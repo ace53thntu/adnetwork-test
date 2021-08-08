@@ -1,0 +1,11 @@
+@import '../../../../assets/layout/layout-variables';
+
+.extend-sidebar {
+  // margin-left: $app-sidebar-width-collapsed;
+  width: $app-sidebar-width;
+  background-color: #fff;
+  padding: 2rem 1rem 0;
+  // height: calc(100vh - #{$app-header-height});
+  height: 100%;
+  overflow: auto;
+}

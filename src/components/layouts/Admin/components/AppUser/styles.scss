@@ -1,0 +1,47 @@
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+
+  85% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ClosedSidebar {
+  0% {
+    position: absolute;
+    left: -9999px;
+    transform: scale(0.1);
+  }
+  85% {
+    opacity: 1;
+    transform: scale(1.05);
+    position: static;
+    left: unset;
+  }
+  100% {
+    transform: scale(1);
+    position: static;
+    left: unset;
+  }
+}
+
+.enableClosedSidebar {
+  position: absolute;
+  left: -9999px;
+  transition: all 2s ease;
+}
+.closed-sidebar .app-sidebar:hover {
+  .enableClosedSidebar {
+    // animation: ClosedSidebar 0.3s;
+    // animation-delay: 0.3s;
+    // animation-fill-mode: forwards;
+    position: static;
+  }
+}
