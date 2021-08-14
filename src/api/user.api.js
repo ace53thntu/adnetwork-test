@@ -1,11 +1,9 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
 
+import {endpoints} from './constants';
+
 // eslint-disable-next-line no-undef
 const apiURL = DMP_API_ENDPOINTS.AUTH_GATEWAY;
-
-const endpoints = {
-  users: 'users'
-};
 
 class UserAPI extends XHRRequest {
   constructor(url) {
@@ -13,8 +11,8 @@ class UserAPI extends XHRRequest {
   }
 
   getUsers = () => {
-    return this.get(endpoints.users);
+    return this.get(endpoints.user.users);
   };
 }
 
-export const UserAPIRequest = new UserAPI(`${apiURL}/v1`);
+export const UserAPIRequest = new UserAPI(apiURL);
