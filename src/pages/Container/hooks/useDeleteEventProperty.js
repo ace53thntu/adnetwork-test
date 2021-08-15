@@ -1,4 +1,5 @@
 import {useMutation} from 'react-query';
+import {fakePromise} from './constants';
 // import {ContainerService} from 'core';
 
 /**
@@ -7,7 +8,7 @@ import {useMutation} from 'react-query';
  */
 export function useDeleteProperty() {
   return useMutation(
-    id => new Promise(resolve => resolve('ok')), //ContainerService.deleteProperty(id).then(res => res?.data),
+    id => fakePromise(), //ContainerService.deleteProperty(id).then(res => res?.data),
     {
       throwOnError: true
     }

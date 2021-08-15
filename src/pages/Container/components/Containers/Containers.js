@@ -13,15 +13,8 @@ import {
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-// components
-
 import ContainerSideBar from '../ContainerSideBar';
-
-// queries/mutations
-// import {useContainers} from 'pages/Container/hooks/useContainers';
-
 import './styles.scss';
-// import {getPartnerId} from 'core/utils/auth';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import Table, {
   TableFilterSelect,
@@ -29,6 +22,7 @@ import Table, {
   TableUtils
 } from 'components/table';
 import AppContent from 'components/layouts/Admin/components/AppContent';
+import {useGetContainers} from 'queries/container/useGetContainers';
 
 const STATUS_OPTIONS = [
   {
@@ -50,8 +44,8 @@ const Containers = props => {
   const navigate = useNavigate();
   // const partnerId = getPartnerId();
 
-  // const {data: containers} = useContainers({partnerId});
-  const containers = [];
+  const {data: containers} = useGetContainers();
+  console.log('🚀 ~ file: Containers.js ~ line 48 ~ containers', containers);
 
   const onRowClick = React.useCallback(
     row => {
@@ -143,7 +137,7 @@ const Containers = props => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardBody>
-                  <Table data={containers} columns={columns} />
+                  <Table data={containers?.items || []} columns={columns} />
                 </CardBody>
               </Card>
             </Col>

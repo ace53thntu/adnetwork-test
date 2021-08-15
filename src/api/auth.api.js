@@ -1,14 +1,8 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
+import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
 const apiURL = DMP_API_ENDPOINTS.AUTH_GATEWAY;
-
-const endpoints = {
-  login: 'login',
-  logout: 'logout',
-  authorize: 'authorize',
-  refreshToken: 'access_token'
-};
 
 class AuthAPI extends XHRRequest {
   constructor(url) {
@@ -16,15 +10,15 @@ class AuthAPI extends XHRRequest {
   }
 
   login = ({email, password}) => {
-    return this.post(endpoints.login, {
+    return this.post(endpoints.auth.login, {
       usernameOrEmail: email,
       password
     });
   };
 
   getProfile = () => {
-    return this.get(endpoints.authorize);
+    return this.get(endpoints.auth.authorize);
   };
 }
 
-export const AuthAPIRequest = new AuthAPI(`${apiURL}/v1`);
+export const AuthAPIRequest = new AuthAPI(apiURL);

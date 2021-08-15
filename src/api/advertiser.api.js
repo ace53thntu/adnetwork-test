@@ -1,8 +1,8 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
-import {endpoints} from './endpoints.api';
+import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
-const apiURL = DMP_API_ENDPOINTS.AUTH_GATEWAY;
+const apiURL = DMP_API_ENDPOINTS.API_GATEWAY;
 
 class AdvertiserAPI extends XHRRequest {
   constructor(url) {
@@ -10,24 +10,28 @@ class AdvertiserAPI extends XHRRequest {
   }
 
   getAllAdvertiser = ({params, options}) => {
-    return this.get(endpoints.advertiser, params, options);
+    return this.get(endpoints.advertiser.advertiser, params, options);
   };
 
   getAdvertiser = ({id, params = null, options}) => {
-    return this.get(`${endpoints.advertiser}/${id}`, params, options);
+    return this.get(
+      `${endpoints.advertiser.advertiser}/${id}`,
+      params,
+      options
+    );
   };
 
   createAdvertiser = ({data, options}) => {
-    return this.post(endpoints.advertiser, data, options);
+    return this.post(endpoints.advertiser.advertiser, data, options);
   };
 
   editAdvertiser = ({id, data, options}) => {
-    return this.put(`${endpoints.advertiser}/${id}`, data, options);
+    return this.put(`${endpoints.advertiser.advertiser}/${id}`, data, options);
   };
 
   deleteAdvertiser = ({id, params}) => {
-    return this.delete(`${endpoints.advertiser}/${id}`, params);
+    return this.delete(`${endpoints.advertiser.advertiser}/${id}`, params);
   };
 }
 
-export const AdvertiserAPIRequest = new AdvertiserAPI(`${apiURL}/v1`);
+export const AdvertiserAPIRequest = new AdvertiserAPI(apiURL);

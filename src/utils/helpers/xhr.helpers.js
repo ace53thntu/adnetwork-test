@@ -30,6 +30,10 @@ const processQueue = (error, token = null) => {
 
 export class XHRRequest {
   constructor({apiURL = ''}) {
+    console.log(
+      '🚀 ~ file: xhr.helpers.js ~ line 33 ~ XHRRequest ~ constructor ~ apiURL',
+      apiURL
+    );
     axios.defaults.headers.common.Accept = '*/*';
     const baseURL = apiURL || '';
     this.axios = axios.create({
