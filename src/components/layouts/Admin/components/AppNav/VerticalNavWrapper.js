@@ -4,6 +4,7 @@ import MetisMenu from 'react-metismenu';
 import {
   AudiencesNav,
   CampaignNav,
+  ContainerNav,
   CreativeNav,
   OrganizationNav,
   ReportNav,
@@ -54,6 +55,17 @@ const Nav = ({role}) => {
       <>
         <MetisMenu
           content={CampaignNav(t)}
+          // activeLinkFromLocation
+          className="vertical-nav-menu"
+          iconNamePrefix=""
+          classNameStateIcon="pe-7s-angle-down"
+          LinkComponent={DefaultLink}
+        />
+        <div className="divider" />
+      </>
+      <>
+        <MetisMenu
+          content={ContainerNav(t)}
           // activeLinkFromLocation
           className="vertical-nav-menu"
           iconNamePrefix=""

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState, useEffect} from 'react';
 
 /**
  * Exp usage:
@@ -25,9 +25,9 @@ import * as React from 'react';
 
 function useDebounce(value, delay) {
   // State and setters for debounced value
-  const [debouncedValue, setDebouncedValue] = React.useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
-  React.useEffect(
+  useEffect(
     () => {
       // Update debounced value after delay
       const handler = setTimeout(() => {

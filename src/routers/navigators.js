@@ -28,9 +28,19 @@ export const CreativeNav = t => {
 export const CampaignNav = t => {
   return [
     {
-      icon: 'pe-7s-box1',
-      label: t('campaignManagement'),
+      icon: 'pe-7s-network',
+      label: t('campaign'),
       to: '#/campaigns'
+    }
+  ];
+};
+
+export const ContainerNav = (t, role) => {
+  return [
+    {
+      icon: 'pe-7s-box1',
+      label: 'Container',
+      to: '#/container'
     }
   ];
 };

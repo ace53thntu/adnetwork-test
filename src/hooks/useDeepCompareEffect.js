@@ -3,8 +3,8 @@
  * You can go to the link and read about that.
  */
 
-import {dequal as deepEqual} from 'dequal';
 import React from 'react';
+import {dequal as deepEqual} from 'dequal';
 
 function checkDeps(deps) {
   if (!deps || !deps.length) {
