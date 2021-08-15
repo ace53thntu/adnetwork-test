@@ -6,6 +6,10 @@ import {default as FormReactSelect} from './FormReactSelect/FormReactSelect';
 import {default as ActiveToogle} from './ActiveToogle';
 import {default as FormTextField} from './FormTextField';
 import {default as FormTextInput} from './FormTextInput';
+import {default as FormToggle} from './FormToggle/FormToggle';
+import {default as SelectCreatable} from './SelectCreatable';
+import {default as FormRadioGroup} from './FormRadioGroup/FormRadioGroup';
+import {default as FormCheckbox} from './FormCheckbox/FormCheckbox';
 
 export {
   TextField,
@@ -15,5 +19,9 @@ export {
   FormTextField,
   FormTextInput,
   Select,
-  SelectPaginate
+  SelectPaginate,
+  FormToggle,
+  SelectCreatable,
+  FormRadioGroup,
+  FormCheckbox
 };

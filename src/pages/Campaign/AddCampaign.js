@@ -7,7 +7,6 @@ import CampaignForm from './CampaignForm';
 // } from 'core/queries/campaigns';
 
 const AddCampaign = () => {
-  console.log('AddCampaign ---', AddCampaign);
   // const {data: listAdvertisers} = useGetAdvertisers();
   const listAdvertisers = [];
   const campaignTree = []; //useGetCampaigns();

@@ -42,10 +42,6 @@ const StyledMenu = withStyles({
 ));
 
 const ManagerCampaign = ({listAdvertisers}) => {
-  console.log(
-    '🚀 ~ file: ManagerCampaign.js ~ line 45 ~ ManagerCampaign ~ listAdvertisers',
-    listAdvertisers
-  );
   const navigate = useNavigate();
   const {
     goToCreate,
