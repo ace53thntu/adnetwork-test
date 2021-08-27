@@ -34,19 +34,6 @@ function ContainerResources({
   const [source, setSource] = useState('web');
   const navigate = useNavigate();
 
-  const {data: pageTypes} = useGetPageTypes();
-  const {data: pageTags} = useGetPageTags();
-
-  const newPageTypes = useMemo(() => {
-    return pageTypes?.map(item => ({
-      id: item,
-      name: item
-    }));
-  }, [pageTypes]);
-
-  // because API response data has tag is null
-  const filteredTags = pageTags?.filter(tag => tag?.tag);
-
   const toggleDialog = useCallback(() => {
     setIsOpenCreatePage(!isOpenCreatePage);
     setSource('web');
@@ -156,12 +143,7 @@ function ContainerResources({
       </CardBody>
 
       <Modal unmountOnClose isOpen={isOpenCreatePage}>
-        <CreatePage
-          toggle={toggleDialog}
-          pageTags={filteredTags}
-          pageTypes={newPageTypes}
-          source={source}
-        />
+        <CreatePage toggle={toggleDialog} source={source} />
       </Modal>
     </Card>
   );

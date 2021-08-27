@@ -10,8 +10,8 @@ export const IMPORT_FILE_LOCATIONS = [
 ];
 export const WEB_TAG_STEPS = [
   {
-    label: 'Pages and Events',
-    title: 'Pages and Events to container'
+    label: 'Pages and Inventories',
+    title: 'Pages and Inventories to container'
   },
   {
     label: 'Overview',
@@ -20,8 +20,8 @@ export const WEB_TAG_STEPS = [
 ];
 export const IOS_TAG_STEPS = [
   {
-    label: 'Screens and Events',
-    title: 'Screens and Events to container'
+    label: 'Screens and Inventories',
+    title: 'Screens and Inventories to container'
   },
   {
     label: 'Overview',
@@ -89,4 +89,23 @@ export const CONTAINER_STATUS = {
   active: 'active',
   draft: 'draft',
   delete: 'delete'
+};
+
+export const getContainerTags = () => {
+  return [
+    'press',
+    'media',
+    'e-commerce',
+    'game',
+    'social',
+    'network',
+    'education',
+    'entertainment',
+    'enterprise'
+  ].map(item => {
+    return {
+      label: item,
+      value: item
+    };
+  });
 };

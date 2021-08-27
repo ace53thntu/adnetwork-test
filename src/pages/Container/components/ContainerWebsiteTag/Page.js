@@ -7,44 +7,42 @@ import {useParams} from 'react-router-dom';
 // components
 
 // queries, mutations
-import useUpdatePage from 'pages/Container/hooks/useUpdatePage';
 
 import {validationPage} from './validations';
-import {useGetPages} from 'pages/Container/hooks/usePages';
 import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
-import useCreatePageTag from 'pages/Container/hooks/useCreatePageTag';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {
-  FormReactSelect,
-  FormTextInput,
-  FormToggle,
-  SelectCreatable
-} from 'components/forms';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
+import {useEditPage} from 'queries/page';
+import {getContainerTags} from 'pages/Container/constants';
+import {useGetContainer} from 'queries/container';
 
 function Page({pageTypes = [], pageTags = [], page}) {
-  const {cid: containerId, tag} = useParams();
-  const {status, pageType: pageTypeRes} = page;
+  console.log('🚀 ~ file: Page.js ~ line 21 ~ Page ~ pageTags', pageTags);
+  const {cid: containerId} = useParams();
+  const {status} = page;
 
-  const pageTypeRef = useRef(pageTypes.find(type => type.id === pageTypeRes));
   const pageTagRef = useRef(
     pageTags
       .filter(tg => {
         if (page?.tags) {
-          return page.tags.map(tag => tag.id).includes(tg.id);
+          return page.tags.includes(tg?.value);
         }
         return false;
       })
-      .map(item => ({id: item.id, label: item.tag, value: item.id}))
+      .map(item => ({id: item.value, label: item.label, value: item.value}))
   );
 
-  const {data: pages} = useGetPages({
-    containerId,
-    source: SOURCE_FROM_TAG[tag]
-  });
+  // const {data: pages} = useGetPages({
+  //   containerId,
+  //   source: SOURCE_FROM_TAG[tag]
+  // });
+  const container = useGetContainer(containerId);
+  console.log('🚀 ~ file: Page.js ~ line 42 ~ Page ~ container', container);
+  const pages = [];
 
   const filteredPages = useRef(
-    pages?.length ? pages.filter(p => p.id !== page.id) : []
+    pages?.length ? pages?.filter(p => p.id !== page.id) : []
   );
 
   const methods = useForm({
@@ -52,25 +50,16 @@ function Page({pageTypes = [], pageTags = [], page}) {
       status,
       name: page?.name ?? '',
       url: page?.url ?? '',
-      pageType: pageTypeRef.current,
-      tags: pageTagRef.current
+      tags: pageTagRef.current || [],
+      context: page?.context ?? ''
     },
     resolver: validationPage(filteredPages.current)
   });
-  const {
-    handleSubmit,
-    formState,
-    reset,
-    register,
-    watch,
-    setValue,
-    errors
-  } = methods;
+  const {handleSubmit, formState, reset, register} = methods;
 
   const {isDirty = false} = formState;
 
-  const [updatePage] = useUpdatePage();
-  const [createPageTag] = useCreatePageTag();
+  const {mutateAsync: updatePage} = useEditPage();
 
   // local states
   const [isLoading, setIsLoading] = useState(false);
@@ -78,8 +67,6 @@ function Page({pageTypes = [], pageTags = [], page}) {
   useEffect(() => {
     register({name: 'tags'});
   }, [register]);
-
-  const selectedTags = watch('tags');
 
   const onHandleSubmit = useCallback(
     async values => {
@@ -127,32 +114,6 @@ function Page({pageTypes = [], pageTags = [], page}) {
     [containerId, page.id, page.source, reset, updatePage]
   );
 
-  const onHandleCreateTag = async ({
-    inputValue,
-    setIsLoading: setIsLoadingCreateTag,
-    createOption,
-    setOptions,
-    setValue: changeValue,
-    options,
-    selected = []
-  }) => {
-    setIsLoadingCreateTag(true);
-    try {
-      const {id: tagId} = await createPageTag({tag: inputValue});
-      const newOption = createOption(tagId, inputValue);
-      setOptions([...options, newOption]);
-      changeValue([...selected, newOption]);
-      setValue('tags', [...selected, newOption], {
-        shouldDirty: true,
-        shouldValidate: true
-      });
-    } catch (error) {
-      console.log('onHandleCreateTag error', error);
-    } finally {
-      setIsLoadingCreateTag(false);
-    }
-  };
-
   return (
     <FormProvider {...methods}>
       <BlockUi tag="div" blocking={isLoading}>
@@ -189,26 +150,23 @@ function Page({pageTypes = [], pageTags = [], page}) {
                 disable={isLoading}
               />
 
-              <FormReactSelect
-                required
-                name="pageType"
-                label="Page type"
-                placeholder="Select a page type..."
-                optionLabelField="name"
-                options={pageTypes}
-                defaultValue={pageTypeRef.current}
+              <FormTextInput
+                isRequired={false}
+                name="context"
+                placeholder="Context..."
+                label="Context"
+                disable={formState.isSubmitting}
               />
 
-              <SelectCreatable
-                data={pageTags}
-                labelKey="tag"
-                onCreate={onHandleCreateTag}
-                selectedValues={selectedTags}
-                setFormValue={setValue}
+              <FormReactSelect
+                required={false}
                 name="tags"
-                placeholder="Select page tags..."
-                label="Page tags"
-                errors={errors}
+                label="Tags"
+                placeholder="Select tags"
+                optionLabelField="name"
+                options={getContainerTags()}
+                disabled={formState.isSubmitting}
+                multiple={true}
               />
 
               <Row>

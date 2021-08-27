@@ -1,25 +1,25 @@
-import {ContainerAPIRequest} from 'api/container.api';
+import {PageAPIRequest} from 'api/page.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CONTAINERS} from './constants';
+import {GET_PAGES} from './constants';
 
 /**
- * Delete a Container
+ * Delete a Page
  */
-export function useDeleteContainer() {
+export function useDeletePage() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid}) =>
-      ContainerAPIRequest.deleteContainer({
-        id: cid
+    ({pageId}) =>
+      PageAPIRequest.deletePage({
+        id: pageId
       }),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CONTAINERS]);
+        client.invalidateQueries([GET_PAGES]);
       }
     }
   );

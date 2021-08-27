@@ -42,8 +42,11 @@ const formName = {
 function CreateEvent({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const {data: events = []} = useEvents({pageId, page: 1, perPage: 10000});
-  const [createEvent] = useCreateEvent();
-  const [createProperty] = useCreateProperty();
+  // const [createEvent] = useCreateEvent();
+  const createEvent = useCallback(() => {
+    return new Promise();
+  }, []);
+  // const [createProperty] = useCreateProperty();
 
   const eventsTypeTrack = useMemo(() => {
     return events?.events?.filter(event =>
@@ -246,13 +249,13 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
       try {
         const createdEvent = await createEvent({pageId, data: submitData});
 
-        if (propsArray.length) {
-          let promises = [];
-          propsArray.forEach(({name}) =>
-            promises.push(createProperty({eventId: createdEvent.id, name}))
-          );
-          await Promise.all(promises);
-        }
+        // if (propsArray.length) {
+        //   let promises = [];
+        //   propsArray.forEach(({name}) =>
+        //     promises.push(createProperty({eventId: createdEvent.id, name}))
+        //   );
+        //   await Promise.all(promises);
+        // }
 
         resetForm();
         toggle();
@@ -267,7 +270,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
         });
       }
     },
-    [createEvent, createProperty, pageId, resetForm, toggle]
+    [createEvent, pageId, resetForm, toggle]
   );
 
   const _renderFormViaEventType = () => {

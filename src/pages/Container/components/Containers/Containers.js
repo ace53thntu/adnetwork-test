@@ -49,7 +49,7 @@ const Containers = props => {
 
   const onRowClick = React.useCallback(
     row => {
-      navigate(`/container/${row.original.id}`);
+      navigate(`/container/${row?.original?.uuid}`);
     },
     [navigate]
   );

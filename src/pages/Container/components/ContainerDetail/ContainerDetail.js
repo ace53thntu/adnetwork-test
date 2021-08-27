@@ -19,27 +19,31 @@ import {useTranslation} from 'react-i18next';
 import ContainerResources from './ContainerResources';
 import ContainerSideBar from '../ContainerSideBar';
 
-import {useGetContainer} from 'pages/Container/hooks/useContainer';
 import {useContainerStore} from 'pages/Container/context';
-import {useContainers} from 'pages/Container/hooks/useContainers';
 import {validationDescriptionTab} from '../ContainerWebsiteTag/validations';
-import useUpdateContainer from 'pages/Container/hooks/useUpdateContainer';
-import useDeleteContainer from 'pages/Container/hooks/useDeleteContainer';
 import {ButtonLoading} from 'components/common';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {FormRadioGroup, FormTextInput} from 'components/forms';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
+import {useGetContainer} from 'queries/container/useGetContainer';
+import {useEditContainer} from 'queries/container/useEditContainer';
+import {useDeleteContainer} from 'queries/container/useDeleteContainer';
+import {useGetContainers} from 'queries/container/useGetContainers';
 
 function ContainerDetail() {
   const {t} = useTranslation();
   const {cid: containerId} = useParams();
   const {selectContainer} = useContainerStore();
 
-  const {data: containers} = useContainers({});
-  const {data: container, isFetching, isError, error} = useGetContainer({
+  const {data: containers} = useGetContainers();
+  const {data: container, isFetching, isError, error} = useGetContainer(
     containerId
-  });
+  );
+  console.log(
+    '🚀 ~ file: ContainerDetail.js ~ line 41 ~ ContainerDetail ~ container',
+    container
+  );
 
   useEffect(() => {
     if (containerId) {
@@ -69,7 +73,7 @@ function ContainerDetail() {
 
   return (
     <>
-      <ContainerSideBar />
+      {/* <ContainerSideBar /> */}
       <AppContent>
         <PageTitleAlt
           heading={container?.name ?? t('containerDetail')}
@@ -121,7 +125,9 @@ function ContainerForm({container, containers = []}) {
   const navigate = useNavigate();
 
   const {name = '', url = '', status = 'active', id: containerId} = container;
-  const filteredContainer = containers.filter(cnt => cnt.id !== container.id);
+  const filteredContainer = containers?.items?.filter(
+    cnt => cnt.id !== container.id
+  );
 
   const methods = useForm({
     defaultValues: {
@@ -132,9 +138,9 @@ function ContainerForm({container, containers = []}) {
     resolver: validationDescriptionTab(filteredContainer)
   });
   const {handleSubmit, formState} = methods;
-  const [updateContainer] = useUpdateContainer();
+  const {mutateAsync: updateContainer} = useEditContainer();
   const {updateContainer: updateContainerDispatch} = useContainerStore();
-  const [deleteContainer] = useDeleteContainer();
+  const {mutateAsync: deleteContainer} = useDeleteContainer();
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

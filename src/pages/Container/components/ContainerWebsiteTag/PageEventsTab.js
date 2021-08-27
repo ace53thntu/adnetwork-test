@@ -5,19 +5,22 @@ import {Row, Col} from 'reactstrap';
 import PageLayout from '../PageLayout';
 import Page from './Page';
 import Events from './Events';
+import {useGetPage} from 'queries/page';
+import {getContainerTags} from 'pages/Container/constants';
 
 // queries, mutations
 // import {useGetPageTypes, useGetPageTags} from 'core/queries/containers';
 
-import {useGetPage} from '../../hooks/usePages';
-
 function PageEventsTab({tabProps: {title}, pageId}) {
-  const {data: page, status, isFetching, isError, error} = useGetPage({
-    pageId
-  });
+  const {data: page, status, isFetching, isError, error} = useGetPage(pageId);
+  console.log(
+    '🚀 ~ file: PageEventsTab.js ~ line 16 ~ PageEventsTab ~ page',
+    page
+  );
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const pageTypes = []; //useGetPageTypes();
-  const pageTags = []; //useGetPageTags();
+  const pageTags = getContainerTags(); //useGetPageTags();
 
   const newPageTypes = useMemo(() => {
     return pageTypes?.map(item => ({
@@ -25,9 +28,6 @@ function PageEventsTab({tabProps: {title}, pageId}) {
       name: item
     }));
   }, [pageTypes]);
-
-  // because API response data has tag is null
-  const filteredTags = pageTags.filter(tag => tag?.tag);
 
   const hasPage = !!page;
 
@@ -38,7 +38,7 @@ function PageEventsTab({tabProps: {title}, pageId}) {
       title={title}
       hasPage={hasPage}
       pageTypes={newPageTypes}
-      pageTags={filteredTags}
+      pageTags={pageTags}
       pageName={page?.name}
       pageId={page?.id}
       source={page?.source}
@@ -55,11 +55,7 @@ function PageEventsTab({tabProps: {title}, pageId}) {
         ) : (
           <>
             <Col sm="12" md="7">
-              <Page
-                pageTypes={newPageTypes}
-                pageTags={filteredTags}
-                page={page}
-              />
+              <Page pageTypes={newPageTypes} pageTags={pageTags} page={page} />
             </Col>
             <Col sm="12" md="5">
               <Events pageId={pageId} />

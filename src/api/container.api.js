@@ -6,10 +6,6 @@ const apiURL = DMP_API_ENDPOINTS.API_GATEWAY;
 
 class ContainerAPI extends XHRRequest {
   constructor(url) {
-    console.log(
-      '🚀 ~ file: container.api.js ~ line 9 ~ ContainerAPI ~ constructor ~ url',
-      url
-    );
     super({apiURL: url});
   }
 

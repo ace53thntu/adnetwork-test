@@ -1,25 +1,25 @@
-import {ContainerAPIRequest} from 'api/container.api';
+import {InventoryAPIRequest} from 'api/inventory.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CONTAINERS} from './constants';
+import {GET_INVENTORIES} from './constants';
 
 /**
- * Delete a Container
+ * Delete a Inventory
  */
-export function useDeleteContainer() {
+export function useDeleteInventory() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid}) =>
-      ContainerAPIRequest.deleteContainer({
-        id: cid
+    ({inventoryId}) =>
+      InventoryAPIRequest.deleteInventory({
+        id: inventoryId
       }),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CONTAINERS]);
+        client.invalidateQueries([GET_INVENTORIES]);
       }
     }
   );

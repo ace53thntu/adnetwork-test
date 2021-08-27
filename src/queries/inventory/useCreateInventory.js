@@ -1,24 +1,24 @@
-import {ContainerAPIRequest} from 'api/container.api';
+import {InventoryAPIRequest} from 'api/inventory.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CONTAINERS} from './constants';
+import {GET_INVENTORIES} from './constants';
 
 /**
- * Create a Container
+ * Create a Inventory
  */
-export function useCreateContainer() {
+export function useCreateInventory() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    data => ContainerAPIRequest.createContainer({data, options: {cancelToken}}),
+    data => InventoryAPIRequest.createInventory({data, options: {cancelToken}}),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CONTAINERS]);
+        client.invalidateQueries([GET_INVENTORIES]);
       }
     }
   );

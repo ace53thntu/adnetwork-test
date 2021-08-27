@@ -1,5 +1,5 @@
 import {useQueryCache, useMutation, useQuery} from 'react-query';
-// import * as containerService from 'services/container';
+import {ContainerAPIRequest} from 'api/container.api';
 import {CONTAINERS} from './constants';
 
 /**
@@ -8,7 +8,7 @@ import {CONTAINERS} from './constants';
 export function useContainers({suspense = true, partnerId}) {
   return useQuery(
     [CONTAINERS, partnerId],
-    () => new Promise(resolve => resolve('ok')), //containerService.getContainers({}).then(res => res.data),
+    () => ContainerAPIRequest.getAllContainer({}).then(res => res?.data),
     {
       suspense
     }

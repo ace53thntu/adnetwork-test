@@ -11,9 +11,9 @@ import {
 } from './utils';
 
 import Tree from './Tree';
-import {useGetContainer} from 'pages/Container/hooks/useContainer';
 import {useGetPages} from 'pages/Container/hooks/usePages';
 import {SOURCE_FROM_TAG, CONTAINER_TREE_TAGS} from './constants';
+import {useGetContainer} from 'queries/container/useGetContainer';
 
 function ContainersTree({containers = []}) {
   const {cid: containerId, tag, pageId} = useParams();
@@ -80,9 +80,7 @@ function ContainerTree({flatTreeData, treeData}) {
 }
 
 function ContainerTreeSources({containerId, treeData, tag}) {
-  const {data: container} = useGetContainer({
-    containerId
-  });
+  const {data: container} = useGetContainer(containerId);
 
   const {source = {}, import_count = 0, transfer_count = 0} = container ?? {};
 
@@ -193,9 +191,7 @@ function ContainerTreeWithPages({containerId, treeData, tag, pageId}) {
 
 function PagesTree({containerId, treeData, tag, pageId}) {
   const {data: container, isFetching: isFetchingGetContainer} = useGetContainer(
-    {
-      containerId
-    }
+    containerId
   );
 
   const {data: pagesRes, isFetching: isFetchingGetPages} = useGetPages({

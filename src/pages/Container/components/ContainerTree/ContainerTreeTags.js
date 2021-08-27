@@ -1,7 +1,9 @@
+//---> Build-in Modules
 import React from 'react';
 
+//---> Internal Modules
 import ContainerSideBar from '../ContainerSideBar';
-import AppContent from 'layouts/Admin/components/AppContent';
+import AppContent from 'components/layouts/Admin/components/AppContent';
 
 function ContainerTreeTags() {
   return (

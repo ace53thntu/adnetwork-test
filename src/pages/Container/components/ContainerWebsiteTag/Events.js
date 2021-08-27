@@ -29,7 +29,9 @@ function Events({pageId}) {
     perPage: pageSize
   });
 
-  const [deleteEvent] = useDeleteEvent();
+  const deleteEvent = useCallback(() => {
+    return new Promise();
+  }, []);
   const {unlockTree} = useContainerStore();
 
   const [isOpen, setIsOpen] = useState(false);

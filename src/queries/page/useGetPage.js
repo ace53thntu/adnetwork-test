@@ -1,27 +1,27 @@
-import {ContainerAPIRequest} from 'api/container.api';
+import {PageAPIRequest} from 'api/page.api';
 import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
-import {GET_CONTAINER} from './constants';
+import {GET_PAGE} from './constants';
 
 /**
- * Hook for get Container from API by query
+ * Hook for get Page from API by query
  */
-export function useGetContainer(cid) {
+export function useGetPage(pageId) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_CONTAINER, cid],
+    [GET_PAGE, pageId],
     () =>
-      ContainerAPIRequest.getContainer({
-        id: cid,
+      PageAPIRequest.getPage({
+        id: pageId,
         options: {
           cancelToken
         }
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!cid
+      enabled: !!pageId
     }
   );
 }

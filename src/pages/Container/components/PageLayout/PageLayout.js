@@ -4,11 +4,11 @@ import {useNavigate, useParams} from 'react-router-dom';
 
 import CreatePage from '../ContainerWebsiteTag/CreatePage';
 
-import useDeletePage from 'pages/Container/hooks/useDeletePage';
 // import {getRole} from 'core/utils/auth';
 // import {SYS_ADMIN} from 'core/constants/roles';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import DialogConfirm from 'components/common/DialogConfirm';
+import {useDeletePage} from 'queries/page';
 
 function PageLayout({
   title,
@@ -25,7 +25,7 @@ function PageLayout({
 }) {
   const navigate = useNavigate();
   const {cid: containerId, tag} = useParams();
-  const [deletePage] = useDeletePage({containerId, tag});
+  const {mutateAsync: deletePage} = useDeletePage({containerId, tag});
 
   const [isOpenCreatePage, setIsOpenCreatePage] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);

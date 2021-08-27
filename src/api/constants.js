@@ -13,6 +13,13 @@ export const endpoints = {
   container: {
     container: `${API_V1}/container`
   },
+  page: {
+    page: `${API_V1}/page`,
+    pages: 'pages'
+  },
+  inventory: {
+    page: `${API_V1}/inventory`
+  },
   advertiser: {
     advertiser: `${API_V1}/advertiser`
   },

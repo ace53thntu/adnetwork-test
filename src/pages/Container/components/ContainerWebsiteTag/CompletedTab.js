@@ -9,15 +9,15 @@ import IOSInitSnippet from './IOSInitSnippet';
 import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
 import {toast} from 'react-toastify';
 import {useContainerStore} from 'pages/Container/context';
-import {useContainers} from 'pages/Container/hooks/useContainers';
-import {useEvents} from 'pages/Container/hooks/useEvents';
-import {useGetContainer} from 'pages/Container/hooks/useContainer';
-import {useGetPages} from 'pages/Container/hooks/usePages';
 import {useParams} from 'react-router-dom';
-import useUpdateContainer from 'pages/Container/hooks/useUpdateContainer';
 import {validationDescriptionTab} from './validations';
 import {FormRadioGroup, FormTextInput} from 'components/forms';
 import {ButtonLoading} from 'components/common';
+import {
+  useEditContainer,
+  useGetContainer,
+  useGetContainers
+} from 'queries/container';
 
 const defaultValue = containerId => `
 <script type="text/javascript">
@@ -28,16 +28,20 @@ window.AicactusSDK||(window.AicactusSDK={}),AicactusSDK.load=function(t){var e=d
 function CompletedTab() {
   const {cid, tag, pageId} = useParams();
   const currentTag = SOURCE_FROM_TAG[tag];
-  const {data: containers} = useContainers({});
-  const {data: container, isFetching} = useGetContainer({containerId: cid});
+  const {data: containers} = useGetContainers();
+  console.log(
+    '🚀 ~ file: CompletedTab.js ~ line 32 ~ CompletedTab ~ containers',
+    containers
+  );
+  const {data: container, isFetching} = useGetContainer(cid);
+  const pages = useCallback(() => {
+    return [];
+  }, []);
 
-  const {data: pages = []} = useGetPages({
-    containerId: cid,
-    source: currentTag
-  });
-
-  const {data: events = []} = useEvents({pageId});
-
+  // const {data: events = []} = useEvents({pageId});
+  const events = useCallback(() => {
+    return [];
+  }, []);
   const isIOS = currentTag === 'ios';
   const isAndroid = currentTag === 'android';
   const isMobile = isIOS || isAndroid;
@@ -63,7 +67,7 @@ function CompletedTab() {
             container={container}
             numberOfPages={numberOfPages}
             numberOfEvents={numberOfEvents}
-            containers={containers}
+            containers={containers?.items}
             isMobile={isMobile}
             isIOS={isIOS}
             isAndroid={isAndroid}
@@ -97,7 +101,7 @@ function CompleteForm({
     resolver: validationDescriptionTab(filteredContainer)
   });
   const {handleSubmit, formState} = methods;
-  const [updateContainer] = useUpdateContainer();
+  const {mutateAsync: updateContainer} = useEditContainer();
 
   const onHandleSubmit = useCallback(
     async formValues => {

@@ -2,13 +2,13 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 
 import ContainerSideBar from '../ContainerSideBar';
-import AppContent from 'layouts/Admin/components/AppContent';
 import ContainerWebsiteTag from '../ContainerWebsiteTag';
 import ContainerIOSTag from '../ContainerIOSTag';
 import ContainerImportOffline from '../ContainerImportOffline';
 import ContainerTransfer from '../ContainerTransfer';
 import {CONTAINER_TREE_TAGS} from './constants';
 import {useContainers} from 'pages/Container/hooks/useContainers';
+import AppContent from 'components/layouts/Admin/components/AppContent';
 
 function ContainerTreePages() {
   const {tag, pageId, cid: containerId} = useParams();

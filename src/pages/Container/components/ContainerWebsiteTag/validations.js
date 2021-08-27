@@ -58,8 +58,7 @@ export const validationPage = (pages = [], isMobile = false) => {
               return true;
             }
             return true;
-          }),
-        pageType: Yup.object().nullable().required('Page type is required.')
+          })
       })
     );
   }
@@ -88,8 +87,7 @@ export const validationPage = (pages = [], isMobile = false) => {
             // return true;
           }
           return true;
-        }),
-      pageType: Yup.object().nullable().required('Page type is required.')
+        })
     })
   );
 };

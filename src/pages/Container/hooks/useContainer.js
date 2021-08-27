@@ -1,13 +1,13 @@
 import {useMutation, useQuery} from 'react-query';
-// import * as containerServices from 'services/container';
+import {ContainerAPIRequest} from 'api/container.api';
 import {CONTAINER} from './constants';
 
 /**
  * Get event
- * @param {uuid} eventId - Event ID
+ * @param {uuid} containerId - Container ID
  */
 const fetchContainer = (key, containerId) =>
-  new Promise(resolve => resolve('ok')); //containerServices.getContainer({id: containerId}).then(res => res?.data);
+  ContainerAPIRequest.getContainer({id: containerId}).then(res => res?.data);
 
 export function useGetContainer({containerId}) {
   return useQuery(containerId && [CONTAINER, containerId], fetchContainer, {
