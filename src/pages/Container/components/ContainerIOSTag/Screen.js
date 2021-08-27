@@ -9,40 +9,34 @@ import {toast} from 'react-toastify';
 // import {FormTextInput, Forms, SelectCreatable, LoadingButton} from 'components';
 
 // queries, mutations
-import useUpdatePage from 'pages/Container/hooks/useUpdatePage';
-
 import {validationPage} from '../ContainerWebsiteTag/validations';
-import {useGetPages} from 'pages/Container/hooks/usePages';
 import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
-import useCreatePageTag from 'pages/Container/hooks/useCreatePageTag';
-import {
-  FormReactSelect,
-  FormTextInput,
-  FormToggle,
-  SelectCreatable
-} from 'components/forms';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
+import {getContainerTags} from 'pages/Container/constants';
+import {useEditPage} from 'queries/page';
 
 function Screen({pageTypes = [], pageTags = [], page}) {
+  console.log('🚀 ~ file: Screen.js ~ line 20 ~ Screen ~ pageTags', pageTags);
   const {cid: containerId, tag} = useParams();
   const {status} = page;
 
-  const pageTypeRef = useRef(pageTypes.find(type => type.id === page.pageType));
   const pageTagRef = useRef(
     pageTags
       .filter(tg => {
         if (page?.tags) {
-          return page.tags.map(tag => tag.id).includes(tg.id);
+          return page.tags.includes(tg?.value);
         }
         return false;
       })
-      .map(item => ({id: item.id, label: item.tag, value: item.id}))
+      .map(item => ({id: item.value, label: item.label, value: item.value}))
   );
 
-  const {data: pages} = useGetPages({
-    containerId,
-    source: SOURCE_FROM_TAG[tag]
-  });
+  // const {data: pages} = useGetPages({
+  //   containerId,
+  //   source: SOURCE_FROM_TAG[tag]
+  // });
+  const pages = useCallback(() => [], []);
 
   const filteredPages = useMemo(() => {
     if (pages?.length) {
@@ -55,29 +49,18 @@ function Screen({pageTypes = [], pageTags = [], page}) {
     defaultValues: {
       status,
       name: page?.name ?? '',
-      pageType: pageTypeRef.current,
-      tags: pageTagRef.current
+      tags: pageTagRef.current,
+      context: page?.context ?? ''
     },
     resolver: validationPage(filteredPages, true)
   });
-  const {
-    handleSubmit,
-    formState,
-    errors,
-    setValue,
-    register,
-    watch,
-    reset
-  } = methods;
+  const {handleSubmit, formState, errors, register, reset} = methods;
 
-  const [updatePage] = useUpdatePage();
-  const [createPageTag] = useCreatePageTag();
+  const {mutateAsync: updatePage} = useEditPage();
 
   useEffect(() => {
     register({name: 'tags'});
   }, [register]);
-
-  const selectedTags = watch('tags');
 
   const onHandleSubmit = useCallback(
     async values => {
@@ -118,32 +101,6 @@ function Screen({pageTypes = [], pageTags = [], page}) {
     [containerId, page.id, page.source, reset, updatePage]
   );
 
-  const onHandleCreateTag = async ({
-    inputValue,
-    setIsLoading: setIsLoadingCreateTag,
-    createOption,
-    setOptions,
-    setValue: changeValue,
-    options,
-    selected
-  }) => {
-    setIsLoadingCreateTag(true);
-    try {
-      const {id: tagId} = await createPageTag({tag: inputValue});
-      const newOption = createOption(tagId, inputValue);
-      setOptions([...options, newOption]);
-      changeValue([...selected, newOption]);
-      setValue('tags', [...selected, newOption], {
-        shouldDirty: true,
-        shouldValidate: true
-      });
-    } catch (error) {
-      console.log('onHandleCreateTag error', error);
-    } finally {
-      setIsLoadingCreateTag(false);
-    }
-  };
-
   return (
     <FormProvider {...methods}>
       <BlockUi tag="div" blocking={formState.isSubmitting}>
@@ -173,38 +130,23 @@ function Screen({pageTypes = [], pageTags = [], page}) {
                 disable={formState.isSubmitting}
               />
 
-              <FormReactSelect
-                required
-                name="pageType"
-                label="Screen type"
-                placeholder="Select a screen type..."
-                optionLabelField="name"
-                options={pageTypes}
-                disabled={formState.isSubmitting}
-                defaultValue={pageTypeRef.current}
+              <FormTextInput
+                isRequired={false}
+                name="context"
+                placeholder="Context..."
+                label="Context"
+                disable={formState.isSubmitting}
               />
 
-              {/* <Forms.FormReactSelect
-                multiple
+              <FormReactSelect
+                required={false}
                 name="tags"
-                label="Screen tags"
-                placeholder="Select screen tags..."
-                optionLabelField="tag"
-                options={pageTags}
+                label="Tags"
+                placeholder="Select tags"
+                optionLabelField="name"
+                options={getContainerTags()}
                 disabled={formState.isSubmitting}
-                defaultValue={pageTagRef.current}
-              /> */}
-
-              <SelectCreatable
-                data={pageTags}
-                labelKey="tag"
-                onCreate={onHandleCreateTag}
-                selectedValues={selectedTags}
-                setFormValue={setValue}
-                name="tags"
-                placeholder="Select screen tags..."
-                label="Screen tags"
-                errors={errors}
+                multiple={true}
               />
 
               <Row>

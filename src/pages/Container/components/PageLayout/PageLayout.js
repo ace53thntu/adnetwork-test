@@ -14,7 +14,6 @@ function PageLayout({
   title,
   children,
   hasPage,
-  pageTypes = [],
   pageTags = [],
   pageName,
   pageId,
@@ -91,7 +90,6 @@ function PageLayout({
             shouldRefetch
             toggle={() => setIsOpenCreatePage(!isOpenCreatePage)}
             pageTags={pageTags}
-            pageTypes={pageTypes}
             source={source}
           />
         </Modal>

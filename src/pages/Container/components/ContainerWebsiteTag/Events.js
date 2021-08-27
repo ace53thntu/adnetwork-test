@@ -142,7 +142,7 @@ function Events({pageId}) {
   return (
     <Card className="main-card mb-3">
       <CardHeader className="border-0">
-        <CardTitle>Events</CardTitle>
+        <CardTitle>Inventories</CardTitle>
         <div className="btn-actions-pane-right">
           <Button
             color="primary"
@@ -150,7 +150,7 @@ function Events({pageId}) {
             onClick={onHandleAddEvent}
           >
             <i className="pe-7s-plus btn-icon-wrapper"> </i>
-            Add event
+            Add Inventory
           </Button>
         </div>
       </CardHeader>
@@ -180,7 +180,9 @@ function Events({pageId}) {
         />
       </CardBody>
 
-      <CreateEvent isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
+      {isOpen && (
+        <CreateEvent isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
+      )}
 
       <Modal
         unmountOnClose

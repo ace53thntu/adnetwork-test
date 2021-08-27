@@ -28,5 +28,9 @@ export const endpoints = {
   },
   strategy: {
     strategy: `${API_V1}/strategy`
+  },
+  adsdefault: {
+    adsdefault: `${API_V1}/adsdefault`,
+    adsdefaultContaiter: 'ads-defaults'
   }
 };

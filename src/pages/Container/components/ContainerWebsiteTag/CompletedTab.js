@@ -176,7 +176,7 @@ function CompleteForm({
                   </Col>
                   <Col sm={12} md={6}>
                     <Count
-                      label="Events"
+                      label="Inventories"
                       count={numberOfEvents}
                       type="success"
                     />

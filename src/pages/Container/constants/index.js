@@ -109,3 +109,61 @@ export const getContainerTags = () => {
     };
   });
 };
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export const getInventoryTypes = () => {
+  return ['direct', 'default', 'bid'].map(item => {
+    return {
+      label: capitalizeFirstLetter(item),
+      value: item
+    };
+  });
+};
+
+export const getInventoryFormats = () => {
+  return ['banner', 'video', 'nativeAds'].map(item => {
+    return {
+      label: capitalizeFirstLetter(item),
+      value: item
+    };
+  });
+};
+
+export const getInventoryTags = () => {
+  return [
+    'Arts & Entertainment',
+    'Automotive',
+    'Business',
+    'Careers',
+    'Education',
+    'Family & Parenting',
+    'Health & Fitness',
+    'Food & Drink',
+    'Hobbies & Interests',
+    'Home & Garden',
+    'Law, Gov’t & Politics',
+    'News',
+    'Personal Finance',
+    'Society',
+    'Science',
+    'Pets',
+    'Sports',
+    'Style & Fashion',
+    'Technology & Computing',
+    'Travel',
+    'Real Estate',
+    'Shopping',
+    'Religion & Spirituality',
+    'Uncategorized',
+    'Non-Standard Content',
+    'Illegal Content'
+  ].map(item => {
+    return {
+      label: item,
+      value: item.toLowerCase()
+    };
+  });
+};

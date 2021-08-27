@@ -6,32 +6,16 @@ import {Row, Col} from 'reactstrap';
 import PageLayout from '../PageLayout';
 import Screen from './Screen';
 import Events from '../ContainerWebsiteTag/Events';
+import {useGetPage} from 'queries/page';
+import {getContainerTags} from 'pages/Container/constants';
 
 // queries, mutations
 // import {useGetPageTypes, useGetPageTags} from 'core/queries/containers';
 
-import {useGetPage} from '../../hooks/usePages';
-
 function ScreensAndEvents({tabProps: {title}, pageId}) {
   // const {tag} = useParams();
-  const {data: page, status, isFetching} = useGetPage({
-    pageId
-  });
-  // const pageTypes = useGetPageTypes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const pageTypes = [];
-  // const pageTags = useGetPageTags();
-  const pageTags = [];
-
-  const pageTypeOpts = useMemo(() => {
-    return pageTypes?.map(item => ({
-      id: item,
-      name: item
-    }));
-  }, [pageTypes]);
-
-  // because API response data has tag is null
-  const filteredTags = pageTags.filter(item => item?.tag);
+  const {data: page, status, isFetching} = useGetPage(pageId);
+  const pageTags = getContainerTags();
 
   const hasPage = !!page;
 
@@ -41,8 +25,7 @@ function ScreensAndEvents({tabProps: {title}, pageId}) {
     <PageLayout
       title={title}
       hasPage={hasPage}
-      pageTypes={pageTypeOpts}
-      pageTags={filteredTags}
+      pageTags={pageTags}
       pageName={page?.name}
       pageId={page?.id}
       source={page?.source}
@@ -53,11 +36,7 @@ function ScreensAndEvents({tabProps: {title}, pageId}) {
           {isLoading ? (
             <div>Loading...</div>
           ) : (
-            <Screen
-              pageTypes={pageTypeOpts}
-              pageTags={filteredTags}
-              page={page}
-            />
+            <Screen pageTags={pageTags} page={page} />
           )}
         </Col>
         <Col sm="12" md="5">
