@@ -18,7 +18,8 @@ export const endpoints = {
     pages: 'pages'
   },
   inventory: {
-    page: `${API_V1}/inventory`
+    inventory: `${API_V1}/inventory`,
+    inventoryContainer: 'inventories'
   },
   advertiser: {
     advertiser: `${API_V1}/advertiser`

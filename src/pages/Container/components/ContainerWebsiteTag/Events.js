@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Button, Card, CardBody, CardTitle, CardHeader, Modal} from 'reactstrap';
 
 // component
@@ -6,33 +6,36 @@ import CreateEvent from './CreateEvent';
 import UpdateEvent from './UpdateEvent';
 
 // hooks
-import {useEvents} from 'pages/Container/hooks/useEvents';
-import useDeleteEvent from 'pages/Container/hooks/useDeleteEvent';
 import {EVENT_TYPES_VALUE} from 'pages/Container/constants';
-import {useContainerStore} from 'pages/Container/context';
+// import {useContainerStore} from 'pages/Container/context';
 // import {getRole} from 'core/utils/auth';
 // import {SYS_ADMIN} from 'core/constants/roles';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import Table, {TableStatusCell} from 'components/table';
+import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
+import {useParams} from 'react-router-dom';
+import useGetInventories from 'pages/Container/hooks/useGetInventories';
 
 function Events({pageId}) {
   // const userRole = getRole();
   const isSysAdmin = true; //userRole === SYS_ADMIN;
+  const {cid: containerId} = useParams();
+  // const [page, setPage] = useState(1);
+  // const [pageSize, setPageSize] = useState(5);
 
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-
-  const {data: events = [], refetch, isFetching} = useEvents({
-    pageId,
-    page,
-    perPage: pageSize
-  });
+  const {data: pages} = useGetInventoriesByContainer({containerId, pageId});
+  console.log('🚀 ~ file: Events.js ~ line 27 ~ Events ~ pages', pages);
+  const inventories = useGetInventories({pages: pages?.pages, pageId});
+  console.log(
+    '🚀 ~ file: Events.js ~ line 30 ~ Events ~ inventories',
+    inventories
+  );
 
   const deleteEvent = useCallback(() => {
     return new Promise();
   }, []);
-  const {unlockTree} = useContainerStore();
+  // const {unlockTree} = useContainerStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -42,15 +45,11 @@ function Events({pageId}) {
 
   // const isMobile = tag === 'android-tag' || tag === 'ios-tag';
 
-  useEffect(() => {
-    refetch();
-  }, [pageId, refetch]);
-
-  useEffect(() => {
-    if (!isFetching) {
-      unlockTree();
-    }
-  }, [isFetching, unlockTree]);
+  // useEffect(() => {
+  //   if (!isFetching) {
+  //     unlockTree();
+  //   }
+  // }, [isFetching, unlockTree]);
 
   const onHandleAddEvent = ev => {
     setIsOpen(true);
@@ -132,12 +131,12 @@ function Events({pageId}) {
     [isSysAdmin]
   );
 
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
-  };
+  // const scrollToTop = () => {
+  //   window.scrollTo(0, 0);
+  // };
 
-  const totalPage =
-    events && events?.total ? Math.ceil(events.total / pageSize) : 1;
+  // const totalPage =
+  //   events && events?.total ? Math.ceil(events.total / pageSize) : 1;
 
   return (
     <Card className="main-card mb-3">
@@ -156,7 +155,7 @@ function Events({pageId}) {
       </CardHeader>
       <CardBody>
         <Table
-          data={events?.events}
+          data={inventories}
           columns={columns}
           cursor
           getTrProps={(state, rowInfo) => ({
@@ -167,16 +166,16 @@ function Events({pageId}) {
           sortable={false}
           resizable={false}
           filterable={false}
-          loading={isFetching}
+          // loading={isFetching}
           className="-striped -highlight"
-          pages={totalPage}
-          pageSize={pageSize}
+          pages={1}
+          // pageSize={pageSize}
           manual
-          onFetchData={(state, instance) => {
-            setPage(state.page + 1);
-            setPageSize(state.pageSize);
-            scrollToTop();
-          }}
+          // onFetchData={(state, instance) => {
+          //   setPage(state.page + 1);
+          //   setPageSize(state.pageSize);
+          //   scrollToTop();
+          // }}
         />
       </CardBody>
 

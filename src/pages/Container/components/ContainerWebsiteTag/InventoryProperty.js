@@ -1,12 +1,19 @@
-import {FormReactSelect, FormTextInput} from 'components/forms';
-import {getInventoryTags} from 'pages/Container/constants';
+//---> Build-in Modules
 import React from 'react';
+
+//---> External Modules
 import {useFormContext} from 'react-hook-form';
 import {Col, Row} from 'reactstrap';
+
+//---> Internal Modules
+import {FormReactSelect, FormTextInput} from 'components/forms';
+import {getInventoryTags} from 'pages/Container/constants';
+import ColorPicker from 'components/forms/ColorPicker';
 
 const InventoryProperty = () => {
   const {formState} = useFormContext();
   const inventoryTags = getInventoryTags();
+
   return (
     <>
       <Row>
@@ -29,12 +36,9 @@ const InventoryProperty = () => {
           />
         </Col>
         <Col sm={4}>
-          <FormTextInput
-            isRequired={false}
+          <ColorPicker
             name="metadata.background_color"
-            placeholder="0"
             label="Background color"
-            disable={formState.isSubmitting}
           />
         </Col>
       </Row>

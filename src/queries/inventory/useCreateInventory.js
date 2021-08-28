@@ -17,8 +17,12 @@ export function useCreateInventory() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
-        client.invalidateQueries([GET_INVENTORIES]);
+      onSettled: data => {
+        console.log(
+          '🚀 ~ file: useCreateInventory.js ~ line 22 ~ useCreateInventory ~ data',
+          data
+        );
+        client.invalidateQueries([GET_INVENTORIES, data?.data?.page_uuid]);
       }
     }
   );

@@ -13,6 +13,14 @@ class InventoryAPI extends XHRRequest {
     return this.get(`${endpoints.inventory.inventory}/${id}`, params, options);
   };
 
+  getInventoriesContainer = ({cid, params = null, options}) => {
+    return this.get(
+      `${endpoints.container.container}/${cid}/${endpoints.inventory.inventoryContainer}`,
+      params,
+      options
+    );
+  };
+
   createInventory = ({data, options}) => {
     return this.post(endpoints.inventory.inventory, data, options);
   };

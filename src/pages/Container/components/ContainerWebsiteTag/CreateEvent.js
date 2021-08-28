@@ -23,6 +23,7 @@ import {
   getInventoryTypes
 } from 'pages/Container/constants';
 import InventoryProperty from './InventoryProperty';
+import {useCreateInventory} from 'queries/inventory';
 
 const formName = {
   properties: 'properties',
@@ -37,6 +38,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
+  const {mutateAsync: createInventory} = useCreateInventory();
 
   const methods = useForm({
     defaultValues: {
@@ -64,7 +66,60 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
     }
   }, [isOpen, resetForm]);
 
-  const onHandleSubmit = useCallback(async values => {}, []);
+  const destructureFormData = formData => {
+    const {
+      name,
+      format,
+      merge,
+      metadata,
+      minimum_price,
+      position_id = 0,
+      status,
+      tracker_template_id = 0,
+      type
+    } = formData;
+    const formatData = format?.value;
+    const minimumPriceData = parseFloat(minimum_price) || '';
+    const formatMetadata = {
+      ...metadata,
+      duration: parseInt(metadata?.duration) ?? 0,
+      width: parseInt(metadata?.duration) ?? 0,
+      height: parseInt(metadata?.duration) ?? 0,
+      tags: metadata?.tags?.map(item => item.value)
+    };
+
+    return {
+      page_uuid: pageId,
+      name,
+      format: formatData,
+      merge,
+      status,
+      minimum_price: minimumPriceData,
+      type: type?.value ?? '',
+      metadata: formatMetadata,
+      position_id,
+      tracker_template_id
+    };
+  };
+
+  const onHandleSubmit = async values => {
+    console.log(
+      '🚀 ~ file: CreateEvent.js ~ line 68 ~ CreateEvent ~ values',
+      values
+    );
+    const formData = destructureFormData(values);
+    setIsLoading(true);
+    try {
+      await createInventory(formData);
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: CreateEvent.js ~ line 114 ~ CreateEvent ~ err',
+        err
+      );
+    }
+    setIsLoading(false);
+    toggle();
+  };
 
   return (
     <Modal
