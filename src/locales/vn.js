@@ -186,9 +186,9 @@ const vn = {
   androidTracking: 'Đánh dấu android',
   manualImportation: 'Nhập thủ công',
   scheduleTransfer: 'Lên lịch chuyển',
-  websiteTag: 'Website tag',
-  iOSTag: 'iOS tag',
-  androidTag: 'Android tag',
+  websiteTag: 'Website',
+  iOSTag: 'iOS',
+  androidTag: 'Android',
 
   //partners
   partnerDescriptiom: 'Xem hoặc thay đổi thông tin đối tác',

@@ -45,12 +45,12 @@ export const ContainerNav = (t, role) => {
   ];
 };
 
-export const OrganizationNav = (t, role) => {
+export const InventoryMarketNav = (t, role) => {
   return [
     {
-      icon: 'pe-7s-users',
-      label: 'Organization',
-      to: '#/organization'
+      icon: 'pe-7s-cart',
+      label: 'Inventory Market',
+      to: '#/inventory-market'
     }
   ];
 };

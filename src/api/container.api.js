@@ -28,6 +28,14 @@ class ContainerAPI extends XHRRequest {
   deleteContainer = ({id, params}) => {
     return this.delete(`${endpoints.container.container}/${id}`, params);
   };
+
+  getContainerPages = ({id, params = null, options}) => {
+    return this.get(
+      `${endpoints.container.container}/${id}/${endpoints.page.pages}`,
+      params,
+      options
+    );
+  };
 }
 
 export const ContainerAPIRequest = new ContainerAPI(apiURL);

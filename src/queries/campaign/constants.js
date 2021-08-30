@@ -1,0 +1,2 @@
+export const GET_CAMAPAIGNS = 'GET_CAMAPAIGNS';
+export const GET_CAMAPAIGN = 'GET_CAMAPAIGN';

@@ -18,6 +18,7 @@ import {useGetStrategies} from './hooks';
 import {useDestructureCampaigns} from './hooks/useDestructureCampaigns';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import DialogConfirm from 'components/common/DialogConfirm';
+import {useGetCampaigns} from 'queries/campaign';
 // import {DialogConfirm} from 'components';
 // import {useGetCampaigns} from 'core/queries/campaigns';
 
@@ -49,15 +50,14 @@ const ManagerCampaign = ({listAdvertisers}) => {
     goToEditCampaign,
     goToViewStrategy
   } = useCampaignManager();
-  // const {data: campaignsResp} = useGetCampaigns({mode: 'details'});
-  const campaignsResp = [];
+  const {data: campaignsResp} = useGetCampaigns();
   const strategies = useGetStrategies({
     advertisers: listAdvertisers,
-    campaigns: campaignsResp
+    campaigns: campaignsResp?.items ?? []
   });
   const campaigns = useDestructureCampaigns({
     advertisers: listAdvertisers,
-    campaigns: campaignsResp
+    campaigns: campaignsResp?.items ?? []
   });
 
   const [cpAnchorEl, setCpAnchorEl] = useState(null);

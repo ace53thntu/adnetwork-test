@@ -193,9 +193,9 @@ const en = {
   androidTracking: 'Android tracking',
   manualImportation: 'Manual importation',
   scheduleTransfer: 'Schedule transfer',
-  websiteTag: 'Website tag',
-  iOSTag: 'iOS tag',
-  androidTag: 'Android tag',
+  websiteTag: 'Website',
+  iOSTag: 'iOS',
+  androidTag: 'Android',
 
   //partners
   partnerDescriptiom: 'View or change the partners information.',

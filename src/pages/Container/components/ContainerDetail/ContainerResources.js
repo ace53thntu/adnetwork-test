@@ -1,5 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useCallback, useState} from 'react';
 import {
   Card,
   CardBody,
@@ -12,8 +11,6 @@ import {
   CardHeader,
   Modal
 } from 'reactstrap';
-import {useGetPageTags} from 'pages/Container/hooks/useGetPageTags';
-import {useGetPageTypes} from 'pages/Container/hooks/useGetPageTypes';
 import {useTranslation} from 'react-i18next';
 
 import {Count} from '../ContainerWebsiteTag/CompletedTab';
@@ -32,7 +29,7 @@ function ContainerResources({
   const {t} = useTranslation();
   const [isOpenCreatePage, setIsOpenCreatePage] = useState(false);
   const [source, setSource] = useState('web');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const toggleDialog = useCallback(() => {
     setIsOpenCreatePage(!isOpenCreatePage);
@@ -74,7 +71,7 @@ function ContainerResources({
             >
               {t('androidTracking')}
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               disabled={importCount > 0}
               onClick={() => navigate('import-offline/create')}
             >
@@ -85,7 +82,7 @@ function ContainerResources({
               onClick={() => navigate('transfer-files/create')}
             >
               {t('scheduleTransfer')}
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
         </UncontrolledButtonDropdown>
         <Row>

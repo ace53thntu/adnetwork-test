@@ -17,7 +17,7 @@ import {useTranslation} from 'react-i18next';
 
 // components
 import ContainerResources from './ContainerResources';
-import ContainerSideBar from '../ContainerSideBar';
+// import ContainerSideBar from '../ContainerSideBar';
 
 import {useContainerStore} from 'pages/Container/context';
 import {validationDescriptionTab} from '../ContainerWebsiteTag/validations';
@@ -30,6 +30,14 @@ import {useGetContainer} from 'queries/container/useGetContainer';
 import {useEditContainer} from 'queries/container/useEditContainer';
 import {useDeleteContainer} from 'queries/container/useDeleteContainer';
 import {useGetContainers} from 'queries/container/useGetContainers';
+import {useGetContainerPages} from 'queries/container/useGetContainerPages';
+import {useCountSource} from 'pages/Container/hooks/useCountSource';
+
+const checkHasSource = ({source = 'web', pages = []}) => {
+  const foundSource = pages?.find(item => item?.source === source);
+  if (foundSource) return true;
+  return false;
+};
 
 function ContainerDetail() {
   const {t} = useTranslation();
@@ -40,9 +48,15 @@ function ContainerDetail() {
   const {data: container, isFetching, isError, error} = useGetContainer(
     containerId
   );
+  const {data: pages = []} = useGetContainerPages(containerId);
   console.log(
-    '🚀 ~ file: ContainerDetail.js ~ line 41 ~ ContainerDetail ~ container',
-    container
+    '🚀 ~ file: ContainerDetail.js ~ line 45 ~ ContainerDetail ~ pages',
+    pages
+  );
+  const countSource = useCountSource(pages);
+  console.log(
+    '🚀 ~ file: ContainerDetail.js ~ line 57 ~ ContainerDetail ~ countSource',
+    countSource
   );
 
   useEffect(() => {
@@ -54,14 +68,14 @@ function ContainerDetail() {
     };
   }, [containerId, selectContainer]);
 
-  const hasWebsiteTag = container?.source?.['web'] ? true : false;
-  const countWebsiteTagPages = container?.source?.['web']?.length ?? 0;
+  const hasWebsiteTag = checkHasSource({pages});
+  const countWebsiteTagPages = countSource?.['web'];
 
-  const hasIOSTag = container?.source?.['ios'] ? true : false;
-  const countIOSTagPages = container?.source?.['ios']?.length ?? 0;
+  const hasIOSTag = checkHasSource({source: 'ios', pages});
+  const countIOSTagPages = countSource?.['ios'];
 
-  const hasAndroidTag = container?.source?.['android'] ? true : false;
-  const countAndroidTagPages = container?.source?.['android']?.length ?? 0;
+  const hasAndroidTag = checkHasSource({source: 'android', pages});
+  const countAndroidTagPages = countSource?.['android'];
 
   const hasImport = container?.import_count > 0 ? true : false;
 
@@ -156,7 +170,7 @@ function ContainerForm({container, containers = []}) {
     async formValues => {
       try {
         await updateContainer({
-          cid: container.id,
+          cid: container.uuid,
           data: formValues
         });
         updateContainerDispatch();
@@ -170,7 +184,7 @@ function ContainerForm({container, containers = []}) {
         });
       }
     },
-    [container.id, updateContainer, updateContainerDispatch, t]
+    [container, updateContainer, updateContainerDispatch, t]
   );
 
   const onRemoveContainer = useCallback(async () => {

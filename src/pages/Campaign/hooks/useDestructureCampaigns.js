@@ -14,7 +14,7 @@ export const useDestructureCampaigns = ({advertisers = [], campaigns = []}) => {
       advertiserName: advertiser?.name ?? '',
       name,
       id,
-      status: active ? 'active' : 'inactive'
+      status: active
     };
   });
 
