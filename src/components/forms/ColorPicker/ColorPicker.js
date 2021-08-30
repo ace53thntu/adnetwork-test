@@ -61,7 +61,10 @@ const ColorPicker = ({label, name, defaultValue = '#cccccc'}) => {
       <div>
         <Input
           onClick={onShowPicker}
-          style={{backgroundColor: color ? color : '#FFFFFF'}}
+          style={{
+            backgroundColor: color ? color : '#FFFFFF',
+            cursor: 'pointer'
+          }}
           placeholder="Click to select color"
           name={name}
           innerRef={register}

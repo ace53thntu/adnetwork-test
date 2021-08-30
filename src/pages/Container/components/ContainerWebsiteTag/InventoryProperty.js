@@ -10,7 +10,7 @@ import {FormReactSelect, FormTextInput} from 'components/forms';
 import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
 
-const InventoryProperty = () => {
+const InventoryProperty = ({currentInventory = null}) => {
   const {formState} = useFormContext();
   const inventoryTags = getInventoryTags();
 
@@ -39,6 +39,7 @@ const InventoryProperty = () => {
           <ColorPicker
             name="metadata.background_color"
             label="Background color"
+            defaultValue={currentInventory?.metadata?.background_color}
           />
         </Col>
       </Row>

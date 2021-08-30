@@ -25,12 +25,7 @@ function Events({pageId}) {
   // const [pageSize, setPageSize] = useState(5);
 
   const {data: pages} = useGetInventoriesByContainer({containerId, pageId});
-  console.log('🚀 ~ file: Events.js ~ line 27 ~ Events ~ pages', pages);
   const inventories = useGetInventories({pages: pages?.pages, pageId});
-  console.log(
-    '🚀 ~ file: Events.js ~ line 30 ~ Events ~ inventories',
-    inventories
-  );
 
   const deleteEvent = useCallback(() => {
     return new Promise();
@@ -56,7 +51,7 @@ function Events({pageId}) {
   };
 
   const onHandleClickRow = row => {
-    setEventId(row.original.id);
+    setEventId(row.original.uuid);
     setIsOpenUpdate(true);
   };
 

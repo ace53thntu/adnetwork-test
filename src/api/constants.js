@@ -33,5 +33,8 @@ export const endpoints = {
   adsdefault: {
     adsdefault: `${API_V1}/adsdefault`,
     adsdefaultContaiter: 'ads-defaults'
+  },
+  trackerTemplate: {
+    trackerTemplate: `${API_V1}/tracker-template`
   }
 };

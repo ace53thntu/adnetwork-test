@@ -1,20 +1,16 @@
-import {convertArrayToObject} from 'utils/helpers/dataStructure.helpers';
-
-export const useDestructureCampaigns = ({advertisers = [], campaigns = []}) => {
+export const useDestructureCampaigns = ({campaigns = []}) => {
   if (!campaigns || campaigns.length === 0) {
     return [];
   }
-  const advertiserObj = convertArrayToObject(advertisers, 'id');
 
   const result = campaigns.map(campaignItem => {
-    const {name, id, advertiser_id, active} = campaignItem;
-    const advertiser = advertiserObj[advertiser_id] || null;
+    const {name, uuid, advertiser_uuid, advertiser_name, status} = campaignItem;
     return {
-      advertiserId: advertiser?.id ?? '',
-      advertiserName: advertiser?.name ?? '',
+      advertiserId: advertiser_uuid ?? '',
+      advertiserName: advertiser_name ?? '',
       name,
-      id,
-      status: active
+      uuid,
+      status
     };
   });
 

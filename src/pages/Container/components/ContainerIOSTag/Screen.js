@@ -10,15 +10,13 @@ import {toast} from 'react-toastify';
 
 // queries, mutations
 import {validationPage} from '../ContainerWebsiteTag/validations';
-import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
 import {getContainerTags} from 'pages/Container/constants';
 import {useEditPage} from 'queries/page';
 
 function Screen({pageTypes = [], pageTags = [], page}) {
-  console.log('🚀 ~ file: Screen.js ~ line 20 ~ Screen ~ pageTags', pageTags);
-  const {cid: containerId, tag} = useParams();
+  const {cid: containerId} = useParams();
   const {status} = page;
 
   const pageTagRef = useRef(
@@ -54,7 +52,7 @@ function Screen({pageTypes = [], pageTags = [], page}) {
     },
     resolver: validationPage(filteredPages, true)
   });
-  const {handleSubmit, formState, errors, register, reset} = methods;
+  const {handleSubmit, formState, register, reset} = methods;
 
   const {mutateAsync: updatePage} = useEditPage();
 
@@ -157,7 +155,7 @@ function Screen({pageTypes = [], pageTags = [], page}) {
                       className="ml-2"
                       color="primary"
                       disabled={!formState.isDirty || formState.isSubmitting}
-                      isLoading={formState.isSubmitting}
+                      loading={formState.isSubmitting}
                     >
                       Save Screen
                     </ButtonLoading>

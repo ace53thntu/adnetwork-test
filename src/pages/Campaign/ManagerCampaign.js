@@ -56,7 +56,6 @@ const ManagerCampaign = ({listAdvertisers}) => {
     campaigns: campaignsResp?.items ?? []
   });
   const campaigns = useDestructureCampaigns({
-    advertisers: listAdvertisers,
     campaigns: campaignsResp?.items ?? []
   });
 
