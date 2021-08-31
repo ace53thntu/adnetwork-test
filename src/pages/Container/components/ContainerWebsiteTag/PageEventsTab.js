@@ -13,10 +13,6 @@ import {getContainerTags} from 'pages/Container/constants';
 
 function PageEventsTab({tabProps: {title}, pageId}) {
   const {data: page, status, isFetching, isError, error} = useGetPage(pageId);
-  console.log(
-    '🚀 ~ file: PageEventsTab.js ~ line 16 ~ PageEventsTab ~ page',
-    page
-  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const pageTypes = []; //useGetPageTypes();

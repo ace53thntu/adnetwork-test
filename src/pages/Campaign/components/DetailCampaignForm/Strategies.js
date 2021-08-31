@@ -7,8 +7,8 @@ import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-import {useCampaignManager} from '../hook';
-import ListStrategies from '../components/ListStrategies';
+import {useCampaignManager} from '../../hook';
+import ListStrategies from '../ListStrategies';
 // import {useGetListStrategy} from 'core/queries';
 
 const Strategies = ({campaignIdCreated}) => {

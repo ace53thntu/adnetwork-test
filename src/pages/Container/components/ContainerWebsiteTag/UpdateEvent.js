@@ -1,4 +1,7 @@
+//---> Build-in Modules
 import React, {useCallback, useState} from 'react';
+
+//---> External Modules
 import BlockUi from 'react-block-ui';
 import {useForm, FormProvider} from 'react-hook-form';
 import {
@@ -10,9 +13,9 @@ import {
   Badge
 } from 'reactstrap';
 
+//---> Internal Modules
 import {getInventoryFormats, getInventoryTypes} from '../../constants';
 import {validationEvent} from './validations';
-
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -20,7 +23,6 @@ import {useEditInventory, useGetInventory} from 'queries/inventory';
 import InventoryProperty from './InventoryProperty';
 import {useDefaultInventory} from 'pages/Container/hooks/useDefaultInventory';
 import {destructureFormData} from './utils';
-import {useGetTrackerTemplates} from 'queries/tracker-template';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 
 const formName = {

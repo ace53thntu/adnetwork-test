@@ -1,5 +1,4 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {useParams} from 'react-router-dom';
 import {
   useForm,
   useFieldArray,
@@ -70,7 +69,7 @@ const FormTransferFile = ({updateListTransfer, setActiveTab, updateItem}) => {
       id: uuidv4()
     };
   }, [updateItem]);
-  const {cid: containerId} = useParams();
+  // const {cid: containerId} = useParams();
   // const [createTransferFile] = useCreateTransferFile();
   // const [updateTransferFile] = useUpdateTransferFile();
 
@@ -104,35 +103,27 @@ const FormTransferFile = ({updateListTransfer, setActiveTab, updateItem}) => {
     resolver: yupResolver(schema)
   });
 
-  const {
-    control,
-    trigger,
-    handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    errors
-  } = methods;
+  const {control, trigger, handleSubmit, setValue, errors} = methods;
   const {fields, append} = useFieldArray({
     control,
     name: 'transfer'
   });
 
-  const handleValues = useCallback(values => {
-    const currentLength = values.length;
-    const currentData = values[currentLength - 1];
-    return {
-      ...currentData,
-      frequency: currentData.frequency?.id,
-      isActive: currentData.isActive === 'active' ? true : false,
-      status: 'active',
-      configuration: ''
-    };
-  }, []);
+  // const handleValues = useCallback(values => {
+  //   const currentLength = values.length;
+  //   const currentData = values[currentLength - 1];
+  //   return {
+  //     ...currentData,
+  //     frequency: currentData.frequency?.id,
+  //     isActive: currentData.isActive === 'active' ? true : false,
+  //     status: 'active',
+  //     configuration: ''
+  //   };
+  // }, []);
 
   const onComplete = React.useCallback(async () => {
-    const formValues = getValues();
-    const currentData = handleValues(formValues.transfer);
+    // const formValues = getValues();
+    // const currentData = handleValues(formValues.transfer);
 
     const result = await trigger();
 
@@ -152,12 +143,12 @@ const FormTransferFile = ({updateListTransfer, setActiveTab, updateItem}) => {
         // }
       } catch (error) {}
     }
-  }, [trigger, getValues, handleValues]);
+  }, [trigger]);
 
   const onSubmit = useCallback(
     async values => {
-      const currentIndex = values.transfer.length - 1;
-      const currentData = handleValues(values.transfer);
+      // const currentIndex = values.transfer.length - 1;
+      // const currentData = handleValues(values.transfer);
       if (updateItem) {
         // const dataTransfer = await updateTransferFile({
         //   cid: containerId,
@@ -193,14 +184,14 @@ const FormTransferFile = ({updateListTransfer, setActiveTab, updateItem}) => {
         // }
       }
     },
-    [append, handleValues, transferField, updateItem]
+    [append, transferField, updateItem]
   );
 
   const onRenewKey = useCallback(async () => {
     setOnLoadRenewKey(true);
     setValue(`transfer[0].configuration`, '');
-    const formValues = getValues();
-    const currentData = handleValues(formValues.transfer);
+    // const formValues = getValues();
+    // const currentData = handleValues(formValues.transfer);
     // const dataTransfer = await updateTransferFile({
     //   cid: containerId,
     //   tcid: updateItem.id,
@@ -220,7 +211,7 @@ const FormTransferFile = ({updateListTransfer, setActiveTab, updateItem}) => {
     //     `Endpoint: /containers/containers/transfer/v1 \nAccess Key: ${dataTransfer?.data?.AccessKey} \nSecret Key: ${dataTransfer?.data?.SecretKey}`
     //   );
     // }
-  }, [getValues, handleValues, setOnLoadRenewKey, setValue]);
+  }, [setOnLoadRenewKey, setValue]);
 
   return (
     <React.Fragment>

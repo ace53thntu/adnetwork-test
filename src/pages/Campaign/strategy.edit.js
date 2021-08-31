@@ -1,6 +1,6 @@
 import React from 'react';
 import {useParams} from 'react-router';
-import {StrategyFormDetailEdit} from './DetailStrategyForm';
+import {StrategyFormDetailEdit} from './components/DetailStrategyForm';
 import {useGetStrategy} from 'core/queries/campaigns';
 
 const EditStrategy = () => {

@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import BlockUi from 'react-block-ui';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {useParams} from 'react-router-dom';
 import {
   Button,
   Card,
@@ -64,7 +63,7 @@ function FormCreate({
   isView = false,
   dataListImportFiles
 }) {
-  const {cid: containerId} = useParams();
+  // const {cid: containerId} = useParams();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);

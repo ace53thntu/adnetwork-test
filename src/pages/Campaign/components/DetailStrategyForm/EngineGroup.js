@@ -8,8 +8,8 @@ import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 //---> Internal Modules
-import SelectStrategyItem from '../components/SelectStrategyItem';
-import {BIDDING_METHODS, KPIS, listEngine} from '../constants';
+import SelectStrategyItem from '../SelectStrategyItem';
+import {BIDDING_METHODS, KPIS, listEngine} from '../../constants';
 import {FormTextInput} from 'components/forms';
 
 const EngineConfigurationGroup = ({viewOnly, currentStrategy}) => {

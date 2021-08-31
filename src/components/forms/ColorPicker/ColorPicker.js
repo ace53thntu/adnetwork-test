@@ -15,23 +15,6 @@ const cover = {
   left: '0px'
 };
 
-function hexToRgbA(hex) {
-  let color = null;
-  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-    color = hex.substring(1).split('');
-    if (color.length === 3) {
-      color = [color[0], color[0], color[1], color[1], color[2], color[2]];
-    }
-    color = '0x' + color.join('');
-    return (
-      'rgba(' +
-      [(color >> 16) & 255, (color >> 8) & 255, color & 255].join(',') +
-      ',1)'
-    );
-  }
-  throw new Error('Bad Hex');
-}
-
 const ColorPicker = ({label, name, defaultValue = '#cccccc'}) => {
   const {register, setValue} = useFormContext();
   const [displayColorPicker, setDisplayColorPicker] = useState(false);

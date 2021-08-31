@@ -2,8 +2,8 @@
 import React from 'react';
 
 //---> Internal Modules
-import {CAMPAIGN_KEYS} from '../../constants';
-import {useDestructureLabels} from '../../hooks';
+import {CAMPAIGN_KEYS} from '../../../constants';
+import {useDestructureLabels} from '../../../hooks';
 import {FormReactSelect} from 'components/forms';
 
 const SelectLabelIds = ({labelsData = []}) => {

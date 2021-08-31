@@ -13,15 +13,15 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 // import {useGetDeals} from 'core/queries/deal/useGetDeals';
 // import {useGetIpRanges} from 'core/queries/ip-range';
 // import {useGetPositions} from 'core/queries/position';
-import SelectStrategyItem from '../components/SelectStrategyItem';
+import SelectStrategyItem from '../SelectStrategyItem';
 import {
   ACCEPTED_ADUNITS,
   ACCEPTED_CONTEXTS,
   ACCEPTED_LAYOUTS,
   ACCEPTED_PLACEMENTS,
   ACCEPTED_SUB_CONTEXTS
-} from '../constants';
-import {useDestructureListToOptions} from '../hooks';
+} from '../../constants';
+import {useDestructureListToOptions} from '../../hooks';
 import {ActiveToogle, FormTextInput} from 'components/forms';
 
 const AdsGroup = ({viewOnly = false, currentStrategy}) => {

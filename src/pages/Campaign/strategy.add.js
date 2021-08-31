@@ -1,6 +1,6 @@
 import React from 'react';
 import {useLocation} from 'react-router-dom';
-import {StrategyFormDetailEdit} from './DetailStrategyForm';
+import {StrategyFormDetailEdit} from './components/DetailStrategyForm';
 
 const AddStrategy = props => {
   const {state} = useLocation();

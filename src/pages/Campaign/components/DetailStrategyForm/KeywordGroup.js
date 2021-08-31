@@ -2,30 +2,30 @@
 import React, {useCallback, useState} from 'react';
 
 //---> External Modules
+import {useTranslation} from 'react-i18next';
 import {Col, FormGroup, Row} from 'reactstrap';
 import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 //---> Internal Modules
-import SelectStrategyItem from '../components/SelectStrategyItem';
-import {useDestructureListToOptions} from '../hooks';
-// import {useGetDomains} from 'core/queries/domain';
+// import {useGetKeywordsLists} from 'core/queries';
+import SelectStrategyItem from '../SelectStrategyItem';
+import {useDestructureListToOptions} from '../../hooks';
 
-const DomainPlacementBlackListGroup = ({viewOnly = false, currentStrategy}) => {
-  // Execute APIs list
-  // const {data: domains = []} = useGetDomains();
-  const domains = [];
+const KeywordGroup = ({viewOnly = false, currentStrategy}) => {
+  const {t} = useTranslation();
+  // Execute API
+  // const {data: keywordsLists = []} = useGetKeywordsLists();
+  const keywordsLists = [];
 
   // Destructure data from API response
-  const destructureDomains = useDestructureListToOptions({
-    listData: domains,
-    keyName: 'domain'
+  const destructureKeywordsLists = useDestructureListToOptions({
+    listData: keywordsLists,
+    keyName: 'name'
   });
 
-  // Define states
   const [isShow, setIsShow] = useState(true);
 
-  // Handle input events
   const handleToggleGroup = useCallback(evt => {
     evt.preventDefault();
     setIsShow(prevState => !prevState);
@@ -35,39 +35,36 @@ const DomainPlacementBlackListGroup = ({viewOnly = false, currentStrategy}) => {
     <>
       <FormGroup tag="fieldset" row className="border border-gray">
         <legend
-          className="col-form-label col-sm-3 ml-3 w-130px c-cursor-pointer"
+          className="col-form-label col-sm-2 ml-3 w-130px c-cursor-pointer"
           onClick={evt => handleToggleGroup(evt)}
-          style={{width: '270px'}}
         >
           <FontAwesomeIcon
             className="mr-1 c-font-12"
             icon={isShow ? faChevronUp : faChevronDown}
           />{' '}
-          Domain Placement Black List
+          Keywords
         </legend>
         <Col sm={12}>
           <Row className={isShow ? '' : 'd-none'}>
             <Col md="6">
-              {/* Domain black list ids */}
               <SelectStrategyItem
                 isRequired={false}
-                name="domain_placement_bl.domain_id"
-                label={'Domain'}
-                placeholder={'Domain'}
-                listOptions={destructureDomains}
+                name="keywords_white_list_ids"
+                label={t('keywordWhiteListIds')}
+                placeholder={t('keywordWhiteListIds')}
+                listOptions={destructureKeywordsLists}
                 disabled={viewOnly}
-                isMulti={false}
+                isMulti
                 currentStrategy={currentStrategy}
               />
             </Col>
             <Col md="6">
-              {/* Domain white list ids */}
               <SelectStrategyItem
                 isRequired={false}
-                name="domain_placement_bl.placement_ids"
-                label={'Placements'}
-                placeholder={'Placements'}
-                listOptions={[]}
+                name="keywords_black_list_ids"
+                label={t('keywordBackListIds')}
+                placeholder={t('keywordBackListIds')}
+                listOptions={destructureKeywordsLists}
                 disabled={viewOnly}
                 isMulti
                 currentStrategy={currentStrategy}
@@ -80,4 +77,4 @@ const DomainPlacementBlackListGroup = ({viewOnly = false, currentStrategy}) => {
   );
 };
 
-export default DomainPlacementBlackListGroup;
+export default KeywordGroup;

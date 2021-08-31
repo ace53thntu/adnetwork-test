@@ -1,6 +1,6 @@
 import {Card, CardBody, CardFooter, CardHeader, Col, Row} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 
 import AndroidInitSnippet from './AndroidInitSnippet';
 import BlockUi from 'react-block-ui';
@@ -18,6 +18,10 @@ import {
   useGetContainer,
   useGetContainers
 } from 'queries/container';
+import {useGetPagesByContainer} from 'queries/page';
+import {useCountSource} from 'pages/Container/hooks/useCountSource';
+import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
+import {useCountInventory} from 'pages/Container/hooks/useCountInventory';
 
 const defaultValue = containerId => `
 <script type="text/javascript">
@@ -29,30 +33,20 @@ function CompletedTab() {
   const {cid, tag, pageId} = useParams();
   const currentTag = SOURCE_FROM_TAG[tag];
   const {data: containers} = useGetContainers();
-  console.log(
-    '🚀 ~ file: CompletedTab.js ~ line 32 ~ CompletedTab ~ containers',
-    containers
-  );
   const {data: container, isFetching} = useGetContainer(cid);
-  const pages = useCallback(() => {
-    return [];
-  }, []);
-
-  // const {data: events = []} = useEvents({pageId});
-  const events = useCallback(() => {
-    return [];
-  }, []);
+  const {data: pages} = useGetPagesByContainer(cid);
+  const countSource = useCountSource(pages);
+  const {data: inventories} = useGetInventoriesByContainer({
+    containerId: cid,
+    pageId
+  });
   const isIOS = currentTag === 'ios';
   const isAndroid = currentTag === 'android';
   const isMobile = isIOS || isAndroid;
 
-  const numberOfPages = useMemo(() => {
-    return pages?.length ?? 0;
-  }, [pages]);
+  const numberOfPages = countSource?.[currentTag];
 
-  const numberOfEvents = useMemo(() => {
-    return events?.length ?? 0;
-  }, [events]);
+  const numberOfEvents = useCountInventory({data: inventories, pageId});
 
   if (isFetching) {
     return <div>Loading...</div>;
@@ -91,7 +85,7 @@ function CompleteForm({
 }) {
   const {updateContainer: updateContainerDispatch} = useContainerStore();
   const {name = '', url = '', status = 'active'} = container;
-  const filteredContainer = containers.filter(cnt => cnt.id !== container.id);
+  const filteredContainer = containers?.filter(cnt => cnt.id !== container.id);
   const methods = useForm({
     defaultValues: {
       name,

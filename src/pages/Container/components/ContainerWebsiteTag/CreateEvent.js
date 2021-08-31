@@ -8,8 +8,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
-  Row
+  ModalHeader
 } from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
@@ -26,6 +25,7 @@ import InventoryProperty from './InventoryProperty';
 import {useCreateInventory} from 'queries/inventory';
 import {destructureFormData} from './utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 
 const formName = {
   properties: 'properties',
@@ -40,6 +40,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
+  const trackerTemplates = useTrackerTemplateOptions();
   const {mutateAsync: createInventory} = useCreateInventory();
 
   const methods = useForm({
@@ -193,7 +194,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                     label="Tracker template"
                     placeholder="Select tracker template"
                     optionLabelField="name"
-                    options={[]}
+                    options={trackerTemplates}
                     disabled={formState.isSubmitting}
                     multiple={false}
                   />

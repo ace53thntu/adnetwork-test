@@ -1,24 +1,21 @@
+//---> Build-in Modules
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+
+//---> External Modules
 import BlockUi from 'react-block-ui';
 import {useForm, FormProvider} from 'react-hook-form';
 import {Row, Col, Card, CardBody, CardTitle, CardHeader} from 'reactstrap';
 import {useParams} from 'react-router-dom';
 
-// components
-
-// queries, mutations
-
+//---> Internal Modules
 import {validationPage} from './validations';
-import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
 import {useEditPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
-import {useGetContainer} from 'queries/container';
 
 function Page({pageTypes = [], pageTags = [], page}) {
-  console.log('🚀 ~ file: Page.js ~ line 21 ~ Page ~ pageTags', pageTags);
   const {cid: containerId} = useParams();
   const {status} = page;
 
@@ -33,12 +30,6 @@ function Page({pageTypes = [], pageTags = [], page}) {
       .map(item => ({id: item.value, label: item.label, value: item.value}))
   );
 
-  // const {data: pages} = useGetPages({
-  //   containerId,
-  //   source: SOURCE_FROM_TAG[tag]
-  // });
-  const container = useGetContainer(containerId);
-  console.log('🚀 ~ file: Page.js ~ line 42 ~ Page ~ container', container);
   const pages = [];
 
   const filteredPages = useRef(

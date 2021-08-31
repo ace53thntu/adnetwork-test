@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react';
 import BlockUi from 'react-block-ui';
-import {useNavigate} from 'react-router-dom';
 import {useForm, FormProvider} from 'react-hook-form';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
@@ -13,7 +12,6 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 // import {CONTAINER_STATUS} from 'pages/Container/constants';
 
 function ContainerCreateDialog({isOpen, toggle, containers = []}) {
-  const navigate = useNavigate();
   // const [createContainer] = useCreateContainer();
   const methods = useForm({
     defaultValues: {

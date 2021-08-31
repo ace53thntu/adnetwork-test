@@ -5,7 +5,7 @@ import React, {useMemo, useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-import {Tabs} from '../components';
+import {Tabs} from '..';
 import DescriptionCampaign from './DescriptionCampaign';
 import Strategies from './Strategies';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import DescriptionStrategy from './DescriptionStrategy';
-import {Divider} from '../components';
+import {Divider} from '..';
 import Audience from './Audience';
 import Concept from './Concept';
 import {Button} from 'reactstrap';

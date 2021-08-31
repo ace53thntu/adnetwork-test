@@ -9,17 +9,16 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
 
 //---> Internal Modules
-import {useCampaignManager} from '../hook';
+import {useCampaignManager} from '../../hook';
 import './_main.scss';
-import {CAMPAIGN_KEYS, CONV_EVENT_OPTIONS} from '../constants';
+import {CAMPAIGN_KEYS, CONV_EVENT_OPTIONS} from '../../constants';
 import {validationCampaign} from './validation';
-// import {useCreateCampaign, useUpdateCampaign} from 'core/queries/campaigns';
-import {useInitCampaignDefaultValue} from '../hooks/useInitCampaignDefaultValue';
-import {useDestrutureAdvertisers} from '../hooks';
-import {parseCampaignFormData} from '../utils';
-import SelectLabelIds from './SelectLabelIds';
+import {useInitCampaignDefaultValue} from '../../hooks/useInitCampaignDefaultValue';
+import {useDestrutureAdvertisers} from '../../hooks';
+import {parseCampaignFormData} from '../../utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
+import {useGetAdvertisers} from 'queries/advertiser';
 
 const DescriptionCampaign = ({
   goToTab,
@@ -30,6 +29,7 @@ const DescriptionCampaign = ({
   labelsData
 }) => {
   const {t} = useTranslation();
+  const {data: advertisers} = useGetAdvertisers();
   // const {mutateAsync: createCampaign} = useCreateCampaign();
   const createCampaign = useCallback(() => {
     return new Promise(resolve => {
@@ -44,7 +44,7 @@ const DescriptionCampaign = ({
   }, []);
   const {gotoCampaignManagement} = useCampaignManager();
   const destructureAdvs = useDestrutureAdvertisers({
-    advertisers: listAdvertisers
+    advertisers: advertisers?.items || []
   });
   const {id: campaignId} = useParams();
   //---> Destructure campaign.
@@ -135,6 +135,11 @@ const DescriptionCampaign = ({
                         selected={value}
                         onChange={date => onChange(date)}
                         className="form-control"
+                        timeInputLabel="Time:"
+                        dateFormat="MM/dd/yyyy h:mm aa"
+                        showTimeInput
+                        showTimeSelect
+                        timeIntervals={15}
                       />
                     )}
                   />
@@ -159,6 +164,11 @@ const DescriptionCampaign = ({
                         selected={value}
                         onChange={date => onChange(date)}
                         className="form-control"
+                        timeInputLabel="Time:"
+                        dateFormat="MM/dd/yyyy h:mm aa"
+                        showTimeInput
+                        showTimeSelect
+                        timeIntervals={15}
                       />
                     )}
                   />
@@ -201,148 +211,6 @@ const DescriptionCampaign = ({
                   render={({onChange, onBlur, value, name}) => (
                     <ActiveToogle value={value} onChange={onChange} />
                   )}
-                />
-              </Col>
-            </FormGroup>
-            {/* Costs */}
-            <FormGroup tag="fieldset" row className="border border-gray">
-              <legend className="col-form-label col-sm-1 ml-3">Costs</legend>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cpi')}
-                  id="cpi"
-                  name={CAMPAIGN_KEYS.CPI}
-                  label={t('Cpi')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cpc')}
-                  id="cpc"
-                  name={CAMPAIGN_KEYS.CPC}
-                  label={t('Cpc')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cpcc')}
-                  id="cpcc"
-                  name={CAMPAIGN_KEYS.CPCC}
-                  label={t('Cpcc')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cpvc')}
-                  id="cpvc"
-                  name={CAMPAIGN_KEYS.CPVC}
-                  label={t('Cpvc')}
-                  isRequired={true}
-                />
-              </Col>
-
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cplpc')}
-                  id="cplpc"
-                  name={CAMPAIGN_KEYS.CPLPC}
-                  label={t('Cplpc')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Cplpv')}
-                  id="cplpv"
-                  name={CAMPAIGN_KEYS.CPLPV}
-                  label={t('Cplpv')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Compc')}
-                  id="compc"
-                  name={CAMPAIGN_KEYS.COMPC}
-                  label={t('Compc')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('Compv')}
-                  id="compv"
-                  name={CAMPAIGN_KEYS.COMPV}
-                  label={t('Compv')}
-                  isRequired={true}
-                />
-              </Col>
-
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('mediaCost')}
-                  id="mediaCost"
-                  name={CAMPAIGN_KEYS.MEDIA_COST}
-                  label={t('mediaCost')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('trackingCost')}
-                  id="trackingCost"
-                  name={CAMPAIGN_KEYS.TRACKING_COST}
-                  label={t('trackingCost')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormReactSelect
-                  name={CAMPAIGN_KEYS.CONV_EVENT_IDS}
-                  label="Conv Event IDs"
-                  options={CONV_EVENT_OPTIONS}
-                  multiple={true}
-                  required
-                />
-              </Col>
-              <Col md="3">
-                <SelectLabelIds labelsData={labelsData} />
-              </Col>
-            </FormGroup>
-            {/* Budgets */}
-            <FormGroup tag="fieldset" row className="border border-gray">
-              <legend className="col-form-label col-sm-1 ml-3">Budget</legend>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('budgetGlobal')}
-                  id="budgetGlobal"
-                  name={`${CAMPAIGN_KEYS.BUGDET}.${CAMPAIGN_KEYS.BUGET_GLOBAL}`}
-                  label={t('budgetGlobal')}
-                  isRequired={true}
-                />
-              </Col>
-              <Col md="3">
-                <FormTextInput
-                  type="number"
-                  placeholder={t('budgetDaily')}
-                  id="budgetDaily"
-                  name={`${CAMPAIGN_KEYS.BUGDET}.${CAMPAIGN_KEYS.BUGET_DAILY}`}
-                  label={t('budgetDaily')}
-                  isRequired={true}
                 />
               </Col>
             </FormGroup>

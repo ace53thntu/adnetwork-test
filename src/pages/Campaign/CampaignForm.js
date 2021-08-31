@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
-import DetailCampaignForm from './DetailCampaignForm';
+import CampaignDetails from './components/DetailCampaignForm';
 
 const CampaignForm = ({
   isEdit = false,
@@ -27,7 +27,7 @@ const CampaignForm = ({
         icon="pe-7s-plane icon-gradient bg-tempting-azure"
       />
       <Container fluid>
-        <DetailCampaignForm
+        <CampaignDetails
           isEdit={isEdit}
           currentCampaign={currentCampaign}
           listAdvertisers={listAdvertisers}

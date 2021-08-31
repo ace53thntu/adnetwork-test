@@ -6,23 +6,12 @@ import {Button, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 import {validationPage} from './validations';
 import {useContainerStore} from '../../context';
-import {SOURCE_FROM_TAG, TAG_FROM_SOURCE} from '../ContainerTree/constants';
-import {
-  DEFAULT_EVENT_PROPERTIES,
-  EVENT_TYPES_VALUE,
-  getContainerTags
-} from 'pages/Container/constants';
-import {COLLECT_TYPES} from './constants';
-import {
-  FormReactSelect,
-  FormTextInput,
-  FormToggle,
-  SelectCreatable
-} from 'components/forms';
+import {TAG_FROM_SOURCE} from '../ContainerTree/constants';
+import {getContainerTags} from 'pages/Container/constants';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreatePage, useGetPagesByContainer} from 'queries/page';
-import {useCreateInventory} from 'queries/inventory';
 
 function CreatePage({
   toggle,
@@ -31,7 +20,6 @@ function CreatePage({
   shouldRefetch = false
 }) {
   const {cid, pageId} = useParams();
-  console.log('🚀 ~ file: CreatePage.js ~ line 34 ~ cid', cid);
   const navigate = useNavigate();
   const {createPage: dispatchCreatePage} = useContainerStore();
   const {data: pages = []} = useGetPagesByContainer(cid);
@@ -67,18 +55,8 @@ function CreatePage({
     defaultValues,
     resolver: validationPage(pages, isMobile)
   });
-  const {
-    handleSubmit,
-    reset,
-    formState,
-    register,
-    watch,
-    setValue,
-    errors
-  } = methods;
-  console.log('🚀 ~ file: CreatePage.js ~ line 79 ~ errors', errors);
+  const {handleSubmit, reset, formState, register} = methods;
   const {mutateAsync: createPage} = useCreatePage();
-  const {mutateAsync: createInventory} = useCreateInventory();
 
   useEffect(() => {
     register({name: 'tags'});
@@ -90,14 +68,12 @@ function CreatePage({
 
   useEffect(() => {
     return () => {
-      console.log('unmount CreatePage');
       resetForm();
     };
   }, [resetForm]);
 
   const onHandleSubmit = useCallback(
     async values => {
-      console.log('🚀 ~ file: CreatePage.js ~ line 101 ~ values', values);
       const {name = null, url = null, tags: pageTags, status, context} = values;
 
       const pageData = {
@@ -109,7 +85,6 @@ function CreatePage({
         source,
         context
       };
-      console.log('🚀 ~ file: CreatePage.js ~ line 119 ~ pageData', pageData);
 
       /**
        * Khi tạo 1 page thì sẽ auto tạo 1 page event
@@ -120,31 +95,6 @@ function CreatePage({
 
       try {
         const {data} = await createPage(pageData);
-        console.log('🚀 ~ file: CreatePage.js ~ line 123 ~ data', data);
-        // const eventTypePageData = {
-        //   status: 'active',
-        //   type: EVENT_TYPES_VALUE.page,
-        //   collectType: COLLECT_TYPES.auto,
-        //   params: {
-        //     category: null,
-        //     name: pageData.name
-        //   },
-        //   name: pageData.name
-        // };
-
-        // try {
-        //   const createdEvent = await createEvent({
-        //     pageId: res.id,
-        //     data: eventTypePageData
-        //   });
-        // } catch (error) {
-        //   console.log('CreatePage -> error', error);
-        //   // TODO - handle when create event failed
-        //   ShowToast.error(error, {
-        //     closeOnClick: true
-        //   });
-        // }
-
         toggle();
         ShowToast.success(
           `Create ${isMobile ? 'screen' : 'page'} successfully!`,

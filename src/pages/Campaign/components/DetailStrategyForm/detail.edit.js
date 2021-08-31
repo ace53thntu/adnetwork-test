@@ -7,10 +7,10 @@ import {Container} from 'reactstrap';
 
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {Tabs} from '../components';
-import {useCampaignManager} from '../hook';
-import {useDestructureCampaignOptions} from '../hooks';
-import {useGetDefaultStrategy} from '../hooks/useGetDefaultStrategy';
+import {Tabs} from '..';
+import {useCampaignManager} from '../../hook';
+import {useDestructureCampaignOptions} from '../../hooks';
+import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
 import Concept from './Concept';
 import DescriptionStrategy from './DescriptionStrategy';
 import Summary from './Summary';

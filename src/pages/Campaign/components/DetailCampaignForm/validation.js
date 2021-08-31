@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {CAMPAIGN_KEYS} from '../constants';
+import {CAMPAIGN_KEYS} from '../../constants';
 
 export const validationCampaign = t => {
   return yupResolver(

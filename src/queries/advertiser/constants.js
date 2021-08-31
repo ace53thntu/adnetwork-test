@@ -1,0 +1,2 @@
+export const GET_ADVERTISERS = 'GET_ADVERTISERS';
+export const GET_ADVERTISER = 'GET_ADVERTISER';

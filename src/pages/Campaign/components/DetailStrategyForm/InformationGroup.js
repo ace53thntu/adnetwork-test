@@ -8,10 +8,10 @@ import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 //---> Internal Modules
-import SelectCampaign from '../components/SelectCampaign';
-import SelectStrategyItem from '../components/SelectStrategyItem';
+import SelectCampaign from '../SelectCampaign';
+import SelectStrategyItem from '../SelectStrategyItem';
 // import {useGetFamilies} from 'core/queries/family/useGetFamilies';
-import {useDestructureListToOptions} from '../hooks';
+import {useDestructureListToOptions} from '../../hooks';
 import {FormTextInput} from 'components/forms';
 
 const InformationGroup = ({

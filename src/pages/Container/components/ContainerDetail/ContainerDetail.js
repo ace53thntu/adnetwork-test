@@ -49,15 +49,7 @@ function ContainerDetail() {
     containerId
   );
   const {data: pages = []} = useGetContainerPages(containerId);
-  console.log(
-    '🚀 ~ file: ContainerDetail.js ~ line 45 ~ ContainerDetail ~ pages',
-    pages
-  );
   const countSource = useCountSource(pages);
-  console.log(
-    '🚀 ~ file: ContainerDetail.js ~ line 57 ~ ContainerDetail ~ countSource',
-    countSource
-  );
 
   useEffect(() => {
     if (containerId) {

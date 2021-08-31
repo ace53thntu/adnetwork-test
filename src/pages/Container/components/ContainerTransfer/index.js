@@ -1,22 +1,19 @@
-import React, {useState, useCallback} from 'react';
-import {useParams} from 'react-router-dom';
-import {Nav, NavItem, Button, TabContent, TabPane, Container} from 'reactstrap';
+import React from 'react';
+import {Container} from 'reactstrap';
 
 // components
-import ListTransferFiles from './ListTransferFiles';
-import FormTransferFiles from './FormTransferFiles';
+// import ListTransferFiles from './ListTransferFiles';
+// import FormTransferFiles from './FormTransferFiles';
 
 // import {useGetAContainer, useFetchTransferFiles} from 'core/queries/containers';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 
 function ContainerTransfer() {
-  const {cid: containerId} = useParams();
-
-  const [activeTab, setActiveTab] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [dataListTransferFiles, setCurrentDataFiles] = useState({});
-  const [containerDetail, setCurrentContainer] = useState(null);
-  const [updateItem, setUpdateItem] = useState(null);
+  // const [activeTab, setActiveTab] = useState(0);
+  // const [loading, setLoading] = useState(true);
+  // const [dataListTransferFiles, setCurrentDataFiles] = useState({});
+  // const [containerDetail, setCurrentContainer] = useState(null);
+  // const [updateItem, setUpdateItem] = useState(null);
 
   // const [fetchTransferFiles] = useFetchTransferFiles();
   // const [getAContainer] = useGetAContainer();
@@ -40,21 +37,21 @@ function ContainerTransfer() {
   //   };
   // }, [getAContainer, fetchTransferFiles, containerId]);
 
-  const updateListTransfer = useCallback(async () => {
-    try {
-      // const dataListTransferFiles = await fetchTransferFiles(containerId);
-      // setCurrentDataFiles(dataListTransferFiles);
-    } catch (error) {}
-  }, []);
+  // const updateListTransfer = useCallback(async () => {
+  //   try {
+  //     // const dataListTransferFiles = await fetchTransferFiles(containerId);
+  //     // setCurrentDataFiles(dataListTransferFiles);
+  //   } catch (error) {}
+  // }, []);
 
-  const onEditOrAddItem = useCallback(
-    async item => {
-      setUpdateItem(item);
-      setActiveTab(1);
-    },
-    [setUpdateItem, setActiveTab]
-  );
-
+  // const onEditOrAddItem = useCallback(
+  //   async item => {
+  //     setUpdateItem(item);
+  //     setActiveTab(1);
+  //   },
+  //   [setUpdateItem, setActiveTab]
+  // );
+  const loading = false;
   return loading ? (
     <div>Loading...</div>
   ) : (
@@ -65,7 +62,7 @@ function ContainerTransfer() {
         icon="pe-7s-plane icon-gradient bg-tempting-azure"
       />
       <Container fluid>
-        <Nav className="justify-content-center">
+        {/* <Nav className="justify-content-center">
           <NavItem>
             <Button
               outline
@@ -107,7 +104,7 @@ function ContainerTransfer() {
               />
             ) : null}
           </TabPane>
-        </TabContent>
+        </TabContent> */}
       </Container>
     </>
   );

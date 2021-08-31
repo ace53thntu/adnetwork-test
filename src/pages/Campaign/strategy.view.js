@@ -1,7 +1,7 @@
 import {useGetStrategy} from 'core/queries/campaigns';
 import React from 'react';
 import {useParams} from 'react-router';
-import {StrategyFormDetailView} from './DetailStrategyForm';
+import {StrategyFormDetailView} from './components/DetailStrategyForm';
 
 const ViewStrategy = () => {
   const {id: stgId} = useParams();
