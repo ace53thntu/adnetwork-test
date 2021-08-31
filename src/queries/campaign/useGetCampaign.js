@@ -13,7 +13,7 @@ export function useGetCampaign(cid) {
   return useQuery(
     [GET_CAMAPAIGN, cid],
     () =>
-      CampaignAPIRequest.getContainer({
+      CampaignAPIRequest.getCampaign({
         id: cid,
         options: {
           cancelToken

@@ -17,10 +17,14 @@ export const useInitCampaignDefaultValue = ({
   convEvents = [],
   convLabel = []
 }) => {
+  console.log(
+    '🚀 ~ file: useInitCampaignDefaultValue.js ~ line 20 ~ advertisers',
+    advertisers
+  );
   return useMemo(() => {
     if (campaign) {
       const {
-        id,
+        uuid: id,
         advertiser_uuid: advId,
         name,
         status,
@@ -33,7 +37,7 @@ export const useInitCampaignDefaultValue = ({
       end_time = new Date(end_time);
 
       // Get advertiser selected
-      const advertiser = advertisers.find(advItem => advItem.id === advId);
+      const advertiser = advertisers.find(advItem => advItem.uuid === advId);
       return {
         id,
         advertiser,

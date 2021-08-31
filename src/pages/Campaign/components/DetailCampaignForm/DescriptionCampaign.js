@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 //---> External Modules
 import {useForm, FormProvider, Controller} from 'react-hook-form';
@@ -19,6 +19,7 @@ import {parseCampaignFormData} from '../../utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
 import {useGetAdvertisers} from 'queries/advertiser';
+import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
 
 const DescriptionCampaign = ({
   goToTab,
@@ -30,18 +31,9 @@ const DescriptionCampaign = ({
 }) => {
   const {t} = useTranslation();
   const {data: advertisers} = useGetAdvertisers();
-  // const {mutateAsync: createCampaign} = useCreateCampaign();
-  const createCampaign = useCallback(() => {
-    return new Promise(resolve => {
-      resolve('ok');
-    });
-  }, []);
-  // const {mutateAsync: updateCampaign} = useUpdateCampaign();
-  const updateCampaign = useCallback(() => {
-    return new Promise(resolve => {
-      resolve('ok');
-    });
-  }, []);
+  const {mutateAsync: createCampaign} = useCreateCampaign();
+  const {mutateAsync: updateCampaign} = useEditCampaign();
+
   const {gotoCampaignManagement} = useCampaignManager();
   const destructureAdvs = useDestrutureAdvertisers({
     advertisers: advertisers?.items || []
@@ -53,6 +45,10 @@ const DescriptionCampaign = ({
     advertisers: destructureAdvs,
     convEvents: CONV_EVENT_OPTIONS
   });
+  console.log(
+    '🚀 ~ file: DescriptionCampaign.js ~ line 48 ~ campaign',
+    campaign
+  );
 
   const methods = useForm({
     defaultValues: campaign,
@@ -61,13 +57,24 @@ const DescriptionCampaign = ({
 
   const {handleSubmit, reset, control, errors} = methods;
 
+  useEffect(() => {
+    reset(campaign);
+  }, [campaign, reset]);
+
   const onSubmit = useCallback(
     async formData => {
+      console.log(
+        '🚀 ~ file: DescriptionCampaign.js ~ line 66 ~ formData',
+        formData
+      );
       const requestBody = parseCampaignFormData(formData);
-
+      console.log(
+        '🚀 ~ file: DescriptionCampaign.js ~ line 59 ~ requestBody',
+        requestBody
+      );
       if (isEdit) {
         try {
-          await updateCampaign({campaignId, data: requestBody});
+          await updateCampaign({campId: campaignId, data: requestBody});
           ShowToast.success('Updated Campaign successfully!');
           goToTab({nextTab: 'strategies'});
         } catch (error) {
@@ -80,7 +87,7 @@ const DescriptionCampaign = ({
             '🚀 ~ file: DescriptionCampaign.js ~ line 66 ~ data',
             data
           );
-          goToTab({nextTab: 'strategies', campaignIdCreated: data?.id});
+          goToTab({nextTab: 'strategies', campaignIdCreated: data?.uuid});
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to create Campaign');
@@ -108,6 +115,7 @@ const DescriptionCampaign = ({
                   placeholder={t('selectAAdvertiser')}
                   options={destructureAdvs || []}
                   disabled={isEdit}
+                  defaultValue={campaign?.advertiser}
                 />
               </Col>
               <Col md="6">
@@ -187,7 +195,7 @@ const DescriptionCampaign = ({
                 <Label className="mr-5">Status</Label>
                 <Controller
                   control={control}
-                  name={CAMPAIGN_KEYS.ACTIVE}
+                  name={CAMPAIGN_KEYS.STATUS}
                   render={({onChange, onBlur, value, name}) => (
                     <ActiveToogle value={value} onChange={onChange} />
                   )}

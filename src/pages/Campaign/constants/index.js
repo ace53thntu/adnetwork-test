@@ -20,9 +20,9 @@ export const CONV_LABEL_OPTIONS = [
 export const CAMPAIGN_KEYS = {
   ID: 'id',
   ADVERTISER: 'advertiser',
-  ADVERTISER_ID: 'advertiser_id',
+  ADVERTISER_ID: 'advertiser_uuid',
   NAME: 'name',
-  ACTIVE: 'active',
+  STATUS: 'status',
   START_TIME: 'start_time',
   END_TIME: 'end_time',
   CPI: 'cpi',

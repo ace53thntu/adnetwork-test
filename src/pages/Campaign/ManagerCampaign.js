@@ -126,7 +126,7 @@ const ManagerCampaign = ({listAdvertisers}) => {
   );
 
   const renderCampaignView = (campaignItem, campIdx) => {
-    const {advertiserName, name, id, status} = campaignItem;
+    const {advertiserName, name, uuid: id, status} = campaignItem;
     return (
       <ListGroupItem
         className={`mb-2 border border-${

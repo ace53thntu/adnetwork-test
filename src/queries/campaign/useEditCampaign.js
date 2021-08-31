@@ -12,7 +12,12 @@ export function useEditCampaign() {
   const client = useQueryClient();
 
   return useMutation(
-    data => CampaignAPIRequest.editCampaign({data, options: {cancelToken}}),
+    ({campId, data}) =>
+      CampaignAPIRequest.editCampaign({
+        id: campId,
+        data,
+        options: {cancelToken}
+      }),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
