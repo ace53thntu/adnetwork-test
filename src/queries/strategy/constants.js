@@ -1,0 +1,2 @@
+export const GET_STRATEGIES = 'GET_STRATEGIES';
+export const GET_STRATEGY = 'GET_STRATEGY';

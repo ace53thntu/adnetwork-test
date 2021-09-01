@@ -17,10 +17,6 @@ export const useInitCampaignDefaultValue = ({
   convEvents = [],
   convLabel = []
 }) => {
-  console.log(
-    '🚀 ~ file: useInitCampaignDefaultValue.js ~ line 20 ~ advertisers',
-    advertisers
-  );
   return useMemo(() => {
     if (campaign) {
       const {

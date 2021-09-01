@@ -1,4 +1,4 @@
-import {TrackerTemplateAPIRequest} from 'api/tracker-template';
+import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 

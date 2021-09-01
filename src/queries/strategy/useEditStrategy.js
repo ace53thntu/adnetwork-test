@@ -1,19 +1,20 @@
-import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
+import {StrategyAPIRequest} from 'api/strategy.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_TRACKER_TEMPLATES} from './constants';
+import {GET_STRATEGIES} from './constants';
 
 /**
- * Hook to create a Tracker template
+ * Edit a Strategy
  */
-export function useCreateTrackerTemplate() {
+export function useEditStrategy() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    data =>
-      TrackerTemplateAPIRequest.createTrackerTemplate({
+    ({straId, data}) =>
+      StrategyAPIRequest.editStrategy({
+        id: straId,
         data,
         options: {cancelToken}
       }),
@@ -22,7 +23,7 @@ export function useCreateTrackerTemplate() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_TRACKER_TEMPLATES]);
+        client.invalidateQueries([GET_STRATEGIES]);
       }
     }
   );

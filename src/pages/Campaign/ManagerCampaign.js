@@ -14,11 +14,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 //---> Internal Modules
 import {colorStatus, generateClassName} from './common';
 import {useCampaignManager} from './hook';
-import {useGetStrategies} from './hooks';
 import {useDestructureCampaigns} from './hooks/useDestructureCampaigns';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {useGetCampaigns} from 'queries/campaign';
+import {useGetStrategies} from 'queries/strategy';
 // import {DialogConfirm} from 'components';
 // import {useGetCampaigns} from 'core/queries/campaigns';
 
@@ -51,10 +51,16 @@ const ManagerCampaign = ({listAdvertisers}) => {
     goToViewStrategy
   } = useCampaignManager();
   const {data: campaignsResp} = useGetCampaigns();
-  const strategies = useGetStrategies({
-    advertisers: listAdvertisers,
-    campaigns: campaignsResp?.items ?? []
-  });
+  const {data: strategiesRes} = useGetStrategies();
+  console.log(
+    '🚀 ~ file: ManagerCampaign.js ~ line 55 ~ ManagerCampaign ~ strategiesRes',
+    strategiesRes
+  );
+  const strategies = [];
+  // const strategies = useGetStrategies({
+  //   advertisers: listAdvertisers,
+  //   campaigns: campaignsResp?.items ?? []
+  // });
   const campaigns = useDestructureCampaigns({
     campaigns: campaignsResp?.items ?? []
   });

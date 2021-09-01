@@ -1,0 +1,2 @@
+export const GET_PUBLISHERS = 'GET_PUBLISHERS';
+export const GET_PUBLISHER = 'GET_PUBLISHER';

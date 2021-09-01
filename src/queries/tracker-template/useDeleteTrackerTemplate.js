@@ -1,4 +1,4 @@
-import {TrackerTemplateAPIRequest} from 'api/tracker-template';
+import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
 import {useMutation, useQueryClient} from 'react-query';
 
 import {GET_TRACKER_TEMPLATES} from './constants';

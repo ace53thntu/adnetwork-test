@@ -56,11 +56,13 @@ function ContainerSideBar() {
         >
           {t('createNew')}
         </Button>
-        <ContainerCreateDialog
-          isOpen={isOpenDialog}
-          toggle={onHandleOpenCreateDialog}
-          containers={containers}
-        />
+        {isOpenDialog && (
+          <ContainerCreateDialog
+            isOpen={isOpenDialog}
+            toggle={onHandleOpenCreateDialog}
+            containers={containers}
+          />
+        )}
       </div>
       <div className="border mb-2">
         <ContainersTree containers={containers} />
