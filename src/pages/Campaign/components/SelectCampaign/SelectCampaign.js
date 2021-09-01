@@ -22,7 +22,7 @@ const SelectCampaign = ({
   const currentCampaign = useMemo(() => {
     if (validArray({list: listCampaignOptions})) {
       const foundCamp = [...listCampaignOptions].find(
-        item => item?.value === parseInt(campId, 10)
+        item => item?.value === campId
       );
       if (foundCamp) {
         return foundCamp;
@@ -36,17 +36,17 @@ const SelectCampaign = ({
 
   useEffect(() => {
     if (!isEdit) {
-      setValue('campaign_id', currentCampaign);
+      setValue('campaign_uuid', currentCampaign);
     } else {
-      setValue('campaign_id', currentStrategy?.campaign_id);
+      setValue('campaign_uuid', currentStrategy?.campaign_uuid);
     }
-  }, [currentCampaign, currentStrategy?.campaign_id, isEdit, setValue]);
+  }, [currentCampaign, currentStrategy?.campaign_uuid, isEdit, setValue]);
 
   return (
     <>
       <FormReactSelect
         required
-        name="campaign_id"
+        name="campaign_uuid"
         label={t('campaign')}
         placeholder={t('selectACampaign')}
         options={listCampaignOptions}

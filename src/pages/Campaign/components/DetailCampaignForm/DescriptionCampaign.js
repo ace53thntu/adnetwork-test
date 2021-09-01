@@ -45,10 +45,6 @@ const DescriptionCampaign = ({
     advertisers: destructureAdvs,
     convEvents: CONV_EVENT_OPTIONS
   });
-  console.log(
-    '🚀 ~ file: DescriptionCampaign.js ~ line 48 ~ campaign',
-    campaign
-  );
 
   const methods = useForm({
     defaultValues: campaign,

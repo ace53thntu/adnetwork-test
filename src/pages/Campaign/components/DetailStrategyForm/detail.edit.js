@@ -15,6 +15,7 @@ import Concept from './Concept';
 import DescriptionStrategy from './DescriptionStrategy';
 import Summary from './Summary';
 import {useQueryString} from 'hooks';
+import {useGetCampaigns} from 'queries/campaign';
 // import {useGetCampaigns} from 'core/queries';
 
 const StrategyFormDetailEdit = ({
@@ -23,10 +24,9 @@ const StrategyFormDetailEdit = ({
   campaignId,
   viewOnly
 }) => {
-  // const {data: listCampaign = []} = useGetCampaigns({mode: 'details'});
-  const listCampaign = [];
+  const {data: listCampaign = []} = useGetCampaigns();
   const listCampaignOptions = useDestructureCampaignOptions({
-    campaigns: listCampaign
+    campaigns: listCampaign?.items
   });
   const query = useQueryString();
   const nextTab = query.get('next_tab');

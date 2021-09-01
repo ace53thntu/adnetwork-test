@@ -3,15 +3,17 @@ import React, {Fragment, useCallback, useState} from 'react';
 
 //---> External Modules
 import {useTranslation} from 'react-i18next';
-import {Col, FormGroup, Row} from 'reactstrap';
+import {Col, FormGroup, Label, Row} from 'reactstrap';
 import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {Controller, useFormContext} from 'react-hook-form';
+import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import SelectCampaign from '../SelectCampaign';
 import SelectStrategyItem from '../SelectStrategyItem';
 // import {useGetFamilies} from 'core/queries/family/useGetFamilies';
-import {useDestructureListToOptions} from '../../hooks';
+import {usePositionOptions} from '../../hooks';
 import {FormTextInput} from 'components/forms';
 
 const InformationGroup = ({
@@ -21,12 +23,9 @@ const InformationGroup = ({
   isEdit
 }) => {
   const {t} = useTranslation();
+  const {errors, control} = useFormContext();
 
-  // const {data: listFamilies = []} = useGetFamilies();
-  const listFamilies = [];
-  const destructureFamilies = useDestructureListToOptions({
-    listData: listFamilies
-  });
+  const positions = usePositionOptions();
   const [isShow, setIsShow] = useState(true);
 
   const handleToggleGroup = useCallback(evt => {
@@ -59,17 +58,7 @@ const InformationGroup = ({
                 isEdit={isEdit}
               />
             </Col>
-            <Col md="6">
-              <SelectStrategyItem
-                viewOnly={viewOnly}
-                listOptions={destructureFamilies}
-                currentStrategy={currentStrategy}
-                name={'family_ids'}
-                label={t('family')}
-                placeholder={t('family')}
-                isMulti={true}
-              />
-            </Col>
+
             <Col md="6">
               <FormTextInput
                 type="text"
@@ -81,13 +70,95 @@ const InformationGroup = ({
                 disabled={viewOnly}
               />
             </Col>
-            <Col md="6">
+
+            <Col xs="6">
+              <FormGroup>
+                <Label for="startDate">
+                  <span className="text-danger">*</span>
+                  {t('startDate')}
+                </Label>
+                <Controller
+                  control={control}
+                  name="start_at"
+                  render={({onChange, onBlur, value, name}) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={date => onChange(date)}
+                      className="form-control"
+                      timeInputLabel="Time:"
+                      dateFormat="dd/MM/yyyy h:mm aa"
+                      showTimeInput
+                      showTimeSelect
+                      timeIntervals={15}
+                      placeholderText="dd/mm/yyyy hh:mm"
+                    />
+                  )}
+                />
+                {errors && errors['start_at'] ? (
+                  <div className="invalid-feedback d-block">
+                    {errors['start_at'].message}
+                  </div>
+                ) : null}
+              </FormGroup>
+            </Col>
+            <Col xs="6">
+              <FormGroup>
+                <Label for="endDate">
+                  <span className="text-danger">*</span>
+                  End date
+                </Label>
+                <Controller
+                  control={control}
+                  name="end_at"
+                  render={({onChange, onBlur, value, name}) => (
+                    <DatePicker
+                      selected={value}
+                      onChange={date => onChange(date)}
+                      className="form-control"
+                      timeInputLabel="Time:"
+                      dateFormat="dd/MM/yyyy h:mm aa"
+                      showTimeInput
+                      showTimeSelect
+                      timeIntervals={15}
+                      placeholderText="dd/mm/yyyy hh:mm"
+                    />
+                  )}
+                />
+                {errors && errors['end_at'] ? (
+                  <div className="invalid-feedback d-block">
+                    {errors['end_at']?.message}
+                  </div>
+                ) : null}
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <SelectStrategyItem
+                viewOnly={viewOnly}
+                listOptions={positions}
+                currentStrategy={currentStrategy}
+                name="position_ids"
+                label={t('position')}
+                placeholder={t('position')}
+                isMulti={true}
+              />
+            </Col>
+            <Col md="4">
               <FormTextInput
-                type="number"
+                type="text"
                 placeholder="Skip Delay"
                 id="skip_delay"
                 name="skip_delay"
                 label="Skip Delay"
+                isRequired={false}
+              />
+            </Col>
+            <Col md="4">
+              <FormTextInput
+                type="text"
+                placeholder="Cpm"
+                id="cpm"
+                name="cpm"
+                label="Cpm"
                 isRequired={false}
               />
             </Col>

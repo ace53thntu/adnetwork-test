@@ -19,6 +19,7 @@ import {PageTitleAlt} from 'components/layouts/Admin/components';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {useGetCampaigns} from 'queries/campaign';
 import {useGetStrategies} from 'queries/strategy';
+import {useDestructureStrategies} from './hooks/useDestructureStrategies';
 // import {DialogConfirm} from 'components';
 // import {useGetCampaigns} from 'core/queries/campaigns';
 
@@ -56,11 +57,10 @@ const ManagerCampaign = ({listAdvertisers}) => {
     '🚀 ~ file: ManagerCampaign.js ~ line 55 ~ ManagerCampaign ~ strategiesRes',
     strategiesRes
   );
-  const strategies = [];
-  // const strategies = useGetStrategies({
-  //   advertisers: listAdvertisers,
-  //   campaigns: campaignsResp?.items ?? []
-  // });
+  const strategies = useDestructureStrategies({
+    strategies: strategiesRes?.items,
+    campaigns: campaignsResp?.items ?? []
+  });
   const campaigns = useDestructureCampaigns({
     campaigns: campaignsResp?.items ?? []
   });
@@ -174,13 +174,13 @@ const ManagerCampaign = ({listAdvertisers}) => {
   const renderStrategyView = (_strategies = []) =>
     _strategies.map((strategy, indStg) => {
       const {
-        advertiserName,
-        campaignName,
-        strategyId,
-        strategyName,
+        advertiser_name: advertiserName,
+        campaign_name: campaignName,
+        uuid: strategyId,
+        name: strategyName,
         status,
         process,
-        campaignId
+        campaign_uuid: campaignId
       } = strategy;
       return (
         <ListGroupItem

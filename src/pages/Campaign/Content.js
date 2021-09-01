@@ -7,8 +7,8 @@ import EditCampaign from './EditCampaign';
 import ManagerCampaign from './ManagerCampaign';
 import StrategyCampaign from './Strategy';
 import AddStrategy from './strategy.add';
-// import EditStrategy from './strategy.edit';
-// import ViewStrategy from './strategy.view';
+import EditStrategy from './strategy.edit';
+import ViewStrategy from './strategy.view';
 import CampaignTree from './CampaignTree';
 import {CAMPAIGN_VIEWS} from './constants';
 import AppContent from 'components/layouts/Admin/components/AppContent';
@@ -53,8 +53,8 @@ const Campaign = () => {
           </Route>
 
           <Route path=":campId/strategy" element={<StrategyCampaign />}>
-            {/* <Route path=":id" element={<ViewStrategy />} />
-            <Route path=":id/edit" element={<EditStrategy />} /> */}
+            <Route path=":id" element={<ViewStrategy />} />
+            <Route path=":id/edit" element={<EditStrategy />} />
             <Route path="/create" element={<AddStrategy />} />
           </Route>
         </Routes>

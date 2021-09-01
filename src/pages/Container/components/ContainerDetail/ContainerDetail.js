@@ -23,7 +23,7 @@ import {useContainerStore} from 'pages/Container/context';
 import {validationDescriptionTab} from '../ContainerWebsiteTag/validations';
 import {ButtonLoading} from 'components/common';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {FormRadioGroup, FormTextInput} from 'components/forms';
+import {FormRadioGroup, FormReactSelect, FormTextInput} from 'components/forms';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {useGetContainer} from 'queries/container/useGetContainer';
@@ -32,6 +32,8 @@ import {useDeleteContainer} from 'queries/container/useDeleteContainer';
 import {useGetContainers} from 'queries/container/useGetContainers';
 import {useGetContainerPages} from 'queries/container/useGetContainerPages';
 import {useCountSource} from 'pages/Container/hooks/useCountSource';
+import {usePublisherOptions} from 'pages/Container/hooks/usePublisherOptions';
+import {destructureFormData} from '../ContainerCreateDialog/dto';
 
 const checkHasSource = ({source = 'web', pages = []}) => {
   const foundSource = pages?.find(item => item?.source === source);
@@ -129,27 +131,49 @@ export default ContainerDetail;
 function ContainerForm({container, containers = []}) {
   const {t} = useTranslation();
   const navigate = useNavigate();
-
-  const {name = '', url = '', status = 'active', id: containerId} = container;
+  const publishers = usePublisherOptions();
+  const {
+    name = '',
+    url = '',
+    status = 'active',
+    id: containerId,
+    publisher_uuid
+  } = container;
+  console.log(
+    '🚀 ~ file: ContainerDetail.js ~ line 135 ~ ContainerForm ~ container',
+    container
+  );
   const filteredContainer = containers?.items?.filter(
     cnt => cnt.id !== container.id
+  );
+  const foundPublisher = publishers?.find(
+    item => item?.value === publisher_uuid
+  );
+  console.log(
+    '🚀 ~ file: ContainerDetail.js ~ line 149 ~ ContainerForm ~ foundPublisher',
+    foundPublisher
   );
 
   const methods = useForm({
     defaultValues: {
       name,
       url,
-      status
+      status,
+      publisher: foundPublisher ?? null
     },
     resolver: validationDescriptionTab(filteredContainer)
   });
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, reset} = methods;
   const {mutateAsync: updateContainer} = useEditContainer();
   const {updateContainer: updateContainerDispatch} = useContainerStore();
   const {mutateAsync: deleteContainer} = useDeleteContainer();
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    reset({name, url, status, publisher: foundPublisher ?? null});
+  }, [foundPublisher, name, reset, status, url]);
 
   useEffect(() => {
     return () => {
@@ -160,10 +184,11 @@ function ContainerForm({container, containers = []}) {
 
   const onHandleSubmit = useCallback(
     async formValues => {
+      const formData = destructureFormData(formValues);
       try {
         await updateContainer({
           cid: container.uuid,
-          data: formValues
+          data: formData
         });
         updateContainerDispatch();
         toast.success(t('updateContainerSuccessfully'), {
@@ -203,6 +228,13 @@ function ContainerForm({container, containers = []}) {
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Row>
             <Col sm={12} md={12}>
+              <FormReactSelect
+                required
+                name="publisher"
+                label="Publisher"
+                placeholder={'Select publisher'}
+                options={publishers}
+              />
               <FormTextInput
                 isRequired
                 name="name"

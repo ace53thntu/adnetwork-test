@@ -7,11 +7,10 @@ export const useDestructureCampaignOptions = ({campaigns = []}) => {
     }
 
     const result = campaigns.map(campaignItem => {
-      const {name, id, strategies} = campaignItem;
+      const {name, uuid: id} = campaignItem;
       return {
         label: name,
-        value: id,
-        strategies
+        value: id
       };
     });
 

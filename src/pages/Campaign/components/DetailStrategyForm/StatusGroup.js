@@ -38,7 +38,7 @@ const StatusGroup = ({viewOnly}) => {
               <Label className="mr-5">Status</Label>
               <Controller
                 control={control}
-                name="active"
+                name="status"
                 render={({onChange, onBlur, value, name}) => (
                   <ActiveToogle
                     value={value}
@@ -48,21 +48,7 @@ const StatusGroup = ({viewOnly}) => {
                 )}
               />
             </Col>
-            <Col md="3">
-              <Label className="mr-5">Week PartsGmt</Label>
-              <Controller
-                control={control}
-                name="week_parts_gmt"
-                disabled={viewOnly}
-                render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle
-                    value={value}
-                    onChange={onChange}
-                    disabled={viewOnly}
-                  />
-                )}
-              />
-            </Col>
+
             <Col md="3">
               <Label className="mr-5">Only Unskippable</Label>
               <Controller

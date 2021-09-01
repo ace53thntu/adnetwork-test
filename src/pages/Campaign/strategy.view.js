@@ -1,4 +1,4 @@
-import {useGetStrategy} from 'core/queries/campaigns';
+import {useGetStrategy} from 'queries/strategy';
 import React from 'react';
 import {useParams} from 'react-router';
 import {StrategyFormDetailView} from './components/DetailStrategyForm';
