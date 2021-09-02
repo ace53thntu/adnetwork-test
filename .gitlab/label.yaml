@@ -1,0 +1,15 @@
+Assets:
+  - 'src/assets/**/*'
+Config:
+  - 'src/config/**/*'
+  - '*.yml'
+  - '*.yaml'
+CSS:
+  - '*.css'
+  - '*.scss'
+Layout:
+  - 'src/layouts/**/*'
+Router:
+  - 'src/router/**/*'
+Translation:
+  - 'src/translations/**/*'
