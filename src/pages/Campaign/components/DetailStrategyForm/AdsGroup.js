@@ -84,7 +84,7 @@ const AdsGroup = ({viewOnly}) => {
             <Col md={4}>
               <FormTextInput
                 type="text"
-                placeholder="View rate prediction"
+                placeholder="0.0"
                 id="view_rate_prediction"
                 name="view_rate_prediction"
                 label="View rate prediction"

@@ -39,8 +39,8 @@ function FormReactSelect({
       <FormGroup>
         {label && (
           <Label for="">
-            {label}
             {required && <span className="text-danger"> *</span>}
+            {label}
           </Label>
         )}
         <Controller

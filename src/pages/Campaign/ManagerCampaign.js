@@ -17,9 +17,10 @@ import {useCampaignManager} from './hook';
 import {useDestructureCampaigns} from './hooks/useDestructureCampaigns';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {useGetCampaigns} from 'queries/campaign';
-import {useGetStrategies} from 'queries/strategy';
+import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
+import {useDeleteStrategy, useGetStrategies} from 'queries/strategy';
 import {useDestructureStrategies} from './hooks/useDestructureStrategies';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 // import {DialogConfirm} from 'components';
 // import {useGetCampaigns} from 'core/queries/campaigns';
 
@@ -45,18 +46,17 @@ const StyledMenu = withStyles({
 
 const ManagerCampaign = ({listAdvertisers}) => {
   const navigate = useNavigate();
+  const {mutateAsync: deleteCampaign} = useDeleteCampaign();
+  const {mutateAsync: deleteStrategy} = useDeleteStrategy();
+  const {data: campaignsResp} = useGetCampaigns();
+  const {data: strategiesRes} = useGetStrategies();
   const {
     goToCreate,
     goToEditStrategy,
     goToEditCampaign,
     goToViewStrategy
   } = useCampaignManager();
-  const {data: campaignsResp} = useGetCampaigns();
-  const {data: strategiesRes} = useGetStrategies();
-  console.log(
-    '🚀 ~ file: ManagerCampaign.js ~ line 55 ~ ManagerCampaign ~ strategiesRes',
-    strategiesRes
-  );
+
   const strategies = useDestructureStrategies({
     strategies: strategiesRes?.items,
     campaigns: campaignsResp?.items ?? []
@@ -97,7 +97,37 @@ const ManagerCampaign = ({listAdvertisers}) => {
     setTitleDialog(title);
   };
 
-  const handleSubmitDelete = () => {};
+  const handleSubmitDelete = async () => {
+    if (typeView === 'strategy') {
+      //---> Delete strategy
+      try {
+        await deleteStrategy({straId: currentStrategy?.id});
+        ShowToast.success('Deleted strategy successfully');
+      } catch (err) {
+        console.log(
+          '🚀 ~ file: ManagerCampaign.js ~ line 108 ~ handleSubmitDelete ~ err',
+          err
+        );
+        ShowToast.error(err);
+      } finally {
+        setOpenConfirmDialog(false);
+      }
+    } else {
+      //---> Delete campaign
+      try {
+        await deleteCampaign({cid: currentCampaign});
+        ShowToast.success('Deleted campaign successfully');
+      } catch (err) {
+        console.log(
+          '🚀 ~ file: ManagerCampaign.js ~ line 122 ~ handleSubmitDelete ~ err',
+          err
+        );
+        ShowToast.error(err);
+      } finally {
+        setOpenConfirmDialog(false);
+      }
+    }
+  };
 
   const handleOpenMenuCampaign = (event, id) => {
     setCpAnchorEl(event.currentTarget);

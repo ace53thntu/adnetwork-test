@@ -10,9 +10,9 @@ export function useDeleteStrategy() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid}) =>
+    ({straId}) =>
       StrategyAPIRequest.deleteStrategy({
-        id: cid
+        id: straId
       }),
     {
       onError: (err, variables, rollback) => {

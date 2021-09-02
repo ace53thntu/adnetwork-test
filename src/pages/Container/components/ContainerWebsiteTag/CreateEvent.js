@@ -26,6 +26,7 @@ import {useCreateInventory} from 'queries/inventory';
 import {destructureFormData} from './utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
+import {usePositionOptions} from 'pages/Campaign/hooks';
 
 const formName = {
   properties: 'properties',
@@ -41,6 +42,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
   const trackerTemplates = useTrackerTemplateOptions();
+  const positions = usePositionOptions();
   const {mutateAsync: createInventory} = useCreateInventory();
 
   const methods = useForm({
@@ -182,7 +184,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                     label="Position"
                     placeholder="Select position"
                     optionLabelField="name"
-                    options={[]}
+                    options={positions}
                     disabled={formState.isSubmitting}
                     multiple={false}
                   />

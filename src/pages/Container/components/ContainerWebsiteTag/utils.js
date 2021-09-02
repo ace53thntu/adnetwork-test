@@ -33,7 +33,7 @@ export const destructureFormData = (pageId, formData) => {
     minimum_price: minimumPriceData,
     type: type?.value ?? '',
     metadata: formatMetadata,
-    position_id,
-    tracker_template_id
+    position_id: position_id?.value,
+    tracker_template_id: tracker_template_id?.value
   };
 };

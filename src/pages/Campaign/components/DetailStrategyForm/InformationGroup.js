@@ -145,7 +145,7 @@ const InformationGroup = ({
             <Col md="4">
               <FormTextInput
                 type="text"
-                placeholder="Skip Delay"
+                placeholder="0"
                 id="skip_delay"
                 name="skip_delay"
                 label="Skip Delay"
@@ -155,7 +155,7 @@ const InformationGroup = ({
             <Col md="4">
               <FormTextInput
                 type="text"
-                placeholder="Cpm"
+                placeholder="0"
                 id="cpm"
                 name="cpm"
                 label="Cpm"

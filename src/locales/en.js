@@ -100,6 +100,7 @@ const en = {
   acceptedContexts: 'Accepted contexts',
   acceptedPlacements: 'Accepted placements',
   recentStrategy: 'Recent strategies',
+  noAudienceAvaliable: 'No audience available',
 
   //report
   reportAudiences: 'Report Audiences',

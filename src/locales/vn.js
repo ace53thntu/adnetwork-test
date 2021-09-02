@@ -93,6 +93,7 @@ const vn = {
   createNewStrategy: 'Tạo mới chiến dịch',
   or: 'hoặc',
   saveWithoutStrategy: 'Lưu không tạo chiến dịch',
+  noAudienceAvaliable: 'No audience available',
 
   //report
   reportAudiences: 'Báo cáo Audiences',

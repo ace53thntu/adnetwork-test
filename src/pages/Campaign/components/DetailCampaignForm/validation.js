@@ -7,13 +7,17 @@ export const validationCampaign = t => {
     yup.object().shape({
       advertiser: yup.object().typeError('Required!'),
       name: yup.string().required('Required!'),
-      [CAMPAIGN_KEYS.START_TIME]: yup.date().required(t('required')),
+      [CAMPAIGN_KEYS.START_TIME]: yup
+        .date()
+        .required(t('required'))
+        .typeError(t('required')),
       [CAMPAIGN_KEYS.END_TIME]: yup
         .date()
         .min(
           yup.ref(`${CAMPAIGN_KEYS.START_TIME}`),
           "End date can't be before start date"
         )
+        .typeError(t('required'))
     })
   );
 };

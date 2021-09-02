@@ -11,7 +11,7 @@ import {useParams} from 'react-router';
 import InformationGroup from './InformationGroup';
 import StatusGroup from './StatusGroup';
 import {useNavigate} from 'react-router-dom';
-// import {strategyFormValidation} from './strategy.validation';
+import {strategyFormValidation} from './strategy.validation';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import '../DetailCampaignForm/_main.scss';
 import AdsGroup from './AdsGroup';
@@ -29,10 +29,6 @@ const DescriptionStrategy = ({
   listCampaignOptions,
   isSummary = false
 }) => {
-  console.log(
-    '🚀 ~ file: DescriptionStrategy.js ~ line 32 ~ currentStrategy',
-    currentStrategy
-  );
   const {t} = useTranslation();
   const {id: strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
@@ -42,7 +38,8 @@ const DescriptionStrategy = ({
   const methods = useForm({
     defaultValues: {
       ...currentStrategy
-    }
+    },
+    resolver: strategyFormValidation(isEdit, t)
   });
 
   const {handleSubmit} = methods;

@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 //---> External Modules
 import BlockUi from 'react-block-ui';
@@ -24,6 +24,7 @@ import InventoryProperty from './InventoryProperty';
 import {useDefaultInventory} from 'pages/Container/hooks/useDefaultInventory';
 import {destructureFormData} from './utils';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
+import {usePositionOptions} from 'pages/Campaign/hooks';
 
 const formName = {
   properties: 'properties',
@@ -58,17 +59,26 @@ function FormUpdate({toggle, inventory, pageId}) {
   const trackerTemplates = useTrackerTemplateOptions();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
-  const defaultValues = useDefaultInventory(inventory);
+  const positions = usePositionOptions();
+  const defaultValues = useDefaultInventory({
+    inventory,
+    trackerTemplates,
+    positions
+  });
   const methods = useForm({
     defaultValues,
     resolver: validationEvent([], true)
   });
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, reset} = methods;
 
   const {mutateAsync: editInventory} = useEditInventory();
 
   // local states
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onHandleSubmit = useCallback(
     async values => {
@@ -192,7 +202,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                     label="Position"
                     placeholder="Select position"
                     optionLabelField="name"
-                    options={[]}
+                    options={positions}
                     disabled={formState.isSubmitting}
                     multiple={false}
                   />
