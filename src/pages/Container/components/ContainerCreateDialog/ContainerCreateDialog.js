@@ -53,7 +53,7 @@ function ContainerCreateDialog({isOpen, toggle, containers = []}) {
   return (
     <Modal unmountOnClose isOpen={isOpen}>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <form onSubmit={handleSubmit(onHandleSubmit)} autoComplete="off">
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader>Create container</ModalHeader>
             <ModalBody>

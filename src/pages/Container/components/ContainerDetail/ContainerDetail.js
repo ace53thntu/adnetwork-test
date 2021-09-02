@@ -225,7 +225,7 @@ function ContainerForm({container, containers = []}) {
   return (
     <FormProvider {...methods}>
       <BlockUi tag="div" blocking={formState.isSubmitting}>
-        <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <form onSubmit={handleSubmit(onHandleSubmit)} autoComplete="off">
           <Row>
             <Col sm={12} md={12}>
               <FormReactSelect

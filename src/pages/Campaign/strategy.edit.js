@@ -6,10 +6,6 @@ import {useGetStrategy} from 'queries/strategy';
 const EditStrategy = () => {
   const {id: stgId} = useParams();
   const {data, isLoading} = useGetStrategy(stgId);
-  console.log(
-    '🚀 ~ file: strategy.edit.js ~ line 9 ~ EditStrategy ~ data',
-    data
-  );
 
   return isLoading ? (
     <div>Loading...</div>

@@ -9,7 +9,7 @@ import {Container} from 'reactstrap';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {Tabs} from '..';
 import {useCampaignManager} from '../../hook';
-import {useDestructureCampaignOptions} from '../../hooks';
+import {useDestructureCampaignOptions, usePositionOptions} from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
 import Concept from './Concept';
 import DescriptionStrategy from './DescriptionStrategy';
@@ -28,12 +28,14 @@ const StrategyFormDetailEdit = ({
   const listCampaignOptions = useDestructureCampaignOptions({
     campaigns: listCampaign?.items
   });
+  const positions = usePositionOptions();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
 
   const strategyData = useGetDefaultStrategy({
     strategyData: currentStrategy,
-    listCampaign: listCampaignOptions
+    listCampaign: listCampaignOptions,
+    positions
   });
 
   const {t} = useTranslation();

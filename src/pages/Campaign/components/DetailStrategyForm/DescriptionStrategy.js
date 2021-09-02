@@ -29,6 +29,10 @@ const DescriptionStrategy = ({
   listCampaignOptions,
   isSummary = false
 }) => {
+  console.log(
+    '🚀 ~ file: DescriptionStrategy.js ~ line 32 ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const {id: strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
@@ -53,7 +57,7 @@ const DescriptionStrategy = ({
       console.log('======== FORM DATA', req);
       if (isEdit) {
         try {
-          await editStrategy({strategyId, data: req});
+          await editStrategy({straId: strategyId, data: req});
           ShowToast.success('Update success');
           goTo({nextTab: 'audience'});
         } catch (error) {
