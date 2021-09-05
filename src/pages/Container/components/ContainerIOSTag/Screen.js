@@ -5,9 +5,6 @@ import {Row, Col, Card, CardBody, CardTitle, CardHeader} from 'reactstrap';
 import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 
-// components
-// import {FormTextInput, Forms, SelectCreatable, LoadingButton} from 'components';
-
 // queries, mutations
 import {validationPage} from '../ContainerWebsiteTag/validations';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';

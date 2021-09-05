@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SketchPicker} from 'react-color';
 import {useFormContext} from 'react-hook-form';
 import {FormGroup, Input, Label} from 'reactstrap';
+import './styles.scss';
 
 const popover = {
   position: 'absolute',
@@ -46,16 +47,24 @@ const ColorPicker = ({label, name, defaultValue = '#cccccc'}) => {
           onClick={onShowPicker}
           style={{
             backgroundColor: color ? color : '#FFFFFF',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            color: '#FFFFFF',
+            textShadow:
+              'black -2px 0px, black 0px 2px, black 2px 0px, black 0px -2px'
           }}
           placeholder="Click to select color"
           name={name}
           innerRef={register}
+          readOnly
         />
         {displayColorPicker ? (
           <div style={popover}>
             <div style={cover} onClick={onClosePicker} />
-            <SketchPicker color={color} onChange={onChangeColor} />
+            <SketchPicker
+              className="c-sketch-picker"
+              color={color}
+              onChange={onChangeColor}
+            />
           </div>
         ) : null}
       </div>

@@ -9,12 +9,11 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
 
 //---> Internal Modules
-import {useCampaignManager} from '../../hook';
 import './_main.scss';
 import {CAMPAIGN_KEYS, CONV_EVENT_OPTIONS} from '../../constants';
 import {validationCampaign} from './validation';
 import {useInitCampaignDefaultValue} from '../../hooks/useInitCampaignDefaultValue';
-import {useDestrutureAdvertisers} from '../../hooks';
+import {useCampaignManager, useDestrutureAdvertisers} from '../../hooks';
 import {parseCampaignFormData} from '../../utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';

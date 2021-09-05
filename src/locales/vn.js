@@ -208,7 +208,6 @@ const vn = {
   currentLogo: 'Logo hiện tại',
   replaceToLogo: 'Thay đổi logo',
   back: 'Trở lại',
-  create: 'Tạo',
   update: 'Cập nhật',
   preview: 'Xem trước',
   aPartner: 'đối tác',
@@ -277,7 +276,15 @@ const vn = {
   segment_csv: 'segment.csv',
   segment_json: 'segment.json',
   log_csv: 'log.csv',
-  log_json: 'log.json'
+  log_json: 'log.json',
+  // Organization
+  organization: 'Organization',
+  publisher: 'Publisher',
+  dsp: 'DSP',
+  newAdvertiser: 'Add new Advertiser',
+
+  // Form Actions
+  create: 'Tạo'
 };
 
 export default vn;

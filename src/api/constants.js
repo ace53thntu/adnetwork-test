@@ -42,5 +42,11 @@ export const endpoints = {
   },
   publisher: {
     publisher: `${API_V1}/publisher`
+  },
+  dsp: {
+    dsp: `${API_V1}/dsp`
+  },
+  iabs: {
+    iabs: `${API_V1}/iabs`
   }
 };

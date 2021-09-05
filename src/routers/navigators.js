@@ -55,6 +55,29 @@ export const InventoryMarketNav = (t, role) => {
   ];
 };
 
+export const OrganizationNav = (t, role) => {
+  return [
+    {
+      icon: 'pe-7s-cart',
+      label: t('organization'),
+      content: [
+        {
+          label: t('publisher'),
+          to: '#/organization/publisher'
+        },
+        {
+          label: t('dsp'),
+          to: '#/organization/dsp'
+        },
+        {
+          label: t('advertiser'),
+          to: '#/organization/advertiser'
+        }
+      ]
+    }
+  ];
+};
+
 export const UserManagementNav = (t, role) => {
   return [
     {

@@ -13,7 +13,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 //---> Internal Modules
 import {colorStatus, generateClassName} from './common';
-import {useCampaignManager} from './hook';
 import {useDestructureCampaigns} from './hooks/useDestructureCampaigns';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import DialogConfirm from 'components/common/DialogConfirm';
@@ -21,8 +20,7 @@ import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
 import {useDeleteStrategy, useGetStrategies} from 'queries/strategy';
 import {useDestructureStrategies} from './hooks/useDestructureStrategies';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-// import {DialogConfirm} from 'components';
-// import {useGetCampaigns} from 'core/queries/campaigns';
+import {useCampaignManager} from './hooks';
 
 const StyledMenu = withStyles({
   paper: {

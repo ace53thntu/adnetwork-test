@@ -7,6 +7,7 @@ import {
   ContainerNav,
   CreativeNav,
   InventoryMarketNav,
+  OrganizationNav,
   ReportNav,
   UserManagementNav
 } from 'routers/navigators';
@@ -77,7 +78,16 @@ const Nav = ({role}) => {
       <>
         <MetisMenu
           content={InventoryMarketNav(t)}
-          // activeLinkFromLocation
+          className="vertical-nav-menu"
+          iconNamePrefix=""
+          classNameStateIcon="pe-7s-angle-down"
+          LinkComponent={DefaultLink}
+        />
+        <div className="divider" />
+      </>
+      <>
+        <MetisMenu
+          content={OrganizationNav(t)}
           className="vertical-nav-menu"
           iconNamePrefix=""
           classNameStateIcon="pe-7s-angle-down"

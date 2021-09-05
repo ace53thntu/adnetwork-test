@@ -1,6 +1,8 @@
 import Dashboard from 'pages/Dashboard/Dashboard';
 import Campaign from 'pages/Campaign';
 import {containerPages} from './container';
+import {inventoryMarketPages} from './inventory-market';
+import {organizationPages} from './organization';
 
 export const appRoutes = {
   path: '/',
@@ -13,6 +15,8 @@ export const appRoutes = {
       path: '/campaigns/*',
       element: <Campaign />
     },
-    containerPages
+    containerPages,
+    inventoryMarketPages,
+    organizationPages
   ]
 };

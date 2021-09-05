@@ -1,0 +1,1 @@
+export {useGetIABs} from './useGetIABs';

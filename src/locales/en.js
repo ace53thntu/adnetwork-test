@@ -215,7 +215,6 @@ const en = {
   currentLogo: 'Current logo',
   replaceToLogo: 'Replace to logo',
   back: 'Back',
-  create: 'Create',
   update: 'Update',
   preview: 'Preview',
   aPartner: 'a partner',
@@ -272,6 +271,7 @@ const en = {
   algorithms: 'Algorithms',
   selectAlgorithms: 'Select algorithms',
   tags: 'Tags',
+  selectTags: 'Select tags',
   saveAndNext: 'Save & Next',
   chooseAnAudience: 'Choose an audience',
   previous: 'Previous',
@@ -306,7 +306,21 @@ const en = {
   segment_csv: 'segment.csv',
   segment_json: 'segment.json',
   log_csv: 'log.csv',
-  log_json: 'log.json'
+  log_json: 'log.json',
+
+  // Organization
+  organization: 'Organization',
+  publisher: 'Publisher',
+  dsp: 'DSP',
+  newAdvertiser: 'Add new Advertiser',
+  domains: 'Domains',
+  selectDomains: 'Select domains...',
+  iabs: 'IABs',
+  selectIABs: 'Select IABs...',
+  typeAndEnter: 'Type something and press enter...',
+  // Form Inputs & Actions,
+  enterName: 'Enter name...',
+  create: 'Create'
 };
 
 export default en;

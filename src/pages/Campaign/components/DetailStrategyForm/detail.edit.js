@@ -8,8 +8,11 @@ import {Container} from 'reactstrap';
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {Tabs} from '..';
-import {useCampaignManager} from '../../hook';
-import {useDestructureCampaignOptions, usePositionOptions} from '../../hooks';
+import {
+  useCampaignManager,
+  useDestructureCampaignOptions,
+  usePositionOptions
+} from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
 import Concept from './Concept';
 import DescriptionStrategy from './DescriptionStrategy';

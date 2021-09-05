@@ -12,8 +12,8 @@ import {useTranslation} from 'react-i18next';
 
 //---> Internal modules
 import {colorStatus, generateClassName} from 'pages/Campaign/common';
-import {useCampaignManager} from 'pages/Campaign/hook';
 import DialogConfirm from 'components/common/DialogConfirm';
+import {useCampaignManager} from 'pages/Campaign/hooks';
 
 const StyledMenu = withStyles({
   paper: {
