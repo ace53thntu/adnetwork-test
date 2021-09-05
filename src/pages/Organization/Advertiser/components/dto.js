@@ -12,9 +12,9 @@ export const mappingApiToForm = ({apiResp}) => {};
  */
 export const mappingFormToApi = ({formData}) => {
   const {name, status, iabs, domains, tags} = formData;
-  const desIABs = iabs?.map(item => item.value) || [];
-  const desDomains = domains?.map(item => item.value) || [];
-  const desTags = tags?.map(item => item.value) || [];
+  const desIABs = iabs?.map(item => item.value) || null;
+  const desDomains = domains?.map(item => item.value) || null;
+  const desTags = tags?.map(item => item.value) || null;
 
   return {
     name,

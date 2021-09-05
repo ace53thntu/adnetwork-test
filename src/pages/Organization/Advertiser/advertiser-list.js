@@ -17,16 +17,25 @@ import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
 import AdvertiserCreate from './advertiser-create';
+import AdvertiserEdit from './advertiser-edit';
 import {AdvertiserForm} from './components';
+import {useGetIABs} from 'queries/iabs';
+import {useIABsOptions} from '../hooks';
+import LoadingIndicator from 'components/common/LoadingIndicator';
 
 const ListAdvertiser = () => {
   const {t} = useTranslation();
-  const {data: advertisersRes} = useGetAdvertisers();
+  const [openForm, setOpenForm] = React.useState(false);
+  const [openFormEdit, setOpenFormEdit] = React.useState(false);
+  const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
+  const {data: advertisersRes, isLoading} = useGetAdvertisers();
   const advertisers = useMemo(() => {
     return advertisersRes?.items?.map(item => {
       return {...item, id: item.uuid};
     });
   }, [advertisersRes?.items]);
+  const {data: IABs} = useGetIABs();
+  const IABsOptions = useIABsOptions({IABs});
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -66,15 +75,22 @@ const ListAdvertiser = () => {
     ];
   }, []);
 
-  const [openForm, setOpenForm] = React.useState(false);
-
   const onToggleModal = () => {
     setOpenForm(prevState => !prevState);
+  };
+
+  const onToggleModalEdit = () => {
+    setOpenFormEdit(prevState => !prevState);
   };
 
   const onClickAdd = evt => {
     evt.preventDefault();
     setOpenForm(true);
+  };
+
+  const onClickItem = data => {
+    setCurrentAdvertiser(data?.uuid);
+    setOpenFormEdit(true);
   };
 
   return (
@@ -89,6 +105,8 @@ const ListAdvertiser = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
+                {isLoading && <LoadingIndicator />}
+
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
@@ -105,7 +123,7 @@ const ListAdvertiser = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody>
+                <CardBody style={{minHeight: '400px'}}>
                   <List
                     data={advertisers || []}
                     columns={columns}
@@ -114,7 +132,7 @@ const ListAdvertiser = () => {
                     // handleAction={(actionIndex, item) => {
                     //   onHandleDelete(actionIndex, item);
                     // }}
-                    // handleClickItem={handleClickItem}
+                    handleClickItem={onClickItem}
                   />
                 </CardBody>
               </Card>
@@ -124,8 +142,27 @@ const ListAdvertiser = () => {
       </AppContent>
       {/* Advertiser Create */}
       <AdvertiserCreate>
-        {openForm && <AdvertiserForm modal={openForm} toggle={onToggleModal} />}
+        {openForm && (
+          <AdvertiserForm
+            modal={openForm}
+            toggle={onToggleModal}
+            IABsOptions={IABsOptions}
+          />
+        )}
       </AdvertiserCreate>
+      {/* Advertiser Edit */}
+      <AdvertiserEdit>
+        {openFormEdit && (
+          <AdvertiserForm
+            modal={openFormEdit}
+            toggle={onToggleModalEdit}
+            IABsOptions={IABsOptions}
+            title="Edit Advertiser"
+            isEdit
+            advertiserId={currentAdvertiser}
+          />
+        )}
+      </AdvertiserEdit>
     </>
   );
 };

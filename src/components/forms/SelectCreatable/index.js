@@ -29,6 +29,10 @@ const SelectCreatable = ({
   const [options, setOptions] = useState(defaultOptions);
   const [value, setValue] = useState(selectedValues);
 
+  React.useEffect(() => {
+    setValue(selectedValues);
+  }, [selectedValues]);
+
   const handleChange = newValue => {
     setValue(newValue);
     setFormValue(name, newValue, {

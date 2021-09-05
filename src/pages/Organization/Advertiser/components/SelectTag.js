@@ -4,11 +4,11 @@ import {useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {INPUT_NAME} from '../constants';
 
-const SelectTag = () => {
+const SelectTag = ({defaultValue = []}) => {
   const {t} = useTranslation();
   const {setValue, errors, watch, register} = useFormContext();
-
   const selectedTags = watch(INPUT_NAME.TAGS);
+
   React.useEffect(() => {
     register({name: INPUT_NAME.TAGS});
   }, [register]);

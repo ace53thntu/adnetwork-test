@@ -58,7 +58,7 @@ export const InventoryMarketNav = (t, role) => {
 export const OrganizationNav = (t, role) => {
   return [
     {
-      icon: 'pe-7s-cart',
+      icon: 'pe-7s-users',
       label: t('organization'),
       content: [
         {
@@ -81,7 +81,7 @@ export const OrganizationNav = (t, role) => {
 export const UserManagementNav = (t, role) => {
   return [
     {
-      icon: 'pe-7s-users',
+      icon: 'pe-7s-user',
       label: t('Users management'),
       to: '#/users'
     }

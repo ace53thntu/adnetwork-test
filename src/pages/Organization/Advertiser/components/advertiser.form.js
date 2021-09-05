@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 //---> External Modules
@@ -21,30 +21,48 @@ import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
 import {INPUT_NAME} from '../constants';
-import {useGetIABs} from 'queries/iabs';
-import {useIABsOptions} from 'pages/Organization/hooks';
 import SelectTag from './SelectTag';
-import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
 import {mappingFormToApi} from './dto';
-import {useCreateAdvertiser} from 'queries/advertiser';
+import {
+  useCreateAdvertiser,
+  useEditAdvertiser,
+  useGetAdvertiser
+} from 'queries/advertiser';
+import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
+import LoadingIndicator from 'components/common/LoadingIndicator';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const AdvertiserForm = ({
   modal = false,
   toggle = () => {},
   className = '',
-  title = 'Create new Advertiser'
+  title = 'Create new Advertiser',
+  IABsOptions = [],
+  isEdit = false,
+  advertiserId = ''
 }) => {
   const {t} = useTranslation();
-  const {data: IABs} = useGetIABs();
-  const IABsOptions = useIABsOptions({IABs});
-  const defaultValues = useDefaultAdvertiser();
+  const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
+    advertiserId
+  );
   const {mutateAsync: createAdvertiser} = useCreateAdvertiser();
-  // const [isLoading, setIsLoading] = useState(false);
+  const {mutateAsync: editAdvertiser} = useEditAdvertiser();
+  const defaultValues = useDefaultAdvertiser({
+    advertiser,
+    iabsArr: IABsOptions
+  });
 
   const methods = useForm({
     defaultValues
   });
-  const {handleSubmit, formState, control} = methods;
+  const {handleSubmit, formState, control, reset} = methods;
+
+  useEffect(() => {
+    //---> Reset default value when API response
+    if (isFetched && defaultValues?.name) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset, isFetched]);
 
   /**
    * Submit form
@@ -56,14 +74,26 @@ const AdvertiserForm = ({
       formData
     );
     const requestBody = mappingFormToApi({formData});
-    // setIsLoading(true);
-    try {
-      await createAdvertiser(requestBody);
-      toggle();
-    } catch (err) {
-      console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
-    } finally {
-      // setIsLoading(false);
+    if (!isEdit) {
+      // CREATE
+      try {
+        await createAdvertiser(requestBody);
+        ShowToast.success('Created advertiser successfully');
+        toggle();
+      } catch (err) {
+        console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
+        ShowToast.error(err || 'Fail to create advertiser');
+      }
+    } else {
+      // EDIT
+      try {
+        await editAdvertiser({advId: advertiserId, data: requestBody});
+        ShowToast.success('Updated advertiser successfully');
+        toggle();
+      } catch (err) {
+        console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
+        ShowToast.error(err || 'Fail to update advertiser');
+      }
     }
   };
 
@@ -74,6 +104,7 @@ const AdvertiserForm = ({
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader>{title}</ModalHeader>
             <ModalBody>
+              {isLoading && <LoadingIndicator />}
               <Row>
                 <Col sm={12}>
                   <FormTextInput
@@ -107,7 +138,7 @@ const AdvertiserForm = ({
                 </Col>
                 {/* Tags */}
                 <Col sm={12}>
-                  <SelectTag />
+                  <SelectTag defaultValue={defaultValues?.tags || []} />
                 </Col>
                 {/* Status */}
                 <Col md="12">
@@ -141,7 +172,10 @@ AdvertiserForm.propTypes = {
   modal: PropTypes.bool,
   toggle: PropTypes.func,
   className: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  advertiserId: PropTypes.string,
+  isEdit: PropTypes.bool,
+  IABsOptions: PropTypes.array
 };
 
 export default AdvertiserForm;
