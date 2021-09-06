@@ -1,8 +1,5 @@
-import {
-  AdvertiserCreatePage,
-  AdvertiserEditPage,
-  AdvertiserListPage
-} from 'pages/Organization/Advertiser';
+import {AdvertiserListPage} from 'pages/Organization/Advertiser';
+import {PublisherListPagePage} from 'pages/Organization/Publisher';
 import React from 'react';
 
 export const organizationPages = {
@@ -14,14 +11,15 @@ export const organizationPages = {
         {
           path: '//*',
           element: <AdvertiserListPage />
-        },
+        }
+      ]
+    },
+    {
+      path: '/publisher/*',
+      children: [
         {
-          path: '/create',
-          element: <AdvertiserCreatePage />
-        },
-        {
-          path: '/:id',
-          element: <AdvertiserEditPage />
+          path: '//*',
+          element: <PublisherListPagePage />
         }
       ]
     }

@@ -21,36 +21,33 @@ import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
 import {INPUT_NAME} from '../constants';
-import SelectTag from './SelectTag';
 import {mappingFormToApi} from './dto';
-import {
-  useCreateAdvertiser,
-  useEditAdvertiser,
-  useGetAdvertiser
-} from 'queries/advertiser';
-import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
+import {useDefaultPublisher} from 'pages/Organization/hooks/useDefaultPublisher';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from 'pages/Campaign/capping/validation';
+import {
+  useCreatePublisher,
+  useEditPublisher,
+  useGetPublisher
+} from 'queries/publisher';
 
-const AdvertiserForm = ({
+const PublisherForm = ({
   modal = false,
   toggle = () => {},
   className = '',
-  title = 'Create new Advertiser',
-  IABsOptions = [],
+  title = 'Create new Publisher',
+  domainOptions = [],
   isEdit = false,
-  advertiserId = ''
+  publisherId = ''
 }) => {
   const {t} = useTranslation();
-  const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
-    advertiserId
-  );
-  const {mutateAsync: createAdvertiser} = useCreateAdvertiser();
-  const {mutateAsync: editAdvertiser} = useEditAdvertiser();
-  const defaultValues = useDefaultAdvertiser({
-    advertiser,
-    iabsArr: IABsOptions
+  const {data: publisher, isFetched, isLoading} = useGetPublisher(publisherId);
+  const {mutateAsync: createPublisher} = useCreatePublisher();
+  const {mutateAsync: editPublisher} = useEditPublisher();
+  const defaultValues = useDefaultPublisher({
+    publisher,
+    domainsArr: domainOptions
   });
 
   const methods = useForm({
@@ -72,29 +69,29 @@ const AdvertiserForm = ({
    */
   const onSubmit = async formData => {
     console.log(
-      '🚀 ~ file: advertiser.form.js ~ line 18 ~ onSubmit ~ formData',
+      '🚀 ~ file: publisher.form.js ~ line 18 ~ onSubmit ~ formData',
       formData
     );
     const requestBody = mappingFormToApi({formData});
     if (!isEdit) {
       // CREATE
       try {
-        await createAdvertiser(requestBody);
-        ShowToast.success('Created advertiser successfully');
+        await createPublisher(requestBody);
+        ShowToast.success('Created publisher successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create advertiser');
+        console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
+        ShowToast.error(err || 'Fail to create publisher');
       }
     } else {
       // EDIT
       try {
-        await editAdvertiser({advId: advertiserId, data: requestBody});
-        ShowToast.success('Updated advertiser successfully');
+        await editPublisher({advId: publisherId, data: requestBody});
+        ShowToast.success('Updated publisher successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to update advertiser');
+        console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
+        ShowToast.error(err || 'Fail to update publisher');
       }
     }
   };
@@ -116,17 +113,6 @@ const AdvertiserForm = ({
                     isRequired
                   />
                 </Col>
-                {/* IABs */}
-                <Col sm={12}>
-                  <FormReactSelect
-                    name={INPUT_NAME.IABS}
-                    label={t('iabs')}
-                    placeholder={t('selectIABs')}
-                    options={IABsOptions}
-                    defaultValue={null}
-                    multiple
-                  />
-                </Col>
                 {/* Domains */}
                 <Col sm={12}>
                   <FormReactSelect
@@ -137,10 +123,6 @@ const AdvertiserForm = ({
                     defaultValue={null}
                     multiple
                   />
-                </Col>
-                {/* Tags */}
-                <Col sm={12}>
-                  <SelectTag defaultValue={defaultValues?.tags || []} />
                 </Col>
                 {/* Status */}
                 <Col md="12">
@@ -170,14 +152,14 @@ const AdvertiserForm = ({
   );
 };
 
-AdvertiserForm.propTypes = {
+PublisherForm.propTypes = {
   modal: PropTypes.bool,
   toggle: PropTypes.func,
   className: PropTypes.string,
   title: PropTypes.string,
-  advertiserId: PropTypes.string,
+  publisherId: PropTypes.string,
   isEdit: PropTypes.bool,
   IABsOptions: PropTypes.array
 };
 
-export default AdvertiserForm;
+export default PublisherForm;
