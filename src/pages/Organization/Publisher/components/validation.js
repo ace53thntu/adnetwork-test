@@ -1,7 +1,10 @@
+import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 export const schemaValidate = t => {
-  return yup.object().shape({
-    name: yup.string().required(t('required'))
-  });
+  return yupResolver(
+    yup.object().shape({
+      name: yup.string().required(t('required'))
+    })
+  );
 };

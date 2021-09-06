@@ -312,6 +312,7 @@ const en = {
   organization: 'Organization',
   publisher: 'Publisher',
   dsp: 'DSP',
+  dspList: 'DSP List',
   newAdvertiser: 'Add new Advertiser',
   domains: 'Domains',
   selectDomains: 'Select domains...',
@@ -319,7 +320,15 @@ const en = {
   selectIABs: 'Select IABs...',
   typeAndEnter: 'Type something and press enter...',
   // Form Inputs & Actions,
+  url: 'Url',
+  apiKey: 'Api Key',
+  user: 'User',
   enterName: 'Enter name...',
+  enterUrl: 'Enter url...',
+  enterApiKey: 'Enter API key...',
+  enterUser: 'Enter user...',
+  enterPassword: 'Enter password...',
+
   create: 'Create'
 };
 

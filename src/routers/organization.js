@@ -1,4 +1,5 @@
 import {AdvertiserListPage} from 'pages/Organization/Advertiser';
+import {DspListPage} from 'pages/Organization/Dsp';
 import {PublisherListPagePage} from 'pages/Organization/Publisher';
 import React from 'react';
 
@@ -20,6 +21,15 @@ export const organizationPages = {
         {
           path: '//*',
           element: <PublisherListPagePage />
+        }
+      ]
+    },
+    {
+      path: '/dsp/*',
+      children: [
+        {
+          path: '//*',
+          element: <DspListPage />
         }
       ]
     }
