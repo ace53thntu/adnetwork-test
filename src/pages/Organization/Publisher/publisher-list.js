@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React from 'react';
 
 //---> External Modules
 import {
@@ -25,22 +25,28 @@ import PublisherCreate from './publisher-create';
 import PublisherEdit from './publisher-edit';
 import {PublisherForm} from './components';
 import {LoadingIndicator} from 'components/common';
-import {useGetPublishers} from 'queries/publisher';
+import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
+import DialogConfirm from 'components/common/DialogConfirm';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const PublisherList = () => {
   const {t} = useTranslation();
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
+  const [showDialog, setShowDialog] = React.useState(false);
   const {data: publishersRes, isLoading} = useGetPublishers();
-  const publishers = useMemo(() => {
+  const publishers = React.useMemo(() => {
     return publishersRes?.items?.map(item => {
       return {...item, id: item.uuid};
     });
   }, [publishersRes?.items]);
-
+  const {
+    mutateAsync: deletePublisher,
+    isLoading: isLoadingDelete
+  } = useDeletePublisher();
   //---> Define columns
-  const columns = useMemo(() => {
+  const columns = React.useMemo(() => {
     return [
       {
         header: 'Name',
@@ -91,8 +97,28 @@ const PublisherList = () => {
   };
 
   const onClickItem = data => {
-    setCurrentPublisher(data?.uuid);
+    setCurrentPublisher(data);
     setOpenFormEdit(true);
+  };
+
+  const onHandleDelete = (actionIndex, item) => {
+    setCurrentPublisher(item);
+    setShowDialog(true);
+  };
+
+  const onCancelDelete = () => {
+    setShowDialog(false);
+  };
+
+  const onSubmitDelete = async () => {
+    try {
+      await deletePublisher({pubId: currentPublisher?.uuid});
+      ShowToast.success('Deleted publisher successfully');
+    } catch (err) {
+      ShowToast.error(err || 'Fail to delete publisher');
+    } finally {
+      setShowDialog(false);
+    }
   };
 
   return (
@@ -131,9 +157,7 @@ const PublisherList = () => {
                     columns={columns}
                     showAction
                     actions={['Delete']}
-                    // handleAction={(actionIndex, item) => {
-                    //   onHandleDelete(actionIndex, item);
-                    // }}
+                    handleAction={onHandleDelete}
                     handleClickItem={onClickItem}
                   />
                 </CardBody>
@@ -160,11 +184,20 @@ const PublisherList = () => {
             toggle={onToggleModalEdit}
             title="Edit Publisher"
             isEdit
-            publisherId={currentPublisher}
+            publisherId={currentPublisher?.uuid}
             domainOptions={[]}
           />
         )}
       </PublisherEdit>
+      {showDialog && (
+        <DialogConfirm
+          open={showDialog}
+          title="Are you sure delete this Publisher?"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isLoadingDelete}
+        />
+      )}
     </>
   );
 };

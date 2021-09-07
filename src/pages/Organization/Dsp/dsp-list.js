@@ -23,20 +23,30 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DspForm from './components/dsp.form';
 import DspCreate from './dsp-create';
 import DspEdit from './dsp-edit';
-import {useGetDsps} from 'queries/dsp';
+import {useDeleteDsp, useGetDsps} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
+import DialogConfirm from 'components/common/DialogConfirm';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const DspList = () => {
   const {t} = useTranslation();
+
+  //---> Define local states.
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentDsp, setCurrentDsp] = React.useState(null);
+  const [showDialog, setShowDialog] = React.useState(false);
+
+  //---> QUery get list of DSP.
   const {data: dspResp, isLoading} = useGetDsps();
   const dsps = useMemo(() => {
     return dspResp?.items?.map(item => {
       return {...item, id: item.uuid};
     });
   }, [dspResp?.items]);
+
+  //---> Mutation delete a DSP
+  const {mutateAsync: deleteDsp, isLoading: isLoadingDelete} = useDeleteDsp();
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -94,6 +104,28 @@ const DspList = () => {
     setOpenFormEdit(true);
   };
 
+  //---> BEGIN: Handle delete
+  const onClickDelete = (actionIndex, item) => {
+    setCurrentDsp(item);
+    setShowDialog(true);
+  };
+
+  const onCancelDelete = () => {
+    setShowDialog(false);
+  };
+
+  const onSubmitDelete = async () => {
+    try {
+      await deleteDsp({dspId: currentDsp?.uuid});
+      ShowToast.success('Deleted DSP successfully');
+    } catch (err) {
+      ShowToast.error(err || 'Fail to delete DSP');
+    } finally {
+      setShowDialog(false);
+    }
+  };
+  //---> END: Handle delete
+
   return (
     <>
       <AppContent>
@@ -130,9 +162,7 @@ const DspList = () => {
                     columns={columns}
                     showAction
                     actions={['Delete']}
-                    // handleAction={(actionIndex, item) => {
-                    //   onHandleDelete(actionIndex, item);
-                    // }}
+                    handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
                 </CardBody>
@@ -146,15 +176,27 @@ const DspList = () => {
         {openForm && <DspForm modal={openForm} toggle={onToggleModal} />}
       </DspCreate>
       {/* DSP Edit */}
-      <DspEdit>
-        <DspForm
-          modal={openFormEdit}
-          toggle={onToggleModalEdit}
-          title="Edit DSP"
-          isEdit
-          dspId={currentDsp}
+      {openFormEdit && (
+        <DspEdit>
+          <DspForm
+            modal={openFormEdit}
+            toggle={onToggleModalEdit}
+            title="Edit DSP"
+            isEdit
+            dspId={currentDsp?.uuid}
+          />
+        </DspEdit>
+      )}
+
+      {showDialog && (
+        <DialogConfirm
+          open={showDialog}
+          title="Are you sure delete this DSP?"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isLoadingDelete}
         />
-      </DspEdit>
+      )}
     </>
   );
 };

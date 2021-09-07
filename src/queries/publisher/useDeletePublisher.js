@@ -10,9 +10,9 @@ export function useDeletePublisher() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid}) =>
+    ({pubId}) =>
       PublisherAPIRequest.deletePublisher({
-        id: cid
+        id: pubId
       }),
     {
       onError: (err, variables, rollback) => {

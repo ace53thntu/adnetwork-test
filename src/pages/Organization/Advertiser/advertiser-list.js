@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {capitalize} from 'utils/helpers/string.helpers';
-import {useGetAdvertisers} from 'queries/advertiser';
+import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {
@@ -22,20 +22,35 @@ import {AdvertiserForm} from './components';
 import {useGetIABs} from 'queries/iabs';
 import {useIABsOptions} from '../hooks';
 import LoadingIndicator from 'components/common/LoadingIndicator';
+import DialogConfirm from 'components/common/DialogConfirm';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const ListAdvertiser = () => {
   const {t} = useTranslation();
+
+  //---> Define local states.
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
+  const [showDialog, setShowDialog] = React.useState(false);
+
+  //---> Query get list of advertisers.
   const {data: advertisersRes, isLoading} = useGetAdvertisers();
   const advertisers = useMemo(() => {
     return advertisersRes?.items?.map(item => {
       return {...item, id: item.uuid};
     });
   }, [advertisersRes?.items]);
+
+  //---> Get list of IABs.
   const {data: IABs} = useGetIABs();
   const IABsOptions = useIABsOptions({IABs});
+
+  //---> Mutation delete a advertiser
+  const {
+    mutateAsync: deleteAdvertiser,
+    isLoading: isLoadingDelete
+  } = useDeleteAdvertiser();
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -89,8 +104,28 @@ const ListAdvertiser = () => {
   };
 
   const onClickItem = data => {
-    setCurrentAdvertiser(data?.uuid);
+    setCurrentAdvertiser(data);
     setOpenFormEdit(true);
+  };
+
+  const onClickDelete = (actionIndex, item) => {
+    setShowDialog(true);
+    setCurrentAdvertiser(item);
+  };
+
+  const onCancelDelete = () => {
+    setShowDialog(false);
+  };
+
+  const onSubmitDelete = async () => {
+    try {
+      await deleteAdvertiser({advId: currentAdvertiser?.uuid});
+      ShowToast.success('Delete advertiser successfully');
+    } catch (err) {
+      ShowToast.error(err || 'Fail to delete advertiser');
+    } finally {
+      setShowDialog(false);
+    }
   };
 
   return (
@@ -129,9 +164,7 @@ const ListAdvertiser = () => {
                     columns={columns}
                     showAction
                     actions={['Delete']}
-                    // handleAction={(actionIndex, item) => {
-                    //   onHandleDelete(actionIndex, item);
-                    // }}
+                    handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
                 </CardBody>
@@ -159,10 +192,19 @@ const ListAdvertiser = () => {
             IABsOptions={IABsOptions}
             title="Edit Advertiser"
             isEdit
-            advertiserId={currentAdvertiser}
+            advertiserId={currentAdvertiser?.uuid}
           />
         )}
       </AdvertiserEdit>
+      {showDialog && (
+        <DialogConfirm
+          open={showDialog}
+          title="Are you sure delete this Advertiser?"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isLoadingDelete}
+        />
+      )}
     </>
   );
 };

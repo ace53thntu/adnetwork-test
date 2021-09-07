@@ -10,9 +10,9 @@ export function useDeleteDsp() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid}) =>
+    ({dspId}) =>
       DspAPIRequest.deleteDsp({
-        id: cid
+        id: dspId
       }),
     {
       onError: (err, variables, rollback) => {

@@ -43,10 +43,6 @@ const DspForm = ({
   const defaultValues = useDefaultDsp({
     dspData
   });
-  console.log(
-    '🚀 ~ file: dsp.form.js ~ line 46 ~ defaultValues',
-    defaultValues
-  );
 
   const methods = useForm({
     defaultValues,

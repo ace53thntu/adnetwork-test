@@ -96,15 +96,15 @@ export class XHRRequest {
                   refresh_token: refreshToken
                 })
                 .then(({data}) => {
-                  setToken(data?.access_token);
-                  setRefreshToken(data?.refresh_token);
+                  setToken(data?.data?.access_token);
+                  setRefreshToken(data?.data?.refresh_token);
                   this.axios.defaults.headers.common[
                     'Authorization'
-                  ] = `Bearer ${data?.access_token}`;
+                  ] = `Bearer ${data?.data?.access_token}`;
                   originalRequest.headers[
                     'Authorization'
-                  ] = `Bearer ${data?.access_token}`;
-                  processQueue(null, data?.access_token);
+                  ] = `Bearer ${data?.data?.access_token}`;
+                  processQueue(null, data?.data?.access_token);
                   resolve(this.axios(originalRequest));
                 })
                 .catch(err => {
