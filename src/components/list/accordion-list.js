@@ -131,7 +131,12 @@ function AccordionList(props) {
               <AccordionDetails style={{width: '100%'}}>
                 <Grid direction="column" container>
                   {detailCaption ? (
-                    <Typography variant="subtitle1">{detailCaption}</Typography>
+                    <Typography
+                      variant="subtitle1"
+                      className={classesList.detailPanelTitle}
+                    >
+                      {detailCaption}
+                    </Typography>
                   ) : null}
 
                   {detailPanel(item)}

@@ -78,6 +78,12 @@ export const useListStyles = makeStyles(
     },
     deleteBtn: {
       cursor: 'pointer !important'
+    },
+    detailPanelTitle: {
+      textTransform: 'uppercase',
+      color: 'rgba(18, 21, 78, 0.7)',
+      fontWeight: 'bold',
+      fontSize: '13px'
     }
   }),
   {

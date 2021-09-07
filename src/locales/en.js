@@ -319,6 +319,15 @@ const en = {
   iabs: 'IABs',
   selectIABs: 'Select IABs...',
   typeAndEnter: 'Type something and press enter...',
+
+  // Inventory Market
+  inventoryMarket: 'Inventory Market',
+  inventoryMarketList: 'Inventory market list',
+  inventories: 'Inventories',
+
+  // Page
+  pages: 'Pages',
+
   // Form Inputs & Actions,
   url: 'Url',
   apiKey: 'Api Key',

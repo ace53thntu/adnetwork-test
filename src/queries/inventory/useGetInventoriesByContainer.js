@@ -11,7 +11,7 @@ export function useGetInventoriesByContainer({containerId, pageId}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_INVENTORIES, pageId],
+    [GET_INVENTORIES, pageId ? pageId : containerId],
     () =>
       InventoryAPIRequest.getInventoriesContainer({
         cid: containerId,
