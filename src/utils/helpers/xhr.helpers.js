@@ -88,25 +88,23 @@ export class XHRRequest {
             originalRequest._retry = true;
             isRefreshing = true;
 
-            const accessToken = getToken();
             const refreshToken = getRefreshToken();
 
             return new Promise((resolve, reject) => {
               axios
-                .post(`${authEndpoint}/v1/access_token`, {
-                  refresh_token: refreshToken,
-                  access_token: accessToken
+                .post(`${authEndpoint}/v1/auth/refresh`, {
+                  refresh_token: refreshToken
                 })
                 .then(({data}) => {
-                  setToken(data.access_token);
-                  setRefreshToken(data.refresh_token);
+                  setToken(data?.access_token);
+                  setRefreshToken(data?.refresh_token);
                   this.axios.defaults.headers.common[
                     'Authorization'
-                  ] = `Bearer ${data.access_token}`;
+                  ] = `Bearer ${data?.access_token}`;
                   originalRequest.headers[
                     'Authorization'
-                  ] = `Bearer ${data.access_token}`;
-                  processQueue(null, data.access_token);
+                  ] = `Bearer ${data?.access_token}`;
+                  processQueue(null, data?.access_token);
                   resolve(this.axios(originalRequest));
                 })
                 .catch(err => {

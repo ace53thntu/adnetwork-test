@@ -1,28 +1,12 @@
 import {useMemo} from 'react';
+import {mappingApiToForm} from '../Publisher/components/dto';
 
-export const useDefaultPublisher = ({publisher = {}, domainsArr = []}) => {
+export const useDefaultPublisher = ({
+  publisher = {},
+  domainsArr = [],
+  countriesArr = []
+}) => {
   return useMemo(() => {
-    let name = '',
-      status = 'active',
-      domains = [];
-
-    if (Object.keys(publisher).length > 0) {
-      name = publisher?.name;
-      status = publisher?.status;
-
-      //---> Destructure Domains selected.
-      let domainsRes = publisher?.domains || [];
-      // TODO: Update list domains.
-      domains = domainsRes.map(domainItem => ({
-        value: domainItem,
-        label: domainItem
-      }));
-    }
-
-    return {
-      name,
-      status,
-      domains
-    };
-  }, [publisher]);
+    return mappingApiToForm({apiResp: publisher, domainsArr, countriesArr});
+  }, [countriesArr, domainsArr, publisher]);
 };

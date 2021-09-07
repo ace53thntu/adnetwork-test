@@ -26,6 +26,7 @@
     "chartjs-plugin-datalabels": "^0.7.0",
     "classnames": "^2.2.6",
     "clsx": "1.1.1",
+    "countries-list": "^2.6.1",
     "date-fns": "^2.15.0",
     "debounce-fn": "4.0.0",
     "dequal": "^2.0.2",

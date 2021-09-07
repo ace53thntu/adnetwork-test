@@ -2,13 +2,14 @@ const API_V1 = 'v1';
 
 export const endpoints = {
   auth: {
-    login: `${API_V1}/login`,
-    logout: `${API_V1}/logout`,
+    login: `${API_V1}/auth/login`,
+    logout: `${API_V1}/auth/logout`,
     authorize: `${API_V1}/authorize`,
-    refreshToken: `${API_V1}/access_token`
+    refreshToken: `${API_V1}/auth/access_token`
   },
   user: {
-    users: `${API_V1}/users`
+    users: `${API_V1}/users`,
+    me: `${API_V1}/me`
   },
   container: {
     container: `${API_V1}/container`

@@ -1,4 +1,4 @@
 window.DMP_API_ENDPOINTS = {
-  AUTH_GATEWAY: 'https://staging-auth.aicactus.io',
+  AUTH_GATEWAY: 'https://staging-adnetwork-api.aicactus.io',
   API_GATEWAY: 'https://staging-adnetwork-api.aicactus.io'
 };

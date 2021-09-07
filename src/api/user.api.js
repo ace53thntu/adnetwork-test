@@ -13,6 +13,10 @@ class UserAPI extends XHRRequest {
   getUsers = () => {
     return this.get(endpoints.user.users);
   };
+
+  getMe = () => {
+    return this.get(endpoints.user.me);
+  };
 }
 
 export const UserAPIRequest = new UserAPI(apiURL);

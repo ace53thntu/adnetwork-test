@@ -323,11 +323,22 @@ const en = {
   url: 'Url',
   apiKey: 'Api Key',
   user: 'User',
+  address: 'Address',
+  city: 'City',
+  zip: 'Zip',
+  country: 'Country',
+  tva: 'TVA',
   enterName: 'Enter name...',
   enterUrl: 'Enter url...',
   enterApiKey: 'Enter API key...',
   enterUser: 'Enter user...',
   enterPassword: 'Enter password...',
+  enterAddress: 'Enter address...',
+  enterCity: 'Enter city...',
+  enterZip: 'Enter zip...',
+  selectCountry: 'Select country...',
+  enterTVA: 'Enter TVA...',
+  enterDescription: 'Enter description...',
 
   create: 'Create'
 };

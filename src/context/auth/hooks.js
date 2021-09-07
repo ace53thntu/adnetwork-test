@@ -37,12 +37,12 @@ function useAuth() {
       setIsLoading(true);
       if (!!email && !!password) {
         try {
-          const res = await AuthAPIRequest.login({email, password});
+          const {data} = await AuthAPIRequest.login({email, password});
           setIsLoading(false);
-          authHelpers.setToken(res.access_token);
-          authHelpers.setRefreshToken(res.refresh_token);
+          authHelpers.setToken(data.access_token);
+          authHelpers.setRefreshToken(data.refresh_token);
           dispatch(authActions.loginSuccess());
-          return res;
+          return data;
         } catch (error) {
           setIsLoading(false);
           setError('Email or password incorrect!');

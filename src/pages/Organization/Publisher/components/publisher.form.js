@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 //---> External Modules
@@ -18,6 +18,7 @@ import {
 import {Controller, FormProvider, useForm} from 'react-hook-form';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
+import {countries} from 'countries-list';
 
 //---> Internal Modules
 import {INPUT_NAME} from '../constants';
@@ -25,12 +26,12 @@ import {mappingFormToApi} from './dto';
 import {useDefaultPublisher} from 'pages/Organization/hooks/useDefaultPublisher';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {schemaValidate} from 'pages/Campaign/capping/validation';
 import {
   useCreatePublisher,
   useEditPublisher,
   useGetPublisher
 } from 'queries/publisher';
+import {schemaValidate} from './validation';
 
 const PublisherForm = ({
   modal = false,
@@ -41,13 +42,26 @@ const PublisherForm = ({
   isEdit = false,
   publisherId = ''
 }) => {
+  console.log(
+    '🚀 ~ file: publisher.form.js ~ line 45 ~ publisherId',
+    publisherId
+  );
+  //---> Destructure list of Country Options.
+  const countryOptions = useMemo(() => {
+    const countriesArr = Object.values(countries);
+    return countriesArr?.map(item => {
+      return {...item, value: item.name, label: item.name};
+    });
+  }, []);
+
   const {t} = useTranslation();
   const {data: publisher, isFetched, isLoading} = useGetPublisher(publisherId);
   const {mutateAsync: createPublisher} = useCreatePublisher();
   const {mutateAsync: editPublisher} = useEditPublisher();
   const defaultValues = useDefaultPublisher({
     publisher,
-    domainsArr: domainOptions
+    domainsArr: domainOptions,
+    countriesArr: countryOptions
   });
 
   const methods = useForm({
@@ -86,7 +100,7 @@ const PublisherForm = ({
     } else {
       // EDIT
       try {
-        await editPublisher({advId: publisherId, data: requestBody});
+        await editPublisher({pubId: publisherId, data: requestBody});
         ShowToast.success('Updated publisher successfully');
         toggle();
       } catch (err) {
@@ -114,14 +128,60 @@ const PublisherForm = ({
                   />
                 </Col>
                 {/* Domains */}
-                <Col sm={12}>
+                <Col sm={6}>
                   <FormReactSelect
                     name={INPUT_NAME.DOMAINS}
                     label={t('domains')}
                     placeholder={t('selectDomains')}
                     options={[]}
                     defaultValue={null}
-                    multiple
+                  />
+                </Col>
+
+                {/* Country */}
+                <Col sm={6}>
+                  <FormReactSelect
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.COUNTRY}`}
+                    label={t('country')}
+                    placeholder={t('selectCountry')}
+                    options={countryOptions}
+                    defaultValue={null}
+                  />
+                </Col>
+                <Col sm={6}>
+                  <FormTextInput
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.ADDRESS}`}
+                    label={t('address')}
+                    placeholder={t('enterAddress')}
+                  />
+                </Col>
+                <Col sm={6}>
+                  <FormTextInput
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.CITY}`}
+                    label={t('city')}
+                    placeholder={t('enterCity')}
+                  />
+                </Col>
+                <Col sm={6}>
+                  <FormTextInput
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.ZIP}`}
+                    label={t('zip')}
+                    placeholder={t('enterZip')}
+                  />
+                </Col>
+
+                <Col sm={6}>
+                  <FormTextInput
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.TVA}`}
+                    label={t('tva')}
+                    placeholder={t('enterTVA')}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <FormTextInput
+                    name={`${INPUT_NAME.METADATA}.${INPUT_NAME.DESCRIPTION}`}
+                    label={t('description')}
+                    placeholder={t('enterDescription')}
                   />
                 </Col>
                 {/* Status */}
