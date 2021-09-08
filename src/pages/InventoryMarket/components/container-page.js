@@ -16,9 +16,14 @@ import {InventoryContainer} from '.';
 
 const ContainerPage = ({data}) => {
   const {t} = useTranslation();
-  const {data: containerPages, isLoading} = useGetPagesByContainer(data?.uuid);
+  const {data: containerPages = [], isLoading} = useGetPagesByContainer(
+    data?.uuid
+  );
 
   console.log('-containerPages', containerPages);
+  const pages = React.useMemo(() => {
+    return containerPages?.map(item => ({...item, id: item?.uuid}));
+  }, [containerPages]);
 
   const columns = React.useMemo(() => {
     return [
@@ -74,12 +79,12 @@ const ContainerPage = ({data}) => {
   return (
     <React.Fragment>
       {isLoading && <LoadingIndicator />}
-      {containerPages?.length > 0 ? (
+      {pages?.length > 0 ? (
         <AccordionList
-          data={containerPages}
+          data={pages}
           columns={columns}
           detailPanel={rowData => {
-            return <InventoryContainer data={rowData} />;
+            return <InventoryContainer page={rowData} />;
           }}
           detailCaption={t('inventories')}
         />

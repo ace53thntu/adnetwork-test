@@ -1,33 +1,38 @@
 //---> Build-in Modules
-import React from 'react';
+import React, {useState} from 'react';
 
 //---> External Modules
-import moment from 'moment';
-
-//---> Internal Modules
-import {List} from 'components/list';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
-import Status from 'components/list/status';
-import {LoadingIndicator} from 'components/common';
-import {useInventoriesByContainer} from '../hooks';
-import NoDataAvailable from 'components/list/no-data';
 import {Badge} from 'reactstrap';
 
-const InventoryContainer = ({data}) => {
+//---> Internal Modules
+import {capitalize} from 'utils/helpers/string.helpers';
+import {LoadingIndicator} from 'components/common';
+import {List} from 'components/list';
+import NoDataAvailable from 'components/list/no-data';
+import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
+import Status from 'components/list/status';
+import {useInventoriesByContainer} from '../hooks';
+import {InventoryDetails} from '.';
+import {getInventoryTypeColor} from '../helpers';
+import {useGetPositions} from 'queries/position';
+
+const InventoryContainer = ({page}) => {
+  const {data: positions = []} = useGetPositions();
+  console.log(
+    '🚀 ~ file: container-inventory.js ~ line 21 ~ InventoryContainer ~ positions',
+    positions
+  );
+
   const {data: containerInventories, isLoading} = useGetInventoriesByContainer({
-    containerId: data?.container_uuid,
-    pageId: data?.uuid
+    containerId: page?.container_uuid,
+    pageId: page?.uuid
   });
-  console.log('-containerInventories', containerInventories);
   const inventories = useInventoriesByContainer({
     data: containerInventories,
-    pageId: data?.uuid
+    page,
+    positions
   });
-  console.log(
-    '🚀 ~ file: container-inventory.js ~ line 21 ~ InventoryContainer ~ inventories',
-    inventories
-  );
+
   const columns = React.useMemo(() => {
     return [
       {
@@ -35,15 +40,23 @@ const InventoryContainer = ({data}) => {
         accessor: 'name'
       },
       {
+        header: 'Page Name',
+        accessor: 'page_name'
+      },
+      {
         header: 'Type',
         accessor: 'type',
-        cell: row => <Badge color="primary">{row?.value}</Badge>
+        cell: row => (
+          <Badge color={getInventoryTypeColor({type: row?.value})}>
+            {row?.value}
+          </Badge>
+        )
       },
       {
         header: 'Minimum Price',
         accessor: 'minimum_price',
         cell: row => (
-          <Badge color="light" pill>
+          <Badge color="warning" pill>
             {row?.value}
           </Badge>
         )
@@ -52,7 +65,7 @@ const InventoryContainer = ({data}) => {
         header: 'Fill Rate',
         accessor: 'fill_rate',
         cell: row => (
-          <Badge color="light" pill>
+          <Badge color="info" pill>
             {row?.value}
           </Badge>
         )
@@ -92,37 +105,43 @@ const InventoryContainer = ({data}) => {
             return null;
           }
         }
-      },
-      {
-        header: 'Created at',
-        accessor: 'created_at',
-        cell: row => {
-          if (row.value) {
-            return row.value ? moment(row.value).format('DD/MM/YYYY') : null;
-          } else {
-            return null;
-          }
-        }
       }
     ];
   }, []);
+
+  //---> Define local states.
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedInventory, setSelectedInventory] = useState(null);
+
+  const onToggleModal = () => {
+    setOpenModal(prevState => !prevState);
+  };
+
+  const onClickItem = item => {
+    setOpenModal(true);
+    setSelectedInventory(item);
+  };
 
   return (
     <React.Fragment>
       {isLoading && <LoadingIndicator />}
       {inventories?.length > 0 ? (
         <List
+          showAction
           data={inventories}
           columns={columns}
-          // handleClickItem={item =>
-          //   handleClickSourceItem({
-          //     containerId: data.id,
-          //     sourceItem: item
-          //   })
-          // }
+          actions={['View', 'Bid', 'Deal']}
+          handleClickItem={onClickItem}
         />
       ) : (
         <NoDataAvailable />
+      )}
+      {openModal && (
+        <InventoryDetails
+          modal={openModal}
+          toggle={onToggleModal}
+          inventoryData={selectedInventory}
+        />
       )}
     </React.Fragment>
   );

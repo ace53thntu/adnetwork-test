@@ -74,6 +74,7 @@ const en = {
   advertiser: 'Advertiser',
   strategy: 'Strategy',
   startDate: 'Start date',
+  endDate: 'End data',
   dueDate: 'Due date',
   status: 'Status',
   process: 'Process',
