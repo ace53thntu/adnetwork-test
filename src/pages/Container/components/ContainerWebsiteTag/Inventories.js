@@ -2,8 +2,8 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {Button, Card, CardBody, CardTitle, CardHeader, Modal} from 'reactstrap';
 
 // component
-import CreateEvent from './CreateEvent';
-import UpdateEvent from './UpdateEvent';
+import CreateInventory from './CreateInventory';
+import UpdateInventory from './UpdateInventory';
 
 // hooks
 import {EVENT_TYPES_VALUE} from 'pages/Container/constants';
@@ -16,8 +16,9 @@ import Table, {TableStatusCell} from 'components/table';
 import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
 import {useParams} from 'react-router-dom';
 import useGetInventories from 'pages/Container/hooks/useGetInventories';
+import {useDeleteInventory} from 'queries/inventory';
 
-function Events({pageId}) {
+function Inventories({pageId}) {
   // const userRole = getRole();
   const isSysAdmin = true; //userRole === SYS_ADMIN;
   const {cid: containerId} = useParams();
@@ -27,14 +28,12 @@ function Events({pageId}) {
   const {data: pages} = useGetInventoriesByContainer({containerId, pageId});
   const inventories = useGetInventories({pages: pages?.pages, pageId});
 
-  const deleteEvent = useCallback(() => {
-    return new Promise();
-  }, []);
+  const {mutateAsync: deleteInventory} = useDeleteInventory();
   // const {unlockTree} = useContainerStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
-  const [eventId, setEventId] = useState(null);
+  const [inventoryId, setInventoryId] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,26 +50,26 @@ function Events({pageId}) {
   };
 
   const onHandleClickRow = row => {
-    setEventId(row.original.uuid);
+    setInventoryId(row.original.uuid);
     setIsOpenUpdate(true);
   };
 
   const handleDeleteEvent = useCallback(async () => {
     setIsLoading(true);
     try {
-      await deleteEvent({eventId});
-      ShowToast.success('Delete event successfully!', {
+      await deleteInventory({inventoryId});
+      ShowToast.success('Deleted Inventory successfully!', {
         closeOnClick: true
       });
       setOpenConfirm(false);
     } catch (error) {
-      ShowToast.error(error, {
+      ShowToast.error(error || 'Fail to delete Inventory', {
         closeOnClick: true
       });
     } finally {
       setIsLoading(false);
     }
-  }, [deleteEvent, eventId]);
+  }, [deleteInventory, inventoryId]);
 
   const columns = useMemo(
     () => [
@@ -109,7 +108,7 @@ function Events({pageId}) {
                 onClick={evt => {
                   evt.stopPropagation();
                   setOpenConfirm(true);
-                  setEventId(row.value.id);
+                  setInventoryId(row.value.uuid);
                 }}
                 className="btn-icon btn-icon-only"
                 disabled={
@@ -175,7 +174,7 @@ function Events({pageId}) {
       </CardBody>
 
       {isOpen && (
-        <CreateEvent isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
+        <CreateInventory isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
       )}
 
       <Modal
@@ -187,11 +186,11 @@ function Events({pageId}) {
           setIsOpenUpdate(!isOpenUpdate);
         }}
       >
-        <UpdateEvent
+        <UpdateInventory
           toggle={() => {
             setIsOpenUpdate(!isOpenUpdate);
           }}
-          eventId={eventId}
+          inventoryId={inventoryId}
           pageId={pageId}
         />
       </Modal>
@@ -208,4 +207,4 @@ function Events({pageId}) {
   );
 }
 
-export default Events;
+export default Inventories;

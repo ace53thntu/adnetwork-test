@@ -10,6 +10,10 @@ export const useDefaultInventory = ({
   trackerTemplates = [],
   positions = []
 }) => {
+  console.log(
+    '🚀 ~ file: useDefaultInventory.js ~ line 13 ~ inventory',
+    inventory
+  );
   return useMemo(() => {
     const inventoryTags = getInventoryTags();
     const inventoryTypes = getInventoryTypes();
@@ -30,18 +34,9 @@ export const useDefaultInventory = ({
         position_id,
         tracker_template_id
       } = inventory;
-      console.log(
-        '🚀 ~ file: useDefaultInventory.js ~ line 33 ~ returnuseMemo ~ position_id',
-        position_id,
-        positions
-      );
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
         item => item.value === position_id
-      );
-      console.log(
-        '🚀 ~ file: useDefaultInventory.js ~ line 42 ~ returnuseMemo ~ destructurePosition',
-        destructurePosition
       );
       const destructureTrackerTemplate = trackerTemplates.find(
         item => item.value === tracker_template_id
@@ -49,6 +44,12 @@ export const useDefaultInventory = ({
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
       );
+      console.log(
+        '🚀 ~ file: useDefaultInventory.js ~ line 44 ~ returnuseMemo ~ metadata',
+        metadata,
+        metadata?.tags
+      );
+
       const destructureTags = metadata?.tags?.map(item => {
         const foundTag = inventoryTags.find(itemTag => itemTag.value === item);
         return foundTag;

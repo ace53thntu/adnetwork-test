@@ -25,6 +25,7 @@ import {useDefaultInventory} from 'pages/Container/hooks/useDefaultInventory';
 import {destructureFormData} from './utils';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 import {usePositionOptions} from 'pages/Campaign/hooks';
+import {useTranslation} from 'react-i18next';
 
 const formName = {
   properties: 'properties',
@@ -35,12 +36,13 @@ const formName = {
   name: 'name'
 };
 
-export default function UpdateEvent({
+export default function UpdateInventory({
   toggle = () => {},
-  eventId = null,
+  inventoryId = null,
   pageId
 }) {
-  const {data: inventory, isFetching} = useGetInventory(eventId);
+  const {data: inventory, isFetching} = useGetInventory(inventoryId);
+  console.log('🚀 ~ file: UpdateInventory.js ~ line 45 ~ inventory', inventory);
   if (isFetching) {
     return (
       <>
@@ -56,6 +58,7 @@ export default function UpdateEvent({
 }
 
 function FormUpdate({toggle, inventory, pageId}) {
+  const {t} = useTranslation();
   const trackerTemplates = useTrackerTemplateOptions();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
@@ -83,7 +86,6 @@ function FormUpdate({toggle, inventory, pageId}) {
   const onHandleSubmit = useCallback(
     async values => {
       const formData = destructureFormData(pageId, values);
-
       setIsLoading(true);
       try {
         await editInventory({inventoryId: defaultValues?.uuid, data: formData});
@@ -92,10 +94,6 @@ function FormUpdate({toggle, inventory, pageId}) {
         });
         toggle();
       } catch (err) {
-        console.log(
-          '🚀 ~ file: CreateEvent.js ~ line 114 ~ CreateEvent ~ err',
-          err
-        );
         ShowToast.error(err, {
           closeOnClick: true
         });
@@ -111,8 +109,8 @@ function FormUpdate({toggle, inventory, pageId}) {
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(onHandleSubmit)}
-          name="create-event"
-          key="create-event"
+          name="create-inventory"
+          key="create-inventory"
         >
           <BlockUi tag="div" blocking={isLoading}>
             <ModalHeader>Inventory Information</ModalHeader>
@@ -133,7 +131,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                 <FormToggle
                   name={formName.status}
                   defaultCheckedValue="active"
-                  label="Status"
+                  label={t('status')}
                   values={{
                     checked: 'active',
                     unChecked: 'inactive'
@@ -145,7 +143,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                   isRequired
                   name="name"
                   placeholder="Name..."
-                  label="Name"
+                  label={t('name')}
                   disable={formState.isSubmitting}
                 />
               </FormGroup>
@@ -154,7 +152,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                   <FormReactSelect
                     required={false}
                     name="type"
-                    label="Type"
+                    label={t('type')}
                     placeholder="Select type"
                     optionLabelField="name"
                     options={inventoryTypes}
@@ -166,7 +164,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                   <FormReactSelect
                     required={false}
                     name="format"
-                    label="Format"
+                    label={t('format')}
                     placeholder="Select format"
                     optionLabelField="name"
                     options={inventoryFormats}
@@ -179,7 +177,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                     isRequired={false}
                     name="minimum_price"
                     placeholder="0.0"
-                    label="Minimum Price"
+                    label={t('doorPrice')}
                     disable={formState.isSubmitting}
                   />
                 </Col>
@@ -190,8 +188,8 @@ function FormUpdate({toggle, inventory, pageId}) {
                   <FormTextInput
                     isRequired={false}
                     name="merge"
-                    placeholder="Merge..."
-                    label="Merge"
+                    placeholder={`${t('merge')}...`}
+                    label={t('merge')}
                     disable={formState.isSubmitting}
                   />
                 </Col>
@@ -199,7 +197,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                   <FormReactSelect
                     required={false}
                     name="position_id"
-                    label="Position"
+                    label={t('position')}
                     placeholder="Select position"
                     optionLabelField="name"
                     options={positions}
@@ -211,7 +209,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                   <FormReactSelect
                     required={false}
                     name="tracker_template_id"
-                    label="Tracker template"
+                    label={t('trackerTemplate')}
                     placeholder="Select tracker template"
                     optionLabelField="name"
                     options={trackerTemplates}

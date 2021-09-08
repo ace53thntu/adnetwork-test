@@ -46,9 +46,9 @@ const tagIds = {
   transfer: 'transfer-files'
 };
 const tagNames = {
-  web: 'Website tag',
-  ios: 'iOS tag',
-  android: 'Android tag',
+  web: 'Website',
+  ios: 'iOS',
+  android: 'Android',
   import: 'Manual importation',
   transfer: 'Schedule transfer'
 };

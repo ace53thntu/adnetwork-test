@@ -37,8 +37,8 @@ export const CONTAINER_SOURCES = [
 ];
 
 export const CONTAINER_TREE_TAGS = [
-  {id: 'website_tag', name: 'Website tag', param: CONTAINER_SOURCES[0]},
-  {id: 'ios_tag', name: 'iOS tag', param: CONTAINER_SOURCES[1]},
+  {id: 'website_tag', name: 'Website', param: CONTAINER_SOURCES[0]},
+  {id: 'ios_tag', name: 'iOS', param: CONTAINER_SOURCES[1]},
   {id: 'import_offline', name: 'Import offline', param: CONTAINER_SOURCES[2]},
   {id: 'transfer_files', name: 'Transfer', param: CONTAINER_SOURCES[3]}
 ];

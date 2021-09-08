@@ -5,7 +5,7 @@ import {Row, Col} from 'reactstrap';
 // components
 import PageLayout from '../PageLayout';
 import Screen from './Screen';
-import Events from '../ContainerWebsiteTag/Events';
+import Inventories from '../ContainerWebsiteTag/Inventories';
 import {useGetPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
 
@@ -40,7 +40,11 @@ function ScreensAndEvents({tabProps: {title}, pageId}) {
           )}
         </Col>
         <Col sm="12" md="5">
-          {isLoading ? <div>Loading...</div> : <Events isIOS pageId={pageId} />}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <Inventories isIOS pageId={pageId} />
+          )}
         </Col>
       </Row>
     </PageLayout>

@@ -27,6 +27,7 @@ import {destructureFormData} from './utils';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 import {usePositionOptions} from 'pages/Campaign/hooks';
+import {useTranslation} from 'react-i18next';
 
 const formName = {
   properties: 'properties',
@@ -37,7 +38,8 @@ const formName = {
   name: 'name'
 };
 
-function CreateEvent({isOpen = false, toggle = () => {}}) {
+function CreateInventory({isOpen = false, toggle = () => {}}) {
+  const {t} = useTranslation();
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
@@ -83,7 +85,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
       setIsLoading(false);
     } catch (err) {
       console.log(
-        '🚀 ~ file: CreateEvent.js ~ line 114 ~ CreateEvent ~ err',
+        '🚀 ~ file: CreateInventory.js ~ line 114 ~ CreateInventory ~ err',
         err
       );
       ShowToast.error(err, {
@@ -115,7 +117,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                 <FormToggle
                   name={formName.status}
                   defaultCheckedValue="active"
-                  label="Status"
+                  label={t('status')}
                   values={{
                     checked: 'active',
                     unChecked: 'inactive'
@@ -127,7 +129,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   isRequired
                   name="name"
                   placeholder="Name..."
-                  label="Name"
+                  label={t('name')}
                   disable={formState.isSubmitting}
                 />
               </FormGroup>
@@ -136,7 +138,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   <FormReactSelect
                     required={false}
                     name="type"
-                    label="Type"
+                    label={t('type')}
                     placeholder="Select type"
                     optionLabelField="name"
                     options={inventoryTypes}
@@ -148,7 +150,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   <FormReactSelect
                     required={false}
                     name="format"
-                    label="Format"
+                    label={t('format')}
                     placeholder="Select format"
                     optionLabelField="name"
                     options={inventoryFormats}
@@ -161,7 +163,8 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                     isRequired={false}
                     name="minimum_price"
                     placeholder="0.0"
-                    label="Minimum Price"
+                    s
+                    label={t('floorPrice')}
                     disable={formState.isSubmitting}
                   />
                 </Col>
@@ -172,8 +175,8 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   <FormTextInput
                     isRequired={false}
                     name="merge"
-                    placeholder="Merge..."
-                    label="Merge"
+                    placeholder={`${t('merge')}...`}
+                    label={t('merge')}
                     disable={formState.isSubmitting}
                   />
                 </Col>
@@ -181,7 +184,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   <FormReactSelect
                     required={false}
                     name="position_id"
-                    label="Position"
+                    label={t('position')}
                     placeholder="Select position"
                     optionLabelField="name"
                     options={positions}
@@ -193,7 +196,7 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   <FormReactSelect
                     required={false}
                     name="tracker_template_id"
-                    label="Tracker template"
+                    label={t('trackerTemplate')}
                     placeholder="Select tracker template"
                     optionLabelField="name"
                     options={trackerTemplates}
@@ -205,6 +208,9 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
               <InventoryProperty />
             </ModalBody>
             <ModalFooter>
+              {/* <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button> */}
               {formState.isDirty ? (
                 <ButtonLoading
                   loading={isLoading}
@@ -215,10 +221,6 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
                   Save
                 </ButtonLoading>
               ) : null}
-
-              {/* <Button color="secondary" onClick={toggle}>
-                Cancel
-              </Button> */}
             </ModalFooter>
           </BlockUi>
         </form>
@@ -227,4 +229,4 @@ function CreateEvent({isOpen = false, toggle = () => {}}) {
   );
 }
 
-export default CreateEvent;
+export default CreateInventory;

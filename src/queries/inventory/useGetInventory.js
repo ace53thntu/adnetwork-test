@@ -18,7 +18,9 @@ export function useGetInventory(inventoryId) {
         options: {
           cancelToken
         }
-      }).then(res => res?.data ?? {}),
+      }).then(res => {
+        return res?.data ?? {};
+      }),
     {
       suspense: false,
       enabled: !!inventoryId

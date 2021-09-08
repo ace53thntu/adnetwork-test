@@ -53,7 +53,7 @@ function ContainerIOSTag({pageId}) {
   return (
     <>
       <PageTitleAlt
-        heading={tag === 'ios-tag' ? 'iOS tag' : 'Android tag'}
+        heading={tag === 'ios-tag' ? 'iOS' : 'Android'}
         subheading="Online tracking"
         icon="pe-7s-plane icon-gradient bg-tempting-azure"
       />

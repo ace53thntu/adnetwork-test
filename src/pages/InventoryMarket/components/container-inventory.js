@@ -18,10 +18,6 @@ import {useGetPositions} from 'queries/position';
 
 const InventoryContainer = ({page}) => {
   const {data: positions = []} = useGetPositions();
-  console.log(
-    '🚀 ~ file: container-inventory.js ~ line 21 ~ InventoryContainer ~ positions',
-    positions
-  );
 
   const {data: containerInventories, isLoading} = useGetInventoriesByContainer({
     containerId: page?.container_uuid,
@@ -112,6 +108,8 @@ const InventoryContainer = ({page}) => {
   //---> Define local states.
   const [openModal, setOpenModal] = useState(false);
   const [selectedInventory, setSelectedInventory] = useState(null);
+  const [isDeal, setIsDeal] = useState(false);
+  const [isBid, setIsBid] = useState(false);
 
   const onToggleModal = () => {
     setOpenModal(prevState => !prevState);
@@ -120,6 +118,39 @@ const InventoryContainer = ({page}) => {
   const onClickItem = item => {
     setOpenModal(true);
     setSelectedInventory(item);
+  };
+
+  const onClickView = currentItem => {
+    setOpenModal(true);
+  };
+
+  const onClickBid = currentItem => {
+    setOpenModal(true);
+    setIsBid(true);
+    setIsDeal(false);
+  };
+
+  const onClickDeal = currentItem => {
+    setOpenModal(true);
+    setIsDeal(true);
+    setIsBid(false);
+  };
+
+  const onClickAction = (actionIndex, currentItem) => {
+    if (actionIndex === 0) {
+      onClickView(currentItem);
+      return;
+    }
+
+    if (actionIndex === 1) {
+      onClickBid(currentItem);
+      return;
+    }
+
+    if (actionIndex === 2) {
+      onClickDeal(currentItem);
+      return;
+    }
   };
 
   return (
@@ -132,6 +163,9 @@ const InventoryContainer = ({page}) => {
           columns={columns}
           actions={['View', 'Bid', 'Deal']}
           handleClickItem={onClickItem}
+          handleAction={(actionIndex, currentItem) =>
+            onClickAction(actionIndex, currentItem)
+          }
         />
       ) : (
         <NoDataAvailable />
@@ -141,6 +175,8 @@ const InventoryContainer = ({page}) => {
           modal={openModal}
           toggle={onToggleModal}
           inventoryData={selectedInventory}
+          isDeal={isDeal}
+          isBid={isBid}
         />
       )}
     </React.Fragment>

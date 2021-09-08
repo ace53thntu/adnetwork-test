@@ -198,6 +198,11 @@ const en = {
   websiteTag: 'Website',
   iOSTag: 'iOS',
   androidTag: 'Android',
+  floorPrice: 'Floor price',
+  merge: 'Merge',
+  trackerTemplate: 'Tracker template',
+  type: 'Type',
+  format: 'Format',
 
   //partners
   partnerDescriptiom: 'View or change the partners information.',

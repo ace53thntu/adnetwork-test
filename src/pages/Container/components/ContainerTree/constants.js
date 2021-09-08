@@ -1,15 +1,15 @@
 export const CONTAINER_TREE_TAGS = [
   {
     id: 'website-tag',
-    name: 'Website tag'
+    name: 'Website'
   },
   {
     id: 'ios-tag',
-    name: 'iOS tag'
+    name: 'iOS'
   },
   {
     id: 'android-tag',
-    name: 'Android tag'
+    name: 'Android'
   },
   {
     id: 'import-offline',

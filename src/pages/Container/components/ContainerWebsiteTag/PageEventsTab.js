@@ -4,7 +4,7 @@ import {Row, Col} from 'reactstrap';
 // components
 import PageLayout from '../PageLayout';
 import Page from './Page';
-import Events from './Events';
+import Inventories from './Inventories';
 import {useGetPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
 
@@ -54,7 +54,7 @@ function PageEventsTab({tabProps: {title}, pageId}) {
               <Page pageTypes={newPageTypes} pageTags={pageTags} page={page} />
             </Col>
             <Col sm="12" md="5">
-              <Events pageId={pageId} />
+              <Inventories pageId={pageId} />
             </Col>
           </>
         )}

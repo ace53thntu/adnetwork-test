@@ -36,7 +36,9 @@ const InventoryDetails = ({
   modal = false,
   toggle = () => {},
   inventoryData = {},
-  className = ''
+  className = '',
+  isBid = false,
+  isDeal = false
 }) => {
   const classes = useStyles();
 
@@ -118,18 +120,23 @@ const InventoryDetails = ({
             </div>
           </CardBody>
         </Card>
-        <TimeRange />
+        {/* Render date range picker */}
+        {isBid || isDeal ? <TimeRange /> : null}
       </ModalBody>
       <ModalFooter>
         <Button color="link" onClick={toggle}>
           Cancel
         </Button>
-        <Button color="primary" onClick={toggle}>
-          Bid
-        </Button>
-        <Button color="primary" onClick={toggle}>
-          Deal
-        </Button>
+        {isBid && (
+          <Button color="primary" onClick={toggle}>
+            Bid
+          </Button>
+        )}
+        {isDeal && (
+          <Button color="primary" onClick={toggle}>
+            Deal
+          </Button>
+        )}
       </ModalFooter>
     </Modal>
   );
@@ -174,7 +181,7 @@ const TimeRange = () => {
               />
               {errors && errors['start_at'] ? (
                 <div className="invalid-feedback d-block">
-                  {errors['start_at'].message}
+                  {errors['start_at']?.message}
                 </div>
               ) : null}
             </FormGroup>
@@ -200,7 +207,7 @@ const TimeRange = () => {
               />
               {errors && errors['end_at'] ? (
                 <div className="invalid-feedback d-block">
-                  {errors['end_at'].message}
+                  {errors['end_at']?.message}
                 </div>
               ) : null}
             </FormGroup>
