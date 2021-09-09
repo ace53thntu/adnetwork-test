@@ -11,11 +11,13 @@ export const mappingApiToForm = ({
   domainsArr = [],
   countriesArr = []
 }) => {
+  console.log('🚀 ~ file: dto.js ~ line 14 ~ domainsArr', domainsArr);
+  console.log('🚀 ~ file: dto.js ~ line 14 ~ countriesArr', countriesArr);
   const {
     uuid = '',
     name = '',
     status = 'active',
-    domains = null,
+    domain = null,
     metadata = {}
   } = apiResp;
   //---> Get selected country
@@ -23,12 +25,12 @@ export const mappingApiToForm = ({
     item => item?.value === metadata?.country
   );
   metadata.country = selectedCountry || null;
-
+  const destructureDomain = domainsArr.find(item => item?.value === domain);
   return {
     uuid,
     name,
     status,
-    domains,
+    domain: destructureDomain,
     metadata
   };
 };
@@ -39,13 +41,13 @@ export const mappingApiToForm = ({
  * @returns data with API request body format trustly
  */
 export const mappingFormToApi = ({formData}) => {
-  const {name, status, domains, metadata} = formData;
-  const desDomains = domains?.value || '';
+  const {name, status, domain, metadata} = formData;
+  const desDomains = domain?.value || '';
   metadata.country = metadata?.country?.value || '';
   return {
     name,
     status,
-    domains: desDomains,
+    domain: desDomains,
     metadata
   };
 };

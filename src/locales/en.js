@@ -317,9 +317,12 @@ const en = {
   // Organization
   organization: 'Organization',
   publisher: 'Publisher',
+  publisherList: 'Publisher list',
   dsp: 'DSP',
   dspList: 'DSP List',
   newAdvertiser: 'Add new Advertiser',
+  domain: 'Domain',
+  selectDomain: 'Select domain...',
   domains: 'Domains',
   selectDomains: 'Select domains...',
   iabs: 'IABs',

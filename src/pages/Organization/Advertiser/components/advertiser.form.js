@@ -31,7 +31,9 @@ import {
 import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {schemaValidate} from 'pages/Campaign/capping/validation';
+import {schemaValidate} from './validation';
+import {useGetDomains} from 'queries/domain';
+import {useDomainOptions} from 'pages/Organization/hooks';
 
 const AdvertiserForm = ({
   modal = false,
@@ -43,6 +45,8 @@ const AdvertiserForm = ({
   advertiserId = ''
 }) => {
   const {t} = useTranslation();
+  const {data: domains} = useGetDomains();
+  const domainOptions = useDomainOptions({domainData: domains?.items || []});
   const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
     advertiserId
   );
@@ -93,7 +97,7 @@ const AdvertiserForm = ({
         ShowToast.success('Updated advertiser successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
+        console.log('🚀 ~ file: advertiser.form.js ~ line 100 ~ err', err);
         ShowToast.error(err || 'Fail to update advertiser');
       }
     }
@@ -133,7 +137,7 @@ const AdvertiserForm = ({
                     name={INPUT_NAME.DOMAINS}
                     label={t('domains')}
                     placeholder={t('selectDomains')}
-                    options={[]}
+                    options={domainOptions}
                     defaultValue={null}
                     multiple
                   />
@@ -159,7 +163,11 @@ const AdvertiserForm = ({
               <Button color="link" onClick={toggle} type="button">
                 {t('cancel')}
               </Button>
-              <Button color="primary" type="submit">
+              <Button
+                color="primary"
+                type="submit"
+                disabled={!formState.isDirty}
+              >
                 {t('save')}
               </Button>{' '}
             </ModalFooter>

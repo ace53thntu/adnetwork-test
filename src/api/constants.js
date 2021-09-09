@@ -49,5 +49,8 @@ export const endpoints = {
   },
   iabs: {
     iabs: `${API_V1}/iabs`
+  },
+  domain: {
+    domain: `${API_V1}/domain`
   }
 };

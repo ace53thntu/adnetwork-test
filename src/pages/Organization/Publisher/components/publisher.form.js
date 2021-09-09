@@ -32,20 +32,20 @@ import {
   useGetPublisher
 } from 'queries/publisher';
 import {schemaValidate} from './validation';
+import {useDomainOptions} from 'pages/Organization/hooks';
+import {useGetDomains} from 'queries/domain';
 
 const PublisherForm = ({
   modal = false,
   toggle = () => {},
   className = '',
   title = 'Create new Publisher',
-  domainOptions = [],
   isEdit = false,
   publisherId = ''
 }) => {
-  console.log(
-    '🚀 ~ file: publisher.form.js ~ line 45 ~ publisherId',
-    publisherId
-  );
+  //---> Get domain options
+  const {data: domainRes} = useGetDomains();
+  const domainOptions = useDomainOptions({domainData: domainRes?.items || []});
   //---> Destructure list of Country Options.
   const countryOptions = useMemo(() => {
     const countriesArr = Object.values(countries);
@@ -130,11 +130,11 @@ const PublisherForm = ({
                 {/* Domains */}
                 <Col sm={6}>
                   <FormReactSelect
-                    name={INPUT_NAME.DOMAINS}
-                    label={t('domains')}
-                    placeholder={t('selectDomains')}
-                    options={[]}
-                    defaultValue={null}
+                    name={INPUT_NAME.DOMAIN}
+                    label={t('domain')}
+                    placeholder={t('selectDomain')}
+                    options={domainOptions}
+                    defaultValue={defaultValues?.domains ?? []}
                   />
                 </Col>
 
@@ -201,7 +201,11 @@ const PublisherForm = ({
               <Button color="link" onClick={toggle} type="button">
                 {t('cancel')}
               </Button>
-              <Button color="primary" type="submit">
+              <Button
+                color="primary"
+                type="submit"
+                disabled={!formState.isDirty}
+              >
                 {t('save')}
               </Button>{' '}
             </ModalFooter>

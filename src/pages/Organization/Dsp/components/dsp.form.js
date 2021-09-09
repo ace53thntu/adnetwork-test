@@ -175,7 +175,11 @@ const DspForm = ({
               >
                 {t('cancel')}
               </Button>
-              <Button color="primary" type="submit">
+              <Button
+                color="primary"
+                type="submit"
+                disabled={!formState.isDirty}
+              >
                 {t('save')}
               </Button>{' '}
             </ModalFooter>

@@ -58,7 +58,7 @@ function ContainerWebsiteTag({pageId}) {
   return (
     <>
       <PageTitleAlt
-        heading="Website tag"
+        heading="Website"
         subheading="Online tracking"
         icon="pe-7s-plane icon-gradient bg-tempting-azure"
       />

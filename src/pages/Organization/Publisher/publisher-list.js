@@ -54,8 +54,8 @@ const PublisherList = () => {
       },
       {
         header: 'Domain',
-        accessor: 'domains',
-        cell: row => <TagsList tagsList={row?.value || []} />
+        accessor: 'domain',
+        cell: row => <TagsList tagsList={[row?.value] || []} />
       },
       {
         header: 'Status',
@@ -138,7 +138,7 @@ const PublisherList = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('publisher')}</div>
+                  <div>{t('publisherList')}</div>
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}
@@ -168,13 +168,7 @@ const PublisherList = () => {
       </AppContent>
       {/* Advertiser Create */}
       <PublisherCreate>
-        {openForm && (
-          <PublisherForm
-            modal={openForm}
-            toggle={onToggleModal}
-            domainOptions={[]}
-          />
-        )}
+        {openForm && <PublisherForm modal={openForm} toggle={onToggleModal} />}
       </PublisherCreate>
       {/* Advertiser Edit */}
       <PublisherEdit>
@@ -185,7 +179,6 @@ const PublisherList = () => {
             title="Edit Publisher"
             isEdit
             publisherId={currentPublisher?.uuid}
-            domainOptions={[]}
           />
         )}
       </PublisherEdit>
