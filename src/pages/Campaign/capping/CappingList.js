@@ -2,7 +2,7 @@
 import React, {Fragment, useMemo} from 'react';
 
 //---> External Component
-// import {useParams} from 'react-router';
+import {useParams} from 'react-router';
 import {Container, ListGroup, ListGroupItem} from 'reactstrap';
 import {v4 as uiidv4} from 'uuid';
 import Card from '@material-ui/core/Card';
@@ -17,8 +17,7 @@ import CappingItem from './CappingItem';
 import FormCapping from './FormCapping';
 import FormWeekPark from './FormWeekPart';
 import useHandleCapping from './hooks/useHandleCapping';
-// import {useGetCappings} from 'core/queries';
-// import {useGetWeekParts} from 'core/queries/week-part';
+import {useGetCappings} from 'queries/capping';
 
 const INIT_CAPPING = {
   campaign_id: '',
@@ -39,7 +38,7 @@ const INIT_WEEK_PART = {
 };
 
 const CappingList = () => {
-  // const {id: strategyId} = useParams();
+  const {id: strategyId} = useParams();
   const {
     handleShowCappingForm,
     handleShowWeekPartForm,
@@ -52,9 +51,10 @@ const CappingList = () => {
   } = useHandleCapping();
 
   // Execute Apis
-  // const {data: listCapping = []} = useGetCappings({strategyId});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const listCapping = [];
+  const {data: cappingsRes = []} = useGetCappings({strategyId});
+  const listCapping = useMemo(() => {
+    return cappingsRes?.items ?? [];
+  }, [cappingsRes?.items]);
   // const {data: listWeekpart = []} = useGetWeekParts({strategyId});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const listWeekpart = [];

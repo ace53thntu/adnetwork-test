@@ -44,10 +44,6 @@ const CappingItem = ({capping = null}) => {
     handleCancelDelete,
     handleSubmitDelete
   } = useHandleCapping();
-  console.log(
-    '🚀 ~ file: CappingItem.js ~ line 47 ~ CappingItem ~ openConfirmDialog',
-    openConfirmDialog
-  );
   const [cpAnchorEl, setCpAnchorEl] = useState(null);
 
   const handleOpenMenuCapping = evt => {
@@ -127,7 +123,7 @@ const CappingItem = ({capping = null}) => {
                 >
                   <MenuItem
                     onClick={() =>
-                      handleEdit({type: capping?.type, id: capping?.id})
+                      handleEdit({type: capping?.type, id: capping?.uuid})
                     }
                   >
                     Edit
@@ -136,7 +132,7 @@ const CappingItem = ({capping = null}) => {
                     onClick={() =>
                       handleDelete({
                         type: capping?.type,
-                        id: capping?.id,
+                        id: capping?.uuid,
                         title: capping?.typeText
                       })
                     }

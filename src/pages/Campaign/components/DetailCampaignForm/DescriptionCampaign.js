@@ -138,11 +138,8 @@ const DescriptionCampaign = ({
                         selected={value}
                         onChange={date => onChange(date)}
                         className="form-control"
-                        timeInputLabel="Time:"
-                        dateFormat="MM/dd/yyyy h:mm aa"
-                        showTimeInput
-                        showTimeSelect
-                        timeIntervals={15}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="dd/mm/yyyy"
                       />
                     )}
                   />
@@ -167,11 +164,8 @@ const DescriptionCampaign = ({
                         selected={value}
                         onChange={date => onChange(date)}
                         className="form-control"
-                        timeInputLabel="Time:"
-                        dateFormat="MM/dd/yyyy h:mm aa"
-                        showTimeInput
-                        showTimeSelect
-                        timeIntervals={15}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="dd/mm/yyyy"
                       />
                     )}
                   />

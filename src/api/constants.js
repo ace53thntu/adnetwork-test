@@ -31,6 +31,12 @@ export const endpoints = {
   strategy: {
     strategy: `${API_V1}/strategy`
   },
+  capping: {
+    capping: `${API_V1}/capping`
+  },
+  weekpart: {
+    weekpart: `${API_V1}/weekpart`
+  },
   adsdefault: {
     adsdefault: `${API_V1}/adsdefault`,
     adsdefaultContaiter: 'ads-defaults'

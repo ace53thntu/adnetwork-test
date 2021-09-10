@@ -38,6 +38,10 @@ const useHandleCapping = () => {
   };
 
   function handleEdit({type, id}) {
+    console.log(
+      '🚀 ~ file: useHandleCapping.js ~ line 41 ~ handleEdit ~ id',
+      id
+    );
     if (type === 'capping') {
       setState({
         ...state,

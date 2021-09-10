@@ -1,20 +1,20 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {CappingAPIRequest} from 'api/capping.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_CAPPINGS} from './constants';
 
 /**
- * Update a Domain
+ * Update a Capping
  */
-export function useEditDomain() {
+export function useEditCapping() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    ({domainId, data}) =>
-      DomainAPIRequest.editDomain({
-        id: domainId,
+    ({cappingId, data}) =>
+      CappingAPIRequest.editCapping({
+        id: cappingId,
         data,
         options: {cancelToken}
       }),
@@ -23,7 +23,7 @@ export function useEditDomain() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_CAPPINGS]);
       }
     }
   );

@@ -69,7 +69,7 @@ const en = {
   managementCampaignDescription:
     'All of your audience data is collected in one place for a quick and easy understanding of who your best customers are, what content they interact with, and how best to reach them effectively.',
   noCampaign: 'There is no campaign',
-  createNewCampaign: 'Create new campaign',
+  createNewCampaign: 'Create campaign',
   searchCampaign: 'Search campaign',
   advertiser: 'Advertiser',
   strategy: 'Strategy',
@@ -92,7 +92,7 @@ const en = {
   selectPlatforms: 'Select platforms',
   save: 'Save',
   cancel: 'Cancel',
-  createNewStrategy: 'Create new strategy',
+  createNewStrategy: 'Create strategy',
   or: 'Or',
   saveWithoutStrategy: 'Save without strategy',
   viewByCampaign: 'View by campaign',

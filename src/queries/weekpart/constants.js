@@ -1,0 +1,2 @@
+export const GET_WEEKPARTS = 'GET_WEEKPARTS';
+export const GET_WEEKPART = 'GET_WEEKPART';

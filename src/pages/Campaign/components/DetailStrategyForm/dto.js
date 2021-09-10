@@ -21,8 +21,8 @@ export const destructureFormData = ({formData}) => {
   } = formData;
 
   const positionIds = position_ids?.map(item => item?.value);
-  const startDate = moment(start_at).format('DD-MM-YYYY HH:mm:ss');
-  const endDate = moment(end_at).format('DD-MM-YYYY HH:mm:ss');
+  const startDate = `${moment(start_at).format('DD-MM-YYYY')} 00:00:00`;
+  const endDate = `${moment(end_at).format('DD-MM-YYYY')} 23:59:59`;
 
   return {
     campaign_uuid: campaign?.value,

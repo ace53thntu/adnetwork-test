@@ -85,12 +85,8 @@ const InformationGroup = ({
                       selected={value}
                       onChange={date => onChange(date)}
                       className="form-control"
-                      timeInputLabel="Time:"
-                      dateFormat="dd/MM/yyyy h:mm aa"
-                      showTimeInput
-                      showTimeSelect
-                      timeIntervals={15}
-                      placeholderText="dd/mm/yyyy hh:mm"
+                      dateFormat="dd/MM/yyy"
+                      placeholderText="dd/mm/yyyy"
                     />
                   )}
                 />
@@ -115,12 +111,8 @@ const InformationGroup = ({
                       selected={value}
                       onChange={date => onChange(date)}
                       className="form-control"
-                      timeInputLabel="Time:"
-                      dateFormat="dd/MM/yyyy h:mm aa"
-                      showTimeInput
-                      showTimeSelect
-                      timeIntervals={15}
-                      placeholderText="dd/mm/yyyy hh:mm"
+                      dateFormat="dd/MM/yyy"
+                      placeholderText="dd/mm/yyyy"
                     />
                   )}
                 />

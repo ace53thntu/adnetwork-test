@@ -1,29 +1,24 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {WeekpartAPIRequest} from 'api/weekpart.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_WEEKPARTS} from './constants';
 
 /**
- * Update a Domain
+ * Create a Weekpart
  */
-export function useEditDomain() {
+export function useCreateWeekpart() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    ({domainId, data}) =>
-      DomainAPIRequest.editDomain({
-        id: domainId,
-        data,
-        options: {cancelToken}
-      }),
+    data => WeekpartAPIRequest.createWeekpart({data, options: {cancelToken}}),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_WEEKPARTS]);
       }
     }
   );

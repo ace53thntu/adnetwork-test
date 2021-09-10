@@ -6,40 +6,32 @@ import {Controller, FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
 import {Button, Col, Form, Label, Row} from 'reactstrap';
-import {yupResolver} from '@hookform/resolvers/yup';
 
 //---> Internal Modules
-// import {useGetCapping} from 'core/queries';
-// import {useCreateCapping} from 'core/queries/campaigns/useCreateCapping';
-// import {useUpdateCapping} from 'core/queries/capping';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
 import {CAPPING_TYPE} from '../constants';
 import {useGetDefaultCapping} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
 import {schemaValidate} from './validation';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {useCreateCapping, useEditCapping, useGetCapping} from 'queries/capping';
+import {mappingFormToApi} from './capping.dto';
 
 const FormCapping = ({onCloseForm}) => {
   const {t} = useTranslation();
   const {id: strategyId} = useParams();
-  const {currentObject} = useHandleCapping();
-  // const {data: currentData} = useGetCapping(currentObject);
-  const currentData = null;
+  const {currentObject = null} = useHandleCapping();
+  const {data: currentData} = useGetCapping(currentObject);
   const defaultValues = useGetDefaultCapping(currentData);
 
-  // Define Queries
-  // const {mutateAsync: createCapping} = useCreateCapping();
-  const createCapping = useCallback(() => {
-    return new Promise(resolve => resolve('ok'));
-  }, []);
-  // const {mutateAsync: updateCapping} = useUpdateCapping();
-  const updateCapping = useCallback(() => {
-    return new Promise(resolve => resolve('ok'));
-  }, []);
-  // Define RHF
+  //---> Define Queries
+  const {mutateAsync: createCapping} = useCreateCapping();
+  const {mutateAsync: editCapping} = useEditCapping();
+
+  //---> Define RHF
   const methods = useForm({
     defaultValues,
-    resolver: yupResolver(schemaValidate(t))
+    resolver: schemaValidate(t)
   });
   const {handleSubmit, control, reset} = methods;
 
@@ -48,26 +40,25 @@ const FormCapping = ({onCloseForm}) => {
   }, [defaultValues, reset]);
 
   const onSubmit = useCallback(
-    async values => {
-      const {ctype, climit, time_frame, smooth} = values;
-      const formData = {
-        strategy_id: parseInt(strategyId, 10) ?? undefined,
-        ctype: ctype?.value ?? '',
-        climit: parseInt(climit, 10) ?? 0,
-        time_frame: parseInt(time_frame, 10) ?? 0,
-        smooth: smooth === 'active' ? true : false
-      };
+    async formData => {
+      const bodyRequest = mappingFormToApi({formData, strategyId});
+
       if (currentObject) {
+        //---> Edit capping
         try {
-          await updateCapping({id: currentData?.id, data: formData});
+          await editCapping({
+            cappingId: defaultValues?.uuid,
+            data: bodyRequest
+          });
           ShowToast.success('Updated capping successfully');
           onCloseForm();
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to update capping');
         }
       } else {
+        //---> Create Capping
         try {
-          await createCapping(formData);
+          await createCapping(bodyRequest);
           ShowToast.success('Created capping successfully');
 
           onCloseForm();
@@ -78,11 +69,11 @@ const FormCapping = ({onCloseForm}) => {
     },
     [
       createCapping,
-      currentData,
       currentObject,
+      defaultValues?.uuid,
+      editCapping,
       onCloseForm,
-      strategyId,
-      updateCapping
+      strategyId
     ]
   );
 
@@ -124,11 +115,22 @@ const FormCapping = ({onCloseForm}) => {
                 isRequired={false}
               />
             </Col>
-            <Col md="6">
+            <Col md="3">
               <Label className="mr-5">Smooth</Label>
               <Controller
                 control={control}
                 name="smooth"
+                defaultValue={'active'}
+                render={({onChange, onBlur, value, name}) => (
+                  <ActiveToogle value={value} onChange={onChange} />
+                )}
+              />
+            </Col>
+            <Col md="3">
+              <Label className="mr-5">{t('status')}</Label>
+              <Controller
+                control={control}
+                name="status"
                 defaultValue={'active'}
                 render={({onChange, onBlur, value, name}) => (
                   <ActiveToogle value={value} onChange={onChange} />
