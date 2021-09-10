@@ -18,6 +18,7 @@ import FormCapping from './FormCapping';
 import FormWeekPark from './FormWeekPart';
 import useHandleCapping from './hooks/useHandleCapping';
 import {useGetCappings} from 'queries/capping';
+import {useGetWeekparts} from 'queries/weekpart';
 
 const INIT_CAPPING = {
   campaign_id: '',
@@ -30,7 +31,7 @@ const INIT_CAPPING = {
 
 const INIT_WEEK_PART = {
   strategy_id: '',
-  week_days: '',
+  week_day: '',
   start_hour: '',
   start_minute: '',
   end_hour: '',
@@ -55,9 +56,11 @@ const CappingList = () => {
   const listCapping = useMemo(() => {
     return cappingsRes?.items ?? [];
   }, [cappingsRes?.items]);
-  // const {data: listWeekpart = []} = useGetWeekParts({strategyId});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const listWeekpart = [];
+  const {data: weekpartRes = []} = useGetWeekparts({strategyId});
+
+  const listWeekpart = useMemo(() => {
+    return weekpartRes?.items ?? [];
+  }, [weekpartRes?.items]);
 
   const combieData = useMemo(() => {
     const destructureCapping = [...listCapping]?.map(item => {
@@ -68,9 +71,9 @@ const CappingList = () => {
         typeText: 'Capping'
       };
     });
-    const destructureWeekPart = listWeekpart?.map(item => {
-      const {week_days} = item;
-      let weekDaysLabel = week_days.map(weekDayItem => {
+    const destructureWeekPart = [...listWeekpart]?.map(item => {
+      const {week_day = ''} = item;
+      let weekDaysLabel = [week_day]?.map(weekDayItem => {
         const foundData = WEEK_DAYS.find(
           labelItem => labelItem.value === weekDayItem
         );
@@ -83,7 +86,7 @@ const CappingList = () => {
         ...INIT_CAPPING,
         type: 'week-part',
         typeText: 'Week Part',
-        week_days: weekDaysLabel
+        week_day: weekDaysLabel
       };
     });
     return [...destructureCapping, ...destructureWeekPart];

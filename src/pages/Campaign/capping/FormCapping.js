@@ -142,7 +142,7 @@ const FormCapping = ({onCloseForm}) => {
             <Button
               onClick={onCloseForm}
               className="mb-2 mr-2 btn-icon"
-              color="secondary"
+              color="link"
             >
               <i className="pe-7s-refresh btn-icon-wrapper"> </i>
               {t('cancel')}

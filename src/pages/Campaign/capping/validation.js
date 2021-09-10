@@ -24,7 +24,7 @@ export const schemaValidate = t => {
 export const schemaValidateWeekPart = t => {
   return yupResolver(
     yup.object().shape({
-      week_days: yup
+      week_day: yup
         .array()
         .of(yup.object().shape({num: yup.number()}))
         .required(t('required')),

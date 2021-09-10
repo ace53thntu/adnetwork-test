@@ -2,23 +2,22 @@
 import React, {useEffect} from 'react';
 
 //---> External Modules
-import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row, Button, Label} from 'reactstrap';
-
-// import {
-//   useCreateWeekPart,
-//   useGetWeekPart,
-//   useUpdateWeekPart
-// } from 'core/queries/week-part';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {FormTextInput, ActiveToogle, FormReactSelect} from 'components/forms';
 import {WEEK_DAYS} from '../constants';
 import {useGetDefaultWeekPart} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
 import {schemaValidateWeekPart} from './validation';
+import {mappingFormToApi} from './weekpart.dto';
+import {
+  useCreateWeekpart,
+  useEditWeekpart,
+  useGetWeekpart
+} from 'queries/weekpart';
 
 const FormWeekPark = ({onCloseForm = () => {}}) => {
   // Init translate
@@ -27,20 +26,17 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
   const {currentObject: weekPartId} = useHandleCapping();
 
   // Define queries
-  // const {data} = useGetWeekPart(weekPartId);
-  const data = null;
+  const {data} = useGetWeekpart(weekPartId);
   const defaultValues = useGetDefaultWeekPart(data);
-  // const {mutateAsync: createWeekPart} = useCreateWeekPart();
-  const createWeekPart = new Promise(resolve => resolve('ok'));
-  // const {mutateAsync: updateWeekPart} = useUpdateWeekPart();
-  const updateWeekPart = new Promise(resolve => resolve('ok'));
+  const {mutateAsync: createWeekPart} = useCreateWeekpart();
+  const {mutateAsync: updateWeekPart} = useEditWeekpart();
 
   // Get query param
   const {id: strategyId} = useParams();
 
   const methods = useForm({
     defaultValues,
-    resolver: yupResolver(schemaValidateWeekPart(t))
+    resolver: schemaValidateWeekPart(t)
   });
   const {handleSubmit, reset, control} = methods;
 
@@ -48,42 +44,8 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
-  /**
-   * Parse data before submit
-   * @param {*} formData
-   * @returns
-   */
-  const parseFormData = ({formData}) => {
-    let {
-      week_days,
-      start_hour,
-      start_minute,
-      end_hour,
-      end_minute,
-      week_parts_gmt,
-      is_gmt
-    } = formData;
-    week_days = week_days.map(item => item.value);
-    start_hour = parseInt(start_hour, 10);
-    start_minute = parseInt(start_minute, 10);
-    end_hour = parseInt(end_hour, 10);
-    end_minute = parseInt(end_minute, 10);
-    let strategy_id = parseInt(strategyId, 10);
-    const convertGmt = is_gmt === 'active' ? true : false;
-    const convertWpGmt = week_parts_gmt === 'active' ? true : false;
-
-    return {
-      week_days,
-      start_time: `${start_hour}:${start_minute}`,
-      end_time: `${end_hour}:${end_minute}`,
-      strategy_id,
-      is_gmt: convertGmt,
-      week_parts_gmt: convertWpGmt
-    };
-  };
-
   const onSubmit = async formData => {
-    const data = parseFormData({formData});
+    const data = mappingFormToApi({formData, strategyId});
     if (weekPartId) {
       try {
         await updateWeekPart({weekPartId, data});
@@ -113,11 +75,33 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
             <Col md="6">
               <FormReactSelect
                 required
-                name="week_days"
+                name="week_day"
                 label={'Week days'}
                 placeholder={'Select'}
                 options={WEEK_DAYS}
                 multiple
+              />
+            </Col>
+            <Col md="3">
+              <Label className="mr-5">{t('status')}</Label>
+              <Controller
+                control={control}
+                name="status"
+                defaultValue={'active'}
+                render={({onChange, onBlur, value, name}) => (
+                  <ActiveToogle value={value} onChange={onChange} />
+                )}
+              />
+            </Col>
+            <Col md="3">
+              <Label className="mr-5">Is GMT</Label>
+              <Controller
+                control={control}
+                name="is_gmt"
+                defaultValue={'active'}
+                render={({onChange, onBlur, value, name}) => (
+                  <ActiveToogle value={value} onChange={onChange} />
+                )}
               />
             </Col>
           </Row>
@@ -168,35 +152,13 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
                 isRequired={true}
               />
             </Col>
-            <Col md="6">
-              <Label className="mr-5">Week Parts GMT</Label>
-              <Controller
-                control={control}
-                name="week_parts_gmt"
-                defaultValue={'active'}
-                render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
-                )}
-              />
-            </Col>
-            <Col md="6">
-              <Label className="mr-5">Is GMT</Label>
-              <Controller
-                control={control}
-                name="is_gmt"
-                defaultValue={'active'}
-                render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
-                )}
-              />
-            </Col>
           </Row>
           <hr />
           <div className="d-block mr-15">
             <Button
               onClick={onCloseForm}
               className="mb-2 mr-2 btn-icon"
-              color="secondary"
+              color="link"
             >
               <i className="pe-7s-refresh btn-icon-wrapper"> </i>
               {t('cancel')}

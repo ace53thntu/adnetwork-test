@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 
 //---> External Modules
-import {ListGroupItem} from 'reactstrap';
+import {Badge, ListGroupItem} from 'reactstrap';
 import {IconButton, MenuItem} from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {Menu} from '@material-ui/core';
@@ -102,7 +102,14 @@ const CappingItem = ({capping = null}) => {
             {renderTitle('End Hour', capping?.end_hour)}
             {renderTitle('End Minute', capping?.end_minute)}
 
-            {renderTitle('Type', capping?.type)}
+            {renderTitle(
+              'Type',
+              <Badge
+                color={capping?.type === 'capping' ? 'primary' : 'success'}
+              >
+                {capping?.type}
+              </Badge>
+            )}
 
             <div className="widget-content-right2">
               <div className="widget-subheading opacity-10">

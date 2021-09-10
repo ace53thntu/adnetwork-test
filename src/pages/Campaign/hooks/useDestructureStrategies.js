@@ -12,7 +12,7 @@ export const useDestructureStrategies = ({strategies = [], campaigns = []}) => {
         let campaign_name = '',
           advertiser_name = '';
         if (foundCampaign) {
-          campaign_name = foundCampaign.campaign_name;
+          campaign_name = foundCampaign.name;
           advertiser_name = foundCampaign.advertiser_name;
         }
         return {uuid, name, campaign_uuid, campaign_name, advertiser_name};

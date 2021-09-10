@@ -2,7 +2,7 @@ import {WeekpartAPIRequest} from 'api/weekpart.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CAPPINGS} from './constants';
+import {GET_WEEKPARTS} from './constants';
 
 /**
  * Update a Weekpart
@@ -12,9 +12,9 @@ export function useEditWeekpart() {
   const client = useQueryClient();
 
   return useMutation(
-    ({weekpartId, data}) =>
+    ({weekPartId, data}) =>
       WeekpartAPIRequest.editWeekpart({
-        id: weekpartId,
+        id: weekPartId,
         data,
         options: {cancelToken}
       }),
@@ -23,7 +23,7 @@ export function useEditWeekpart() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CAPPINGS]);
+        client.invalidateQueries([GET_WEEKPARTS]);
       }
     }
   );

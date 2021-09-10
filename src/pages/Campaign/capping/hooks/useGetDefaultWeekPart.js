@@ -3,7 +3,7 @@ import {WEEK_DAYS} from 'pages/Campaign/constants';
 
 export const useGetDefaultWeekPart = weekPart => {
   return useMemo(() => {
-    let week_days = [],
+    let week_day = null,
       start_hour = '',
       start_minute = '',
       end_hour = '',
@@ -12,10 +12,12 @@ export const useGetDefaultWeekPart = weekPart => {
       week_parts_gmt = 'inactive';
 
     if (weekPart) {
-      week_days = weekPart?.week_days;
-      week_days = WEEK_DAYS.filter(
-        item => week_days && week_days.includes(item.value)
+      week_day = weekPart?.week_day || '';
+      week_day = week_day.split(',') || [];
+      week_day = WEEK_DAYS.filter(
+        item => week_day && week_day.includes(item.value.toString())
       );
+
       start_hour = weekPart?.start_hour;
       start_minute = weekPart?.start_minute;
       end_hour = weekPart?.end_hour;
@@ -25,7 +27,7 @@ export const useGetDefaultWeekPart = weekPart => {
     }
 
     return {
-      week_days,
+      week_day,
       start_hour,
       start_minute,
       end_hour,

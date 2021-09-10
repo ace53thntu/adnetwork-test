@@ -11,8 +11,6 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {useSelector} from 'react-redux';
 
 //---> Internal Modules
-// import {useEditStrategy} from 'core/queries';
-// import {useGetConcepts} from 'core/queries/creatives/useGetConcepts';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const Concept = ({goTo, isSummary = false, strategyData, isViewed}) => {

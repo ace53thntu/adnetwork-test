@@ -11,7 +11,6 @@ const CappingProvider = props => {
     showFormCapping: false,
     showFormWeekPart: false
   });
-  console.log('🚀 ~ file: CappingContext.js ~ line 7 ~ state', state);
 
   return (
     <CappingContext.Provider value={[state, setState]}>

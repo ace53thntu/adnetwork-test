@@ -1,7 +1,7 @@
 import {WeekpartAPIRequest} from 'api/weekpart.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CAPPINGS} from './constants';
+import {GET_WEEKPARTS} from './constants';
 
 /**
  * Delete a Weekpart
@@ -19,7 +19,7 @@ export function useDeleteWeekpart() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CAPPINGS]);
+        client.invalidateQueries([GET_WEEKPARTS]);
       }
     }
   );

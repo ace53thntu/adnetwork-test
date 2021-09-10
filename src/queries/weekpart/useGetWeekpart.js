@@ -2,7 +2,7 @@ import {WeekpartAPIRequest} from 'api/weekpart.api';
 import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
-import {GET_CAPPING, GET_WEEKPART} from './constants';
+import {GET_WEEKPART} from './constants';
 
 /**
  * Hook for get Weekpart from API by query
