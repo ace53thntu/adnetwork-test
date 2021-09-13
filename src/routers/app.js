@@ -3,6 +3,7 @@ import Campaign from 'pages/Campaign';
 import {containerPages} from './container';
 import {inventoryMarketPages} from './inventory-market';
 import {organizationPages} from './organization';
+import {userManagementPages} from './user';
 
 export const appRoutes = {
   path: '/',
@@ -17,6 +18,7 @@ export const appRoutes = {
     },
     containerPages,
     inventoryMarketPages,
-    organizationPages
+    organizationPages,
+    userManagementPages
   ]
 };

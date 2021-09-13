@@ -70,7 +70,6 @@ const ListAdvertiser = () => {
         cell: row => <TagsList tagsList={row?.value || []} />
       },
       {
-        header: 'Status',
         accessor: 'status',
         cell: row => {
           let statusProps = {

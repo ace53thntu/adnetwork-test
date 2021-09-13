@@ -66,7 +66,6 @@ const DspList = () => {
         cell: row => <div title={row?.value}>{row?.value}</div>
       },
       {
-        header: 'Status',
         accessor: 'status',
         cell: row => {
           let statusProps = {

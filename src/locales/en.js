@@ -341,6 +341,7 @@ const en = {
   url: 'Url',
   apiKey: 'Api Key',
   user: 'User',
+  userList: 'Users list',
   address: 'Address',
   city: 'City',
   zip: 'Zip',

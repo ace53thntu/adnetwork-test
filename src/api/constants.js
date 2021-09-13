@@ -8,7 +8,7 @@ export const endpoints = {
     refreshToken: `${API_V1}/auth/access_token`
   },
   user: {
-    users: `${API_V1}/users`,
+    user: `${API_V1}/user`,
     me: `${API_V1}/me`
   },
   container: {

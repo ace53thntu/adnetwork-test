@@ -1,4 +1,3 @@
-import React from 'react';
 import {Containers, ContainerLayout, ContainerDetail} from 'pages/Container';
 import ContainerTreeTags from 'pages/Container/components/ContainerTree/ContainerTreeTags';
 import ContainerTreePages from 'pages/Container/components/ContainerTree/ContainerTreePages';

@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React from 'react';
+import React, {useMemo} from 'react';
 
 //---> External Modules
 import {
@@ -9,53 +9,61 @@ import {
   Row,
   Col,
   CardBody,
-  Container
+  Container,
+  Badge
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
 
 //---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import AppContent from 'components/layouts/Admin/components/AppContent';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
+import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
 import Status from 'components/list/status';
-import TagsList from 'components/list/tags/tags';
-import PublisherCreate from './publisher-create';
-import PublisherEdit from './publisher-edit';
-import {PublisherForm} from './components';
-import {LoadingIndicator} from 'components/common';
-import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
+import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
+import {capitalize} from 'utils/helpers/string.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {useDeleteUser, useGetUsers} from 'queries/users';
 
-const PublisherList = () => {
+const UserList = () => {
   const {t} = useTranslation();
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openFormEdit, setOpenFormEdit] = React.useState(false);
-  const [currentPublisher, setCurrentPublisher] = React.useState(null);
+
+  //---> Define local states.
+  const [currentUser, setCurrentUser] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
-  const {data: publishersRes, isLoading} = useGetPublishers();
-  const publishers = React.useMemo(() => {
-    return publishersRes?.items?.map(item => {
+
+  //---> Query get list of Users.
+  const {data: userRes, isLoading} = useGetUsers();
+  const users = useMemo(() => {
+    return userRes?.items?.map(item => {
       return {...item, id: item.uuid};
     });
-  }, [publishersRes?.items]);
-  const {
-    mutateAsync: deletePublisher,
-    isLoading: isLoadingDelete
-  } = useDeletePublisher();
+  }, [userRes?.items]);
+
+  //---> Mutation delete user
+  const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
+
   //---> Define columns
-  const columns = React.useMemo(() => {
+  const columns = useMemo(() => {
     return [
       {
-        header: 'Name',
-        accessor: 'name'
+        header: 'Username',
+        accessor: 'username'
       },
       {
-        header: 'Domain',
-        accessor: 'domain',
-        cell: row => <TagsList tagsList={[row?.value] || []} />
+        header: 'Email',
+        accessor: 'email',
+        cell: row => <Badge color="light">{row?.value}</Badge>
+      },
+      {
+        header: 'Role',
+        accessor: 'role',
+        cell: row => renderRole(row?.value)
+      },
+      {
+        header: 'Organization',
+        accessor: 'organization'
       },
       {
         accessor: 'status',
@@ -75,34 +83,24 @@ const PublisherList = () => {
         }
       },
       {
-        header: 'Created at',
-        accessor: 'created_at',
-        cell: row => moment(row?.value).format('DD/MM/YYYY') || ''
+        header: 'Updated at',
+        accessor: 'update_at',
+        cell: row => moment(row?.value).format('DD/MM/YYYY')
       }
     ];
   }, []);
 
-  const onToggleModal = () => {
-    setOpenForm(prevState => !prevState);
-  };
-
-  const onToggleModalEdit = () => {
-    setOpenFormEdit(prevState => !prevState);
-  };
-
   const onClickAdd = evt => {
     evt.preventDefault();
-    setOpenForm(true);
   };
 
   const onClickItem = data => {
-    setCurrentPublisher(data);
-    setOpenFormEdit(true);
+    setCurrentUser(data);
   };
 
-  const onHandleDelete = (actionIndex, item) => {
-    setCurrentPublisher(item);
+  const onClickDelete = (actionIndex, item) => {
     setShowDialog(true);
+    setCurrentUser(item);
   };
 
   const onCancelDelete = () => {
@@ -111,10 +109,10 @@ const PublisherList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deletePublisher({pubId: currentPublisher?.uuid});
-      ShowToast.success('Deleted publisher successfully');
+      await deleteUser({advId: currentUser?.uuid});
+      ShowToast.success('Deleted user successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete publisher');
+      ShowToast.error(err || 'Fail to delete user');
     } finally {
       setShowDialog(false);
     }
@@ -124,7 +122,7 @@ const PublisherList = () => {
     <>
       <AppContent>
         <PageTitleAlt
-          heading={t('publisher')}
+          heading={t('user')}
           subheading={t('managementSegmentDescription')}
           icon="pe-7s-plane icon-gradient bg-tempting-azure"
         />
@@ -137,7 +135,7 @@ const PublisherList = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('publisherList')}</div>
+                  <div>{t('userList')}</div>
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}
@@ -152,11 +150,11 @@ const PublisherList = () => {
                 </CardHeader>
                 <CardBody style={{minHeight: '400px'}}>
                   <List
-                    data={publishers || []}
+                    data={users || []}
                     columns={columns}
                     showAction
                     actions={['Delete']}
-                    handleAction={onHandleDelete}
+                    handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
                 </CardBody>
@@ -165,26 +163,11 @@ const PublisherList = () => {
           </Row>
         </Container>
       </AppContent>
-      {/* Advertiser Create */}
-      <PublisherCreate>
-        {openForm && <PublisherForm modal={openForm} toggle={onToggleModal} />}
-      </PublisherCreate>
-      {/* Advertiser Edit */}
-      <PublisherEdit>
-        {openFormEdit && (
-          <PublisherForm
-            modal={openFormEdit}
-            toggle={onToggleModalEdit}
-            title="Edit Publisher"
-            isEdit
-            publisherId={currentPublisher?.uuid}
-          />
-        )}
-      </PublisherEdit>
+
       {showDialog && (
         <DialogConfirm
           open={showDialog}
-          title="Are you sure delete this Publisher?"
+          title="Are you sure delete this User?"
           handleClose={onCancelDelete}
           handleAgree={onSubmitDelete}
           isLoading={isLoadingDelete}
@@ -194,4 +177,29 @@ const PublisherList = () => {
   );
 };
 
-export default PublisherList;
+const renderRole = role => {
+  let badgeColor = '';
+  switch (role) {
+    case 'admin':
+      badgeColor = 'info';
+      break;
+    case 'manager':
+      badgeColor = 'warning';
+      break;
+    case 'dsp':
+      badgeColor = 'primary';
+      break;
+    case 'advertiser':
+      badgeColor = 'success';
+      break;
+    case 'publisher':
+      badgeColor = 'secondary';
+      break;
+    default:
+      break;
+  }
+
+  return <Badge color={badgeColor}>{role}</Badge>;
+};
+
+export default UserList;

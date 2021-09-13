@@ -6,7 +6,7 @@ import {GET_USERS} from './constants';
 export function useGetUsers() {
   return useQuery(
     GET_USERS,
-    () => UserAPIRequest.getUsers().then(res => res?.data ?? []),
+    () => UserAPIRequest.getAllUser({}).then(res => res?.data ?? []),
     {
       suspense: false
     }

@@ -1,4 +1,3 @@
-import React from 'react';
 import InventoryMarket from 'pages/InventoryMarket';
 
 export const inventoryMarketPages = {
