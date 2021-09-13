@@ -25,6 +25,9 @@ import DialogConfirm from 'components/common/DialogConfirm';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useDeleteUser, useGetUsers} from 'queries/users';
+import UserCreate from './user-create';
+import UserEdit from './user-edit';
+import {UserForm} from './components';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -32,6 +35,8 @@ const UserList = () => {
   //---> Define local states.
   const [currentUser, setCurrentUser] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
+  const [openForm, setOpenForm] = React.useState(false);
+  const [openFormEdit, setOpenFormEdit] = React.useState(false);
 
   //---> Query get list of Users.
   const {data: userRes, isLoading} = useGetUsers();
@@ -54,7 +59,18 @@ const UserList = () => {
       {
         header: 'Email',
         accessor: 'email',
-        cell: row => <Badge color="light">{row?.value}</Badge>
+        cell: row => (
+          <div
+            style={{
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis'
+            }}
+            title={row?.value}
+          >
+            <Badge color="light">{row?.value}</Badge>
+          </div>
+        )
       },
       {
         header: 'Role',
@@ -90,12 +106,22 @@ const UserList = () => {
     ];
   }, []);
 
+  const onToggleModal = () => {
+    setOpenForm(prevState => !prevState);
+  };
+
+  const onToggleModalEdit = () => {
+    setOpenFormEdit(prevState => !prevState);
+  };
+
   const onClickAdd = evt => {
     evt.preventDefault();
+    setOpenForm(true);
   };
 
   const onClickItem = data => {
     setCurrentUser(data);
+    setOpenFormEdit(true);
   };
 
   const onClickDelete = (actionIndex, item) => {
@@ -163,7 +189,22 @@ const UserList = () => {
           </Row>
         </Container>
       </AppContent>
-
+      {/* Create user */}
+      <UserCreate>
+        {openForm && <UserForm modal={openForm} toggle={onToggleModal} />}
+      </UserCreate>
+      {/* Edit user */}
+      <UserEdit>
+        {openFormEdit && (
+          <UserForm
+            modal={openFormEdit}
+            toggle={onToggleModalEdit}
+            title="Edit User"
+            isEdit
+            userId={currentUser?.uuid}
+          />
+        )}
+      </UserEdit>
       {showDialog && (
         <DialogConfirm
           open={showDialog}

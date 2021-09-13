@@ -5,8 +5,12 @@ const en = {
   keepMeLoggedIn: 'Keep me logged in',
   usernameOrEmail: 'Username Or Email',
   username: 'Username',
+  enterUsername: 'Enter username',
+  enterEmail: 'Enter email',
   password: 'Password',
   login: 'Login',
+  avatarUrl: 'Avatar url',
+  role: 'Role',
 
   //menu
   accountManagement: 'Account Management',
