@@ -40,14 +40,30 @@ export const mappingApiToForm = ({
  * @param {*} formData - API response data
  * @returns data with API request body format trustly
  */
-export const mappingFormToApi = ({formData}) => {
-  const {name, status, domain, metadata} = formData;
-  const desDomains = domain?.value || '';
-  metadata.country = metadata?.country?.value || '';
+export const mappingFormToApi = ({formData = {}}) => {
+  const {
+    username = '',
+    email = '',
+    password = '',
+    organization = '',
+    role = null,
+    language = '',
+    avatar_url = '',
+    dsp_uuid = '',
+    advertiser_uuid = '',
+    publisher_uuid = ''
+  } = formData;
+
   return {
-    name,
-    status,
-    domain: desDomains,
-    metadata
+    username,
+    email,
+    password,
+    organization,
+    role: role?.value,
+    language: language?.value,
+    avatar_url,
+    dsp_uuid: dsp_uuid?.value,
+    advertiser_uuid: advertiser_uuid?.value,
+    publisher_uuid: publisher_uuid?.value
   };
 };

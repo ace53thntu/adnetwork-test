@@ -28,6 +28,9 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from './validation';
 import {getUserRole, INPUT_NAME} from '../constants';
 import {useCreateUser, useEditUser, useGetUser} from 'queries/users';
+import SelectAdvertiser from './select-advertiser';
+import SelectDsp from './select-dsp';
+import SelectPublisher from './select-publisher';
 
 const UserForm = ({
   modal = false,
@@ -43,9 +46,13 @@ const UserForm = ({
   const countryOptions = React.useMemo(() => {
     const countriesArr = Object.values(countries);
     return countriesArr?.map(item => {
-      return {...item, value: item.name, label: item.name};
+      return {...item, value: item.languages?.[0], label: item.name};
     });
   }, []);
+  console.log(
+    '🚀 ~ file: user.form.js ~ line 52 ~ countryOptions ~ countryOptions',
+    countryOptions
+  );
 
   const {t} = useTranslation();
   const {data: user, isLoading} = useGetUser(userId);
@@ -54,10 +61,16 @@ const UserForm = ({
   const {mutateAsync: editUser} = useEditUser();
 
   const methods = useForm({
-    defaultValues: {},
+    defaultValues: {
+      username: '',
+      email: '',
+      status: 'active',
+      role: null
+    },
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control} = methods;
+  const {handleSubmit, formState, control, errors} = methods;
+  console.log('🚀 ~ file: user.form.js ~ line 69 ~ errors', errors);
 
   // useEffect(() => {
   //   //---> Reset default value when API response
@@ -156,6 +169,17 @@ const UserForm = ({
                     placeholder={t('avatarUrl')}
                   />
                 </Col>
+                {/* Status */}
+                <Col sm="6">
+                  <Label className="mr-5">{t('status')}</Label>
+                  <Controller
+                    control={control}
+                    name={INPUT_NAME.STATUS}
+                    render={({onChange, onBlur, value, name}) => (
+                      <ActiveToogle value={value} onChange={onChange} />
+                    )}
+                  />
+                </Col>
                 {/* Role */}
                 <Col sm={6}>
                   <FormReactSelect
@@ -167,16 +191,10 @@ const UserForm = ({
                     required
                   />
                 </Col>
-                {/* Status */}
-                <Col md="12">
-                  <Label className="mr-5">{t('status')}</Label>
-                  <Controller
-                    control={control}
-                    name={INPUT_NAME.STATUS}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle value={value} onChange={onChange} />
-                    )}
-                  />
+                <Col sm={6}>
+                  <SelectAdvertiser />
+                  <SelectDsp />
+                  <SelectPublisher />
                 </Col>
               </Row>
             </ModalBody>
