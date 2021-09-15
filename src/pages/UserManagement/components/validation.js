@@ -6,7 +6,8 @@ export const schemaValidate = t => {
     yup.object().shape({
       username: yup.string().required(t('required')),
       email: yup.string().email('Invalid email format').required(t('required')),
-      role: yup.object().required(t('required')).typeError(t('required'))
+      role: yup.object().required(t('required')).typeError(t('required')),
+      advertiser_uuid: yup.object()
     })
   );
 };

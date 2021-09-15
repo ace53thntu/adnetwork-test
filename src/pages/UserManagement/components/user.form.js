@@ -31,6 +31,11 @@ import {useCreateUser, useEditUser, useGetUser} from 'queries/users';
 import SelectAdvertiser from './select-advertiser';
 import SelectDsp from './select-dsp';
 import SelectPublisher from './select-publisher';
+import {useDefaultUser} from '../hooks';
+import {useGetDsps} from 'queries/dsp';
+import {useGetPublishers} from 'queries/publisher';
+import {useGetAdvertisers} from 'queries/advertiser';
+import {useOptionsList} from 'hooks';
 
 const UserForm = ({
   modal = false,
@@ -55,29 +60,46 @@ const UserForm = ({
   );
 
   const {t} = useTranslation();
-  const {data: user, isLoading} = useGetUser(userId);
-  console.log('🚀 ~ file: user.form.js ~ line 52 ~ user', user);
+  const {data: dspResp = {}} = useGetDsps();
+  const {data: publisherResp = {}} = useGetPublishers();
+  const {data: advertiserResp = {}} = useGetAdvertisers();
+  const {data: userResp, isLoading, isFetched} = useGetUser(userId);
   const {mutateAsync: createUser} = useCreateUser();
   const {mutateAsync: editUser} = useEditUser();
+  const dspOptions = useOptionsList({list: dspResp?.items});
+  const advertiserOptions = useOptionsList({list: advertiserResp?.items});
+  const publisherOptions = useOptionsList({list: publisherResp?.items});
+
+  const defaultValues = useDefaultUser({
+    apiResp: userResp,
+    languagesArr: countryOptions,
+    dspsArr: dspOptions,
+    advertisersArr: advertiserOptions,
+    publishersArr: publisherOptions,
+    rolesArr: userRoles
+  });
+  console.log(
+    '🚀 ~ file: user.form.js ~ line 67 ~ defaultValues',
+    defaultValues
+  );
 
   const methods = useForm({
-    defaultValues: {
-      username: '',
-      email: '',
-      status: 'active',
-      role: null
-    },
+    defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, errors} = methods;
+  const {handleSubmit, formState, control, errors, reset} = methods;
   console.log('🚀 ~ file: user.form.js ~ line 69 ~ errors', errors);
 
-  // useEffect(() => {
-  //   //---> Reset default value when API response
-  //   if (isFetched && defaultValues?.name) {
-  //     reset(defaultValues);
-  //   }
-  // }, [reset, isFetched]);
+  React.useEffect(() => {
+    //---> Reset default value when API response
+    if (isFetched && defaultValues?.username !== userResp?.username) {
+      console.log(
+        '🚀 ~ file: user.form.js ~ line 96 ~ React.useEffect ~ isFetched',
+        isFetched
+      );
+      reset(defaultValues);
+    }
+  }, [reset, isFetched, defaultValues, userResp?.username]);
 
   /**
    * Submit form
@@ -192,9 +214,9 @@ const UserForm = ({
                   />
                 </Col>
                 <Col sm={6}>
-                  <SelectAdvertiser />
-                  <SelectDsp />
-                  <SelectPublisher />
+                  <SelectAdvertiser options={advertiserOptions} />
+                  <SelectDsp options={dspOptions} />
+                  <SelectPublisher options={publisherOptions} />
                 </Col>
               </Row>
             </ModalBody>

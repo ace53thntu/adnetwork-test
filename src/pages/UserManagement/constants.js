@@ -19,7 +19,7 @@ export const USER_ROLE = {
   MANAGER: 'manager',
   DSP: 'dsp',
   ADVERTISER: 'advertiser',
-  PUBLISHER: 'publiser'
+  PUBLISHER: 'publisher'
 };
 
 export const getUserRole = () => {

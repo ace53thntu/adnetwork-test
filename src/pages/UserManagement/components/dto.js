@@ -8,30 +8,44 @@
  */
 export const mappingApiToForm = ({
   apiResp = {},
-  domainsArr = [],
-  countriesArr = []
+  languagesArr = [],
+  rolesArr = [],
+  advertisersArr = [],
+  dspsArr = [],
+  publishersArr = []
 }) => {
-  console.log('🚀 ~ file: dto.js ~ line 14 ~ domainsArr', domainsArr);
-  console.log('🚀 ~ file: dto.js ~ line 14 ~ countriesArr', countriesArr);
   const {
     uuid = '',
-    name = '',
+    username = '',
+    email = '',
+    language = null,
+    role = null,
     status = 'active',
-    domain = null,
-    metadata = {}
+    publisher_uuid = '',
+    dsp_uuid = '',
+    advertiser_uuid = '',
+    password = ''
   } = apiResp;
-  //---> Get selected country
-  const selectedCountry = countriesArr?.find(
-    item => item?.value === metadata?.country
-  );
-  metadata.country = selectedCountry || null;
-  const destructureDomain = domainsArr.find(item => item?.value === domain);
+  const foundLanguage =
+    languagesArr?.find(item => item.value === language) || null;
+  const foundRole = rolesArr?.find(item => item.value === role) || null;
+  const foundPublisher =
+    publishersArr?.find(item => item.value === publisher_uuid) || null;
+  const foundAdvertiser =
+    advertisersArr?.find(item => item.value === advertiser_uuid) || null;
+  const foundDsp = dspsArr?.find(item => item.value === dsp_uuid) || null;
+
   return {
     uuid,
-    name,
+    username,
+    password,
+    email,
+    language: foundLanguage,
+    role: foundRole,
     status,
-    domain: destructureDomain,
-    metadata
+    dsp_uuid: foundDsp,
+    advertiser_uuid: foundAdvertiser,
+    publisher_uuid: foundPublisher
   };
 };
 
