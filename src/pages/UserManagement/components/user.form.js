@@ -18,7 +18,6 @@ import {
 import {Controller, FormProvider, useForm} from 'react-hook-form';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
-import {countries} from 'countries-list';
 
 //---> Internal Modules
 import {mappingFormToApi} from './dto';
@@ -26,16 +25,12 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {schemaValidate} from './validation';
-import {getUserRole, INPUT_NAME} from '../constants';
+import {INPUT_NAME} from '../constants';
 import {useCreateUser, useEditUser, useGetUser} from 'queries/users';
 import SelectAdvertiser from './select-advertiser';
 import SelectDsp from './select-dsp';
 import SelectPublisher from './select-publisher';
 import {useDefaultUser} from '../hooks';
-import {useGetDsps} from 'queries/dsp';
-import {useGetPublishers} from 'queries/publisher';
-import {useGetAdvertisers} from 'queries/advertiser';
-import {useOptionsList} from 'hooks';
 
 const UserForm = ({
   modal = false,
@@ -43,32 +38,17 @@ const UserForm = ({
   className = '',
   title = 'Create new User',
   isEdit = false,
-  userId = ''
+  userId = '',
+  countryOptions,
+  dspOptions,
+  advertiserOptions,
+  publisherOptions,
+  userRoles
 }) => {
-  //---> Get user role options
-  const userRoles = getUserRole();
-  //---> Destructure list of Country Options.
-  const countryOptions = React.useMemo(() => {
-    const countriesArr = Object.values(countries);
-    return countriesArr?.map(item => {
-      return {...item, value: item.languages?.[0], label: item.name};
-    });
-  }, []);
-  console.log(
-    '🚀 ~ file: user.form.js ~ line 52 ~ countryOptions ~ countryOptions',
-    countryOptions
-  );
-
   const {t} = useTranslation();
-  const {data: dspResp = {}} = useGetDsps();
-  const {data: publisherResp = {}} = useGetPublishers();
-  const {data: advertiserResp = {}} = useGetAdvertisers();
   const {data: userResp, isLoading, isFetched} = useGetUser(userId);
   const {mutateAsync: createUser} = useCreateUser();
   const {mutateAsync: editUser} = useEditUser();
-  const dspOptions = useOptionsList({list: dspResp?.items});
-  const advertiserOptions = useOptionsList({list: advertiserResp?.items});
-  const publisherOptions = useOptionsList({list: publisherResp?.items});
 
   const defaultValues = useDefaultUser({
     apiResp: userResp,
@@ -78,28 +58,19 @@ const UserForm = ({
     publishersArr: publisherOptions,
     rolesArr: userRoles
   });
-  console.log(
-    '🚀 ~ file: user.form.js ~ line 67 ~ defaultValues',
-    defaultValues
-  );
 
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, errors, reset} = methods;
-  console.log('🚀 ~ file: user.form.js ~ line 69 ~ errors', errors);
+  const {handleSubmit, formState, control, reset} = methods;
 
   React.useEffect(() => {
     //---> Reset default value when API response
-    if (isFetched && defaultValues?.username !== userResp?.username) {
-      console.log(
-        '🚀 ~ file: user.form.js ~ line 96 ~ React.useEffect ~ isFetched',
-        isFetched
-      );
+    if (isFetched) {
       reset(defaultValues);
     }
-  }, [reset, isFetched, defaultValues, userResp?.username]);
+  }, [reset, isFetched, defaultValues]);
 
   /**
    * Submit form
@@ -163,15 +134,17 @@ const UserForm = ({
                 </Col>
 
                 {/* Password */}
-                <Col sm={6}>
-                  <FormTextInput
-                    name={INPUT_NAME.PASSWORD}
-                    label={t('password')}
-                    placeholder={t('enterPassword')}
-                    isRequired
-                    type="password"
-                  />
-                </Col>
+                {!isEdit && (
+                  <Col sm={6}>
+                    <FormTextInput
+                      name={INPUT_NAME.PASSWORD}
+                      label={t('password')}
+                      placeholder={t('enterPassword')}
+                      isRequired
+                      type="password"
+                    />
+                  </Col>
+                )}
 
                 {/* Language */}
                 <Col sm={6}>

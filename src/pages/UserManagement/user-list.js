@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
+import {countries} from 'countries-list';
 
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
@@ -28,6 +29,11 @@ import {useDeleteUser, useGetUsers} from 'queries/users';
 import UserCreate from './user-create';
 import UserEdit from './user-edit';
 import {UserForm} from './components';
+import {useGetDsps} from 'queries/dsp';
+import {useGetPublishers} from 'queries/publisher';
+import {useGetAdvertisers} from 'queries/advertiser';
+import {useOptionsList} from 'hooks';
+import {getUserRole} from './constants';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -48,6 +54,24 @@ const UserList = () => {
 
   //---> Mutation delete user
   const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
+
+  //---> Get list data
+  //---> Get user role options
+  const userRoles = getUserRole();
+  //---> Destructure list of Country Options.
+  const countryOptions = React.useMemo(() => {
+    const countriesArr = Object.values(countries);
+    return countriesArr?.map(item => {
+      return {...item, value: item.languages?.[0], label: item.name};
+    });
+  }, []);
+
+  const {data: dspResp = {}} = useGetDsps();
+  const {data: publisherResp = {}} = useGetPublishers();
+  const {data: advertiserResp = {}} = useGetAdvertisers();
+  const dspOptions = useOptionsList({list: dspResp?.items});
+  const advertiserOptions = useOptionsList({list: advertiserResp?.items});
+  const publisherOptions = useOptionsList({list: publisherResp?.items});
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -191,7 +215,17 @@ const UserList = () => {
       </AppContent>
       {/* Create user */}
       <UserCreate>
-        {openForm && <UserForm modal={openForm} toggle={onToggleModal} />}
+        {openForm && (
+          <UserForm
+            modal={openForm}
+            toggle={onToggleModal}
+            userRoles={userRoles}
+            countryOptions={countryOptions}
+            dspOptions={dspOptions}
+            advertiserOptions={advertiserOptions}
+            publisherOptions={publisherOptions}
+          />
+        )}
       </UserCreate>
       {/* Edit user */}
       <UserEdit>
@@ -202,6 +236,11 @@ const UserList = () => {
             title="Edit User"
             isEdit
             userId={currentUser?.uuid}
+            userRoles={userRoles}
+            countryOptions={countryOptions}
+            dspOptions={dspOptions}
+            advertiserOptions={advertiserOptions}
+            publisherOptions={publisherOptions}
           />
         )}
       </UserEdit>
