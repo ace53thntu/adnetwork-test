@@ -15,6 +15,10 @@ import {useInventoriesByContainer} from '../hooks';
 import {InventoryDetails} from '.';
 import {getInventoryTypeColor} from '../helpers';
 import {useGetPositions} from 'queries/position';
+import {useGetDsps} from 'queries/dsp';
+import {useOptionsList} from 'hooks';
+import {useGetAudiences} from 'queries/audience';
+import {useGetDeals} from 'queries/deal';
 
 const InventoryContainer = ({page}) => {
   const {data: positions = []} = useGetPositions();
@@ -28,6 +32,12 @@ const InventoryContainer = ({page}) => {
     page,
     positions
   });
+  const {data: dspResp} = useGetDsps();
+  const dspOptions = useOptionsList({list: dspResp?.items});
+  const {data: audienceResp} = useGetAudiences();
+  const audienceOptions = useOptionsList({list: audienceResp?.items});
+  const {data: dealResp} = useGetDeals();
+  const dealOptions = useOptionsList({list: dealResp?.items});
 
   const columns = React.useMemo(() => {
     return [
@@ -49,8 +59,8 @@ const InventoryContainer = ({page}) => {
         )
       },
       {
-        header: 'Minimum Price',
-        accessor: 'minimum_price',
+        header: 'Floor price',
+        accessor: 'floor_price',
         cell: row => (
           <Badge color="warning" pill>
             {row?.value}
@@ -122,21 +132,28 @@ const InventoryContainer = ({page}) => {
 
   const onClickView = currentItem => {
     setOpenModal(true);
+    setSelectedInventory(currentItem);
   };
 
   const onClickBid = currentItem => {
     setOpenModal(true);
     setIsBid(true);
     setIsDeal(false);
+    setSelectedInventory(currentItem);
   };
 
   const onClickDeal = currentItem => {
     setOpenModal(true);
     setIsDeal(true);
     setIsBid(false);
+    setSelectedInventory(currentItem);
   };
 
   const onClickAction = (actionIndex, currentItem) => {
+    console.log(
+      '🚀 ~ file: container-inventory.js ~ line 150 ~ onClickAction ~ currentItem',
+      currentItem
+    );
     if (actionIndex === 0) {
       onClickView(currentItem);
       return;
@@ -177,6 +194,9 @@ const InventoryContainer = ({page}) => {
           inventoryData={selectedInventory}
           isDeal={isDeal}
           isBid={isBid}
+          dspOptions={dspOptions}
+          audienceOptions={audienceOptions}
+          dealOptions={dealOptions}
         />
       )}
     </React.Fragment>

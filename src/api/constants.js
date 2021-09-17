@@ -58,5 +58,11 @@ export const endpoints = {
   },
   domain: {
     domain: `${API_V1}/domain`
+  },
+  audience: {
+    audience: `${API_V1}/audience`
+  },
+  deal: {
+    deal: `${API_V1}/deal`
   }
 };

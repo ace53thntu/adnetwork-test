@@ -32,6 +32,14 @@ class InventoryAPI extends XHRRequest {
   deleteInventory = ({id, params}) => {
     return this.delete(`${endpoints.inventory.inventory}/${id}`, params);
   };
+
+  registerInventory = ({data, id, options}) => {
+    return this.post(
+      `${endpoints.inventory.inventory}/${id}/${endpoints.dsp.dsp}`,
+      data,
+      options
+    );
+  };
 }
 
 export const InventoryAPIRequest = new InventoryAPI(apiURL);

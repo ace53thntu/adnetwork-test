@@ -1,0 +1,2 @@
+export const GET_AUDIENCES = 'GET_AUDIENCES';
+export const GET_AUDIENCE = 'GET_AUDIENCE';

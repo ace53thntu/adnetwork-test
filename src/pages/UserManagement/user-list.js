@@ -159,7 +159,7 @@ const UserList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteUser({advId: currentUser?.uuid});
+      await deleteUser({userId: currentUser?.uuid});
       ShowToast.success('Deleted user successfully');
     } catch (err) {
       ShowToast.error(err || 'Fail to delete user');
