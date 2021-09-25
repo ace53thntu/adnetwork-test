@@ -3,7 +3,6 @@ import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
 import {GET_INVENTORY} from './constants';
-
 /**
  * Hook for get Inventory from API by query
  */
@@ -19,6 +18,7 @@ export function useGetInventory(inventoryId) {
           cancelToken
         }
       }).then(res => {
+        console.log('res?.data', res?.data);
         return res?.data ?? {};
       }),
     {

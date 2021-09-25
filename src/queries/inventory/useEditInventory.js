@@ -2,7 +2,7 @@ import {InventoryAPIRequest} from 'api/inventory.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORIES} from './constants';
+import {GET_INVENTORIES, GET_INVENTORY} from './constants';
 
 /**
  * Update a Inventory
@@ -22,8 +22,9 @@ export function useEditInventory() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
+      onSettled: data => {
         client.invalidateQueries([GET_INVENTORIES]);
+        client.invalidateQueries([GET_INVENTORY, data?.data?.uuid]);
       }
     }
   );

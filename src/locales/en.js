@@ -203,10 +203,12 @@ const en = {
   iOSTag: 'iOS',
   androidTag: 'Android',
   floorPrice: 'Floor price',
+  dealFloorPrice: 'Deal floor price',
   merge: 'Merge',
   trackerTemplate: 'Tracker template',
   type: 'Type',
   format: 'Format',
+  enableDeal: 'Enable deal',
 
   //partners
   partnerDescriptiom: 'View or change the partners information.',

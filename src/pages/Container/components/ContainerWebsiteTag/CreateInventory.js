@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 //---> External Modules
 import {
@@ -8,7 +8,8 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader
+  ModalHeader,
+  Row
 } from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
@@ -35,7 +36,8 @@ const formName = {
   type: 'type',
   collect_type: 'collect_type',
   traits: 'traits',
-  name: 'name'
+  name: 'name',
+  enable_deal: 'enable_deal'
 };
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
@@ -50,28 +52,15 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const methods = useForm({
     defaultValues: {
       status: 'active',
+      enable_deal: 'active',
       type: null
     }
     // resolver: validationEvent()
   });
-  const {handleSubmit, reset, formState} = methods;
+  const {handleSubmit, formState} = methods;
 
   // local states
   const [isLoading, setIsLoading] = useState(false);
-
-  // funcs
-  const resetForm = useCallback(() => {
-    reset({
-      status: 'active',
-      type: null
-    });
-  }, [reset]);
-
-  useEffect(() => {
-    if (isOpen) {
-      resetForm();
-    }
-  }, [isOpen, resetForm]);
 
   const onHandleSubmit = async values => {
     const formData = destructureFormData(pageId, values);
@@ -84,10 +73,6 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
 
       setIsLoading(false);
     } catch (err) {
-      console.log(
-        '🚀 ~ file: CreateInventory.js ~ line 114 ~ CreateInventory ~ err',
-        err
-      );
       ShowToast.error(err, {
         closeOnClick: true
       });
@@ -113,17 +98,30 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
           <BlockUi tag="div" blocking={isLoading}>
             <ModalHeader>Inventory Information</ModalHeader>
             <ModalBody>
-              <FormGroup className="d-flex justify-content-end mb-0">
-                <FormToggle
-                  name={formName.status}
-                  defaultCheckedValue="active"
-                  label={t('status')}
-                  values={{
-                    checked: 'active',
-                    unChecked: 'inactive'
-                  }}
-                />
-              </FormGroup>
+              <div className="d-flex justify-content-end">
+                <FormGroup className="d-flex justify-content-end mb-0">
+                  <FormToggle
+                    name={formName.status}
+                    defaultCheckedValue="active"
+                    label={t('status')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+                <FormGroup className="d-flex justify-content-end mb-0 ml-3">
+                  <FormToggle
+                    name={formName.enable_deal}
+                    defaultCheckedValue="active"
+                    label={t('enableDeal')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+              </div>
               <FormGroup>
                 <FormTextInput
                   isRequired
@@ -133,7 +131,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
                   disable={formState.isSubmitting}
                 />
               </FormGroup>
-              <FormGroup row>
+              <Row>
                 <Col sm={4}>
                   <FormReactSelect
                     required={false}
@@ -161,16 +159,16 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
                 <Col sm={4}>
                   <FormTextInput
                     isRequired={false}
-                    name="minimum_price"
+                    name="floor_price"
                     placeholder="0.0"
                     s
                     label={t('floorPrice')}
                     disable={formState.isSubmitting}
                   />
                 </Col>
-              </FormGroup>
+              </Row>
 
-              <FormGroup row>
+              <Row>
                 <Col sm={4}>
                   <FormTextInput
                     isRequired={false}
@@ -195,7 +193,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
                 <Col sm={4}>
                   <FormReactSelect
                     required={false}
-                    name="tracker_template_id"
+                    name="tracker_template_uuid"
                     label={t('trackerTemplate')}
                     placeholder="Select tracker template"
                     optionLabelField="name"
@@ -204,7 +202,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
                     multiple={false}
                   />
                 </Col>
-              </FormGroup>
+              </Row>
               <InventoryProperty />
             </ModalBody>
             <ModalFooter>

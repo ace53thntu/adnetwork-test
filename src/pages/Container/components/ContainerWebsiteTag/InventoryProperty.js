@@ -4,6 +4,7 @@ import React from 'react';
 //---> External Modules
 import {useFormContext} from 'react-hook-form';
 import {Col, Row} from 'reactstrap';
+import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {FormReactSelect, FormTextInput} from 'components/forms';
@@ -11,6 +12,7 @@ import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
 
 const InventoryProperty = ({currentInventory = null}) => {
+  const {t} = useTranslation();
   const {formState} = useFormContext();
   const inventoryTags = getInventoryTags();
 
@@ -59,6 +61,16 @@ const InventoryProperty = ({currentInventory = null}) => {
             name="metadata.duration"
             placeholder="0"
             label="Duration"
+            disable={formState.isSubmitting}
+          />
+        </Col>
+        <Col sm={4}>
+          <FormTextInput
+            isRequired={false}
+            name="deal_floor_price"
+            placeholder="0.0"
+            s
+            label={t('dealFloorPrice')}
             disable={formState.isSubmitting}
           />
         </Col>

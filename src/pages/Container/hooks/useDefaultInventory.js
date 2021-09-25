@@ -26,20 +26,21 @@ export const useDefaultInventory = ({
         status,
         type,
         format,
-        minimum_price,
+        floor_price,
         merge,
         metadata,
         fill_rate,
         click_rate,
         position_id,
-        tracker_template_id
+        tracker_template_uuid,
+        deal_floor_price
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
         item => item.value === position_id
       );
       const destructureTrackerTemplate = trackerTemplates.find(
-        item => item.value === tracker_template_id
+        item => item.value === tracker_template_uuid
       );
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
@@ -61,7 +62,8 @@ export const useDefaultInventory = ({
         status,
         type: destructureType,
         format: destructureFormat,
-        minimum_price,
+        floor_price,
+        deal_floor_price,
         merge,
         metadata,
         fill_rate,

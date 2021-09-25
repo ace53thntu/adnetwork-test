@@ -175,7 +175,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                 <Col sm={4}>
                   <FormTextInput
                     isRequired={false}
-                    name="minimum_price"
+                    name="floor_price"
                     placeholder="0.0"
                     label={t('doorPrice')}
                     disable={formState.isSubmitting}
@@ -208,7 +208,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                 <Col sm={4}>
                   <FormReactSelect
                     required={false}
-                    name="tracker_template_id"
+                    name="tracker_template_uuid"
                     label={t('trackerTemplate')}
                     placeholder="Select tracker template"
                     optionLabelField="name"

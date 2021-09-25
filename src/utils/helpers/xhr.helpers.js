@@ -64,6 +64,10 @@ export class XHRRequest {
 
     this.axios.interceptors.response.use(
       response => {
+        console.log(
+          '🚀 ~ file: xhr.helpers.js ~ line 67 ~ XHRRequest ~ constructor ~ response',
+          response
+        );
         return response;
       },
       async error => {
