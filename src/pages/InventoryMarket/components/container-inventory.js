@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 
 //---> External Modules
-import {Badge} from 'reactstrap';
+import {Badge, Modal} from 'reactstrap';
 
 //---> Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -187,7 +187,12 @@ const InventoryContainer = ({page}) => {
       ) : (
         <NoDataAvailable />
       )}
-      {openModal && (
+      <Modal
+        unmountOnClose
+        size="lg"
+        className="modal-dialog shadow-none"
+        isOpen={openModal}
+      >
         <InventoryDetails
           modal={openModal}
           toggle={onToggleModal}
@@ -198,7 +203,7 @@ const InventoryContainer = ({page}) => {
           audienceOptions={audienceOptions}
           dealOptions={dealOptions}
         />
-      )}
+      </Modal>
     </React.Fragment>
   );
 };

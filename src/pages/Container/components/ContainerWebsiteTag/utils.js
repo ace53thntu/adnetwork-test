@@ -16,6 +16,7 @@ export const destructureFormData = (pageId, formData) => {
     type,
     enable_deal
   } = formData;
+
   const formatData = format?.value;
   const minimumPriceData = parseFloat(floor_price) || '';
   const dealFloorPriceData = parseFloat(deal_floor_price) || '';

@@ -12,7 +12,8 @@ function FormToggle({
   },
   defaultCheckedValue,
   disabled = false,
-  inline = true
+  inline = true,
+  ...rest
 }) {
   const {register, setValue, watch} = useFormContext();
 
@@ -46,6 +47,7 @@ function FormToggle({
       label={label}
       disabled={disabled}
       inline={inline}
+      {...rest}
     />
   );
 }

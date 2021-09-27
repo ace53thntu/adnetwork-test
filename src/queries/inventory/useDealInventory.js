@@ -5,15 +5,15 @@ import {useMutation, useQueryClient} from 'react-query';
 import {GET_INVENTORIES} from './constants';
 
 /**
- * Register a Inventory for DSP
+ * Deal an Inventory for DSP
  */
-export function useRegisterInventory() {
+export function useDealInventory() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
     ({inventoryId, data}) =>
-      InventoryAPIRequest.registerInventory({
+      InventoryAPIRequest.dealInventory({
         id: inventoryId,
         data,
         options: {cancelToken}

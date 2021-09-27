@@ -30,10 +30,6 @@ const processQueue = (error, token = null) => {
 
 export class XHRRequest {
   constructor({apiURL = ''}) {
-    // console.log(
-    //   '🚀 ~ file: xhr.helpers.js ~ line 33 ~ XHRRequest ~ constructor ~ apiURL',
-    //   apiURL
-    // );
     axios.defaults.headers.common.Accept = '*/*';
     const baseURL = apiURL || '';
     this.axios = axios.create({
@@ -64,10 +60,6 @@ export class XHRRequest {
 
     this.axios.interceptors.response.use(
       response => {
-        console.log(
-          '🚀 ~ file: xhr.helpers.js ~ line 67 ~ XHRRequest ~ constructor ~ response',
-          response
-        );
         return response;
       },
       async error => {

@@ -11,7 +11,7 @@ class AuthAPI extends XHRRequest {
 
   login = ({email, password}) => {
     return this.post(endpoints.auth.login, {
-      usernameOrEmail: email,
+      username: email,
       password
     });
   };

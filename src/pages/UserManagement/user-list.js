@@ -67,9 +67,17 @@ const UserList = () => {
   }, []);
 
   const {data: dspResp = {}} = useGetDsps();
+  console.log(
+    '🚀 ~ file: user-list.js ~ line 70 ~ UserList ~ dspResp',
+    dspResp
+  );
   const {data: publisherResp = {}} = useGetPublishers();
   const {data: advertiserResp = {}} = useGetAdvertisers();
   const dspOptions = useOptionsList({list: dspResp?.items});
+  console.log(
+    '🚀 ~ file: user-list.js ~ line 73 ~ UserList ~ dspOptions',
+    dspOptions
+  );
   const advertiserOptions = useOptionsList({list: advertiserResp?.items});
   const publisherOptions = useOptionsList({list: publisherResp?.items});
 

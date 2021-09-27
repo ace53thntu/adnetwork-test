@@ -20,7 +20,6 @@ const ContainerPage = ({data}) => {
     data?.uuid
   );
 
-  console.log('-containerPages', containerPages);
   const pages = React.useMemo(() => {
     return containerPages?.map(item => ({...item, id: item?.uuid}));
   }, [containerPages]);

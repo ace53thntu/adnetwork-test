@@ -33,9 +33,17 @@ class InventoryAPI extends XHRRequest {
     return this.delete(`${endpoints.inventory.inventory}/${id}`, params);
   };
 
-  registerInventory = ({data, id, options}) => {
+  bidInventory = ({data, id, options}) => {
     return this.post(
       `${endpoints.inventory.inventory}/${id}/${endpoints.dsp.dsp}`,
+      data,
+      options
+    );
+  };
+
+  dealInventory = ({data, id, options}) => {
+    return this.post(
+      `${endpoints.inventory.inventory}/${id}/${endpoints.inventory.deal}`,
       data,
       options
     );

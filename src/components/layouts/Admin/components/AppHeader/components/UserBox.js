@@ -35,7 +35,10 @@ const UserBox = () => {
 
   useEffect(() => {
     Emitter.on('UPDATE_PROFILE', val => {
-      setCurrentUser(val);
+      setCurrentUser({
+        ...val,
+        full_name: `${val?.first_name} ${val?.last_name}`
+      });
     });
 
     return () => {
@@ -99,8 +102,8 @@ const UserBox = () => {
                             />
                           </div>
                           <div className="widget-content-left">
-                            <div className="widget-heading">
-                              {currentUser?.full_name ?? 'Admin'}
+                            <div className="widget-heading text-capitalize">
+                              {currentUser?.full_name ?? currentUser?.username}
                             </div>
                             <div className="widget-subheading opacity-8">
                               {capitalize('admin')}
@@ -145,10 +148,12 @@ const UserBox = () => {
             </UncontrolledButtonDropdown>
           </div>
           <div className="widget-content-left  ml-3 header-user-info">
-            <div className="widget-heading">
-              {currentUser?.full_name ?? 'Admin'}
+            <div className="widget-heading text-capitalize">
+              {currentUser?.full_name ?? currentUser?.username}
             </div>
-            <div className="widget-subheading">{capitalize('admin')}</div>
+            <div className="widget-subheading text-capitalize">
+              {currentUser?.full_name ?? currentUser?.username}
+            </div>
           </div>
         </div>
       </div>

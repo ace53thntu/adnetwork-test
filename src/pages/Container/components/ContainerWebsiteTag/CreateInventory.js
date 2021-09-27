@@ -94,6 +94,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
           onSubmit={handleSubmit(onHandleSubmit)}
           name="create-event"
           key="create-event"
+          autoComplete="off"
         >
           <BlockUi tag="div" blocking={isLoading}>
             <ModalHeader>Inventory Information</ModalHeader>

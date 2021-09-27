@@ -4,7 +4,6 @@ import React, {useEffect} from 'react';
 //---> External Modules
 import {
   Button,
-  Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
@@ -28,7 +27,12 @@ import DatePicker from 'react-datepicker';
 //---> Internal Modules
 import {getInventoryTypeColor} from '../helpers';
 import {useTranslation} from 'react-i18next';
-import {FormReactSelect} from 'components/forms';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+import {INPUTS_NAME} from '../constants';
+import StartAt from './start-at';
+import {mappingFormToApi} from './dto';
+import {useDealInventory} from 'queries/inventory';
+import BlockUi from 'react-block-ui';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -49,24 +53,44 @@ const InventoryDetails = ({
   audienceOptions = [],
   dealOptions = []
 }) => {
+  const {t} = useTranslation();
   const classes = useStyles();
-  const methods = useForm();
-  const {handleSubmit} = useForm();
+  const {mutateAsync: dealInventory} = useDealInventory();
+  const methods = useForm({
+    defaultValues: {
+      [INPUTS_NAME.NAME]: '',
+      [INPUTS_NAME.STATUS]: 'active',
+      [INPUTS_NAME.DSP_UUID]: '',
+      [INPUTS_NAME.START_AT]: null,
+      [INPUTS_NAME.END_AT]: null
+    }
+  });
+  const {handleSubmit, formState} = methods;
 
-  const onSubmit = formData => {
+  const onSubmit = async formData => {
     console.log(
       '🚀 ~ file: inventory-detail.js ~ line 48 ~ onSubmit ~ formData',
       formData
     );
+    const submitData = mappingFormToApi({formData});
+    try {
+      await dealInventory({data: submitData, inventoryId: inventoryData?.uuid});
+    } catch (error) {
+      console.log('🚀 ~ file: inventory-detail.js ~ line 75 ~ error', error);
+    }
   };
 
   return (
-    <Modal isOpen={modal} className={className} size="lg">
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+    <FormProvider {...methods}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+        id="bidInventory"
+      >
+        <BlockUi tag="div" blocking={formState.isSubmitting}>
           <ModalHeader>{inventoryData?.name}</ModalHeader>
           <ModalBody>
-            <Card>
+            <Card className="mb-3">
               <CardBody className={classes.bgHover}>
                 <div className="d-flex flex-wrap">
                   {/* Type */}
@@ -153,30 +177,70 @@ const InventoryDetails = ({
                     <DealSelect options={dealOptions} />
                   </Col>
                 </Row>
+                <TimeRange />
               </>
             )}
             {/* Render date range picker */}
-
-            {isBid || isDeal ? <TimeRange /> : null}
+            {isDeal ? (
+              <>
+                <Row className="mt-3">
+                  <Col sm="5">
+                    <FormTextInput
+                      name={INPUTS_NAME.NAME}
+                      label="Name"
+                      placeholder="Enter deal name..."
+                    />
+                  </Col>
+                  <Col sm="4">
+                    <DspSelect options={dspOptions} />
+                  </Col>
+                  <Col sm={3}>
+                    <FormGroup>
+                      <label>&nbsp;</label>
+                      <div>
+                        <FormToggle
+                          name={INPUTS_NAME.STATUS}
+                          defaultCheckedValue="active"
+                          label={t('status')}
+                          values={{
+                            checked: 'active',
+                            unChecked: 'inactive'
+                          }}
+                        />
+                      </div>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <TimeRange />
+              </>
+            ) : null}
           </ModalBody>
           <ModalFooter>
             <Button color="link" onClick={toggle}>
               Cancel
             </Button>
             {isBid && (
-              <Button type="submit" color="primary">
+              <Button
+                type="submit"
+                color="primary"
+                disabled={!formState.isDirty}
+              >
                 Bid
               </Button>
             )}
             {isDeal && (
-              <Button type="submit" color="primary">
+              <Button
+                type="submit"
+                color="primary"
+                disabled={!formState.isDirty}
+              >
                 Deal
               </Button>
             )}
           </ModalFooter>
-        </form>
-      </FormProvider>
-    </Modal>
+        </BlockUi>
+      </form>
+    </FormProvider>
   );
 };
 
@@ -195,31 +259,19 @@ const TimeRange = () => {
   const {control, errors, register} = useFormContext();
 
   useEffect(() => {
-    register('start_at');
-    register('end_at');
+    register([INPUTS_NAME.END_AT]);
   }, [register]);
 
   return (
-    <Row className="mt-2">
+    <Row className="mt-3">
       <Col xs="6">
         <FormGroup>
           <Label for="startDate">
             <span className="text-danger">*</span>
             {t('startDate')}
           </Label>
-          <Controller
-            control={control}
-            name="start_at"
-            render={({onChange, onBlur, value, name}) => (
-              <DatePicker
-                selected={value}
-                onChange={date => onChange(date)}
-                className="form-control"
-                dateFormat="dd/MM/yyyy"
-                placeholderText="dd/mm/yyyy"
-              />
-            )}
-          />
+
+          <StartAt />
           {errors && errors['start_at'] ? (
             <div className="invalid-feedback d-block">
               {errors['start_at']?.message}

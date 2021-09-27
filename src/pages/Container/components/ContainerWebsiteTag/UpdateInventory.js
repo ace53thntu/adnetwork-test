@@ -31,9 +31,8 @@ const formName = {
   properties: 'properties',
   status: 'status',
   type: 'type',
-  collect_type: 'collectType',
-  traits: 'traits',
-  name: 'name'
+  name: 'name',
+  enable_deal: 'enable_deal'
 };
 
 export default function UpdateInventory({
@@ -111,6 +110,7 @@ function FormUpdate({toggle, inventory, pageId}) {
           onSubmit={handleSubmit(onHandleSubmit)}
           name="create-inventory"
           key="create-inventory"
+          autoComplete="off"
         >
           <BlockUi tag="div" blocking={isLoading}>
             <ModalHeader>Inventory Information</ModalHeader>
@@ -137,7 +137,18 @@ function FormUpdate({toggle, inventory, pageId}) {
                     unChecked: 'inactive'
                   }}
                 />
+                <FormToggle
+                  className="ml-2"
+                  name={formName.enable_deal}
+                  defaultCheckedValue="active"
+                  label={t('enableDeal')}
+                  values={{
+                    checked: 'active',
+                    unChecked: 'inactive'
+                  }}
+                />
               </FormGroup>
+
               <FormGroup>
                 <FormTextInput
                   isRequired
@@ -177,7 +188,7 @@ function FormUpdate({toggle, inventory, pageId}) {
                     isRequired={false}
                     name="floor_price"
                     placeholder="0.0"
-                    label={t('doorPrice')}
+                    label={t('floorPrice')}
                     disable={formState.isSubmitting}
                   />
                 </Col>

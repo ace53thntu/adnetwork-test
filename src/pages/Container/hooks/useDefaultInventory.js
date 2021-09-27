@@ -10,10 +10,6 @@ export const useDefaultInventory = ({
   trackerTemplates = [],
   positions = []
 }) => {
-  console.log(
-    '🚀 ~ file: useDefaultInventory.js ~ line 13 ~ inventory',
-    inventory
-  );
   return useMemo(() => {
     const inventoryTags = getInventoryTags();
     const inventoryTypes = getInventoryTypes();
@@ -33,7 +29,8 @@ export const useDefaultInventory = ({
         click_rate,
         position_id,
         tracker_template_uuid,
-        deal_floor_price
+        deal_floor_price,
+        enable_deal
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
@@ -68,8 +65,9 @@ export const useDefaultInventory = ({
         metadata,
         fill_rate,
         click_rate,
-        tracker_template_id: destructureTrackerTemplate,
-        position_id: destructurePosition
+        tracker_template_uuid: destructureTrackerTemplate,
+        position_id: destructurePosition,
+        enable_deal: enable_deal ? 'active' : 'inactive'
       };
     }
     return {};
