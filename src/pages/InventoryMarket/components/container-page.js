@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2021-present, AiCactus, Inc.
+ * All rights reserved.
+ *
+ * @flow
+ */
+
 //---> Build-in Modules
 import React from 'react';
 

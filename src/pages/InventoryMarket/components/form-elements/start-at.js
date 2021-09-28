@@ -1,7 +1,14 @@
+/**
+ * Copyright (c) 2021-present, AiCactus, Inc.
+ * All rights reserved.
+ *
+ * @flow
+ */
+
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
-import {INPUTS_NAME} from '../constants';
+import {INPUTS_NAME} from '../../constants';
 
 const StartAt = () => {
   const {control, register} = useFormContext();

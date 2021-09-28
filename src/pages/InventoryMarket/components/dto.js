@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2021-present, AiCactus, Inc.
+ * All rights reserved.
+ *
+ * @flow
+ */
+
 import moment from 'moment';
 import {INPUTS_NAME} from '../constants';
 
