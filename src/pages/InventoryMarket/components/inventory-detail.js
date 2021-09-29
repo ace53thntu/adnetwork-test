@@ -6,7 +6,7 @@
  */
 
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React from 'react';
 
 //---> External Modules
 import {
@@ -16,30 +16,20 @@ import {
   ModalFooter,
   Card,
   CardBody,
-  Badge,
-  Row,
-  Col,
-  FormGroup,
-  Label
+  Badge
 } from 'reactstrap';
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  useFormContext
-} from 'react-hook-form';
+import {FormProvider, useForm} from 'react-hook-form';
 import {makeStyles} from '@material-ui/core';
-import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import {getInventoryTypeColor} from '../helpers';
-import {useTranslation} from 'react-i18next';
-import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {INPUTS_NAME} from '../constants';
-import StartAt from './form-elements/start-at';
 import {mappingFormToApi} from './dto';
-import {useDealInventory} from 'queries/inventory';
+import {useBidInventory, useDealInventory} from 'queries/inventory';
 import BlockUi from 'react-block-ui';
+import DealForm from './deal.form';
+import InventoryBidForm from './bid.form';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -60,9 +50,10 @@ const InventoryDetails = ({
   audienceOptions = [],
   dealOptions = []
 }) => {
-  const {t} = useTranslation();
   const classes = useStyles();
   const {mutateAsync: dealInventory} = useDealInventory();
+  const {mutateAsync: bidInventory} = useBidInventory();
+
   const methods = useForm({
     defaultValues: {
       [INPUTS_NAME.NAME]: '',
@@ -74,16 +65,41 @@ const InventoryDetails = ({
   });
   const {handleSubmit, formState} = methods;
 
-  const onSubmit = async formData => {
-    console.log(
-      '🚀 ~ file: inventory-detail.js ~ line 48 ~ onSubmit ~ formData',
-      formData
-    );
-    const submitData = mappingFormToApi({formData});
+  async function executeDealInventory({formData}) {
+    const submitData = mappingFormToApi({formData, isDeal: true});
     try {
-      await dealInventory({data: submitData, inventoryId: inventoryData?.uuid});
+      await dealInventory({
+        data: submitData,
+        inventoryId: inventoryData?.uuid
+      });
+      ShowToast.success('Deal inventory successfully');
+      toggle();
     } catch (error) {
       console.log('🚀 ~ file: inventory-detail.js ~ line 75 ~ error', error);
+      ShowToast.error(error?.msg || 'Fail to deal inventory');
+    }
+  }
+
+  async function executeBidInventory({formData}) {
+    const submitData = mappingFormToApi({formData, isDeal: false});
+    try {
+      await bidInventory({
+        data: submitData,
+        inventoryId: inventoryData?.uuid
+      });
+      ShowToast.success('Bid inventory successfully');
+      toggle();
+    } catch (error) {
+      console.log('🚀 ~ file: inventory-detail.js ~ line 75 ~ error', error);
+      ShowToast.error(error?.msg || 'Fail to bid inventory');
+    }
+  }
+
+  const onSubmit = async formData => {
+    if (!isDeal) {
+      await executeBidInventory({formData});
+    } else {
+      await executeDealInventory({formData});
     }
   };
 
@@ -172,55 +188,20 @@ const InventoryDetails = ({
               </CardBody>
             </Card>
             {isBid && (
-              <>
-                <Row className="mt-3">
-                  <Col sm="4">
-                    <DspSelect options={dspOptions} />
-                  </Col>
-                  <Col sm="4">
-                    <AudienceSelect options={audienceOptions} />
-                  </Col>
-                  <Col sm="4">
-                    <DealSelect options={dealOptions} />
-                  </Col>
-                </Row>
-                <TimeRange />
-              </>
+              <InventoryBidForm
+                dspOptions={dspOptions}
+                audienceOptions={audienceOptions}
+                dealOptions={dealOptions}
+              />
             )}
             {/* Render date range picker */}
-            {isDeal ? (
-              <>
-                <Row className="mt-3">
-                  <Col sm="5">
-                    <FormTextInput
-                      name={INPUTS_NAME.NAME}
-                      label="Name"
-                      placeholder="Enter deal name..."
-                    />
-                  </Col>
-                  <Col sm="4">
-                    <DspSelect options={dspOptions} />
-                  </Col>
-                  <Col sm={3}>
-                    <FormGroup>
-                      <label>&nbsp;</label>
-                      <div>
-                        <FormToggle
-                          name={INPUTS_NAME.STATUS}
-                          defaultCheckedValue="active"
-                          label={t('status')}
-                          values={{
-                            checked: 'active',
-                            unChecked: 'inactive'
-                          }}
-                        />
-                      </div>
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <TimeRange />
-              </>
-            ) : null}
+            {isDeal && (
+              <DealForm
+                dspOptions={dspOptions}
+                audienceOptions={audienceOptions}
+                dealOptions={dealOptions}
+              />
+            )}
           </ModalBody>
           <ModalFooter>
             <Button color="link" onClick={toggle}>
@@ -259,81 +240,5 @@ const InventoryPartial = React.memo(({label = '', children}) => {
     </div>
   );
 });
-
-// Sub components
-const TimeRange = () => {
-  const {t} = useTranslation();
-  const {control, errors, register} = useFormContext();
-
-  useEffect(() => {
-    register([INPUTS_NAME.END_AT]);
-  }, [register]);
-
-  return (
-    <Row className="mt-3">
-      <Col xs="6">
-        <FormGroup>
-          <Label for="startDate">
-            <span className="text-danger">*</span>
-            {t('startDate')}
-          </Label>
-
-          <StartAt />
-          {errors && errors['start_at'] ? (
-            <div className="invalid-feedback d-block">
-              {errors['start_at']?.message}
-            </div>
-          ) : null}
-        </FormGroup>
-      </Col>
-      <Col xs="6">
-        <FormGroup>
-          <Label for="endDate">
-            <span className="text-danger">*</span>
-            {t('endDate')}
-          </Label>
-          <Controller
-            control={control}
-            name="end_at"
-            render={({onChange, onBlur, value, name}) => (
-              <DatePicker
-                selected={value}
-                onChange={date => onChange(date)}
-                className="form-control"
-                dateFormat="dd/MM/yyyy"
-                placeholderText="dd/mm/yyyy"
-              />
-            )}
-          />
-          {errors && errors['end_at'] ? (
-            <div className="invalid-feedback d-block">
-              {errors['end_at']?.message}
-            </div>
-          ) : null}
-        </FormGroup>
-      </Col>
-    </Row>
-  );
-};
-
-const DspSelect = ({options = []}) => {
-  const {register} = useFormContext();
-
-  useEffect(() => {
-    register('dsp_uuid');
-  }, [register]);
-
-  return <FormReactSelect name="dsp_uuid" options={options} label="Dsp" />;
-};
-
-const AudienceSelect = ({options = []}) => {
-  return (
-    <FormReactSelect name="audience_uuid" options={options} label="Audience" />
-  );
-};
-
-const DealSelect = ({options = []}) => {
-  return <FormReactSelect name="deal_uuid" options={options} label="Deal" />;
-};
 
 export default React.memo(InventoryDetails);

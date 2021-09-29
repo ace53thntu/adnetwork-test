@@ -29,6 +29,7 @@ export default function DspSelect({options = []}) {
       options={options}
       label="Dsp"
       placeholder="Select dsp..."
+      required
     />
   );
 }

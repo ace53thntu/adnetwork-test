@@ -35,7 +35,7 @@ class InventoryAPI extends XHRRequest {
 
   bidInventory = ({data, id, options}) => {
     return this.post(
-      `${endpoints.inventory.inventory}/${id}/${endpoints.dsp.dsp}`,
+      `${endpoints.inventory.inventory}/${id}/${endpoints.inventory.dsp}`,
       data,
       options
     );

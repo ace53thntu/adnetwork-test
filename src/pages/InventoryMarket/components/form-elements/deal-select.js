@@ -29,6 +29,7 @@ export default function DealSelect({options = []}) {
       options={options}
       label="Deal"
       placeholder="Select deal..."
+      required
     />
   );
 }

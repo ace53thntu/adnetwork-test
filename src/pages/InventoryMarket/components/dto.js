@@ -23,7 +23,16 @@ const convertDate = ({date, isStart = true}) => {
 };
 
 export const mappingFormToApi = ({formData = {}, isDeal = true}) => {
-  const {start_at, end_at, dsp_uuid, name, status} = formData;
+  const {
+    start_at,
+    end_at,
+    dsp_uuid,
+    name,
+    status,
+    audience_uuid,
+    deal_uuid,
+    budget: {global, daily} = {}
+  } = formData;
   const convertStartAt = convertDate({date: start_at});
   const convertEndAt = convertDate({date: end_at, isStart: false});
 
@@ -41,7 +50,15 @@ export const mappingFormToApi = ({formData = {}, isDeal = true}) => {
   //---> Case bid
   return {
     [INPUTS_NAME.START_AT]: convertStartAt,
-    [INPUTS_NAME.END_AT]: convertEndAt
+    [INPUTS_NAME.END_AT]: convertEndAt,
+    [INPUTS_NAME.DSP_UUID]: dsp_uuid?.value,
+    [INPUTS_NAME.AUDICEN_UUID]: audience_uuid?.value,
+    [INPUTS_NAME.DEAL_UUID]: deal_uuid?.value,
+    [INPUTS_NAME.BUDGET]: {
+      [INPUTS_NAME.GLOBAL]: parseInt(global, 10),
+      [INPUTS_NAME.DAILY]: parseInt(daily, 10)
+    },
+    [INPUTS_NAME.STATUS]: status
   };
 };
 

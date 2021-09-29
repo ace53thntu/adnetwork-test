@@ -21,7 +21,8 @@ export const endpoints = {
   inventory: {
     inventory: `${API_V1}/inventory`,
     inventoryContainer: 'inventories',
-    deal: 'deal'
+    deal: 'deal',
+    dsp: 'dsp'
   },
   advertiser: {
     advertiser: `${API_V1}/advertiser`
