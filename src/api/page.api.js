@@ -17,6 +17,10 @@ class PageAPI extends XHRRequest {
     );
   };
 
+  getAllPage = ({params = null, options}) => {
+    return this.get(`${endpoints.page.page}`, params, options);
+  };
+
   getPage = ({id, params = null, options}) => {
     return this.get(`${endpoints.page.page}/${id}`, params, options);
   };

@@ -4,3 +4,5 @@ export {useEditInventory} from './useEditInventory';
 export {useDeleteInventory} from './useDeleteInventory';
 export {useBidInventory} from './useBidInventory';
 export {useDealInventory} from './useDealInventory';
+export {useGetInventoryDeals} from './useGetInventoryDeals';
+export {useGetInventoryBids} from './useGetInventoryBids';

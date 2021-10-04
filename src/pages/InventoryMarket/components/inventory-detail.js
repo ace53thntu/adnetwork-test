@@ -25,7 +25,12 @@ import {makeStyles} from '@material-ui/core';
 import {getInventoryTypeColor} from '../helpers';
 import {INPUTS_NAME} from '../constants';
 import {mappingFormToApi} from './dto';
-import {useBidInventory, useDealInventory} from 'queries/inventory';
+import {
+  useBidInventory,
+  useDealInventory,
+  useGetInventoryBids,
+  useGetInventoryDeals
+} from 'queries/inventory';
 import BlockUi from 'react-block-ui';
 import DealForm from './deal.form';
 import InventoryBidForm from './bid.form';
@@ -51,6 +56,17 @@ const InventoryDetails = ({
   dealOptions = []
 }) => {
   const classes = useStyles();
+  const {data: listDeals} = useGetInventoryDeals({
+    inventoryId: inventoryData?.uuid
+  });
+  console.log(
+    '🚀 ~ file: inventory-detail.js ~ line 55 ~ listDeals',
+    listDeals
+  );
+  const {data: listBids} = useGetInventoryBids({
+    inventoryId: inventoryData?.uuid
+  });
+  console.log('🚀 ~ file: inventory-detail.js ~ line 57 ~ listBids', listBids);
   const {mutateAsync: dealInventory} = useDealInventory();
   const {mutateAsync: bidInventory} = useBidInventory();
 

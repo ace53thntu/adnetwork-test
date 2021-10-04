@@ -9,6 +9,10 @@ class InventoryAPI extends XHRRequest {
     super({apiURL: url});
   }
 
+  getAllInventory = ({params = null, options}) => {
+    return this.get(`${endpoints.inventory.inventory}`, params, options);
+  };
+
   getInventory = ({id, params = null, options}) => {
     return this.get(`${endpoints.inventory.inventory}/${id}`, params, options);
   };
@@ -45,6 +49,22 @@ class InventoryAPI extends XHRRequest {
     return this.post(
       `${endpoints.inventory.inventory}/${id}/${endpoints.inventory.deal}`,
       data,
+      options
+    );
+  };
+
+  getInventoryDeal = ({id, params = null, options}) => {
+    return this.get(
+      `${endpoints.inventory.inventory}/${id}/${endpoints.inventory.deal}`,
+      params,
+      options
+    );
+  };
+
+  getInventoryBid = ({id, params = null, options}) => {
+    return this.get(
+      `${endpoints.inventory.inventory}/${id}/${endpoints.inventory.dsp}`,
+      params,
       options
     );
   };

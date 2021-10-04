@@ -13,7 +13,6 @@ import {
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import ContainerSideBar from '../ContainerSideBar';
 import './styles.scss';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import Table, {
@@ -23,6 +22,7 @@ import Table, {
 } from 'components/table';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {useGetContainers} from 'queries/container/useGetContainers';
+import ContainerSidebar from '../Sidebar';
 
 const STATUS_OPTIONS = [
   {
@@ -125,7 +125,7 @@ const Containers = props => {
 
   return (
     <>
-      <ContainerSideBar />
+      <ContainerSidebar />
       <AppContent>
         <PageTitleAlt
           heading={t('containerManager')}
