@@ -34,6 +34,7 @@ import {useGetContainerPages} from 'queries/container/useGetContainerPages';
 import {useCountSource} from 'pages/Container/hooks/useCountSource';
 import {usePublisherOptions} from 'pages/Container/hooks/usePublisherOptions';
 import {destructureFormData} from '../ContainerCreateDialog/dto';
+import ContainerSidebar from '../Sidebar';
 
 const checkHasSource = ({source = 'web', pages = []}) => {
   const foundSource = pages?.find(item => item?.source === source);
@@ -81,7 +82,7 @@ function ContainerDetail() {
 
   return (
     <>
-      {/* <ContainerSideBar /> */}
+      <ContainerSidebar />
       <AppContent>
         <PageTitleAlt
           heading={container?.name ?? t('containerDetail')}

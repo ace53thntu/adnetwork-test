@@ -8,7 +8,6 @@ import {
   setViewContainer
 } from 'store/reducers/container';
 import {PageAPIRequest} from 'api/page.api';
-import {InventoryAPIRequest} from 'api/inventory.api';
 import {ContainerAPIRequest} from 'api/container.api';
 import {useCancelRequest} from 'hooks';
 import useDeepCompareEffect, {
@@ -19,18 +18,22 @@ import {useDispatch, useSelector} from 'react-redux';
 import {unSelectedChild} from 'pages/Container/utils';
 
 import {makeStyles} from '@material-ui/core/styles';
+import {useNavigate} from 'react-router';
+import {TAG_FROM_SOURCE} from '../ContainerTree/constants';
 
 const useStyles = makeStyles({
   root: {
-    height: 400,
+    height: '100%',
     flexGrow: 1,
     maxWidth: 400
   },
   treeBox: {
-    height: 400,
+    height: 'calc(100vh - 220px)',
     overflow: 'auto'
   }
 });
+
+const PAGE_LIMIT = 3;
 
 function ContainerTree() {
   const classes = useStyles();
@@ -55,20 +58,6 @@ function ContainerTree() {
       });
     },
     [cancelToken]
-  );
-
-  const getInventoryData = useCallback(
-    async ({page, perPage, name, cid}) => {
-      return InventoryAPIRequest.getInventoriesContainer({
-        cid,
-        params: {page, limit: perPage},
-        options: {
-          cancelToken
-        }
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
   );
 
   useEffect(() => {
@@ -114,7 +103,8 @@ function ContainerTree() {
           numChildren: total_pages,
           expanded: false,
           selected: false,
-          isContainer: true
+          isContainer: true,
+          containerId: uuid
         }));
 
         setTreeData(newData);
@@ -141,45 +131,71 @@ function ContainerTree() {
             cancelToken
           }
         });
+        console.log('---- resData getAllPage', resData);
+        // Destructure pages data
+        let objMapping = {};
+        let listSource = [];
 
-        const children = resData.map(({uuid, name, total_inventories = 0}) => ({
-          id: uuid,
-          name: name,
+        resData?.forEach(element => {
+          const makeKey = element.source;
+          if (!objMapping[makeKey]) {
+            objMapping[makeKey] = [];
+          }
+
+          objMapping[makeKey].push({
+            ...element
+          });
+        });
+        console.log(objMapping);
+
+        Object.entries(objMapping).forEach(([sourceKey, pagesBySource]) => {
+          const destructurePages = pagesBySource?.map(pageItem => ({
+            ...pageItem,
+            isPage: true,
+            containerId: node?.id,
+            id: pageItem?.uuid
+          }));
+          listSource.push({
+            [sourceKey]: destructurePages,
+            name: sourceKey
+          });
+        });
+
+        console.log('=========== listSource', listSource);
+
+        const children = listSource?.map((item, idx) => ({
+          id: `pr-${idx + 1}`,
+          name: item?.name,
           description: '',
-          children: [],
-          numChildren: total_inventories,
+          children: item[item?.name] || [],
+          numChildren: item[item?.name]?.length,
           page: 0,
           expanded: false,
           selected: false,
           isPage: true,
-          parentId: node.id
+          parentId: node.id,
+          isSource: true
         }));
 
         return children;
       } catch (error) {}
     } else {
       try {
-        const {data} = await getInventoryData({
-          cid: node.parentId,
-          page: currentPage,
-          perPage: pageLimit
-        });
-
-        const resData = data?.data ?? [];
-
-        const children = resData.map(({id, name}) => ({
-          id,
-          name: name,
-          description: '',
-          children: [],
-          numChildren: 0,
-          page: 0,
-          expanded: false,
-          selected: false,
-          isInventory: true,
-          parentId: node.id,
-          containerId: node.parentId
-        }));
+        console.log('===== node', node);
+        const children = [];
+        // const children = node?.map(({id, name}) => ({
+        //   id,
+        //   name: name,
+        //   description: '',
+        //   children: [],
+        //   numChildren: 0,
+        //   page: 0,
+        //   expanded: false,
+        //   selected: false,
+        //   isInventory: true,
+        //   parentId: node.id,
+        //   containerId: node.parentId
+        // }));
 
         return children;
       } catch (error) {}
@@ -219,6 +235,8 @@ function TreeListView({
   handleLoadMoreInRoot,
   isLast = false
 }) {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const [nodes, setNodes] = useState(data);
 
@@ -241,7 +259,16 @@ function TreeListView({
 
   const handleSelect = useCallback(
     (event, node, state) => {
-      const {isContainer, isPage, isInventory, parentId, containerId} = node;
+      console.log('🚀 ~ file: index.js ~ line 267 ~ node', node);
+      const {
+        isContainer,
+        isPage,
+        isSource,
+        parentId,
+        containerId,
+        id,
+        source
+      } = node;
       if (isContainer) {
         const newNodes = [...nodes].map(item => {
           if (item.id === node.id) {
@@ -259,6 +286,56 @@ function TreeListView({
         dispatch(selectContainer(node.id));
         dispatch(selectInventory(null));
         dispatch(selectPage(null));
+        navigate(`/container/${id}`);
+      }
+      if (isSource) {
+        console.log('🚀 ~ file: index.js ~ line 345 ~ isSource', isSource);
+        const {children} = node;
+        const {containerId, source, id} = children?.[0];
+        // const newNodes = [...nodes].map(item => {
+        //   if (item.id === containerId) {
+        //     return {
+        //       ...item,
+        //       children: [...item.children].map(child => {
+        //         if (child.id === parentId) {
+        //           return {
+        //             ...child,
+        //             selected: false,
+        //             children: [...child.children].map(nestChild => {
+        //               if (nestChild.id === node.id) {
+        //                 return {
+        //                   ...nestChild,
+        //                   ...node,
+        //                   ...state
+        //                 };
+        //               }
+        //               return {
+        //                 ...nestChild,
+        //                 selected: false
+        //               };
+        //             })
+        //           };
+        //         }
+        //         return {
+        //           ...child,
+        //           selected: false
+        //         };
+        //       })
+        //     };
+        //   }
+        //   return {
+        //     ...item,
+        //     selected: false
+        //   };
+        // });
+        // setNodes(newNodes);
+        // dispatch(setViewContainer(CONTAINER_VIEWS.inventoryDetail));
+        // dispatch(selectInventory(node.id));
+        // dispatch(selectPage(parentId));
+        // dispatch(selectContainer(containerId));
+        const tagLink = TAG_FROM_SOURCE[source];
+        navigate(`/container/${containerId}/${tagLink}/${id}`);
+        return;
       }
       if (isPage) {
         const newNodes = [...nodes].map(item => {
@@ -294,49 +371,10 @@ function TreeListView({
         dispatch(selectPage(node.id));
         dispatch(selectContainer(containerId));
         dispatch(selectInventory(null));
-      }
-      if (isInventory) {
-        const newNodes = [...nodes].map(item => {
-          if (item.id === containerId) {
-            return {
-              ...item,
-              children: [...item.children].map(child => {
-                if (child.id === parentId) {
-                  return {
-                    ...child,
-                    selected: false,
-                    children: [...child.children].map(nestChild => {
-                      if (nestChild.id === node.id) {
-                        return {
-                          ...nestChild,
-                          ...node,
-                          ...state
-                        };
-                      }
-                      return {
-                        ...nestChild,
-                        selected: false
-                      };
-                    })
-                  };
-                }
-                return {
-                  ...child,
-                  selected: false
-                };
-              })
-            };
-          }
-          return {
-            ...item,
-            selected: false
-          };
-        });
-        setNodes(newNodes);
-        dispatch(setViewContainer(CONTAINER_VIEWS.inventoryDetail));
-        dispatch(selectInventory(node.id));
-        dispatch(selectPage(parentId));
-        dispatch(selectContainer(containerId));
+
+        const tagLink = TAG_FROM_SOURCE[source];
+
+        navigate(`/container/${containerId}/${tagLink}/${id}`);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -390,8 +428,16 @@ function TreeListView({
     <Tree
       nodes={JSON.parse(JSON.stringify(nodes))}
       loadChildren={loadChildren}
-      pageLimit={3}
-      theme={minimalTheme}
+      pageLimit={PAGE_LIMIT}
+      theme={{
+        ...minimalTheme,
+        bodyTextStyle: {
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          marginBottom: 0
+        }
+      }}
       paginated
       Checkbox={() => null}
       selectCallback={handleSelect}

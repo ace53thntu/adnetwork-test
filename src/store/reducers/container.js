@@ -11,7 +11,7 @@ const SELECT_ITEM = '@container/SELECT_ITEM';
 
 export const CONTAINER_VIEWS = {
   container: 'container',
-  contaienrDetail: 'contaienrDetail',
+  containerDetail: 'containerDetail',
   pageDetail: 'pageDetail',
   inventoryDetail: 'inventoryDetail'
 };

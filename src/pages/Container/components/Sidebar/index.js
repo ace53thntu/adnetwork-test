@@ -5,6 +5,7 @@ import {Input} from 'reactstrap';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 
 import ContainerTree from '../Tree';
+import './style.scss';
 
 export default function ContainerSidebar() {
   console.log('xxxx');
@@ -19,7 +20,12 @@ export default function ContainerSidebar() {
   };
 
   return (
-    <ExtendSidebar heading="Organization">
+    <ExtendSidebar
+      heading="Container"
+      classes="aic-sidebar"
+      isLink
+      path="/container"
+    >
       <div className="mb-2">
         <Input
           placeholder="Search..."

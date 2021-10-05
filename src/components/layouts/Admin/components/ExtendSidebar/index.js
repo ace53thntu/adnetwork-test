@@ -9,7 +9,8 @@ export default function ExtendSidebar({
   heading = '',
   children,
   isLink = false,
-  path = ''
+  path = '',
+  classes
 }) {
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ export default function ExtendSidebar({
   }, [navigate, path]);
 
   return (
-    <div className="extend-sidebar">
+    <div className={`extend-sidebar ${classes}`}>
       {!isLink ? (
         <Header>{heading}</Header>
       ) : (

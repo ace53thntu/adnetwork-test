@@ -17,10 +17,6 @@ function ContainerWebsiteTag({pageId}) {
 
   // local states
   const [activeStep, setActiveStep] = useState(0);
-  console.log(
-    '🚀 ~ file: ContainerWebsiteTag.js ~ line 20 ~ ContainerWebsiteTag ~ activeStep',
-    activeStep
-  );
 
   const ACTIVE_STEP = WEB_TAG_STEPS[activeStep];
 

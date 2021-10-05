@@ -1,7 +1,6 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 
-import ContainerSideBar from '../ContainerSideBar';
 import ContainerWebsiteTag from '../ContainerWebsiteTag';
 import ContainerIOSTag from '../ContainerIOSTag';
 import ContainerImportOffline from '../ContainerImportOffline';
@@ -9,9 +8,10 @@ import ContainerTransfer from '../ContainerTransfer';
 import {CONTAINER_TREE_TAGS} from './constants';
 import {useContainers} from 'pages/Container/hooks/useContainers';
 import AppContent from 'components/layouts/Admin/components/AppContent';
+import ContainerSidebar from '../Sidebar';
 
 function ContainerTreePages() {
-  const {tag, pageId, cid: containerId} = useParams();
+  const {tag, pageId} = useParams();
 
   const {isFetching: loading} = useContainers({});
 
@@ -42,7 +42,7 @@ function ContainerTreePages() {
 
   return (
     <>
-      <ContainerSideBar containerId={containerId} />
+      <ContainerSidebar />
       <AppContent>{content}</AppContent>
     </>
   );

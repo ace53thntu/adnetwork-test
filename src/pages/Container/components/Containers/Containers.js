@@ -23,6 +23,7 @@ import Table, {
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {useGetContainers} from 'queries/container/useGetContainers';
 import ContainerSidebar from '../Sidebar';
+import '../../style.scss';
 
 const STATUS_OPTIONS = [
   {
@@ -126,7 +127,7 @@ const Containers = props => {
   return (
     <>
       <ContainerSidebar />
-      <AppContent>
+      <AppContent noPadding={false}>
         <PageTitleAlt
           heading={t('containerManager')}
           subheading={t('managementContainerDescription')}
