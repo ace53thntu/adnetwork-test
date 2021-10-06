@@ -12,12 +12,9 @@ import React, {useState} from 'react';
 import {Badge, Modal} from 'reactstrap';
 
 //---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
 import {LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
 import NoDataAvailable from 'components/list/no-data';
-import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
-import Status from 'components/list/status';
 import {useInventoriesByContainer} from '../hooks';
 import {InventoryDetails} from '.';
 import {getInventoryTypeColor} from '../helpers';
@@ -26,14 +23,19 @@ import {useGetDsps} from 'queries/dsp';
 import {useOptionsList} from 'hooks';
 import {useGetAudiences} from 'queries/audience';
 import {useGetDeals} from 'queries/deal';
+import './styles.scss';
+import {useGetInventoryByPage} from 'queries/inventory';
 
 const InventoryContainer = ({page}) => {
   const {data: positions = []} = useGetPositions();
 
-  const {data: containerInventories, isLoading} = useGetInventoriesByContainer({
-    containerId: page?.container_uuid,
-    pageId: page?.uuid
-  });
+  const {data: containerInventories, isLoading} = useGetInventoryByPage(
+    page?.uuid
+  );
+  console.log(
+    '🚀 ~ file: container-inventory.js ~ line 34 ~ InventoryContainer ~ containerInventories',
+    containerInventories
+  );
   const inventories = useInventoriesByContainer({
     data: containerInventories,
     page,
@@ -93,31 +95,22 @@ const InventoryContainer = ({page}) => {
         )
       },
       {
-        accessor: 'status',
-        cell: row => {
-          if (row.value) {
-            let statusProps = {
-              label: capitalize(row.value)
-            };
-            switch (row.value) {
-              case 'active':
-                statusProps.color = 'success';
-                break;
-              case 'pending':
-                statusProps.color = 'warning';
-                break;
-              case 'completed':
-                statusProps.color = 'info';
-                break;
-              default:
-                statusProps.color = 'error';
-                break;
-            }
-            return <Status {...statusProps} noHeader />;
-          } else {
-            return null;
-          }
-        }
+        header: 'Bid Count',
+        accessor: 'active_bid_count',
+        cell: row => (
+          <Badge color="light" pill>
+            {row?.value || 0}
+          </Badge>
+        )
+      },
+      {
+        header: 'Deal Count',
+        accessor: 'active_deal_count',
+        cell: row => (
+          <Badge color="light" pill>
+            {row?.value || 0}
+          </Badge>
+        )
       }
     ];
   }, []);

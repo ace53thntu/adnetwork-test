@@ -3,12 +3,7 @@ import {useMemo} from 'react';
 export const useInventoriesByContainer = ({data, page, positions}) => {
   return useMemo(() => {
     if (data) {
-      const {pages} = data;
-      const foundPage = pages?.find(pageItem => pageItem?.uuid === page?.uuid);
-      if (!foundPage) {
-        return [];
-      }
-      const inventories = foundPage?.inventories?.map(item => {
+      const inventories = data?.map(item => {
         const {position_id} = item;
         const position = positions?.find(poItem => poItem.id === position_id);
         return {
@@ -22,5 +17,5 @@ export const useInventoriesByContainer = ({data, page, positions}) => {
     }
 
     return [];
-  }, [data, page?.name, page?.uuid, positions]);
+  }, [data, page?.name, positions]);
 };

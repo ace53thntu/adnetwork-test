@@ -57,6 +57,8 @@ function List(props) {
               key={item?.id ?? itemIndex}
               handleClick={() => (disabled ? {} : handleClickItem(item))}
               status={item?.status}
+              isBid={!!item?.active_bid_count}
+              isDeal={!!item?.active_deal_count}
             >
               {checkable && !selectable ? (
                 <ListItemIcon>

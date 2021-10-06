@@ -5,7 +5,7 @@ import React from 'react';
 import {useListStyles} from './styles';
 
 function ListItem(props) {
-  const {children, handleClick, status} = props;
+  const {children, handleClick, status, isBid = false, isDeal = false} = props;
 
   const classes = useListStyles();
 
@@ -31,7 +31,9 @@ function ListItem(props) {
       disableRipple
       className={classNames(
         classes.listItemRoot,
-        status ? getStatusColor(status) : ''
+        status ? getStatusColor(status) : '',
+        isBid ? 'has-bid' : '',
+        isDeal ? 'has-deal' : ''
       )}
       onClick={handleClick}
     >
@@ -50,7 +52,9 @@ ListItem.propTypes = {
     'pending',
     'completed',
     'inactive'
-  ])
+  ]),
+  isBid: PropTypes.bool,
+  isDeal: PropTypes.bool
 };
 
 ListItem.defaultProps = {
