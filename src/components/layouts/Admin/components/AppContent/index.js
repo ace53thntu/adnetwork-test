@@ -2,10 +2,14 @@ import {Box} from '@material-ui/core';
 import React from 'react';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
-export default function AppContent({children, noPadding = true}) {
+export default function AppContent({
+  children,
+  noPadding = true,
+  customClass = ''
+}) {
   return (
     <div
-      className="app-main__inner"
+      className={`app-main__inner ${customClass}`}
       style={
         noPadding
           ? {

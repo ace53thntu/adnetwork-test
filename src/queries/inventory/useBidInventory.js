@@ -7,7 +7,7 @@ import {GET_INVENTORY_BY_PAGE} from './constants';
 /**
  * Bid an Inventory for DSP
  */
-export function useBidInventory() {
+export function useBidInventory(pageUuid) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -22,11 +22,8 @@ export function useBidInventory() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: data => {
-        client.invalidateQueries([
-          GET_INVENTORY_BY_PAGE,
-          data?.data?.page_uuid
-        ]);
+      onSettled: (data, variables) => {
+        client.invalidateQueries([GET_INVENTORY_BY_PAGE, pageUuid]);
       }
     }
   );

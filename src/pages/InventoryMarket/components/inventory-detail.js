@@ -67,8 +67,10 @@ const InventoryDetails = ({
     inventoryId: inventoryData?.uuid
   });
   console.log('🚀 ~ file: inventory-detail.js ~ line 57 ~ listBids', listBids);
-  const {mutateAsync: dealInventory} = useDealInventory();
-  const {mutateAsync: bidInventory} = useBidInventory();
+  const {mutateAsync: dealInventory} = useDealInventory(
+    inventoryData?.page_uuid
+  );
+  const {mutateAsync: bidInventory} = useBidInventory(inventoryData?.page_uuid);
 
   const methods = useForm({
     defaultValues: {

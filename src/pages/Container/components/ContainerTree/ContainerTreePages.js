@@ -43,7 +43,7 @@ function ContainerTreePages() {
   return (
     <>
       <ContainerSidebar />
-      <AppContent>{content}</AppContent>
+      <AppContent customClass="custom-container">{content}</AppContent>
     </>
   );
 }

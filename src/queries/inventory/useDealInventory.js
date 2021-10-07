@@ -2,12 +2,12 @@ import {InventoryAPIRequest} from 'api/inventory.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORIES} from './constants';
+import {GET_INVENTORY_BY_PAGE} from './constants';
 
 /**
  * Deal an Inventory for DSP
  */
-export function useDealInventory() {
+export function useDealInventory(pageUuid) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -23,7 +23,7 @@ export function useDealInventory() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: data => {
-        client.invalidateQueries([GET_INVENTORIES, data?.data?.page_uuid]);
+        client.invalidateQueries([GET_INVENTORY_BY_PAGE, pageUuid]);
       }
     }
   );

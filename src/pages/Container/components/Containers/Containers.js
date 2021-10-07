@@ -127,7 +127,7 @@ const Containers = props => {
   return (
     <>
       <ContainerSidebar />
-      <AppContent noPadding={false}>
+      <AppContent noPadding={false} customClass="custom-container">
         <PageTitleAlt
           heading={t('containerManager')}
           subheading={t('managementContainerDescription')}

@@ -13,16 +13,16 @@ import {
   selectStrategy,
   setViewCampaign
 } from 'store/reducers/campaign';
-// import {AdvertiserAPIRequest} from 'api/advertiser.api';
-// import {CampaignAPIRequest} from 'api/campaign.api';
-// import {StrategyAPIRequest} from 'api/strategy.api';
-// import {useCancelRequest} from 'hooks';
 import useDeepCompareEffect, {
   useDeepCompareMemoize
 } from 'hooks/useDeepCompareEffect';
 import {makeStyles} from '@material-ui/core/styles';
 import {CAMPAIGN_VIEWS} from 'pages/Campaign/constants';
 import {unSelectedChild} from 'utils/helpers/tree.helpers';
+import {AdvertiserAPIRequest} from 'api/advertiser.api';
+import {useCancelRequest} from 'hooks';
+import {StrategyAPIRequest} from 'api/strategy.api';
+import {CampaignAPIRequest} from 'api/campaign.api';
 
 const TreeListView = ({
   data = [],
@@ -236,7 +236,7 @@ const useStyles = makeStyles({
 function TreeSiebar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const {cancelToken} = useCancelRequest();
+  const {cancelToken} = useCancelRequest();
   const {shouldReloadTree, selectedAdvertiser, view} = useSelector(
     state => state.campReducer
   );
@@ -246,38 +246,32 @@ function TreeSiebar() {
 
   const getAdvertiserData = useCallback(
     async (page, perPage, name, agencyId) => {
-      // return AdvertiserAPIRequest.getAllAdvertiser({
-      //   page,
-      //   per_page: perPage,
-      //   agency_id: agencyId,
-      //   options: {
-      //     cancelToken
-      //   }
-      // });
-
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve([]);
-        }, 300);
+      return AdvertiserAPIRequest.getAllAdvertiser({
+        params: {
+          page,
+          limit: perPage,
+          agency_uuid: agencyId
+        },
+        options: {
+          cancelToken
+        }
       });
     },
-    []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cancelToken]
   );
 
   const getStrategyData = useCallback(
     async ({page, perPage, name, campaignId}) => {
-      // return StrategyService.getStrategies({
-      //   page,
-      //   per_page: perPage,
-      //   campaign_id: campaignId,
-      //   options: {
-      //     cancelToken
-      //   }
-      // });
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve([]);
-        }, 300);
+      return StrategyAPIRequest.getAllStrategy({
+        params: {
+          page,
+          limit: perPage,
+          campaign_uuid: campaignId
+        },
+        options: {
+          cancelToken
+        }
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -287,14 +281,14 @@ function TreeSiebar() {
   useEffect(() => {
     async function init() {
       const {data, headers} = await getAdvertiserData(currentPage, 10, '');
-      const resData = data?.data ?? [];
-      const newData = resData.map(({id, name, total_campaign = 0}) => ({
+      const resData = data?.items ?? [];
+      const newData = resData.map(({uuid: id, name, total_campaigns = 0}) => ({
         id,
         name,
         description: '',
         children: [],
         page: 0,
-        numChildren: total_campaign,
+        numChildren: total_campaigns,
         expanded: false,
         selected: false,
         isAdvertiser: true
@@ -314,13 +308,13 @@ function TreeSiebar() {
       async function init() {
         const {data} = await getAdvertiserData(1, 10, '');
         const resData = data?.data ?? [];
-        const newData = resData.map(({id, name, total_campaign = 0}) => ({
-          id,
+        const newData = resData.map(({uuid, name, total_campaigns = 0}) => ({
+          id: uuid,
           name,
           description: '',
           children: [],
           page: 0,
-          numChildren: total_campaign,
+          numChildren: total_campaigns,
           expanded: false,
           selected: false,
           isAdvertiser: true
@@ -337,35 +331,34 @@ function TreeSiebar() {
   const loadChildren = useCallback(async (node, pageLimit, currentPage) => {
     if (node.isAdvertiser) {
       try {
-        // const {data} = await CampaignV2Service.getCampaigns({
-        //   page: currentPage,
-        //   per_page: pageLimit,
-        //   name: '',
-        //   advertiser_id: node.id,
-        //   options: {
-        //     cancelToken
-        //   }
-        // });
-
-        // const resData = data?.data ?? [];
-        const resData = await Promise(resolve => {
-          setTimeout(() => {
-            resolve([]);
-          }, 300);
+        const {data} = await CampaignAPIRequest.getAllCampaign({
+          params: {
+            page: currentPage,
+            limit: pageLimit,
+            name: '',
+            advertiser_uuid: node.id
+          },
+          options: {
+            cancelToken
+          }
         });
 
-        const children = resData.map(({id, name, total_strategy = 0}) => ({
-          id,
-          name: name,
-          description: '',
-          children: [],
-          numChildren: total_strategy,
-          page: 0,
-          expanded: false,
-          selected: false,
-          isCampaign: true,
-          parentId: node.id
-        }));
+        const resData = data?.items ?? [];
+
+        const children = resData.map(
+          ({uuid: id, name, total_strategies = 0}) => ({
+            id,
+            name: name,
+            description: '',
+            children: [],
+            numChildren: total_strategies,
+            page: 0,
+            expanded: false,
+            selected: false,
+            isCampaign: true,
+            parentId: node.id
+          })
+        );
 
         return children;
       } catch (error) {}
@@ -377,9 +370,9 @@ function TreeSiebar() {
           perPage: pageLimit
         });
 
-        const resData = data?.data ?? [];
+        const resData = data?.items ?? [];
 
-        const children = resData.map(({id, name}) => ({
+        const children = resData.map(({uuid: id, name}) => ({
           id,
           name: name,
           description: '',
