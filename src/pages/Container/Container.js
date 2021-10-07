@@ -16,7 +16,7 @@ function Container() {
   return (
     <ContainerProvider>
       <ContainerSidebar />
-      <AppContent customClass="custom-container">
+      <AppContent customClass="custom-right-content">
         <Outlet />
       </AppContent>
     </ContainerProvider>

@@ -223,12 +223,12 @@ const TreeListView = ({
 
 const useStyles = makeStyles({
   root: {
-    height: 400,
+    height: 'calc(100vh - 220px)',
     flexGrow: 1,
     maxWidth: 400
   },
   treeBox: {
-    height: 400,
+    height: 'calc(100vh - 220px)',
     overflow: 'auto'
   }
 });

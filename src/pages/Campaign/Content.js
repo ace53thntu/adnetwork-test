@@ -40,7 +40,7 @@ const Campaign = () => {
   return (
     <Fragment>
       <CampaignTree listAdvertisers={advertisersResp} />
-      <AppContent>
+      <AppContent customClass="custom-right-content">
         <Routes>
           <Route path="/">
             <ManagerCampaign listAdvertisers={advertisersResp} />

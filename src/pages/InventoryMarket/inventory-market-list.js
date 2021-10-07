@@ -14,6 +14,7 @@ import {AccordionList} from 'components/list';
 import {capitalize} from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
 import {ContainerPage} from './components';
+import AppContent from 'components/layouts/Admin/components/AppContent';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -82,7 +83,7 @@ const InventoryMarket = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <AppContent>
       <PageTitleAlt
         heading={t('inventoryMarket')}
         subheading=""
@@ -113,7 +114,7 @@ const InventoryMarket = () => {
           </Col>
         </Row>
       </Container>
-    </React.Fragment>
+    </AppContent>
   );
 };
 

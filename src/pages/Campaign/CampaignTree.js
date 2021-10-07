@@ -20,7 +20,12 @@ const CampaignTree = ({listAdvertisers}) => {
   const {t} = useTranslation();
 
   return (
-    <ExtendSidebar heading={t('campaignManagement')} isLink path={'/campaigns'}>
+    <ExtendSidebar
+      classes="aic-sidebar"
+      heading={t('campaignManagement')}
+      isLink
+      path={'/campaigns'}
+    >
       <div className="mb-2">
         <Input placeholder={t('search')} />
       </div>
