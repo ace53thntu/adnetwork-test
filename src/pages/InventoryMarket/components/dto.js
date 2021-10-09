@@ -31,7 +31,8 @@ export const mappingFormToApi = ({formData = {}, isDeal = true}) => {
     status,
     audience_uuid,
     deal_uuid,
-    budget: {global, daily} = {}
+    budget: {global, daily} = {},
+    header_bidding
   } = formData;
   const convertStartAt = convertDate({date: start_at});
   const convertEndAt = convertDate({date: end_at, isStart: false});
@@ -58,7 +59,8 @@ export const mappingFormToApi = ({formData = {}, isDeal = true}) => {
       [INPUTS_NAME.GLOBAL]: parseInt(global, 10),
       [INPUTS_NAME.DAILY]: parseInt(daily, 10)
     },
-    [INPUTS_NAME.STATUS]: status
+    [INPUTS_NAME.STATUS]: status,
+    [INPUTS_NAME.HEADER_BIDDING]: parseFloat(header_bidding)
   };
 };
 

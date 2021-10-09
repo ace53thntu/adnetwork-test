@@ -95,8 +95,8 @@ const InventoryContainer = ({page}) => {
         )
       },
       {
-        header: 'Bid Count',
-        accessor: 'active_bid_count',
+        header: 'Total Bids',
+        accessor: 'total_active_bids',
         cell: row => (
           <Badge color="light" pill>
             {row?.value || 0}
@@ -104,8 +104,8 @@ const InventoryContainer = ({page}) => {
         )
       },
       {
-        header: 'Deal Count',
-        accessor: 'active_deal_count',
+        header: 'Total Deal',
+        accessor: 'total_active_deals',
         cell: row => (
           <Badge color="light" pill>
             {row?.value || 0}

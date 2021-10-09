@@ -83,7 +83,7 @@ function ContainerDetail() {
   return (
     <>
       <ContainerSidebar />
-      <AppContent>
+      <AppContent customClass="custom-right-content">
         <PageTitleAlt
           heading={container?.name ?? t('containerDetail')}
           subheading={t('containerDescription')}

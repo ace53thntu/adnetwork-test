@@ -126,3 +126,23 @@ export const startOfDay = (date, ms = false) =>
 export const endOfDay = date => moment(date).endOf('day').toISOString();
 export const startOfHour = (date, ms = false) =>
   ms ? moment(date).endOf('h').unix() : moment(date).endOf('h').toISOString();
+
+export const enumerateDaysBetweenDates = ({
+  startDate,
+  endDate,
+  formatStr,
+  unit = 'days',
+  increaseNumber = 1
+}) => {
+  const now = startDate.clone();
+  const dates = [];
+
+  while (now.isSameOrBefore(endDate)) {
+    dates.push(now.format(formatStr));
+
+    now.add(increaseNumber, unit);
+  }
+  dates.length = dates.length - 1;
+
+  return dates;
+};

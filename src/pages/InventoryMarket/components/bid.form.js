@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import {Col, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
-import {AudienceSelect, DealSelect, DspSelect} from './form-elements';
+import {AudienceSelect, DspSelect} from './form-elements';
 import TimeRange from './form-elements/time-range';
 import {ActiveToogle, FormTextInput} from 'components/forms';
 import {INPUTS_NAME} from '../constants';
@@ -22,7 +22,8 @@ import {Controller, useFormContext} from 'react-hook-form';
 const InventoryBidForm = ({
   dspOptions = [],
   audienceOptions = [],
-  dealOptions = []
+  dealOptions = [],
+  excludeBidDates = []
 }) => {
   const {control} = useFormContext();
 
@@ -36,32 +37,29 @@ const InventoryBidForm = ({
           <AudienceSelect options={audienceOptions} />
         </Col>
         <Col sm="4">
-          <DealSelect options={dealOptions} />
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col sm="3">
           <FormTextInput
             name={INPUTS_NAME.HEADER_BIDDING}
             label="Header bidding"
             placeholder="0"
           />
         </Col>
-        <Col sm="3">
+      </Row>
+      <Row className="mt-3">
+        <Col sm="4">
           <FormTextInput
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.GLOBAL}`}
             label="Budget global"
             placeholder="0"
           />
         </Col>
-        <Col sm="3">
+        <Col sm="4">
           <FormTextInput
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.DAILY}`}
             label="Budget daily"
             placeholder="0"
           />
         </Col>
-        <Col sm={3}>
+        <Col sm="4">
           <Label className="mr-5">Status</Label>
           <Controller
             control={control}
@@ -73,12 +71,12 @@ const InventoryBidForm = ({
           />
         </Col>
       </Row>
-      <TimeRange />
+      <TimeRange excludeDates={excludeBidDates} />
     </>
   );
 };
 
-InventoryBidForm.propsType = {
+InventoryBidForm.propTypes = {
   dspOptions: PropTypes.array,
   audienceOptions: PropTypes.array,
   dealOptions: PropTypes.array

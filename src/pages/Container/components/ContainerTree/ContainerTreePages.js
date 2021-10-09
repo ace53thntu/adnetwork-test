@@ -13,7 +13,7 @@ import ContainerSidebar from '../Sidebar';
 function ContainerTreePages() {
   const {tag, pageId} = useParams();
 
-  const {isFetching: loading} = useContainers({});
+  const {isFetching: loading} = useContainers({suspense: false});
 
   if (loading) {
     return <div>Loading...</div>;

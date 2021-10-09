@@ -1,9 +1,17 @@
 .has-bid {
   background-color: #fed9b7 !important;
-  border-color: #f7b924 !important;
+  border-color: #fdca9b !important;
+
+  &:hover {
+    background-color: #fdca9b !important;
+  }
 }
 
 .has-deal {
   background-color: #e0f3ff !important;
-  border-color: #545cd8 !important;
+  border-color: #b3e2ff !important;
+
+  &:hover {
+    background-color: #b3e2ff !important;
+  }
 }

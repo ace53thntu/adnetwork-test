@@ -10,8 +10,9 @@ import {Controller, useFormContext} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import {INPUTS_NAME} from '../../constants';
 
-const StartAt = () => {
-  const {control, register} = useFormContext();
+const StartAt = ({excludeDates = []}) => {
+  const {control, register, watch} = useFormContext();
+  const endDate = watch(INPUTS_NAME.END_AT);
 
   React.useEffect(() => {
     register([INPUTS_NAME.START_AT]);
@@ -28,6 +29,11 @@ const StartAt = () => {
           className="form-control"
           dateFormat="dd/MM/yyyy"
           placeholderText="dd/mm/yyyy"
+          startDate={value}
+          endDate={endDate}
+          selectsStart
+          minDate={new Date()}
+          excludeDates={excludeDates}
         />
       )}
     />

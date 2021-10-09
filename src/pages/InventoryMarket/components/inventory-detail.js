@@ -35,6 +35,7 @@ import BlockUi from 'react-block-ui';
 import DealForm from './deal.form';
 import InventoryBidForm from './bid.form';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {useExcludePeriod} from '../hooks';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -55,6 +56,8 @@ const InventoryDetails = ({
   audienceOptions = [],
   dealOptions = []
 }) => {
+  let title = isBid ? 'Bid:' : '';
+  title = isDeal ? 'Deal:' : title;
   const classes = useStyles();
   const {data: listDeals} = useGetInventoryDeals({
     inventoryId: inventoryData?.uuid
@@ -63,10 +66,10 @@ const InventoryDetails = ({
     '🚀 ~ file: inventory-detail.js ~ line 55 ~ listDeals',
     listDeals
   );
-  const {data: listBids} = useGetInventoryBids({
+  const {data: bidsList} = useGetInventoryBids({
     inventoryId: inventoryData?.uuid
   });
-  console.log('🚀 ~ file: inventory-detail.js ~ line 57 ~ listBids', listBids);
+  console.log('🚀 ~ file: inventory-detail.js ~ line 57 ~ bidsList', bidsList);
   const {mutateAsync: dealInventory} = useDealInventory(
     inventoryData?.page_uuid
   );
@@ -81,7 +84,13 @@ const InventoryDetails = ({
       [INPUTS_NAME.END_AT]: null
     }
   });
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, watch} = methods;
+  const selectedDsp = watch(INPUTS_NAME.DSP_UUID);
+  const excludeBidDates = useExcludePeriod({bidsList, dsp: selectedDsp?.value});
+  console.log(
+    '🚀 ~ file: inventory-detail.js ~ line 90 ~ excludeBidDates',
+    excludeBidDates
+  );
 
   async function executeDealInventory({formData}) {
     const submitData = mappingFormToApi({formData, isDeal: true});
@@ -129,7 +138,9 @@ const InventoryDetails = ({
         id="bidInventory"
       >
         <BlockUi tag="div" blocking={formState.isSubmitting}>
-          <ModalHeader>{inventoryData?.name}</ModalHeader>
+          <ModalHeader>
+            {title} {inventoryData?.name}
+          </ModalHeader>
           <ModalBody>
             <Card className="mb-3">
               <CardBody className={classes.bgHover}>
@@ -210,6 +221,7 @@ const InventoryDetails = ({
                 dspOptions={dspOptions}
                 audienceOptions={audienceOptions}
                 dealOptions={dealOptions}
+                excludeBidDates={excludeBidDates}
               />
             )}
             {/* Render date range picker */}
