@@ -4,9 +4,8 @@ export const ConceptListItemContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  /* justify-content: center; */
   margin-right: 15px;
+  margin-bottom: 15px;
 `;
 
 export const ConceptListItemAction = styled.div`
@@ -26,7 +25,6 @@ export const ConceptListItemBody = styled.div`
 
 export const ConceptListItemName = styled.div`
   color: #4f4f4f;
-  /* margin: 10px; */
   text-align: center;
   width: 140px;
   text-overflow: ellipsis;

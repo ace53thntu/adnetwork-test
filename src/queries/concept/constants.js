@@ -1,2 +1,3 @@
 export const GET_CONCEPTS = 'GET_CONCEPTS';
+export const GET_CONCEPTS_LOAD_MORE = 'GET_CONCEPTS_LOAD_MORE';
 export const GET_CONCEPT = 'GET_CONCEPT';

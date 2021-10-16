@@ -2,7 +2,7 @@ import {AdvertiserAPIRequest} from 'api/advertiser.api';
 import {ConceptAPI} from 'api/concept.api';
 import {Tree} from 'components/common';
 import {minimalTheme} from 'components/common/TreeLazy';
-import {GET_CONCEPTS} from 'queries/concept/constants';
+import {GET_CONCEPTS, GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
 import {useQueryClient} from 'react-query';
@@ -21,6 +21,8 @@ import {
 import {TreeContainer} from './AdvertisersTree.styles';
 import {advertisersMapData} from './dto';
 
+const LIMIT = 10;
+
 function AdvertisersTree(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,16 +34,25 @@ function AdvertisersTree(props) {
 
   const queryClient = useQueryClient();
 
-  async function init(conceptId) {
-    const res = await AdvertiserAPIRequest.getAllAdvertiser({});
+  const [page, setPage] = React.useState(1);
+  const [total, setTotal] = React.useState(1);
+
+  async function init(currentPage) {
+    const res = await AdvertiserAPIRequest.getAllAdvertiser({
+      params: {
+        page: currentPage,
+        limit: LIMIT
+      }
+    });
     if (res?.data?.items?.length) {
-      const items = advertisersMapData(res.data.items);
-      dispatch(setAdvertisersRedux(items));
+      const items = advertisersMapData(res.data.items, currentPage);
+      setTotal(res.data?.total ?? 0);
+      dispatch(setAdvertisersRedux(items, currentPage));
     }
   }
 
   React.useEffect(() => {
-    init();
+    init(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,16 +100,21 @@ function AdvertisersTree(props) {
       const {isAdvertiser, id, expanded} = node;
 
       if (isAdvertiser) {
+        const queryData = queryClient.getQueryData([GET_CONCEPTS_LOAD_MORE]);
+        console.log(
+          '🚀 ~ file: AdvertisersTree.js ~ line 104 ~ queryData',
+          queryData
+        );
         if (expanded) {
           //
         } else {
-          const queryData = queryClient.getQueryData([
-            GET_CONCEPTS,
-            {advertiser_uuid: id}
-          ]);
-
-          if (queryData?.data?.items) {
-            const items = queryData.data.items;
+          if (queryData.pages?.length) {
+            const items = queryData.pages.reduce((prev, cur) => {
+              const {
+                data: {items}
+              } = cur;
+              return [...prev, ...items];
+            }, []);
 
             const children = items?.map(({uuid, name}) => ({
               id: uuid,
@@ -179,17 +195,29 @@ function AdvertisersTree(props) {
     [selectedAdvertiserId]
   );
 
+  const totalPage = Math.ceil(total / 10);
+
+  const handleLoadMoreInRoot = React.useCallback(() => {
+    if (totalPage > page) {
+      setPage(page + 1);
+      init(page + 1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, totalPage]);
+
   return (
     <TreeContainer>
       <Tree
         paginated
-        pageLimit={10}
-        nodes={advertisersRedux}
-        loadChildren={loadChildren}
+        pageLimit={LIMIT}
         theme={minimalTheme}
+        nodes={advertisersRedux}
+        isLast={page === totalPage}
         Checkbox={() => null}
+        loadChildren={loadChildren}
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
+        handleLoadMoreInRoot={handleLoadMoreInRoot}
       />
     </TreeContainer>
   );

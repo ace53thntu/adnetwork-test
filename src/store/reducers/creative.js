@@ -8,6 +8,7 @@ const RESET = '@creative/RESET';
 const ADVERTISERS = '@creative/ADVERTISERS';
 const SELECT_ADVERTISER = '@creative/SELECT_ADVERTISER';
 const EXPAND_ADVERTISER = '@creative/EXPAND_ADVERTISER';
+
 const DELETE_CONCEPT = '@creative/DELETE_CONCEPT';
 const SELECT_CONCEPT = '@creative/SELECT_CONCEPT';
 const LOAD_CONCEPT = '@creative/LOAD_CONCEPT';
@@ -16,7 +17,8 @@ const ADD_CONCEPT = '@creative/ADD_CONCEPT';
 
 // dispatch actions
 export const resetCreativeRedux = () => createAction(RESET, {});
-export const setAdvertisersRedux = data => createAction(ADVERTISERS, {data});
+export const setAdvertisersRedux = (data, page) =>
+  createAction(ADVERTISERS, {data, page});
 export const selectAdvertiserRedux = id =>
   createAction(SELECT_ADVERTISER, {id});
 export const expandAdvertiserRedux = (id, state) =>
@@ -37,7 +39,8 @@ const creativeInitialState = {
   isLoading: true,
   selectedAdvertiserId: null,
   selectedConceptId: null,
-  expandedIds: []
+  expandedIds: [],
+  advertiserPage: 1
 };
 
 const handleActions = {
@@ -61,7 +64,15 @@ function handleReset(state) {
 }
 
 function handleSetAdvertisers(state, action) {
-  state.advertisers = action.payload.data;
+  const {page, data} = action.payload;
+
+  if (page > state.advertiserPage) {
+    state.advertiserPage = page;
+    state.advertisers = [...state.advertisers, ...data];
+  } else {
+    state.advertisers = data;
+  }
+
   state.isLoading = false;
 }
 

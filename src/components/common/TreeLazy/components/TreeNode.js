@@ -2,6 +2,8 @@ import deepEquals from 'fast-deep-equal';
 import React, {Component} from 'react';
 import {CSSTransition} from 'react-transition-group';
 
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+
 import {hasChildren, isFullyFetched, shouldShowMore} from '../util';
 
 class TreeNode extends Component {
@@ -245,7 +247,10 @@ class TreeNode extends Component {
               expanded={expanded}
             />
           ) : (
-            <span style={theme.expanderStyle} />
+            // <span style={theme.expanderStyle} />
+            <span style={theme.expanderStyle}>
+              <FiberManualRecordIcon style={{fontSize: 10}} />
+            </span>
           )}
           {/* CheckBox: Overridable Component for visualizing selection state */}
           <Checkbox theme={theme} node={node} selected={selected} />

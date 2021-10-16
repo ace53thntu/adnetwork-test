@@ -1,9 +1,9 @@
 import {BlockOverlay} from 'components/common';
 // import PropTypes from 'prop-types';
-import {useGetConcepts} from 'queries/concept';
+import {useGetConceptsLoadMore} from 'queries/concept';
 import * as React from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {Card, CardBody} from 'reactstrap';
+import {Button, Card, CardBody} from 'reactstrap';
 
 import MButton from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -14,26 +14,28 @@ import {
   AddConceptContainer,
   AddConceptContainerBody,
   ConceptsContainer,
+  ConceptsLoadMore,
   btnTheme
 } from './ConceptList.styles';
 import ConceptListItem from './ConceptListItem';
 import {conceptItemRepoToView} from './dto';
 
-let concepts = [];
+const LIMIT = 10;
 
 function ConceptList(props) {
   const {advertiserId} = useParams();
 
-  const {data: res, isFetching} = useGetConcepts({
-    params: {
-      advertiser_uuid: advertiserId
-    },
+  const {
+    data: res,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useGetConceptsLoadMore({
+    advertiserId,
+    limit: LIMIT,
     enabled: !!advertiserId
   });
-
-  if (res?.data?.items) {
-    concepts = res.data.items;
-  }
 
   return (
     <Card className="main-card mb-3">
@@ -63,10 +65,32 @@ function ConceptList(props) {
             </Link>
           </AddConceptContainer>
 
-          {concepts?.map((item, index) => (
-            <ConceptListItem key={index} data={conceptItemRepoToView(item)} />
-          ))}
+          {res?.pages.map((group, i) => {
+            return (
+              <React.Fragment key={i}>
+                {group?.data?.items?.map((item, index) => (
+                  <ConceptListItem
+                    key={index}
+                    data={conceptItemRepoToView(item)}
+                  />
+                ))}
+              </React.Fragment>
+            );
+          })}
         </ConceptsContainer>
+
+        {hasNextPage && (
+          <ConceptsLoadMore>
+            <Button
+              className="btn-wide mb-2 mr-2"
+              color="primary"
+              disabled={isFetchingNextPage}
+              onClick={() => fetchNextPage()}
+            >
+              Load more
+            </Button>
+          </ConceptsLoadMore>
+        )}
       </CardBody>
     </Card>
   );

@@ -46,3 +46,9 @@ export const ConceptsContainer = styled.div`
   flex-wrap: wrap;
   flex-direction: row;
 `;
+
+export const ConceptsLoadMore = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
