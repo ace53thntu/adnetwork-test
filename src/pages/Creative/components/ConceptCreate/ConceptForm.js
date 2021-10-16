@@ -7,7 +7,11 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useNavigate, useParams} from 'react-router';
 import {Button, Card, CardBody, CardFooter, Col, Row} from 'reactstrap';
-import {addConceptRedux, updateConceptRedux} from 'store/reducers/creative';
+import {
+  addConceptRedux,
+  selectConceptRedux,
+  updateConceptRedux
+} from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {createConceptModelToRepo} from './dto';
@@ -72,8 +76,8 @@ function ConceptForm(props) {
         const res = await createConceptRequest(bodyRequest);
         ShowToast.success('Create Concept successfully!');
         setIsLoading(false);
-        handleCancel();
         dispatch(addConceptRedux(res?.data));
+        handleCancel();
       }
     } catch (error) {
       setIsLoading(false);
@@ -83,6 +87,7 @@ function ConceptForm(props) {
 
   const handleCancel = () => {
     navigate('..');
+    dispatch(selectConceptRedux(null, advertiserId));
   };
 
   return (

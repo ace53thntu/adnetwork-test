@@ -100,15 +100,19 @@ function AdvertisersTree(props) {
       const {isAdvertiser, id, expanded} = node;
 
       if (isAdvertiser) {
-        const queryData = queryClient.getQueryData([GET_CONCEPTS_LOAD_MORE]);
+        const queryData = queryClient.getQueryData([
+          GET_CONCEPTS_LOAD_MORE,
+          node.id
+        ]);
         console.log(
-          '🚀 ~ file: AdvertisersTree.js ~ line 104 ~ queryData',
+          '🚀 ~ file: AdvertisersTree.js ~ line 107 ~ queryData',
           queryData
         );
+
         if (expanded) {
           //
         } else {
-          if (queryData.pages?.length) {
+          if (queryData?.pages?.length) {
             const items = queryData.pages.reduce((prev, cur) => {
               const {
                 data: {items}
@@ -134,10 +138,10 @@ function AdvertisersTree(props) {
               if (res?.data?.items?.length) {
                 const items = res.data.items;
 
-                queryClient.setQueryData(
-                  [GET_CONCEPTS, {advertiser_uuid: id}],
-                  res
-                );
+                queryClient.setQueryData([GET_CONCEPTS_LOAD_MORE, node.id], {
+                  pageParams: [undefined],
+                  pages: [res]
+                });
 
                 const children = items?.map(({uuid, name}) => ({
                   id: uuid,

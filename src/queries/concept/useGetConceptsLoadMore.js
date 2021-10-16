@@ -8,12 +8,12 @@ export function useGetConceptsLoadMore({advertiserId, limit, enabled = true}) {
   const {cancelToken} = useCancelRequest();
 
   return useInfiniteQuery(
-    [GET_CONCEPTS_LOAD_MORE],
+    [GET_CONCEPTS_LOAD_MORE, advertiserId],
     ({pageParam = 1}) => {
       return ConceptAPI.getConcepts({
         params: {
           page: pageParam,
-          limit: limit,
+          limit,
           advertiser_uuid: advertiserId
         },
         options: {

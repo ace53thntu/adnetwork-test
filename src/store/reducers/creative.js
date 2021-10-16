@@ -123,24 +123,21 @@ function handleExpandAdvertiser(state, action) {
 function handleDeleteConcept(state, action) {
   const {conceptId, advertiserId} = action.payload;
 
-  if (state.expandedIds.includes(advertiserId)) {
-    const newNodes = [...state.advertisers].map(item => {
-      if (item.id === advertiserId) {
-        const child = [...item.children].filter(
-          child => child.id !== conceptId
-        );
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      const included = state.expandedIds.includes(advertiserId);
+      const child = [...item.children].filter(child => child.id !== conceptId);
 
-        return {
-          ...item,
-          numChildren: item.numChildren - 1,
-          children: child,
-          selected: child.length === 0 ? true : item.selected
-        };
-      }
-      return unSelectedChild(item);
-    });
-    state.advertisers = newNodes;
-  }
+      return {
+        ...item,
+        numChildren: item.numChildren - 1,
+        children: included ? child : [],
+        selected: included && child.length === 0 ? true : item.selected
+      };
+    }
+    return unSelectedChild(item);
+  });
+  state.advertisers = newNodes;
 }
 
 function handleSelectConcept(state, action) {
@@ -158,7 +155,8 @@ function handleSelectConcept(state, action) {
     if (item.id === advertiserId) {
       return {
         ...item,
-        selected: false,
+        expanded: true,
+        selected: conceptId ? false : true,
         children: [...item.children].map(child => {
           if (child.id === conceptId) {
             return {
@@ -215,17 +213,21 @@ function handUpdateConcept(state, action) {
 
   const newNodes = state.advertisers.map(item => {
     if (item.id === advertiser_uuid) {
+      const included = state.expandedIds.includes(advertiser_uuid);
+
       return {
         ...item,
-        children: item.children.map(conceptItem => {
-          if (conceptItem.id === conceptId) {
-            return {
-              ...conceptItem,
-              name
-            };
-          }
-          return conceptItem;
-        })
+        children: included
+          ? item.children.map(conceptItem => {
+              if (conceptItem.id === conceptId) {
+                return {
+                  ...conceptItem,
+                  name
+                };
+              }
+              return conceptItem;
+            })
+          : []
       };
     }
     return unSelectedChild(item);
@@ -243,20 +245,22 @@ function handAddConcept(state, action) {
       return {
         ...item,
         numChildren: item.numChildren + 1,
-        children: [
-          ...item.children,
-          {
-            id: uuid,
-            name,
-            children: [],
-            numChildren: 0,
-            page: 0,
-            expanded: false,
-            selected: state.selectedConceptId === uuid,
-            parentId: advertiser_uuid,
-            isConcept: true
-          }
-        ]
+        children: state.expandedIds.includes(advertiser_uuid)
+          ? [
+              ...item.children,
+              {
+                id: uuid,
+                name,
+                children: [],
+                numChildren: 0,
+                page: 0,
+                expanded: false,
+                selected: state.selectedConceptId === uuid,
+                parentId: advertiser_uuid,
+                isConcept: true
+              }
+            ]
+          : []
       };
     }
     return unSelectedChild(item);
