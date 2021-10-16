@@ -1,7 +1,7 @@
 import {DialogConfirm} from 'components/common';
 import PropTypes from 'prop-types';
 import {useDeleteConcept} from 'queries/concept';
-import {GET_CONCEPTS} from 'queries/concept/constants';
+import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
 import * as React from 'react';
 import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
@@ -65,7 +65,7 @@ function ConceptListItem(props) {
     setIsOpen(false);
     try {
       await deleteConceptRequest(conceptId);
-      queryClient.invalidateQueries([GET_CONCEPTS]);
+      queryClient.invalidateQueries([GET_CONCEPTS_LOAD_MORE]);
       ShowToast.success('Delete Concept successfully!');
       dispatch(deleteConceptRedux(conceptId, advertiserId));
     } catch (error) {

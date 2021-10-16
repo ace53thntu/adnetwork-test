@@ -122,20 +122,25 @@ function handleExpandAdvertiser(state, action) {
 
 function handleDeleteConcept(state, action) {
   const {conceptId, advertiserId} = action.payload;
-  const newNodes = [...state.advertisers].map(item => {
-    if (item.id === advertiserId) {
-      const child = [...item.children].filter(child => child.id !== conceptId);
 
-      return {
-        ...item,
-        numChildren: item.numChildren - 1,
-        children: child,
-        selected: child.length === 0 ? true : item.selected
-      };
-    }
-    return unSelectedChild(item);
-  });
-  state.advertisers = newNodes;
+  if (state.expandedIds.includes(advertiserId)) {
+    const newNodes = [...state.advertisers].map(item => {
+      if (item.id === advertiserId) {
+        const child = [...item.children].filter(
+          child => child.id !== conceptId
+        );
+
+        return {
+          ...item,
+          numChildren: item.numChildren - 1,
+          children: child,
+          selected: child.length === 0 ? true : item.selected
+        };
+      }
+      return unSelectedChild(item);
+    });
+    state.advertisers = newNodes;
+  }
 }
 
 function handleSelectConcept(state, action) {
