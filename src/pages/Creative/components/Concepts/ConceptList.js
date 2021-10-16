@@ -2,8 +2,10 @@ import {BlockOverlay} from 'components/common';
 // import PropTypes from 'prop-types';
 import {useGetConceptsLoadMore} from 'queries/concept';
 import * as React from 'react';
+import {useDispatch} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {Button, Card, CardBody} from 'reactstrap';
+import {loadConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
 import MButton from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -24,22 +26,44 @@ const LIMIT = 10;
 
 function ConceptList(props) {
   const {advertiserId} = useParams();
+  const dispatch = useDispatch();
+
+  const {expandedIds, selectedAdvertiserId} = useCreativeSelector();
 
   const {
     data: res,
-    isFetching,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
+    status
   } = useGetConceptsLoadMore({
     advertiserId,
     limit: LIMIT,
     enabled: !!advertiserId
   });
 
+  React.useEffect(() => {
+    if (
+      expandedIds.length &&
+      selectedAdvertiserId === advertiserId &&
+      expandedIds.includes(advertiserId)
+    ) {
+      const len = res?.pages?.length ?? 0;
+      if (len > 1) {
+        const items = res?.pages?.reduce((prev, cur) => {
+          const {
+            data: {items}
+          } = cur;
+          return [...prev, ...items];
+        }, []);
+        dispatch(loadConceptRedux(items));
+      }
+    }
+  }, [advertiserId, dispatch, expandedIds, res?.pages, selectedAdvertiserId]);
+
   return (
     <Card className="main-card mb-3">
-      {isFetching ? <BlockOverlay /> : null}
+      {status === 'loading' ? <BlockOverlay /> : null}
       <CardBody>
         <ConceptsContainer>
           <AddConceptContainer>

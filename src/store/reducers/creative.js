@@ -97,6 +97,12 @@ function handleSelectAdvertiser(state, action) {
 function handleExpandAdvertiser(state, action) {
   const {id, nodeState} = action.payload;
 
+  if (state.expandedIds.includes(id)) {
+    state.expandedIds = state.expandedIds.filter(advId => advId !== id);
+  } else {
+    state.expandedIds = [...state.expandedIds, id];
+  }
+
   const newNodes = [...state.advertisers].map(item => {
     if (item.id === id) {
       return {
@@ -136,6 +142,12 @@ function handleSelectConcept(state, action) {
   const {conceptId, advertiserId} = action.payload;
   state.selectedConceptId = conceptId;
   state.selectedAdvertiserId = advertiserId;
+
+  if (state.expandedIds.includes(advertiserId)) {
+    //
+  } else {
+    state.expandedIds = [...state.expandedIds, advertiserId];
+  }
 
   const newNodes = [...state.advertisers].map(item => {
     if (item.id === advertiserId) {
