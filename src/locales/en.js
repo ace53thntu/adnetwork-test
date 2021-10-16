@@ -33,6 +33,7 @@ const en = {
   reportCampaign: 'Report campaign',
   creative: 'Creative',
   dashboard: 'Dashboard',
+  creativeManagement: 'Creative Management',
 
   //overview
   totalUsers: 'Total Users',

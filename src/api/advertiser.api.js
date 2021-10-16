@@ -1,4 +1,5 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
+
 import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
@@ -9,7 +10,7 @@ class AdvertiserAPI extends XHRRequest {
     super({apiURL: url});
   }
 
-  getAllAdvertiser = ({params, options}) => {
+  getAllAdvertiser = ({params = {}, options = {}}) => {
     return this.get(endpoints.advertiser.advertiser, params, options);
   };
 

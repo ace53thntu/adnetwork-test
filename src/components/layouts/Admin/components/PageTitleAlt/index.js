@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
 import cx from 'classnames';
-import {Button} from 'reactstrap';
+import React, {useCallback} from 'react';
 import {Helmet} from 'react-helmet-async';
+import {Button} from 'reactstrap';
 
 const PageTitleAlt = props => {
   const {
     heading,
-    icon,
+    icon = 'pe-7s-speaker icon-gradient bg-tempting-azure',
     subheading,
     actions,
     onClick,

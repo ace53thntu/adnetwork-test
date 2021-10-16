@@ -12,6 +12,20 @@ class TreeNode extends Component {
 
   static getDerivedStateFromProps({node, useLocalState}, state) {
     const {selected, expanded, children} = state;
+
+    if (!useLocalState && node.name !== state.name) {
+      return {
+        name: node.name
+      };
+    }
+
+    if (!useLocalState && node.numChildren !== state.numChildren) {
+      return {
+        numChildren: node.numChildren,
+        children: node.children
+      };
+    }
+
     if (
       !useLocalState &&
       (selected !== node.selected ||
@@ -30,14 +44,16 @@ class TreeNode extends Component {
   constructor(props) {
     super(props);
     const {node} = props;
-    const {expanded, selected, children, page} = node;
+    const {expanded, selected, children, page, name, numChildren} = node;
     this.state = {
       expanderLoading: false,
       paginatorLoading: false,
       expanded,
       selected,
       children,
-      page
+      page,
+      name,
+      numChildren
     };
   }
 

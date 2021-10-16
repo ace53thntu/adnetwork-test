@@ -1,5 +1,7 @@
-import * as React from 'react';
 // import PropTypes from 'prop-types';
+import './BlockOverlay.styles.scss';
+
+import * as React from 'react';
 
 function BlockOverlay(props) {
   return (

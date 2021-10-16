@@ -47,10 +47,11 @@ class Tree extends Component {
       paginated,
       doubleClickSelect,
       handleLoadMoreInRoot,
-      isLast
+      isLast = true
     } = this.props;
 
     const parsedNodes = parse ? parse(nodes) : nodes;
+
     return (
       <ul style={{...theme.treeStyle, ...style}} className={className}>
         {parsedNodes.map((node, index) => {

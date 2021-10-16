@@ -66,5 +66,9 @@ export const endpoints = {
   },
   deal: {
     deal: `${API_V1}/deal`
+  },
+  concept: {
+    concepts: `${API_V1}/concept`,
+    concept: `${API_V1}/concept`
   }
 };
