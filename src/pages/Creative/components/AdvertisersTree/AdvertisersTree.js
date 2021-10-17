@@ -2,10 +2,10 @@ import {AdvertiserAPIRequest} from 'api/advertiser.api';
 import {ConceptAPI} from 'api/concept.api';
 import {Tree} from 'components/common';
 import {minimalTheme} from 'components/common/TreeLazy';
-import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
+// import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
-import {useQueryClient} from 'react-query';
+// import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {
@@ -32,7 +32,7 @@ function AdvertisersTree(props) {
     selectedConceptId
   } = useCreativeSelector();
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const [page, setPage] = React.useState(1);
   const [total, setTotal] = React.useState(1);
@@ -100,21 +100,22 @@ function AdvertisersTree(props) {
       const {isAdvertiser, id, expanded} = node;
 
       if (isAdvertiser) {
-        const queryData = queryClient.getQueryData([
-          GET_CONCEPTS_LOAD_MORE,
-          node.id
-        ]);
+        // const queryData = queryClient.getQueryData([
+        //   GET_CONCEPTS_LOAD_MORE,
+        //   node.id
+        // ]);
 
         if (expanded) {
           //
         } else {
-          if (queryData?.pages?.length) {
-            const items = queryData.pages.reduce((prev, cur) => {
-              const {
-                data: {items}
-              } = cur;
-              return [...prev, ...items];
-            }, []);
+          const res = await getConcepts(id);
+          if (res?.data?.items?.length) {
+            const items = res.data.items;
+
+            // queryClient.setQueryData([GET_CONCEPTS_LOAD_MORE, node.id], {
+            //   pageParams: [undefined],
+            //   pages: [res]
+            // });
 
             const children = items?.map(({uuid, name}) => ({
               id: uuid,
@@ -125,37 +126,60 @@ function AdvertisersTree(props) {
               expanded: false,
               selected: false,
               parentId: node.id,
-              isConcept: true
+              isConcept: true,
+              isAdvertiser: false
             }));
             return children;
-          } else {
-            if (id !== selectedAdvertiserId) {
-              const res = await getConcepts(id);
-              if (res?.data?.items?.length) {
-                const items = res.data.items;
-
-                queryClient.setQueryData([GET_CONCEPTS_LOAD_MORE, node.id], {
-                  pageParams: [undefined],
-                  pages: [res]
-                });
-
-                const children = items?.map(({uuid, name}) => ({
-                  id: uuid,
-                  name,
-                  children: [],
-                  numChildren: 0,
-                  page: 0,
-                  expanded: false,
-                  selected: false,
-                  parentId: node.id,
-                  isConcept: true,
-                  isAdvertiser: false
-                }));
-                return children;
-              }
-            }
-            return [];
           }
+          return [];
+          // if (queryData?.pages?.length) {
+          //   const items = queryData.pages.reduce((prev, cur) => {
+          //     const {
+          //       data: {items}
+          //     } = cur;
+          //     return [...prev, ...items];
+          //   }, []);
+
+          //   const children = items?.map(({uuid, name}) => ({
+          //     id: uuid,
+          //     name,
+          //     children: [],
+          //     numChildren: 0,
+          //     page: 0,
+          //     expanded: false,
+          //     selected: false,
+          //     parentId: node.id,
+          //     isConcept: true
+          //   }));
+          //   return children;
+          // } else {
+          //   if (id !== selectedAdvertiserId) {
+          //     const res = await getConcepts(id);
+          //     if (res?.data?.items?.length) {
+          //       const items = res.data.items;
+
+          //       queryClient.setQueryData([GET_CONCEPTS_LOAD_MORE, node.id], {
+          //         pageParams: [undefined],
+          //         pages: [res]
+          //       });
+
+          //       const children = items?.map(({uuid, name}) => ({
+          //         id: uuid,
+          //         name,
+          //         children: [],
+          //         numChildren: 0,
+          //         page: 0,
+          //         expanded: false,
+          //         selected: false,
+          //         parentId: node.id,
+          //         isConcept: true,
+          //         isAdvertiser: false
+          //       }));
+          //       return children;
+          //     }
+          //   }
+          //   return [];
+          // }
         }
       }
     },
