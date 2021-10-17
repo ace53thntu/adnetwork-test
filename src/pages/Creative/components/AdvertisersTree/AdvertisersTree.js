@@ -2,7 +2,7 @@ import {AdvertiserAPIRequest} from 'api/advertiser.api';
 import {ConceptAPI} from 'api/concept.api';
 import {Tree} from 'components/common';
 import {minimalTheme} from 'components/common/TreeLazy';
-import {GET_CONCEPTS, GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
+import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
 import {useQueryClient} from 'react-query';
@@ -104,10 +104,6 @@ function AdvertisersTree(props) {
           GET_CONCEPTS_LOAD_MORE,
           node.id
         ]);
-        console.log(
-          '🚀 ~ file: AdvertisersTree.js ~ line 107 ~ queryData',
-          queryData
-        );
 
         if (expanded) {
           //

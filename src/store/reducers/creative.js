@@ -61,6 +61,7 @@ function handleReset(state) {
   state.selectedAdvertiserId = null;
   state.selectedConceptId = null;
   state.expandedIds = [];
+  state.advertiserPage = 1;
 }
 
 function handleSetAdvertisers(state, action) {
