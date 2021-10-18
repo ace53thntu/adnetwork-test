@@ -7,7 +7,7 @@ import {GET_INVENTORY_BID} from './constants';
 /**
  * Hook for get Inventory Dealed from API by query
  */
-export function useGetInventoryBids({inventoryId}) {
+export function useGetInventoryBids({inventoryId, isBid = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,7 @@ export function useGetInventoryBids({inventoryId}) {
       }).then(res => res?.data ?? []),
     {
       suspense: false,
-      enabled: !!inventoryId
+      enabled: !!inventoryId && isBid
     }
   );
 }

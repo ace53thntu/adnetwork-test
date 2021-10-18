@@ -20,7 +20,7 @@ export default function TimeRange({excludeDates = []}) {
   }, [register]);
 
   return (
-    <Row className="mt-3">
+    <Row>
       {/* BEGIN: Start date */}
       <Col xs="6">
         <FormGroup>

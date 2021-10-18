@@ -54,22 +54,22 @@ const InventoryDetails = ({
   isDeal = false,
   dspOptions = [],
   audienceOptions = [],
-  dealOptions = []
+  dealOptions = [],
+  isEdit = false
 }) => {
   let title = isBid ? 'Bid:' : '';
   title = isDeal ? 'Deal:' : title;
   const classes = useStyles();
+
+  //---> Executing queries
   const {data: listDeals} = useGetInventoryDeals({
-    inventoryId: inventoryData?.uuid
+    inventoryId: inventoryData?.uuid,
+    isDeal
   });
-  console.log(
-    '🚀 ~ file: inventory-detail.js ~ line 55 ~ listDeals',
-    listDeals
-  );
   const {data: bidsList} = useGetInventoryBids({
-    inventoryId: inventoryData?.uuid
+    inventoryId: inventoryData?.uuid,
+    isBid
   });
-  console.log('🚀 ~ file: inventory-detail.js ~ line 57 ~ bidsList', bidsList);
   const {mutateAsync: dealInventory} = useDealInventory(
     inventoryData?.page_uuid
   );
@@ -86,10 +86,15 @@ const InventoryDetails = ({
   });
   const {handleSubmit, formState, watch} = methods;
   const selectedDsp = watch(INPUTS_NAME.DSP_UUID);
-  const excludeBidDates = useExcludePeriod({bidsList, dsp: selectedDsp?.value});
+
+  //---> Get invalid dates to bid/deal
+  const excludeDates = useExcludePeriod({
+    dataList: isBid ? bidsList : listDeals,
+    dsp: selectedDsp?.value
+  });
   console.log(
-    '🚀 ~ file: inventory-detail.js ~ line 90 ~ excludeBidDates',
-    excludeBidDates
+    '🚀 ~ file: inventory-detail.js ~ line 90 ~ excludeDates',
+    excludeDates
   );
 
   async function executeDealInventory({formData}) {
@@ -221,7 +226,7 @@ const InventoryDetails = ({
                 dspOptions={dspOptions}
                 audienceOptions={audienceOptions}
                 dealOptions={dealOptions}
-                excludeBidDates={excludeBidDates}
+                excludeDates={excludeDates}
               />
             )}
             {/* Render date range picker */}
@@ -230,6 +235,7 @@ const InventoryDetails = ({
                 dspOptions={dspOptions}
                 audienceOptions={audienceOptions}
                 dealOptions={dealOptions}
+                excludeDates={excludeDates}
               />
             )}
           </ModalBody>
@@ -238,13 +244,25 @@ const InventoryDetails = ({
               Cancel
             </Button>
             {isBid && (
-              <Button
-                type="submit"
-                color="primary"
-                disabled={!formState.isDirty}
-              >
-                Bid
-              </Button>
+              <React.Fragment>
+                {isEdit && (
+                  <React.Fragment>
+                    <Button type="button" color="danger">
+                      Delete
+                    </Button>
+                    <Button type="button" color="warning">
+                      Finish
+                    </Button>
+                  </React.Fragment>
+                )}
+                <Button
+                  type="submit"
+                  color="primary"
+                  disabled={!formState.isDirty}
+                >
+                  Bid
+                </Button>
+              </React.Fragment>
             )}
             {isDeal && (
               <Button

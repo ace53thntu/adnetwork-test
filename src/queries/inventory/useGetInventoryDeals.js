@@ -7,7 +7,7 @@ import {GET_INVENTORY_DEAL} from './constants';
 /**
  * Hook for get Inventory Dealed from API by query
  */
-export function useGetInventoryDeals({inventoryId}) {
+export function useGetInventoryDeals({inventoryId, isDeal = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,7 @@ export function useGetInventoryDeals({inventoryId}) {
       }).then(res => res?.data ?? []),
     {
       suspense: false,
-      enabled: !!inventoryId
+      enabled: !!inventoryId && isDeal
     }
   );
 }

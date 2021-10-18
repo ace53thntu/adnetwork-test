@@ -7,4 +7,3 @@
 
 export {default as DspSelect} from './dsp-select';
 export {default as AudienceSelect} from './audience-select';
-export {default as DealSelect} from './deal-select';
