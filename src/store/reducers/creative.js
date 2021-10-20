@@ -15,6 +15,8 @@ const LOAD_CONCEPT = '@creative/LOAD_CONCEPT';
 const UPDATE_CONCEPT = '@creative/UPDATE_CONCEPT';
 const ADD_CONCEPT = '@creative/ADD_CONCEPT';
 
+const TOGGLE_CREATE_CREATIVE_DIALOG = '@creative/TOGGLE_CREATE_CREATIVE_DIALOG';
+
 // dispatch actions
 export const resetCreativeRedux = () => createAction(RESET, {});
 export const setAdvertisersRedux = (data, page) =>
@@ -34,13 +36,17 @@ export const updateConceptRedux = (conceptId, concept) =>
   createAction(UPDATE_CONCEPT, {conceptId, concept});
 export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
 
+export const toggleCreateCreativeDialog = () =>
+  createAction(TOGGLE_CREATE_CREATIVE_DIALOG, {});
+
 const creativeInitialState = {
   advertisers: [],
   isLoading: true,
   selectedAdvertiserId: null,
   selectedConceptId: null,
   expandedIds: [],
-  advertiserPage: 1
+  advertiserPage: 1,
+  isToggleCreateCreativeDialog: false
 };
 
 const handleActions = {
@@ -50,9 +56,10 @@ const handleActions = {
   [EXPAND_ADVERTISER]: handleExpandAdvertiser,
   [DELETE_CONCEPT]: handleDeleteConcept,
   [SELECT_CONCEPT]: handleSelectConcept,
-  [LOAD_CONCEPT]: handLoadConcept,
-  [UPDATE_CONCEPT]: handUpdateConcept,
-  [ADD_CONCEPT]: handAddConcept
+  [LOAD_CONCEPT]: handleLoadConcept,
+  [UPDATE_CONCEPT]: handleUpdateConcept,
+  [ADD_CONCEPT]: handleAddConcept,
+  [TOGGLE_CREATE_CREATIVE_DIALOG]: handleToggleCreateCreativeDialog
 };
 
 function handleReset(state) {
@@ -62,6 +69,7 @@ function handleReset(state) {
   state.selectedConceptId = null;
   state.expandedIds = [];
   state.advertiserPage = 1;
+  state.isShowCreateCreativeDialog = false;
 }
 
 function handleSetAdvertisers(state, action) {
@@ -177,7 +185,7 @@ function handleSelectConcept(state, action) {
   state.advertisers = newNodes;
 }
 
-function handLoadConcept(state, action) {
+function handleLoadConcept(state, action) {
   const {concepts} = action.payload;
 
   const newNodes = [...state.advertisers].map(item => {
@@ -207,7 +215,7 @@ function handLoadConcept(state, action) {
   state.advertisers = newNodes;
 }
 
-function handUpdateConcept(state, action) {
+function handleUpdateConcept(state, action) {
   const {concept, conceptId} = action.payload;
 
   const {name, advertiser_uuid} = concept;
@@ -236,7 +244,7 @@ function handUpdateConcept(state, action) {
   state.advertisers = newNodes;
 }
 
-function handAddConcept(state, action) {
+function handleAddConcept(state, action) {
   const {concept} = action.payload;
 
   const {name, advertiser_uuid, uuid} = concept;
@@ -267,6 +275,10 @@ function handAddConcept(state, action) {
     return unSelectedChild(item);
   });
   state.advertisers = newNodes;
+}
+
+function handleToggleCreateCreativeDialog(state, action) {
+  state.isToggleCreateCreativeDialog = !state.isToggleCreateCreativeDialog;
 }
 
 export function useCreativeSelector() {

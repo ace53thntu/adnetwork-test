@@ -290,7 +290,11 @@ const vn = {
   newAdvertiser: 'Add new Advertiser',
 
   // Form Actions
-  create: 'Tạo'
+  create: 'Tạo',
+
+  creativeTabBanner: 'Banner',
+  creativeTabNativeBanner: 'Native Banner',
+  creativeTabVideo: 'Video'
 };
 
 export default vn;

@@ -6,6 +6,8 @@ import LoadingIndicator from './LoadingIndicator';
 import {ScrollReset} from './ScrollReset/ScrollReset';
 import Tree from './TreeLazy';
 
+export * from './Collapse';
+export * from './StrapConfirmModal';
 export {
   ScrollReset,
   BlockOverlay,

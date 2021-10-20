@@ -366,7 +366,11 @@ const en = {
   enterTVA: 'Enter TVA...',
   enterDescription: 'Enter description...',
 
-  create: 'Create'
+  create: 'Create',
+
+  creativeTabBanner: 'Banner',
+  creativeTabNativeBanner: 'Native Banner',
+  creativeTabVideo: 'Video'
 };
 
 export default en;

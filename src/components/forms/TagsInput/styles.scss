@@ -1,0 +1,81 @@
+.input-tag {
+  background: white;
+  border: 1px solid #d6d6d6;
+  border-radius: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4.5px 8px;
+
+  &.isInvalid {
+    border-color: red;
+  }
+}
+
+.input-tag input {
+  border: none;
+  width: 100%;
+  color: #495057;
+  outline: none;
+}
+
+.input-tag__tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.input-tag__tags > div {
+  background-color: rgb(230, 230, 230);
+  border-radius: 2px;
+  display: flex;
+  margin: 2px;
+  min-width: 0px;
+  box-sizing: border-box;
+
+  & > span {
+    border-radius: 2px;
+    color: rgb(51, 51, 51);
+    font-size: 85%;
+    overflow: hidden;
+    padding: 3px 3px 3px 6px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+    &.tag-invalid {
+      color: red;
+    }
+  }
+}
+
+.input-tag__tags > div > div {
+  align-items: center;
+  border-radius: 2px;
+  display: flex;
+  padding-left: 4px;
+  padding-right: 4px;
+  box-sizing: border-box;
+  &:hover {
+    background-color: rgb(255, 189, 173);
+    color: rgb(222, 53, 11);
+    cursor: pointer;
+  }
+  & > svg {
+    display: inline-block;
+    fill: currentcolor;
+    line-height: 1;
+    stroke: currentcolor;
+    stroke-width: 0;
+  }
+}
+
+.input-tag__tags > div.input-tag__tags__input {
+  background: none;
+  flex-grow: 1;
+  padding: 0;
+  min-width: 5px;
+  width: 50px;
+}

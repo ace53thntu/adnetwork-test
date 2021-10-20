@@ -70,5 +70,12 @@ export const endpoints = {
   concept: {
     concepts: `${API_V1}/concept`,
     concept: `${API_V1}/concept`
+  },
+  creative: {
+    creative: `${API_V1}/creative`
+  },
+  uploader: {
+    config: `${API_V1}/config`,
+    upload: `${API_V1}/file/upload`
   }
 };

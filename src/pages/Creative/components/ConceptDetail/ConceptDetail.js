@@ -7,6 +7,7 @@ import {selectConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
 import ConceptForm from '../ConceptCreate/ConceptForm';
 import {CreativeBodyLayout} from '../CreativeLayout';
+import {ActionsBar, CreativeCreate} from '..';
 
 function ConceptDetail(props) {
   const {conceptId, advertiserId} = useParams();
@@ -30,7 +31,11 @@ function ConceptDetail(props) {
       {isFetching ? (
         <div>Loading...</div>
       ) : (
-        <ConceptForm isEdit concept={concept} />
+        <>
+          <ConceptForm isEdit concept={concept} />
+          <ActionsBar />
+          <CreativeCreate />
+        </>
       )}
     </CreativeBodyLayout>
   );

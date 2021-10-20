@@ -1,7 +1,7 @@
-import {useUploadFileRequest} from 'core/queries';
-import {getUploaderConfig} from 'core/utils/storeUploaderConfig';
+import {useUploadFileRequest} from 'queries/uploader';
 import React from 'react';
 import {useDropzone} from 'react-dropzone';
+import {getUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 
 const uploaderConfig = getUploaderConfig();
 const fileTypePaths = uploaderConfig?.file_type_paths;

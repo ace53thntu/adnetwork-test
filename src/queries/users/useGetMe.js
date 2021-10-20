@@ -8,7 +8,7 @@ export function useGetMe({enable = false}) {
     GET_ME,
     () => UserAPIRequest.getMe().then(res => res?.data ?? {}),
     {
-      suspense: false,
+      suspense: true,
       enable
     }
   );

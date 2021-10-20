@@ -1,0 +1,4 @@
+const API_VERSION = 'v1';
+const UPLOADER_URL = window.DMP_API_ENDPOINTS.UPLOADER_GATEWAY;
+
+export const FILE_DISPLAY_URL = `${UPLOADER_URL}/${API_VERSION}/file/with-id`;
