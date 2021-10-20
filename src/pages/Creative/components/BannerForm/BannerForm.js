@@ -81,20 +81,24 @@ function BannerForm(props) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onSubmit = async values => {
-    const bodyRequest = creativeModelToRepo(values, conceptId);
-    setIsLoading(true);
+    console.log(
+      '🚀 ~ file: BannerForm.js ~ line 84 ~ BannerForm ~ values',
+      values
+    );
+    // const bodyRequest = creativeModelToRepo(values, conceptId);
+    // setIsLoading(true);
 
-    if (isCreate) {
-      try {
-        await createCreativeRequest(bodyRequest);
-        setIsLoading(false);
-        dispatch(toggleCreateCreativeDialog());
-        ShowToast.success('Create Creative successfully!');
-      } catch (error) {
-        setIsLoading(false);
-        ShowToast.error(error?.msg);
-      }
-    }
+    // if (isCreate) {
+    //   try {
+    //     await createCreativeRequest(bodyRequest);
+    //     setIsLoading(false);
+    //     dispatch(toggleCreateCreativeDialog());
+    //     ShowToast.success('Create Creative successfully!');
+    //   } catch (error) {
+    //     setIsLoading(false);
+    //     ShowToast.error(error?.msg);
+    //   }
+    // }
   };
 
   return (

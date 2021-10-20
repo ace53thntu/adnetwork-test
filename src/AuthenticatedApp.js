@@ -27,6 +27,7 @@ function AuthenticatedApp(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetchingConfig]);
 
+  // return <div>AuthenticatedApp</div>;
   const elements = useRoutes(authenticatedRoutes);
   return elements;
 }

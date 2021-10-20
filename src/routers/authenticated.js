@@ -20,7 +20,7 @@ const authenticatedRoutes = [
   {
     path: '/',
     element: <AdminLayout />,
-    children: [appRoutes]
+    children: appRoutes
   },
   // Not found routes work as you'd expect
   {path: '*', element: <NotFound />}

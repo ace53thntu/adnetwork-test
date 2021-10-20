@@ -7,21 +7,18 @@ import {inventoryMarketPages} from './inventory-market';
 import {organizationPages} from './organization';
 import {userManagementPages} from './user';
 
-export const appRoutes = {
-  path: '/',
-  children: [
-    {
-      path: '/dashboard',
-      element: <Dashboard />
-    },
-    {
-      path: '/campaigns/*',
-      element: <Campaign />
-    },
-    containerPages,
-    inventoryMarketPages,
-    organizationPages,
-    userManagementPages,
-    creativePages
-  ]
-};
+export const appRoutes = [
+  {
+    path: '/dashboard',
+    element: <Dashboard />
+  },
+  {
+    path: '/campaigns/*',
+    element: <Campaign />
+  },
+  containerPages,
+  inventoryMarketPages,
+  organizationPages,
+  userManagementPages,
+  creativePages
+];

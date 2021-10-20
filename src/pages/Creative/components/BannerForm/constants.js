@@ -23,13 +23,12 @@ export const INVOCATION_TAG_TYPES = [
 
 const uploaderConfig = getUploaderConfig();
 
-export const CREATIVE_FILE_TYPES = uploaderConfig?.allowed_image_type?.map(
-  type => ({
+export const CREATIVE_FILE_TYPES =
+  uploaderConfig?.allowed_image_type?.map(type => ({
     id: type,
     value: type,
     label: type
-  })
-);
+  })) ?? [];
 
 export const ALLOWED_VIDEO_TYPES = uploaderConfig?.allowed_video_type ?? [];
 export const ALLOWED_IMAGE_TYPES = uploaderConfig?.allowed_image_type ?? [];
