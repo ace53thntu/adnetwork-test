@@ -1,4 +1,3 @@
-import {BlockOverlay} from 'components/common';
 // import PropTypes from 'prop-types';
 import {useGetCreative} from 'queries/creative';
 import * as React from 'react';
@@ -50,9 +49,10 @@ function BannerDetailBody(props) {
     enabled: !!creativeId
   });
 
+  if (isFetching) return <div>Loading...</div>;
+
   return (
     <>
-      {isFetching && <BlockOverlay />}
       <BannerForm creative={creative} />
     </>
   );

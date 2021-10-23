@@ -22,7 +22,7 @@ const alternativeDefaultValues = {
   only_catalog_products: false,
   catalog_id: '0',
   file: null,
-  rawId: null
+  rawId: ''
 };
 
 function Alternatives(props) {
@@ -82,4 +82,4 @@ function Alternatives(props) {
 Alternatives.propTypes = {};
 Alternatives.defaultProps = {};
 
-export default Alternatives;
+export default React.memo(Alternatives);

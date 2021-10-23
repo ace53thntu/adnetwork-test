@@ -1,7 +1,7 @@
-import React from 'react';
-import {Input as StrapInput, FormGroup, Label, FormFeedback} from 'reactstrap';
-import {useFormContext} from 'react-hook-form';
 import __get from 'lodash/get';
+import React from 'react';
+import {useFormContext} from 'react-hook-form';
+import {FormFeedback, FormGroup, Label, Input as StrapInput} from 'reactstrap';
 
 const FormTextInput = ({
   type = 'text',
@@ -17,7 +17,7 @@ const FormTextInput = ({
   style,
   ...rest
 }) => {
-  const {register, errors} = useFormContext();
+  const {errors, register} = useFormContext();
   const errorMessage = __get(errors, `${name}.message`);
 
   return (

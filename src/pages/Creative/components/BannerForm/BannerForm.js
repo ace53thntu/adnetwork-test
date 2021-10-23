@@ -7,7 +7,7 @@ import {
   FormTextInput
 } from 'components/forms';
 import PropTypes from 'prop-types';
-import {useCreateCreative} from 'queries/creative';
+import {useCreateCreative, useUpdateCreative} from 'queries/creative';
 import {GET_CREATIVES} from 'queries/creative/constants';
 import * as React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
@@ -16,7 +16,11 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button, Col, Row} from 'reactstrap';
-import {toggleCreateCreativeDialog} from 'store/reducers/creative';
+import {
+  toggleCreateCreativeDialog,
+  toggleCreativeDetailDialog
+} from 'store/reducers/creative';
+import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import Box from '@material-ui/core/Box';
@@ -29,6 +33,7 @@ import {
 } from './constants';
 import {
   alternativeFormValuesToRepo,
+  alternativeRepoToModel,
   creativeModelToRepo,
   creativeRepoToModel
 } from './dto';
@@ -57,16 +62,22 @@ const defaultFormValues = {
 
 function BannerForm(props) {
   const {isCreate, creative} = props;
-  console.log(
-    '🚀 ~ file: BannerForm.js ~ line 56 ~ BannerForm ~ creative',
-    creative
-  );
 
   const client = useQueryClient();
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const {conceptId} = useParams();
   const {mutateAsync: createCreativeRequest} = useCreateCreative();
+  const {mutateAsync: updateCreativeRequest} = useUpdateCreative();
+
+  const params = React.useMemo(() => {
+    return {
+      concept_uuid: conceptId,
+      status: 'active',
+      sort_by: 'updated_at',
+      sort: 'desc'
+    };
+  }, [conceptId]);
 
   const defaultValues = React.useMemo(() => {
     if (!!creative) {
@@ -78,7 +89,9 @@ function BannerForm(props) {
 
   const methods = useForm({
     defaultValues,
-    resolver: bannerFormValidationResolver()
+    resolver: bannerFormValidationResolver(),
+    reValidateMode: 'onChange',
+    mode: 'onChange'
   });
   const {
     handleSubmit,
@@ -124,11 +137,74 @@ function BannerForm(props) {
         setIsLoading(false);
         ShowToast.error(error?.msg);
       }
+    } else {
+      const alternatives = values?.alternatives;
+
+      if (alternatives?.length) {
+        let promises = [];
+        const creativeId = creative.uuid;
+
+        // new alternatives
+        const newAlts = alternatives.filter(alt => !alt?.rawId?.length);
+        newAlts.forEach(item => {
+          const requestData = alternativeFormValuesToRepo(item, creativeId);
+          promises.push(
+            AlternativeAPI.createAlternative({data: requestData, options: {}})
+          );
+        });
+
+        // update alternatives
+        const updateAlts = alternatives.filter(alt => alt?.rawId?.length);
+        const rawAlts = creative.alternatives;
+
+        updateAlts.forEach(item => {
+          const rawData = rawAlts.find(raw => raw.uuid === item.rawId);
+          if (rawData) {
+            const converted = alternativeRepoToModel(rawData);
+            const diff = difference(item, {
+              ...converted,
+              rawId: rawData.uuid
+            });
+
+            if (Object.keys(diff).length) {
+              const requestData = alternativeFormValuesToRepo(item, creativeId);
+              promises.push(
+                AlternativeAPI.updateAlternative({
+                  alternativeId: item.rawId,
+                  data: requestData,
+                  options: {}
+                })
+              );
+            }
+          }
+        });
+
+        await Promise.all(promises);
+      }
+
+      try {
+        await updateCreativeRequest({
+          creativeId: creative.uuid,
+          updatedData: bodyRequest
+        });
+
+        setIsLoading(false);
+        ShowToast.success('Update Creative successfully!');
+        client.invalidateQueries([GET_CREATIVES, params]);
+        handleCloseDialog();
+      } catch (error) {
+        setIsLoading(false);
+        ShowToast.error(error?.msg);
+      }
     }
   };
 
   const handleCloseDialog = () => {
-    dispatch(toggleCreateCreativeDialog());
+    if (isCreate) {
+      dispatch(toggleCreateCreativeDialog());
+    } else {
+      dispatch(toggleCreativeDetailDialog(null));
+    }
   };
 
   return (
@@ -148,7 +224,6 @@ function BannerForm(props) {
                   placeholder=""
                   name="name"
                   label="Name"
-                  // disable={isLoading || disabled}
                   defaultValue={defaultValues?.name}
                 />
               </Col>
@@ -157,7 +232,6 @@ function BannerForm(props) {
                   name="tags"
                   label="Tags"
                   placeholder="Enter tags..."
-                  // disabled={isLoading}
                   defaultValue={defaultValues?.tags}
                 />
               </Col>
@@ -167,7 +241,6 @@ function BannerForm(props) {
                   placeholder=""
                   name="creative_type"
                   label="Creative type"
-                  // disabled={isLoading || disabled}
                   defaultValue={defaultValues.creative_type}
                 />
               </Col>
@@ -210,7 +283,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="invocation_tag_type"
                       label="Invocation tag type"
-                      // disabled={isLoading || disabled}
                       defaultValue={defaultValues.invocation_tag_type}
                     />
                   </Col>
@@ -220,7 +292,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="extra_trackers"
                       label="Extra trackers"
-                      // disable={isLoading || disabled}
                       defaultValue={defaultValues.extra_trackers}
                     />
                   </Col>
@@ -230,7 +301,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="click_url"
                       label="Click url"
-                      // disable={isLoading || disabled}
                       defaultValue={defaultValues.click_url}
                     />
                   </Col>
@@ -239,7 +309,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="width"
                       label="Width"
-                      // disable={isLoading || disabled}
                       defaultValue={defaultValues.width}
                     />
                   </Col>
@@ -248,7 +317,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="height"
                       label="Height"
-                      // disable={isLoading || disabled}
                       defaultValue={defaultValues.height}
                     />
                   </Col>
@@ -263,7 +331,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="file_type"
                       label="File type"
-                      // disabled={isLoading || disabled}
                       defaultValue={defaultValues.file_type}
                     />
                   </Col>
@@ -275,7 +342,6 @@ function BannerForm(props) {
                       placeholder=""
                       name="invocation_tag"
                       label="Invocation tag"
-                      // disable={isLoading || disabled}
                       rows={4}
                       style={{
                         resize: 'none'
@@ -327,4 +393,4 @@ BannerForm.defaultProps = {
   creative: {}
 };
 
-export default BannerForm;
+export default React.memo(BannerForm);

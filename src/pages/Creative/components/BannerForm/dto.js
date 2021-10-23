@@ -44,7 +44,6 @@ export function creativeModelToRepo(raw, conceptId) {
 
 export function creativeRepoToModel(raw) {
   const {
-    // concept_id,
     invocation_tag,
     invocation_tag_type,
     extra_trackers,
@@ -53,17 +52,15 @@ export function creativeRepoToModel(raw) {
     click_url = '',
     https,
     sound,
-    multiproduct,
+    multi_product,
     name,
     file_type,
     width = '0',
     height = '0',
     alternatives = []
   } = raw;
-  console.log('🚀 ~ file: dto.js ~ line 63 ~ creativeRepoToModel ~ raw', raw);
 
   return {
-    // concept_id,
     name,
     invocation_tag,
     invocation_tag_type: INVOCATION_TAG_TYPES.find(
@@ -75,7 +72,7 @@ export function creativeRepoToModel(raw) {
     click_url,
     https,
     sound,
-    multi_product: multiproduct,
+    multiproduct: multi_product,
     file_type: file_type
       ? CREATIVE_FILE_TYPES.find(type => type.value === file_type)
       : CREATIVE_FILE_TYPES[0],
@@ -84,7 +81,7 @@ export function creativeRepoToModel(raw) {
     alternatives: alternatives?.map(item => {
       return {
         ...alternativeRepoToModel(item),
-        rawId: item.id
+        rawId: item?.uuid ?? null
       };
     })
   };
@@ -151,15 +148,15 @@ export function alternativeRepoToModel(raw) {
     name,
     sound,
     description,
-    catalog_id,
+    catalog_id: catalog_id.toString(),
     extra_config,
     max_products: max_products?.toString(),
     min_products: min_products?.toString(),
     only_catalog_products,
-    priority,
-    product_height,
+    priority: priority.toString(),
+    product_height: product_height.toString(),
     product_query_string,
-    product_width,
+    product_width: product_width.toString(),
     products,
     file
   };

@@ -2,12 +2,22 @@ import {BlockOverlay, StrapConfirmModal} from 'components/common';
 import {FormCheckbox, FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import {
+  useCreateAlternative,
+  useDeleteAlternative,
+  useUpdateAlternative
+} from 'queries/alternative';
+import {GET_CREATIVE} from 'queries/creative/constants';
 import * as React from 'react';
 import {useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import {useQueryClient} from 'react-query';
 import {Button, Col, Row} from 'reactstrap';
+import {useCreativeSelector} from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import {alternativeFormValuesToRepo} from '../BannerForm/dto';
 import {UploadFile} from '../UploadFile';
 import {ACCEPT_FILES, LIMIT_FILE_SIZE, formAlternativeName} from './constants';
 
@@ -19,8 +29,15 @@ function AlternativeForm(props) {
     handleRemoveAlternative
   } = props;
 
+  const client = useQueryClient();
   const {t} = useTranslation();
-  const {watch} = useFormContext();
+  const {watch, trigger: formTrigger} = useFormContext();
+  const {selectedCreativeId} = useCreativeSelector();
+  const {mutateAsync: updateAlternativeRequest} = useUpdateAlternative();
+  const {mutateAsync: deleteAlternativeRequest} = useDeleteAlternative();
+  const {mutateAsync: createAlternativeRequest} = useCreateAlternative();
+
+  const isEdit = !!selectedCreativeId;
 
   const prefixName = `${formAlternativeName}[${itemIndex}]`;
 
@@ -37,73 +54,83 @@ function AlternativeForm(props) {
   }
 
   async function handleAgree() {
-    // if (!rawAlternative) {
-    //   handleRemoveAlternative(itemIndex);
-    //   handleClose();
-    // } else {
-    //   try {
-    //     await deleteAlternativeRequest(rawAlternative.id);
-    //     ShowToast.success('Delete Alternative successfully!');
-    //     handleRemoveAlternative(rawAlternative.id);
-    //     handleClose();
-    //     client.invalidateQueries(['GET_CREATIVE_BY_ID', creativeId]);
-    //   } catch (error) {
-    //     ShowToast.error(error?.msg);
-    //   }
-    // }
+    if (!watchCurrentAlt?.rawId) {
+      handleRemoveAlternative(itemIndex);
+      handleClose();
+    } else {
+      setIsLoading(true);
+      try {
+        handleClose();
+        await deleteAlternativeRequest(watchCurrentAlt.rawId);
+        setIsLoading(false);
+        handleRemoveAlternative(itemIndex);
+        ShowToast.success('Delete Alternative successfully!');
+        // client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
+      } catch (error) {
+        setIsLoading(false);
+        ShowToast.error(error?.msg);
+      }
+    }
   }
 
   function handleCancel() {
-    // if (creativeId) {
-    //   toggleCollapse();
-    // } else {
-    handleRemoveAlternative(itemIndex);
-    // }
+    if (isEdit) {
+      toggleCollapse();
+    } else {
+      handleRemoveAlternative(itemIndex);
+    }
   }
 
   async function handleSave() {
-    // if (creativeId) {
-    //   const resValid = await formTrigger('alternatives');
-    //   if (resValid) {
-    //     setIsLoading(true);
-    //     const alternatives = formGetValues()?.alternatives ?? [];
-    //     const currentAlternative = alternatives[itemIndex];
-    //     const requestData = alternativeFormValuesToRepo(
-    //       currentAlternative,
-    //       creativeId
-    //     );
+    if (!isEdit) {
+      toggleCollapse();
+    } else {
+      const resValid = await formTrigger(formAlternativeName);
 
-    //     if (rawAlternative) {
-    //       try {
-    //         await updateAlternativeRequest({
-    //           alternativeId: rawAlternative.id,
-    //           updatedData: requestData
-    //         });
-    //         setIsLoading(false);
-    //         ShowToast.success('Update Alternative successfully!');
-    //         client.invalidateQueries(['GET_CREATIVE_BY_ID', creativeId]);
-    //       } catch (error) {
-    //         setIsLoading(false);
-    //         ShowToast.error(error?.msg);
-    //       }
-    //     } else {
-    //       try {
-    //         await createAlternativeRequest(requestData);
-    //         setIsLoading(false);
-    //         ShowToast.success('Add Alternative successfully!');
-    //         client.invalidateQueries(['GET_CREATIVE_BY_ID', creativeId]);
-    //       } catch (error) {
-    //         setIsLoading(false);
-    //         ShowToast.error(error?.msg);
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   toggleCollapse();
-    // }
+      if (resValid) {
+        const requestData = alternativeFormValuesToRepo(
+          watchCurrentAlt,
+          selectedCreativeId
+        );
 
-    toggleCollapse();
+        setIsLoading(true);
+        if (watchCurrentAlt?.rawId) {
+          // update
+          try {
+            await updateAlternativeRequest({
+              alternativeId: watchCurrentAlt.rawId,
+              data: requestData
+            });
+            setIsLoading(false);
+            ShowToast.success('Update Alternative successfully!');
+            client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
+          } catch (error) {
+            setIsLoading(false);
+            ShowToast.error(error?.msg);
+          }
+        } else {
+          // add new
+          try {
+            await createAlternativeRequest(requestData);
+            setIsLoading(false);
+            ShowToast.success('Add Alternative successfully!');
+            client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
+          } catch (error) {
+            setIsLoading(false);
+            ShowToast.error(error?.msg);
+          }
+        }
+      }
+    }
   }
+
+  const handleRemove = () => {
+    if (!watchCurrentAlt?.rawId && !watchCurrentAlt?.file) {
+      handleRemoveAlternative(itemIndex);
+    } else {
+      setIsOpen(true);
+    }
+  };
 
   return (
     <>
@@ -118,6 +145,7 @@ function AlternativeForm(props) {
                 type="hidden"
                 bsSize="sm"
                 defaultValue={defaultValues?.rawId}
+                applyFieldArray
               />
               <FormTextInput
                 isRequired
@@ -127,6 +155,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.name}
+                applyFieldArray
               />
             </Col>
             <Col md="12">
@@ -144,6 +173,7 @@ function AlternativeForm(props) {
                     }}
                     bsSize="sm"
                     defaultValue={defaultValues?.description}
+                    applyFieldArray
                   />
                 </Col>
                 <Col>
@@ -159,6 +189,7 @@ function AlternativeForm(props) {
                     }}
                     bsSize="sm"
                     defaultValue={defaultValues?.products}
+                    applyFieldArray
                   />
                 </Col>
               </Row>
@@ -175,6 +206,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.min_products}
+                applyFieldArray
               />
             </Col>
             <Col>
@@ -186,6 +218,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.max_products}
+                applyFieldArray
               />
             </Col>
             <Col>
@@ -197,6 +230,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.product_width}
+                applyFieldArray
               />
             </Col>
             <Col>
@@ -208,6 +242,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.product_height}
+                applyFieldArray
               />
             </Col>
           </Row>
@@ -222,6 +257,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.priority}
+                applyFieldArray
               />
             </Col>
 
@@ -233,6 +269,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.catalog_id}
+                applyFieldArray
               />
             </Col>
             <Col md={4}>
@@ -241,6 +278,7 @@ function AlternativeForm(props) {
                 name={`${prefixName}.only_catalog_products`}
                 label="Only catalog products"
                 disabled={isLoading}
+                applyFieldArray
               />
             </Col>
             <Col md={3}>
@@ -251,6 +289,7 @@ function AlternativeForm(props) {
                 name={`${prefixName}.sound`}
                 label="Sound"
                 disabled={isLoading}
+                applyFieldArray
               />
             </Col>
           </Row>
@@ -263,6 +302,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.product_query_string}
+                applyFieldArray
               />
             </Col>
             <Col>
@@ -273,6 +313,7 @@ function AlternativeForm(props) {
                 disable={isLoading}
                 bsSize="sm"
                 defaultValue={defaultValues?.extra_config}
+                applyFieldArray
               />
             </Col>
           </Row>
@@ -292,7 +333,7 @@ function AlternativeForm(props) {
       <Row>
         <Col>
           <div className="d-flex justify-content-end">
-            {/* {creativeId ? (
+            {isEdit ? (
               <Button
                 color="danger"
                 onClick={handleRemove}
@@ -301,7 +342,7 @@ function AlternativeForm(props) {
               >
                 Remove
               </Button>
-            ) : null} */}
+            ) : null}
 
             <Button
               color="secondary"
@@ -342,4 +383,4 @@ AlternativeForm.propTypes = {
 };
 AlternativeForm.defaultProps = {};
 
-export default AlternativeForm;
+export default React.memo(AlternativeForm);

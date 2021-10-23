@@ -1,8 +1,13 @@
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
-import {FormGroup, CustomInput} from 'reactstrap';
+import {CustomInput, FormGroup} from 'reactstrap';
 
-function FormCheckbox({name, label, disabled = false}) {
+function FormCheckbox({
+  name,
+  label,
+  disabled = false,
+  applyFieldArray = false
+}) {
   const {register, errors} = useFormContext();
 
   return (
@@ -14,7 +19,7 @@ function FormCheckbox({name, label, disabled = false}) {
           name={name}
           label={label}
           disabled={disabled}
-          innerRef={register}
+          innerRef={applyFieldArray ? register() : register}
           invalid={errors?.[name]?.message ? true : false}
         />
       </div>

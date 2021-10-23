@@ -13,6 +13,22 @@ class AlternativeAPIService extends XHRRequest {
   createAlternative = ({data, options = {}}) => {
     return this.post(endpoints.alternative.alternative, data, options);
   };
+
+  updateAlternative = ({alternativeId, data, options = {}}) => {
+    return this.put(
+      `${endpoints.alternative.alternative}/${alternativeId}`,
+      data,
+      options
+    );
+  };
+
+  deleteAlternative = ({alternativeId, options = {}}) => {
+    return this.delete(
+      `${endpoints.alternative.alternative}/${alternativeId}`,
+      {},
+      options
+    );
+  };
 }
 
 export const AlternativeAPI = new AlternativeAPIService(apiURL);
