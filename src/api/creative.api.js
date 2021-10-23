@@ -17,6 +17,26 @@ class CreativeAPIService extends XHRRequest {
   getConfig = ({options = {}}) => {
     return this.get(endpoints.creative.config, {}, options);
   };
+
+  getCreatives = ({params = {}, options = {}}) => {
+    return this.get(endpoints.creative.creative, params, options);
+  };
+
+  deleteCreative = ({creativeId, options = {}}) => {
+    return this.delete(
+      `${endpoints.creative.creative}/${creativeId}`,
+      {},
+      options
+    );
+  };
+
+  getCreative = ({creativeId, options = {}}) => {
+    return this.get(
+      `${endpoints.creative.creative}/${creativeId}`,
+      {},
+      options
+    );
+  };
 }
 
 export const CreativeAPI = new CreativeAPIService(apiURL);

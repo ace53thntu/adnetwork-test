@@ -77,5 +77,8 @@ export const endpoints = {
   uploader: {
     config: `${API_V1}/config`,
     upload: `${API_V1}/file/upload`
+  },
+  alternative: {
+    alternative: `${API_V1}/alternative`
   }
 };

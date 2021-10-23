@@ -44,8 +44,8 @@ export function useUploadFile({
         formData.append('file', acceptedFiles[0]);
 
         try {
-          const {data} = await uploadFileRequest(formData);
-          const fileUploaded = data?.data;
+          const res = await uploadFileRequest(formData);
+          const fileUploaded = res?.data;
           const fileObj = {
             ...fileUploaded
           };

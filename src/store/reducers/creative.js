@@ -16,6 +16,7 @@ const UPDATE_CONCEPT = '@creative/UPDATE_CONCEPT';
 const ADD_CONCEPT = '@creative/ADD_CONCEPT';
 
 const TOGGLE_CREATE_CREATIVE_DIALOG = '@creative/TOGGLE_CREATE_CREATIVE_DIALOG';
+const TOGGLE_DETAIL_DIALOG = '@creative/TOGGLE_DETAIL_DIALOG';
 
 // dispatch actions
 export const resetCreativeRedux = () => createAction(RESET, {});
@@ -39,6 +40,9 @@ export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
 export const toggleCreateCreativeDialog = () =>
   createAction(TOGGLE_CREATE_CREATIVE_DIALOG, {});
 
+export const toggleCreativeDetailDialog = creativeId =>
+  createAction(TOGGLE_DETAIL_DIALOG, {creativeId});
+
 const creativeInitialState = {
   advertisers: [],
   isLoading: true,
@@ -46,7 +50,9 @@ const creativeInitialState = {
   selectedConceptId: null,
   expandedIds: [],
   advertiserPage: 1,
-  isToggleCreateCreativeDialog: false
+  isToggleCreateCreativeDialog: false,
+  toggleDetailDialog: false,
+  selectedCreativeId: null
 };
 
 const handleActions = {
@@ -59,7 +65,8 @@ const handleActions = {
   [LOAD_CONCEPT]: handleLoadConcept,
   [UPDATE_CONCEPT]: handleUpdateConcept,
   [ADD_CONCEPT]: handleAddConcept,
-  [TOGGLE_CREATE_CREATIVE_DIALOG]: handleToggleCreateCreativeDialog
+  [TOGGLE_CREATE_CREATIVE_DIALOG]: handleToggleCreateCreativeDialog,
+  [TOGGLE_DETAIL_DIALOG]: handleToggleCreativeDetailDialog
 };
 
 function handleReset(state) {
@@ -69,7 +76,9 @@ function handleReset(state) {
   state.selectedConceptId = null;
   state.expandedIds = [];
   state.advertiserPage = 1;
-  state.isShowCreateCreativeDialog = false;
+  state.isToggleCreateCreativeDialog = false;
+  state.toggleDetailDialog = false;
+  state.selectedCreativeId = null;
 }
 
 function handleSetAdvertisers(state, action) {
@@ -279,6 +288,11 @@ function handleAddConcept(state, action) {
 
 function handleToggleCreateCreativeDialog(state, action) {
   state.isToggleCreateCreativeDialog = !state.isToggleCreateCreativeDialog;
+}
+
+function handleToggleCreativeDetailDialog(state, action) {
+  state.selectedCreativeId = action.payload.creativeId;
+  state.toggleDetailDialog = !state.toggleDetailDialog;
 }
 
 export function useCreativeSelector() {

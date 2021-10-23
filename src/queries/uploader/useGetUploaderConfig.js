@@ -4,7 +4,7 @@ import {useQuery} from 'react-query';
 
 import {GET_UPLOADER_CONFIG} from './constants';
 
-export function useGetUploaderConfig() {
+export function useGetUploaderConfig({enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -16,7 +16,8 @@ export function useGetUploaderConfig() {
         }
       }).then(res => res?.data ?? null),
     {
-      suspense: false
+      suspense: false,
+      enabled
     }
   );
 }

@@ -9,10 +9,9 @@ import {setUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 function AuthenticatedApp(props) {
   const {data: authUser, isFetching} = useGetMe({enable: true});
 
-  const {
-    data: configRes,
-    isFetching: isFetchingConfig
-  } = useGetUploaderConfig();
+  const {data: configRes, isFetching: isFetchingConfig} = useGetUploaderConfig({
+    enabled: !!authUser
+  });
 
   React.useEffect(() => {
     if (!isFetching) {

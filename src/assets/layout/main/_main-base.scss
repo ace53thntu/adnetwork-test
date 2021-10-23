@@ -18,6 +18,8 @@
   .app-main__inner {
     padding: $grid-gutter-width $grid-gutter-width 0;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 
     & > .RRT__container {
       & > .RRT__panel {
@@ -37,6 +39,7 @@
 
 .body-tabs-shadow-btn {
   .app-main__inner {
+    overflow-y: auto;
     & > .RRT__container {
       & > .RRT__panel {
         margin-top: ($grid-gutter-width / 1.5);

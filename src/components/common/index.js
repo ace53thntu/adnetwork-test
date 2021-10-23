@@ -8,6 +8,7 @@ import Tree from './TreeLazy';
 
 export * from './Collapse';
 export * from './StrapConfirmModal';
+export * from './SwiperList';
 export {
   ScrollReset,
   BlockOverlay,

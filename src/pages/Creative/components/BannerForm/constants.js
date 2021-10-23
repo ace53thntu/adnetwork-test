@@ -21,6 +21,8 @@ export const INVOCATION_TAG_TYPES = [
   }
 ];
 
+export const ASSET_TYPES_IS_FILE = ['video', 'imgdco', 'icon', 'logo', 'img'];
+
 const uploaderConfig = getUploaderConfig();
 
 export const CREATIVE_FILE_TYPES =

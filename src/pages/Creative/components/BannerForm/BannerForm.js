@@ -1,4 +1,5 @@
-import {CollapseBox} from 'components/common';
+import {AlternativeAPI} from 'api/alternative.api';
+import {BlockOverlay, CollapseBox} from 'components/common';
 import {
   FormCheckbox,
   FormReactSelect,
@@ -7,9 +8,11 @@ import {
 } from 'components/forms';
 import PropTypes from 'prop-types';
 import {useCreateCreative} from 'queries/creative';
+import {GET_CREATIVES} from 'queries/creative/constants';
 import * as React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button, Col, Row} from 'reactstrap';
@@ -24,7 +27,11 @@ import {
   CREATIVE_TYPES,
   INVOCATION_TAG_TYPES
 } from './constants';
-import {creativeModelToRepo} from './dto';
+import {
+  alternativeFormValuesToRepo,
+  creativeModelToRepo,
+  creativeRepoToModel
+} from './dto';
 import {bannerFormValidationResolver} from './utils';
 
 const defaultFormValues = {
@@ -49,20 +56,25 @@ const defaultFormValues = {
 };
 
 function BannerForm(props) {
-  const {isCreate} = props;
+  const {isCreate, creative} = props;
+  console.log(
+    '🚀 ~ file: BannerForm.js ~ line 56 ~ BannerForm ~ creative',
+    creative
+  );
 
+  const client = useQueryClient();
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const {conceptId} = useParams();
   const {mutateAsync: createCreativeRequest} = useCreateCreative();
 
   const defaultValues = React.useMemo(() => {
-    // if (!!creative) {
-    //   return creativeRepoToModel(creative);
-    // }
+    if (!!creative) {
+      return creativeRepoToModel(creative);
+    }
 
     return defaultFormValues;
-  }, []);
+  }, [creative]);
 
   const methods = useForm({
     defaultValues,
@@ -70,35 +82,53 @@ function BannerForm(props) {
   });
   const {
     handleSubmit,
-    formState: {isDirty},
-    control,
-    errors,
-    trigger,
-    getValues,
-    watch
+    formState: {isDirty}
   } = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onSubmit = async values => {
-    console.log(
-      '🚀 ~ file: BannerForm.js ~ line 84 ~ BannerForm ~ values',
-      values
-    );
-    // const bodyRequest = creativeModelToRepo(values, conceptId);
-    // setIsLoading(true);
+    const bodyRequest = creativeModelToRepo(values, conceptId);
+    setIsLoading(true);
 
-    // if (isCreate) {
-    //   try {
-    //     await createCreativeRequest(bodyRequest);
-    //     setIsLoading(false);
-    //     dispatch(toggleCreateCreativeDialog());
-    //     ShowToast.success('Create Creative successfully!');
-    //   } catch (error) {
-    //     setIsLoading(false);
-    //     ShowToast.error(error?.msg);
-    //   }
-    // }
+    if (isCreate) {
+      try {
+        const res = await createCreativeRequest(bodyRequest);
+
+        if (values?.alternatives?.length) {
+          const createdId = res?.data?.uuid;
+          if (createdId) {
+            const alternatives = values.alternatives;
+
+            const alternativeData = alternatives.map(item => {
+              return alternativeFormValuesToRepo(item, createdId);
+            });
+
+            let promises = [];
+
+            alternativeData.forEach(item => {
+              promises.push(
+                AlternativeAPI.createAlternative({data: item, options: {}})
+              );
+            });
+
+            await Promise.all(promises);
+          }
+        }
+
+        setIsLoading(false);
+        dispatch(toggleCreateCreativeDialog());
+        ShowToast.success('Create Creative successfully!');
+        client.invalidateQueries([GET_CREATIVES]);
+      } catch (error) {
+        setIsLoading(false);
+        ShowToast.error(error?.msg);
+      }
+    }
+  };
+
+  const handleCloseDialog = () => {
+    dispatch(toggleCreateCreativeDialog());
   };
 
   return (
@@ -108,6 +138,7 @@ function BannerForm(props) {
         id="banner-form"
         name="banner-form"
       >
+        {isLoading && <BlockOverlay />}
         <Box>
           <CollapseBox open title="Information">
             <Row>
@@ -267,17 +298,14 @@ function BannerForm(props) {
         <div className="d-flex justify-content-end">
           <Button
             color="secondary"
-            onClick={() => {
-              // reset({...defaultFormValues});
-              // handleCancel();
-            }}
+            onClick={handleCloseDialog}
             disabled={isLoading}
           >
             Close
           </Button>
           <Button
             color="primary"
-            disabled={!isDirty}
+            disabled={!isDirty || isLoading}
             type="submit"
             className="ml-2"
             form="banner-form"
@@ -291,10 +319,12 @@ function BannerForm(props) {
 }
 
 BannerForm.propTypes = {
-  isCreate: PropTypes.bool
+  isCreate: PropTypes.bool,
+  creative: PropTypes.object
 };
 BannerForm.defaultProps = {
-  isCreate: false
+  isCreate: false,
+  creative: {}
 };
 
 export default BannerForm;

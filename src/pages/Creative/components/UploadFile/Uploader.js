@@ -52,7 +52,7 @@ function Uploader(props) {
     isInArray
   });
 
-  const file = value?.id ? value : files?.[0] ? files[0] : null;
+  const file = value?.uuid ? value : files?.[0] ? files[0] : null;
 
   return (
     <Row>

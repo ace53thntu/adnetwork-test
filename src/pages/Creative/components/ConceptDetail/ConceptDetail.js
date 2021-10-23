@@ -3,8 +3,10 @@ import {useGetConcept} from 'queries/concept';
 import * as React from 'react';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
+import {Col, Container, Row} from 'reactstrap';
 import {selectConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
+import {Banners} from '../Banners';
 import ConceptForm from '../ConceptCreate/ConceptForm';
 import {CreativeBodyLayout} from '../CreativeLayout';
 import {ActionsBar, CreativeCreate} from '..';
@@ -33,7 +35,22 @@ function ConceptDetail(props) {
       ) : (
         <>
           <ConceptForm isEdit concept={concept} />
-          <ActionsBar />
+
+          <div className="my-3">
+            <Container fluid>
+              <Row>
+                <Col>
+                  <ActionsBar />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Banners />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+
           <CreativeCreate />
         </>
       )}

@@ -1,0 +1,2 @@
+export const GET_CREATIVES = 'GET_CREATIVES';
+export const GET_CREATIVE = 'GET_CREATIVE';
