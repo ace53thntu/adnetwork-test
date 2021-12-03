@@ -22,7 +22,6 @@ import {Controller, useFormContext} from 'react-hook-form';
 const InventoryBidForm = ({
   dspOptions = [],
   audienceOptions = [],
-  dealOptions = [],
   excludeBidDates = []
 }) => {
   const {control} = useFormContext();
@@ -78,8 +77,7 @@ const InventoryBidForm = ({
 
 InventoryBidForm.propTypes = {
   dspOptions: PropTypes.array,
-  audienceOptions: PropTypes.array,
-  dealOptions: PropTypes.array
+  audienceOptions: PropTypes.array
 };
 
 export default InventoryBidForm;

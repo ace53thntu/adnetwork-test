@@ -16,7 +16,6 @@ import TimeRange from './form-elements/time-range';
 export default function DealForm({
   dspOptions,
   audienceOptions,
-  dealOptions,
   excludeDates = []
 }) {
   const {control} = useFormContext();

@@ -1,31 +1,27 @@
-import {useGetCampaign} from 'queries/campaign';
-import React, {memo} from 'react';
-import {useParams} from 'react-router';
-import CampaignForm from './CampaignForm';
-// import {
-//   useGetAdvertisers,
-//   useGetCampaign,
-//   useGetCampaigns,
-//   useGetLabels
-// } from 'core/queries/campaigns';
+import React from 'react';
 
-const EditCampaign = props => {
+import PropTypes from 'prop-types';
+import {useParams} from 'react-router';
+
+import {useGetCampaign} from 'queries/campaign';
+import CampaignForm from './CampaignForm';
+
+const propTypes = {
+  isEdit: PropTypes.bool,
+  isView: PropTypes.bool
+};
+
+const EditCampaign = ({isEdit, isView}) => {
   const {id: campaignId} = useParams();
-  // const {data: listAdvertisers} = useGetAdvertisers();
   const listAdvertisers = [];
-  const campaignTree = []; //useGetCampaigns();
+  const campaignTree = [];
   const {data: currentCampaign} = useGetCampaign(campaignId);
-  console.log(
-    '🚀 ~ file: EditCampaign.js ~ line 18 ~ currentCampaign',
-    currentCampaign
-  );
-  // const advertiserId = undefined;
-  // const {data: labelsData} = useGetLabels(advertiserId);
   const labelsData = [];
 
   return campaignId && listAdvertisers && currentCampaign ? (
     <CampaignForm
-      isEdit={props.isEdit}
+      isEdit={isEdit}
+      isView={isView}
       campaignId={campaignId}
       listAdvertisers={listAdvertisers}
       campaignTree={campaignTree}
@@ -35,4 +31,6 @@ const EditCampaign = props => {
   ) : null;
 };
 
-export default memo(EditCampaign);
+EditCampaign.propTypes = propTypes;
+
+export default EditCampaign;

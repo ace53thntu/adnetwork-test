@@ -54,7 +54,6 @@ const InventoryDetails = ({
   isDeal = false,
   dspOptions = [],
   audienceOptions = [],
-  dealOptions = [],
   isEdit = false
 }) => {
   let title = isBid ? 'Bid:' : '';
@@ -225,7 +224,6 @@ const InventoryDetails = ({
               <InventoryBidForm
                 dspOptions={dspOptions}
                 audienceOptions={audienceOptions}
-                dealOptions={dealOptions}
                 excludeDates={excludeDates}
               />
             )}
@@ -234,7 +232,6 @@ const InventoryDetails = ({
               <DealForm
                 dspOptions={dspOptions}
                 audienceOptions={audienceOptions}
-                dealOptions={dealOptions}
                 excludeDates={excludeDates}
               />
             )}

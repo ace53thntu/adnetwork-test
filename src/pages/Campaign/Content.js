@@ -42,6 +42,7 @@ const Campaign = () => {
       <CampaignTree listAdvertisers={advertisersResp} />
       <AppContent customClass="custom-right-content">
         <Routes>
+          {/* Campaign */}
           <Route path="/">
             <ManagerCampaign listAdvertisers={advertisersResp} />
           </Route>
@@ -49,12 +50,16 @@ const Campaign = () => {
             <AddCampaign />
           </Route>
           <Route path="/:id">
+            <EditCampaign isView={true} />
+          </Route>
+          <Route path="/:id/edit">
             <EditCampaign isEdit={true} />
           </Route>
 
-          <Route path=":campId/strategy" element={<StrategyCampaign />}>
-            <Route path=":id" element={<ViewStrategy />} />
-            <Route path=":id/edit" element={<EditStrategy />} />
+          {/* Strategy */}
+          <Route path="/:campId/strategy" element={<StrategyCampaign />}>
+            <Route path="/:id" element={<ViewStrategy />} />
+            <Route path="/:id/edit" element={<EditStrategy />} />
             <Route path="/create" element={<AddStrategy />} />
           </Route>
         </Routes>

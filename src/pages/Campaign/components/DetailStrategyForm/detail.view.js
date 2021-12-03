@@ -80,9 +80,9 @@ const StrategyFormDetailView = ({
               />
               <div style={{textAlign: 'right'}}>
                 <Link
-                  to={`/campaigns/${currentStrategy?.campaign_id}/strategy/${currentStrategy?.id}/edit`}
+                  to={`/campaigns/${currentStrategy?.campaign_uuid}/strategy/${currentStrategy?.uuid}/edit`}
                 >
-                  <Button>Go to Edit</Button>
+                  <Button color="link">Go to Edit</Button>
                 </Link>
               </div>
             </>

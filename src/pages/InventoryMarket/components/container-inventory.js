@@ -22,7 +22,6 @@ import {useGetPositions} from 'queries/position';
 import {useGetDsps} from 'queries/dsp';
 import {useOptionsList} from 'hooks';
 import {useGetAudiences} from 'queries/audience';
-import {useGetDeals} from 'queries/deal';
 import './styles.scss';
 import {useGetInventoryByPage} from 'queries/inventory';
 
@@ -45,8 +44,6 @@ const InventoryContainer = ({page}) => {
   const dspOptions = useOptionsList({list: dspResp?.items});
   const {data: audienceResp} = useGetAudiences();
   const audienceOptions = useOptionsList({list: audienceResp?.items});
-  const {data: dealResp} = useGetDeals();
-  const dealOptions = useOptionsList({list: dealResp?.items});
 
   const columns = React.useMemo(() => {
     return [
@@ -201,7 +198,6 @@ const InventoryContainer = ({page}) => {
           isBid={isBid}
           dspOptions={dspOptions}
           audienceOptions={audienceOptions}
-          dealOptions={dealOptions}
         />
       </Modal>
     </React.Fragment>
