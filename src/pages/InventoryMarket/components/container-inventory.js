@@ -28,13 +28,11 @@ import {useGetInventoryByPage} from 'queries/inventory';
 const InventoryContainer = ({page}) => {
   const {data: positions = []} = useGetPositions();
 
-  const {data: containerInventories, isLoading} = useGetInventoryByPage(
-    page?.uuid
-  );
-  console.log(
-    '🚀 ~ file: container-inventory.js ~ line 34 ~ InventoryContainer ~ containerInventories',
-    containerInventories
-  );
+  const {
+    data: {items: containerInventories = []} = {},
+    isLoading
+  } = useGetInventoryByPage(page?.uuid);
+
   const inventories = useInventoriesByContainer({
     data: containerInventories,
     page,

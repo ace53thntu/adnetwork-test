@@ -11,13 +11,14 @@ import {PageTitleAlt} from 'components/layouts/Admin/components';
 // import {useGetCampaigns} from 'core/queries';
 import CappingManagement from '../../capping';
 import {Divider, Tabs} from '..';
-import StrategyReport from '../StrategyReport';
 import {listEngine, listEngineFirstPrice} from '../../constants';
 import {useCampaignManager, useDestructureCampaignOptions} from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
 // import Audience from './Audience';
 import DescriptionStrategy from './DescriptionStrategy';
 import Concept from './Concept';
+import EntityReport from 'pages/EntityReport';
+import {useGetCampaigns} from 'queries/campaign';
 
 const StrategyFormDetailView = ({
   isEdit,
@@ -27,11 +28,22 @@ const StrategyFormDetailView = ({
 }) => {
   const {t} = useTranslation();
   const {gotoCampaignManagement} = useCampaignManager();
-  // const {data: listCampaign} = useGetCampaigns({mode: 'details'});
-  const listCampaign = [];
+  const {data: {items: listCampaign = []} = {}} = useGetCampaigns();
+  console.log(
+    '🚀 ~ file: detail.view.js ~ line 33 ~ listCampaign',
+    listCampaign
+  );
   const listCampaignOptions = useDestructureCampaignOptions({
     campaigns: listCampaign
   });
+
+  const foundCampaign = listCampaign?.find(
+    item => item?.uuid === currentStrategy?.campaign_uuid
+  );
+  console.log(
+    '🚀 ~ file: detail.view.js ~ line 42 ~ foundCampaign',
+    foundCampaign
+  );
 
   const strategyData = useGetDefaultStrategy({
     strategyData: currentStrategy,
@@ -94,7 +106,14 @@ const StrategyFormDetailView = ({
         },
         {
           name: 'Report',
-          content: <StrategyReport />
+          content: (
+            <EntityReport
+              entity="strategy"
+              entityId={currentStrategy?.uuid}
+              ownerId={foundCampaign?.advertiser_uuid}
+              ownerRole="advertiser"
+            />
+          )
         }
       ].map(({name, content}, index) => ({
         key: index,
@@ -103,7 +122,9 @@ const StrategyFormDetailView = ({
       })),
     [
       campaignId,
-      currentStrategy,
+      currentStrategy?.campaign_uuid,
+      currentStrategy?.uuid,
+      foundCampaign?.advertiser_uuid,
       goTo,
       gotoCampaignManagement,
       isEdit,

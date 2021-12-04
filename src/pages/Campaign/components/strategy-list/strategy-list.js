@@ -18,13 +18,27 @@ const DeleteTitle = 'Are you sure delete this Strategy?';
 const propTypes = {};
 
 const StrategyList = () => {
-  const navigate = useNavigate();
-  const {data: {items: strategies = []} = {}, isFetching} = useGetStrategies();
-  const {mutateAsync: deleteStrategy} = useDeleteStrategy();
-
+  //---> Local states
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
   const [isDeleting, setIsDeleting] = React.useState(false);
+
+  //--->
+  const navigate = useNavigate();
+  const {mutateAsync: deleteStrategy} = useDeleteStrategy();
+  const {data: {items = []} = {}, isFetching} = useGetStrategies();
+  const strategies = React.useMemo(() => {
+    return items?.map(item => {
+      const campaign = item?.campaign;
+      const campaignName = campaign?.name;
+      const advertiserName = campaign?.advertiser_name;
+      return {
+        ...item,
+        campaign_name: campaignName,
+        advertiser_name: advertiserName
+      };
+    });
+  }, [items]);
 
   //---> Define columns
   const columns = React.useMemo(() => {

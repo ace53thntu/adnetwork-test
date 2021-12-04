@@ -80,5 +80,15 @@ export const endpoints = {
   },
   alternative: {
     alternative: `${API_V1}/alternative`
+  },
+  report: {
+    report: `${API_V1}/report`,
+    url: 'url'
+  },
+  reportPage: {
+    reportPage: `${API_V1}/report-page`
+  },
+  metric: {
+    metric: `${API_V1}/metrics`
   }
 };

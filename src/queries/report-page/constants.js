@@ -1,0 +1,2 @@
+export const GET_REPORT_PAGES = 'GET_REPORT_PAGES';
+export const GET_REPORT_PAGE = 'GET_REPORT_PAGE';
