@@ -42,6 +42,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport} from 'queries/report';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {useChartData} from './hooks';
+import {useMetricUrlSelector} from 'store/reducers/entity-report';
 
 const initDefaultValue = ({
   initColors = [],
@@ -66,7 +67,6 @@ const initDefaultValue = ({
 export default function ModalReportForm({
   modal = false,
   toggle = () => {},
-  metricUrl = '',
   metricSet = [],
   initColors = [],
   isEdit = false,
@@ -84,6 +84,7 @@ export default function ModalReportForm({
 }) {
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
+  const metricUrl = useMetricUrlSelector();
 
   const distributionOptions = getDistributions();
   // Data sample

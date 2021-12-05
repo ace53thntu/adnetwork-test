@@ -8,18 +8,13 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {Button, CustomInput, ListGroup, ListGroupItem} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
-import {useSelector} from 'react-redux';
 
 //---> Internal Modules
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const Concept = ({goTo, isSummary = false, strategyData, isViewed}) => {
   const navigate = useNavigate();
-  const {selectedAdvertiser} = useSelector(state => state.campReducer);
-  console.log(
-    '🚀 ~ file: Concept.js ~ line 13 ~ Concept ~ advertierId',
-    selectedAdvertiser
-  );
+
   const {t} = useTranslation();
   const {id: strategyId} = useParams();
   // const {data: concepts = []} = useGetConcepts({

@@ -10,9 +10,9 @@ export function useDeleteReport() {
   const client = useQueryClient();
 
   return useMutation(
-    ({pubId}) =>
+    ({reportId}) =>
       ReportAPIRequest.deleteReport({
-        id: pubId
+        id: reportId
       }),
     {
       onError: (err, variables, rollback) => {

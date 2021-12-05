@@ -29,21 +29,10 @@ const StrategyFormDetailView = ({
   const {t} = useTranslation();
   const {gotoCampaignManagement} = useCampaignManager();
   const {data: {items: listCampaign = []} = {}} = useGetCampaigns();
-  console.log(
-    '🚀 ~ file: detail.view.js ~ line 33 ~ listCampaign',
-    listCampaign
-  );
+
   const listCampaignOptions = useDestructureCampaignOptions({
     campaigns: listCampaign
   });
-
-  const foundCampaign = listCampaign?.find(
-    item => item?.uuid === currentStrategy?.campaign_uuid
-  );
-  console.log(
-    '🚀 ~ file: detail.view.js ~ line 42 ~ foundCampaign',
-    foundCampaign
-  );
 
   const strategyData = useGetDefaultStrategy({
     strategyData: currentStrategy,
@@ -52,6 +41,7 @@ const StrategyFormDetailView = ({
     listEngine,
     listEngineFirstPrice
   });
+  const ownerId = currentStrategy?.campaign?.advertiser_uuid;
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -110,7 +100,7 @@ const StrategyFormDetailView = ({
             <EntityReport
               entity="strategy"
               entityId={currentStrategy?.uuid}
-              ownerId={foundCampaign?.advertiser_uuid}
+              ownerId={ownerId}
               ownerRole="advertiser"
             />
           )
@@ -124,10 +114,10 @@ const StrategyFormDetailView = ({
       campaignId,
       currentStrategy?.campaign_uuid,
       currentStrategy?.uuid,
-      foundCampaign?.advertiser_uuid,
       goTo,
       gotoCampaignManagement,
       isEdit,
+      ownerId,
       strategyData,
       t,
       viewOnly

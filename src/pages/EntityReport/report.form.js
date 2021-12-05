@@ -16,6 +16,8 @@ import {
 } from 'constants/report';
 import {useGenerateReportUrl} from 'queries/report';
 import {FormReactSelect} from 'components/forms';
+import {useDispatch} from 'react-redux';
+import {setMetricUrlRedux} from 'store/reducers/entity-report';
 
 const randomHex = () =>
   `#${Math.floor(Math.random() * 0xffffff)
@@ -30,11 +32,10 @@ const ReportForm = ({
   ownerId,
   ownerRole
 }) => {
+  const dispatch = useDispatch();
   const {mutateAsync: generateReportUrl} = useGenerateReportUrl();
-
   const [isLoading, setIsLoading] = React.useState(false);
   const [showReportForm, setShowReportForm] = React.useState(false);
-  const [metricUrl, setMetricUrl] = React.useState('');
 
   const methods = useForm({
     defaultValues: {
@@ -66,9 +67,8 @@ const ReportForm = ({
       name: `Strategy report - ${moment().format('DD-MM-YYYY hh:mm')}`,
       type: 'overview',
       service: 'service',
-      entity_id: parseInt(entityId, 10),
+      entity_uuid: entityId,
       entity_type: entityType,
-
       properties: {
         config: {
           chart_type: 'bar',
@@ -84,9 +84,8 @@ const ReportForm = ({
       }
     };
     try {
-      const {data: {data: {url} = {}} = {}} = await generateReportUrl(data);
-
-      setMetricUrl(url);
+      const {data: {url} = {}} = await generateReportUrl(data);
+      dispatch(setMetricUrlRedux(url));
       toggleModalReportForm();
     } catch (error) {
       // TODO: handle error generate report
@@ -140,7 +139,6 @@ const ReportForm = ({
         <ModalReportForm
           modal={showReportForm}
           toggle={toggleModalReportForm}
-          metricUrl={metricUrl}
           metricSet={seletedMetricSet}
           initColors={colors}
           metricType={metricType}

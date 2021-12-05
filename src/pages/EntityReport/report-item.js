@@ -41,10 +41,9 @@ export default function ReportItem({
   const colors = parseColors(color);
 
   const {mutateAsync: deleteReport} = useDeleteReport();
-  const {data: metrics = null, isFetched, isLoading} = useGetMetrics({
+  const {data: metrics = null, isFetched, isFetching} = useGetMetrics({
     url: reportUrl
   });
-  console.log('🚀 ~ file: report-item.js ~ line 47 ~ metrics', metrics);
 
   const metricData = useChartData({
     type: chartType,
@@ -54,7 +53,6 @@ export default function ReportItem({
     metricSet,
     entityId: entityId
   });
-  console.log('🚀 ~ file: report-item.js ~ line 56 ~ metricData', metricData);
 
   const defaultValues = useDefaultValues({reportItem});
 
@@ -63,7 +61,7 @@ export default function ReportItem({
   const [isLoadingDelete, setIsLoadingDelete] = React.useState(false);
 
   const toggleModal = () => {
-    if (!isLoading) {
+    if (!isFetching) {
       setOpenModal(prevState => !prevState);
     }
   };
@@ -103,13 +101,9 @@ export default function ReportItem({
     setShowDialogConfirm(true);
   };
 
-  if (!metricData) {
-    return <ReportItemStyled isLoading={isLoading}>No report</ReportItemStyled>;
-  }
-
   return (
     <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-      <ReportItemStyled isLoading={isLoading} onClick={handleOpenModal}>
+      <ReportItemStyled isLoading={isFetching} onClick={handleOpenModal}>
         <div className={`chx-report ${modeSelectReport ? 'd-flex' : 'd-none'}`}>
           <Checkbox
             inputProps={{'aria-label': 'primary checkbox'}}
@@ -130,7 +124,7 @@ export default function ReportItem({
             onClick={evt => evt.stopPropagation()}
           />
         </div>
-        {!isLoading && !isViewed && (
+        {!isFetching && !isViewed && (
           <div className="delete-report">
             <Button
               type="button"
@@ -142,28 +136,31 @@ export default function ReportItem({
             </Button>
           </div>
         )}
-        {isLoading && <LoadingIndicator type="ball-clip-rotate-multiple" />}
-        {isFetched && (
-          <div>
-            <ChartItem
-              series={metricData?.series}
-              categories={metricData?.categories}
-              nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
-              chartType={chartType}
-              color={colors}
-              reportId={reportId}
-              unit={unit}
-              metricSet={metricSet}
-              data={metricData?.series?.[0]?.data || []}
-            />
-            <MetricInfo
-              timeRange={timeRange}
-              unit={unit}
-              distributionBy={distributionBy}
-              metricType={metricType}
-            />
-          </div>
-        )}
+        {isFetching && <LoadingIndicator type="ball-clip-rotate-multiple" />}
+        {isFetched &&
+          (metricData ? (
+            <div>
+              <ChartItem
+                series={metricData?.series}
+                categories={metricData?.categories}
+                nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
+                chartType={chartType}
+                color={colors}
+                reportId={reportId}
+                unit={unit}
+                metricSet={metricSet}
+                data={metricData?.series?.[0]?.data || []}
+              />
+              <MetricInfo
+                timeRange={timeRange}
+                unit={unit}
+                distributionBy={distributionBy}
+                metricType={metricType}
+              />
+            </div>
+          ) : (
+            <div>No report</div>
+          ))}
       </ReportItemStyled>
 
       {openModal && defaultValues && (

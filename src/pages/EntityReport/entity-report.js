@@ -9,8 +9,9 @@ import {Col, Row} from 'reactstrap';
 import ReportList from './report-list';
 import ReportForm from './report.form';
 import {ENTITY_TYPES, METRIC_TYPES} from 'constants/report';
-import {useGetReports} from 'queries/report';
 import {LoadingIndicator} from 'components/common';
+import Pagination from 'components/list/pagination';
+import {useGetReportsInfinity} from 'queries/report/useGetReports';
 
 const NUMBER_OF_PAGE = 10;
 
@@ -23,7 +24,13 @@ const EntityReport = ({
   const entityType = ENTITY_TYPES[entity];
   const distributionBy = entityType === 'organisation' ? 'manager' : entityType;
   const metricType = METRIC_TYPES[entity];
-  const {data: {items: reports = []} = {}, isFetching} = useGetReports({
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetReportsInfinity({
     params: {
       entity_uuid: entityId,
       entity_type: entityType,
@@ -31,10 +38,13 @@ const EntityReport = ({
     },
     enabled: true
   });
-  console.log(
-    '🚀 ~ file: entity-report.js ~ line 28 ~ EntityReport ~ reports',
-    reports
-  );
+
+  const reports = React.useMemo(() => {
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      return [...acc, ...items];
+    }, []);
+  }, [pages]);
 
   return (
     <div style={{minHeight: 400, padding: 15}}>
@@ -48,6 +58,13 @@ const EntityReport = ({
             metricType={metricType}
             distributionBy={distributionBy}
           />
+          {hasNextPage && (
+            <Pagination
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
+          )}
           <hr />
           <ReportForm
             entityId={entityId}
