@@ -93,16 +93,20 @@ function Banners(props) {
 
   return (
     <>
-      <Row>
-        <Col>
-          <h5>Banners</h5>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <SwiperList slides={swiperData} />
-        </Col>
-      </Row>
+      {swiperData?.length ? (
+        <>
+          <Row>
+            <Col>
+              <h5>Banners</h5>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SwiperList slides={swiperData} />
+            </Col>
+          </Row>
+        </>
+      ) : null}
 
       <DialogConfirm
         open={isOpen}

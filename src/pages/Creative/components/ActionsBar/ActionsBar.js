@@ -27,7 +27,9 @@ function ActionsBar(props) {
 
   const [isShowFilter, setIsShowFilter] = React.useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [anchorViewAsEl, setAnchorViewAsEl] = React.useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [anchorGroupByEl, setAnchorGroupByEl] = React.useState(null);
 
   useOnClickOutside(ref, () => setIsShowFilter(false));
@@ -35,6 +37,7 @@ function ActionsBar(props) {
   const handleClickViewAsMenu = event => {
     setAnchorViewAsEl(event.currentTarget);
   };
+  // eslint-disable-next-line no-unused-vars
   const handleCloseViewAsMenu = () => {
     setAnchorViewAsEl(null);
   };
@@ -42,6 +45,7 @@ function ActionsBar(props) {
   const handleClickGroupByMenu = event => {
     setAnchorGroupByEl(event.currentTarget);
   };
+  // eslint-disable-next-line no-unused-vars
   const handleCloseGroupByMenu = () => {
     setAnchorGroupByEl(null);
   };

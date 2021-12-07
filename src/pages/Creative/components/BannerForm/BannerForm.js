@@ -80,12 +80,12 @@ function BannerForm(props) {
   }, [conceptId]);
 
   const defaultValues = React.useMemo(() => {
-    if (!!creative) {
+    if (!isCreate) {
       return creativeRepoToModel(creative);
     }
 
     return defaultFormValues;
-  }, [creative]);
+  }, [creative, isCreate]);
 
   const methods = useForm({
     defaultValues,
