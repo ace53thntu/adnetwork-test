@@ -8,7 +8,6 @@ import Code from './Code';
 import IOSInitSnippet from './IOSInitSnippet';
 import {SOURCE_FROM_TAG} from '../ContainerTree/constants';
 import {toast} from 'react-toastify';
-import {useContainerStore} from 'pages/Container/context';
 import {useParams} from 'react-router-dom';
 import {validationDescriptionTab} from './validations';
 import {FormRadioGroup, FormTextInput} from 'components/forms';
@@ -22,18 +21,27 @@ import {useGetPagesByContainer} from 'queries/page';
 import {useCountSource} from 'pages/Container/hooks/useCountSource';
 import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
 import {useCountInventory} from 'pages/Container/hooks/useCountInventory';
+import PublisherSelect from '../ContainerDetail/PublisherSelect';
+import {useGetPublisher} from 'queries/publisher';
+import {mappingFormToApi} from '../ContainerDetail/dto';
+import {useTranslation} from 'react-i18next';
+import {useContainerSelector} from 'store/reducers/container';
 
 const defaultValue = containerId => `
 <script type="text/javascript">
-window.AicactusSDK||(window.AicactusSDK={}),AicactusSDK.load=function(t){var e=document.createElement("script");e.async=!0,e.type="text/javascript",e.src="https://cdn.aicactus.io/aicactus-sdk.min.js?t="+Date.now(),e.addEventListener?e.addEventListener("load",function(e){"function"==typeof t&&t(e)},!1):e.onreadystatechange=function(){("complete"==this.readyState||"loaded"==this.readyState)&&t(window.event)};let a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(e,a)},AicactusSDK.load(function(){AicactusSDK.initialize({containerId:"${containerId}@web"}),AicactusSDK.callMethodsFromContainer()});
+  window.AicactusSDK||(window.AicactusSDK={}),AicactusSDK.load=function(t){var e=document.createElement("script");e.async=!0,e.type="text/javascript",e.src="https://cdn.aicactus.io/aicactus-sdk.min.js?t="+Date.now(),e.addEventListener?e.addEventListener("load",function(e){"function"==typeof t&&t(e)},!1):e.onreadystatechange=function(){("complete"==this.readyState||"loaded"==this.readyState)&&t(window.event)};let a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(e,a)},AicactusSDK.load(function(){AicactusSDK.initialize({containerId:"${containerId}@web"}),AicactusSDK.callMethodsFromContainer()});
 </script>
 `;
 
 function CompletedTab() {
+  const [isFetching, setIsFetching] = React.useState(true);
   const {cid, tag, pageId} = useParams();
   const currentTag = SOURCE_FROM_TAG[tag];
   const {data: containers} = useGetContainers();
-  const {data: container, isFetching} = useGetContainer(cid);
+  const {data: container, isFetched} = useGetContainer(cid);
+  const {data: publisher, isFetched: isFetchedPublisher} = useGetPublisher(
+    container?.publisher_uuid
+  );
   const {data: pages} = useGetPagesByContainer(cid);
   const countSource = useCountSource(pages);
   const {data: inventories} = useGetInventoriesByContainer({
@@ -47,6 +55,12 @@ function CompletedTab() {
   const numberOfPages = countSource?.[currentTag];
 
   const numberOfEvents = useCountInventory({data: inventories, pageId});
+
+  React.useEffect(() => {
+    if (isFetched && isFetchedPublisher) {
+      setIsFetching(false);
+    }
+  }, [isFetched, isFetchedPublisher]);
 
   if (isFetching) {
     return <div>Loading...</div>;
@@ -65,6 +79,7 @@ function CompletedTab() {
             isMobile={isMobile}
             isIOS={isIOS}
             isAndroid={isAndroid}
+            publisher={publisher}
           />
         </Card>
       </Col>
@@ -78,19 +93,25 @@ function CompleteForm({
   container,
   numberOfPages,
   numberOfEvents,
-  containers,
   isMobile = false,
   isAndroid = false,
-  isIOS = false
+  isIOS = false,
+  publisher
 }) {
-  const {updateContainer: updateContainerDispatch} = useContainerStore();
+  const {t} = useTranslation();
+  const {containers: containersRedux} = useContainerSelector();
   const {name = '', url = '', status = 'active'} = container;
-  const filteredContainer = containers?.filter(cnt => cnt.id !== container.id);
+  const filteredContainer = containersRedux?.filter(
+    cnt => cnt.uuid !== container.uuid
+  );
   const methods = useForm({
     defaultValues: {
       name,
       url,
-      status
+      status,
+      publisher_uuid: publisher
+        ? {value: publisher?.uuid, label: publisher?.name}
+        : null
     },
     resolver: validationDescriptionTab(filteredContainer)
   });
@@ -99,22 +120,22 @@ function CompleteForm({
 
   const onHandleSubmit = useCallback(
     async formValues => {
+      const formData = mappingFormToApi(formValues);
       try {
         await updateContainer({
-          cid: container.id,
-          data: formValues
+          cid: container.uuid,
+          data: formData
         });
-        updateContainerDispatch();
-        toast.success('Update container successfully!', {
+        toast.success('Updated container successfully!', {
           closeOnClick: true
         });
       } catch (error) {
-        toast.error(error, {
+        toast.error(error?.message || 'Fail to update container', {
           closeOnClick: true
         });
       }
     },
-    [container.id, updateContainer, updateContainerDispatch]
+    [container, updateContainer]
   );
 
   return (
@@ -124,6 +145,7 @@ function CompleteForm({
           <CardBody>
             <Row>
               <Col sm={12} md={6}>
+                <PublisherSelect isEdit currentContainer={container} />
                 <FormTextInput
                   isRequired
                   name="name"
@@ -196,7 +218,7 @@ function CompleteForm({
               className="ml-2 btn-primary"
               disabled={!formState.isDirty}
             >
-              Save Container
+              {t('save')}
             </ButtonLoading>
           </CardFooter>
         </form>

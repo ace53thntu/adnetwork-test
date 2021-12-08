@@ -3,12 +3,11 @@ import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {Input} from 'reactstrap';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {ContainersTree} from '../Tree';
 
-import ContainerTree from '../Tree';
 import './style.scss';
 
 export default function ContainerSidebar() {
-  console.log('xxxx');
   const reduxDispatch = useDispatch();
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function ContainerSidebar() {
         />
       </div>
       <div className="border mb-2">
-        <ContainerTree />
+        <ContainersTree />
       </div>
     </ExtendSidebar>
   );

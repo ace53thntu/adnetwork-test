@@ -44,7 +44,7 @@
     "loaders.css": "^0.1.2",
     "localforage": "^1.9.0",
     "lodash": "4.17.15",
-    "match-sorter": "^4.2.0",
+    "match-sorter": "^6.3.1",
     "moment": "2.26.0",
     "moment-timezone": "^0.5.33",
     "node-sass": "4.14.1",

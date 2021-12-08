@@ -1,4 +1,13 @@
 const en = {
+  // Inventoru
+  priceEngine: 'Price engine',
+  selectPriceEngine: 'Select Price engine',
+  marketType: 'Market type',
+  selectMartketType: 'Select martket type',
+  selectDsp: 'Select DSP',
+  selectFormat: 'Select format',
+  format: 'Format',
+
   //login
   welcomeBack: 'Welcome back,',
   signInDescription: 'Please sign in to your account below.',
@@ -208,7 +217,6 @@ const en = {
   merge: 'Merge',
   trackerTemplate: 'Tracker template',
   type: 'Type',
-  format: 'Format',
   enableDeal: 'Enable deal',
 
   //partners

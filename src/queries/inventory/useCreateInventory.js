@@ -2,7 +2,7 @@ import {InventoryAPIRequest} from 'api/inventory.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORIES} from './constants';
+import {GET_INVENTORY_BY_PAGE} from './constants';
 
 /**
  * Create a Inventory
@@ -18,11 +18,10 @@ export function useCreateInventory() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: data => {
-        console.log(
-          '🚀 ~ file: useCreateInventory.js ~ line 22 ~ useCreateInventory ~ data',
-          data
-        );
-        client.invalidateQueries([GET_INVENTORIES, data?.data?.page_uuid]);
+        client.invalidateQueries([
+          GET_INVENTORY_BY_PAGE,
+          data?.data?.page_uuid
+        ]);
       }
     }
   );

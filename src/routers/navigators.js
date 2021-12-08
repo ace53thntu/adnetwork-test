@@ -12,7 +12,7 @@ export const AudiencesNav = t => {
     {
       icon: 'pe-7s-graph2',
       label: t('audiences'),
-      to: '#/audience-management'
+      to: '#/audiences'
     }
   ];
 };

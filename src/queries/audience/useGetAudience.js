@@ -7,21 +7,21 @@ import {GET_AUDIENCE} from './constants';
 /**
  * Hook for get Audience from API by query
  */
-export function useGetAudience(aid) {
+export function useGetAudience({audienceId, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_AUDIENCE, aid],
+    [GET_AUDIENCE, audienceId],
     () =>
       AudienceAPIRequest.getAudience({
-        id: aid,
+        id: audienceId,
         options: {
           cancelToken
         }
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!aid
+      enabled
     }
   );
 }

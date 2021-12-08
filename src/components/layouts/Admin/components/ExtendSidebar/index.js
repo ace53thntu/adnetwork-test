@@ -10,7 +10,7 @@ export default function ExtendSidebar({
   children,
   isLink = false,
   path = '',
-  classes
+  classes = ''
 }) {
   const navigate = useNavigate();
 

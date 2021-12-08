@@ -1,32 +1,20 @@
+//---> Byild0in Modules
 import React, {useCallback, useMemo, useState} from 'react';
+
+//---> External Modules
 import {Button, Card, CardBody, CardTitle, CardHeader, Modal} from 'reactstrap';
 
-// component
-import CreateInventory from './CreateInventory';
-import UpdateInventory from './UpdateInventory';
-
-// hooks
+//---> Internal Modules
 import {EVENT_TYPES_VALUE} from 'pages/Container/constants';
-// import {useContainerStore} from 'pages/Container/context';
-// import {getRole} from 'core/utils/auth';
-// import {SYS_ADMIN} from 'core/constants/roles';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import Table, {TableStatusCell} from 'components/table';
-import {useGetInventoriesByContainer} from 'queries/inventory/useGetInventoriesByContainer';
-import {useParams} from 'react-router-dom';
-import useGetInventories from 'pages/Container/hooks/useGetInventories';
 import {useDeleteInventory} from 'queries/inventory';
+import CreateInventory from './CreateInventory';
+import UpdateInventory from './UpdateInventory';
 
-function Inventories({pageId}) {
-  // const userRole = getRole();
+function Inventories({pageId, inventories = []}) {
   const isSysAdmin = true; //userRole === SYS_ADMIN;
-  const {cid: containerId} = useParams();
-  // const [page, setPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(5);
-
-  const {data: pages} = useGetInventoriesByContainer({containerId, pageId});
-  const inventories = useGetInventories({pages: pages?.pages, pageId});
 
   const {mutateAsync: deleteInventory} = useDeleteInventory();
   // const {unlockTree} = useContainerStore();
@@ -36,14 +24,6 @@ function Inventories({pageId}) {
   const [inventoryId, setInventoryId] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const isMobile = tag === 'android-tag' || tag === 'ios-tag';
-
-  // useEffect(() => {
-  //   if (!isFetching) {
-  //     unlockTree();
-  //   }
-  // }, [isFetching, unlockTree]);
 
   const onHandleAddEvent = ev => {
     setIsOpen(true);

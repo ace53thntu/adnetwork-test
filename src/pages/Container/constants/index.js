@@ -10,8 +10,8 @@ export const IMPORT_FILE_LOCATIONS = [
 ];
 export const WEB_TAG_STEPS = [
   {
-    label: 'Pages and Inventories',
-    title: 'Pages and Inventories to container'
+    label: 'Page and Inventories',
+    title: 'Page and Inventories to container'
   },
   {
     label: 'Overview',
@@ -20,8 +20,8 @@ export const WEB_TAG_STEPS = [
 ];
 export const IOS_TAG_STEPS = [
   {
-    label: 'Screens and Inventories',
-    title: 'Screens and Inventories to container'
+    label: 'Screen and Inventories',
+    title: 'Screen and Inventories to container'
   },
   {
     label: 'Overview',

@@ -5,7 +5,6 @@ import {useForm, FormProvider} from 'react-hook-form';
 import {Button, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 import {validationPage} from './validations';
-import {useContainerStore} from '../../context';
 import {TAG_FROM_SOURCE} from '../ContainerTree/constants';
 import {getContainerTags} from 'pages/Container/constants';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
@@ -21,7 +20,6 @@ function CreatePage({
 }) {
   const {cid, pageId} = useParams();
   const navigate = useNavigate();
-  const {createPage: dispatchCreatePage} = useContainerStore();
   const {data: pages = []} = useGetPagesByContainer(cid);
 
   const isMobile = source === 'ios' || source === 'android';
@@ -86,13 +84,6 @@ function CreatePage({
         context
       };
 
-      /**
-       * Khi tạo 1 page thì sẽ auto tạo 1 page event
-       * sau đó sẽ tạo thêm default properties cho page event nữa
-       * Các default props ở đây:
-       * https://aicactus.atlassian.net/wiki/spaces/DMP/pages/54263829/Page
-       */
-
       try {
         const {data} = await createPage(pageData);
         toggle();
@@ -109,8 +100,6 @@ function CreatePage({
             `/container/${cid}/${TAG_FROM_SOURCE[source]}/${data?.uuid}`
           );
         }
-
-        dispatchCreatePage();
       } catch (error) {
         ShowToast.error(error, {
           closeOnClick: true
@@ -119,16 +108,7 @@ function CreatePage({
         // setIsLoading(false);
       }
     },
-    [
-      cid,
-      createPage,
-      dispatchCreatePage,
-      isMobile,
-      navigate,
-      pageId,
-      source,
-      toggle
-    ]
+    [cid, createPage, isMobile, navigate, pageId, source, toggle]
   );
 
   return (

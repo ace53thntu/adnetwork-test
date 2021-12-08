@@ -24,7 +24,9 @@ class TreeNode extends Component {
     if (!useLocalState && node.numChildren !== state.numChildren) {
       return {
         numChildren: node.numChildren,
-        children: node.children
+        children: node.children,
+        selected: node.selected,
+        expanded: node.expanded
       };
     }
 

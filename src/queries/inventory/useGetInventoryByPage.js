@@ -6,14 +6,14 @@ import {GET_INVENTORY_BY_PAGE} from './constants';
 /**
  * Hook for get Inventory from API by query
  */
-export function useGetInventoryByPage(pageId) {
+export function useGetInventoryByPage(pageId, params = {}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
     [GET_INVENTORY_BY_PAGE, pageId],
     () =>
       InventoryAPIRequest.getAllInventory({
-        params: {page_uuid: pageId},
+        params: {...params, page_uuid: pageId},
         options: {
           cancelToken
         }

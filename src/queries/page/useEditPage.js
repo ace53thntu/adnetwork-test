@@ -12,9 +12,9 @@ export function useEditPage() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cid, data}) =>
+    ({pageId, data}) =>
       PageAPIRequest.editPage({
-        id: cid,
+        id: pageId,
         data,
         options: {cancelToken}
       }),

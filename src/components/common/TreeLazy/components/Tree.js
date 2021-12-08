@@ -19,8 +19,25 @@ import DEFAULT_PAGINATOR from './Paginator';
 import TreeNode from './TreeNode';
 
 class Tree extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      paginatorLoading: false
+    };
+  }
+
   // default loadChildren implementation to be overridden via props
   loadChildren = async (node, pageLimit, page) => node.children;
+
+  handleLoadMoreInRoot = async e => {
+    this.setState({
+      paginatorLoading: true
+    });
+    await this.props.handleLoadMoreInRoot(e);
+    this.setState({
+      paginatorLoading: false
+    });
+  };
 
   render() {
     const {
@@ -46,7 +63,7 @@ class Tree extends Component {
       useLocalState,
       paginated,
       doubleClickSelect,
-      handleLoadMoreInRoot,
+      // handleLoadMoreInRoot,
       isLast = true
     } = this.props;
 
@@ -87,12 +104,15 @@ class Tree extends Component {
             <CSSTransition classNames="fade-in" timeout={200}>
               <>
                 <div>
-                  <Paginator
-                    theme={theme}
-                    indentWidth={indentWidth}
-                    depth={depth}
-                    onClick={e => handleLoadMoreInRoot(e)}
-                  />
+                  {this.state.paginatorLoading && <Loading theme={theme} />}
+                  {!this.state.paginatorLoading && (
+                    <Paginator
+                      theme={theme}
+                      indentWidth={indentWidth}
+                      depth={depth}
+                      onClick={e => this.handleLoadMoreInRoot(e)}
+                    />
+                  )}
                 </div>
               </>
             </CSSTransition>

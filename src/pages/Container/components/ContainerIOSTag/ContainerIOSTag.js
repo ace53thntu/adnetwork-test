@@ -2,17 +2,15 @@ import React, {useState, useCallback} from 'react';
 import {Nav, NavItem, Button, TabContent, TabPane, Container} from 'reactstrap';
 import {useParams} from 'react-router-dom';
 
-import {useContainerStore} from '../../context';
 import {IOS_TAG_STEPS} from '../../constants';
 import EmptyPage from './EmptyPage';
 import ScreensAndEvents from './ScreensAndEvents';
 import CompletedTab from '../ContainerWebsiteTag/CompletedTab';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
+import Inventories from '../ContainerWebsiteTag/Inventories';
 
-function ContainerIOSTag({pageId}) {
+function ContainerIOSTag({pageId, inventories = []}) {
   const {tag} = useParams();
-  const {state} = useContainerStore();
-  const {selectedPage} = state;
 
   // local states
   const [activeStep, setActiveStep] = useState(0);
@@ -36,7 +34,9 @@ function ContainerIOSTag({pageId}) {
               pageId === 'create' ? (
                 <EmptyPage tabProps={tabProps} />
               ) : (
-                <ScreensAndEvents tabProps={tabProps} pageId={pageId} />
+                <ScreensAndEvents tabProps={tabProps} pageId={pageId}>
+                  <Inventories pageId={pageId} inventories={inventories} />
+                </ScreensAndEvents>
               )
             ) : (
               <div>Loading...</div>
@@ -53,7 +53,7 @@ function ContainerIOSTag({pageId}) {
   return (
     <>
       <PageTitleAlt
-        heading={tag === 'ios-tag' ? 'iOS' : 'Android'}
+        heading={tag === 'ios' ? 'iOS' : 'Android'}
         subheading="Online tracking"
         icon="pe-7s-plane icon-gradient bg-tempting-azure"
       />
@@ -74,7 +74,7 @@ function ContainerIOSTag({pageId}) {
                     onClick={() => {
                       onChangeTab(index);
                     }}
-                    disabled={index === 2 && !selectedPage ? true : false}
+                    disabled={index === 2 ? true : false}
                   >
                     {label}
                   </Button>

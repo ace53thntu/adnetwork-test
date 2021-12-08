@@ -19,10 +19,6 @@ const ManagerCampaign = ({listAdvertisers}) => {
   const mode = query.get('mode') || 'strategy';
   const {goToCreate, gotoCreateStrategy} = useCampaignManager();
   const [typeView, setTypeView] = useState('');
-  console.log(
-    '🚀 ~ file: ManagerCampaign.js ~ line 22 ~ ManagerCampaign ~ typeView',
-    typeView
-  );
 
   const {t} = useTranslation();
 

@@ -1,94 +1,731 @@
+import {original} from 'immer';
+import {matchSorter} from 'match-sorter';
+import {CONTAINER_TREE_SOURCES} from 'pages/Container/components/Tree/constants';
+import {
+  unSelectedAndUnExpanded,
+  unSelectedChild
+} from 'pages/Container/components/Tree/utils';
+import {useSelector} from 'react-redux';
+
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
 
-const SELECT_CONTAINER = '@container/SELECT_CONTAINER';
-const SELECT_PAGE = '@container/SELECT_PAGE';
-const SELECT_INVENTORY = '@container/SELECT_INVENTORY';
-const RELOAD_TREE = '@container/RELOAD_TREE';
-const SET_VIEW = '@container/SET_VIEW';
-const CREATE_ACTION = '@container/CREATE_ACTION';
-const SELECT_ITEM = '@container/SELECT_ITEM';
+// dispatch action types
+const RESET = '@container/RESET';
+const SHOULD_REFETCH_CONTAINER = '@container/SHOULD_REFETCH_CONTAINER';
+const CONTAINERS = '@container/CONTAINERS';
+const SELECT_CONTAINER_ID = '@container/SELECT_CONTAINER_ID';
+const EXPAND_CONTAINER = '@container/EXPAND_CONTAINER';
+const SET_CONTAINER = '@container/SET_CONTAINER';
+const UN_EXPAND_CONTAINERS = '@container/UN_EXPAND_CONTAINERS';
+const UPDATED_CONTAINER = '@container/UPDATED_CONTAINER';
+const SEARCH_CONTAINERS = '@container/SEARCH_CONTAINERS';
+const TOGGLE_CREATE_CONTAINER_MODAL =
+  '@container/TOGGLE_CREATE_CONTAINER_MODAL';
 
-export const CONTAINER_VIEWS = {
-  container: 'container',
-  containerDetail: 'containerDetail',
-  pageDetail: 'pageDetail',
-  inventoryDetail: 'inventoryDetail'
+const EXPAND_SOURCE = '@container/EXPAND_SOURCE';
+const SET_FLAG_ALREADY = '@container/SET_FLAG_ALREADY';
+const TOGGLE_CREATE_EVENT = '@container/TOGGLE_CREATE_EVENT';
+const EVENT_PAGING = '@container/EVENT_PAGING';
+
+const TOGGLE_CREATE_PAGE_MODAL = '@container/TOGGLE_CREATE_PAGE_MODAL';
+const DELETE_PAGE = '@container/DELETE_PAGE';
+const UPDATE_PAGE = '@container/UPDATE_PAGE';
+const CREATED_PAGE = '@container/CREATED_PAGE';
+
+const CREATED_IMPORT_OR_TRANSFER = '@container/CREATED_IMPORT_OR_TRANSFER';
+
+// dispatch actions
+export const resetContainerRedux = () => {
+  return createAction(RESET, {});
 };
-
-export const CONTAINER_CREATE_ACTION = {
-  container: 'container',
-  page: 'page',
-  inventory: 'inventory'
+export const shouldRefetchContainerRedux = flag => {
+  return createAction(SHOULD_REFETCH_CONTAINER, {flag});
 };
-
-export const selectItem = id => createAction(SELECT_ITEM, {id});
-
-export const selectContainer = containerId =>
-  createAction(SELECT_CONTAINER, {containerId});
-
-export const selectPage = pageId => createAction(SELECT_PAGE, {pageId});
-
-export const selectInventory = inventoryId =>
-  createAction(SELECT_INVENTORY, {inventoryId});
-
-export const reloadTree = shouldReload =>
-  createAction(RELOAD_TREE, {shouldReload});
-
-export const setViewContainer = view => createAction(SET_VIEW, {view});
-
-export const containerCreateAction = action =>
-  createAction(CREATE_ACTION, {action});
+export const setContainersRedux = data => {
+  return createAction(CONTAINERS, {data});
+};
+export const selectContainerRedux = (containerId, container) => {
+  return createAction(SELECT_CONTAINER_ID, {containerId, container});
+};
+export const expandContainerRedux = (containerId, state) => {
+  return createAction(EXPAND_CONTAINER, {containerId, state});
+};
+export const expandSourceRedux = (sourceId, state, containerId) => {
+  return createAction(EXPAND_SOURCE, {sourceId, state, containerId});
+};
+export const setContainerRedux = (container, source, pageId) => {
+  return createAction(SET_CONTAINER, {container, source, pageId});
+};
+export const unExpandContainersRedux = () => {
+  return createAction(UN_EXPAND_CONTAINERS, {});
+};
+export const deletePageRedux = () => {
+  return createAction(DELETE_PAGE, {});
+};
+export const setFlagAlready = flag => {
+  return createAction(SET_FLAG_ALREADY, {flag});
+};
+export const updatePageRedux = ({pageId, name}) => {
+  return createAction(UPDATE_PAGE, {name, pageId});
+};
+export const toggleCreateEventRedux = eventId => {
+  return createAction(TOGGLE_CREATE_EVENT, {eventId});
+};
+export const eventPagingRedux = paging => {
+  return createAction(EVENT_PAGING, {paging});
+};
+export const toggleCreatePageModalRedux = source => {
+  return createAction(TOGGLE_CREATE_PAGE_MODAL, {source});
+};
+export const createdPageRedux = () => {
+  return createAction(CREATED_PAGE, {});
+};
+export const updatedContainerRedux = container => {
+  return createAction(UPDATED_CONTAINER, {container});
+};
+export const searchContainersRedux = keyword => {
+  return createAction(SEARCH_CONTAINERS, {keyword});
+};
+export const toggleCreateContainerModalRedux = () => {
+  return createAction(TOGGLE_CREATE_CONTAINER_MODAL, {});
+};
+export const createdImportRedux = (source, container) => {
+  return createAction(CREATED_IMPORT_OR_TRANSFER, {container, source});
+};
 
 const containerInitialState = {
-  selectedContainer: null,
-  selectedPage: null,
-  selectedInventory: null,
-  shouldReloadTree: false,
-  createAction: null,
-  view: CONTAINER_VIEWS.container,
-  selectedId: null
+  containers: [],
+  containersTemp: [],
+  isLoading: true,
+  selectedContainerId: null,
+  expandedIds: [],
+  selectedSource: null,
+  container: null,
+  selectedPageId: null,
+  alreadySetContainer: false,
+  toggleCreateEvent: false,
+  toggleCreatePageModal: false,
+  toggleCreateContainerModal: false,
+  eventId: null,
+  eventPaging: {
+    page: 1,
+    perPage: 5
+  },
+  keyword: '',
+  shouldRefetchContainer: false
 };
 
 const handleActions = {
-  [SELECT_CONTAINER]: handleSelectContainer,
-  [RELOAD_TREE]: handleReloadTree,
-  [CREATE_ACTION]: handleCreateAction,
-  [SET_VIEW]: handleSetView,
-  [SELECT_PAGE]: handleSelectPage,
-  [SELECT_INVENTORY]: handleSelectInventory,
-  [SELECT_ITEM]: handleSelectItem
+  [RESET]: handleReset,
+  [SHOULD_REFETCH_CONTAINER]: handleShouldRefetchContainer,
+  [CONTAINERS]: handleSetContainers,
+  [SET_CONTAINER]: handleSetContainer,
+  [SELECT_CONTAINER_ID]: handleSelectContainer,
+  [EXPAND_CONTAINER]: handleExpandContainer,
+  [UN_EXPAND_CONTAINERS]: handleUnExpandContainers,
+  [UPDATED_CONTAINER]: handleUpdatedContainer,
+  [SEARCH_CONTAINERS]: handleSearchContainers,
+  [TOGGLE_CREATE_CONTAINER_MODAL]: handleToggleCreateContainerModal,
+
+  [EXPAND_SOURCE]: handleExpandSource,
+  [SET_FLAG_ALREADY]: handleSetFlagAlready,
+
+  [DELETE_PAGE]: handleDeletePage,
+  [UPDATE_PAGE]: handleUpdatePage,
+  [TOGGLE_CREATE_PAGE_MODAL]: handleCreatePageModal,
+
+  [TOGGLE_CREATE_EVENT]: handleToggleCreateEvent,
+  [EVENT_PAGING]: handleEventPaging,
+  [CREATED_IMPORT_OR_TRANSFER]: handleCreatedImport
 };
 
-function handleSelectItem(state, action) {
-  state.selectedId = action.payload.id;
+function handleReset(state) {
+  state.containers = [];
+  state.containersTemp = [];
+  state.isLoading = true;
+  state.selectedContainerId = null;
+  state.expandedIds = [];
+  state.selectedSource = null;
+  state.container = null;
+  state.selectedPageId = null;
+  state.alreadySetContainer = false;
+  state.toggleCreateEvent = false;
+  state.toggleCreatePageModal = false;
+  state.toggleCreateContainerModal = false;
+  state.eventId = null;
+  state.eventPaging = {
+    page: 1,
+    perPage: 5
+  };
+  state.keyword = '';
+  state.shouldRefetchContainer = false;
+}
+
+function handleShouldRefetchContainer(state, action) {
+  state.shouldRefetchContainer = action.payload.flag;
+}
+
+function handleSetContainers(state, action) {
+  const {data} = action.payload;
+
+  state.containers = data;
+  state.containersTemp = data;
+  state.isLoading = false;
 }
 
 function handleSelectContainer(state, action) {
-  state.selectedContainer = action.payload.containerId;
+  const {containerId, container} = action.payload;
+
+  const newNodes = [...state.containers].map(item => {
+    if (item.id === containerId) {
+      return {
+        ...item,
+        selected: true,
+        children: [...item.children].map(child => unSelectedChild(child))
+      };
+    }
+    return unSelectedAndUnExpanded(item);
+  });
+  state.selectedContainerId = containerId;
+  state.containers = newNodes;
+  state.keyword = '';
+  state.container = container;
+  state.selectedSource = null;
+  state.selectedPageId = null;
 }
 
-function handleSelectPage(state, action) {
-  state.selectedPage = action.payload.pageId;
+function handleExpandContainer(state, action) {
+  const {containerId, state: nodeState} = action.payload;
+  console.log('state.expandedIds', original(state.expandedIds), containerId);
+  if (state.expandedIds.includes(containerId)) {
+    state.expandedIds = state.expandedIds.filter(
+      advId => advId !== containerId
+    );
+  } else {
+    state.expandedIds = [...state.expandedIds, containerId];
+  }
+
+  const newNodes = [...state.containers].map(item => {
+    console.log(
+      '🚀 ~ file: container.js ~ line 210 ~ handleExpandContainer ~ item',
+      item
+    );
+    if (item.id === containerId) {
+      return {
+        ...item,
+        expanded: !item.expanded,
+        ...nodeState
+        // selected: !item.selected
+      };
+    }
+    if (item.id !== state.selectedContainerId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.containers = newNodes;
 }
 
-function handleSelectInventory(state, action) {
-  state.selectedInventory = action.payload.inventoryId;
+function handleSetContainer(state, action) {
+  const {container, source, pageId} = action.payload;
+
+  const newNodes = [...state.containers].map(item => {
+    if (item.id === container.id) {
+      //
+      if (!item.expanded) {
+        let containerItem = {
+          ...item,
+          expanded: true,
+          selected: false
+        };
+
+        const {
+          import_count,
+          transfer_count,
+          source: containerSource
+        } = container;
+
+        if (source === 'import' && import_count === 0) {
+          containerItem.selected = true;
+        }
+        if (source === 'transfer' && transfer_count === 0) {
+          containerItem.selected = true;
+        }
+
+        let children = [];
+
+        if (!!containerSource && Object.keys(containerSource).length) {
+          Object.keys(containerSource).forEach((sourceKey, index) => {
+            children.push({
+              id: sourceKey,
+              name: CONTAINER_TREE_SOURCES[sourceKey],
+              children: [],
+              numChildren: containerSource[sourceKey]?.length ?? 0,
+              page: 0,
+              expanded: false,
+              selected: false,
+              parentId: container.id,
+              isSource: true
+            });
+          });
+        }
+
+        if (import_count > 0) {
+          children.push({
+            id: 'import',
+            name: CONTAINER_TREE_SOURCES.import,
+            children: [],
+            numChildren: 0,
+            page: 0,
+            expanded: false,
+            selected: source === 'import',
+            parentId: container.id,
+            isSource: true
+          });
+        }
+
+        if (transfer_count > 0) {
+          children.push({
+            id: 'transfer',
+            name: CONTAINER_TREE_SOURCES.transfer,
+            children: [],
+            numChildren: 0,
+            page: 0,
+            expanded: false,
+            selected: source === 'transfer',
+            parentId: container.id,
+            isSource: true
+          });
+        }
+
+        containerItem.children = children.map(child => {
+          if (child.id === source) {
+            let sourceItem = {
+              ...child,
+              expanded: true,
+              selected: false
+            };
+
+            if (child.id !== 'import' && child.id !== 'transfer') {
+              const sourceChildren = container?.source?.[source]?.map(
+                (sourceData, index) => {
+                  const {id, name} = sourceData;
+
+                  return {
+                    id,
+                    name: name,
+                    children: [],
+                    numChildren: 0,
+                    page: 0,
+                    expanded: false,
+                    selected: pageId === id,
+                    parentId: child.id,
+                    isPage: true,
+                    containerId: container.id
+                  };
+                }
+              );
+              sourceItem.children = sourceChildren;
+            } else {
+              sourceItem.selected = true;
+            }
+
+            return sourceItem;
+          }
+          return {
+            ...child,
+            selected: false,
+            expanded: false
+          };
+        });
+
+        if (item.numChildren <= 0) {
+          containerItem.numChildren = containerItem.children.length;
+        }
+        return containerItem;
+      } else {
+        const isExistSource = !!item.children.find(
+          sourceNe => sourceNe.id === source
+        );
+
+        if (isExistSource) {
+          return {
+            ...item,
+            expanded: true,
+            selected: false,
+            children: [...item.children].map(child => {
+              if (child.id === source) {
+                let sourceItem = {
+                  ...child,
+                  expanded: true,
+                  selected: false
+                };
+                const sourceChildren = container?.source?.[source]?.map(
+                  (sourceData, index) => {
+                    const {id, name} = sourceData;
+                    return {
+                      id,
+                      name: name,
+                      children: [],
+                      numChildren: 0,
+                      page: 0,
+                      expanded: false,
+                      selected: pageId === id,
+                      // selected: state.selectedPageId === id index === 0,
+                      parentId: child.id,
+                      isPage: true,
+                      containerId: container.id
+                    };
+                  }
+                );
+                sourceItem.children = sourceChildren;
+
+                if (source === 'import' || source === 'transfer') {
+                  sourceItem.selected = true;
+                }
+
+                return sourceItem;
+              }
+              return {
+                ...child,
+                selected: false,
+                children: child?.children
+                  ? original(child.children)?.map(unSelectedChild) ?? []
+                  : []
+              };
+            })
+          };
+        } else {
+          if (source !== 'import' && source !== 'transfer') {
+            const newSource = container.source?.[source];
+
+            let children = item.children.map(child =>
+              unSelectedAndUnExpanded(child)
+            );
+
+            if (newSource) {
+              const sourceChildren = newSource?.map((sourceData, index) => {
+                const {id, name} = sourceData;
+
+                return {
+                  id,
+                  name,
+                  children: [],
+                  numChildren: 0,
+                  page: 0,
+                  expanded: false,
+                  selected: pageId === id,
+                  parentId: source,
+                  isPage: true,
+                  containerId: container.id
+                };
+              });
+              children.push({
+                id: source,
+                name: CONTAINER_TREE_SOURCES[source],
+                children: sourceChildren,
+                numChildren: newSource?.length ?? 0,
+                page: 0,
+                expanded: true,
+                selected: false,
+                parentId: container.id,
+                isSource: true
+              });
+              let containerItem = {
+                ...item,
+                source: {
+                  ...item.source,
+                  [source]: newSource?.length ?? 0
+                },
+                expanded: true,
+                selected: false,
+                children,
+                numChildren: children.length
+              };
+              console.log('---containerItem: ', containerItem);
+              return containerItem;
+            }
+            let containerItem = {
+              ...item,
+              expanded: true,
+              selected: false,
+              children,
+              numChildren: children.length
+            };
+            console.log('---containerItem: ', containerItem);
+            return containerItem;
+          } else {
+            const {import_count, transfer_count} = container;
+            let containerItem = {
+              ...item,
+              expanded:
+                source === 'import'
+                  ? import_count > 0
+                  : source !== 'transfer'
+                  ? transfer_count > 0
+                  : false,
+              selected: false
+            };
+            if (source === 'import' && import_count === 0) {
+              containerItem.selected = true;
+            }
+            if (source === 'transfer' && transfer_count === 0) {
+              containerItem.selected = true;
+            }
+
+            let children = item.children.map(child => {
+              if (child.id === source) {
+                return {
+                  ...child,
+                  selected: true
+                };
+              }
+              return unSelectedChild(child);
+            });
+
+            containerItem.children = children;
+
+            return containerItem;
+          }
+        }
+      }
+    }
+    return unSelectedChild(item);
+  });
+  state.containers = newNodes;
+  state.containersTemp = newNodes.map(item => unSelectedChild(item));
+  state.container = container;
+  state.selectedContainerId = container.id;
+  state.selectedSource = source;
+  state.selectedPageId = pageId;
+  state.alreadySetContainer = pageId ? true : false;
 }
 
-function handleReloadTree(state, action) {
-  state.shouldReloadTree = action.payload.shouldReload;
+function handleUnExpandContainers(state, action) {
+  state.container = null;
+  state.selectedContainerId = null;
+  state.selectedSource = null;
+  state.selectedPageId = null;
+  state.containers = state.containersTemp;
+  state.expandedIds = [];
+  state.alreadySetContainer = false;
+  state.keyword = '';
 }
 
-function handleCreateAction(state, action) {
-  state.createAction = action.payload.action;
+function handleExpandSource(state, action) {
+  console.log('action.payload', action.payload);
+  const {sourceId, state: nodeState, containerId} = action.payload;
+  const newNodes = [...state.containers].map(item => {
+    if (item.id === containerId) {
+      return {
+        ...item,
+        children: item.children.map(child => {
+          if (child.id === sourceId) {
+            return {
+              ...child,
+              ...nodeState
+            };
+          }
+          return child;
+        })
+
+        // selected: !item.selected
+      };
+    }
+    if (item.id !== state.selectedContainerId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.containers = newNodes;
 }
 
-function handleSetView(state, action) {
-  state.view = action.payload.view;
+function handleDeletePage(state, action) {
+  const newNodes = [...state.containers].map(item => {
+    if (item.id === state.selectedContainerId) {
+      let isExistPage = true;
+      let updatedChild = item.children.map(source => {
+        if (source.id === state.selectedSource) {
+          let updatedSource = {
+            ...source
+          };
+          updatedSource.children = source.children.filter(
+            page => page.id !== state.selectedPageId
+          );
+          if (!updatedSource.children.length) {
+            isExistPage = false;
+          }
+          return updatedSource;
+        }
+        return source;
+      });
+
+      if (!isExistPage) {
+        updatedChild = item.children.filter(
+          source => source.id !== state.selectedSource
+        );
+      }
+
+      return {
+        ...item,
+        selected: true,
+        children: updatedChild,
+        expanded: updatedChild?.length ? true : false,
+        numChildren: updatedChild.length
+      };
+    }
+    if (item.id !== state.selectedContainerId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.containers = newNodes;
+  state.selectedSource = null;
+  state.selectedPageId = null;
+}
+
+function handleSetFlagAlready(state, action) {
+  state.alreadySetContainer = action.payload.flag;
+}
+
+function handleUpdatePage(state, action) {
+  const {name, pageId} = action.payload;
+  const newNodes = [...state.containers].map(item => {
+    if (item.id === state.selectedContainerId) {
+      return {
+        ...item,
+        children: item.children.map(child => {
+          if (child.id === state.selectedSource) {
+            return {
+              ...child,
+              children: child.children.map(page => {
+                if (page.id === pageId) {
+                  return {
+                    ...page,
+                    name
+                  };
+                }
+                return page;
+              })
+            };
+          }
+          return child;
+        })
+      };
+    }
+    if (item.id !== state.selectedContainerId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.containers = newNodes;
+}
+
+function handleToggleCreateEvent(state, action) {
+  state.toggleCreateEvent = !state.toggleCreateEvent;
+  state.eventId = action.payload.eventId;
+}
+
+function handleEventPaging(state, action) {
+  const {paging} = action.payload;
+  state.eventPaging = paging;
+}
+
+function handleCreatePageModal(state, action) {
+  const {source} = action.payload;
+
+  state.toggleCreatePageModal = !state.toggleCreatePageModal;
+  if (source) {
+    state.selectedSource = source;
+  }
+}
+
+function handleUpdatedContainer(state, action) {
+  const {container} = action.payload;
+
+  state.container = container;
+  state.containers = [...state.containers].map(item => {
+    if (item.id === container.id) {
+      const {name, url, status} = container;
+      return {
+        ...item,
+        name,
+        url,
+        status
+      };
+    }
+    return item;
+  });
+}
+
+function handleSearchContainers(state, action) {
+  const {keyword} = action.payload;
+  state.keyword = keyword;
+  if (keyword?.length) {
+    const newContainers = matchSorter(original(state.containersTemp), keyword, {
+      keys: [
+        {
+          threshold: matchSorter.rankings.CONTAINS,
+          key: ['name']
+        }
+      ]
+    });
+    state.containers = newContainers;
+  } else {
+    //
+    state.containers = state.containersTemp;
+  }
+}
+
+function handleToggleCreateContainerModal(state, action) {
+  state.toggleCreateContainerModal = !state.toggleCreateContainerModal;
+}
+
+function handleCreatedImport(state, action) {
+  const {container, source} = action.payload;
+  state.container = container;
+  state.containers = state.containers.map(containerItem => {
+    if (containerItem.id === container.id) {
+      let updatedContainerItem = {
+        ...containerItem
+      };
+      updatedContainerItem.importCount += 1;
+      const isExistImport = !!containerItem.children.find(
+        child => child.id === source
+      );
+      if (!isExistImport) {
+        updatedContainerItem.children.push({
+          expanded: true,
+          id: source,
+          isSource: true,
+          name: CONTAINER_TREE_SOURCES[source],
+          numChildren: 0,
+          page: 0,
+          parentId: containerItem.id,
+          selected: true,
+          children: []
+        });
+        updatedContainerItem.expanded = true;
+        updatedContainerItem.selected = false;
+        updatedContainerItem.numChildren += 1;
+      }
+
+      return updatedContainerItem;
+    }
+    return containerItem;
+  });
+}
+
+// hook to use container reducer
+export function useContainerSelector() {
+  const state = useSelector(state => state.containerReducer);
+  return state;
 }
 
 export const containerReducer = (
   initialState = containerInitialState,
   action
-) => createReducer(initialState, action, handleActions);
+) => {
+  return createReducer(initialState, action, handleActions);
+};

@@ -22,9 +22,10 @@ function PageLayout({
   isError = false,
   loading = false
 }) {
+  console.log('🚀 ~ file: PageLayout.js ~ line 25 ~ pageId', pageId);
   const navigate = useNavigate();
-  const {cid: containerId, tag} = useParams();
-  const {mutateAsync: deletePage} = useDeletePage({containerId, tag});
+  const {cid: containerId} = useParams();
+  const {mutateAsync: deletePage} = useDeletePage();
 
   const [isOpenCreatePage, setIsOpenCreatePage] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -36,20 +37,20 @@ function PageLayout({
   const handleDeletePage = useCallback(async () => {
     setIsLoading(true);
     try {
-      await deletePage({pageId, containerId, tag});
+      await deletePage({pageId});
       setIsLoading(false);
       setOpenConfirm(false);
       ShowToast.success(`Delete ${isIOS ? 'screen' : 'page'} successfully!`, {
         closeOnClick: true
       });
-      navigate(`/container/${containerId}/${tag}`);
+      navigate(`/container/${containerId}`);
     } catch (error) {
       setIsLoading(false);
       ShowToast.error(error, {
         closeOnClick: true
       });
     }
-  }, [containerId, deletePage, isIOS, navigate, pageId, tag]);
+  }, [containerId, deletePage, isIOS, navigate, pageId]);
 
   return (
     <>

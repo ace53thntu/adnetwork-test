@@ -1,8 +1,4 @@
-// export const getValueOfProperty = (propVal, propType) => {
-
-// }
-
-export const destructureFormData = (pageId, formData) => {
+export const mappingInventoryFormToApi = ({pageId, formData}) => {
   const {
     name,
     format,
@@ -14,7 +10,10 @@ export const destructureFormData = (pageId, formData) => {
     status,
     tracker_template_uuid = 0,
     type,
-    enable_deal
+    enable_deal,
+    market_type,
+    price_engine,
+    market_dsps
   } = formData;
 
   const formatData = format?.value;
@@ -28,6 +27,10 @@ export const destructureFormData = (pageId, formData) => {
     tags: metadata?.tags?.map(item => item?.value)
   };
 
+  const marketDsps = market_dsps
+    ? Array.from(market_dsps, dsp => dsp?.value)
+    : [];
+
   return {
     page_uuid: pageId,
     name,
@@ -40,6 +43,9 @@ export const destructureFormData = (pageId, formData) => {
     metadata: formatMetadata,
     position_id: position_id?.value,
     tracker_template_uuid: tracker_template_uuid?.value,
-    enable_deal: enable_deal === 'active' ? true : false
+    enable_deal: enable_deal === 'active' ? true : false,
+    price_engine: price_engine?.value || null,
+    market_type: market_type?.value || null,
+    market_dsps: marketDsps
   };
 };

@@ -1,4 +1,4 @@
-import matchSorter from 'match-sorter';
+import {matchSorter} from 'match-sorter';
 
 export const filterStringByKey = (rows, value, key) =>
   matchSorter(rows, value, {keys: [key]});

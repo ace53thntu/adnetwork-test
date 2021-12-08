@@ -1,29 +1,17 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {Row, Col} from 'reactstrap';
 
 // components
 import PageLayout from '../PageLayout';
 import Page from './Page';
-import Inventories from './Inventories';
 import {useGetPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
 
-// queries, mutations
-// import {useGetPageTypes, useGetPageTags} from 'core/queries/containers';
-
-function PageEventsTab({tabProps: {title}, pageId}) {
+function PageEventsTab({tabProps: {title}, pageId, children}) {
   const {data: page, status, isFetching, isError, error} = useGetPage(pageId);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const pageTypes = []; //useGetPageTypes();
   const pageTags = getContainerTags(); //useGetPageTags();
-
-  const newPageTypes = useMemo(() => {
-    return pageTypes?.map(item => ({
-      id: item,
-      name: item
-    }));
-  }, [pageTypes]);
 
   const hasPage = !!page;
 
@@ -33,10 +21,9 @@ function PageEventsTab({tabProps: {title}, pageId}) {
     <PageLayout
       title={title}
       hasPage={hasPage}
-      pageTypes={newPageTypes}
       pageTags={pageTags}
       pageName={page?.name}
-      pageId={page?.id}
+      pageId={page?.uuid}
       source={page?.source}
       isError={isError}
       loading={isLoading}
@@ -51,10 +38,10 @@ function PageEventsTab({tabProps: {title}, pageId}) {
         ) : (
           <>
             <Col sm="12" md="7">
-              <Page pageTypes={newPageTypes} pageTags={pageTags} page={page} />
+              <Page pageTags={pageTags} page={page} />
             </Col>
             <Col sm="12" md="5">
-              <Inventories pageId={pageId} />
+              {children}
             </Col>
           </>
         )}

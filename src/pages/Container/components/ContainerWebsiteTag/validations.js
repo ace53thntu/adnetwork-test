@@ -141,3 +141,23 @@ export const validationProperty = manualCollect => {
     })
   );
 };
+
+export const validationInventory = () => {
+  return yupResolver(
+    Yup.object().shape({
+      name: Yup.string().required('This field is required.'),
+      type: Yup.object()
+        .required('This field is required.')
+        .typeError('This field is required.'),
+      market_type: Yup.object()
+        .required('This field is required.')
+        .typeError('This field is required.'),
+      price_engine: Yup.object()
+        .required('This field is required.')
+        .typeError('This field is required.'),
+      market_dsps: Yup.array()
+        .required('This field is required.')
+        .typeError('This field is required.')
+    })
+  );
+};

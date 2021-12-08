@@ -1,14 +1,14 @@
 export const CONTAINER_TREE_TAGS = [
   {
-    id: 'website-tag',
-    name: 'Website'
+    id: 'web',
+    name: 'Web'
   },
   {
-    id: 'ios-tag',
+    id: 'ios',
     name: 'iOS'
   },
   {
-    id: 'android-tag',
+    id: 'android',
     name: 'Android'
   },
   {
@@ -21,9 +21,9 @@ export const CONTAINER_TREE_TAGS = [
   }
 ];
 
-const webKey = 'website-tag';
-const iosKey = 'ios-tag';
-const androidKey = 'android-tag';
+const webKey = 'web';
+const iosKey = 'ios';
+const androidKey = 'android';
 
 export const SOURCE_FROM_TAG = {
   [webKey]: 'web',

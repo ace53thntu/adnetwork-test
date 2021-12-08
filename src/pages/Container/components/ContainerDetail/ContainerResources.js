@@ -140,7 +140,7 @@ function ContainerResources({
       </CardBody>
 
       <Modal unmountOnClose isOpen={isOpenCreatePage}>
-        <CreatePage toggle={toggleDialog} source={source} />
+        <CreatContaePage toggle={toggleDialog} source={source} />
       </Modal>
     </Card>
   );

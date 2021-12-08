@@ -14,8 +14,10 @@ import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {ButtonLoading} from 'components/common';
 import {useEditPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
+import {useTranslation} from 'react-i18next';
 
-function Page({pageTypes = [], pageTags = [], page}) {
+function Page({pageTags = [], page}) {
+  const {t} = useTranslation();
   const {cid: containerId} = useParams();
   const {status} = page;
 
@@ -66,30 +68,30 @@ function Page({pageTypes = [], pageTags = [], page}) {
         url: pageURL,
         pageType: pageTypeId,
         tags: pageTags,
-        status: pageStatus
+        status: pageStatus,
+        context
       } = values;
 
       const updatedPage = {
-        name: pageName.trim(),
-        url: pageURL.trim(),
-        pageType: pageTypeId.id,
-        tags: Array.from(pageTags, tag => ({
-          id: tag.id
-        })),
+        name: pageName?.trim(),
+        container_uuid: containerId,
+        tags: Array.from(pageTags, tag => tag?.value),
+        context,
+        url: pageURL?.trim(),
         status: pageStatus,
-        containerId: containerId,
-        source: page.source
+        source: page?.source
       };
 
       setIsLoading(true);
       try {
-        await updatePage({pageId: page.id, data: updatedPage});
+        await updatePage({pageId: page?.uuid, data: updatedPage});
         reset({
           name: pageName,
           url: pageURL,
           pageType: pageTypeId,
           tags: pageTags,
-          status: pageStatus
+          status: pageStatus,
+          context
         });
         ShowToast.success('Update page successfully!', {
           closeOnClick: true
@@ -102,7 +104,7 @@ function Page({pageTypes = [], pageTags = [], page}) {
         setIsLoading(false);
       }
     },
-    [containerId, page.id, page.source, reset, updatePage]
+    [containerId, page?.source, page?.uuid, reset, updatePage]
   );
 
   return (
@@ -165,12 +167,11 @@ function Page({pageTypes = [], pageTags = [], page}) {
                   <div className="d-flex justify-content-end">
                     <ButtonLoading
                       type="submit"
-                      className="ml-2"
-                      color="primary"
+                      className="btn-primary"
                       disabled={!isDirty || isLoading}
                       isLoading={isLoading}
                     >
-                      Save Page
+                      {t('save')}
                     </ButtonLoading>
                   </div>
                 </Col>

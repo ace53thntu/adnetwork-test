@@ -1,7 +1,7 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORIES} from './constants';
+import {GET_INVENTORY_BY_PAGE} from './constants';
 
 /**
  * Delete a Inventory
@@ -18,8 +18,11 @@ export function useDeleteInventory() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
-        client.invalidateQueries([GET_INVENTORIES]);
+      onSettled: data => {
+        client.invalidateQueries([
+          GET_INVENTORY_BY_PAGE,
+          data?.data?.page_uuid
+        ]);
       }
     }
   );

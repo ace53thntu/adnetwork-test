@@ -16,7 +16,13 @@ export const isFullyFetched = (node, numChildren) =>
   numChildren === node.numChildren;
 
 export const shouldShowMore = (node, numChildren) => {
-  return node.children.length >= numChildren
-    ? false
-    : numChildren < node.numChildren;
+  // return node.children.length >= numChildren
+  //   ? false
+  //   : numChildren < node.numChildren;
+
+  if (node?.totalPage) {
+    return node.totalPage > node.page;
+  }
+
+  return numChildren < node.numChildren;
 };

@@ -10,8 +10,8 @@ import ReportList from './report-list';
 import ReportForm from './report.form';
 import {ENTITY_TYPES, METRIC_TYPES} from 'constants/report';
 import {LoadingIndicator} from 'components/common';
-import Pagination from 'components/list/pagination';
 import {useGetReportsInfinity} from 'queries/report/useGetReports';
+import {Pagination} from 'components/list/pagination';
 
 const NUMBER_OF_PAGE = 10;
 

@@ -17,48 +17,8 @@ export default function PageEvent({
   const isAndroidSource = tag === TAG_FROM_SOURCE.android;
   const isIOSSource = tag === TAG_FROM_SOURCE.ios;
 
-  // const currentProperties = useMemo(() => {
-  //   let propObj = ``;
-  //   properties.forEach(
-  //     ({propertyName, propertyContent, propertyPossibleValue}, index) => {
-  //       const value = propertyContent?.length
-  //         ? propertyContent
-  //         : propertyPossibleValue?.length
-  //         ? `"${propertyPossibleValue}"`
-  //         : '// value';
-
-  //       if (index === 0) {
-  //         if (index === properties.length - 1) {
-  //           propObj = propObj + `${propertyName}: ${value}`;
-  //         } else {
-  //           propObj = propObj + `${propertyName}: ${value},`;
-  //         }
-  //       } else {
-  //         if (index === properties.length - 1) {
-  //           propObj =
-  //             propObj +
-  //             `
-  //       ${propertyName}: ${value}`;
-  //         } else {
-  //           propObj =
-  //             propObj +
-  //             `
-  //       ${propertyName}: ${value},`;
-  //         }
-  //       }
-  //     }
-  //   );
-
-  //   return propObj;
-  // }, [properties]);
-
   return (
     <>
-      {/* <FormTextInput
-        name="category"
-        placeholder="The category of the page..."
-        label="Category"
-      /> */}
       <FormTextInput
         name="name"
         placeholder="The name of the page..."
@@ -83,15 +43,6 @@ export default function PageEvent({
                             </div>
                           ) : null}
                         </div>
-                        {/* <div className="widget-subheading">
-                          {manualCollect
-                            ? '// value'
-                            : property.propertyContent?.length
-                            ? property.propertyContent
-                            : property?.propertyPossibleValue?.length
-                            ? property.propertyPossibleValue
-                            : '// value'}
-                        </div> */}
                       </div>
                     </div>
                   </div>

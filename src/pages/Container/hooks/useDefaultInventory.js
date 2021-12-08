@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import {capitalize} from 'utils/helpers/string.helpers';
 import {
   getInventoryFormats,
   getInventoryTags,
@@ -30,7 +31,10 @@ export const useDefaultInventory = ({
         position_id,
         tracker_template_uuid,
         deal_floor_price,
-        enable_deal
+        enable_deal,
+        market_type,
+        price_engine,
+        market_dsps
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
@@ -42,11 +46,10 @@ export const useDefaultInventory = ({
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
       );
-      console.log(
-        '🚀 ~ file: useDefaultInventory.js ~ line 44 ~ returnuseMemo ~ metadata',
-        metadata,
-        metadata?.tags
-      );
+      const marketDsps = Array.from(market_dsps, item => ({
+        value: item?.uuid,
+        label: item?.name
+      }));
 
       const destructureTags = metadata?.tags?.map(item => {
         const foundTag = inventoryTags.find(itemTag => itemTag.value === item);
@@ -67,7 +70,14 @@ export const useDefaultInventory = ({
         click_rate,
         tracker_template_uuid: destructureTrackerTemplate,
         position_id: destructurePosition,
-        enable_deal: enable_deal ? 'active' : 'inactive'
+        enable_deal: enable_deal ? 'active' : 'inactive',
+        market_type: market_type
+          ? {value: market_type, label: capitalize(market_type)}
+          : null,
+        price_engine: price_engine
+          ? {value: price_engine, label: capitalize(price_engine)}
+          : null,
+        market_dsps: marketDsps || []
       };
     }
     return {};

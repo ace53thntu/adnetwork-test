@@ -7,8 +7,11 @@ const theme = {
   },
   bodyTextStyle: {
     padding: 0,
-    wordWrap: 'break-word',
-    marginBottom: 0
+    // wordWrap: 'break-word',
+    marginBottom: 0,
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   },
   checkboxStyle: {
     width: 30,

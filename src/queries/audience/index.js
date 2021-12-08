@@ -1,4 +1,4 @@
-export {useGetAudiences} from './useGetAudiences';
+export {useGetAudiences, useGetAudiencesInfinity} from './useGetAudiences';
 export {useGetAudience} from './useGetAudience';
 export {useCreateAudience} from './useCreateAudience';
 export {useEditAudience} from './useEditAudience';

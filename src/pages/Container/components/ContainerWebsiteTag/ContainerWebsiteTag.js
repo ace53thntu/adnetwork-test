@@ -8,12 +8,13 @@ import PageEventsTabCreate from './PageEventsTabCreate';
 
 import {WEB_TAG_STEPS} from '../../constants';
 
-import {useContainerStore} from '../../context';
+// import {useContainerStore} from '../../context';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
+import Inventories from './Inventories';
 
-function ContainerWebsiteTag({pageId}) {
-  const {state} = useContainerStore();
-  const {selectedPage} = state;
+function ContainerWebsiteTag({pageId, inventories = []}) {
+  // const {state} = useContainerStore();
+  // const {selectedPage} = state;
 
   // local states
   const [activeStep, setActiveStep] = useState(0);
@@ -37,7 +38,9 @@ function ContainerWebsiteTag({pageId}) {
               pageId === 'create' ? (
                 <PageEventsTabCreate tabProps={tabProps} />
               ) : (
-                <PageEventsTab tabProps={tabProps} pageId={pageId} />
+                <PageEventsTab tabProps={tabProps} pageId={pageId}>
+                  <Inventories pageId={pageId} inventories={inventories} />
+                </PageEventsTab>
               )
             ) : (
               <div>Loading...</div>
@@ -75,7 +78,8 @@ function ContainerWebsiteTag({pageId}) {
                     onClick={() => {
                       onChangeTab(index);
                     }}
-                    disabled={index === 2 && !selectedPage ? true : false}
+                    // disabled={index === 2 && !selectedPage ? true : false}
+                    disabled={index === 2 ? true : false}
                   >
                     {label}
                   </Button>

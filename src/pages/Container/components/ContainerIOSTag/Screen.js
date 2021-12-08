@@ -1,18 +1,30 @@
+//---> Build-in Modules
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+
+//---> External Modules
+import PropTypes from 'prop-types';
 import BlockUi from 'react-block-ui';
 import {useForm, FormProvider} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {Row, Col, Card, CardBody, CardTitle, CardHeader} from 'reactstrap';
 import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 
-// queries, mutations
-import {validationPage} from '../ContainerWebsiteTag/validations';
-import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+//---> Internal Modules
 import {ButtonLoading} from 'components/common';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {getContainerTags} from 'pages/Container/constants';
 import {useEditPage} from 'queries/page';
+import {validationPage} from '../ContainerWebsiteTag/validations';
 
-function Screen({pageTypes = [], pageTags = [], page}) {
+const propTypes = {
+  pageTypes: PropTypes.array,
+  pageTags: PropTypes.array,
+  page: PropTypes.object
+};
+
+function Screen({pageTypes = [], pageTags = [], page = {}}) {
+  const {t} = useTranslation();
   const {cid: containerId} = useParams();
   const {status} = page;
 
@@ -59,30 +71,29 @@ function Screen({pageTypes = [], pageTags = [], page}) {
 
   const onHandleSubmit = useCallback(
     async values => {
+      console.log('🚀 ~ file: Screen.js ~ line 74 ~ Screen ~ values', values);
       const {
         name: pageName,
-        pageType: pageTypeId,
         tags: pageTags,
-        status: pageStatus
+        status: pageStatus,
+        context
       } = values;
 
       const updatedPage = {
         name: pageName?.trim(),
-        pageType: pageTypeId.id,
-        tags: Array.from(pageTags, tag => ({
-          id: tag.id
-        })),
+        tags: Array.from(pageTags, tag => tag.value),
         status: pageStatus,
-        containerId,
-        source: page.source
+        container_uuid: containerId,
+        source: page?.source,
+        context
       };
       try {
-        await updatePage({pageId: page.id, data: updatedPage});
+        await updatePage({pageId: page.uuid, data: updatedPage});
         reset({
           name: pageName,
-          pageType: pageTypeId,
           tags: pageTags,
-          status: pageStatus
+          status: pageStatus,
+          context
         });
         toast.success('Update screen successfully!', {
           closeOnClick: true
@@ -93,7 +104,7 @@ function Screen({pageTypes = [], pageTags = [], page}) {
         });
       }
     },
-    [containerId, page.id, page.source, reset, updatePage]
+    [containerId, page, reset, updatePage]
   );
 
   return (
@@ -149,12 +160,11 @@ function Screen({pageTypes = [], pageTags = [], page}) {
                   <div className="d-flex justify-content-end">
                     <ButtonLoading
                       type="submit"
-                      className="ml-2"
-                      color="primary"
+                      className="btn-primary"
                       disabled={!formState.isDirty || formState.isSubmitting}
                       loading={formState.isSubmitting}
                     >
-                      Save Screen
+                      {t('save')}
                     </ButtonLoading>
                   </div>
                 </Col>
@@ -166,5 +176,7 @@ function Screen({pageTypes = [], pageTags = [], page}) {
     </FormProvider>
   );
 }
+
+Screen.propTypes = propTypes;
 
 export default Screen;

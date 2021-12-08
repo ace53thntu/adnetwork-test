@@ -14,16 +14,14 @@ import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
 import './styles.scss';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
 import Table, {
   TableFilterSelect,
   TableStatusCell,
   TableUtils
 } from 'components/table';
-import AppContent from 'components/layouts/Admin/components/AppContent';
 import {useGetContainers} from 'queries/container/useGetContainers';
-import ContainerSidebar from '../Sidebar';
 import '../../style.scss';
+import {ContainerBodyLayout} from '../Layouts';
 
 const STATUS_OPTIONS = [
   {
@@ -43,10 +41,8 @@ const STATUS_OPTIONS = [
 const Containers = props => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  // const partnerId = getPartnerId();
 
   const {data: containers} = useGetContainers();
-  console.log('🚀 ~ file: Containers.js ~ line 48 ~ containers', containers);
 
   const onRowClick = React.useCallback(
     row => {
@@ -126,13 +122,10 @@ const Containers = props => {
 
   return (
     <>
-      <ContainerSidebar />
-      <AppContent noPadding={false} customClass="custom-right-content">
-        <PageTitleAlt
-          heading={t('containerManager')}
-          subheading={t('managementContainerDescription')}
-          icon="pe-7s-plane icon-gradient bg-tempting-azure"
-        />
+      <ContainerBodyLayout
+        heading={t('containerManager')}
+        subHeading={t('containerDescription')}
+      >
         <Container fluid>
           <Row>
             <Col md="12">
@@ -144,7 +137,7 @@ const Containers = props => {
             </Col>
           </Row>
         </Container>
-      </AppContent>
+      </ContainerBodyLayout>
     </>
   );
 };

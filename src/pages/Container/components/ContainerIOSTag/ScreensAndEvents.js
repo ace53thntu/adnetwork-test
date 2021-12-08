@@ -5,14 +5,13 @@ import {Row, Col} from 'reactstrap';
 // components
 import PageLayout from '../PageLayout';
 import Screen from './Screen';
-import Inventories from '../ContainerWebsiteTag/Inventories';
 import {useGetPage} from 'queries/page';
 import {getContainerTags} from 'pages/Container/constants';
 
 // queries, mutations
 // import {useGetPageTypes, useGetPageTags} from 'core/queries/containers';
 
-function ScreensAndEvents({tabProps: {title}, pageId}) {
+function ScreensAndEvents({tabProps: {title}, pageId, children}) {
   // const {tag} = useParams();
   const {data: page, status, isFetching} = useGetPage(pageId);
   const pageTags = getContainerTags();
@@ -27,7 +26,7 @@ function ScreensAndEvents({tabProps: {title}, pageId}) {
       hasPage={hasPage}
       pageTags={pageTags}
       pageName={page?.name}
-      pageId={page?.id}
+      pageId={page?.uuid}
       source={page?.source}
       isIOS
     >
@@ -40,11 +39,7 @@ function ScreensAndEvents({tabProps: {title}, pageId}) {
           )}
         </Col>
         <Col sm="12" md="5">
-          {isLoading ? (
-            <div>Loading...</div>
-          ) : (
-            <Inventories isIOS pageId={pageId} />
-          )}
+          {isLoading ? <div>Loading...</div> : children}
         </Col>
       </Row>
     </PageLayout>
