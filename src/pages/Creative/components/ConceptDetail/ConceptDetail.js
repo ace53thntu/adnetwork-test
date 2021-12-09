@@ -9,6 +9,7 @@ import {selectConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 import {Banners} from '../Banners';
 import ConceptForm from '../ConceptCreate/ConceptForm';
 import {CreativeBodyLayout} from '../CreativeLayout';
+import {NativeAds} from '../NativeAds';
 import {ActionsBar, CreativeCreate} from '..';
 
 function ConceptDetail(props) {
@@ -46,6 +47,11 @@ function ConceptDetail(props) {
               <Row>
                 <Col>
                   <Banners />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <NativeAds />
                 </Col>
               </Row>
             </Container>

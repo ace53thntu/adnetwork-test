@@ -189,11 +189,12 @@ export class XHRRequest {
     });
   }
 
-  delete(action, params) {
+  delete(action, params, options = {}) {
     const query = this.toQueryString(params);
     const path = query ? `${action}?${query}` : action;
     return this.rest(path, null, {
-      method: 'DELETE'
+      method: 'DELETE',
+      ...options
     });
   }
 

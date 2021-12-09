@@ -17,6 +17,7 @@ const ADD_CONCEPT = '@creative/ADD_CONCEPT';
 
 const TOGGLE_CREATE_CREATIVE_DIALOG = '@creative/TOGGLE_CREATE_CREATIVE_DIALOG';
 const TOGGLE_DETAIL_DIALOG = '@creative/TOGGLE_DETAIL_DIALOG';
+const DIRTY_FORM = '@creative/DIRTY_FORM';
 
 // dispatch actions
 export const resetCreativeRedux = () => createAction(RESET, {});
@@ -40,8 +41,10 @@ export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
 export const toggleCreateCreativeDialog = () =>
   createAction(TOGGLE_CREATE_CREATIVE_DIALOG, {});
 
-export const toggleCreativeDetailDialog = creativeId =>
-  createAction(TOGGLE_DETAIL_DIALOG, {creativeId});
+export const toggleCreativeDetailDialog = (creativeId, detailOf = '') =>
+  createAction(TOGGLE_DETAIL_DIALOG, {creativeId, detailOf});
+
+export const dirtyForm = val => createAction(DIRTY_FORM, {val});
 
 const creativeInitialState = {
   advertisers: [],
@@ -52,7 +55,9 @@ const creativeInitialState = {
   advertiserPage: 1,
   isToggleCreateCreativeDialog: false,
   toggleDetailDialog: false,
-  selectedCreativeId: null
+  detailOf: '',
+  selectedCreativeId: null,
+  dirtyForm: false
 };
 
 const handleActions = {
@@ -66,8 +71,13 @@ const handleActions = {
   [UPDATE_CONCEPT]: handleUpdateConcept,
   [ADD_CONCEPT]: handleAddConcept,
   [TOGGLE_CREATE_CREATIVE_DIALOG]: handleToggleCreateCreativeDialog,
-  [TOGGLE_DETAIL_DIALOG]: handleToggleCreativeDetailDialog
+  [TOGGLE_DETAIL_DIALOG]: handleToggleCreativeDetailDialog,
+  [DIRTY_FORM]: handleDirtyForm
 };
+
+function handleDirtyForm(state, action) {
+  state.dirtyForm = action.payload.val;
+}
 
 function handleReset(state) {
   state.advertisers = [];
@@ -79,6 +89,7 @@ function handleReset(state) {
   state.isToggleCreateCreativeDialog = false;
   state.toggleDetailDialog = false;
   state.selectedCreativeId = null;
+  state.dirtyForm = false;
 }
 
 function handleSetAdvertisers(state, action) {
@@ -292,6 +303,7 @@ function handleToggleCreateCreativeDialog(state, action) {
 
 function handleToggleCreativeDetailDialog(state, action) {
   state.selectedCreativeId = action.payload.creativeId;
+  state.detailOf = action.payload.detailOf;
   state.toggleDetailDialog = !state.toggleDetailDialog;
 }
 

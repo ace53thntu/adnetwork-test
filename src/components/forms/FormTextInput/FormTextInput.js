@@ -21,7 +21,15 @@ const FormTextInput = ({
   const errorMessage = __get(errors, `${name}.message`);
 
   return (
-    <FormGroup>
+    <FormGroup
+      style={
+        type === 'hidden'
+          ? {
+              margin: 0
+            }
+          : {}
+      }
+    >
       {label ? (
         <Label>
           {isRequired ? <span className="text-danger">*</span> : null}

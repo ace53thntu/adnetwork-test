@@ -1,7 +1,7 @@
 import {DialogConfirm, SwiperList} from 'components/common';
 // import PropTypes from 'prop-types';
-import {useDeleteCreative, useGetCreatives} from 'queries/creative';
-import {GET_CREATIVES} from 'queries/creative/constants';
+import {useDeleteNativeAd, useGetNativeAds} from 'queries/native-ad';
+import {GET_NATIVE_ADS} from 'queries/native-ad/constants';
 import * as React from 'react';
 import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
@@ -10,13 +10,15 @@ import {Col, Row} from 'reactstrap';
 import {toggleCreativeDetailDialog} from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
-import {BannerDetail} from '../BannerDetail';
+import {NativeAdDetail} from '../NativeAdDetail';
 import {SwiperItem} from '../SwiperItem';
 
-function Banners(props) {
+function NativeAds(props) {
   const {conceptId} = useParams();
   const client = useQueryClient();
   const dispatch = useDispatch();
+
+  const {mutateAsync: deleteNativeAdRequest} = useDeleteNativeAd();
 
   const params = React.useMemo(() => {
     return {
@@ -27,17 +29,14 @@ function Banners(props) {
     };
   }, [conceptId]);
 
-  const {data: res} = useGetCreatives({
+  const {data: res} = useGetNativeAds({
     params
   });
-
-  const {mutateAsync: deleteCreativeRequest} = useDeleteCreative();
+  const nativeAds = res?.items;
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-
-  const banners = res?.items;
 
   const handleClose = () => {
     setIsOpen(false);
@@ -45,51 +44,47 @@ function Banners(props) {
     setIsLoading(false);
   };
 
-  const handleDeleteCreative = React.useCallback(
-    creativeId => {
-      setDeleteId(creativeId);
-      setIsOpen(true);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const handleAgree = React.useCallback(async () => {
+  const handleDeleteNativeAd = nativeAdId => {
+    setDeleteId(nativeAdId);
+    setIsOpen(true);
+  };
+
+  const handleAgree = async () => {
     setIsLoading(true);
+
     try {
-      await deleteCreativeRequest(deleteId);
-      ShowToast.success('Remove Creative successfully!');
+      await deleteNativeAdRequest(deleteId);
+      ShowToast.success('Remove Native Banner successfully!');
       handleClose();
-      client.invalidateQueries([GET_CREATIVES, params]);
+      client.invalidateQueries([GET_NATIVE_ADS, params]);
     } catch (error) {
       setIsLoading(false);
       ShowToast.error(error?.message);
     }
-  }, [client, deleteCreativeRequest, deleteId, params]);
+  };
 
-  const handleOpenCreativeDetailDialog = React.useCallback(creative => {
-    dispatch(toggleCreativeDetailDialog(creative.uuid, 'banner'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleOpenCreativeDetailDialog = nativeAd => {
+    dispatch(toggleCreativeDetailDialog(nativeAd.uuid, 'nativeAd'));
+  };
 
   const swiperData = React.useMemo(() => {
-    return banners?.map((creative, idx) => {
-      const {name} = creative;
+    return nativeAds?.map((nativeAd, idx) => {
+      const {name} = nativeAd;
 
-      const file = creative?.alternatives?.[0];
+      const file = nativeAd?.assets?.[0];
 
       return (
         <SwiperItem
-          isCreative
           name={name}
           file={file}
           handleClickName={handleOpenCreativeDetailDialog}
-          item={creative}
-          onDelete={() => handleDeleteCreative(creative.uuid)}
+          item={nativeAd}
+          onDelete={() => handleDeleteNativeAd(nativeAd.uuid)}
         />
       );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [banners]);
+  }, [nativeAds]);
 
   return (
     <>
@@ -97,7 +92,7 @@ function Banners(props) {
         <>
           <Row>
             <Col>
-              <h5>Banners</h5>
+              <h5>Native Banners</h5>
             </Col>
           </Row>
           <Row>
@@ -115,12 +110,12 @@ function Banners(props) {
         handleAgree={handleAgree}
       />
 
-      <BannerDetail />
+      <NativeAdDetail />
     </>
   );
 }
 
-Banners.propTypes = {};
-Banners.defaultProps = {};
+NativeAds.propTypes = {};
+NativeAds.defaultProps = {};
 
-export default React.memo(Banners);
+export default NativeAds;

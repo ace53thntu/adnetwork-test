@@ -1,5 +1,5 @@
-// import PropTypes from 'prop-types';
-import {useGetCreative} from 'queries/creative';
+import PropTypes from 'prop-types';
+import {useGetNativeAd} from 'queries/native-ad';
 import * as React from 'react';
 import {useDispatch} from 'react-redux';
 import {Card, CardBody, Modal, ModalHeader} from 'reactstrap';
@@ -8,9 +8,9 @@ import {
   useCreativeSelector
 } from 'store/reducers/creative';
 
-import {BannerForm} from '../BannerForm';
+import {NativeAdForm} from '../NativeAdTab';
 
-function BannerDetail(props) {
+function NativeAdDetail(props) {
   const dispatch = useDispatch();
 
   const {
@@ -23,7 +23,7 @@ function BannerDetail(props) {
     dispatch(toggleCreativeDetailDialog(null));
   };
 
-  const isOpen = detailOf === 'banner' && toggleDetailDialog;
+  const isOpen = detailOf === 'nativeAd' && toggleDetailDialog;
 
   return (
     <Modal
@@ -32,34 +32,35 @@ function BannerDetail(props) {
       isOpen={isOpen}
       className="modal-dialog-centered shadow-none modal-size-1200"
     >
-      <ModalHeader toggle={handleCloseModal}>Edit Creative</ModalHeader>
+      <ModalHeader toggle={handleCloseModal}>Edit Native Banner</ModalHeader>
       <Card>
         <CardBody>
-          <BannerDetailBody creativeId={selectedCreativeId} />
+          <BannerDetailBody nativeAdId={selectedCreativeId} />
         </CardBody>
       </Card>
     </Modal>
   );
 }
 
-BannerDetail.propTypes = {};
-BannerDetail.defaultProps = {};
+NativeAdDetail.propTypes = {};
+NativeAdDetail.defaultProps = {};
 
-export default BannerDetail;
+export default NativeAdDetail;
 
 function BannerDetailBody(props) {
-  const {creativeId} = props;
+  const {nativeAdId} = props;
 
-  const {data: creative, isFetching} = useGetCreative({
-    creativeId: creativeId,
-    enabled: !!creativeId
-  });
+  const {data: nativeAd, isFetching} = useGetNativeAd({nativeAdId});
 
   if (isFetching) return <div>Loading...</div>;
 
   return (
     <>
-      <BannerForm creative={creative} />
+      <NativeAdForm nativeAd={nativeAd} isCreate={false} />
     </>
   );
 }
+
+BannerDetailBody.propTypes = {
+  nativeAdId: PropTypes.any
+};
