@@ -94,5 +94,8 @@ export const endpoints = {
   nativeAd: {
     list: `${API_V1}/native-ads`,
     asset: `${API_V1}/asset`
+  },
+  video: {
+    list: `${API_V1}/video`
   }
 };

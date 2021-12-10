@@ -1,6 +1,5 @@
 import {NativeAdAPI} from 'api/native-ad.api';
-import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
-import EntityReport from 'pages/EntityReport';
+import {BlockOverlay, CollapseBox} from 'components/common';
 import PropTypes from 'prop-types';
 import {useCreateNativeAd} from 'queries/native-ad';
 import {GET_NATIVE_ADS} from 'queries/native-ad/constants';
@@ -38,12 +37,6 @@ const defaultValues = {
   //
   // assets: []
 };
-
-/**
- * TODO:
- * - update assets
- *
- */
 
 function NativeAdForm(props) {
   const {nativeAd, isCreate} = props;
@@ -178,11 +171,11 @@ function NativeAdForm(props) {
       </FormProvider>
 
       {/* BEGIN: Report */}
-      {nativeAd?.id && (
+      {/* {nativeAd?.id && (
         <Collapse initialOpen={true} title="Report" unMount={false}>
           <EntityReport entityId={nativeAd?.id} entity="native_ad" />
         </Collapse>
-      )}
+      )} */}
 
       {/* END: Report */}
 

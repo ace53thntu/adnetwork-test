@@ -39,8 +39,10 @@ function SwiperItem(props) {
   const isNotAFile = !ASSET_TYPES_IS_FILE.includes(file?.type);
 
   const notFoundText = isCreative
-    ? 'Not found Alternative'
-    : 'Not found Assets.';
+    ? 'Not found Alternative(s)'
+    : isVideo
+    ? 'Not found file(s)'
+    : 'Not found Asset(s).';
 
   return (
     <SwiperItemContainer>

@@ -111,7 +111,6 @@ export function getAssetAcceptFile(type) {
     logo: allowImage,
     img: allowImage
   };
-
   return accepts[type];
 }
 

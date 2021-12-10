@@ -1,0 +1,42 @@
+export function videoRepoToFormValues(raw) {
+  const {name, click_url = '', height, width, files} = raw;
+
+  const result = {
+    name,
+    click_url,
+    width: width?.toString() ?? '1',
+    height: height?.toString() ?? '1'
+  };
+
+  if (files) {
+    result.files = files?.map(file => ({
+      file: {
+        ...file
+      }
+    }));
+  }
+
+  return result;
+}
+
+export function videoFormValuesToRepo(raw, conceptId, requestFiles = []) {
+  const {name, click_url, width, height} = raw;
+
+  let obj = {
+    name,
+    click_url,
+    width: parseInt(width, 10),
+    height: parseInt(height, 10),
+    dtype: 'video',
+    concept_uuid: conceptId,
+    status: 'active'
+  };
+
+  // if (requestFiles?.length) {
+  //   obj.file_ids = requestFiles;
+  // } else {
+  //   obj.file_ids = [];
+  // }
+
+  return obj;
+}
