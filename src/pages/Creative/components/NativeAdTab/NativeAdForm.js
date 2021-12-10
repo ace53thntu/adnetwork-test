@@ -1,5 +1,5 @@
 import {NativeAdAPI} from 'api/native-ad.api';
-import {Collapse, CollapseBox} from 'components/common';
+import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
 import EntityReport from 'pages/EntityReport';
 import PropTypes from 'prop-types';
 import {useCreateNativeAd} from 'queries/native-ad';
@@ -38,6 +38,12 @@ const defaultValues = {
   //
   // assets: []
 };
+
+/**
+ * TODO:
+ * - update assets
+ *
+ */
 
 function NativeAdForm(props) {
   const {nativeAd, isCreate} = props;
@@ -92,6 +98,12 @@ function NativeAdForm(props) {
     }
   };
 
+  const checkAssets = values => {
+    const newAssets = values?.assets?.filter(asset => !asset.uuid);
+
+    createAssets(nativeAd.uuid, newAssets);
+  };
+
   const onSubmit = async values => {
     setIsLoading(true);
 
@@ -113,7 +125,7 @@ function NativeAdForm(props) {
         handleError(error);
       }
     } else {
-      const requestData = nativeAdFormValuesToRepo(values);
+      const requestData = nativeAdFormValuesToRepo(values, conceptId);
       const nativeId = nativeAd.uuid;
       const isDiff = difference(requestData, nativeAd);
 
@@ -124,7 +136,7 @@ function NativeAdForm(props) {
             data: requestData
           });
         }
-        // checkAssets(values);
+        checkAssets(values);
         setIsLoading(false);
         ShowToast.success('Update Native Banner successfully!');
         handleCloseDialog();
@@ -151,11 +163,9 @@ function NativeAdForm(props) {
           id="native-ad-form"
           name="native-ad-form"
         >
+          {isLoading && <BlockOverlay />}
           <CollapseBox open title="Information">
-            <NativeAdInformationForm
-              defaultValues={getDefaultValues}
-              isLoading={isLoading}
-            />
+            <NativeAdInformationForm defaultValues={getDefaultValues} />
           </CollapseBox>
 
           <Assets
@@ -163,7 +173,6 @@ function NativeAdForm(props) {
             nativeAdId={nativeAd?.id}
             rawNativeAd={nativeAd}
             formWatch={watch}
-            isLoading={isLoading}
           />
         </form>
       </FormProvider>
@@ -187,7 +196,7 @@ function NativeAdForm(props) {
         </Button>
         <Button
           color="primary"
-          disabled={!isDirty}
+          disabled={!isDirty || isLoading}
           type="submit"
           className="ml-2"
           form="native-ad-form"

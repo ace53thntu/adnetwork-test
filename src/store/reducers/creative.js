@@ -90,6 +90,7 @@ function handleReset(state) {
   state.toggleDetailDialog = false;
   state.selectedCreativeId = null;
   state.dirtyForm = false;
+  state.detailOf = '';
 }
 
 function handleSetAdvertisers(state, action) {

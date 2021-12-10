@@ -33,6 +33,10 @@ class NativeAdAPIService extends XHRRequest {
   updateNativeAd = ({nativeAdId, data, options = {}}) => {
     return this.put(`${endpoints.nativeAd.list}/${nativeAdId}`, data, options);
   };
+
+  deleteAsset = ({assetId, options = {}}) => {
+    return this.delete(`${endpoints.nativeAd.asset}/${assetId}`, {}, options);
+  };
 }
 
 export const NativeAdAPI = new NativeAdAPIService(apiURL);

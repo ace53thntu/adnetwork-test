@@ -18,12 +18,12 @@ export function nativeAdRawToFormValues(raw) {
     extra_trackers,
     // active,
     dco_product,
-    assets: assets?.map(({custom_id, file, type, value, id}) => ({
+    assets: assets?.map(({custom_id, file, type, value, uuid}) => ({
       custom_id,
       file,
       value,
       type: ASSET_TYPES.find(item => item.value === type),
-      id
+      uuid
     }))
   };
 }

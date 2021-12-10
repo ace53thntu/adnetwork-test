@@ -1,6 +1,7 @@
 import {StrapConfirmModal} from 'components/common';
 import {FormReactSelect, FormTextInput} from 'components/forms';
 import PropTypes from 'prop-types';
+import {useDeleteAsset} from 'queries/native-ad';
 import * as React from 'react';
 import {Button, Col, Row} from 'reactstrap';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -19,13 +20,14 @@ function AssetForm(props) {
     formWatch,
     data,
     toggleCollapse,
-    // assetId,
+    assetId,
     remove,
-    assetIndex,
-    isLoading
+    assetIndex
   } = props;
 
-  const isEdit = data?.id;
+  const {mutateAsync: deleteAssetRequest} = useDeleteAsset();
+
+  const isEdit = data?.uuid;
 
   const [isOpenDialog, setIsOpenDialog] = React.useState(false);
 
@@ -41,9 +43,9 @@ function AssetForm(props) {
 
   const handleAgree = async () => {
     try {
-      // await deleteAssetRequest({assetId, mode: 'soft'});
+      await deleteAssetRequest(assetId);
       handleClose();
-      // ShowToast.success('Remove Asset successfully!');
+      ShowToast.success('Remove Asset successfully!');
       remove(assetIndex);
     } catch (error) {
       ShowToast.error(error?.message);
@@ -66,7 +68,7 @@ function AssetForm(props) {
                 isRequired
                 name={`${assetName}.custom_id`}
                 label="Custom ID"
-                disable={isEdit || isLoading}
+                disable={isEdit}
                 defaultValue={data?.custom_id}
               />
             </Col>
@@ -74,7 +76,7 @@ function AssetForm(props) {
               <FormReactSelect
                 name={`${assetName}.type`}
                 label="Type"
-                disabled={isEdit || isLoading}
+                disabled={isEdit}
                 bsSize="sm"
                 options={ASSET_TYPES}
                 defaultValue={data?.type}
@@ -88,7 +90,7 @@ function AssetForm(props) {
                   isRequired
                   name={`${assetName}.value`}
                   label="Value"
-                  disable={isEdit || isLoading}
+                  disable={isEdit}
                   defaultValue={data?.value}
                 />
               </Col>
@@ -124,7 +126,6 @@ function AssetForm(props) {
               onClick={toggleCollapse}
               className="ml-2"
               type="button"
-              disabled={isLoading}
             >
               Close
             </Button>
@@ -149,11 +150,8 @@ AssetForm.propTypes = {
   toggleCollapse: PropTypes.func,
   assetId: PropTypes.any,
   remove: PropTypes.func,
-  assetIndex: PropTypes.any,
-  isLoading: PropTypes.bool
+  assetIndex: PropTypes.any
 };
-AssetForm.defaultProps = {
-  isLoading: false
-};
+AssetForm.defaultProps = {};
 
 export default AssetForm;

@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Col, Row} from 'reactstrap';
 
 function NativeAdInformationForm(props) {
-  const {defaultValues, isLoading} = props;
+  const {defaultValues} = props;
 
   return (
     <>
@@ -15,7 +15,6 @@ function NativeAdInformationForm(props) {
             placeholder=""
             name="name"
             label="Name"
-            disable={isLoading}
             defaultValue={defaultValues.name}
           />
         </Col>
@@ -24,7 +23,6 @@ function NativeAdInformationForm(props) {
             placeholder=""
             name="click_url"
             label="Click URL"
-            disable={isLoading}
             defaultValue={defaultValues.click_url}
           />
         </Col>
@@ -33,7 +31,6 @@ function NativeAdInformationForm(props) {
             placeholder=""
             name="dco_product"
             label="DCO product"
-            disable={isLoading}
             defaultValue={defaultValues.dco_product}
           />
         </Col>
@@ -44,7 +41,6 @@ function NativeAdInformationForm(props) {
             placeholder=""
             name="product_query_string"
             label="Product query string"
-            disable={isLoading}
             defaultValue={defaultValues.product_query_string}
           />
         </Col>
@@ -53,7 +49,6 @@ function NativeAdInformationForm(props) {
             placeholder=""
             name="extra_trackers"
             label="Extra trackers"
-            disable={isLoading}
             defaultValue={defaultValues.extra_trackers}
           />
         </Col>
@@ -70,12 +65,10 @@ function NativeAdInformationForm(props) {
 }
 
 NativeAdInformationForm.propTypes = {
-  defaultValues: PropTypes.any,
-  isLoading: PropTypes.bool
+  defaultValues: PropTypes.any
 };
 NativeAdInformationForm.defaultProps = {
-  defaultValues: null,
-  isLoading: false
+  defaultValues: null
 };
 
 export default NativeAdInformationForm;

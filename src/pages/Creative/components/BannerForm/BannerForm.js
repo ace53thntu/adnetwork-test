@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button, Col, Row} from 'reactstrap';
 import {
+  dirtyForm,
   toggleCreateCreativeDialog,
   toggleCreativeDetailDialog
 } from 'store/reducers/creative';
@@ -97,6 +98,11 @@ function BannerForm(props) {
     handleSubmit,
     formState: {isDirty}
   } = methods;
+
+  React.useEffect(() => {
+    dispatch(dirtyForm(isDirty));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDirty]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 

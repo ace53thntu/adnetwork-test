@@ -2,29 +2,33 @@ import clsx from 'clsx';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
+import {useDispatch} from 'react-redux';
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap';
+import {dirtyForm, useCreativeSelector} from 'store/reducers/creative';
 
 import {BannerForm} from '../BannerForm';
 import {NativeAdTab} from '../NativeAdTab';
+import {VideoTab} from '../VideoTab';
 import {TABS} from './constants';
 
 function CreativeCreateBody(props) {
   const {t} = useTranslation();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const {dirtyForm: isDirty} = useCreativeSelector();
 
   const [activeTab, setActiveTab] = React.useState(TABS.banner);
 
   const toggle = tab => {
     if (activeTab !== tab) {
-      // if (isDirty) {
-      //   if (window.confirm('Your data will lost when switch other tab.')) {
-      //     dispatch(dirtyForm(false));
-      //     setActiveTab(tab);
-      //   } else {
-      //     //
-      //   }
-      //   return;
-      // }
+      if (isDirty) {
+        if (window.confirm('Your data will lost when switch other tab.')) {
+          dispatch(dirtyForm(false));
+          setActiveTab(tab);
+        } else {
+          //
+        }
+        return;
+      }
       setActiveTab(tab);
     }
   };
@@ -72,7 +76,7 @@ function CreativeCreateBody(props) {
           {activeTab === TABS.nativeBanner && <NativeAdTab isCreate />}
         </TabPane>
         <TabPane tabId={TABS.video}>
-          {activeTab === TABS.video && 'Video'}
+          {activeTab === TABS.video && <VideoTab isCreate />}
         </TabPane>
       </TabContent>
     </>

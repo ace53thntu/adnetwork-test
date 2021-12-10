@@ -12,11 +12,11 @@ const defaultValues = {
   type: ASSET_TYPES[0],
   value: '',
   file: null,
-  id: null
+  uuid: null
 };
 
 function Assets(props) {
-  const {control, nativeAdId, rawNativeAd, formWatch, isLoading} = props;
+  const {control, rawNativeAd, formWatch} = props;
 
   const {fields: assets, append, remove} = useFieldArray({
     control,
@@ -34,7 +34,7 @@ function Assets(props) {
             key={`${idx}-${asset?.id}`}
             title={`Asset ${idx + 1}`}
             unMount={false}
-            initialOpen={!asset.id}
+            initialOpen={!asset.uuid}
           >
             <AssetForm
               assetName={assetName}
@@ -42,9 +42,7 @@ function Assets(props) {
               remove={remove}
               formWatch={formWatch}
               data={asset}
-              nativeAdId={nativeAdId}
-              assetId={rawNativeAd?.assets?.[idx]?.id}
-              isLoading={isLoading}
+              assetId={rawNativeAd?.assets?.[idx]?.uuid}
             />
           </Collapse>
         );
@@ -67,11 +65,8 @@ function Assets(props) {
 Assets.propTypes = {
   control: PropTypes.any,
   formWatch: PropTypes.func,
-  rawNativeAd: PropTypes.any,
-  isLoading: PropTypes.bool
+  rawNativeAd: PropTypes.any
 };
-Assets.defaultProps = {
-  isLoading: false
-};
+Assets.defaultProps = {};
 
 export default Assets;
