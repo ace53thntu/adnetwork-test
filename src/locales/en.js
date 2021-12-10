@@ -184,6 +184,7 @@ const en = {
   noAudienceAvailable: 'No Audience available.',
 
   //container
+  selectPublisher: 'Select publisher',
   containers: 'Containers',
   searchContainer: 'Search container',
   containerManager: 'Container Manager',

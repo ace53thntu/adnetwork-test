@@ -29,7 +29,6 @@ function DescriptionTab({tabProps: {title}, container}) {
 
   useEffect(() => {
     return () => {
-      console.log('cleanup');
       reset();
     };
   }, [reset]);
@@ -48,7 +47,6 @@ function DescriptionTab({tabProps: {title}, container}) {
       });
       reset();
     } catch (error) {
-      console.log('DescriptionTab onHandleSubmit -> error', error);
     } finally {
       setIsLoading(false);
     }

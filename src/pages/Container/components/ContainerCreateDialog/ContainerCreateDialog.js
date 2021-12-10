@@ -41,7 +41,6 @@ function ContainerCreateDialog({isOpen, toggle, containers = []}) {
           navigate(`/container/${res.id}`);
         }
       } catch (error) {
-        console.log('ContainerCreate -> error', error);
         ShowToast.success(error, {
           closeOnClick: true
         });

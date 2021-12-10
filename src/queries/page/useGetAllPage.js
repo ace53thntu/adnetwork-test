@@ -7,21 +7,21 @@ import {GET_PAGES} from './constants';
 /**
  * Hook for get Page by container from API by query
  */
-export function useGetAllPage(containerUuid) {
+export function useGetAllPage({containerId, enabled = false, params = {}}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_PAGES, containerUuid],
+    [GET_PAGES, containerId],
     () =>
       PageAPIRequest.getAllPage({
-        params: {container_uuid: containerUuid},
+        params: {container_uuid: containerId, ...params},
         options: {
           cancelToken
         }
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!containerUuid
+      enabled
     }
   );
 }

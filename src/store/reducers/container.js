@@ -34,6 +34,7 @@ const UPDATE_PAGE = '@container/UPDATE_PAGE';
 const CREATED_PAGE = '@container/CREATED_PAGE';
 
 const CREATED_IMPORT_OR_TRANSFER = '@container/CREATED_IMPORT_OR_TRANSFER';
+const SELECT_PAGE_ID = '@container/SELECT_PAGE_ID';
 
 // dispatch actions
 export const resetContainerRedux = () => {
@@ -54,11 +55,14 @@ export const expandContainerRedux = (containerId, state) => {
 export const expandSourceRedux = (sourceId, state, containerId) => {
   return createAction(EXPAND_SOURCE, {sourceId, state, containerId});
 };
-export const setContainerRedux = (container, source, pageId) => {
-  return createAction(SET_CONTAINER, {container, source, pageId});
+export const setContainerRedux = (container, source, pageId, pages) => {
+  return createAction(SET_CONTAINER, {container, source, pageId, pages});
 };
 export const unExpandContainersRedux = () => {
   return createAction(UN_EXPAND_CONTAINERS, {});
+};
+export const selectPageRedux = (pageId, page) => {
+  return createAction(SELECT_PAGE_ID, {pageId, page});
 };
 export const deletePageRedux = () => {
   return createAction(DELETE_PAGE, {});
@@ -117,6 +121,7 @@ const containerInitialState = {
 };
 
 const handleActions = {
+  // [SELECT_PAGE_ID]: handleSelectPage,
   [RESET]: handleReset,
   [SHOULD_REFETCH_CONTAINER]: handleShouldRefetchContainer,
   [CONTAINERS]: handleSetContainers,
@@ -174,6 +179,28 @@ function handleSetContainers(state, action) {
   state.isLoading = false;
 }
 
+// function handleSelectPage(state, action) {
+//     const {pageId, page} = action.payload;
+
+//     const newNodes = [...state.pages].map(item => {
+//       if (item.id === pageId) {
+//         return {
+//           ...item,
+//           selected: true,
+//           children: [...item.children].map(child => unSelectedChild(child))
+//         };
+//       }
+//       return unSelectedAndUnExpanded(item);
+//     });
+//     state.selectedContainerId = containerId;
+//     state.pages = newNodes;
+//     state.keyword = '';
+//     state.page = page;
+//     state.selectedSource = null;
+//     state.selectedPageId = pageId;
+//   }
+// }
+
 function handleSelectContainer(state, action) {
   const {containerId, container} = action.payload;
 
@@ -197,7 +224,6 @@ function handleSelectContainer(state, action) {
 
 function handleExpandContainer(state, action) {
   const {containerId, state: nodeState} = action.payload;
-  console.log('state.expandedIds', original(state.expandedIds), containerId);
   if (state.expandedIds.includes(containerId)) {
     state.expandedIds = state.expandedIds.filter(
       advId => advId !== containerId
@@ -207,10 +233,6 @@ function handleExpandContainer(state, action) {
   }
 
   const newNodes = [...state.containers].map(item => {
-    console.log(
-      '🚀 ~ file: container.js ~ line 210 ~ handleExpandContainer ~ item',
-      item
-    );
     if (item.id === containerId) {
       return {
         ...item,
@@ -228,12 +250,13 @@ function handleExpandContainer(state, action) {
 }
 
 function handleSetContainer(state, action) {
-  const {container, source, pageId} = action.payload;
+  const {container, source, pageId, pages = []} = action.payload;
 
   const newNodes = [...state.containers].map(item => {
-    if (item.id === container.id) {
+    if (item.id === container.uuid) {
       //
       if (!item.expanded) {
+        console.log('COLLAPSE');
         let containerItem = {
           ...item,
           expanded: true,
@@ -245,6 +268,10 @@ function handleSetContainer(state, action) {
           transfer_count,
           source: containerSource
         } = container;
+        console.log(
+          '🚀 ~ file: container.js ~ line 271 ~ handleSetContainer ~ containerSource',
+          containerSource
+        );
 
         if (source === 'import' && import_count === 0) {
           containerItem.selected = true;
@@ -261,11 +288,11 @@ function handleSetContainer(state, action) {
               id: sourceKey,
               name: CONTAINER_TREE_SOURCES[sourceKey],
               children: [],
-              numChildren: containerSource[sourceKey]?.length ?? 0,
+              numChildren: containerSource[sourceKey] ?? 0,
               page: 0,
               expanded: false,
               selected: false,
-              parentId: container.id,
+              parentId: container.uuid,
               isSource: true
             });
           });
@@ -308,23 +335,30 @@ function handleSetContainer(state, action) {
             };
 
             if (child.id !== 'import' && child.id !== 'transfer') {
-              const sourceChildren = container?.source?.[source]?.map(
-                (sourceData, index) => {
-                  const {id, name} = sourceData;
+              const pagesBySource = pages?.length > 0 ? pages : child?.children;
+              console.log(
+                '🚀 ~ file: container.js ~ line 334 ~ handleSetContainer ~ pagesBySource',
+                pagesBySource
+              );
+              const sourceChildren = pagesBySource?.map((sourceData, index) => {
+                const {id, name} = sourceData;
 
-                  return {
-                    id,
-                    name: name,
-                    children: [],
-                    numChildren: 0,
-                    page: 0,
-                    expanded: false,
-                    selected: pageId === id,
-                    parentId: child.id,
-                    isPage: true,
-                    containerId: container.id
-                  };
-                }
+                return {
+                  id,
+                  name: name,
+                  children: [],
+                  numChildren: 0,
+                  page: 0,
+                  expanded: false,
+                  selected: pageId === id,
+                  parentId: child.id,
+                  isPage: true,
+                  containerId: container.id
+                };
+              });
+              console.log(
+                '🚀 ~ file: container.js ~ line 355 ~ sourceChildren ~ sourceChildren',
+                sourceChildren
               );
               sourceItem.children = sourceChildren;
             } else {
@@ -345,6 +379,7 @@ function handleSetContainer(state, action) {
         }
         return containerItem;
       } else {
+        console.log('EXPANDED');
         const isExistSource = !!item.children.find(
           sourceNe => sourceNe.id === source
         );
@@ -361,7 +396,14 @@ function handleSetContainer(state, action) {
                   expanded: true,
                   selected: false
                 };
-                const sourceChildren = container?.source?.[source]?.map(
+                const pagesBySource =
+                  pages?.length > 0 ? pages : child?.children;
+                console.log(
+                  '🚀 ~ file: container.js ~ line 386 ~ handleSetContainer ~ pagesBySource',
+                  pagesBySource
+                );
+
+                const sourceChildren = pagesBySource?.map(
                   (sourceData, index) => {
                     const {id, name} = sourceData;
                     return {
@@ -443,7 +485,6 @@ function handleSetContainer(state, action) {
                 children,
                 numChildren: children.length
               };
-              console.log('---containerItem: ', containerItem);
               return containerItem;
             }
             let containerItem = {
@@ -453,7 +494,6 @@ function handleSetContainer(state, action) {
               children,
               numChildren: children.length
             };
-            console.log('---containerItem: ', containerItem);
             return containerItem;
           } else {
             const {import_count, transfer_count} = container;
@@ -496,7 +536,7 @@ function handleSetContainer(state, action) {
   state.containers = newNodes;
   state.containersTemp = newNodes.map(item => unSelectedChild(item));
   state.container = container;
-  state.selectedContainerId = container.id;
+  state.selectedContainerId = container.uuid;
   state.selectedSource = source;
   state.selectedPageId = pageId;
   state.alreadySetContainer = pageId ? true : false;
@@ -514,7 +554,6 @@ function handleUnExpandContainers(state, action) {
 }
 
 function handleExpandSource(state, action) {
-  console.log('action.payload', action.payload);
   const {sourceId, state: nodeState, containerId} = action.payload;
   const newNodes = [...state.containers].map(item => {
     if (item.id === containerId) {
@@ -543,9 +582,19 @@ function handleExpandSource(state, action) {
 
 function handleDeletePage(state, action) {
   const newNodes = [...state.containers].map(item => {
+    console.log(
+      'handleDeletePage container id',
+      item.id,
+      state.selectedContainerId
+    );
     if (item.id === state.selectedContainerId) {
       let isExistPage = true;
       let updatedChild = item.children.map(source => {
+        console.log(
+          '===== source.id',
+          source.id,
+          original(state.selectedSource)
+        );
         if (source.id === state.selectedSource) {
           let updatedSource = {
             ...source
@@ -560,6 +609,10 @@ function handleDeletePage(state, action) {
         }
         return source;
       });
+      console.log(
+        '🚀 ~ file: container.js ~ line 602 ~ handleDeletePage ~ updatedChild',
+        updatedChild
+      );
 
       if (!isExistPage) {
         updatedChild = item.children.filter(

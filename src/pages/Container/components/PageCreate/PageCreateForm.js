@@ -20,16 +20,14 @@ import {ContainerAPIRequest} from 'api/container.api';
 import {useQueryClient} from 'react-query';
 import {GET_CONTAINER} from 'queries/container/constants';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+import {GET_PAGES} from 'queries/page/constants';
 
 function PageCreateForm({pageTags = []}) {
   const queryCache = useQueryClient();
 
   const dispatch = useDispatch();
   const {cid, tag: source} = useParams();
-  console.log(
-    '🚀 ~ file: PageCreateForm.js ~ line 29 ~ PageCreateForm ~ tag',
-    source
-  );
+
   const navigate = useNavigate();
   const {data: pages = []} = useGetPagesByContainer(cid);
   const {selectedSource} = useContainerSelector();
@@ -69,7 +67,7 @@ function PageCreateForm({pageTags = []}) {
     resolver: validationPage(pages, isMobile)
   });
   const {handleSubmit, reset, formState, register} = methods;
-  const {mutateAsync: createPage} = useCreatePage();
+  const {mutateAsync: createPage} = useCreatePage(cid);
 
   React.useEffect(() => {
     register({name: 'tags'});
@@ -114,11 +112,9 @@ function PageCreateForm({pageTags = []}) {
           id: cid,
           options: {}
         });
-        console.log(
-          '🚀 ~ file: PageCreateForm.js ~ line 115 ~ PageCreateForm ~ containerRes',
-          containerRes
-        );
+
         queryCache.setQueryData([GET_CONTAINER, cid], containerRes.data);
+        queryCache.invalidateQueries([GET_PAGES, cid]);
         toggleModal();
         dispatch(setContainerRedux(containerRes.data, pageSource, data.uuid));
         navigate(

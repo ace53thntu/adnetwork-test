@@ -1,6 +1,6 @@
-import {Containers, ContainerLayout, ContainerDetail} from 'pages/Container';
-import ContainerTreeTags from 'pages/Container/components/ContainerTree/ContainerTreeTags';
-import ContainerTreePages from 'pages/Container/components/ContainerTree/ContainerTreePages';
+import {Containers, ContainerDetail, ContainerLayout} from 'pages/Container';
+import {ContainerSource} from 'pages/Container/components/ContainerSource';
+import {ContainerSourcePage} from 'pages/Container/components/ContainerSourcePage';
 // import {ROLES} from 'core/constants';
 
 // const {MANAGER, TRADER} = ROLES;
@@ -20,13 +20,13 @@ export const containerPages = {
       // canAccess: [MANAGER, TRADER]
     },
     {
-      path: ':cid/:tag',
-      element: <ContainerTreeTags />
+      path: ':cid/:source',
+      element: <ContainerSource />
       // canAccess: [MANAGER, TRADER]
     },
     {
-      path: ':cid/:tag/:pageId',
-      element: <ContainerTreePages />
+      path: ':cid/:source/:pageId',
+      element: <ContainerSourcePage />
       // canAccess: [MANAGER, TRADER]
     }
   ]

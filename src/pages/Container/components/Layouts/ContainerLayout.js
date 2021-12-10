@@ -19,7 +19,7 @@ import {
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {ContainersTree} from '../Tree';
 
-// import {ContainerCreateModal} from '../ContainerCreate';
+import {ContainerCreateModal} from '../ContainerCreate';
 
 function ContainerLayout(props) {
   const reduxDispatch = useDispatch();
@@ -69,7 +69,7 @@ function ContainerLayout(props) {
           </Button>
 
           {/* create container dialog will be here */}
-          {/* <ContainerCreateModal /> */}
+          <ContainerCreateModal />
         </div>
         <div className="border mb-2">
           <ContainersTree />

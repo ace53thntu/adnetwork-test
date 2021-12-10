@@ -6,7 +6,6 @@ import {CONTAINER_TREE_TAGS} from './constants';
 import {useGetPages} from 'pages/Container/hooks/usePages';
 
 function TreeLevelTwoRedirect() {
-  console.log('zo tag ne');
   const {cid: containerId, tag} = useParams();
   const navigate = useNavigate();
   const {setPages} = useContainerStore();
@@ -39,7 +38,6 @@ function TreeLevelTwoRedirect() {
 
   useEffect(() => {
     if (!isFetching && pages) {
-      console.log('zo day k');
       setPages(pages);
       if (pages?.[0]?.id) {
         navigate(`./${pages[0].id}`);

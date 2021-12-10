@@ -21,7 +21,6 @@ import {Count} from '../ContainerWebsiteTag/CompletedTab';
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
-
   const dispatch = useDispatch();
   const {t} = useTranslation();
 

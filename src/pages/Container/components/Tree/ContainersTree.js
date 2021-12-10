@@ -58,11 +58,6 @@ function ContainersTree(props) {
 
   const loadChildren = React.useCallback(
     async (node, pageLimit, currentPage) => {
-      console.log(
-        '🚀 ~ file: ContainersTree.js ~ line 61 ~ currentPage',
-        currentPage,
-        pageLimit
-      );
       const {isContainer, id, expanded, isSource} = node;
 
       if (isContainer) {
@@ -121,7 +116,6 @@ function ContainersTree(props) {
       if (isSource) {
         if (!expanded) {
           const {parentId, id} = node;
-          console.log('🚀 ~ file: ContainersTree.js ~ line 124 ~ node', node);
           let children = [];
           try {
             const res = await PageAPIRequest.getAllPage({
@@ -132,7 +126,6 @@ function ContainersTree(props) {
                 source: id
               }
             });
-            console.log('🚀 ~ file: ContainersTree.js ~ line 130 ~ res', res);
             if (res?.data?.items) {
               queryCache.setQueryData([GET_PAGES, parentId], res.data.items);
               const currentSourceData = res.data.items ?? [];

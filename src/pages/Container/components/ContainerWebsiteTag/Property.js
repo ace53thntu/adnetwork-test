@@ -65,7 +65,6 @@ export default function Property({
           setIsLoading(false);
           toggle();
         } catch (error) {
-          console.log('🚀 ~ file: Property.js ~ line 51 ~ error', error);
           setIsLoading(false);
         }
       } else {

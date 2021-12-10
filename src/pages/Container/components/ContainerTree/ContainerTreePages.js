@@ -12,14 +12,11 @@ import {CONTAINER_TREE_TAGS} from './constants';
 import {useContainers} from 'pages/Container/hooks/useContainers';
 import {ContainerBodyLayout} from '../Layouts';
 import {useGetInventoryByPage} from 'queries/inventory';
+import {useGetPage} from 'queries/page';
 
 function ContainerTreePages() {
   const {tag, pageId} = useParams();
-  console.log(
-    '🚀 ~ file: ContainerTreePages.js ~ line 18 ~ ContainerTreePages ~ pageId',
-    pageId
-  );
-
+  const {data: page} = useGetPage(pageId);
   const {isFetching: loading} = useContainers({suspense: false});
   const {data: {items: inventories = []} = []} = useGetInventoryByPage(pageId);
 
@@ -48,7 +45,9 @@ function ContainerTreePages() {
     content = <ContainerTransfer />;
   }
 
-  return <ContainerBodyLayout>{content}</ContainerBodyLayout>;
+  return (
+    <ContainerBodyLayout heading={page?.name}>{content}</ContainerBodyLayout>
+  );
 }
 
 export default ContainerTreePages;

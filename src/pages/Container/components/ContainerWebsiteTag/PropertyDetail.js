@@ -41,10 +41,6 @@ export default function PropertyDetail({
         setIsLoading(false);
         toggle();
       } catch (error) {
-        console.log(
-          '🚀 ~ file: PropertyDetail.js ~ line 39 ~ onHandleSubmit ~ error',
-          error
-        );
         setIsLoading(false);
       }
     },

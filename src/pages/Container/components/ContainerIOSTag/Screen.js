@@ -71,7 +71,6 @@ function Screen({pageTypes = [], pageTags = [], page = {}}) {
 
   const onHandleSubmit = useCallback(
     async values => {
-      console.log('🚀 ~ file: Screen.js ~ line 74 ~ Screen ~ values', values);
       const {
         name: pageName,
         tags: pageTags,

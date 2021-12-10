@@ -6,7 +6,7 @@ import {GET_INVENTORY_BY_PAGE} from './constants';
 /**
  * Delete a Inventory
  */
-export function useDeleteInventory() {
+export function useDeleteInventory(pageId) {
   const client = useQueryClient();
 
   return useMutation(
@@ -18,11 +18,9 @@ export function useDeleteInventory() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: data => {
-        client.invalidateQueries([
-          GET_INVENTORY_BY_PAGE,
-          data?.data?.page_uuid
-        ]);
+      onSettled: () => {
+        console.log('useGetInventoryByPage', pageId);
+        client.invalidateQueries([GET_INVENTORY_BY_PAGE, pageId]);
       }
     }
   );

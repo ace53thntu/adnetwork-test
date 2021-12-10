@@ -22,7 +22,6 @@ function PageLayout({
   isError = false,
   loading = false
 }) {
-  console.log('🚀 ~ file: PageLayout.js ~ line 25 ~ pageId', pageId);
   const navigate = useNavigate();
   const {cid: containerId} = useParams();
   const {mutateAsync: deletePage} = useDeletePage();

@@ -1,17 +1,13 @@
 import React, {useState, useCallback} from 'react';
 import {Nav, NavItem, Button, TabContent, TabPane, Container} from 'reactstrap';
-import {useParams} from 'react-router-dom';
 
 import {IOS_TAG_STEPS} from '../../constants';
 import EmptyPage from './EmptyPage';
 import ScreensAndEvents from './ScreensAndEvents';
 import CompletedTab from '../ContainerWebsiteTag/CompletedTab';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
 import Inventories from '../ContainerWebsiteTag/Inventories';
 
 function ContainerIOSTag({pageId, inventories = []}) {
-  const {tag} = useParams();
-
   // local states
   const [activeStep, setActiveStep] = useState(0);
 
@@ -52,11 +48,6 @@ function ContainerIOSTag({pageId, inventories = []}) {
 
   return (
     <>
-      <PageTitleAlt
-        heading={tag === 'ios' ? 'iOS' : 'Android'}
-        subheading="Online tracking"
-        icon="pe-7s-plane icon-gradient bg-tempting-azure"
-      />
       <Container fluid>
         <div>
           <Nav className="justify-content-center">

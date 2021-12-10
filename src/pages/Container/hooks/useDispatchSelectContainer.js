@@ -18,7 +18,7 @@ export function useDispatchSelectContainer() {
     isError,
     error,
     isFetched
-  } = useGetContainer(containerId);
+  } = useGetContainer({containerId, enabled: !!containerId});
 
   React.useEffect(() => {
     if (

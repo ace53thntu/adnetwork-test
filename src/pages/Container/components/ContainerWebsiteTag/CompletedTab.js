@@ -38,7 +38,10 @@ function CompletedTab() {
   const {cid, tag, pageId} = useParams();
   const currentTag = SOURCE_FROM_TAG[tag];
   const {data: containers} = useGetContainers();
-  const {data: container, isFetched} = useGetContainer(cid);
+  const {data: container, isFetched} = useGetContainer({
+    containerId: cid,
+    enabled: !!cid
+  });
   const {data: publisher, isFetched: isFetchedPublisher} = useGetPublisher(
     container?.publisher_uuid
   );

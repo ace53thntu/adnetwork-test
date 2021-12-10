@@ -12,11 +12,12 @@ import Table, {TableStatusCell} from 'components/table';
 import {useDeleteInventory} from 'queries/inventory';
 import CreateInventory from './CreateInventory';
 import UpdateInventory from './UpdateInventory';
+import {useParams} from 'react-router';
 
-function Inventories({pageId, inventories = []}) {
+function Inventories({inventories = []}) {
   const isSysAdmin = true; //userRole === SYS_ADMIN;
-
-  const {mutateAsync: deleteInventory} = useDeleteInventory();
+  const {pageId} = useParams();
+  const {mutateAsync: deleteInventory} = useDeleteInventory(pageId);
   // const {unlockTree} = useContainerStore();
 
   const [isOpen, setIsOpen] = useState(false);

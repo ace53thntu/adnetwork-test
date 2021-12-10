@@ -7,7 +7,11 @@ import {GET_PAGES} from './constants';
 /**
  * Create a Page
  */
-export function useCreatePage() {
+export function useCreatePage(containerId) {
+  console.log(
+    '🚀 ~ file: useCreatePage.js ~ line 11 ~ useCreatePage ~ containerId',
+    containerId
+  );
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -18,7 +22,8 @@ export function useCreatePage() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_PAGES]);
+        console.log('onSettled containerId', containerId);
+        client.invalidateQueries([GET_PAGES, containerId]);
       }
     }
   );
