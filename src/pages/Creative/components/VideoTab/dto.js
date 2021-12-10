@@ -1,5 +1,5 @@
 export function videoRepoToFormValues(raw) {
-  const {name, click_url = '', height, width, files} = raw;
+  const {name, click_url = '', height, width, file} = raw;
 
   const result = {
     name,
@@ -8,8 +8,8 @@ export function videoRepoToFormValues(raw) {
     height: height?.toString() ?? '1'
   };
 
-  if (files) {
-    result.files = files?.map(file => ({
+  if (file?.length) {
+    result.files = file?.map(file => ({
       file: {
         ...file
       }
@@ -32,11 +32,11 @@ export function videoFormValuesToRepo(raw, conceptId, requestFiles = []) {
     status: 'active'
   };
 
-  // if (requestFiles?.length) {
-  //   obj.file_ids = requestFiles;
-  // } else {
-  //   obj.file_ids = [];
-  // }
+  if (requestFiles?.length) {
+    obj.file_uuids = requestFiles;
+  } else {
+    obj.file_uuids = [];
+  }
 
   return obj;
 }

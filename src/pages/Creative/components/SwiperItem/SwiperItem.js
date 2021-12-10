@@ -26,7 +26,7 @@ function SwiperItem(props) {
     isVideo
   } = props;
 
-  const isVideoTypeOfVideo = ALLOWED_VIDEO_TYPES.includes(file?.mime_type);
+  const isVideoTypeOfVideo = ALLOWED_VIDEO_TYPES.includes(file?.mimeType);
 
   const isVideoTypeOfCreative = ALLOWED_VIDEO_TYPES.includes(
     file?.file?.mimeType

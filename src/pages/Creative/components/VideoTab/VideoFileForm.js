@@ -35,7 +35,6 @@ function VideoFileForm(props) {
               maxSize={getAssetLimitFileSize(ASSET_TYPES[1].id)}
               accept={getAssetAcceptFile(ASSET_TYPES[1].id)}
               defaultValue={defaultValue}
-              onlyPreview={defaultValue ? true : false}
               removeFile={removeFile}
               fileIndex={fileIndex}
               fileType={'VIDEO'}

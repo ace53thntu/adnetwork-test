@@ -85,7 +85,7 @@ function VideoForm(props) {
   const onSubmit = async values => {
     let requestData = {};
     if (values?.files?.length) {
-      const fileIds = values.files.map(file => file?.file?.id);
+      const fileIds = values.files.map(file => file?.file?.file?.uuid);
       if (fileIds?.every(fileId => fileId !== undefined)) {
         requestData = videoFormValuesToRepo(values, conceptId, fileIds);
       } else {
@@ -96,7 +96,6 @@ function VideoForm(props) {
     }
     setIsLoading(true);
 
-    // console.log('---requestData: ', requestData);
     if (isCreate) {
       try {
         await createVideoRequest(requestData);

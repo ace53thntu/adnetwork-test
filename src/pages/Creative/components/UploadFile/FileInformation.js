@@ -31,11 +31,12 @@ function FileInformation(props) {
 
   function handleAgree() {
     removeFiles();
+    handleClose();
   }
 
   return (
     <FileInformationContainer>
-      {ALLOWED_VIDEO_TYPES.includes(file.mime_type) ? (
+      {ALLOWED_VIDEO_TYPES.includes(file.mimeType) ? (
         <PreviewVideo controls src={`${FILE_DISPLAY_URL}/${file?.uuid}`} />
       ) : (
         <PreviewImage

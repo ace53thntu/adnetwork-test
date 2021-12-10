@@ -28,7 +28,7 @@ function VideoFiles(props) {
               <Collapse
                 initialOpen={defaultValue !== null ? false : true}
                 title={`File Upload ${idx + 1}`}
-                key={idx}
+                key={item.id}
                 unMount={false}
               >
                 <VideoFileForm
