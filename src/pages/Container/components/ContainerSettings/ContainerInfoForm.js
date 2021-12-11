@@ -5,11 +5,17 @@ import PropTypes from 'prop-types';
 import {useEditContainer} from 'queries/container';
 import * as React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
 import {CardBody, CardFooter, Col, Row} from 'reactstrap';
-import {updatedContainerRedux} from 'store/reducers/container';
+import {
+  updatedContainerRedux,
+  useContainerSelector
+} from 'store/reducers/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {mappingApiToForm, mappingFormToApi} from '../ContainerDetail/dto';
+import PublisherSelect from '../ContainerDetail/PublisherSelect';
 
 import {
   AndroidInitSnippet,
@@ -17,7 +23,6 @@ import {
   WebIdentifySnippet
 } from '../Snippets';
 import Count from './Count';
-import {containerRepoToFormValues} from './dto';
 import {containerFormResolver} from './validations';
 
 const defaultValue = containerId => `
@@ -27,16 +32,24 @@ window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=d
 `;
 
 function ContainerInfoForm(props) {
-  const {containers, container, eventsCounts, pagesCount} = props;
+  const {t} = useTranslation();
+  const {containerRedux} = useContainerSelector();
+  const {containers, container, eventsCounts} = props;
   const dispatch = useDispatch();
   const {source} = useParams();
+
   const {mutateAsync: updateContainerRequest} = useEditContainer();
 
   const isIOS = source === 'ios';
   const isAndroid = source === 'android';
   const isMobile = isIOS || isAndroid;
 
-  const formDefaultValues = containerRepoToFormValues(container);
+  const formDefaultValues = mappingApiToForm({
+    container,
+    containerRedux,
+    t,
+    publisher: container?.publisher
+  });
 
   const methods = useForm({
     defaultValues: formDefaultValues,
@@ -48,15 +61,15 @@ function ContainerInfoForm(props) {
 
   const onHandleSubmit = async values => {
     setIsLoading(true);
-
+    const formData = mappingFormToApi(values);
     try {
       await updateContainerRequest({
-        cid: container.id,
-        data: values
+        cid: container?.uuid,
+        data: formData
       });
 
       setIsLoading(false);
-      ShowToast.success('Update container successfully!');
+      ShowToast.success('Updated container successfully!');
       reset(values);
       dispatch(
         updatedContainerRedux({
@@ -66,7 +79,7 @@ function ContainerInfoForm(props) {
       );
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(error?.message || 'Fail to update container');
     }
   };
 
@@ -77,6 +90,7 @@ function ContainerInfoForm(props) {
         <CardBody>
           <Row>
             <Col sm={12} md={6}>
+              <PublisherSelect currentContainer={formDefaultValues} isEdit />
               <FormTextInput
                 isRequired
                 name="name"
@@ -118,22 +132,26 @@ function ContainerInfoForm(props) {
                 <Col sm={12} md={6}>
                   <Count
                     label={isMobile ? 'Screens' : 'Pages'}
-                    count={pagesCount}
+                    count={container?.source?.[source] || 0}
                   />
                 </Col>
                 <Col sm={12} md={6}>
-                  <Count label="Events" count={eventsCounts} type="success" />
+                  <Count
+                    label="Inventories"
+                    count={eventsCounts}
+                    type="success"
+                  />
                 </Col>
               </Row>
             </Col>
 
             <Col sm={12} md={6}>
-              {isAndroid && <AndroidInitSnippet containerId={container.id} />}
-              {isIOS && <IosInitSnippet containerId={container.id} />}
+              {isAndroid && <AndroidInitSnippet containerId={container.uuid} />}
+              {isIOS && <IosInitSnippet containerId={container.uuid} />}
               {!isMobile && (
                 <div className="aicactus-snippet">
                   <WebIdentifySnippet>
-                    {defaultValue(container.id)}
+                    {defaultValue(container.uuid)}
                   </WebIdentifySnippet>
                 </div>
               )}
@@ -148,7 +166,7 @@ function ContainerInfoForm(props) {
             className="ml-2 btn-primary"
             disabled={!formState.isDirty}
           >
-            Save Container
+            {t('save')}
           </ButtonLoading>
         </CardFooter>
       </form>

@@ -156,8 +156,15 @@ export const validationInventory = () => {
         .required('This field is required.')
         .typeError('This field is required.'),
       market_dsps: Yup.array()
-        .required('This field is required.')
-        .typeError('This field is required.')
+        .nullable()
+        .when('market_type', marketTypeVal => {
+          if (marketTypeVal?.value === 'private') {
+            return Yup.array()
+              .required('This field is required.')
+              .typeError('This field is required.');
+          }
+          return Yup.array().nullable().notRequired();
+        })
     })
   );
 };

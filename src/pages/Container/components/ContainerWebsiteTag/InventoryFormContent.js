@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BlockUi from 'react-block-ui';
 import {useTranslation} from 'react-i18next';
-import {useFormContext} from 'react-hook-form';
+import {useFormContext, useWatch} from 'react-hook-form';
 import {
   Col,
   FormGroup,
@@ -55,6 +55,7 @@ const InventoryFormContent = ({
   const {t} = useTranslation();
   const {formState} = useFormContext();
   const isSubmitting = formState?.isSubmitting;
+  const watchMarkType = useWatch({name: 'market_type'});
 
   return (
     <BlockUi tag="div" blocking={isLoading}>
@@ -130,7 +131,10 @@ const InventoryFormContent = ({
               multiple={false}
             />
           </Col>
-          <Col sm={12}>
+          <Col
+            sm={12}
+            className={watchMarkType?.value === 'private' ? 'block' : 'd-none'}
+          >
             <DspSelect currentInventory={inventory} />
           </Col>
           <Col sm={4}>

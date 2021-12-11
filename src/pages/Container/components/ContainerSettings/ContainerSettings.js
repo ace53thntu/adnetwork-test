@@ -1,18 +1,25 @@
 // import PropTypes from 'prop-types';
-import {useGetContainer} from 'queries/container';
+import {ContainerAPIRequest} from 'api/container.api';
+import {PublisherAPIRequest} from 'api/publisher.api';
 import * as React from 'react';
 import {useParams} from 'react-router';
-
 import ContainerInfoForm from './ContainerInfoForm';
 
+// import ContainerInfoForm from './ContainerInfoForm';
+
 function ContainerSettings(props) {
-  // const {containerId, source, pageId} = useParams();
   const {cid: containerId} = useParams();
 
-  const {data: container, status} = useGetContainer({
-    containerId,
-    enabled: !!containerId
-  });
+  // const {cid: containerId} = useParams();
+  // console.log(
+  //   '🚀 ~ file: ContainerSettings.js ~ line 11 ~ ContainerSettings ~ containerId',
+  //   containerId
+  // );
+
+  // const {data: container, status} = useGetContainer({
+  //   containerId,
+  //   enabled: !!containerId
+  // });
 
   // const {data: pages = []} = useGetPages({
   //   containerId,
@@ -30,6 +37,29 @@ function ContainerSettings(props) {
   //   suspense: false,
   //   partnerId
   // });
+
+  const [container, setContainer] = React.useState(null);
+  const [status, setStatus] = React.useState('');
+
+  React.useEffect(() => {
+    async function getContainerDetails() {
+      try {
+        const {data} = await ContainerAPIRequest.getContainer({
+          id: containerId
+        });
+        const {data: publisher} = await PublisherAPIRequest.getPublisher({
+          id: data?.publisher_uuid
+        });
+        setContainer({...data, publisher});
+        setStatus('success');
+      } catch (err) {
+        setStatus('error');
+      }
+    }
+    if (containerId) {
+      getContainerDetails();
+    }
+  }, [containerId]);
 
   const pagesCount = 0; //pages?.length ?? 0;
   const eventsCounts = 0; //events?.length ?? 0;

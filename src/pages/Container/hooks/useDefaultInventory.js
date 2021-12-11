@@ -34,7 +34,7 @@ export const useDefaultInventory = ({
         enable_deal,
         market_type,
         price_engine,
-        market_dsps
+        market_dsps = []
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
@@ -46,10 +46,12 @@ export const useDefaultInventory = ({
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
       );
-      const marketDsps = Array.from(market_dsps, item => ({
-        value: item?.uuid,
-        label: item?.name
-      }));
+      const marketDsps = market_dsps
+        ? Array.from(market_dsps, item => ({
+            value: item?.uuid,
+            label: item?.name
+          }))
+        : [];
 
       const destructureTags = metadata?.tags?.map(item => {
         const foundTag = inventoryTags.find(itemTag => itemTag.value === item);
