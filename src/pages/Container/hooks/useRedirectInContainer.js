@@ -20,19 +20,19 @@ export function useRedirectInContainer() {
   } = useContainerSelector();
 
   const enabled = containerRedux?.id !== containerId;
-  console.log(
-    '🚀 ~ file: useRedirectInContainer.js ~ line 23 ~ useRedirectInContainer ~ containerId',
-    containerId
-  );
 
   const {
-    data: container,
+    data: containerRes,
     isFetching,
     status,
     isError,
     error,
     isFetched
   } = useGetContainer({containerId, enabled});
+  const container = React.useMemo(
+    () => ({...containerRes, id: containerRes?.uuid}),
+    [containerRes]
+  );
 
   const {data: {items: pages = []} = {}, status: pageStatus} = useGetAllPage({
     containerId,
@@ -41,10 +41,7 @@ export function useRedirectInContainer() {
     },
     enabled: !!containerId && isFetched
   });
-  console.log(
-    '🚀 ~ file: useRedirectInContainer.js ~ line 30 ~ useRedirectInContainer ~ pages',
-    pages
-  );
+
   const destructurePages = React.useMemo(
     () =>
       pages?.map(item => {

@@ -135,7 +135,6 @@ const handleActions = {
 
   [EXPAND_SOURCE]: handleExpandSource,
   [SET_FLAG_ALREADY]: handleSetFlagAlready,
-
   [DELETE_PAGE]: handleDeletePage,
   [UPDATE_PAGE]: handleUpdatePage,
   [TOGGLE_CREATE_PAGE_MODAL]: handleCreatePageModal,
@@ -256,7 +255,6 @@ function handleSetContainer(state, action) {
     if (item.id === container.uuid) {
       //
       if (!item.expanded) {
-        console.log('COLLAPSE');
         let containerItem = {
           ...item,
           expanded: true,
@@ -268,10 +266,6 @@ function handleSetContainer(state, action) {
           transfer_count,
           source: containerSource
         } = container;
-        console.log(
-          '🚀 ~ file: container.js ~ line 271 ~ handleSetContainer ~ containerSource',
-          containerSource
-        );
 
         if (source === 'import' && import_count === 0) {
           containerItem.selected = true;
@@ -336,10 +330,6 @@ function handleSetContainer(state, action) {
 
             if (child.id !== 'import' && child.id !== 'transfer') {
               const pagesBySource = pages?.length > 0 ? pages : child?.children;
-              console.log(
-                '🚀 ~ file: container.js ~ line 334 ~ handleSetContainer ~ pagesBySource',
-                pagesBySource
-              );
               const sourceChildren = pagesBySource?.map((sourceData, index) => {
                 const {id, name} = sourceData;
 
@@ -356,10 +346,7 @@ function handleSetContainer(state, action) {
                   containerId: container.id
                 };
               });
-              console.log(
-                '🚀 ~ file: container.js ~ line 355 ~ sourceChildren ~ sourceChildren',
-                sourceChildren
-              );
+
               sourceItem.children = sourceChildren;
             } else {
               sourceItem.selected = true;
@@ -379,7 +366,6 @@ function handleSetContainer(state, action) {
         }
         return containerItem;
       } else {
-        console.log('EXPANDED');
         const isExistSource = !!item.children.find(
           sourceNe => sourceNe.id === source
         );
@@ -398,10 +384,6 @@ function handleSetContainer(state, action) {
                 };
                 const pagesBySource =
                   pages?.length > 0 ? pages : child?.children;
-                console.log(
-                  '🚀 ~ file: container.js ~ line 386 ~ handleSetContainer ~ pagesBySource',
-                  pagesBySource
-                );
 
                 const sourceChildren = pagesBySource?.map(
                   (sourceData, index) => {
@@ -582,19 +564,9 @@ function handleExpandSource(state, action) {
 
 function handleDeletePage(state, action) {
   const newNodes = [...state.containers].map(item => {
-    console.log(
-      'handleDeletePage container id',
-      item.id,
-      state.selectedContainerId
-    );
     if (item.id === state.selectedContainerId) {
       let isExistPage = true;
       let updatedChild = item.children.map(source => {
-        console.log(
-          '===== source.id',
-          source.id,
-          original(state.selectedSource)
-        );
         if (source.id === state.selectedSource) {
           let updatedSource = {
             ...source
@@ -609,10 +581,6 @@ function handleDeletePage(state, action) {
         }
         return source;
       });
-      console.log(
-        '🚀 ~ file: container.js ~ line 602 ~ handleDeletePage ~ updatedChild',
-        updatedChild
-      );
 
       if (!isExistPage) {
         updatedChild = item.children.filter(

@@ -17,7 +17,6 @@ import {ContainersTree} from '../Tree';
 // import ContainerCreateDialog from '../ContainerCreateDialog';
 
 function ContainerLayout(props) {
-  console.log('ContainerLayout');
   const reduxDispatch = useDispatch();
   const {t} = useTranslation();
 

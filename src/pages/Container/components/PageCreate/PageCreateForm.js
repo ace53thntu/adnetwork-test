@@ -21,6 +21,7 @@ import {useQueryClient} from 'react-query';
 import {GET_CONTAINER} from 'queries/container/constants';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {GET_PAGES} from 'queries/page/constants';
+import {PageAPIRequest} from 'api/page.api';
 
 function PageCreateForm({pageTags = []}) {
   const queryCache = useQueryClient();
@@ -113,13 +114,32 @@ function PageCreateForm({pageTags = []}) {
           options: {}
         });
 
+        const pageRes = await PageAPIRequest.getPagesByContainer({
+          cid
+        });
+
+        const container = containerRes.data;
+        const pageId = data?.uuid;
+        const pages = pageRes?.data?.map(item => {
+          return {
+            id: item.uuid,
+            name: item.name,
+            children: [],
+            numChildren: 0,
+            page: 0,
+            expanded: false,
+            selected: false,
+            parentId: pageSource,
+            isPage: true,
+            containerId: container?.uuid
+          };
+        });
+
         queryCache.setQueryData([GET_CONTAINER, cid], containerRes.data);
         queryCache.invalidateQueries([GET_PAGES, cid]);
         toggleModal();
-        dispatch(setContainerRedux(containerRes.data, pageSource, data.uuid));
-        navigate(
-          `/container/${cid}/${TAG_FROM_SOURCE[pageSource]}/${data?.uuid}`
-        );
+        dispatch(setContainerRedux(container, pageSource, pageId, pages));
+        navigate(`/container/${cid}/${TAG_FROM_SOURCE[pageSource]}/${pageId}`);
       } catch (error) {
         ShowToast.error(error, {
           closeOnClick: true
