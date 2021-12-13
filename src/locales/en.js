@@ -1,5 +1,9 @@
 const en = {
-  // Inventoru
+  // Form Input
+  pleaseEnterNumber: 'Please enter a number',
+  selectType: 'Select type',
+
+  // Inventory
   priceEngine: 'Price engine',
   selectPriceEngine: 'Select Price engine',
   marketType: 'Market type',

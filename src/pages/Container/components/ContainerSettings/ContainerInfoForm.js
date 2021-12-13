@@ -34,7 +34,7 @@ window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=d
 function ContainerInfoForm(props) {
   const {t} = useTranslation();
   const {containerRedux} = useContainerSelector();
-  const {containers, container, eventsCounts} = props;
+  const {containers, container} = props;
   const dispatch = useDispatch();
   const {source} = useParams();
 
@@ -138,7 +138,7 @@ function ContainerInfoForm(props) {
                 <Col sm={12} md={6}>
                   <Count
                     label="Inventories"
-                    count={eventsCounts}
+                    count={container?.total_inventories || 0}
                     type="success"
                   />
                 </Col>

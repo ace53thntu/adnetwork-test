@@ -15,6 +15,7 @@ function FormReactSelect({
   optionLabelField = 'label',
   defaultValue = null,
   menuPlacement = 'bottom',
+  isClearable = false,
   ...rest
 }) {
   const {errors, control} = useFormContext();
@@ -69,6 +70,7 @@ function FormReactSelect({
                   }
                 }}
                 menuPlacement={menuPlacement}
+                isClearable={isClearable}
               />
             );
           }}

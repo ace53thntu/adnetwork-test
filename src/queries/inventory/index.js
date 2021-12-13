@@ -7,3 +7,4 @@ export {useDealInventory} from './useDealInventory';
 export {useGetInventoryDeals} from './useGetInventoryDeals';
 export {useGetInventoryBids} from './useGetInventoryBids';
 export {useGetInventoryByPage} from './useGetInventoryByPage';
+export {useGetInventoriesInfinity} from './useGetInventoriesInfinity';

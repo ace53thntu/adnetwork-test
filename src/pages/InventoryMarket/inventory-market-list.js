@@ -15,6 +15,15 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
 import {ContainerPage} from './components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
+import {useDispatch} from 'react-redux';
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {FilterBar, FilterBarForm} from './components/filter-bar';
+import {
+  getInventoryFormats,
+  getInventoryTypes
+} from 'pages/Container/constants';
+import {useSearchTypeSelector} from 'store/reducers/inventory-market';
+import {InventoryListLayout} from './components/inventory-list-layout';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -37,12 +46,12 @@ const getStatus = ({row, statusProps}) => {
 
 const InventoryMarket = () => {
   const {t} = useTranslation();
-
   //---> Query list of containers
   const {data: containersRes = [], isLoading} = useGetContainers();
   const containers = React.useMemo(() => {
     return containersRes?.items?.map(item => ({...item, id: item?.uuid})) || [];
   }, [containersRes?.items]);
+  const searchType = useSearchTypeSelector();
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -82,6 +91,12 @@ const InventoryMarket = () => {
     ];
   }, []);
 
+  const reduxDispatch = useDispatch();
+
+  React.useEffect(() => {
+    reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
+
   return (
     <AppContent>
       <PageTitleAlt
@@ -91,26 +106,40 @@ const InventoryMarket = () => {
       />
       <Container fluid>
         <Row>
+          <Col>
+            <FilterBar>
+              <FilterBarForm
+                typeOptions={getInventoryTypes()}
+                formatOptions={getInventoryFormats()}
+              />
+            </FilterBar>
+          </Col>
+        </Row>
+        <Row>
           <Col md="12">
-            <Card className="main-card mb-3">
-              {/* Render loading indicator */}
-              {isLoading && <LoadingIndicator />}
-              <CardHeader
-                style={{display: 'flex', justifyContent: 'space-between'}}
-              >
-                <div>{t('inventoryMarketList')}</div>
-              </CardHeader>
-              <CardBody style={{minHeight: '400px'}}>
-                <AccordionList
-                  data={containers}
-                  columns={columns}
-                  detailPanel={rowData => {
-                    return <ContainerPage data={rowData} />;
-                  }}
-                  detailCaption={t('pages')}
-                />
-              </CardBody>
-            </Card>
+            {searchType ? (
+              <InventoryListLayout />
+            ) : (
+              <Card className="main-card mb-3">
+                {/* Render loading indicator */}
+                {isLoading && <LoadingIndicator />}
+                <CardHeader
+                  style={{display: 'flex', justifyContent: 'space-between'}}
+                >
+                  <div>{t('inventoryMarketList')}</div>
+                </CardHeader>
+                <CardBody style={{minHeight: '400px'}}>
+                  <AccordionList
+                    data={containers}
+                    columns={columns}
+                    detailPanel={rowData => {
+                      return <ContainerPage data={rowData} />;
+                    }}
+                    detailCaption={t('pages')}
+                  />
+                </CardBody>
+              </Card>
+            )}
           </Col>
         </Row>
       </Container>
