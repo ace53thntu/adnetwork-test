@@ -2,12 +2,18 @@ const en = {
   // Form Input
   pleaseEnterNumber: 'Please enter a number',
   selectType: 'Select type',
+  width: 'Width',
+  height: 'Height',
+  backgroudColor: 'Background color',
+  extension: 'Extension',
+  duration: 'Duration',
+  selectTrackerTemplate: 'Select tracker template',
 
   // Inventory
   priceEngine: 'Price engine',
   selectPriceEngine: 'Select Price engine',
   marketType: 'Market type',
-  selectMartketType: 'Select martket type',
+  selectMarketType: 'Select market type',
   selectDsp: 'Select DSP',
   selectFormat: 'Select format',
   format: 'Format',
@@ -222,7 +228,7 @@ const en = {
   merge: 'Merge',
   trackerTemplate: 'Tracker template',
   type: 'Type',
-  enableDeal: 'Enable deal',
+  enableDeal: 'Deal',
 
   //partners
   partnerDescriptiom: 'View or change the partners information.',

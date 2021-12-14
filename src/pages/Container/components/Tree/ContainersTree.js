@@ -38,7 +38,10 @@ function ContainersTree(props) {
     container
   } = useContainerSelector();
 
-  const {data: {items: containers = []} = {}, isFetching} = useGetContainers();
+  const {data: {items: containers = []} = {}, isFetching} = useGetContainers({
+    params: {limit: 1000, page: 1},
+    enabled: true
+  });
 
   React.useEffect(() => {
     if (!isFetching) {

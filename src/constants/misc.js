@@ -1,3 +1,8 @@
+export const InputStatus = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive'
+};
+
 export const LANG_OPTIONS = [
   {
     id: 'en',

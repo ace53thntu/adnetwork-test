@@ -16,13 +16,13 @@ import {
   useContainerSelector
 } from 'store/reducers/container';
 import {CONTAINERS} from 'pages/Container/hooks/constants';
-import {validationDescriptionTab} from '../ContainerWebsiteTag/validations';
 import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
 import {FormRadioGroup, FormTextInput} from 'components/forms';
 import {useDeleteContainer, useEditContainer} from 'queries/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from './dto';
 import PublisherSelect from './PublisherSelect';
+import {validationDescriptionTab} from './validattion';
 
 const propTypes = {
   container: PropTypes.object,

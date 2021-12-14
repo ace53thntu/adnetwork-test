@@ -1,4 +1,3 @@
-import {Button} from '@material-ui/core';
 import styled from 'styled-components';
 
 export const FilterWrap = styled.div`
@@ -24,18 +23,12 @@ export const FilterButtonStyled = styled.div`
   margin-bottom: 10px;
 `;
 
-export const FilterButton = styled(({isActived, ...props}) => (
-  <Button {...props} />
-))`
-  background: ${props => (props.isActived === 'true' ? '#3f51b5' : '#ffffff')};
-  color: ${props => (props.isActived === 'true' ? '#ffffff' : '#3f51b5')};
-  &:hover {
-    color: ${props => (props.isActived === 'true' ? '#ffffff' : 'inherit')};
-    background: ${props =>
-      props.isActived === 'true' ? '#3f51b5' : 'inherit'};
-  }
-`;
-
 export const SubmitButtonWrap = styled.div`
   padding-top: 30px;
+`;
+
+export const FilterModeGroupStyled = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 `;

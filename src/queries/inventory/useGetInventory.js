@@ -18,7 +18,6 @@ export function useGetInventory(inventoryId) {
           cancelToken
         }
       }).then(res => {
-        console.log('res?.data', res?.data);
         return res?.data ?? {};
       }),
     {

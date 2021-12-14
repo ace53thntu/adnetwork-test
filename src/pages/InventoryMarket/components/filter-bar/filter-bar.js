@@ -2,14 +2,11 @@
 import React from 'react';
 
 //---> External Modules
-import FilterListIcon from '@material-ui/icons/FilterList';
-import SearchIcon from '@material-ui/icons/Search';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import {ButtonGroup, Button} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 
 //---> Internal Modules
 import {
-  FilterButton,
   FilterButtonStyled,
   FilterContent,
   FilterWrap,
@@ -17,23 +14,25 @@ import {
 } from './styled';
 import {useDispatch} from 'react-redux';
 import {
-  InitParamFilter,
+  InitFilterParams,
+  resetFilterParamsRedux,
   setFilterParamsRedux,
   setSearchTypeRedux,
   useSearchTypeSelector
 } from 'store/reducers/inventory-market';
-import {ActionTypes} from 'pages/InventoryMarket/constants';
-import {Button} from 'reactstrap';
 import {filterSchema} from './validation';
 import {useTranslation} from 'react-i18next';
 import {mappingFormToApi} from './dto';
+import MarketTypeSelect from './market-type-select';
+import {FilterTypes} from 'constants/inventory-market';
+import FilterModeGroup from './filter-mode-group';
 
 const FilterBar = ({children}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const searchType = useSearchTypeSelector();
   const methods = useForm({
-    defaultValues: InitParamFilter,
+    defaultValues: InitFilterParams,
     resolver: filterSchema(t)
   });
   const {
@@ -45,10 +44,10 @@ const FilterBar = ({children}) => {
   function onClickButtonFilter(evt, type) {
     evt.preventDefault();
     if (searchType !== type) {
-      reset(InitParamFilter);
+      reset(InitFilterParams);
       dispatch(setSearchTypeRedux(type));
     } else {
-      reset(InitParamFilter);
+      reset(InitFilterParams);
       dispatch(setSearchTypeRedux(''));
     }
   }
@@ -61,39 +60,40 @@ const FilterBar = ({children}) => {
   function onClearFilterSearch(evt) {
     evt.preventDefault();
 
-    dispatch(setFilterParamsRedux(InitParamFilter));
-    reset(InitParamFilter);
+    dispatch(setFilterParamsRedux(InitFilterParams));
+    reset(InitFilterParams);
   }
+
+  React.useEffect(() => {
+    return () => dispatch(resetFilterParamsRedux());
+  }, [dispatch]);
 
   return (
     <>
+      <FilterModeGroup />
       {/* Action Header */}
-      <FilterButtonStyled title="Filter">
-        <ButtonGroup color="primary" aria-label=" primary button group">
+      <FilterButtonStyled>
+        <ButtonGroup>
           {/* Filter button */}
-          <FilterButton
+          <Button
             color="primary"
-            aria-label="filter"
-            component="span"
-            isActived={searchType === ActionTypes.FILTER ? 'true' : 'false'}
-            onClick={evt => onClickButtonFilter(evt, ActionTypes.FILTER)}
+            outline={searchType === FilterTypes.FILTER ? false : true}
+            onClick={evt => onClickButtonFilter(evt, FilterTypes.FILTER)}
           >
-            <span className="mr-2">Filter</span>
-            <FilterListIcon fontSize="small" />
-          </FilterButton>
+            Filter
+          </Button>
 
           {/* Search button */}
-          <FilterButton
+          <Button
             color="primary"
-            aria-label="search"
-            component="span"
-            isActived={searchType === ActionTypes.SEARCH ? 'true' : 'false'}
-            onClick={evt => onClickButtonFilter(evt, ActionTypes.SEARCH)}
+            outline={searchType === FilterTypes.SEARCH ? false : true}
+            onClick={evt => onClickButtonFilter(evt, FilterTypes.SEARCH)}
           >
-            <span className="mr-2">Search</span>
-            <SearchIcon fontSize="small" />
-          </FilterButton>
+            Search
+          </Button>
         </ButtonGroup>
+        {/* Market type filter */}
+        <MarketTypeSelect />
       </FilterButtonStyled>
 
       {/* Form */}

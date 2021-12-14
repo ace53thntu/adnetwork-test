@@ -13,7 +13,6 @@ import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
 
 function ContainerSourcePage(props) {
   const {source, pageId} = useParams();
-
   const {isFetching, isError, error} = useRedirectInContainer();
   const {data: {items: inventories = []} = {}} = useGetInventoryByPage(pageId);
 

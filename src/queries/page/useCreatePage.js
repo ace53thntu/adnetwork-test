@@ -22,7 +22,6 @@ export function useCreatePage(containerId) {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        console.log('onSettled containerId', containerId);
         client.invalidateQueries([GET_PAGES, containerId]);
       }
     }

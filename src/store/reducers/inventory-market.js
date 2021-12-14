@@ -1,24 +1,29 @@
+import React from 'react';
+
 import {createSelector} from 'reselect';
 import {useSelector} from 'react-redux';
 
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
-import React from 'react';
+import {FilterMode} from 'constants/inventory-market';
 
-export const InitParamFilter = {
+export const InitFilterParams = {
   format: null,
   type: null,
   floor_price: '',
   deal_price: '',
   fill_rate: '',
   click_rate: '',
-  search: ''
+  search: '',
+  market_type: ''
 };
 
 //---> Define action types
 const ACTION_PREFIX = '@inventory_market';
 const SET_SEARCH_TYPE = `${ACTION_PREFIX}/SET_SEARCH_TYPE`;
 const SET_FILTER_PARAMS = `${ACTION_PREFIX}/SET_FILTER_PARAMS`;
+const SET_FILTER_MODE = `${ACTION_PREFIX}/SET_FILTER_MODE`;
+const RESET_FILTER = `${ACTION_PREFIX}/RESET_FILTER`;
 
 //---> Create actions
 export const setSearchTypeRedux = searchType =>
@@ -27,21 +32,38 @@ export const setSearchTypeRedux = searchType =>
 export const setFilterParamsRedux = filterParams =>
   createAction(SET_FILTER_PARAMS, {filterParams});
 
+export const resetFilterParamsRedux = () => createAction(RESET_FILTER);
+export const setFilterModeRedux = filterMode =>
+  createAction(SET_FILTER_MODE, {filterMode});
+
 //---> Initializing states
 const inventoryMarketInitialState = {
   searchType: '',
-  filterParams: InitParamFilter
+  filterParams: InitFilterParams,
+  filterMode: FilterMode.MARKET
 };
 
 //---> Action mapping
 const handleActions = {
   [SET_SEARCH_TYPE]: handleSetSearchType,
-  [SET_FILTER_PARAMS]: handleSetFilterParams
+  [SET_FILTER_PARAMS]: handleSetFilterParams,
+  [RESET_FILTER]: handleResetFilter,
+  [SET_FILTER_MODE]: handleSetFilterMode
 };
+
+function handleSetFilterMode(state, action) {
+  state.filterMode = action.payload.filterMode;
+}
+
+function handleResetFilter(state, action) {
+  state.searchType = '';
+  state.filterParams = InitFilterParams;
+  state.filterMode = FilterMode.MARKET;
+}
 
 function handleSetSearchType(state, action) {
   state.searchType = action.payload.searchType;
-  state.filterParams = InitParamFilter;
+  state.filterParams = InitFilterParams;
 }
 
 function handleSetFilterParams(state, action) {
@@ -60,7 +82,17 @@ const makeSelectFilterParams = () =>
     a => a.filterParams
   );
 
+const makeSelectFilterMode = () =>
+  createSelector(
+    state => state.inventoryMarketReducer,
+    a => a.filterMode
+  );
+
 //---> Hook to select state
+export function useFilterModeSelector() {
+  const selectFilterMode = React.useMemo(makeSelectFilterMode, []);
+  return useSelector(state => selectFilterMode(state));
+}
 export function useFilterParamsSelector() {
   const selectFilterParams = React.useMemo(makeSelectFilterParams, []);
   return useSelector(state => selectFilterParams(state));

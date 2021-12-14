@@ -16,7 +16,10 @@ import {LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
 import NoDataAvailable from 'components/list/no-data';
 import {useInventoriesByContainer} from '../../hooks';
-import {getInventoryTypeColor} from '../../helpers';
+import {
+  getInventoryMarketTypeColor,
+  getInventoryTypeColor
+} from '../../helpers';
 import {useGetPositions} from 'queries/position';
 import {useGetDsps} from 'queries/dsp';
 import {useOptionsList} from 'hooks';
@@ -82,6 +85,15 @@ const InventoryList = ({page, filterParams = null}) => {
         accessor: 'type',
         cell: row => (
           <Badge color={getInventoryTypeColor({type: row?.value})}>
+            {row?.value}
+          </Badge>
+        )
+      },
+      {
+        header: 'Market Type',
+        accessor: 'market_type',
+        cell: row => (
+          <Badge color={getInventoryMarketTypeColor({type: row?.value})}>
             {row?.value}
           </Badge>
         )
@@ -225,6 +237,7 @@ const InventoryList = ({page, filterParams = null}) => {
           isBid={isBid}
           dspOptions={dspOptions}
           audienceOptions={audienceOptions}
+          params={params}
         />
       </Modal>
     </React.Fragment>

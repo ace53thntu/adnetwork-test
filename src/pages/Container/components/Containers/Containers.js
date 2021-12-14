@@ -42,7 +42,10 @@ const Containers = props => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
-  const {data: containers} = useGetContainers();
+  const {data: containers} = useGetContainers({
+    params: {limit: 1000, page: 1},
+    enabled: true
+  });
 
   const onRowClick = React.useCallback(
     row => {

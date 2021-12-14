@@ -10,8 +10,8 @@ import {useTranslation} from 'react-i18next';
 import {FormReactSelect, FormTextInput} from 'components/forms';
 import {FormFieldItem} from './styled';
 import {useSearchTypeSelector} from 'store/reducers/inventory-market';
-import {ActionTypes} from 'pages/InventoryMarket/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {FilterTypes} from 'constants/inventory-market';
 
 // Prop types
 const propTypes = {
@@ -27,7 +27,7 @@ const FilterBarForm = ({children, typeOptions = [], formatOptions = []}) => {
 
   return (
     <>
-      {searchType === ActionTypes.SEARCH && (
+      {searchType === FilterTypes.SEARCH && (
         <FormFieldItem width="100%">
           <FormTextInput
             placeholder="Please type something..."
@@ -36,7 +36,7 @@ const FilterBarForm = ({children, typeOptions = [], formatOptions = []}) => {
           />
         </FormFieldItem>
       )}
-      {searchType === ActionTypes.FILTER && (
+      {searchType === FilterTypes.FILTER && (
         <React.Fragment>
           <FormFieldItem width="180px">
             <FormReactSelect

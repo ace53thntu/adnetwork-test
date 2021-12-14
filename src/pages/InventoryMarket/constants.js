@@ -12,8 +12,3 @@ export const INPUTS_NAME = {
   STATUS: 'status',
   NAME: 'name'
 };
-
-export const ActionTypes = {
-  FILTER: 'filter',
-  SEARCH: 'search'
-};

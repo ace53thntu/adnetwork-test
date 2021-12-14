@@ -17,7 +17,7 @@ import {
 } from 'reactstrap';
 
 import {toggleCreatePageModalRedux} from 'store/reducers/container';
-import {Count} from '../ContainerWebsiteTag/CompletedTab';
+import Count from '../ContainerSettings/Count';
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
@@ -60,36 +60,15 @@ function ContainerSources(props) {
                   {t('addResource')}
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem
-                    disabled={countWebsiteTagPages > 0}
-                    onClick={onHandleAddPage}
-                  >
+                  <DropdownItem onClick={onHandleAddPage}>
                     {t('websiteTracking')}
                   </DropdownItem>
-                  <DropdownItem
-                    disabled={countIOSTagPages > 0}
-                    onClick={onHandleAddScreen}
-                  >
+                  <DropdownItem onClick={onHandleAddScreen}>
                     {t('iOSTracking')}
                   </DropdownItem>
-                  <DropdownItem
-                    disabled={countAndroidTagPages > 0}
-                    onClick={onHandleAddScreenAndroid}
-                  >
+                  <DropdownItem onClick={onHandleAddScreenAndroid}>
                     {t('androidTracking')}
                   </DropdownItem>
-                  {/* <DropdownItem
-                    disabled={importCount > 0}
-                    onClick={() => navigate('import')}
-                  >
-                    {t('manualImportation')}
-                  </DropdownItem>
-                  <DropdownItem
-                    disabled={transferCount > 0}
-                    onClick={() => navigate('transfer')}
-                  >
-                    {t('scheduleTransfer')}
-                  </DropdownItem> */}
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
 

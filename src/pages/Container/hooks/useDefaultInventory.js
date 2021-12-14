@@ -1,18 +1,9 @@
 import {useMemo} from 'react';
 import {capitalize} from 'utils/helpers/string.helpers';
-import {
-  getInventoryFormats,
-  getInventoryTags,
-  getInventoryTypes
-} from '../constants';
+import {getInventoryFormats, getInventoryTypes} from '../constants';
 
-export const useDefaultInventory = ({
-  inventory,
-  trackerTemplates = [],
-  positions = []
-}) => {
+export const useDefaultInventory = ({inventory, positions = []}) => {
   return useMemo(() => {
-    const inventoryTags = getInventoryTags();
     const inventoryTypes = getInventoryTypes();
     const inventoryFormats = getInventoryFormats();
 
@@ -30,6 +21,7 @@ export const useDefaultInventory = ({
         click_rate,
         position_id,
         tracker_template_uuid,
+        tracker_template_name,
         deal_floor_price,
         enable_deal,
         market_type,
@@ -40,9 +32,9 @@ export const useDefaultInventory = ({
       const destructurePosition = positions.find(
         item => item.value === position_id
       );
-      const destructureTrackerTemplate = trackerTemplates.find(
-        item => item.value === tracker_template_uuid
-      );
+      const destructureTrackerTemplate = tracker_template_uuid
+        ? {value: tracker_template_uuid, label: tracker_template_name}
+        : null;
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
       );
@@ -52,12 +44,12 @@ export const useDefaultInventory = ({
             label: item?.name
           }))
         : [];
+      let parsedTags =
+        metadata?.tags && Object.keys(metadata?.tags).length > 0
+          ? Object.values(metadata.tags)?.map(item => item)
+          : [];
 
-      const destructureTags = metadata?.tags?.map(item => {
-        const foundTag = inventoryTags.find(itemTag => itemTag.value === item);
-        return foundTag;
-      });
-      metadata.tags = destructureTags;
+      metadata.tags = parsedTags;
       return {
         uuid,
         name,
@@ -83,5 +75,5 @@ export const useDefaultInventory = ({
       };
     }
     return {};
-  }, [inventory, positions, trackerTemplates]);
+  }, [inventory, positions]);
 };

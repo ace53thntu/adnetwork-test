@@ -18,10 +18,10 @@ function PagesAndEventsTab(props) {
           </CardHeader>
           <CardBody>
             <Row>
-              <Col sm="12" md="7">
+              <Col sm="12" md="5">
                 <PageInformation />
               </Col>
-              <Col sm="12" md="5">
+              <Col sm="12" md="7">
                 {children}
               </Col>
             </Row>

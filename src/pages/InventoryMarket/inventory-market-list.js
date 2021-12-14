@@ -47,7 +47,10 @@ const getStatus = ({row, statusProps}) => {
 const InventoryMarket = () => {
   const {t} = useTranslation();
   //---> Query list of containers
-  const {data: containersRes = [], isLoading} = useGetContainers();
+  const {data: containersRes = [], isLoading} = useGetContainers({
+    params: {limit: 1000, page: 1},
+    enabled: true
+  });
   const containers = React.useMemo(() => {
     return containersRes?.items?.map(item => ({...item, id: item?.uuid})) || [];
   }, [containersRes?.items]);

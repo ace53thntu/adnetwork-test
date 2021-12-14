@@ -2,21 +2,35 @@
 import React from 'react';
 
 // External Modules
+import {ErrorMessage} from '@hookform/error-message';
 import CurrencyInput from 'react-currency-input-field';
 import {Controller, useFormContext} from 'react-hook-form';
-import {ErrorMessage} from '@hookform/error-message';
 import {useTranslation} from 'react-i18next';
+import PropTypes from 'prop-types';
 import {Label} from 'reactstrap';
 
 // Internal Modules
 import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
 import {ErrorMessageStyled} from './styled';
 
+const propTypes = {
+  className: PropTypes.string,
+  inputId: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  prefix: PropTypes.string,
+  groupSeparator: PropTypes.string,
+  decimalSeparator: PropTypes.string,
+  disabled: PropTypes.bool
+};
+
 const CurrencyInputField = props => {
   const {t} = useTranslation();
 
   const {
-    className,
+    className = '',
     inputId = 'currencyInput',
     name: inputName = '',
     label = '',
@@ -24,7 +38,8 @@ const CurrencyInputField = props => {
     required = false,
     prefix = '',
     groupSeparator = '.',
-    decimalSeparator = ','
+    decimalSeparator = ',',
+    disabled = false
   } = props;
   const {control, errors} = useFormContext();
 
@@ -53,6 +68,7 @@ const CurrencyInputField = props => {
               step={1}
               groupSeparator={groupSeparator}
               decimalSeparator={decimalSeparator}
+              disabled={disabled}
             />
           );
         }}
@@ -67,5 +83,7 @@ const CurrencyInputField = props => {
     </div>
   );
 };
+
+CurrencyInputField.propTypes = propTypes;
 
 export default React.memo(CurrencyInputField);

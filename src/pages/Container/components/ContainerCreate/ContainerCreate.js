@@ -8,7 +8,10 @@ import ContainerCreateForm from './ContainerCreateForm';
 import {BlockOverlay} from 'components/common';
 
 function ContainerCreate(props) {
-  const {data: {items: containers = []} = {}, isFetching} = useGetContainers();
+  const {data: {items: containers = []} = {}, isFetching} = useGetContainers({
+    params: {limit: 1000, page: 1},
+    enabled: true
+  });
 
   return (
     <>

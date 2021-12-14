@@ -1,4 +1,4 @@
-export const MartketTypes = [
+export const MarketTypes = [
   {
     value: 'private',
     label: 'Private'

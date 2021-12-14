@@ -4,7 +4,7 @@ import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
 import OverviewTab from '../WebsiteTag/OverviewTab';
 import PagesAndEventsTab from '../WebsiteTag/PagesAndEventsTab';
 import {IOS_TAG_STEPS} from 'pages/Container/constants';
-import Inventories from '../ContainerWebsiteTag/Inventories';
+import Inventories from '../InventoryForm/Inventories';
 
 function IosTag(props) {
   const [activeStep, setActiveStep] = React.useState(0);

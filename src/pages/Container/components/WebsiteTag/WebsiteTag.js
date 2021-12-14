@@ -3,13 +3,12 @@ import * as React from 'react';
 import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
 
 import {WEB_TAG_STEPS} from '../../constants';
-import Inventories from '../ContainerWebsiteTag/Inventories';
+import Inventories from '../InventoryForm/Inventories';
 import OverviewTab from './OverviewTab';
 import PagesAndEventsTab from './PagesAndEventsTab';
 
 function WebsiteTag(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-
   const ACTIVE_STEP = WEB_TAG_STEPS[activeStep];
 
   const tabProps = {

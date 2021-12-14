@@ -36,6 +36,8 @@ import DealForm from './deal.form';
 import InventoryBidForm from './bid.form';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useExcludePeriod} from '../hooks';
+import {useQueryClient} from 'react-query';
+import {GET_INVENTORIES} from 'queries/inventory/constants';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -54,11 +56,13 @@ const InventoryDetails = ({
   isDeal = false,
   dspOptions = [],
   audienceOptions = [],
-  isEdit = false
+  isEdit = false,
+  params
 }) => {
   let title = isBid ? 'Bid:' : '';
   title = isDeal ? 'Deal:' : title;
   const classes = useStyles();
+  const client = useQueryClient();
 
   //---> Executing queries
   const {data: listDeals} = useGetInventoryDeals({
@@ -118,6 +122,7 @@ const InventoryDetails = ({
         data: submitData,
         inventoryId: inventoryData?.uuid
       });
+      await client.invalidateQueries([GET_INVENTORIES, params]);
       ShowToast.success('Bid inventory successfully');
       toggle();
     } catch (error) {

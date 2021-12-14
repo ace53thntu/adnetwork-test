@@ -14,7 +14,6 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ButtonLoading} from 'components/common';
 import {useCreatePage, useGetPagesByContainer} from 'queries/page';
 import {useDispatch} from 'react-redux';
-import {TAG_FROM_SOURCE} from '../ContainerTree/constants';
 import BlockUi from 'react-block-ui';
 import {ContainerAPIRequest} from 'api/container.api';
 import {useQueryClient} from 'react-query';
@@ -22,6 +21,7 @@ import {GET_CONTAINER} from 'queries/container/constants';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {GET_PAGES} from 'queries/page/constants';
 import {PageAPIRequest} from 'api/page.api';
+import {TAG_FROM_SOURCE} from 'constants/container';
 
 function PageCreateForm({pageTags = []}) {
   const queryCache = useQueryClient();
@@ -114,13 +114,18 @@ function PageCreateForm({pageTags = []}) {
           options: {}
         });
 
-        const pageRes = await PageAPIRequest.getPagesByContainer({
-          cid
+        const pageRes = await PageAPIRequest.getAllPage({
+          params: {
+            container_uuid: cid,
+            source: pageSource,
+            limit: 1000,
+            page: 1
+          }
         });
 
         const container = containerRes.data;
         const pageId = data?.uuid;
-        const pages = pageRes?.data?.map(item => {
+        const pages = pageRes?.data?.items?.map(item => {
           return {
             id: item.uuid,
             name: item.name,
@@ -137,11 +142,12 @@ function PageCreateForm({pageTags = []}) {
 
         queryCache.setQueryData([GET_CONTAINER, cid], containerRes.data);
         queryCache.invalidateQueries([GET_PAGES, cid]);
-        toggleModal();
         dispatch(setContainerRedux(container, pageSource, pageId, pages));
+        toggleModal();
+
         navigate(`/container/${cid}/${TAG_FROM_SOURCE[pageSource]}/${pageId}`);
       } catch (error) {
-        ShowToast.error(error, {
+        ShowToast.error(error?.msg, {
           closeOnClick: true
         });
       } finally {
@@ -150,13 +156,13 @@ function PageCreateForm({pageTags = []}) {
     },
     [
       cid,
+      pageSource,
       createPage,
-      dispatch,
       isMobile,
-      navigate,
       queryCache,
+      dispatch,
       toggleModal,
-      pageSource
+      navigate
     ]
   );
 
