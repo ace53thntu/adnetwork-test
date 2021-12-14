@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
+import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -25,22 +26,40 @@ import PublisherCreate from './publisher-create';
 import PublisherEdit from './publisher-edit';
 import {PublisherForm} from './components';
 import {LoadingIndicator} from 'components/common';
-import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
+import {useDeletePublisher, useGetPublishersInfinity} from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Pagination} from 'components/list/pagination';
 
 const PublisherList = () => {
+  const reduxDispatch = useDispatch();
   const {t} = useTranslation();
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
-  const {data: publishersRes, isLoading} = useGetPublishers();
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetPublishersInfinity({
+    params: {
+      limit: DEFAULT_PAGINATION.perPage
+    },
+    enabled: true
+  });
+
   const publishers = React.useMemo(() => {
-    return publishersRes?.items?.map(item => {
-      return {...item, id: item.uuid};
-    });
-  }, [publishersRes?.items]);
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      return [...acc, ...items];
+    }, []);
+  }, [pages]);
+
   const {
     mutateAsync: deletePublisher,
     isLoading: isLoadingDelete
@@ -120,6 +139,10 @@ const PublisherList = () => {
     }
   };
 
+  React.useEffect(() => {
+    reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
+
   return (
     <>
       <AppContent>
@@ -132,7 +155,7 @@ const PublisherList = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
-                {isLoading && <LoadingIndicator />}
+                {isFetching && <LoadingIndicator />}
 
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
@@ -159,6 +182,13 @@ const PublisherList = () => {
                     handleAction={onHandleDelete}
                     handleClickItem={onClickItem}
                   />
+                  {hasNextPage && (
+                    <Pagination
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      fetchNextPage={fetchNextPage}
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>

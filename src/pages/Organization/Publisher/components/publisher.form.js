@@ -34,6 +34,7 @@ import {
 import {schemaValidate} from './validation';
 import {useDomainOptions} from 'pages/Organization/hooks';
 import {useGetDomains} from 'queries/domain';
+import DomainSelect from '../../components/domain-select';
 
 const PublisherForm = ({
   modal = false,
@@ -95,7 +96,7 @@ const PublisherForm = ({
         toggle();
       } catch (err) {
         console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create publisher');
+        ShowToast.error(err?.msg || 'Fail to create publisher');
       }
     } else {
       // EDIT
@@ -105,7 +106,7 @@ const PublisherForm = ({
         toggle();
       } catch (err) {
         console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to update publisher');
+        ShowToast.error(err?.msg || 'Fail to update publisher');
       }
     }
   };
@@ -129,12 +130,11 @@ const PublisherForm = ({
                 </Col>
                 {/* Domains */}
                 <Col sm={6}>
-                  <FormReactSelect
+                  <DomainSelect
+                    defaultValue={defaultValues?.domain}
                     name={INPUT_NAME.DOMAIN}
                     label={t('domain')}
                     placeholder={t('selectDomain')}
-                    options={domainOptions}
-                    defaultValue={defaultValues?.domains ?? []}
                   />
                 </Col>
 

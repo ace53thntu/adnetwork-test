@@ -16,7 +16,7 @@ import {
   Label
 } from 'reactstrap';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
+import {ActiveToogle, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
@@ -27,6 +27,7 @@ import {INPUT_NAME} from '../constants';
 import {mappingFormToApi} from './dto';
 import {useDefaultDsp} from 'pages/Organization/hooks';
 import {schemaValidate} from './validation';
+import DomainSelect from 'pages/Organization/components/domain-select';
 
 const DspForm = ({
   modal = false,
@@ -36,6 +37,7 @@ const DspForm = ({
   isEdit = false,
   dspId = ''
 }) => {
+  console.log('🚀 ~ file: dsp.form.js ~ line 40 ~ dspId', dspId);
   const {t} = useTranslation();
   const {data: dspData, isFetched, isLoading} = useGetDsp(dspId);
   const {mutateAsync: createDsp} = useCreateDsp();
@@ -75,17 +77,17 @@ const DspForm = ({
         toggle();
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create DSP');
+        ShowToast.error(err?.msg || 'Fail to create DSP');
       }
     } else {
       // EDIT
       try {
-        await editDsp({advId: dspId, data: requestBody});
+        await editDsp({dspId, data: requestBody});
         ShowToast.success('Updated DSP successfully');
         toggle();
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to update DSP');
+        ShowToast.error(err?.msg || 'Fail to update DSP');
       }
     }
   };
@@ -117,13 +119,11 @@ const DspForm = ({
                 </Col>
                 {/* Domains */}
                 <Col sm={12}>
-                  <FormReactSelect
-                    name={INPUT_NAME.DOMAINS}
-                    label={t('domains')}
-                    placeholder={t('selectDomains')}
-                    options={[]}
-                    defaultValue={null}
-                    multiple
+                  <DomainSelect
+                    defaultValue={defaultValues?.domain}
+                    name={INPUT_NAME.DOMAIN}
+                    label={t('domain')}
+                    placeholder={t('selectDomain')}
                   />
                 </Col>
                 <Col sm={12}>
@@ -131,7 +131,6 @@ const DspForm = ({
                     name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.API_KEY}`}
                     label={t('apiKey')}
                     placeholder={t('enterApiKey')}
-                    isRequired
                   />
                 </Col>
                 <Col sm={12}>
@@ -139,7 +138,6 @@ const DspForm = ({
                     name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.USER}`}
                     label={t('user')}
                     placeholder={t('enterUser')}
-                    isRequired
                   />
                 </Col>
                 <Col sm={12}>
@@ -147,7 +145,6 @@ const DspForm = ({
                     name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.PASSWORD}`}
                     label={t('password')}
                     placeholder={t('enterPassword')}
-                    isRequired
                     type="password"
                   />
                 </Col>

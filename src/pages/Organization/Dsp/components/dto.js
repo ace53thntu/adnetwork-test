@@ -11,16 +11,19 @@ export const mappingApiToForm = ({apiResp}) => {};
  * @returns data with API request body format trustly
  */
 export const mappingFormToApi = ({formData}) => {
-  const {name, status, url, domains, credential} = formData;
+  console.log(
+    '🚀 ~ file: dto.js ~ line 14 ~ mappingFormToApi ~ formData',
+    formData
+  );
+  const {name, status, url, domain, credential} = formData;
   const destructureName = name?.trim() || '';
   const destructureUrl = url?.trim() || '';
-  const desDomains = domains?.map(item => item.value) || null;
 
   return {
     name: destructureName,
     status,
     url: destructureUrl,
     credential,
-    domains: desDomains
+    domain: domain?.value || ''
   };
 };

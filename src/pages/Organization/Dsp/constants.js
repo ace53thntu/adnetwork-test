@@ -1,7 +1,7 @@
 export const INPUT_NAME = {
   NAME: 'name',
   STATUS: 'status',
-  DOMAINS: 'domains',
+  DOMAIN: 'domain',
   URL: 'url',
   CREDENTIAL: 'credential',
   API_KEY: 'apiKey',

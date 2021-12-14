@@ -1,3 +1,4 @@
+import {Grid} from '@material-ui/core';
 import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
@@ -5,6 +6,7 @@ import orange from '@material-ui/core/colors/orange';
 import red from '@material-ui/core/colors/red';
 import {makeStyles} from '@material-ui/core/styles';
 import {alpha as fade} from '@material-ui/core/styles';
+import styled from 'styled-components';
 
 const boxShadow = color =>
   `0px 1px 3px 0px ${fade(color, 0.2)}, 0px 1px 1px 0px ${fade(
@@ -132,3 +134,7 @@ export const useAccordionListStyles = makeStyles(
     name: 'components-accordion-list'
   }
 );
+
+export const GridStyled = styled(Grid)`
+  flex-grow: ${props => (props.flexGrow ? props.flexGrow : 1)};
+`;

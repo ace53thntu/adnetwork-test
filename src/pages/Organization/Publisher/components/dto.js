@@ -11,8 +11,6 @@ export const mappingApiToForm = ({
   domainsArr = [],
   countriesArr = []
 }) => {
-  console.log('🚀 ~ file: dto.js ~ line 14 ~ domainsArr', domainsArr);
-  console.log('🚀 ~ file: dto.js ~ line 14 ~ countriesArr', countriesArr);
   const {
     uuid = '',
     name = '',
@@ -25,7 +23,7 @@ export const mappingApiToForm = ({
     item => item?.value === metadata?.country
   );
   metadata.country = selectedCountry || null;
-  const destructureDomain = domainsArr.find(item => item?.value === domain);
+  const destructureDomain = domain ? {value: domain, label: domain} : null;
   return {
     uuid,
     name,

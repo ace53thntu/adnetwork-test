@@ -23,10 +23,12 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DspForm from './components/dsp.form';
 import DspCreate from './dsp-create';
 import DspEdit from './dsp-edit';
-import {useDeleteDsp, useGetDsps} from 'queries/dsp';
+import {useDeleteDsp, useGetDspsInfinity} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Pagination} from 'components/list/pagination';
 
 const DspList = () => {
   const {t} = useTranslation();
@@ -38,12 +40,25 @@ const DspList = () => {
   const [showDialog, setShowDialog] = React.useState(false);
 
   //---> QUery get list of DSP.
-  const {data: dspResp, isLoading} = useGetDsps();
-  const dsps = useMemo(() => {
-    return dspResp?.items?.map(item => {
-      return {...item, id: item.uuid};
-    });
-  }, [dspResp?.items]);
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetDspsInfinity({
+    params: {
+      limit: DEFAULT_PAGINATION.perPage
+    },
+    enabled: true
+  });
+
+  const dsps = React.useMemo(() => {
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      return [...acc, ...items];
+    }, []);
+  }, [pages]);
 
   //---> Mutation delete a DSP
   const {mutateAsync: deleteDsp, isLoading: isLoadingDelete} = useDeleteDsp();
@@ -57,8 +72,8 @@ const DspList = () => {
       },
       {
         header: 'Domain',
-        accessor: 'domains',
-        cell: row => <TagsList tagsList={row?.value || []} />
+        accessor: 'domain',
+        cell: row => <TagsList tagsList={[row?.value] || []} />
       },
       {
         header: 'Url',
@@ -99,7 +114,7 @@ const DspList = () => {
   };
 
   const onClickItem = data => {
-    setCurrentDsp(data?.uuid);
+    setCurrentDsp(data);
     setOpenFormEdit(true);
   };
 
@@ -137,7 +152,7 @@ const DspList = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
-                {isLoading && <LoadingIndicator />}
+                {isFetching && <LoadingIndicator />}
 
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
@@ -164,6 +179,13 @@ const DspList = () => {
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
+                  {hasNextPage && (
+                    <Pagination
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      fetchNextPage={fetchNextPage}
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>

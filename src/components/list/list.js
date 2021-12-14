@@ -14,7 +14,7 @@ import React, {useState} from 'react';
 import BodyText from './body-text';
 import Header from './header';
 import ListItem from './list-item';
-import {useListStyles} from './styles';
+import {GridStyled, useListStyles} from './styles';
 
 function List(props) {
   const {
@@ -94,8 +94,9 @@ function List(props) {
               <Grid container spacing={2}>
                 {columns?.map((column, index) => {
                   const {header, accessor, cell} = column;
+
                   return (
-                    <Grid
+                    <GridStyled
                       item
                       md
                       zeroMinWidth
@@ -118,7 +119,7 @@ function List(props) {
                           noTruncate={noTruncate}
                         />
                       )}
-                    </Grid>
+                    </GridStyled>
                   );
                 })}
               </Grid>
