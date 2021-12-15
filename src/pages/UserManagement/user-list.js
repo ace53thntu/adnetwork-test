@@ -25,15 +25,13 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useDeleteUser, useGetUsers} from 'queries/users';
+import {useDeleteUser, useGetUsersInfinity} from 'queries/users';
 import UserCreate from './user-create';
 import UserEdit from './user-edit';
 import {UserForm} from './components';
-import {useGetDsps} from 'queries/dsp';
-import {useGetPublishers} from 'queries/publisher';
-import {useGetAdvertisers} from 'queries/advertiser';
-import {useOptionsList} from 'hooks';
 import {getUserRole} from './constants';
+import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Pagination} from 'components/list/pagination';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -45,12 +43,28 @@ const UserList = () => {
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
 
   //---> Query get list of Users.
-  const {data: userRes, isLoading} = useGetUsers();
-  const users = useMemo(() => {
-    return userRes?.items?.map(item => {
-      return {...item, id: item.uuid};
-    });
-  }, [userRes?.items]);
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetUsersInfinity({
+    params: {
+      limit: DEFAULT_PAGINATION.perPage
+    },
+    enabled: true
+  });
+  const users = React.useMemo(() => {
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      const userDestructure = items?.map(userItem => ({
+        ...userItem,
+        id: userItem?.uuid
+      }));
+      return [...acc, ...userDestructure];
+    }, []);
+  }, [pages]);
 
   //---> Mutation delete user
   const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
@@ -65,21 +79,6 @@ const UserList = () => {
       return {...item, value: item.languages?.[0], label: item.name};
     });
   }, []);
-
-  const {data: dspResp = {}} = useGetDsps();
-  console.log(
-    '🚀 ~ file: user-list.js ~ line 70 ~ UserList ~ dspResp',
-    dspResp
-  );
-  const {data: publisherResp = {}} = useGetPublishers();
-  const {data: advertiserResp = {}} = useGetAdvertisers();
-  const dspOptions = useOptionsList({list: dspResp?.items});
-  console.log(
-    '🚀 ~ file: user-list.js ~ line 73 ~ UserList ~ dspOptions',
-    dspOptions
-  );
-  const advertiserOptions = useOptionsList({list: advertiserResp?.items});
-  const publisherOptions = useOptionsList({list: publisherResp?.items});
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -110,8 +109,8 @@ const UserList = () => {
         cell: row => renderRole(row?.value)
       },
       {
-        header: 'Organization',
-        accessor: 'organization'
+        header: 'Company',
+        accessor: 'company'
       },
       {
         accessor: 'status',
@@ -188,7 +187,7 @@ const UserList = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
-                {isLoading && <LoadingIndicator />}
+                {isFetching && <LoadingIndicator />}
 
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
@@ -215,6 +214,13 @@ const UserList = () => {
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
+                  {hasNextPage && (
+                    <Pagination
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      fetchNextPage={fetchNextPage}
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>
@@ -229,9 +235,6 @@ const UserList = () => {
             toggle={onToggleModal}
             userRoles={userRoles}
             countryOptions={countryOptions}
-            dspOptions={dspOptions}
-            advertiserOptions={advertiserOptions}
-            publisherOptions={publisherOptions}
           />
         )}
       </UserCreate>
@@ -246,9 +249,6 @@ const UserList = () => {
             userId={currentUser?.uuid}
             userRoles={userRoles}
             countryOptions={countryOptions}
-            dspOptions={dspOptions}
-            advertiserOptions={advertiserOptions}
-            publisherOptions={publisherOptions}
           />
         )}
       </UserEdit>

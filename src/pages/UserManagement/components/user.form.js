@@ -15,7 +15,7 @@ import {
   Col,
   Label
 } from 'reactstrap';
-import {Controller, FormProvider, useForm} from 'react-hook-form';
+import {Controller, FormProvider, useForm, useWatch} from 'react-hook-form';
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
 
@@ -25,12 +25,12 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {schemaValidate} from './validation';
-import {INPUT_NAME} from '../constants';
+import {INPUT_NAME, USER_ROLE} from '../constants';
 import {useCreateUser, useEditUser, useGetUser} from 'queries/users';
-import SelectAdvertiser from './select-advertiser';
-import SelectDsp from './select-dsp';
-import SelectPublisher from './select-publisher';
 import {useDefaultUser} from '../hooks';
+import AdvertiserSelect from './form-fields/advertiser-select';
+import DspSelect from './form-fields/dsp-select';
+import PublisherSelect from './form-fields/publisher-select';
 
 const UserForm = ({
   modal = false,
@@ -40,9 +40,6 @@ const UserForm = ({
   isEdit = false,
   userId = '',
   countryOptions,
-  dspOptions,
-  advertiserOptions,
-  publisherOptions,
   userRoles
 }) => {
   const {t} = useTranslation();
@@ -53,17 +50,15 @@ const UserForm = ({
   const defaultValues = useDefaultUser({
     apiResp: userResp,
     languagesArr: countryOptions,
-    dspsArr: dspOptions,
-    advertisersArr: advertiserOptions,
-    publishersArr: publisherOptions,
     rolesArr: userRoles
   });
 
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidate(t)
+    resolver: schemaValidate(t, isEdit)
   });
   const {handleSubmit, formState, control, reset} = methods;
+  const watchRole = useWatch({control, name: INPUT_NAME.ROLE});
 
   React.useEffect(() => {
     //---> Reset default value when API response
@@ -81,7 +76,7 @@ const UserForm = ({
       '🚀 ~ file: user.form.js ~ line 18 ~ onSubmit ~ formData',
       formData
     );
-    const requestBody = mappingFormToApi({formData});
+    const requestBody = mappingFormToApi({formData, isEdit});
     if (!isEdit) {
       // CREATE
       try {
@@ -89,8 +84,7 @@ const UserForm = ({
         ShowToast.success('Created user successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: user.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create user');
+        ShowToast.error(err?.msg || 'Fail to create user');
       }
     } else {
       // EDIT
@@ -99,8 +93,7 @@ const UserForm = ({
         ShowToast.success('Updated user successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: user.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to update user');
+        ShowToast.error(err?.msg || 'Fail to update user');
       }
     }
   };
@@ -142,6 +135,7 @@ const UserForm = ({
                       placeholder={t('enterPassword')}
                       isRequired
                       type="password"
+                      autoComplete="new-password"
                     />
                   </Col>
                 )}
@@ -159,9 +153,9 @@ const UserForm = ({
                 {/* Avatar */}
                 <Col sm={6}>
                   <FormTextInput
-                    name={INPUT_NAME.AVATAR_URL}
-                    label={t('avatarUrl')}
-                    placeholder={t('avatarUrl')}
+                    name={INPUT_NAME.COMPANY}
+                    label={t('company')}
+                    placeholder={t('company')}
                   />
                 </Col>
                 {/* Status */}
@@ -175,6 +169,7 @@ const UserForm = ({
                     )}
                   />
                 </Col>
+
                 {/* Role */}
                 <Col sm={6}>
                   <FormReactSelect
@@ -186,11 +181,42 @@ const UserForm = ({
                     required
                   />
                 </Col>
-                <Col sm={6}>
-                  <SelectAdvertiser options={advertiserOptions} />
-                  <SelectDsp options={dspOptions} />
-                  <SelectPublisher options={publisherOptions} />
-                </Col>
+
+                {/* Advertiser list */}
+                {watchRole?.value === USER_ROLE.ADVERTISER && (
+                  <Col sm={6}>
+                    <AdvertiserSelect
+                      name={INPUT_NAME.ADVERTISER_UUID}
+                      label={t('advertiser')}
+                      placeholder={t('selectAdvertiser')}
+                      defaultValue={defaultValues?.advertiser_uuid || null}
+                    />
+                  </Col>
+                )}
+
+                {/* Dsp list */}
+                {watchRole?.value === USER_ROLE.DSP && (
+                  <Col sm={6}>
+                    <DspSelect
+                      name={INPUT_NAME.DSP_UUID}
+                      label={t('dsp')}
+                      placeholder={t('selectDsp')}
+                      defaultValue={defaultValues?.dsp_uuid || null}
+                    />
+                  </Col>
+                )}
+
+                {/* Publisher list */}
+                {watchRole?.value === USER_ROLE.PUBLISHER && (
+                  <Col sm={6}>
+                    <PublisherSelect
+                      name={INPUT_NAME.PUBLISHER_UUID}
+                      label={t('publisher')}
+                      placeholder={t('selectPublisher')}
+                      defaultValue={defaultValues?.publisher_uuid || null}
+                    />
+                  </Col>
+                )}
               </Row>
             </ModalBody>
             <ModalFooter>

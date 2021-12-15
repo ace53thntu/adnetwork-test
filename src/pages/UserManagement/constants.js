@@ -4,7 +4,7 @@ export const INPUT_NAME = {
   USERNAME: 'username',
   EMAIL: 'email',
   PASSWORD: 'password',
-  ORGANIZATION: 'organization',
+  COMPANY: 'company',
   ROLE: 'role',
   LANGUAGE: 'language',
   AVATAR_URL: 'avatar_url',

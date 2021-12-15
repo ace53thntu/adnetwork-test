@@ -8,6 +8,8 @@ const en = {
   extension: 'Extension',
   duration: 'Duration',
   selectTrackerTemplate: 'Select tracker template',
+  selectAdvertiser: 'Select advertiser',
+  company: 'Company',
 
   // Inventory
   priceEngine: 'Price engine',

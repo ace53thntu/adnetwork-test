@@ -1,5 +1,5 @@
 export {useGetMe} from './useGetMe';
-export {useGetUsers} from './useGetUsers';
+export {useGetUsers, useGetUsersInfinity} from './useGetUsers';
 export {useGetUser} from './useGetUser';
 export {useCreateUser} from './useCreateUser';
 export {useEditUser} from './useEditUser';

@@ -4,20 +4,14 @@ import {mappingApiToForm} from '../components/dto';
 export const useDefaultUser = ({
   apiResp = {},
   languagesArr = [],
-  rolesArr = [],
-  advertisersArr = [],
-  dspsArr = [],
-  publishersArr = []
+  rolesArr = []
 }) => {
   return React.useMemo(() => {
     const userData = mappingApiToForm({
       apiResp,
       languagesArr,
-      rolesArr,
-      advertisersArr,
-      dspsArr,
-      publishersArr
+      rolesArr
     });
     return userData;
-  }, [advertisersArr, apiResp, dspsArr, languagesArr, publishersArr, rolesArr]);
+  }, [apiResp, languagesArr, rolesArr]);
 };

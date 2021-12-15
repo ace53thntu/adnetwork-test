@@ -9,10 +9,7 @@
 export const mappingApiToForm = ({
   apiResp = {},
   languagesArr = [],
-  rolesArr = [],
-  advertisersArr = [],
-  dspsArr = [],
-  publishersArr = []
+  rolesArr = []
 }) => {
   const {
     uuid = '',
@@ -24,16 +21,22 @@ export const mappingApiToForm = ({
     publisher_uuid = '',
     dsp_uuid = '',
     advertiser_uuid = '',
-    password = ''
+    password = '',
+    publisher_name = '',
+    advertiser_name = '',
+    dsp_name = '',
+    company = ''
   } = apiResp;
   const foundLanguage =
     languagesArr?.find(item => item.value === language) || null;
   const foundRole = rolesArr?.find(item => item.value === role) || null;
-  const foundPublisher =
-    publishersArr?.find(item => item.value === publisher_uuid) || null;
-  const foundAdvertiser =
-    advertisersArr?.find(item => item.value === advertiser_uuid) || null;
-  const foundDsp = dspsArr?.find(item => item.value === dsp_uuid) || null;
+  const foundPublisher = publisher_uuid
+    ? {value: publisher_uuid, label: publisher_name}
+    : null;
+  const foundAdvertiser = advertiser_uuid
+    ? {value: advertiser_uuid, label: advertiser_name}
+    : null;
+  const foundDsp = dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null;
 
   return {
     uuid,
@@ -45,7 +48,8 @@ export const mappingApiToForm = ({
     status,
     dsp_uuid: foundDsp,
     advertiser_uuid: foundAdvertiser,
-    publisher_uuid: foundPublisher
+    publisher_uuid: foundPublisher,
+    company
   };
 };
 
@@ -54,25 +58,26 @@ export const mappingApiToForm = ({
  * @param {*} formData - API response data
  * @returns data with API request body format trustly
  */
-export const mappingFormToApi = ({formData = {}}) => {
+export const mappingFormToApi = ({formData = {}, isEdit = false}) => {
   const {
     username = '',
     email = '',
     password = '',
-    organization = '',
+    company = '',
     role = null,
     language = '',
     avatar_url = '',
     dsp_uuid = '',
     advertiser_uuid = '',
-    publisher_uuid = ''
+    publisher_uuid = '',
+    status
   } = formData;
-
-  return {
+  const data = {
     username,
-    email,
     password,
-    organization,
+    email,
+    status,
+    company,
     role: role?.value,
     language: language?.value,
     avatar_url,
@@ -80,4 +85,10 @@ export const mappingFormToApi = ({formData = {}}) => {
     advertiser_uuid: advertiser_uuid?.value,
     publisher_uuid: publisher_uuid?.value
   };
+
+  if (isEdit) {
+    delete data.password;
+  }
+
+  return data;
 };
