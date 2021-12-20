@@ -4,19 +4,19 @@ import React, {useCallback} from 'react';
 //---> External Modules
 import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {Button, Container, Form} from 'reactstrap';
+import {Button, Form} from 'reactstrap';
 import {useParams} from 'react-router';
 
 //---> Internal Modules
-import InformationGroup from './InformationGroup';
-import StatusGroup from './StatusGroup';
+import InformationGroup from '../../strategy/form-fields/InformationGroup';
+import StatusGroup from '../../strategy/form-fields/StatusGroup';
 import {useNavigate} from 'react-router-dom';
-import {strategyFormValidation} from './strategy.validation';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import '../DetailCampaignForm/_main.scss';
-import AdsGroup from './AdsGroup';
+import AdsGroup from '../../strategy/form-fields/AdsGroup';
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
-import {destructureFormData} from './dto';
+import {destructureFormData} from '../../strategy/dto';
+import {strategySchema} from 'pages/Campaign/strategy/validation';
 
 const DescriptionStrategy = ({
   goTo,
@@ -39,7 +39,7 @@ const DescriptionStrategy = ({
     defaultValues: {
       ...currentStrategy
     },
-    resolver: strategyFormValidation(isEdit, t)
+    resolver: strategySchema(isEdit, t)
   });
 
   const {handleSubmit} = methods;
@@ -93,23 +93,18 @@ const DescriptionStrategy = ({
     <div>
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <Container fluid>
-            {/* Information Group */}
-            <InformationGroup
-              listCampaignOptions={listCampaignOptions}
-              viewOnly={viewOnly}
-              currentStrategy={currentStrategy}
-              isEdit={isEdit}
-            />
-            {/* Status Group */}
-            <StatusGroup
-              viewOnly={viewOnly}
-              currentStrategy={currentStrategy}
-            />
+          {/* Information Group */}
+          <InformationGroup
+            listCampaignOptions={listCampaignOptions}
+            viewOnly={viewOnly}
+            currentStrategy={currentStrategy}
+            isEdit={isEdit}
+          />
+          {/* Status Group */}
+          <StatusGroup viewOnly={viewOnly} currentStrategy={currentStrategy} />
 
-            {/* Ads Group */}
-            <AdsGroup viewOnly={viewOnly} currentStrategy={currentStrategy} />
-          </Container>
+          {/* Ads Group */}
+          <AdsGroup viewOnly={viewOnly} currentStrategy={currentStrategy} />
           {!viewOnly && !isSummary && (
             <div className="d-block text-right mr-15">
               <Button

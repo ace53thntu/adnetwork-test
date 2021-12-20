@@ -1,5 +1,6 @@
 import {AuthLayout} from 'components/layouts';
 import {NotFound} from 'components/layouts';
+import {RoutePaths} from 'constants/route-paths';
 import {LoginPage} from 'pages/Login';
 import * as React from 'react';
 import {Navigate} from 'react-router-dom';
@@ -7,18 +8,18 @@ import {Navigate} from 'react-router-dom';
 const unAuthRoutes = [
   {
     path: '*',
-    element: <Navigate to="login" />
+    element: <Navigate to={RoutePaths.LOGIN} />
   },
   {
     path: '/',
-    element: <Navigate to="login" />
+    element: <Navigate to={RoutePaths.LOGIN} />
   },
   {
     path: '/',
     element: <AuthLayout />,
     children: [
       {
-        path: 'login',
+        path: RoutePaths.LOGIN,
         element: <LoginPage />
       }
     ]

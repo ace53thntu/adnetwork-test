@@ -6,7 +6,7 @@ import React from 'react';
 import {useNavigate} from 'react-router';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
-import {CampaignListStyled} from './styled';
+import {CampaignListStyled} from '../../campaign-management/styled';
 
 const DeleteTitle = 'Are you sure delete this Campaign';
 
@@ -14,7 +14,10 @@ const propTypes = {};
 
 const CampaignList = () => {
   const navigate = useNavigate();
-  const {data: {items: campaigns = []} = {}, isFetching} = useGetCampaigns();
+  const {data: {items = []} = {}, isFetching} = useGetCampaigns();
+  const campaigns = React.useMemo(() => {
+    return items?.map(item => ({...item, id: item?.uuid}));
+  }, [items]);
   const {mutateAsync: deleteCampaign} = useDeleteCampaign();
 
   const [openDialog, setOpenDialog] = React.useState(false);

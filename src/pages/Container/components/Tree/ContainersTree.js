@@ -25,7 +25,7 @@ import {TreeContainerStyled} from './ContainersTree.styles';
 import {GET_PAGES} from 'queries/page/constants';
 import {DEFAULT_PAGINATION} from 'constants/misc';
 
-const LIMIT = 2;
+const LIMIT = 1000;
 
 function ContainersTree(props) {
   const navigate = useNavigate();

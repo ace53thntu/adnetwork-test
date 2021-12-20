@@ -14,9 +14,9 @@ import {
   usePositionOptions
 } from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
-import Concept from './Concept';
+import Concept from '../../strategy/form-fields/Concept';
 import DescriptionStrategy from './DescriptionStrategy';
-import Summary from './Summary';
+import Summary from '../../strategy/form-fields/Summary';
 import {useQueryString} from 'hooks';
 import {useGetCampaigns} from 'queries/campaign';
 // import {useGetCampaigns} from 'core/queries';

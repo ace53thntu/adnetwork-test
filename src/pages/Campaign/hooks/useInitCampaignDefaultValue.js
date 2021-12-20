@@ -29,8 +29,8 @@ export const useInitCampaignDefaultValue = ({
       } = campaign;
 
       let {start_time, end_time} = campaign;
-      start_time = new Date(start_time);
-      end_time = new Date(end_time);
+      start_time = start_time ? new Date(start_time) : new Date();
+      end_time = end_time ? new Date(end_time) : null;
 
       // Get advertiser selected
       const advertiser = advertisers.find(advItem => advItem.uuid === advId);

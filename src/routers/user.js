@@ -1,7 +1,8 @@
-import {UserListPage} from 'pages/UserManagement';
+import {RoutePaths} from 'constants/route-paths';
+import {UserListPage} from 'pages/user-management';
 
 export const userManagementPages = {
-  path: 'users',
+  path: RoutePaths.USER,
   children: [
     {
       path: '',

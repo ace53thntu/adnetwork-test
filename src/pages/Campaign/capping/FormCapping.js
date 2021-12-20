@@ -19,7 +19,7 @@ import {mappingFormToApi} from './capping.dto';
 
 const FormCapping = ({onCloseForm}) => {
   const {t} = useTranslation();
-  const {id: strategyId} = useParams();
+  const {strategyId} = useParams();
   const {currentObject = null} = useHandleCapping();
   const {data: currentData} = useGetCapping(currentObject);
   const defaultValues = useGetDefaultCapping(currentData);

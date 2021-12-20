@@ -9,7 +9,22 @@ const en = {
   duration: 'Duration',
   selectTrackerTemplate: 'Select tracker template',
   selectAdvertiser: 'Select advertiser',
+  selectCampaign: 'Select Campaign',
   company: 'Company',
+
+  // Main Menu
+  userManagement: 'User Management',
+
+  // Page title
+  campaignDetail: 'View a Campaign',
+  campaignEdit: 'Edit a Campaign',
+  campaignCreate: 'Add new Campaign',
+  strategyDetail: 'View a strategy',
+  strategyEdit: 'Edit a strategy',
+  strategyCreate: 'Add new strategy',
+  strategyPageDescription: '',
+  // Card Header
+  advertiserList: 'Advertiser List',
 
   // Inventory
   priceEngine: 'Price engine',
@@ -104,7 +119,6 @@ const en = {
   dueDate: 'Due date',
   status: 'Status',
   process: 'Process',
-  campaignDetail: 'Campaign detail',
   createCampaign: 'Create campaign',
   campaignPageDescription:
     'Wide selection of buttons that feature different styles for backgrounds, borders and hover options!',
@@ -199,7 +213,7 @@ const en = {
   selectPublisher: 'Select publisher',
   containers: 'Containers',
   searchContainer: 'Search container',
-  containerManager: 'Container Manager',
+  containerManager: 'Container Management',
   managementContainerDescription: 'View or change the containers information.',
   actions: 'Actions',
   edit: 'Edit',
@@ -294,8 +308,6 @@ const en = {
   audience: 'Audience',
   activation: 'Activation',
   validation: 'Validation',
-  strategyDetail: 'Strategy detail',
-  createStrategy: 'Create strategy',
   strategyManagerDescription:
     'Wide selection of buttons that feature different styles for backgrounds, borders and hover options!',
   budgetMustBeANumber: 'Budget must be a number',
@@ -369,7 +381,7 @@ const en = {
   url: 'Url',
   apiKey: 'Api Key',
   user: 'User',
-  userList: 'Users list',
+  userList: 'User list',
   address: 'Address',
   city: 'City',
   zip: 'Zip',

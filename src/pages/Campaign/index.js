@@ -1,8 +1,7 @@
-import React from 'react';
-import Content from './Content';
-
-const Campaign = () => {
-  return <Content />;
-};
-
-export default Campaign;
+export {CampaignPageLayout, ListContainerLayout} from './layout';
+export {
+  CampaignList,
+  CampaignCreate,
+  CampaignDetail,
+  CampaignEdit
+} from './campaign-management';

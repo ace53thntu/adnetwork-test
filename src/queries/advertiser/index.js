@@ -1,4 +1,7 @@
-export {useGetAdvertisers} from './useGetAdvertisers';
+export {
+  useGetAdvertisers,
+  useGetAdvertisersInfinity
+} from './useGetAdvertisers';
 export {useGetAdvertiser} from './useGetAdvertiser';
 export {useCreateAdvertiser} from './useCreateAdvertiser';
 export {useEditAdvertiser} from './useEditAdvertiser';

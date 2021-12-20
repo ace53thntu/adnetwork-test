@@ -29,9 +29,20 @@ import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {DEFAULT_PAGINATION} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {useDispatch} from 'react-redux';
 
+/**
+ * @function DSP List Component
+ * @returns JSX
+ */
 const DspList = () => {
   const {t} = useTranslation();
+  const reduxDispatch = useDispatch();
+
+  React.useEffect(() => {
+    reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
 
   //---> Define local states.
   const [openForm, setOpenForm] = React.useState(false);
@@ -161,7 +172,7 @@ const DspList = () => {
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}
-                      className="btn-icon"
+                      className="btn-icon btn-shadow"
                       size="sm"
                       color="primary"
                     >

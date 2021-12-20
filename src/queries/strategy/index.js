@@ -1,4 +1,4 @@
-export {useGetStrategies} from './useGetStrategies';
+export {useGetStrategies, useGetStrategiesInfinity} from './useGetStrategies';
 export {useGetStrategy} from './useGetStrategy';
 export {useCreateStrategy} from './useCreateStrategy';
 export {useEditStrategy} from './useEditStrategy';

@@ -6,8 +6,8 @@ import {useTranslation} from 'react-i18next';
 import {Input} from 'reactstrap';
 
 //---> Internal Modules
-import TreeSidebar from './components/TreeSidebar';
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
+import {TreeSidebar} from './sidebar-tree';
 
 const style_1 = {
   paddingLeft: 5,

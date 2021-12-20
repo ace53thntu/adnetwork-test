@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 function Header(props) {
   return (
-    <Typography variant="body2" color="textSecondary">
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      className="font-weight-bold"
+    >
       {props.text}
     </Typography>
   );

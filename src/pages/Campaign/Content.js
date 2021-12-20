@@ -17,9 +17,9 @@ import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 const Campaign = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const {selectedCampaign, selectedStrategy, view} = useSelector(
-    state => state.campReducer
-  );
+  // const {selectedCampaign, selectedStrategy, view} = useSelector(
+  //   state => state.campReducer
+  // );
   useEffect(() => {
     reduxDispatch(setEnableClosedSidebar(true));
   }, [reduxDispatch]);
@@ -27,15 +27,15 @@ const Campaign = () => {
   // const {data: advertisersResp = []} = useGetAdvertisers();
   const advertisersResp = [];
 
-  useEffect(() => {
-    if (view === CAMPAIGN_VIEWS.advertiserDetail) {
-      navigate(`/campaigns`);
-    } else if (view === CAMPAIGN_VIEWS.campaignDetail) {
-      navigate(`/campaigns/${selectedCampaign}`);
-    } else if (view === CAMPAIGN_VIEWS.strategyDetail) {
-      navigate(`/campaigns/${selectedCampaign}/strategy/${selectedStrategy}`);
-    }
-  }, [navigate, selectedCampaign, selectedStrategy, view]);
+  // useEffect(() => {
+  //   if (view === CAMPAIGN_VIEWS.advertiserDetail) {
+  //     navigate(`/campaigns`);
+  //   } else if (view === CAMPAIGN_VIEWS.campaignDetail) {
+  //     navigate(`/campaigns/${selectedCampaign}`);
+  //   } else if (view === CAMPAIGN_VIEWS.strategyDetail) {
+  //     navigate(`/campaigns/${selectedCampaign}/strategy/${selectedStrategy}`);
+  //   }
+  // }, [navigate, selectedCampaign, selectedStrategy, view]);
 
   return (
     <Fragment>

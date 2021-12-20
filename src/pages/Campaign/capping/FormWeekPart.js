@@ -32,7 +32,7 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
   const {mutateAsync: updateWeekPart} = useEditWeekpart();
 
   // Get query param
-  const {id: strategyId} = useParams();
+  const {strategyId} = useParams();
 
   const methods = useForm({
     defaultValues,

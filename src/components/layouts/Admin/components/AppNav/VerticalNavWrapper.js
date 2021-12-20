@@ -66,8 +66,7 @@ const Nav = ({role}) => {
       </>
       <>
         <MetisMenu
-          content={ContainerNav(t)}
-          // activeLinkFromLocation
+          content={InventoryMarketNav(t)}
           className="vertical-nav-menu"
           iconNamePrefix=""
           classNameStateIcon="pe-7s-angle-down"
@@ -77,7 +76,8 @@ const Nav = ({role}) => {
       </>
       <>
         <MetisMenu
-          content={InventoryMarketNav(t)}
+          content={ContainerNav(t)}
+          // activeLinkFromLocation
           className="vertical-nav-menu"
           iconNamePrefix=""
           classNameStateIcon="pe-7s-angle-down"

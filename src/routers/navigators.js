@@ -1,9 +1,11 @@
+import {HASH_PATH, RoutePaths} from 'constants/route-paths';
+
 export const ReportNav = t => {
   return [
     {
       icon: 'pe-7s-display2',
       label: t('dashboard'),
-      to: '#/dashboard'
+      to: `${HASH_PATH}/${RoutePaths.DASHBOARD}`
     }
   ];
 };
@@ -12,7 +14,7 @@ export const AudiencesNav = t => {
     {
       icon: 'pe-7s-graph2',
       label: t('audiences'),
-      to: '#/audiences'
+      to: `${HASH_PATH}/${RoutePaths.AUDIENCE}`
     }
   ];
 };
@@ -21,7 +23,7 @@ export const CreativeNav = t => {
     {
       icon: 'pe-7s-graph3',
       label: t('creative'),
-      to: '#/creative'
+      to: `${HASH_PATH}/${RoutePaths.CREATIVE}`
     }
   ];
 };
@@ -30,7 +32,7 @@ export const CampaignNav = t => {
     {
       icon: 'pe-7s-network',
       label: t('campaign'),
-      to: '#/campaigns'
+      to: `${HASH_PATH}/${RoutePaths.CAMPAIGN}`
     }
   ];
 };
@@ -40,7 +42,7 @@ export const ContainerNav = (t, role) => {
     {
       icon: 'pe-7s-box1',
       label: 'Container',
-      to: '#/container'
+      to: `${HASH_PATH}/${RoutePaths.CONTAINER}`
     }
   ];
 };
@@ -50,7 +52,7 @@ export const InventoryMarketNav = (t, role) => {
     {
       icon: 'pe-7s-cart',
       label: 'Inventory Market',
-      to: '#/inventory-market'
+      to: `${HASH_PATH}/${RoutePaths.INVENTORY_MARKET}`
     }
   ];
 };
@@ -63,15 +65,15 @@ export const OrganizationNav = (t, role) => {
       content: [
         {
           label: t('publisher'),
-          to: '#/organization/publisher'
+          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`
         },
         {
           label: t('dsp'),
-          to: '#/organization/dsp'
+          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`
         },
         {
           label: t('advertiser'),
-          to: '#/organization/advertiser'
+          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`
         }
       ]
     }
@@ -82,8 +84,8 @@ export const UserManagementNav = (t, role) => {
   return [
     {
       icon: 'pe-7s-user',
-      label: t('Users management'),
-      to: '#/users'
+      label: t('userManagement'),
+      to: `${HASH_PATH}/${RoutePaths.USER}`
     }
   ];
 };

@@ -1,8 +1,8 @@
-import Campaign from 'pages/Campaign';
 import Dashboard from 'pages/Dashboard/Dashboard';
 import {audiencePages} from './audience';
 
 import {containerPages} from './container';
+import {campaignPages} from './campaign';
 import {creativePages} from './creative';
 import {inventoryMarketPages} from './inventory-market';
 import {organizationPages} from './organization';
@@ -13,10 +13,7 @@ export const appRoutes = [
     path: '/dashboard',
     element: <Dashboard />
   },
-  {
-    path: '/campaigns/*',
-    element: <Campaign />
-  },
+  campaignPages,
   containerPages,
   inventoryMarketPages,
   organizationPages,

@@ -44,9 +44,6 @@ const ManagerCampaign = ({listAdvertisers}) => {
     navigate(`/campaigns?mode=${type}`);
   };
 
-  const renderTableList = () =>
-    typeView === 'campaign' ? <CampaignList /> : <StrategyList />;
-
   return (
     <Fragment>
       <PageTitleAlt
@@ -79,7 +76,7 @@ const ManagerCampaign = ({listAdvertisers}) => {
             name="view_mode"
           />
         </div>
-        {renderTableList()}
+        {typeView === 'campaign' ? <CampaignList /> : <StrategyList />}
       </Container>
     </Fragment>
   );

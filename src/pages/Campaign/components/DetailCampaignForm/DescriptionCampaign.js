@@ -29,7 +29,7 @@ const DescriptionCampaign = ({
   labelsData
 }) => {
   const {t} = useTranslation();
-  const {data: advertisers} = useGetAdvertisers();
+  const {data: advertisers} = useGetAdvertisers({enabled: true});
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign();
 

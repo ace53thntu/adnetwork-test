@@ -1,7 +1,9 @@
-import {AdminLayout, NotFound} from 'components/layouts';
 import * as React from 'react';
+
 import {Navigate} from 'react-router-dom';
 
+import {AdminLayout, NotFound} from 'components/layouts';
+import {RoutePaths} from 'constants/route-paths';
 import {appRoutes} from './app';
 
 const authenticatedRoutes = [
@@ -10,11 +12,11 @@ const authenticatedRoutes = [
     element: <Navigate to="/dashboard" />
   },
   {
-    path: 'login',
+    path: RoutePaths.LOGIN,
     element: <Navigate to="/dashboard" replace />
   },
   {
-    path: 'register',
+    path: RoutePaths.REGISTER,
     element: <Navigate to="/dashboard" replace />
   },
   {

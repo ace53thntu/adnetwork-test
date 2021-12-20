@@ -1,3 +1,4 @@
+import {RoutePaths} from 'constants/route-paths';
 import {Containers, ContainerDetail, ContainerLayout} from 'pages/Container';
 import {ContainerSource} from 'pages/Container/components/ContainerSource';
 import {ContainerSourcePage} from 'pages/Container/components/ContainerSourcePage';
@@ -6,7 +7,7 @@ import {ContainerSourcePage} from 'pages/Container/components/ContainerSourcePag
 // const {MANAGER, TRADER} = ROLES;
 
 export const containerPages = {
-  path: 'container',
+  path: RoutePaths.CONTAINER,
   element: <ContainerLayout />,
   children: [
     {

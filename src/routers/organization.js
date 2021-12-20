@@ -1,12 +1,13 @@
+import {RoutePaths} from 'constants/route-paths';
 import {AdvertiserListPage} from 'pages/Organization/Advertiser';
 import {DspListPage} from 'pages/Organization/Dsp';
 import {PublisherListPagePage} from 'pages/Organization/Publisher';
 
 export const organizationPages = {
-  path: '/organization',
+  path: RoutePaths.ORGANIZATION,
   children: [
     {
-      path: '/advertiser/*',
+      path: `${RoutePaths.ADVERTISER}/*`,
       children: [
         {
           path: '//*',
@@ -15,7 +16,7 @@ export const organizationPages = {
       ]
     },
     {
-      path: '/publisher/*',
+      path: `${RoutePaths.PUBLISHER}/*`,
       children: [
         {
           path: '//*',
@@ -24,7 +25,7 @@ export const organizationPages = {
       ]
     },
     {
-      path: '/dsp/*',
+      path: `${RoutePaths.DSP}/*`,
       children: [
         {
           path: '//*',

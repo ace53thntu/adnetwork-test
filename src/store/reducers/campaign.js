@@ -1,86 +1,561 @@
+import {original} from 'immer';
+import {matchSorter} from 'match-sorter';
+import {
+  unSelectedAndUnExpanded,
+  unSelectedChild
+} from 'pages/Container/components/Tree/utils';
+import {useSelector} from 'react-redux';
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
-import {CAMPAIGN_VIEWS} from 'pages/Campaign/constants';
 
-const SELECT_ADVERTISER = '@campaign/SELECT_ADVERTISER';
-const SELECT_CAMPAIGN = '@campaign/SELECT_CAMPAIGN';
-const SELECT_STRATEGY = '@campaign/SELECT_STRATEGY';
-const RELOAD_TREE = '@campaign/RELOAD_TREE';
-const SET_VIEW = '@campaign/SET_VIEW';
-const CREATE_ACTION = '@campaign/CREATE_ACTION';
-const SELECT_ITEM = '@campaign/SELECT_ITEM';
+// dispatch action types
+const PREFIX = '@campaign_management';
+const RESET = `${PREFIX}/RESET`;
+const SET_ADVERTISERS = `${PREFIX}/SET_ADVERTISERS`;
 
-export const CAMPAIGN_CREATE_ACTION = {
-  advertiser: 'advertiser',
-  campaign: 'campaign',
-  strategy: 'strategy'
+const SELECT_ADVERTISER_ID = `${PREFIX}/SELECT_ADVERTISER_ID`;
+const EXPAND_ADVERTISER = `${PREFIX}/EXPAND_ADVERTISER`;
+const SET_ADVERTISER = `${PREFIX}/SET_ADVERTISER`;
+const UN_EXPAND_ADVERTISERS = `${PREFIX}/UN_EXPAND_ADVERTISERS`;
+const SEARCH_CAMPAIGNS = `${PREFIX}/SEARCH_CAMPAIGNS`;
+const EXPAND_CAMPAIGN = `${PREFIX}/EXPAND_CAMPAIGN`;
+const SET_CAMPAIGN = `${PREFIX}/SET_CAMPAIGN`;
+const SET_STRATEGY = `${PREFIX}/SET_STRATEGY`;
+
+const SELECT_STRATEGY_ID = `${PREFIX}/SELECT_STRATEGY_ID`;
+
+// dispatch actions
+export const resetCampaignRedux = () => {
+  return createAction(RESET, {});
 };
 
-export const selectItem = id => createAction(SELECT_ITEM, {id});
+export const setAdvertisersRedux = data => {
+  return createAction(SET_ADVERTISERS, {data});
+};
+export const selectAdvertiserRedux = (advertiserId, advertiser) => {
+  return createAction(SELECT_ADVERTISER_ID, {advertiserId, advertiser});
+};
+export const expandAdvertiserRedux = (advertiserId, state) => {
+  return createAction(EXPAND_ADVERTISER, {advertiserId, state});
+};
+export const setAdvertiserRedux = (container, source, pageId, pages) => {
+  return createAction(SET_ADVERTISER, {container, source, pageId, pages});
+};
+export const unExpandAdvertisersRedux = () => {
+  return createAction(UN_EXPAND_ADVERTISERS, {});
+};
 
-export const selectAdvertiser = advertiserId =>
-  createAction(SELECT_ADVERTISER, {advertiserId});
+// Campaign
+export const expandCampaignRedux = (campaignId, state, advertiserId) => {
+  return createAction(EXPAND_CAMPAIGN, {campaignId, state, advertiserId});
+};
 
-export const selectCampaign = campaignId =>
-  createAction(SELECT_CAMPAIGN, {campaignId});
+export const setCampaignRedux = (advertiserId, campaignId) => {
+  return createAction(SET_CAMPAIGN, {advertiserId, campaignId});
+};
 
-export const selectStrategy = strategyId =>
-  createAction(SELECT_STRATEGY, {strategyId});
+// Strategy
+export const selectStrategyRedux = (strategyId, strategy) => {
+  return createAction(SELECT_STRATEGY_ID, {strategyId, strategy});
+};
+export const setStrategyRedux = (advertiserId, campaignId, strategyId) => {
+  return createAction(SET_STRATEGY, {advertiserId, campaignId, strategyId});
+};
 
-export const reloadTree = shouldReload =>
-  createAction(RELOAD_TREE, {shouldReload});
+export const searchCampaignRedux = keyword => {
+  return createAction(SEARCH_CAMPAIGNS, {keyword});
+};
 
-export const setViewCampaign = view => createAction(SET_VIEW, {view});
-
-export const orgCreateAction = action => createAction(CREATE_ACTION, {action});
-
-const campInitialState = {
-  selectedAdvertiser: null,
+const campaignInitialState = {
+  advertisers: [],
+  advertisersTemp: [],
+  isLoading: true,
+  selectedAdvertiserId: null,
+  expandedIds: [],
   selectedCampaign: null,
-  selectedStrategy: null,
-  shouldReloadTree: false,
-  createAction: null,
-  view: CAMPAIGN_VIEWS.advertiser,
-  selectedId: null
+  advertiser: null,
+  selectedStrategyId: null,
+  alreadySetAdvertiser: false,
+  keyword: ''
 };
 
 const handleActions = {
-  [SELECT_ADVERTISER]: handleSelectAdvertiser,
-  [RELOAD_TREE]: handleReloadTree,
-  [CREATE_ACTION]: handleCreateAction,
-  [SET_VIEW]: handleSetView,
-  [SELECT_CAMPAIGN]: handleSelectCampaign,
-  [SELECT_STRATEGY]: handleSelectStragegy,
-  [SELECT_ITEM]: handleSelectItem
+  [RESET]: handleReset,
+  [SET_ADVERTISERS]: handleSetAdvertisers,
+  [SET_ADVERTISER]: handleSetAdvertiser,
+  [SELECT_ADVERTISER_ID]: handleSelectAdvertiser,
+  [EXPAND_ADVERTISER]: handleExpandAdvertiser,
+  [UN_EXPAND_ADVERTISERS]: handleUnExpandContainers,
+  [SEARCH_CAMPAIGNS]: handleSearchCampaigns,
+  [EXPAND_CAMPAIGN]: handleExpandCampaign,
+  [SET_CAMPAIGN]: handleSetCampaign,
+  [SET_STRATEGY]: handleSetStrategy
 };
 
-function handleSelectItem(state, action) {
-  state.selectedId = action.payload.id;
+function handleReset(state) {
+  state.advertisers = [];
+  state.advertisersTemp = [];
+  state.isLoading = true;
+  state.selectedAdvertiserId = null;
+  state.expandedIds = [];
+  state.selectedCampaign = null;
+  state.advertiser = null;
+  state.selectedStrategyId = null;
+  state.alreadySetAdvertiser = false;
+  state.keyword = '';
+}
+
+function handleSetAdvertisers(state, action) {
+  const {data} = action.payload;
+
+  state.advertisers = data;
+  state.advertisersTemp = data;
+  state.isLoading = false;
 }
 
 function handleSelectAdvertiser(state, action) {
-  state.selectedAdvertiser = action.payload.advertiserId;
+  const {advertiserId, advertiser} = action.payload;
+
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      return {
+        ...item,
+        selected: true,
+        children: [...item.children].map(child => unSelectedChild(child))
+      };
+    }
+    return unSelectedAndUnExpanded(item);
+  });
+  state.selectedAdvertiserId = advertiserId;
+  state.advertisers = newNodes;
+  state.keyword = '';
+  state.advertiser = advertiser;
+  state.selectedCampaign = null;
+  state.selectedStrategyId = null;
 }
 
-function handleSelectCampaign(state, action) {
-  state.selectedCampaign = action.payload.campaignId;
+function handleExpandAdvertiser(state, action) {
+  const {advertiserId, state: nodeState} = action.payload;
+  if (state.expandedIds.includes(advertiserId)) {
+    state.expandedIds = state.expandedIds.filter(
+      advId => advId !== advertiserId
+    );
+  } else {
+    state.expandedIds = [...state.expandedIds, advertiserId];
+  }
+
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      return {
+        ...item,
+        expanded: !item.expanded,
+        ...nodeState
+      };
+    }
+    if (item.id !== state.selectedAdvertiserId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.advertisers = newNodes;
 }
 
-function handleSelectStragegy(state, action) {
-  state.selectedStrategy = action.payload.strategyId;
+function handleSetAdvertiser(state, action) {
+  // const {advertiser, campaign, strategyId, strategies = []} = action.payload;
+  // const newNodes = [...state.advertisers].map(item => {
+  //   if (item.id === advertiser.id) {
+  //     //
+  //     if (!item.expanded) {
+  //       let advertiserItem = {
+  //         ...item,
+  //         expanded: true,
+  //         selected: false
+  //       };
+  //       let children = [];
+  //       advertiserItem.children = children.map(child => {
+  //         if (child.id === campaign.id) {
+  //           let campaignItem = {
+  //             ...child,
+  //             expanded: true,
+  //             selected: false
+  //           };
+  //           if (child.id !== 'import' && child.id !== 'transfer') {
+  //             const pagesBySource = pages?.length > 0 ? pages : child?.children;
+  //             const sourceChildren = pagesBySource?.map((sourceData, index) => {
+  //               const {id, name} = sourceData;
+  //               return {
+  //                 id,
+  //                 name: name,
+  //                 children: [],
+  //                 numChildren: 0,
+  //                 page: 0,
+  //                 expanded: false,
+  //                 selected: pageId === id,
+  //                 parentId: child.id,
+  //                 isPage: true,
+  //                 containerId: container.id
+  //               };
+  //             });
+  //             sourceItem.children = sourceChildren;
+  //           } else {
+  //             sourceItem.selected = true;
+  //           }
+  //           return sourceItem;
+  //         }
+  //         return {
+  //           ...child,
+  //           selected: false,
+  //           expanded: false
+  //         };
+  //       });
+  //       if (item.numChildren <= 0) {
+  //         containerItem.numChildren = containerItem.children.length;
+  //       }
+  //       return containerItem;
+  //     } else {
+  //       const isExistSource = !!item.children.find(
+  //         sourceNe => sourceNe.id === source
+  //       );
+  //       if (isExistSource) {
+  //         return {
+  //           ...item,
+  //           expanded: true,
+  //           selected: false,
+  //           children: [...item.children].map(child => {
+  //             if (child.id === source) {
+  //               let sourceItem = {
+  //                 ...child,
+  //                 expanded: true,
+  //                 selected: false
+  //               };
+  //               const pagesBySource =
+  //                 pages?.length > 0 ? pages : child?.children;
+  //               const sourceChildren = pagesBySource?.map(
+  //                 (sourceData, index) => {
+  //                   const {id, name} = sourceData;
+  //                   return {
+  //                     id,
+  //                     name: name,
+  //                     children: [],
+  //                     numChildren: 0,
+  //                     page: 0,
+  //                     expanded: false,
+  //                     selected: pageId === id,
+  //                     // selected: state.selectedPageId === id index === 0,
+  //                     parentId: child.id,
+  //                     isPage: true,
+  //                     containerId: container.id
+  //                   };
+  //                 }
+  //               );
+  //               sourceItem.children = sourceChildren;
+  //               if (source === 'import' || source === 'transfer') {
+  //                 sourceItem.selected = true;
+  //               }
+  //               return sourceItem;
+  //             }
+  //             return {
+  //               ...child,
+  //               selected: false,
+  //               children: child?.children
+  //                 ? original(child.children)?.map(unSelectedChild) ?? []
+  //                 : []
+  //             };
+  //           })
+  //         };
+  //       } else {
+  //         if (source !== 'import' && source !== 'transfer') {
+  //           const newSource = container.source?.[source];
+  //           let children = item.children.map(child =>
+  //             unSelectedAndUnExpanded(child)
+  //           );
+  //           if (newSource) {
+  //             const sourceChildren = newSource?.map((sourceData, index) => {
+  //               const {id, name} = sourceData;
+  //               return {
+  //                 id,
+  //                 name,
+  //                 children: [],
+  //                 numChildren: 0,
+  //                 page: 0,
+  //                 expanded: false,
+  //                 selected: pageId === id,
+  //                 parentId: source,
+  //                 isPage: true,
+  //                 containerId: container.id
+  //               };
+  //             });
+  //             children.push({
+  //               id: source,
+  //               name: CONTAINER_TREE_SOURCES[source],
+  //               children: sourceChildren,
+  //               numChildren: newSource?.length ?? 0,
+  //               page: 0,
+  //               expanded: true,
+  //               selected: false,
+  //               parentId: container.id,
+  //               isSource: true
+  //             });
+  //             let containerItem = {
+  //               ...item,
+  //               source: {
+  //                 ...item.source,
+  //                 [source]: newSource?.length ?? 0
+  //               },
+  //               expanded: true,
+  //               selected: false,
+  //               children,
+  //               numChildren: children.length
+  //             };
+  //             return containerItem;
+  //           }
+  //           let containerItem = {
+  //             ...item,
+  //             expanded: true,
+  //             selected: false,
+  //             children,
+  //             numChildren: children.length
+  //           };
+  //           return containerItem;
+  //         } else {
+  //           const {import_count, transfer_count} = container;
+  //           let containerItem = {
+  //             ...item,
+  //             expanded:
+  //               source === 'import'
+  //                 ? import_count > 0
+  //                 : source !== 'transfer'
+  //                 ? transfer_count > 0
+  //                 : false,
+  //             selected: false
+  //           };
+  //           if (source === 'import' && import_count === 0) {
+  //             containerItem.selected = true;
+  //           }
+  //           if (source === 'transfer' && transfer_count === 0) {
+  //             containerItem.selected = true;
+  //           }
+  //           let children = item.children.map(child => {
+  //             if (child.id === source) {
+  //               return {
+  //                 ...child,
+  //                 selected: true
+  //               };
+  //             }
+  //             return unSelectedChild(child);
+  //           });
+  //           containerItem.children = children;
+  //           return containerItem;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return unSelectedChild(item);
+  // });
+  // state.containers = newNodes;
+  // state.containersTemp = newNodes.map(item => unSelectedChild(item));
+  // state.container = container;
+  // state.selectedContainerId = container.uuid;
+  // state.selectedSource = source;
+  // state.selectedPageId = pageId;
+  // state.alreadySetContainer = pageId ? true : false;
 }
 
-function handleReloadTree(state, action) {
-  state.shouldReloadTree = action.payload.shouldReload;
+function handleUnExpandContainers(state, action) {
+  state.container = null;
+  state.selectedContainerId = null;
+  state.selectedSource = null;
+  state.selectedPageId = null;
+  state.containers = state.containersTemp;
+  state.expandedIds = [];
+  state.alreadySetContainer = false;
+  state.keyword = '';
 }
 
-function handleCreateAction(state, action) {
-  state.createAction = action.payload.action;
+function handleExpandCampaign(state, action) {
+  const {campaignId, state: nodeState, advertiserId} = action.payload;
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      return {
+        ...item,
+        children: item.children.map(child => {
+          if (child.id === campaignId) {
+            return {
+              ...child,
+              ...nodeState
+            };
+          }
+          return child;
+        })
+
+        // selected: !item.selected
+      };
+    }
+    if (item.id !== state.selectedAdvertiserId) {
+      return unSelectedChild(item);
+    }
+    return item;
+  });
+  state.advertisers = newNodes;
 }
 
-function handleSetView(state, action) {
-  state.view = action.payload.view;
+function handleSetCampaign(state, action) {
+  const {advertiserId, campaignId} = action.payload;
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      //
+      if (!item.expanded) {
+        let advertiserItem = {
+          ...item,
+          expanded: true,
+          selected: false
+        };
+        let children = [];
+        advertiserItem.children = children.map(child => {
+          if (child.id === campaignId) {
+            let campaignItem = {
+              ...child,
+              expanded: true,
+              selected: true
+            };
+
+            return campaignItem;
+          }
+          return {
+            ...child,
+            selected: false,
+            expanded: false
+          };
+        });
+        if (item.numChildren <= 0) {
+          advertiserItem.numChildren = advertiserItem.children.length;
+        }
+        return advertiserItem;
+      } else {
+        return {
+          ...item,
+          expanded: true,
+          selected: false,
+          children: [...item.children].map(campItem => {
+            if (campItem.id === campaignId) {
+              return {
+                ...campItem,
+                selected: true
+              };
+            }
+            return unSelectedChild(campItem);
+          })
+        };
+      }
+    }
+    return unSelectedChild(item);
+  });
+  state.advertisers = newNodes;
+  state.advertisersTemp = newNodes.map(item => unSelectedChild(item));
+  state.selectedContainId = advertiserId;
+  state.selectedCampaign = campaignId;
+  // state.selectedPageId = pageId;
 }
 
-export const campReducer = (initialState = campInitialState, action) =>
-  createReducer(initialState, action, handleActions);
+function handleSetStrategy(state, action) {
+  const {advertiserId, campaignId, strategyId} = action.payload;
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      //
+      if (!item.expanded) {
+        let advertiserItem = {
+          ...item,
+          expanded: true,
+          selected: false
+        };
+        let children = [];
+        advertiserItem.children = children.map(child => {
+          if (child.id === campaignId) {
+            let campaignItem = {
+              ...child,
+              expanded: true,
+              selected: true
+            };
+
+            return campaignItem;
+          }
+          return {
+            ...child,
+            selected: false,
+            expanded: false
+          };
+        });
+        if (item.numChildren <= 0) {
+          advertiserItem.numChildren = advertiserItem.children.length;
+        }
+        return advertiserItem;
+      } else {
+        return {
+          ...item,
+          expanded: true,
+          selected: false,
+          children: [...item.children].map(campItem => {
+            if (campItem.id === campaignId) {
+              return {
+                ...campItem,
+                selected: false,
+                children: [...campItem.children].map(strateyItem => {
+                  if (strateyItem.id === strategyId) {
+                    return {
+                      ...strateyItem,
+                      selected: true
+                    };
+                  }
+                  return unSelectedChild(strateyItem);
+                })
+              };
+            }
+            return unSelectedChild(campItem);
+          })
+        };
+      }
+    }
+    return unSelectedChild(item);
+  });
+  state.advertisers = newNodes;
+  state.advertisersTemp = newNodes.map(item => unSelectedChild(item));
+  state.selectedAdvertiserId = advertiserId;
+  state.selectedCampaign = campaignId;
+  state.selectedStrategyId = strategyId;
+}
+
+function handleSearchCampaigns(state, action) {
+  const {keyword} = action.payload;
+  state.keyword = keyword;
+  if (keyword?.length) {
+    const newAdvertisers = matchSorter(
+      original(state.advertisersTemp),
+      keyword,
+      {
+        keys: [
+          {
+            threshold: matchSorter.rankings.CONTAINS,
+            key: ['name']
+          }
+        ]
+      }
+    );
+    state.advertisers = newAdvertisers;
+  } else {
+    //
+    state.advertisers = state.advertisersTemp;
+  }
+}
+
+// hook to use container reducer
+export function useCampaignSelector() {
+  const state = useSelector(state => state.campaignReducer);
+  return state;
+}
+
+export const campaignReducer = (
+  initialState = campaignInitialState,
+  action
+) => {
+  return createReducer(initialState, action, handleActions);
+};

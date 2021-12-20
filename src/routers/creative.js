@@ -1,3 +1,4 @@
+import {RoutePaths} from 'constants/route-paths';
 import CreativePage from 'pages/Creative';
 import {
   ConceptCreate,
@@ -7,7 +8,7 @@ import {
 } from 'pages/Creative/components';
 
 export const creativePages = {
-  path: 'creative',
+  path: RoutePaths.CREATIVE,
   element: <CreativeLayout />,
   children: [
     {

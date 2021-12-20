@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {convertApiToForm} from '../components/DetailStrategyForm/dto';
+import {convertApiToForm} from '../strategy/dto';
 
 export const useGetDefaultStrategy = ({
   strategyData = null,

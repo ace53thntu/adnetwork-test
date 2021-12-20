@@ -1,7 +1,8 @@
-import InventoryMarket from 'pages/InventoryMarket';
+import {RoutePaths} from 'constants/route-paths';
+import InventoryMarket from 'pages/inventory-market';
 
 export const inventoryMarketPages = {
-  path: 'inventory-market',
+  path: RoutePaths.INVENTORY_MARKET,
   element: <InventoryMarket />,
   children: [
     {

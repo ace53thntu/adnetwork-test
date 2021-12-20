@@ -16,8 +16,8 @@ import {useCampaignManager, useDestructureCampaignOptions} from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
 // import Audience from './Audience';
 import DescriptionStrategy from './DescriptionStrategy';
-import Concept from './Concept';
-import EntityReport from 'pages/EntityReport';
+import Concept from '../../strategy/form-fields/Concept';
+import EntityReport from 'pages/entity-dashboard';
 import {useGetCampaigns} from 'queries/campaign';
 
 const StrategyFormDetailView = ({

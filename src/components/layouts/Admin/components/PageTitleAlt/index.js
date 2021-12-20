@@ -42,8 +42,7 @@ const PageTitleAlt = props => {
           <div className="page-title-actions">
             <Button
               onClick={handleClick}
-              outline
-              className="mb-2 mr-2 btn-transition"
+              className="mb-2 mr-2 btn-transition btn-shadow"
               color="primary"
             >
               {actions}

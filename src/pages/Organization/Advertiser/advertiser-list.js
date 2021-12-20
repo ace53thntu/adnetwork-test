@@ -1,8 +1,8 @@
+// Build-in Modules
 import React, {useMemo} from 'react';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
-import AppContent from 'components/layouts/Admin/components/AppContent';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+
+// External Modules
+import {useDispatch} from 'react-redux';
 import {
   Card,
   CardHeader,
@@ -13,6 +13,15 @@ import {
   Container
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
+
+// Internal Modules
+import {capitalize} from 'utils/helpers/string.helpers';
+import {
+  useDeleteAdvertiser,
+  useGetAdvertisersInfinity
+} from 'queries/advertiser';
+import AppContent from 'components/layouts/Admin/components/AppContent';
+import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
@@ -24,9 +33,20 @@ import {useIABsOptions} from '../hooks';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {Pagination} from 'components/list/pagination';
 
+/**
+ * @function Advertiser List Component
+ * @returns JSX
+ */
 const ListAdvertiser = () => {
   const {t} = useTranslation();
+  const reduxDispatch = useDispatch();
+
+  React.useEffect(() => {
+    reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
 
   //---> Define local states.
   const [openForm, setOpenForm] = React.useState(false);
@@ -35,12 +55,20 @@ const ListAdvertiser = () => {
   const [showDialog, setShowDialog] = React.useState(false);
 
   //---> Query get list of advertisers.
-  const {data: advertisersRes, isLoading} = useGetAdvertisers();
-  const advertisers = useMemo(() => {
-    return advertisersRes?.items?.map(item => {
-      return {...item, id: item.uuid};
-    });
-  }, [advertisersRes?.items]);
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetAdvertisersInfinity({enabled: true});
+
+  const advertisers = React.useMemo(() => {
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      return [...acc, ...items];
+    }, []);
+  }, [pages]);
 
   //---> Get list of IABs.
   const {data: IABs} = useGetIABs();
@@ -139,16 +167,16 @@ const ListAdvertiser = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
-                {isLoading && <LoadingIndicator />}
+                {isFetching && <LoadingIndicator />}
 
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('advertiser')}</div>
+                  <div>{t('advertiserList')}</div>
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}
-                      className="btn-icon"
+                      className="btn-icon btn-shadow"
                       size="sm"
                       color="primary"
                     >
@@ -166,6 +194,13 @@ const ListAdvertiser = () => {
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
+                  {hasNextPage && (
+                    <Pagination
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      fetchNextPage={fetchNextPage}
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>

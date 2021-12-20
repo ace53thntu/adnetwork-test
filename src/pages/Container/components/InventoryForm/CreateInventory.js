@@ -14,10 +14,10 @@ import {
 import {useCreateInventory} from 'queries/inventory';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
-import {usePositionOptions} from 'pages/Campaign/hooks';
 import {mappingInventoryFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
+import {usePositionOptions} from 'pages/Campaign/hooks';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
