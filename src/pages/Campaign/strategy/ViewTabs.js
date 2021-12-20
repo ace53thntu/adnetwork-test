@@ -17,10 +17,6 @@ import {RoutePaths} from 'constants/route-paths';
 import Audience from './form-fields/Audience';
 
 const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
-  console.log(
-    '🚀 ~ file: ViewTabs.js ~ line 18 ~ StrategyViewTabs ~ currentStrategy',
-    currentStrategy
-  );
   const {t} = useTranslation();
   const {gotoCampaignManagement} = useCampaignManager();
   const ownerId = currentStrategy?.campaign?.advertiser_uuid;

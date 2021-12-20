@@ -211,6 +211,7 @@ const InventoryList = ({page, filterParams = null}) => {
             handleAction={(actionIndex, currentItem) =>
               onClickAction(actionIndex, currentItem)
             }
+            isShowInventoryHighlight
           />
           {hasNextPage && (
             <Pagination

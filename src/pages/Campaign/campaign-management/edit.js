@@ -6,17 +6,19 @@ import React from 'react';
 // External Modules
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {Card, CardBody, Col, Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
 import {CampaignContainerStyled} from './styled';
 import {CampaignTabs} from '.';
+import {apiToForm} from 'entities/Campaign';
 
 const CampaignEdit = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
   const {data: campaign, isFetching, isFetched} = useGetCampaign(campaignId);
+  const campaignDestructure = apiToForm({campaign});
 
   return (
     <CampaignContentLayout
@@ -28,11 +30,7 @@ const CampaignEdit = () => {
         {isFetched && (
           <Row>
             <Col md="12">
-              <Card className="main-card mb-3">
-                <CardBody>
-                  <CampaignTabs isEdit currentCampaign={campaign} />
-                </CardBody>
-              </Card>
+              <CampaignTabs isEdit currentCampaign={campaignDestructure} />
             </Col>
           </Row>
         )}

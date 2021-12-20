@@ -11,23 +11,21 @@ import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
-import {useGetAdvertisers} from 'queries/advertiser';
+import {ActiveToogle, FormTextInput} from 'components/forms';
 import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
-import {useDestrutureAdvertisers, useInitCampaignDefaultValue} from '../hooks';
-import {CAMPAIGN_KEYS, CONV_EVENT_OPTIONS} from '../constants';
+import {CAMPAIGN_KEYS} from '../constants';
 import {validationCampaign} from './validation';
-import {parseCampaignFormData} from '../utils';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import AdvertiserSelect from './form-fields/AdvertiserSelect';
+import {formToApi} from 'entities/Campaign';
 
 const propTypes = {
   goToTab: PropTypes.func,
   isEdit: PropTypes.bool,
-  currentCampaign: PropTypes.any,
-  listAdvertisers: PropTypes.array,
-  campaignTree: PropTypes.array,
-  labelsData: PropTypes.array
+  isCreate: PropTypes.bool,
+  isView: PropTypes.bool,
+  currentCampaign: PropTypes.any
 };
 
 const CampaignForm = ({
@@ -35,30 +33,18 @@ const CampaignForm = ({
   isEdit = false,
   isCreate = false,
   isView = false,
-  currentCampaign = null,
-  listAdvertisers = [],
-  campaignTree = [],
-  labelsData = []
+  currentCampaign = null
 }) => {
   const {t} = useTranslation();
-  const {data: advertisers} = useGetAdvertisers({enabled: true});
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign();
 
-  const destructureAdvs = useDestrutureAdvertisers({
-    advertisers: advertisers?.items || []
-  });
-  const {id: campaignId} = useParams();
-  //---> Destructure campaign.
-  const campaign = useInitCampaignDefaultValue({
-    campaign: currentCampaign,
-    advertisers: destructureAdvs,
-    convEvents: CONV_EVENT_OPTIONS
-  });
-  console.log('🚀 ~ file: form.js ~ line 58 ~ campaign', campaign);
+  const {campaignId} = useParams();
+
+  console.log('🚀 ~ file: form.js ~ line 58 ~ campaign', currentCampaign);
 
   const methods = useForm({
-    defaultValues: campaign,
+    defaultValues: currentCampaign,
     resolver: validationCampaign(t)
   });
 
@@ -66,13 +52,13 @@ const CampaignForm = ({
 
   useEffect(() => {
     if (isView || isEdit) {
-      reset(campaign);
+      reset(currentCampaign);
     }
-  }, [campaign, isEdit, isView, reset]);
+  }, [currentCampaign, isEdit, isView, reset]);
 
   const onSubmit = useCallback(
     async formData => {
-      const requestBody = parseCampaignFormData(formData);
+      const requestBody = formToApi(formData);
 
       if (isEdit) {
         try {
@@ -106,14 +92,13 @@ const CampaignForm = ({
                 Information
               </legend>
               <Col md="6">
-                <FormReactSelect
-                  required
-                  name={CAMPAIGN_KEYS.ADVERTISER}
+                <AdvertiserSelect
+                  isRequired
+                  name={CAMPAIGN_KEYS.ADVERTISER_ID}
                   label={t('advertiser')}
                   placeholder={t('selectAAdvertiser')}
-                  options={destructureAdvs || []}
                   disabled={!isCreate}
-                  defaultValue={campaign?.advertiser}
+                  defaultValue={currentCampaign?.advertiser_uuid}
                 />
               </Col>
               <Col md="6">
@@ -216,19 +201,32 @@ const CampaignForm = ({
             </FormGroup>
           </Container>
           <div className="d-block text-right mr-15">
-            <Link to={`/${RoutePaths.CAMPAIGN}`}>
-              <Button className="mb-2 mr-2 btn-icon" color="link">
-                {t('cancel')}
-              </Button>
-            </Link>
-            <Button
-              type="submit"
-              className="mb-2 mr-2 btn-icon"
-              color="primary"
-            >
-              <i className="pe-7s-upload btn-icon-wrapper"> </i>
-              {t('save')}
-            </Button>
+            {isEdit || isCreate ? (
+              <>
+                <Link to={`/${RoutePaths.CAMPAIGN}`}>
+                  <Button className="mb-2 mr-2 btn-icon" color="link">
+                    {t('cancel')}
+                  </Button>
+                </Link>
+                <Button
+                  type="submit"
+                  className="mb-2 mr-2 btn-icon"
+                  color="primary"
+                >
+                  <i className="pe-7s-upload btn-icon-wrapper"> </i>
+                  {t('save')}
+                </Button>
+              </>
+            ) : null}
+            {isView && (
+              <Link
+                to={`/${RoutePaths.CAMPAIGN}/${currentCampaign?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentCampaign?.advertiser_uuid?.value}`}
+              >
+                <Button className="mb-2 mr-2 btn-icon" color="link">
+                  {t('goToEdit')}
+                </Button>
+              </Link>
+            )}
           </div>
         </Form>
       </FormProvider>

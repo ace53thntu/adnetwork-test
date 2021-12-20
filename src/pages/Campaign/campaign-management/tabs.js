@@ -2,21 +2,26 @@
 import React, {useMemo, useCallback, useState} from 'react';
 
 //---> External Modules
+import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
-import {Tabs} from '../components';
 
 //---> Internal Modules
+import {Tabs} from '../components';
 import CampaignForm from './form';
 import CampaignStrategies from './strategies';
 
+const propTypes = {
+  isView: PropTypes.bool,
+  isEdit: PropTypes.bool,
+  isCreate: PropTypes.bool,
+  currentCampaign: PropTypes.any
+};
+
 const CampaignTabs = ({
-  isEdit,
-  isCreate,
-  currentCampaign,
-  listAdvertisers,
-  campaignTree,
-  advertiserId,
-  labelsData
+  isView = false,
+  isEdit = false,
+  isCreate = false,
+  currentCampaign = null
 }) => {
   const {t} = useTranslation();
   const [currentTab, setCurrentTab] = useState('description');
@@ -37,11 +42,8 @@ const CampaignTabs = ({
               goToTab={goToTab}
               isEdit={isEdit}
               isCreate={isCreate}
+              isView={isView}
               currentCampaign={currentCampaign}
-              listAdvertisers={listAdvertisers}
-              campaignTree={campaignTree}
-              advertiserId={advertiserId}
-              labelsData={labelsData}
             />
           )
         },
@@ -60,18 +62,7 @@ const CampaignTabs = ({
         title: name,
         getContent: () => content
       })),
-    [
-      t,
-      goToTab,
-      isEdit,
-      isCreate,
-      currentCampaign,
-      listAdvertisers,
-      campaignTree,
-      advertiserId,
-      labelsData,
-      campaignIdCreated
-    ]
+    [t, goToTab, isEdit, isCreate, isView, currentCampaign, campaignIdCreated]
   );
 
   const getTab = index => {
@@ -101,5 +92,7 @@ const CampaignTabs = ({
     </div>
   );
 };
+
+CampaignTabs.propTypes = propTypes;
 
 export default CampaignTabs;

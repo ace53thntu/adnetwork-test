@@ -29,7 +29,8 @@ function List(props) {
     selectable,
     selectedValue,
     disabled,
-    noTruncate
+    noTruncate,
+    isShowInventoryHighlight
   } = props;
 
   const classes = useListStyles();
@@ -57,8 +58,8 @@ function List(props) {
               key={item?.id ?? itemIndex}
               handleClick={() => (disabled ? {} : handleClickItem(item))}
               status={item?.status}
-              isBid={!!item?.has_active_bid}
-              isDeal={!!item?.has_active_deal}
+              isBid={!!item?.has_active_bid && isShowInventoryHighlight}
+              isDeal={!!item?.has_active_deal && isShowInventoryHighlight}
             >
               {checkable && !selectable ? (
                 <ListItemIcon>
@@ -233,7 +234,8 @@ List.propTypes = {
   ),
   checkable: PropTypes.bool,
   selectable: PropTypes.bool,
-  selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isShowInventoryHighlight: PropTypes.bool
 };
 
 List.defaultProps = {
@@ -245,7 +247,8 @@ List.defaultProps = {
   checkable: false,
   selectable: false,
   selectedValue: '',
-  disabled: false
+  disabled: false,
+  isShowInventoryHighlight: false
 };
 
 export default List;

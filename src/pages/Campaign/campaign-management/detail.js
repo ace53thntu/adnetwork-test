@@ -1,12 +1,13 @@
 // Build-in Modules
 import {LoadingIndicator} from 'components/common';
+import {apiToForm} from 'entities/Campaign';
 import {useGetCampaign} from 'queries/campaign';
 import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {Card, CardBody, Col, Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 import {CampaignTabs} from '.';
 
 // Internal Modules
@@ -17,6 +18,7 @@ const CampaignDetail = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
   const {data: campaign, isFetching, isFetched} = useGetCampaign(campaignId);
+  const campaignDestructure = apiToForm({campaign});
 
   return (
     <CampaignContentLayout
@@ -28,11 +30,7 @@ const CampaignDetail = () => {
         {isFetched && (
           <Row>
             <Col md="12">
-              <Card className="main-card mb-3">
-                <CardBody>
-                  <CampaignTabs isView currentCampaign={campaign} />
-                </CardBody>
-              </Card>
+              <CampaignTabs isView currentCampaign={campaignDestructure} />
             </Col>
           </Row>
         )}

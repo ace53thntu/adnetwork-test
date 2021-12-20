@@ -2,6 +2,7 @@
 import React, {useCallback} from 'react';
 
 //---> External Modules
+import PropTypes from 'prop-types';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Button, Form} from 'reactstrap';
@@ -16,17 +17,28 @@ import StatusGroup from './form-fields/StatusGroup';
 import AdsGroup from './form-fields/AdsGroup';
 import {destructureFormData} from './dto';
 import {strategySchema} from './validation';
+import InventoryGroup from './form-fields/InventoryGroup';
+
+const propTypes = {
+  goTo: PropTypes.func,
+  isEdit: PropTypes.bool,
+  campaignId: PropTypes.string,
+  gotoCampaignManagement: PropTypes.func,
+  isView: PropTypes.bool,
+  currentStrategy: PropTypes.any,
+  isSummary: PropTypes.bool,
+  positions: PropTypes.array
+};
 
 const StrategyForm = ({
   goTo,
   isEdit,
   campaignId,
-  setListErrors,
   gotoCampaignManagement,
   isView,
   currentStrategy = null,
-  listCampaignOptions,
-  isSummary = false
+  isSummary = false,
+  positions = []
 }) => {
   const {t} = useTranslation();
   const {id: strategyId} = useParams();
@@ -90,16 +102,20 @@ const StrategyForm = ({
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Information Group */}
           <InformationGroup
-            listCampaignOptions={listCampaignOptions}
             isView={isView}
             currentStrategy={currentStrategy}
             isEdit={isEdit}
+            positions={positions}
           />
           {/* Status Group */}
           <StatusGroup viewOnly={isView} currentStrategy={currentStrategy} />
 
           {/* Ads Group */}
           <AdsGroup viewOnly={isView} currentStrategy={currentStrategy} />
+
+          {/* Inventory Group */}
+          {isEdit && <InventoryGroup />}
+
           {!isView && !isSummary && (
             <div className="d-block text-right mr-15">
               <Button
@@ -125,5 +141,7 @@ const StrategyForm = ({
     </div>
   );
 };
+
+StrategyForm.propTypes = propTypes;
 
 export default StrategyForm;

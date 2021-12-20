@@ -35,7 +35,10 @@ const StrategyEdit = () => {
         {isFetched && status === 'success' && (
           <Row>
             <Col md="12">
-              <StrategyEditTabs currentStrategy={strategy} />
+              <StrategyEditTabs
+                currentStrategy={strategy}
+                positions={positionOptions}
+              />
             </Col>
           </Row>
         )}

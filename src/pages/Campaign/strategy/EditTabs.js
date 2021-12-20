@@ -7,18 +7,17 @@ import {useTranslation} from 'react-i18next';
 //---> Internal Modules
 
 import {useQueryString} from 'hooks';
-import {useGetCampaigns} from 'queries/campaign';
 import StrategyForm from './form';
 import {Tabs} from '../components';
-import {useCampaignManager, useDestructureCampaignOptions} from '../hooks';
+import {useCampaignManager} from '../hooks';
 import Concept from './form-fields/Concept';
 import Summary from './form-fields/Summary';
 
-const StrategyEditTabs = ({currentStrategy = {}, campaignId}) => {
-  const {data: listCampaign = []} = useGetCampaigns();
-  const listCampaignOptions = useDestructureCampaignOptions({
-    campaigns: listCampaign?.items
-  });
+const StrategyEditTabs = ({
+  currentStrategy = {},
+  campaignId,
+  positions = []
+}) => {
   const query = useQueryString();
   const nextTab = query.get('next_tab');
 
@@ -48,8 +47,8 @@ const StrategyEditTabs = ({currentStrategy = {}, campaignId}) => {
               isEdit
               currentStrategy={currentStrategy}
               gotoCampaignManagement={gotoCampaignManagement}
-              listCampaignOptions={listCampaignOptions}
               goTo={goTo}
+              positions={positions}
             />
           )
         },
@@ -82,7 +81,6 @@ const StrategyEditTabs = ({currentStrategy = {}, campaignId}) => {
                 isEdit
                 currentStrategy={currentStrategy}
                 gotoCampaignManagement={gotoCampaignManagement}
-                listCampaignOptions={listCampaignOptions}
                 goTo={goTo}
               />
             </div>
@@ -93,14 +91,7 @@ const StrategyEditTabs = ({currentStrategy = {}, campaignId}) => {
         title: name,
         getContent: () => content
       })),
-    [
-      t,
-      goTo,
-      campaignId,
-      currentStrategy,
-      gotoCampaignManagement,
-      listCampaignOptions
-    ]
+    [t, goTo, campaignId, currentStrategy, gotoCampaignManagement, positions]
   );
 
   const getTab = index => {

@@ -9,21 +9,13 @@ import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import SelectStrategyItem from '../../components/SelectStrategyItem';
-import {usePositionOptions} from '../../hooks';
 import {FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
 
-const InformationGroup = ({
-  listCampaignOptions,
-  currentStrategy,
-  isEdit,
-  isView
-}) => {
+const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
-
-  const positions = usePositionOptions();
 
   return (
     <>

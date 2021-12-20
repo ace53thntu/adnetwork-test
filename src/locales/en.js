@@ -11,6 +11,7 @@ const en = {
   selectAdvertiser: 'Select advertiser',
   selectCampaign: 'Select Campaign',
   company: 'Company',
+  goToEdit: 'Go to edit',
 
   // Main Menu
   userManagement: 'User Management',
@@ -23,6 +24,7 @@ const en = {
   strategyEdit: 'Edit a strategy',
   strategyCreate: 'Add new strategy',
   strategyPageDescription: '',
+  inventoryList: 'Inventory List',
   // Card Header
   advertiserList: 'Advertiser List',
 
