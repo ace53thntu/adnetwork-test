@@ -31,7 +31,7 @@ deploy-staging: CLUSTER_LOCATION ?= europe-west1-d
 deploy-staging: CLUSTER_NAMESPACE ?= staging
 deploy-staging: HELM_RELEASE ?= adnetwork
 deploy-staging:
-	gcloud container clusters get-credentials $(CLUSTER_NAME) --zone $(CLUSTER_LOCATION)
+	# gcloud container clusters get-credentials $(CLUSTER_NAME) --zone $(CLUSTER_LOCATION)
 	kubectl -n $(CLUSTER_NAMESPACE) rollout restart deployment.apps/$(HELM_RELEASE)-$(APP)
 
 up:
