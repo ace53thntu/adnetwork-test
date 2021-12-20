@@ -93,8 +93,12 @@ function NativeAdForm(props) {
 
   const checkAssets = values => {
     const newAssets = values?.assets?.filter(asset => !asset.uuid);
+    console.log(
+      '🚀 ~ file: NativeAdForm.js ~ line 96 ~ NativeAdForm ~ newAssets',
+      newAssets
+    );
 
-    createAssets(nativeAd.uuid, newAssets);
+    // createAssets(nativeAd.uuid, newAssets);
   };
 
   const onSubmit = async values => {
