@@ -3,7 +3,7 @@ import {useGetMe} from 'queries/users';
 import React from 'react';
 import {useRoutes} from 'react-router-dom';
 import {authenticatedRoutes} from 'routers/authenticated';
-import {setUser} from 'utils/helpers/auth.helpers';
+import {setRole, setUser} from 'utils/helpers/auth.helpers';
 import {setUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 
 function AuthenticatedApp(props) {
@@ -16,6 +16,7 @@ function AuthenticatedApp(props) {
   React.useEffect(() => {
     if (!isFetching) {
       setUser(authUser);
+      setRole(authUser?.role);
     }
   }, [isFetching, authUser]);
 

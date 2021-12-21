@@ -1,3 +1,4 @@
+import {ROLE_KEY} from 'constants/auth';
 import * as AUTH_KEY from '../constants/auth.constants';
 import {
   getLocalData,
@@ -78,3 +79,7 @@ export const getUser = () => getLocalData(USER_INFO_KEY);
  * Remove user
  */
 export const removeUser = () => removeLocalData(USER_INFO_KEY);
+
+export const setRole = role => storeLocalData(ROLE_KEY, role);
+export const removeRole = role => removeLocalData(ROLE_KEY, role);
+export const getRole = () => getLocalData(ROLE_KEY);
