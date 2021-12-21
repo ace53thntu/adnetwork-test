@@ -97,5 +97,8 @@ export const endpoints = {
   },
   video: {
     list: `${API_V1}/video`
+  },
+  activation: {
+    activation: `${API_V1}/activation`
   }
 };

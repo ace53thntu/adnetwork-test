@@ -3,7 +3,14 @@ import React from 'react';
 
 //---> External Modules
 import moment from 'moment';
-import {Badge} from 'reactstrap';
+import {
+  Badge,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button
+} from 'reactstrap';
 
 //---> Internal Modules
 import {List} from 'components/list';
@@ -17,6 +24,8 @@ import {BodyContentStyled, NoAudienceStyled} from './styled';
 import {LoadingIndicator} from 'components/common';
 import ActionBar from './action-bar';
 import {useNavigate} from 'react-router';
+import {AudienceActivation} from '../audience-activation';
+import {useTranslation} from 'react-i18next';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -43,7 +52,10 @@ const ActionIndexs = {
 };
 
 const AudienceList = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = React.useState(false);
+
   const {
     data: {pages = []} = {},
     isFetching,
@@ -127,9 +139,13 @@ const AudienceList = () => {
     }
   }
 
+  function onToggleModal() {
+    setOpenModal(prevState => !prevState);
+  }
+
   return (
     <>
-      <ActionBar />
+      <ActionBar onClickActivation={onToggleModal} />
       <BodyContentStyled>
         {isFetching && <LoadingIndicator />}
         {audiences?.length > 0 ? (
@@ -154,6 +170,21 @@ const AudienceList = () => {
           />
         )}
       </BodyContentStyled>
+
+      {/* Activation Modal */}
+      {openModal && (
+        <Modal isOpen={openModal} size="lg">
+          <ModalHeader>Activation</ModalHeader>
+          <ModalBody>
+            <AudienceActivation />
+          </ModalBody>
+          <ModalFooter>
+            <Button type="button" onClick={onToggleModal} color="link">
+              {t('cancel')}
+            </Button>
+          </ModalFooter>
+        </Modal>
+      )}
     </>
   );
 };

@@ -31,6 +31,10 @@ const propTypes = {
 };
 
 const InventoryContentModal = ({containerId}) => {
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 34 ~ InventoryContentModal ~ containerId',
+    containerId
+  );
   let params = {
     limit: DEFAULT_PAGINATION.perPage
   };

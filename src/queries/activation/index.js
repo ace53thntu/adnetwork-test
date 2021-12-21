@@ -1,0 +1,1 @@
+export {useGetActivation} from './useGetActivation';

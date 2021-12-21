@@ -309,6 +309,7 @@ const en = {
   pleaseCheckValidationSummary: 'Please check the validation summary',
   audience: 'Audience',
   activation: 'Activation',
+  activate: 'Activate',
   validation: 'Validation',
   strategyManagerDescription:
     'Wide selection of buttons that feature different styles for backgrounds, borders and hover options!',
