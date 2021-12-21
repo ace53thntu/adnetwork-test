@@ -36,6 +36,7 @@ function Alternatives(props) {
     control,
     name: formAlternativeName
   });
+  const {errors} = useFormContext();
 
   const handleAddAlternative = () => {
     addAlternativeField(alternativeDefaultValues);
@@ -49,12 +50,15 @@ function Alternatives(props) {
           : index === alternativeFields.length - 1;
         const title = item.name.length ? item.name : 'Alternative Information';
 
+        const isError = Boolean(errors?.[formAlternativeName]?.[index]);
+
         return (
           <Collapse
             initialOpen={isOpen}
             key={item.id}
             title={title}
             unMount={false}
+            isError={isError}
           >
             <AlternativeForm
               itemIndex={index}
