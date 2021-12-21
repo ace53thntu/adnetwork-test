@@ -16,8 +16,8 @@ export function createNativeAdResolver(isEdit = false) {
               'is-number',
               'Custom ID must be a integer number and greater than 0.',
               val => {
-                if (isEdit) {
-                  return true;
+                if (!val?.length) {
+                  return false;
                 }
                 const reg = /^\d+$/;
                 const parsed = parseInt(val, 10);
@@ -29,9 +29,6 @@ export function createNativeAdResolver(isEdit = false) {
               }
             ),
             value: Yup.string().when('type', typeVal => {
-              if (isEdit) {
-                return Yup.string().notRequired();
-              }
               if (!ASSET_TYPES_IS_FILE.includes(typeVal.id)) {
                 return Yup.string().required('Required.');
               }
@@ -41,9 +38,6 @@ export function createNativeAdResolver(isEdit = false) {
             file: Yup.object()
               .nullable()
               .when('type', typeVal => {
-                if (isEdit) {
-                  return Yup.object().nullable().notRequired();
-                }
                 if (ASSET_TYPES_IS_FILE.includes(typeVal.id)) {
                   return Yup.object().nullable().required('Required.');
                 }

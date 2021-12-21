@@ -26,7 +26,6 @@ function AssetForm(props) {
   } = props;
 
   const {mutateAsync: deleteAssetRequest} = useDeleteAsset();
-
   const isEdit = data?.uuid;
 
   const [isOpenDialog, setIsOpenDialog] = React.useState(false);
@@ -42,13 +41,17 @@ function AssetForm(props) {
   const handleClose = () => setIsOpenDialog(false);
 
   const handleAgree = async () => {
-    try {
-      await deleteAssetRequest(assetId);
-      handleClose();
-      ShowToast.success('Remove Asset successfully!');
+    if (isEdit) {
+      try {
+        await deleteAssetRequest(assetId);
+        handleClose();
+        ShowToast.success('Remove Asset successfully!');
+        remove(assetIndex);
+      } catch (error) {
+        ShowToast.error(error?.message);
+      }
+    } else {
       remove(assetIndex);
-    } catch (error) {
-      ShowToast.error(error?.message);
     }
   };
 
@@ -59,28 +62,30 @@ function AssetForm(props) {
           <Row>
             <Col md={3}>
               <FormTextInput
-                name={`${assetName}.id`}
-                defaultValue={data?.id}
                 type="hidden"
+                name={`${assetName}.uuid`}
+                defaultValue={data?.uuid}
+                applyFieldArray
               />
 
               <FormTextInput
                 isRequired
-                name={`${assetName}.custom_id`}
                 label="Custom ID"
-                disable={isEdit}
+                name={`${assetName}.custom_id`}
                 defaultValue={data?.custom_id}
+                readOnly={isEdit}
+                applyFieldArray
               />
             </Col>
             <Col md={3}>
               <FormReactSelect
-                name={`${assetName}.type`}
                 label="Type"
-                disabled={isEdit}
+                menuPlacement="top"
                 bsSize="sm"
+                name={`${assetName}.type`}
+                disabled={isEdit}
                 options={ASSET_TYPES}
                 defaultValue={data?.type}
-                menuPlacement="top"
               />
             </Col>
 
@@ -88,10 +93,11 @@ function AssetForm(props) {
               <Col md={6}>
                 <FormTextInput
                   isRequired
-                  name={`${assetName}.value`}
                   label="Value"
-                  disable={isEdit}
+                  name={`${assetName}.value`}
+                  readOnly={isEdit}
                   defaultValue={data?.value}
+                  applyFieldArray
                 />
               </Col>
             )}
@@ -115,11 +121,9 @@ function AssetForm(props) {
       <Row>
         <Col>
           <div className="d-flex justify-content-end">
-            {isEdit && (
-              <Button color="danger" onClick={handleRemoveAsset}>
-                Remove
-              </Button>
-            )}
+            <Button color="danger" onClick={handleRemoveAsset}>
+              Remove
+            </Button>
 
             <Button
               color="secondary"

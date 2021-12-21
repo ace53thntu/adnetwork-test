@@ -33,9 +33,9 @@ const defaultValues = {
   click_url: '',
   dco_product: '',
   product_query_string: '',
-  extra_trackers: ''
+  extra_trackers: '',
   //
-  // assets: []
+  assets: []
 };
 
 function NativeAdForm(props) {
@@ -58,7 +58,7 @@ function NativeAdForm(props) {
 
   const methods = useForm({
     defaultValues: getDefaultValues,
-    resolver: createNativeAdResolver(!!nativeAd)
+    resolver: createNativeAdResolver(!isCreate)
   });
   const {
     handleSubmit,
@@ -93,12 +93,8 @@ function NativeAdForm(props) {
 
   const checkAssets = values => {
     const newAssets = values?.assets?.filter(asset => !asset.uuid);
-    console.log(
-      '🚀 ~ file: NativeAdForm.js ~ line 96 ~ NativeAdForm ~ newAssets',
-      newAssets
-    );
 
-    // createAssets(nativeAd.uuid, newAssets);
+    createAssets(nativeAd.uuid, newAssets);
   };
 
   const onSubmit = async values => {

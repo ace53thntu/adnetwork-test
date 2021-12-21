@@ -1,7 +1,7 @@
 import {Collapse} from 'components/common/Collapse';
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {useFieldArray} from 'react-hook-form';
+import {useFieldArray, useFormContext} from 'react-hook-form';
 import {Button} from 'reactstrap';
 
 import AssetForm from './AssetForm';
@@ -22,19 +22,23 @@ function Assets(props) {
     control,
     name: 'assets'
   });
+  const {errors} = useFormContext();
 
   return (
     <div>
       {assets?.map((asset, idx) => {
         const assetIndex = idx;
         const assetName = `assets[${idx}]`;
+        const isError = Boolean(errors?.assets?.[idx]);
+        const isOpen = !asset.uuid;
 
         return (
           <Collapse
-            key={`${idx}-${asset?.id}`}
+            key={`${asset?.id}`}
             title={`Asset ${idx + 1}`}
             unMount={false}
-            initialOpen={!asset.uuid}
+            initialOpen={isOpen}
+            isError={isError}
           >
             <AssetForm
               assetName={assetName}
@@ -69,4 +73,4 @@ Assets.propTypes = {
 };
 Assets.defaultProps = {};
 
-export default Assets;
+export default React.memo(Assets);

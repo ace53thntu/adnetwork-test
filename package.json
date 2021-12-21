@@ -72,7 +72,7 @@
     "react-flagkit": "2.0.4",
     "react-hamburgers": "^1.0.0",
     "react-helmet-async": "^1.0.7",
-    "react-hook-form": "6.9.5",
+    "react-hook-form": "6.15.8",
     "react-i18next": "^11.7.0",
     "react-is": "17.0.0",
     "react-leaflet": "^2.7.0",

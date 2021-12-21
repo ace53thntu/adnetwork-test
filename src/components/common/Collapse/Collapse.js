@@ -7,9 +7,15 @@ import MuiCollapse from '@material-ui/core/Collapse';
 import CollapseBox from './CollapseBox';
 
 function Collapse(props) {
-  const {title, children, unMount, initialOpen} = props;
+  const {title, children, unMount, initialOpen, isError} = props;
 
   const [open, setOpen] = React.useState(initialOpen);
+
+  React.useEffect(() => {
+    if (isError) {
+      setOpen(true);
+    }
+  }, [isError]);
 
   function handleCollapse(event) {
     event?.preventDefault();
@@ -17,7 +23,12 @@ function Collapse(props) {
   }
 
   return (
-    <CollapseBox title={title} open={open} handleClick={handleCollapse}>
+    <CollapseBox
+      title={title}
+      open={open}
+      handleClick={handleCollapse}
+      isError={isError}
+    >
       <MuiCollapse in={open}>
         {unMount ? (
           open && (
@@ -51,11 +62,13 @@ Collapse.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
   unMount: PropTypes.bool,
-  initialOpen: PropTypes.bool
+  initialOpen: PropTypes.bool,
+  isError: PropTypes.bool
 };
 Collapse.defaultProps = {
   unMount: true,
-  initialOpen: false
+  initialOpen: false,
+  isError: false
 };
 
 export default Collapse;
