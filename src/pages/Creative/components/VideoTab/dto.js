@@ -29,13 +29,12 @@ export function videoFormValuesToRepo(raw, conceptId, requestFiles = []) {
     height: parseInt(height, 10),
     dtype: 'video',
     concept_uuid: conceptId,
-    status: 'active'
+    status: 'active',
+    file_uuids: []
   };
 
   if (requestFiles?.length) {
-    obj.file_uuids = requestFiles;
-  } else {
-    obj.file_uuids = [];
+    obj.file_uuids = [...obj.file_uuids, ...requestFiles];
   }
 
   return obj;

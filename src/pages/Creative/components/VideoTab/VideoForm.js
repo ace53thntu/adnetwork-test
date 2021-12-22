@@ -83,18 +83,15 @@ function VideoForm(props) {
   };
 
   const onSubmit = async values => {
+    setIsLoading(true);
     let requestData = {};
     if (values?.files?.length) {
-      const fileIds = values.files.map(file => file?.file?.file?.uuid);
-      if (fileIds?.every(fileId => fileId !== undefined)) {
-        requestData = videoFormValuesToRepo(values, conceptId, fileIds);
-      } else {
-        requestData = videoFormValuesToRepo(values, conceptId, []);
-      }
+      const filtered = values.files.filter(item => item.file.file);
+      const fileIds = filtered.map(file => file.file.file.uuid);
+      requestData = videoFormValuesToRepo(values, conceptId, fileIds);
     } else {
-      requestData = videoFormValuesToRepo(values, conceptId);
+      requestData = videoFormValuesToRepo(values, conceptId, []);
     }
-    setIsLoading(true);
 
     if (isCreate) {
       try {
