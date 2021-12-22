@@ -12,6 +12,7 @@ const en = {
   selectCampaign: 'Select Campaign',
   company: 'Company',
   goToEdit: 'Go to edit',
+  viewReport: 'View report',
 
   // Main Menu
   userManagement: 'User Management',
@@ -27,6 +28,7 @@ const en = {
   inventoryList: 'Inventory List',
   // Card Header
   advertiserList: 'Advertiser List',
+  inventoryReports: 'Inventory Reports',
 
   // Inventory
   priceEngine: 'Price engine',
@@ -383,6 +385,8 @@ const en = {
   // Form Inputs & Actions,
   url: 'Url',
   apiKey: 'Api Key',
+  accessKey: 'Access Key',
+  secretKey: 'Secret Key',
   user: 'User',
   userList: 'User list',
   address: 'Address',
@@ -393,6 +397,8 @@ const en = {
   enterName: 'Enter name...',
   enterUrl: 'Enter url...',
   enterApiKey: 'Enter API key...',
+  enterAccessKey: 'Enter Access key...',
+  enterSecretKey: 'Enter Secret key...',
   enterUser: 'Enter user...',
   enterPassword: 'Enter password...',
   enterAddress: 'Enter address...',

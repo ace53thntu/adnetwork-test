@@ -1,6 +1,6 @@
 //---> Build-in Modules
 import {INPUT_NAME} from 'constants/report';
-import {useReport} from 'pages/entity-dashboard/hooks';
+import {useReport} from 'pages/entity-report/hooks';
 import React from 'react';
 
 //---> External Modules

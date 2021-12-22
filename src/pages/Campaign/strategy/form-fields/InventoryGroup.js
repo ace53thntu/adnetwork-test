@@ -7,7 +7,7 @@ import {Col, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
-import {InventoryModal} from './inventory-modal';
+import {InventoryModal, StrategyInventory} from './inventories';
 import {InventoryModalStyled} from './styled';
 import {useTranslation} from 'react-i18next';
 
@@ -31,6 +31,7 @@ const InventoryGroup = ({isView = false}) => {
             Add Inventory
           </Button>
         </div>
+        <StrategyInventory />
       </Col>
       <InventoryModalStyled toggle={onToggleModal} isOpen={openModal}>
         <ModalHeader toggle={onToggleModal}>{t('inventoryList')}</ModalHeader>
@@ -43,7 +44,7 @@ const InventoryGroup = ({isView = false}) => {
           </Button>
           <Button type="button" color="primary" onClick={onToggleModal}>
             {t('add')}
-          </Button>{' '}
+          </Button>
         </ModalFooter>
       </InventoryModalStyled>
     </Collapse>

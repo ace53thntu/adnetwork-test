@@ -1,5 +1,5 @@
 import {INPUT_NAME} from 'constants/report';
-import {parseColors} from 'pages/entity-dashboard/utils';
+import {parseColors} from 'pages/entity-report/utils';
 import React from 'react';
 import {useFormContext, useWatch} from 'react-hook-form';
 import {R2ChartPie} from '../charts';

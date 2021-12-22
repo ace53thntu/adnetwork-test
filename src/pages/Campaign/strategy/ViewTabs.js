@@ -7,7 +7,7 @@ import {Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
 
 //---> Internal Modules
-import EntityReport from 'pages/entity-dashboard';
+import EntityReport from 'pages/entity-report';
 import StrategyForm from './form';
 import {useCampaignManager} from '../hooks';
 import {Divider, Tabs} from '../components';

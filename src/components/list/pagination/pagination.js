@@ -16,6 +16,7 @@ const Pagination = ({
         onClick={() => fetchNextPage()}
         disabled={!hasNextPage || isFetchingNextPage}
         color="primary"
+        size="sm"
       >
         {isFetchingNextPage && (
           <Spinner color="light" size="sm" className="mr-2" />

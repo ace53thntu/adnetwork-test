@@ -25,15 +25,23 @@ import {
   getInventoryTypeColor
 } from 'pages/inventory-market/helpers';
 import DealFloorPriceInput from './DealFloorPriceInput';
+import {
+  setStrategyInventoryListRedux,
+  useStrategyInventorySelector
+} from 'store/reducers/campaign';
+import {useDispatch} from 'react-redux';
+import {useStrategyInventories} from 'pages/Campaign/hooks/useStrategyInventories';
 
 const propTypes = {
   containerId: PropTypes.string
 };
 
 const InventoryContentModal = ({containerId}) => {
+  const dispatch = useDispatch();
+  const strategyInventories = useStrategyInventorySelector();
   console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 34 ~ InventoryContentModal ~ containerId',
-    containerId
+    '🚀 ~ file: InventoryContentModal.js ~ line 40 ~ InventoryContentModal ~ strategyInventories',
+    strategyInventories
   );
   let params = {
     limit: DEFAULT_PAGINATION.perPage
@@ -58,6 +66,43 @@ const InventoryContentModal = ({containerId}) => {
       return [...acc, ...itemsDestructure];
     }, []);
   }, [pages]);
+  const inventoriesMapping = useStrategyInventories({
+    inventories,
+    strategyInventories
+  });
+
+  const onClickAddInventory = React.useCallback(
+    (evt, _inventory) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      let tmpArr = [...strategyInventories];
+      const inventoryFound = tmpArr?.find(
+        item => item?.uuid === _inventory?.uuid
+      );
+      if (!inventoryFound) {
+        tmpArr.push(_inventory);
+      } else {
+        tmpArr = tmpArr.filter(item => item?.uuid !== _inventory?.uuid);
+      }
+      dispatch(setStrategyInventoryListRedux(tmpArr));
+    },
+    [dispatch, strategyInventories]
+  );
+
+  const onChangeDealFloorPrice = React.useCallback(
+    (value, _inventoryId) => {
+      let tmpArr = [...strategyInventories];
+      tmpArr = tmpArr.map(item => {
+        if (item?.uuid === _inventoryId) {
+          return {...item, deal_floor_price: value};
+        }
+        return item;
+      });
+      dispatch(setStrategyInventoryListRedux(tmpArr));
+    },
+    [dispatch, strategyInventories]
+  );
 
   const columns = React.useMemo(() => {
     return [
@@ -114,15 +159,39 @@ const InventoryContentModal = ({containerId}) => {
       {
         header: 'Deal Floor Price',
         accessor: 'deal_floor_price',
-        cell: row => <DealFloorPriceInput defaultValue={row?.value || 0} />
+        cell: row => (
+          <DealFloorPriceInput
+            defaultValue={row?.value || 0}
+            onChangeInputGlobal={value =>
+              onChangeDealFloorPrice(value, row?.original?.uuid)
+            }
+          />
+        )
       },
       {
         header: 'Actions',
         accessor: 'action',
-        cell: row => <Button color="info">Add</Button>
+        cell: row => {
+          const isAdded = row?.original?.is_added || false;
+          return (
+            <Button
+              className="mb-2 mr-2 btn-icon btn-icon-only btn-shadow btn-dashed"
+              outline
+              color={isAdded ? 'danger' : 'primary'}
+              type="button"
+              onClick={evt => onClickAddInventory(evt, row?.original)}
+            >
+              <i
+                className={`${
+                  isAdded ? 'pe-7s-less' : 'pe-7s-plus'
+                } btn-icon-wrapper`}
+              ></i>
+            </Button>
+          );
+        }
       }
     ];
-  }, []);
+  }, [onChangeDealFloorPrice, onClickAddInventory]);
 
   //---> Define local states.
 
@@ -144,7 +213,7 @@ const InventoryContentModal = ({containerId}) => {
         <>
           <List
             showAction={false}
-            data={inventories}
+            data={inventoriesMapping}
             columns={columns}
             handleClickItem={onClickItem}
             handleAction={(actionIndex, currentItem) =>

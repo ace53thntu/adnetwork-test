@@ -7,8 +7,8 @@ import {useFormContext, useWatch} from 'react-hook-form';
 //---> Internal Modules
 import {FORMAT_BY_UNIT, INPUT_NAME} from 'constants/report';
 import {R2ChartLine, R2ChartBar} from '../charts';
-import {parseColors} from 'pages/entity-dashboard/utils';
-import {useConfigChart} from 'pages/entity-dashboard/hooks';
+import {parseColors} from 'pages/entity-report/utils';
+import {useConfigChart} from 'pages/entity-report/hooks';
 
 export default function CustomLineChart({
   series = [],

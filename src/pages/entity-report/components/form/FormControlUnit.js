@@ -1,5 +1,5 @@
 import {INPUT_NAME} from 'constants/report';
-import {validTimeRange} from 'pages/entity-dashboard/utils/validateReportTime';
+import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
 import {useDispatch} from 'react-redux';

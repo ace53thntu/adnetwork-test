@@ -2,6 +2,7 @@ import React from 'react';
 import Loading from 'components/common/loading';
 
 const AdvertiserList = React.lazy(() => import('./advertiser-list'));
+const AdvertiserReport = React.lazy(() => import('./advertiser-report'));
 
 function AdvertiserListPage() {
   return (
@@ -11,4 +12,12 @@ function AdvertiserListPage() {
   );
 }
 
-export {AdvertiserListPage};
+function AdvertiserReportPage() {
+  return (
+    <React.Suspense fallback={<Loading />}>
+      <AdvertiserReport />
+    </React.Suspense>
+  );
+}
+
+export {AdvertiserListPage, AdvertiserReportPage};

@@ -1,4 +1,3 @@
-export {useDestructureStrategies} from './useDestructureStrategies';
 export {useDestructureCampaigns} from './useDestructureCampaigns';
 export {useDestructureLabels} from './useDestructureLabels';
 export {useDestructureCampaignOptions} from './useDestructureCampaignOptions';

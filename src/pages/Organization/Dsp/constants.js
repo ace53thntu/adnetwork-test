@@ -4,7 +4,8 @@ export const INPUT_NAME = {
   DOMAIN: 'domain',
   URL: 'url',
   CREDENTIAL: 'credential',
-  API_KEY: 'apiKey',
+  ACCESS_KEY: 'access_key',
+  SECRET_KEY: 'secret_key',
   USER: 'user',
   PASSWORD: 'password'
 };

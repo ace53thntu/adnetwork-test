@@ -1,8 +1,10 @@
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
+import {Pagination} from 'components/list/pagination';
 import Status from 'components/list/status';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
-import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
+import {useDeleteCampaign, useGetCampaignsInfinity} from 'queries/campaign';
 import React from 'react';
 import {useNavigate} from 'react-router';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -15,10 +17,25 @@ const propTypes = {};
 
 const CampaignList = () => {
   const navigate = useNavigate();
-  const {data: {items = []} = {}, isFetching} = useGetCampaigns();
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetCampaignsInfinity({
+    params: {
+      limit: DEFAULT_PAGINATION.perPage
+    },
+    enabled: true
+  });
   const campaigns = React.useMemo(() => {
-    return items?.map(item => ({...item, id: item?.uuid}));
-  }, [items]);
+    return pages?.reduce((acc, page) => {
+      const {items = []} = page;
+      const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...itemsDestructure];
+    }, []);
+  }, [pages]);
   const {mutateAsync: deleteCampaign} = useDeleteCampaign();
 
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -106,6 +123,13 @@ const CampaignList = () => {
           handleAction={onClickDelete}
           handleClickItem={onClickItem}
         />
+        {hasNextPage && (
+          <Pagination
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        )}
       </CampaignListStyled>
       {openDialog && (
         <DialogConfirm

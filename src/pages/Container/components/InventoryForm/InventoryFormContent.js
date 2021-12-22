@@ -25,6 +25,8 @@ import {MarketTypes, PriceEngines} from 'constants/inventory';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import TrackerTemplateSelect from './TrackerTemplateSelect';
 import {InputStatus} from 'constants/misc';
+import {Link} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 const formName = {
   properties: 'properties',
@@ -204,16 +206,23 @@ const InventoryFormContent = ({
         <Button type="button" color="link" onClick={toggle}>
           Cancel
         </Button>
-        {formState.isDirty ? (
-          <ButtonLoading
-            loading={isLoading}
-            type="submit"
-            className="ml-2 btn-primary"
-            disabled={!formState.isDirty}
+        <ButtonLoading
+          loading={isLoading}
+          type="submit"
+          className="ml-2 btn-primary"
+          disabled={!formState.isDirty}
+        >
+          {t('save')}
+        </ButtonLoading>
+        {inventory?.uuid && (
+          <Link
+            to={`/${RoutePaths.INVENTORY}/${inventory?.uuid}/${RoutePaths.REPORT}`}
           >
-            {t('save')}
-          </ButtonLoading>
-        ) : null}
+            <Button color="success" type="button">
+              {t('viewReport')}
+            </Button>
+          </Link>
+        )}
       </ModalFooter>
     </BlockUi>
   );

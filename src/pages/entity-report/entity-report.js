@@ -8,7 +8,7 @@ import {Col, Row} from 'reactstrap';
 //---> Internal Modules
 import ReportList from './report-list';
 import ReportForm from './report.form';
-import {ENTITY_TYPES, METRIC_TYPES} from 'constants/report';
+import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import {LoadingIndicator} from 'components/common';
 import {useGetReportsInfinity} from 'queries/report/useGetReports';
 import {Pagination} from 'components/list/pagination';
@@ -16,13 +16,14 @@ import {Pagination} from 'components/list/pagination';
 const NUMBER_OF_PAGE = 10;
 
 const EntityReport = ({
-  entity = 'strategy',
+  entity = EntityTypes.STRATEGY,
   entityId = null,
   ownerId,
   ownerRole
 }) => {
-  const entityType = ENTITY_TYPES[entity];
-  const distributionBy = entityType === 'organisation' ? 'manager' : entityType;
+  const entityType = entity;
+  const distributionBy =
+    entityType === EntityTypes.ORGANIZATION ? 'manager' : entityType;
   const metricType = METRIC_TYPES[entity];
   const {
     data: {pages = []} = {},

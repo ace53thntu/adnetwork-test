@@ -4,10 +4,14 @@ import PropTypes from 'prop-types';
 import {Input} from 'reactstrap';
 
 const propTypes = {
-  defaultValue: PropTypes.number
+  defaultValue: PropTypes.number,
+  onChangeInputGlobal: PropTypes.func
 };
 
-const DealFloorPriceInput = ({defaultValue = 0}) => {
+const DealFloorPriceInput = ({
+  defaultValue = 0,
+  onChangeInputGlobal = () => null
+}) => {
   const [inputval, setInputVal] = React.useState(0);
 
   React.useEffect(() => {
@@ -15,7 +19,9 @@ const DealFloorPriceInput = ({defaultValue = 0}) => {
   }, [defaultValue]);
 
   function onChangeInput(evt) {
-    setInputVal(evt.target.value);
+    const {value} = evt.target;
+    setInputVal(value);
+    onChangeInputGlobal(value);
   }
 
   return <Input value={inputval} onChange={onChangeInput} />;

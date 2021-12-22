@@ -417,32 +417,55 @@ export const METRIC_TYPES = {
   trend_campaign: 'trend-campaign',
   trend_organization: 'trend-organisation',
   trend_advertiser: 'trend-advertiser',
+  trend_publisher: 'trend-publisher',
+  trend_dsp: 'trend-dsp',
+  trend_inventory: 'trend-inventory',
   strategy: 'distribution-strategy',
   campaign: 'distribution-campaign',
   organization: 'distribution-organisation',
   advertiser: 'distribution-advertiser',
   creative: 'distribution-advertiser',
   navtive_ad: 'distribution-advertiser',
-  video: 'distribution-advertiser'
+  video: 'distribution-advertiser',
+  publisher: 'distribution-publisher',
+  dsp: 'distribution-dsp',
+  inventory: 'distribution-inventory'
 };
 
 export const METRIC_TYPE_OPTIONS = [
+  //---> Strategy
   {value: 'distribution-strategy', label: 'Distribution strategy'},
   {value: 'trend-strategy', label: 'Trend strategy'},
+
+  //--->  Campaign
   {value: 'distribution-campaign', label: 'Distribution campaign'},
   {value: 'trend-campaign', label: 'Trend campaign'},
-  {value: 'distribution-organisation', label: 'Distribution organisation'},
-  {value: 'trend-organisation', label: 'Trend organisation'},
+
+  //---> Advertiser
   {value: 'distribution-advertiser', label: 'Distribution advertiser'},
-  {value: 'trend-advertiser', label: 'Trend advertiser'}
+  {value: 'trend-advertiser', label: 'Trend advertiser'},
+
+  //---> DSP
+  {value: 'distribution-dsp', label: 'Distribution dsp'},
+  {value: 'trend-dsp', label: 'Trend dsp'},
+
+  //---> Publisher
+  {value: 'distribution-publisher', label: 'Distribution publisher'},
+  {value: 'trend-publisher', label: 'Trend publisher'},
+
+  //---> Inventory
+  {value: 'distribution-inventory', label: 'Distribution inventory'},
+  {value: 'trend-inventory', label: 'Trend inventory'}
 ];
 
-export const ENTITY_TYPES = {
-  strategy: 'strategy',
-  campaign: 'campaign',
-  advertiser: 'advertiser',
-  organization: 'organisation',
-  video: 'video',
-  native_ad: 'native-ad',
-  creative: 'creative'
+export const EntityTypes = {
+  STRATEGY: 'strategy',
+  CAMPAIGN: 'campaign',
+  ADVERTISER: 'advertiser',
+  PUBLISHER: 'publisher',
+  DSP: 'dsp',
+  VIDEO: 'video',
+  NAVTIVE_AD: 'native-ad',
+  CREATIVE: 'creative',
+  INVENTORY: 'inventory'
 };

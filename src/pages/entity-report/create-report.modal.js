@@ -50,6 +50,10 @@ const initDefaultValue = ({
   distributionBy,
   entityType
 }) => {
+  console.log(
+    '🚀 ~ file: create-report.modal.js ~ line 53 ~ entityType',
+    entityType
+  );
   return {
     properties: {
       color: JSON.stringify(initColors),

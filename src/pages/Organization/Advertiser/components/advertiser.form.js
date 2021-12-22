@@ -34,6 +34,8 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from './validation';
 import {useGetDomains} from 'queries/domain';
 import {useDomainOptions} from 'pages/Organization/hooks';
+import {Link} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 const AdvertiserForm = ({
   modal = false,
@@ -169,7 +171,16 @@ const AdvertiserForm = ({
                 disabled={!formState.isDirty}
               >
                 {t('save')}
-              </Button>{' '}
+              </Button>
+              {isEdit && (
+                <Link
+                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${advertiserId}/${RoutePaths.REPORT}`}
+                >
+                  <Button color="success" type="button">
+                    {t('viewReport')}
+                  </Button>
+                </Link>
+              )}
             </ModalFooter>
           </BlockUi>
         </Form>

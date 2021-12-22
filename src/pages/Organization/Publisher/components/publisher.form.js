@@ -35,6 +35,8 @@ import {schemaValidate} from './validation';
 import {useDomainOptions} from 'pages/Organization/hooks';
 import {useGetDomains} from 'queries/domain';
 import DomainSelect from '../../components/domain-select';
+import {Link} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 const PublisherForm = ({
   modal = false,
@@ -105,7 +107,6 @@ const PublisherForm = ({
         ShowToast.success('Updated publisher successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
         ShowToast.error(err?.msg || 'Fail to update publisher');
       }
     }
@@ -207,7 +208,16 @@ const PublisherForm = ({
                 disabled={!formState.isDirty}
               >
                 {t('save')}
-              </Button>{' '}
+              </Button>
+              {isEdit && (
+                <Link
+                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}/${RoutePaths.REPORT}`}
+                >
+                  <Button color="success" type="button">
+                    {t('viewReport')}
+                  </Button>
+                </Link>
+              )}
             </ModalFooter>
           </BlockUi>
         </Form>

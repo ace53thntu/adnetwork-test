@@ -8,7 +8,7 @@ import {
   useMetricUrlSelector
 } from 'store/reducers/entity-report';
 import {replaceQueryParam} from 'utils/query';
-import {validTimeRange} from 'pages/entity-dashboard/utils/validateReportTime';
+import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {ErrorMessageStyled} from './styled';
 
 export default function TimeRange({defaultValue}) {

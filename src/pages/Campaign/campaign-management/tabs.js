@@ -9,6 +9,9 @@ import {useTranslation} from 'react-i18next';
 import {Tabs} from '../components';
 import CampaignForm from './form';
 import CampaignStrategies from './strategies';
+import EntityReport from 'pages/entity-report';
+import {EntityTypes} from 'constants/report';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
   isView: PropTypes.bool,
@@ -24,6 +27,9 @@ const CampaignTabs = ({
   currentCampaign = null
 }) => {
   const {t} = useTranslation();
+  const ownerId = currentCampaign?.advertiser_uuid?.value;
+  const entityId = currentCampaign?.uuid;
+  console.log('🚀 ~ file: tabs.js ~ line 30 ~ ownerId', ownerId);
   const [currentTab, setCurrentTab] = useState('description');
   const [campaignIdCreated, setCampaignIdCreated] = useState('');
 
@@ -48,8 +54,15 @@ const CampaignTabs = ({
           )
         },
         {
-          name: t('strategy'),
-          content: (
+          name: isView ? t('report') : t('strategy'),
+          content: isView ? (
+            <EntityReport
+              entity={EntityTypes.CAMPAIGN}
+              entityId={entityId}
+              ownerId={ownerId}
+              ownerRole={USER_ROLE.ADVERTISER}
+            />
+          ) : (
             <CampaignStrategies
               goToTab={goToTab}
               campaignIdCreated={campaignIdCreated}
@@ -62,7 +75,17 @@ const CampaignTabs = ({
         title: name,
         getContent: () => content
       })),
-    [t, goToTab, isEdit, isCreate, isView, currentCampaign, campaignIdCreated]
+    [
+      t,
+      goToTab,
+      isEdit,
+      isCreate,
+      isView,
+      currentCampaign,
+      entityId,
+      ownerId,
+      campaignIdCreated
+    ]
   );
 
   const getTab = index => {

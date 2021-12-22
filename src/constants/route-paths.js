@@ -16,5 +16,7 @@ export const RoutePaths = {
   DSP: 'dsp',
   USER: 'user',
   CREATE: 'create',
-  EDIT: 'edit'
+  EDIT: 'edit',
+  REPORT: 'report',
+  INVENTORY: 'inventory'
 };

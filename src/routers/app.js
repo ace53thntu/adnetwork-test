@@ -1,7 +1,7 @@
 import Dashboard from 'pages/Dashboard/Dashboard';
 import {audiencePages} from './audience';
 
-import {containerPages} from './container';
+import {containerPages, inventoryPages} from './container';
 import {campaignPages} from './campaign';
 import {creativePages} from './creative';
 import {inventoryMarketPages} from './inventory-market';
@@ -19,5 +19,6 @@ export const appRoutes = [
   organizationPages,
   userManagementPages,
   creativePages,
-  audiencePages
+  audiencePages,
+  inventoryPages
 ];

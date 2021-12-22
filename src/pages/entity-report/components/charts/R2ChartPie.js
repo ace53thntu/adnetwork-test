@@ -4,7 +4,7 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {Pie} from 'react-chartjs-2';
-import {usePieChart} from 'pages/entity-dashboard/hooks';
+import {usePieChart} from 'pages/entity-report/hooks';
 
 //---> Internal Modules
 

@@ -28,6 +28,8 @@ import {mappingFormToApi} from './dto';
 import {useDefaultDsp} from 'pages/Organization/hooks';
 import {schemaValidate} from './validation';
 import DomainSelect from 'pages/Organization/components/domain-select';
+import {Link} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 const DspForm = ({
   modal = false,
@@ -37,7 +39,6 @@ const DspForm = ({
   isEdit = false,
   dspId = ''
 }) => {
-  console.log('🚀 ~ file: dsp.form.js ~ line 40 ~ dspId', dspId);
   const {t} = useTranslation();
   const {data: dspData, isFetched, isLoading} = useGetDsp(dspId);
   const {mutateAsync: createDsp} = useCreateDsp();
@@ -128,24 +129,16 @@ const DspForm = ({
                 </Col>
                 <Col sm={12}>
                   <FormTextInput
-                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.API_KEY}`}
-                    label={t('apiKey')}
-                    placeholder={t('enterApiKey')}
+                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.ACCESS_KEY}`}
+                    label={t('accessKey')}
+                    placeholder={t('enterAccessKey')}
                   />
                 </Col>
                 <Col sm={12}>
                   <FormTextInput
-                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.USER}`}
-                    label={t('user')}
-                    placeholder={t('enterUser')}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.PASSWORD}`}
-                    label={t('password')}
-                    placeholder={t('enterPassword')}
-                    type="password"
+                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.SECRET_KEY}`}
+                    label={t('secretKey')}
+                    placeholder={t('enterSecretKey')}
                   />
                 </Col>
                 {/* Status */}
@@ -178,7 +171,16 @@ const DspForm = ({
                 disabled={!formState.isDirty}
               >
                 {t('save')}
-              </Button>{' '}
+              </Button>
+              {isEdit && (
+                <Link
+                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}/${RoutePaths.REPORT}`}
+                >
+                  <Button color="success" type="button">
+                    {t('viewReport')}
+                  </Button>
+                </Link>
+              )}
             </ModalFooter>
           </BlockUi>
         </Form>

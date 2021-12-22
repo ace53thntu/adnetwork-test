@@ -4,7 +4,9 @@ import {
   unSelectedAndUnExpanded,
   unSelectedChild
 } from 'pages/Container/components/Tree/utils';
+import React from 'react';
 import {useSelector} from 'react-redux';
+import {createSelector} from 'reselect';
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
 
@@ -23,8 +25,12 @@ const SET_CAMPAIGN = `${PREFIX}/SET_CAMPAIGN`;
 const SET_STRATEGY = `${PREFIX}/SET_STRATEGY`;
 
 const SELECT_STRATEGY_ID = `${PREFIX}/SELECT_STRATEGY_ID`;
+const SET_STRATEGY_INVENTORY_LIST = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST`;
 
 // dispatch actions
+export const setStrategyInventoryListRedux = (inventoryList = []) => {
+  return createAction(SET_STRATEGY_INVENTORY_LIST, {inventoryList});
+};
 export const resetCampaignRedux = () => {
   return createAction(RESET, {});
 };
@@ -76,10 +82,12 @@ const campaignInitialState = {
   advertiser: null,
   selectedStrategyId: null,
   alreadySetAdvertiser: false,
-  keyword: ''
+  keyword: '',
+  inventoryList: []
 };
 
 const handleActions = {
+  [SET_STRATEGY_INVENTORY_LIST]: handleSetStrategyInventoryList,
   [RESET]: handleReset,
   [SET_ADVERTISERS]: handleSetAdvertisers,
   [SET_ADVERTISER]: handleSetAdvertiser,
@@ -91,6 +99,11 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function handleSetStrategyInventoryList(state, action) {
+  const {inventoryList} = action.payload;
+  state.inventoryList = inventoryList;
+}
 
 function handleReset(state) {
   state.advertisers = [];
@@ -547,10 +560,22 @@ function handleSearchCampaigns(state, action) {
   }
 }
 
+// Selector
+const makeSelectStrategyInventory = () =>
+  createSelector(
+    state => state.campaignReducer,
+    a => a.inventoryList
+  );
+
 // hook to use container reducer
 export function useCampaignSelector() {
   const state = useSelector(state => state.campaignReducer);
   return state;
+}
+
+export function useStrategyInventorySelector() {
+  const selectSearchType = React.useMemo(makeSelectStrategyInventory, []);
+  return useSelector(state => selectSearchType(state));
 }
 
 export const campaignReducer = (
