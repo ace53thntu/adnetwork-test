@@ -1,5 +1,5 @@
 import {NativeAdAPI} from 'api/native-ad.api';
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
 import PropTypes from 'prop-types';
 import {useCreateNativeAd} from 'queries/native-ad';
 import {GET_NATIVE_ADS} from 'queries/native-ad/constants';
@@ -14,10 +14,12 @@ import {Button} from 'reactstrap';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog
+  toggleCreativeDetailDialog,
+  useCreativeSelector
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import EntityReport from 'pages/entity-report';
 
 import Assets from './Assets';
 import NativeAdInformationForm from './NativeAdInformationForm';
@@ -27,6 +29,8 @@ import {
   nativeAdRawToFormValues
 } from './dto';
 import {createNativeAdResolver} from './validations';
+import {EntityTypes} from 'constants/report';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const defaultValues = {
   name: '',
@@ -44,6 +48,8 @@ function NativeAdForm(props) {
   const client = useQueryClient();
   const {t} = useTranslation();
   const {conceptId} = useParams();
+  const {selectedAdvertiserId} = useCreativeSelector();
+
   const {mutateAsync: createNativeAdRequest} = useCreateNativeAd();
   const {mutateAsync: updateNativeAdRequest} = useUpdateNativeAd();
 
@@ -171,11 +177,16 @@ function NativeAdForm(props) {
       </FormProvider>
 
       {/* BEGIN: Report */}
-      {/* {nativeAd?.id && (
+      {nativeAd?.uuid && (
         <Collapse initialOpen={true} title="Report" unMount={false}>
-          <EntityReport entityId={nativeAd?.id} entity="native_ad" />
+          <EntityReport
+            entity={EntityTypes.NAVTIVE_AD}
+            entityId={nativeAd?.uuid}
+            ownerId={selectedAdvertiserId}
+            ownerRole={USER_ROLE.ADVERTISER}
+          />
         </Collapse>
-      )} */}
+      )}
 
       {/* END: Report */}
 

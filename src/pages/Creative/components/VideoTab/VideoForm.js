@@ -1,4 +1,4 @@
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
 import PropTypes from 'prop-types';
 import {useCreateVideo, useUpdateVideo} from 'queries/video';
 import {GET_VIDEOS} from 'queries/video/constants';
@@ -12,7 +12,8 @@ import {Button} from 'reactstrap';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog
+  toggleCreativeDetailDialog,
+  useCreativeSelector
 } from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
@@ -20,6 +21,9 @@ import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
+import EntityReport from 'pages/entity-report';
+import {EntityTypes} from 'constants/report';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const defaultValues = {
   // concept_id: 1,
@@ -36,6 +40,7 @@ function VideoForm(props) {
   const {video: rawData, isCreate} = props;
   const {t} = useTranslation();
   const {conceptId} = useParams();
+  const {selectedAdvertiserId} = useCreativeSelector();
   const dispatch = useDispatch();
   const client = useQueryClient();
 
@@ -134,6 +139,19 @@ function VideoForm(props) {
           <VideoFiles videoId={rawData?.uuid} />
         </form>
       </FormProvider>
+      {/* BEGIN: Report */}
+      {rawData?.uuid && (
+        <Collapse initialOpen={true} title="Report" unMount={false}>
+          <EntityReport
+            entityId={rawData?.uuid}
+            entity={EntityTypes.CREATIVE}
+            ownerId={selectedAdvertiserId}
+            ownerRole={USER_ROLE.ADVERTISER}
+          />
+        </Collapse>
+      )}
+
+      {/* END: Report */}
 
       <div className="d-flex justify-content-end">
         <Button

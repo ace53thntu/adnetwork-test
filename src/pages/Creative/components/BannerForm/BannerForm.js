@@ -1,5 +1,5 @@
 import {AlternativeAPI} from 'api/alternative.api';
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
 import {
   FormCheckbox,
   FormReactSelect,
@@ -19,7 +19,8 @@ import {Button, Col, Row} from 'reactstrap';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog
+  toggleCreativeDetailDialog,
+  useCreativeSelector
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -39,6 +40,9 @@ import {
   creativeRepoToModel
 } from './dto';
 import {bannerFormValidationResolver} from './utils';
+import EntityReport from 'pages/entity-report';
+import {EntityTypes} from 'constants/report';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const defaultFormValues = {
   invocation_tag: '',
@@ -63,6 +67,7 @@ const defaultFormValues = {
 
 function BannerForm(props) {
   const {isCreate, creative} = props;
+  const {selectedAdvertiserId} = useCreativeSelector();
 
   const client = useQueryClient();
   const dispatch = useDispatch();
@@ -214,179 +219,197 @@ function BannerForm(props) {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        id="banner-form"
-        name="banner-form"
-      >
-        {isLoading && <BlockOverlay />}
-        <Box>
-          <CollapseBox open title="Information">
+    <>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          id="banner-form"
+          name="banner-form"
+        >
+          {isLoading && <BlockOverlay />}
+          <Box>
+            <CollapseBox open title="Information">
+              <Row>
+                <Col md="4">
+                  <FormTextInput
+                    isRequired
+                    placeholder=""
+                    name="name"
+                    label="Name"
+                    defaultValue={defaultValues?.name}
+                  />
+                </Col>
+                <Col md="4">
+                  <FormTagsInput
+                    name="tags"
+                    label="Tags"
+                    placeholder="Enter tags..."
+                    defaultValue={defaultValues?.tags}
+                  />
+                </Col>
+                <Col md="4">
+                  <FormReactSelect
+                    options={CREATIVE_TYPES}
+                    placeholder=""
+                    name="creative_type"
+                    label="Creative type"
+                    defaultValue={defaultValues.creative_type}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col md="8">
+                  <Row>
+                    <Col md={6}>
+                      <Row>
+                        <Col md="4">
+                          <FormCheckbox
+                            defaultValues={defaultValues.sound}
+                            name={'sound'}
+                            label="Sound"
+                            // disabled={isLoading || disabled}
+                          />
+                        </Col>
+                        <Col md="4">
+                          <FormCheckbox
+                            defaultValues={defaultValues.https}
+                            name={'https'}
+                            label="Https"
+                            // disabled={isLoading || disabled}
+                          />
+                        </Col>
+                        <Col md="4">
+                          <FormCheckbox
+                            defaultValues={defaultValues.multiproduct}
+                            name={'multiproduct'}
+                            label="Multiproduct"
+                            // disabled={isLoading || disabled}
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+
+                    <Col md="6">
+                      <FormReactSelect
+                        options={INVOCATION_TAG_TYPES}
+                        placeholder=""
+                        name="invocation_tag_type"
+                        label="Invocation tag type"
+                        defaultValue={defaultValues.invocation_tag_type}
+                      />
+                    </Col>
+
+                    <Col md="6">
+                      <FormTextInput
+                        placeholder=""
+                        name="extra_trackers"
+                        label="Extra trackers"
+                        defaultValue={defaultValues.extra_trackers}
+                      />
+                    </Col>
+
+                    <Col md="6">
+                      <FormTextInput
+                        placeholder=""
+                        name="click_url"
+                        label="Click url"
+                        defaultValue={defaultValues.click_url}
+                      />
+                    </Col>
+                    <Col md="6">
+                      <FormTextInput
+                        placeholder=""
+                        name="width"
+                        label="Width"
+                        defaultValue={defaultValues.width}
+                      />
+                    </Col>
+                    <Col md="6">
+                      <FormTextInput
+                        placeholder=""
+                        name="height"
+                        label="Height"
+                        defaultValue={defaultValues.height}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+
+                <Col md="4">
+                  <Row>
+                    <Col>
+                      <FormReactSelect
+                        options={CREATIVE_FILE_TYPES}
+                        placeholder=""
+                        name="file_type"
+                        label="File type"
+                        defaultValue={defaultValues.file_type}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <FormTextInput
+                        type="textarea"
+                        placeholder=""
+                        name="invocation_tag"
+                        label="Invocation tag"
+                        rows={4}
+                        style={{
+                          resize: 'none'
+                        }}
+                        defaultValue={defaultValues.invocation_tag}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </CollapseBox>
+
             <Row>
-              <Col md="4">
-                <FormTextInput
-                  isRequired
-                  placeholder=""
-                  name="name"
-                  label="Name"
-                  defaultValue={defaultValues?.name}
-                />
-              </Col>
-              <Col md="4">
-                <FormTagsInput
-                  name="tags"
-                  label="Tags"
-                  placeholder="Enter tags..."
-                  defaultValue={defaultValues?.tags}
-                />
-              </Col>
-              <Col md="4">
-                <FormReactSelect
-                  options={CREATIVE_TYPES}
-                  placeholder=""
-                  name="creative_type"
-                  label="Creative type"
-                  defaultValue={defaultValues.creative_type}
-                />
+              <Col>
+                <Alternatives />
               </Col>
             </Row>
-            <Row>
-              <Col md="8">
-                <Row>
-                  <Col md={6}>
-                    <Row>
-                      <Col md="4">
-                        <FormCheckbox
-                          defaultValues={defaultValues.sound}
-                          name={'sound'}
-                          label="Sound"
-                          // disabled={isLoading || disabled}
-                        />
-                      </Col>
-                      <Col md="4">
-                        <FormCheckbox
-                          defaultValues={defaultValues.https}
-                          name={'https'}
-                          label="Https"
-                          // disabled={isLoading || disabled}
-                        />
-                      </Col>
-                      <Col md="4">
-                        <FormCheckbox
-                          defaultValues={defaultValues.multiproduct}
-                          name={'multiproduct'}
-                          label="Multiproduct"
-                          // disabled={isLoading || disabled}
-                        />
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="6">
-                    <FormReactSelect
-                      options={INVOCATION_TAG_TYPES}
-                      placeholder=""
-                      name="invocation_tag_type"
-                      label="Invocation tag type"
-                      defaultValue={defaultValues.invocation_tag_type}
-                    />
-                  </Col>
-
-                  <Col md="6">
-                    <FormTextInput
-                      placeholder=""
-                      name="extra_trackers"
-                      label="Extra trackers"
-                      defaultValue={defaultValues.extra_trackers}
-                    />
-                  </Col>
-
-                  <Col md="6">
-                    <FormTextInput
-                      placeholder=""
-                      name="click_url"
-                      label="Click url"
-                      defaultValue={defaultValues.click_url}
-                    />
-                  </Col>
-                  <Col md="6">
-                    <FormTextInput
-                      placeholder=""
-                      name="width"
-                      label="Width"
-                      defaultValue={defaultValues.width}
-                    />
-                  </Col>
-                  <Col md="6">
-                    <FormTextInput
-                      placeholder=""
-                      name="height"
-                      label="Height"
-                      defaultValue={defaultValues.height}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-
-              <Col md="4">
-                <Row>
-                  <Col>
-                    <FormReactSelect
-                      options={CREATIVE_FILE_TYPES}
-                      placeholder=""
-                      name="file_type"
-                      label="File type"
-                      defaultValue={defaultValues.file_type}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <FormTextInput
-                      type="textarea"
-                      placeholder=""
-                      name="invocation_tag"
-                      label="Invocation tag"
-                      rows={4}
-                      style={{
-                        resize: 'none'
-                      }}
-                      defaultValue={defaultValues.invocation_tag}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </CollapseBox>
-
+          </Box>
+        </form>
+      </FormProvider>
+      {/* BEGIN: Report */}
+      {creative?.uuid && (
+        <Collapse initialOpen={true} title="Reports" unMount={false}>
           <Row>
             <Col>
-              <Alternatives />
+              <EntityReport
+                entity={EntityTypes.CREATIVE}
+                entityId={creative?.uuid}
+                ownerId={selectedAdvertiserId}
+                ownerRole={USER_ROLE.ADVERTISER}
+              />
             </Col>
           </Row>
-        </Box>
+        </Collapse>
+      )}
 
-        <div className="d-flex justify-content-end">
-          <Button
-            color="secondary"
-            onClick={handleCloseDialog}
-            disabled={isLoading}
-          >
-            Close
-          </Button>
-          <Button
-            color="primary"
-            disabled={!isDirty || isLoading}
-            type="submit"
-            className="ml-2"
-            form="banner-form"
-          >
-            {t('save')}
-          </Button>
-        </div>
-      </form>
-    </FormProvider>
+      {/* END: Report */}
+      <div className="d-flex justify-content-end">
+        <Button
+          color="secondary"
+          onClick={handleCloseDialog}
+          disabled={isLoading}
+        >
+          Close
+        </Button>
+        <Button
+          color="primary"
+          disabled={!isDirty || isLoading}
+          type="submit"
+          className="ml-2"
+          form="banner-form"
+        >
+          {t('save')}
+        </Button>
+      </div>
+    </>
   );
 }
 
