@@ -1,23 +1,33 @@
-import * as React from 'react';
-
-import {Navigate} from 'react-router-dom';
-
 import {AdminLayout, NotFound} from 'components/layouts';
 import {RoutePaths} from 'constants/route-paths';
+import * as React from 'react';
+import {Navigate, useLocation} from 'react-router-dom';
+
 import {appRoutes} from './app';
+
+function RedirectToPreviousRoute(props) {
+  const {to} = props;
+  const location = useLocation();
+
+  if (location.state?.from?.pathname) {
+    return <Navigate to={location.state.from.pathname} />;
+  }
+
+  return <Navigate to={to} />;
+}
 
 const authenticatedRoutes = [
   {
     path: '/',
-    element: <Navigate to="/dashboard" />
+    element: <RedirectToPreviousRoute to="/dashboard" />
   },
   {
     path: RoutePaths.LOGIN,
-    element: <Navigate to="/dashboard" replace />
+    element: <RedirectToPreviousRoute to="/dashboard" replace />
   },
   {
     path: RoutePaths.REGISTER,
-    element: <Navigate to="/dashboard" replace />
+    element: <RedirectToPreviousRoute to="/dashboard" replace />
   },
   {
     path: '/',

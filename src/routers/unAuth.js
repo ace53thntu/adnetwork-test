@@ -3,16 +3,29 @@ import {NotFound} from 'components/layouts';
 import {RoutePaths} from 'constants/route-paths';
 import {LoginPage} from 'pages/Login';
 import * as React from 'react';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useLocation} from 'react-router-dom';
+
+function RedirectToLogin(props) {
+  const location = useLocation();
+
+  return (
+    <Navigate
+      to={RoutePaths.LOGIN}
+      state={{
+        from: location
+      }}
+    />
+  );
+}
 
 const unAuthRoutes = [
   {
     path: '*',
-    element: <Navigate to={RoutePaths.LOGIN} />
+    element: <RedirectToLogin />
   },
   {
     path: '/',
-    element: <Navigate to={RoutePaths.LOGIN} />
+    element: <RedirectToLogin />
   },
   {
     path: '/',
