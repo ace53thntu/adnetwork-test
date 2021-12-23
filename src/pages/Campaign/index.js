@@ -1,4 +1,4 @@
-export {CampaignPageLayout, ListContainerLayout} from './layout';
+export {CampaignPageLayout, ListCampaignLayout} from './layout';
 export {
   CampaignList,
   CampaignCreate,

@@ -20,7 +20,7 @@ function CampaignContentLayout(props) {
   return (
     <>
       <PageTitleAlt
-        icon="pe-7s-glasses icon-gradient bg-tempting-azure"
+        icon="pe-7s-network icon-gradient bg-tempting-azure"
         heading={heading}
         subheading={subHeading}
         {...actionPageTitle}

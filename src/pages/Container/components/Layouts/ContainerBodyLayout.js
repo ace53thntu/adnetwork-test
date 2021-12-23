@@ -12,7 +12,7 @@ function ContainerBodyLayout(props) {
   return (
     <>
       <PageTitleAlt
-        icon="pe-7s-glasses icon-gradient bg-tempting-azure"
+        icon="pe-7s-box1 icon-gradient bg-tempting-azure"
         heading={heading}
         subheading={subHeading}
       />

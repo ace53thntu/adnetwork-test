@@ -12,6 +12,7 @@ import {Pagination} from 'components/list/pagination';
 import SidebarItem from './sidebar-item';
 import {useDestructureAudiences} from 'pages/Audience/hooks';
 import {SidebarLoadingStyled} from './styled';
+import {RoutePaths} from 'constants/route-paths';
 
 //---> Define prop types
 const propTypes = {};
@@ -36,7 +37,7 @@ const AudienceSidebar = () => {
 
   function onClickItem(evt, id) {
     evt.preventDefault();
-    navigate(`/audiences/${id}`);
+    navigate(`/${RoutePaths.AUDIENCE}/${id}`);
   }
 
   return (

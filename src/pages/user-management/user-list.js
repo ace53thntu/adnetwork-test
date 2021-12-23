@@ -32,9 +32,16 @@ import {UserForm} from './components';
 import {getUserRole} from './constants';
 import {DEFAULT_PAGINATION} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {useDispatch} from 'react-redux';
 
 const UserList = () => {
   const {t} = useTranslation();
+  const reduxDispatch = useDispatch();
+
+  React.useEffect(() => {
+    reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
 
   //---> Define local states.
   const [currentUser, setCurrentUser] = React.useState(null);
@@ -181,7 +188,7 @@ const UserList = () => {
         <PageTitleAlt
           heading={t('user')}
           subheading={t('managementSegmentDescription')}
-          icon="pe-7s-plane icon-gradient bg-tempting-azure"
+          icon="pe-7s-user icon-gradient bg-tempting-azure"
         />
         <Container fluid>
           <Row>

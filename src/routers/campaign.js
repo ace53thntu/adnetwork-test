@@ -1,7 +1,7 @@
 import {RoutePaths} from 'constants/route-paths';
 import {
   CampaignCreate,
-  ListContainerLayout,
+  ListCampaignLayout,
   CampaignPageLayout,
   CampaignDetail,
   CampaignEdit
@@ -22,7 +22,7 @@ export const campaignPages = {
   children: [
     {
       path: '',
-      element: <ListContainerLayout />
+      element: <ListCampaignLayout />
       // canAccess: [MANAGER, TRADER]
     },
     {

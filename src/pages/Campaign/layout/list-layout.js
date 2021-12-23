@@ -12,7 +12,7 @@ import {useQueryString} from 'hooks';
 import {CampaignList} from '../campaign-management';
 import {StrategyList} from '../strategy';
 
-const ListContainerLayout = () => {
+const ListCampaignLayout = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const query = useQueryString();
@@ -94,4 +94,4 @@ const ListContainerLayout = () => {
   );
 };
 
-export default React.memo(ListContainerLayout);
+export default React.memo(ListCampaignLayout);

@@ -10,14 +10,17 @@ import {BackToHomeButton, CardStyled} from './styled';
 import DetailItem from './detail-item';
 import {useGetAudience} from 'queries/audience';
 import {LoadingIndicator} from 'components/common';
+import {RoutePaths} from 'constants/route-paths';
 
 //---> Define prop types
 const propTypes = {};
 
 const AudienceDetail = props => {
   const {id: audienceId} = useParams();
-  const {data, isLoading} = useGetAudience({audienceId, enabled: !!audienceId});
-  const audience = data?.data?.data || {};
+  const {data: audience = {}, isLoading} = useGetAudience({
+    audienceId,
+    enabled: !!audienceId
+  });
 
   const {
     name: audience_name,
@@ -44,7 +47,7 @@ const AudienceDetail = props => {
       {isLoading && <LoadingIndicator />}
       <CardHeader>
         Audience name: {audience_name}{' '}
-        <BackToHomeButton to="/audiences">
+        <BackToHomeButton to={`/${RoutePaths.AUDIENCE}`}>
           <Button color="link">Back to list</Button>
         </BackToHomeButton>
       </CardHeader>
