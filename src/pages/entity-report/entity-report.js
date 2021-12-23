@@ -10,7 +10,7 @@ import ReportList from './report-list';
 import ReportForm from './report.form';
 import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import {LoadingIndicator} from 'components/common';
-import {useGetReportsInfinity} from 'queries/report/useGetReports';
+import {useGetReportsInfinite} from 'queries/report/useGetReports';
 import {Pagination} from 'components/list/pagination';
 
 const NUMBER_OF_PAGE = 10;
@@ -31,7 +31,7 @@ const EntityReport = ({
     fetchNextPage,
     isFetching,
     isFetchingNextPage
-  } = useGetReportsInfinity({
+  } = useGetReportsInfinite({
     params: {
       entity_uuid: entityId,
       entity_type: entityType,

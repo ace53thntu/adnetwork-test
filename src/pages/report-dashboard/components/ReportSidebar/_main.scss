@@ -1,0 +1,27 @@
+.report-page-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+
+  &-selected {
+    background-color: #e0f3ff;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: #e0f3ff;
+  }
+
+  button {
+    font-size: 0.9375rem;
+  }
+
+  .followed {
+    color: #353ed1;
+  }
+
+  .unfollow {
+    color: #acb5bd;
+  }
+}

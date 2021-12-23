@@ -89,3 +89,27 @@ export const UserManagementNav = (t, role) => {
     }
   ];
 };
+
+export const NAVIGATION_NAME_MAP = {
+  '/overview': 'Overview',
+  '/report/audiences': 'Audiences',
+  '/report/campaigns': 'Campaigns',
+  '/insight/segment-management': 'Segment management',
+  '/insight/audience-management': 'Audience',
+  '/container': 'Container',
+  '/partners': 'Partners management',
+  '/users': 'Users management',
+  '/roles': 'Roles management',
+  '/permissions': 'Permissions management',
+  '/profile': 'Profile'
+};
+
+export const getChildrenContainers = element => {
+  const routers = [];
+  return routers.map(path => {
+    return {
+      path,
+      element
+    };
+  });
+};

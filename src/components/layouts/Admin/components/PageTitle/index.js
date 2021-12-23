@@ -7,8 +7,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useLocation} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
 import {useTranslation} from 'react-i18next';
-
-import {NAVIGATION_NAME_MAP} from 'router/navigations/constants';
+import {NAVIGATION_NAME_MAP} from 'routers/navigators';
 
 export default function PageTitle({icon, heading, subheading}) {
   const {t} = useTranslation();

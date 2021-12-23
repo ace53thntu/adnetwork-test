@@ -23,7 +23,7 @@ export function useGetReports({params, enabled = false}) {
  * Query get report with pagination
  * @returns Array data reports
  */
-export function useGetReportsInfinity({
+export function useGetReportsInfinite({
   params,
   enabled = false,
   page = DEFAULT_PAGINATION.page

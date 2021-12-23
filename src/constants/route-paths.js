@@ -18,5 +18,6 @@ export const RoutePaths = {
   CREATE: 'create',
   EDIT: 'edit',
   REPORT: 'report',
-  INVENTORY: 'inventory'
+  INVENTORY: 'inventory',
+  PAGE: 'page'
 };

@@ -86,7 +86,8 @@ export const endpoints = {
     url: 'url'
   },
   reportPage: {
-    reportPage: `${API_V1}/report-page`
+    reportPage: `${API_V1}/report_page`,
+    follow: 'follow'
   },
   metric: {
     metric: `${API_V1}/metrics`

@@ -1,4 +1,4 @@
-export {useGetReports} from './useGetReports';
+export {useGetReports, useGetReportsInfinite} from './useGetReports';
 export {useGetReport} from './useGetReport';
 export {useCreateReport} from './useCreateReport';
 export {useEditReport} from './useEditReport';

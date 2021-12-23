@@ -32,6 +32,14 @@ class ReportPageAPI extends XHRRequest {
   deleteReportPage = ({id, params}) => {
     return this.delete(`${endpoints.reportPage.reportPage}/${id}`, params);
   };
+
+  followReportPage = ({data, options}) => {
+    return this.post(
+      `${endpoints.reportPage.reportPage}/${endpoints.reportPage.follow}`,
+      data,
+      options
+    );
+  };
 }
 
 export const ReportPageAPIRequest = new ReportPageAPI(apiURL);
