@@ -2,14 +2,14 @@ import {RoutePaths} from 'constants/route-paths';
 import {
   CampaignCreateLazy,
   CampaignDetailLazy,
-  CampaignEdit,
+  CampaignEditLazy,
   CampaignPageLayout,
   ListCampaignLayoutLazy
 } from 'pages/Campaign';
 import {
-  StrategyCreate,
-  StrategyDetail,
-  StrategyEdit
+  StrategyCreateLazy,
+  StrategyDetailLazy,
+  StrategyEditLazy
 } from 'pages/Campaign/strategy';
 import React from 'react';
 
@@ -31,20 +31,19 @@ export const campaignPages = {
     },
     {
       path: `/:campaignId/${RoutePaths.EDIT}`,
-      element: <CampaignEdit />
-      // canAccess: [MANAGER, TRADER]
+      element: <CampaignEditLazy />
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/${RoutePaths.CREATE}`,
-      element: <StrategyCreate />
+      element: <StrategyCreateLazy />
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId`,
-      element: <StrategyDetail />
+      element: <StrategyDetailLazy />
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId/${RoutePaths.EDIT}`,
-      element: <StrategyEdit />
+      element: <StrategyEditLazy />
     }
   ]
 };

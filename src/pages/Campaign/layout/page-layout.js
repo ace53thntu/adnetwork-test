@@ -1,3 +1,4 @@
+import {ErrorBoundary} from 'components/common';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 //---> Internal Modules
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
@@ -38,7 +39,7 @@ function CampaignPageLayout(props) {
   };
 
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <ErrorBoundary>
       <ExtendSidebar
         heading={
           <NavLink to={`/${RoutePaths.CAMPAIGN}`}>
@@ -56,14 +57,16 @@ function CampaignPageLayout(props) {
 
         <div className="divider" />
         <div className="border mb-2">
-          <TreeSidebar />
+          <ErrorBoundary>
+            <TreeSidebar />
+          </ErrorBoundary>
         </div>
       </ExtendSidebar>
 
       <AppContent>
         <Outlet />
       </AppContent>
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

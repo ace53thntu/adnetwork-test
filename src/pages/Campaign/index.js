@@ -3,5 +3,5 @@ export {
   CampaignList,
   CampaignCreateLazy,
   CampaignDetailLazy,
-  CampaignEdit
+  CampaignEditLazy
 } from './campaign-management';

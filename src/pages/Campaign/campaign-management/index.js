@@ -2,7 +2,6 @@ import {ErrorBoundary} from 'components/common';
 import React from 'react';
 
 export {default as CampaignList} from './list';
-export {default as CampaignEdit} from './edit';
 export {default as CampaignTabs} from './tabs';
 
 const CampaignCreate = React.lazy(() =>
@@ -10,6 +9,9 @@ const CampaignCreate = React.lazy(() =>
 );
 const CampaignDetail = React.lazy(() =>
   import('./detail' /* webpackChunkName: "campaign-detail" */)
+);
+const CampaignEdit = React.lazy(() =>
+  import('./edit' /* webpackChunkName: "campaign-edit" */)
 );
 
 function CampaignCreateLazy() {
@@ -28,4 +30,12 @@ function CampaignDetailLazy() {
   );
 }
 
-export {CampaignCreateLazy, CampaignDetailLazy};
+function CampaignEditLazy() {
+  return (
+    <ErrorBoundary>
+      <CampaignEdit />
+    </ErrorBoundary>
+  );
+}
+
+export {CampaignCreateLazy, CampaignDetailLazy, CampaignEditLazy};

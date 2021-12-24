@@ -1,23 +1,22 @@
-//---> Build-in Modules
-import React, {useCallback} from 'react';
-
 //---> External Modules
 import PropTypes from 'prop-types';
-import {FormProvider, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Button, Form} from 'reactstrap';
-import {useParams} from 'react-router';
-import {useNavigate} from 'react-router-dom';
-
 //---> Internal Modules
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
+//---> Build-in Modules
+import React, {useCallback} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {useParams} from 'react-router';
+import {useNavigate} from 'react-router-dom';
+import {Button, Form} from 'reactstrap';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import InformationGroup from './form-fields/InformationGroup';
-import StatusGroup from './form-fields/StatusGroup';
-import AdsGroup from './form-fields/AdsGroup';
+
 import {destructureFormData} from './dto';
-import {strategySchema} from './validation';
+import AdsGroup from './form-fields/AdsGroup';
+import InformationGroup from './form-fields/InformationGroup';
 import InventoryGroup from './form-fields/InventoryGroup';
+import StatusGroup from './form-fields/StatusGroup';
+import {strategySchema} from './validation';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -119,7 +118,7 @@ const StrategyForm = ({
           {!isView && !isSummary && (
             <div className="d-block text-right mr-15">
               <Button
-                onClick={() => gotoCampaignManagement()}
+                onClick={() => gotoCampaignManagement?.()}
                 className="mb-2 mr-2 btn-icon"
                 color="secondary"
               >
