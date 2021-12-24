@@ -1,7 +1,6 @@
 import i18next from 'i18next';
 import {en, vn} from 'locales';
 import {initReactI18next} from 'react-i18next';
-// import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18next.use(initReactI18next).init({
   resources: {

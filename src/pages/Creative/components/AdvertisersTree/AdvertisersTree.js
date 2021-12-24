@@ -2,6 +2,7 @@ import {AdvertiserAPIRequest} from 'api/advertiser.api';
 import {ConceptAPI} from 'api/concept.api';
 import {Tree} from 'components/common';
 import {minimalTheme} from 'components/common/TreeLazy';
+import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 // import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
@@ -56,7 +57,7 @@ function AdvertisersTree(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
+  useDeepCompareEffect(() => {
     if (selectedConceptId) {
       async function initConcept() {
         const res = await getConcepts(selectedAdvertiserId);
