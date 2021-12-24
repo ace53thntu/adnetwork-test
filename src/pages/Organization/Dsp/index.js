@@ -1,22 +1,26 @@
+import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import Loading from 'components/common/loading';
 
-const DspList = React.lazy(() => import('./dsp-list'));
-const DspReport = React.lazy(() => import('./dsp-report'));
+const DspList = React.lazy(() =>
+  import('./dsp-list' /* webpackChunkName: "dsp-list" */)
+);
+const DspReport = React.lazy(() =>
+  import('./dsp-report' /* webpackChunkName: "dsp-report" */)
+);
 
 function DspListPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <DspList />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 
 function DspReportPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <DspReport />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

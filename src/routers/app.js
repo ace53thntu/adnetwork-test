@@ -12,9 +12,9 @@ export const appRoutes = [
   audiencePages,
   creativePages,
   campaignPages,
-  containerPages,
   inventoryMarketPages,
+  containerPages,
+  inventoryPages,
   organizationPages,
-  userManagementPages,
-  inventoryPages
+  userManagementPages
 ];

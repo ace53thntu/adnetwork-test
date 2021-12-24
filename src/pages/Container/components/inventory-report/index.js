@@ -1,13 +1,15 @@
+import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import Loading from 'components/common/loading';
 
-const InventoryReport = React.lazy(() => import('./inventory-report'));
+const InventoryReport = React.lazy(() =>
+  import('./inventory-report' /* webpackChunkName: "inventory-report" */)
+);
 
 function InventoryReportPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <InventoryReport />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

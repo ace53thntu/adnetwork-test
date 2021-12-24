@@ -1,13 +1,15 @@
+import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import Loading from 'components/common/loading';
 
-const UserList = React.lazy(() => import('./user-list'));
+const UserList = React.lazy(() =>
+  import('./user-list' /* webpackChunkName: "user-list" */)
+);
 
 function UserListPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <UserList />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

@@ -1,3 +1,16 @@
-import ContainerSource from './ContainerSource';
+import {ErrorBoundary} from 'components/common';
+import React from 'react';
 
-export {ContainerSource};
+const ContainerSource = React.lazy(() =>
+  import('./ContainerSource' /* webpackChunkName: "container-source" */)
+);
+
+function ContainerSourceLazy() {
+  return (
+    <ErrorBoundary>
+      <ContainerSource />
+    </ErrorBoundary>
+  );
+}
+
+export {ContainerSourceLazy};

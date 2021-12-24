@@ -1,22 +1,26 @@
+import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import Loading from 'components/common/loading';
 
-const PublisherList = React.lazy(() => import('./publisher-list'));
-const PublisherReport = React.lazy(() => import('./publisher-report'));
+const PublisherList = React.lazy(() =>
+  import('./publisher-list' /* webpackChunkName: "publisher-list" */)
+);
+const PublisherReport = React.lazy(() =>
+  import('./publisher-report' /* webpackChunkName: "publisher-report" */)
+);
 
 function PublisherListPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <PublisherList />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 
 function PublisherReportPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <PublisherReport />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

@@ -1,11 +1,12 @@
 import {RoutePaths} from 'constants/route-paths';
-import {Containers, ContainerDetail, ContainerLayout} from 'pages/Container';
-import {ContainerSource} from 'pages/Container/components/ContainerSource';
-import {ContainerSourcePage} from 'pages/Container/components/ContainerSourcePage';
+import {
+  ContainerDetailLazy,
+  ContainerLayout,
+  ContainersLazy
+} from 'pages/Container';
+import {ContainerSourceLazy} from 'pages/Container/components/ContainerSource';
+import {ContainerSourcePageLazy} from 'pages/Container/components/ContainerSourcePage';
 import {InventoryReportPage} from 'pages/Container/components/inventory-report';
-// import {ROLES} from 'core/constants';
-
-// const {MANAGER, TRADER} = ROLES;
 
 export const containerPages = {
   path: RoutePaths.CONTAINER,
@@ -13,23 +14,19 @@ export const containerPages = {
   children: [
     {
       path: '',
-      element: <Containers />
-      // canAccess: [MANAGER, TRADER]
+      element: <ContainersLazy />
     },
     {
       path: ':cid',
-      element: <ContainerDetail />
-      // canAccess: [MANAGER, TRADER]
+      element: <ContainerDetailLazy />
     },
     {
       path: ':cid/:source',
-      element: <ContainerSource />
-      // canAccess: [MANAGER, TRADER]
+      element: <ContainerSourceLazy />
     },
     {
       path: ':cid/:source/:pageId',
-      element: <ContainerSourcePage />
-      // canAccess: [MANAGER, TRADER]
+      element: <ContainerSourcePageLazy />
     }
   ]
 };
@@ -40,7 +37,6 @@ export const inventoryPages = {
     {
       path: `:inventoryId/${RoutePaths.REPORT}`,
       element: <InventoryReportPage />
-      // canAccess: [MANAGER, TRADER]
     }
   ]
 };
