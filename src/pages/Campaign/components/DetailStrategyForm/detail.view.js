@@ -1,24 +1,23 @@
-//---> Build-in Modules
-import React, {useCallback, useMemo, useState} from 'react';
-
-//---> External Modules
-import {useTranslation} from 'react-i18next';
-import {Button, Container} from 'reactstrap';
-import {Link} from 'react-router-dom';
-
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
+import {EntityReport} from 'pages/entity-report';
+import {useGetCampaigns} from 'queries/campaign';
+//---> Build-in Modules
+import React, {useCallback, useMemo, useState} from 'react';
+//---> External Modules
+import {useTranslation} from 'react-i18next';
+import {Link} from 'react-router-dom';
+import {Button, Container} from 'reactstrap';
+
 // import {useGetCampaigns} from 'core/queries';
 import CappingManagement from '../../capping';
-import {Divider, Tabs} from '..';
 import {listEngine, listEngineFirstPrice} from '../../constants';
 import {useCampaignManager, useDestructureCampaignOptions} from '../../hooks';
 import {useGetDefaultStrategy} from '../../hooks/useGetDefaultStrategy';
+import Concept from '../../strategy/form-fields/Concept';
 // import Audience from './Audience';
 import DescriptionStrategy from './DescriptionStrategy';
-import Concept from '../../strategy/form-fields/Concept';
-import EntityReport from 'pages/entity-report';
-import {useGetCampaigns} from 'queries/campaign';
+import {Divider, Tabs} from '..';
 
 const StrategyFormDetailView = ({
   isEdit,

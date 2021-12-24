@@ -1,20 +1,19 @@
+import {RoutePaths} from 'constants/route-paths';
+//---> Internal Modules
+import {EntityReport} from 'pages/entity-report';
 //---> Build-in Modules
 import React, {useCallback, useMemo, useState} from 'react';
-
 //---> External Modules
 import {useTranslation} from 'react-i18next';
-import {Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {Button} from 'reactstrap';
 
-//---> Internal Modules
-import EntityReport from 'pages/entity-report';
-import StrategyForm from './form';
-import {useCampaignManager} from '../hooks';
-import {Divider, Tabs} from '../components';
-import Concept from './form-fields/Concept';
 import CappingManagement from '../capping';
-import {RoutePaths} from 'constants/route-paths';
+import {Divider, Tabs} from '../components';
+import {useCampaignManager} from '../hooks';
+import StrategyForm from './form';
 import Audience from './form-fields/Audience';
+import Concept from './form-fields/Concept';
 
 const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
   const {t} = useTranslation();

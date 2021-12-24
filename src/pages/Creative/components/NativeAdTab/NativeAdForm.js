@@ -1,5 +1,8 @@
 import {NativeAdAPI} from 'api/native-ad.api';
 import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
+import {EntityTypes} from 'constants/report';
+import {EntityReport} from 'pages/entity-report';
+import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateNativeAd} from 'queries/native-ad';
 import {GET_NATIVE_ADS} from 'queries/native-ad/constants';
@@ -19,7 +22,6 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import EntityReport from 'pages/entity-report';
 
 import Assets from './Assets';
 import NativeAdInformationForm from './NativeAdInformationForm';
@@ -29,8 +31,6 @@ import {
   nativeAdRawToFormValues
 } from './dto';
 import {createNativeAdResolver} from './validations';
-import {EntityTypes} from 'constants/report';
-import {USER_ROLE} from 'pages/user-management/constants';
 
 const defaultValues = {
   name: '',

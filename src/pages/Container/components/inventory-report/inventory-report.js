@@ -1,15 +1,14 @@
+import {EntityTypes} from 'constants/report';
+//---> Internal Modules
+import {EntityReport} from 'pages/entity-report';
+import {USER_ROLE} from 'pages/user-management/constants';
 //---> Build-in Modules
 import React from 'react';
-
+import {useTranslation} from 'react-i18next';
 //---> External Modules
 import {useParams} from 'react-router-dom';
 
-//---> Internal Modules
-import EntityReport from 'pages/entity-report';
 import InventoryLayout from './layout';
-import {EntityTypes} from 'constants/report';
-import {USER_ROLE} from 'pages/user-management/constants';
-import {useTranslation} from 'react-i18next';
 
 const InventoryReport = () => {
   const {t} = useTranslation();

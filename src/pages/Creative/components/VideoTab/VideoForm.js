@@ -1,4 +1,7 @@
 import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
+import {EntityTypes} from 'constants/report';
+import {EntityReport} from 'pages/entity-report';
+import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateVideo, useUpdateVideo} from 'queries/video';
 import {GET_VIDEOS} from 'queries/video/constants';
@@ -21,9 +24,6 @@ import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
-import EntityReport from 'pages/entity-report';
-import {EntityTypes} from 'constants/report';
-import {USER_ROLE} from 'pages/user-management/constants';
 
 const defaultValues = {
   // concept_id: 1,

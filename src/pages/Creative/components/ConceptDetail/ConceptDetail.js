@@ -11,7 +11,7 @@ import ConceptForm from '../ConceptCreate/ConceptForm';
 import {CreativeBodyLayout} from '../CreativeLayout';
 import {NativeAds} from '../NativeAds';
 import {Videos} from '../Videos';
-import {ActionsBar, CreativeCreate} from '..';
+import {ActionsBar, CreativeCreateLazy} from '..';
 
 function ConceptDetail(props) {
   const {conceptId, advertiserId} = useParams();
@@ -63,7 +63,7 @@ function ConceptDetail(props) {
             </Container>
           </div>
 
-          <CreativeCreate />
+          <CreativeCreateLazy />
         </>
       )}
     </CreativeBodyLayout>

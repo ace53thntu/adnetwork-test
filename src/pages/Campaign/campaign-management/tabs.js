@@ -1,5 +1,5 @@
 import {EntityTypes} from 'constants/report';
-import EntityReport from 'pages/entity-report';
+import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 //---> External Modules
 import PropTypes from 'prop-types';

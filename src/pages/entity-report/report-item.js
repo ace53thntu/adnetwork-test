@@ -1,22 +1,23 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
-import {Button} from 'reactstrap';
-import {Checkbox} from '@material-ui/core';
+import './styles/styles.scss';
 
 import {DialogConfirm, LoadingIndicator} from 'components/common';
-import ChartItem from './chart-item';
-import MetricInfo from './metric-info';
-import ModalCreateReport from './create-report.modal';
 import {METRIC_SETS} from 'constants/report';
-import {useChartData, useDefaultValues} from './hooks';
-import {parseColors} from './utils';
-import {DefaultColor} from './constants.js/index.js';
-import './styles/styles.scss';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {ReportItemStyled} from './styled';
-import {useDeleteReport} from 'queries/report';
+import PropTypes from 'prop-types';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
+import {useDeleteReport} from 'queries/report';
+import React from 'react';
+import {Button} from 'reactstrap';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+
+import {Checkbox} from '@material-ui/core';
+
+import ChartItem from './chart-item';
+import {DefaultColor} from './constants.js/index.js';
+import ModalCreateReport from './create-report.modal';
+import {useChartData, useDefaultValues} from './hooks';
+import MetricInfo from './metric-info';
+import {ReportItemStyled} from './styled';
+import {parseColors} from './utils';
 
 export default function ReportItem({
   entityId,

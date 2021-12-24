@@ -1,23 +1,22 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import PropTypes from 'prop-types';
-import {FormProvider, useForm, useWatch} from 'react-hook-form';
-import {FormGroup, Label, Button, Spinner} from 'reactstrap';
-import moment from 'moment';
-
-//---> Internal Modules
-import ModalReportForm from './create-report.modal';
+import {FormReactSelect} from 'components/forms';
 import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
   REPORT_VIEW_TYPES
 } from 'constants/report';
+import moment from 'moment';
+//---> External Modules
+import PropTypes from 'prop-types';
 import {useGenerateReportUrl} from 'queries/report';
-import {FormReactSelect} from 'components/forms';
+//---> Build-in Modules
+import React from 'react';
+import {FormProvider, useForm, useWatch} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
+import {Button, FormGroup, Label, Spinner} from 'reactstrap';
 import {setMetricUrlRedux} from 'store/reducers/entity-report';
+
+//---> Internal Modules
+import ModalReportForm from './create-report.modal';
 
 const randomHex = () =>
   `#${Math.floor(Math.random() * 0xffffff)

@@ -1,24 +1,23 @@
-//---> Build-in modules
-import React, {useCallback, useState} from 'react';
-
-//---> External Modules
-import {Card, CardBody, Col, Row} from 'reactstrap';
-import {useParams} from 'react-router-dom';
-
-//---> Internal Modules
-import ModalReportPage from '../report-page-modal';
-import {ActionFooter, ActionHeader} from '../actions';
-import {ReportContainerStyled} from './styled';
-import {useGetReportsInfinite} from 'queries/report';
-import {useDestructureReports} from 'pages/report-dashboard/hooks';
-import {useFollowReportPage} from 'queries/report-page';
-import {checkIsFollowed} from 'pages/report-dashboard/helpers';
-import {validArray} from 'utils/helpers/dataStructure.helpers';
+import {LoadingIndicator} from 'components/common';
+import {Pagination} from 'components/list/pagination';
 import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import ReportItem from 'pages/entity-report/report-item';
-import {Pagination} from 'components/list/pagination';
-import {LoadingIndicator} from 'components/common';
+import {checkIsFollowed} from 'pages/report-dashboard/helpers';
+import {useDestructureReports} from 'pages/report-dashboard/hooks';
+import {useGetReportsInfinite} from 'queries/report';
+import {useFollowReportPage} from 'queries/report-page';
+//---> Build-in modules
+import React, {useCallback, useState} from 'react';
+import {useParams} from 'react-router-dom';
+//---> External Modules
+import {Card, CardBody, Col, Row} from 'reactstrap';
 import {getUser} from 'utils/helpers/auth.helpers';
+import {validArray} from 'utils/helpers/dataStructure.helpers';
+
+import {ActionFooter, ActionHeader} from '../actions';
+//---> Internal Modules
+import ModalReportPage from '../report-page-modal';
+import {ReportContainerStyled} from './styled';
 
 const PER_PAGE = 10;
 const PAGE = 0;

@@ -50,7 +50,7 @@ function ActionsBar(props) {
     setAnchorGroupByEl(null);
   };
 
-  const handleToggleCreateCreativeDialog = () => {
+  const handleToggleCreateCreativeDialog = async () => {
     dispatch(toggleCreateCreativeDialog());
   };
 
