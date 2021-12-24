@@ -29,7 +29,6 @@ const CampaignTabs = ({
   const {t} = useTranslation();
   const ownerId = currentCampaign?.advertiser_uuid?.value;
   const entityId = currentCampaign?.uuid;
-  console.log('🚀 ~ file: tabs.js ~ line 30 ~ ownerId', ownerId);
   const [currentTab, setCurrentTab] = useState('description');
   const [campaignIdCreated, setCampaignIdCreated] = useState('');
 

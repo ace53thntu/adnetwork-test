@@ -23,6 +23,7 @@ import {capitalize} from 'utils/helpers/string.helpers';
 
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {RoutePaths} from 'constants/route-paths';
 
 const UserBox = () => {
   const {t} = useTranslation();
@@ -136,8 +137,17 @@ const UserBox = () => {
                       </NavItem>
                       <NavItem>
                         <NavLinkTrap tag="span">
-                          <NavLink to="users" onClick={onHandleOpenDropdown}>
+                          <NavLink to={`/${RoutePaths.USER}`}>
                             {t('users')}
+                          </NavLink>
+                        </NavLinkTrap>
+                      </NavItem>
+                      <NavItem>
+                        <NavLinkTrap tag="span">
+                          <NavLink
+                            to={`/${RoutePaths.USER}/${RoutePaths.PROFILE}`}
+                          >
+                            {t('profile')}
                           </NavLink>
                         </NavLinkTrap>
                       </NavItem>

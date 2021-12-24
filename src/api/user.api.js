@@ -33,6 +33,9 @@ class UserAPI extends XHRRequest {
   deleteUser = ({id, params}) => {
     return this.delete(`${endpoints.user.user}/${id}`, params);
   };
+
+  updateProfile = ({id, data, options}) =>
+    this.put(`${endpoints.user.user}/${id}`, data, options);
 }
 
 export const UserAPIRequest = new UserAPI(apiURL);

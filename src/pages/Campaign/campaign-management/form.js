@@ -41,8 +41,6 @@ const CampaignForm = ({
 
   const {campaignId} = useParams();
 
-  console.log('🚀 ~ file: form.js ~ line 58 ~ campaign', currentCampaign);
-
   const methods = useForm({
     defaultValues: currentCampaign,
     resolver: validationCampaign(t)

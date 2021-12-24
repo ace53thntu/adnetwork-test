@@ -13,6 +13,8 @@ const en = {
   company: 'Company',
   goToEdit: 'Go to edit',
   viewReport: 'View report',
+  firstName: 'First name',
+  lastName: 'Last name',
 
   // Main Menu
   userManagement: 'User Management',

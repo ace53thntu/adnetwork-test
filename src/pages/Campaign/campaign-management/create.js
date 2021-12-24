@@ -8,9 +8,11 @@ import {Card, CardBody, Col, Container, Row} from 'reactstrap';
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
 import {CampaignTabs} from '.';
+import {apiToForm} from 'entities/Campaign';
 
 const CampaignCreate = () => {
   const {t} = useTranslation();
+  const currentCampaign = apiToForm({});
 
   return (
     <CampaignContentLayout
@@ -22,7 +24,7 @@ const CampaignCreate = () => {
           <Col md="12">
             <Card className="main-card mb-3">
               <CardBody>
-                <CampaignTabs isCreate />
+                <CampaignTabs isCreate currentCampaign={currentCampaign} />
               </CardBody>
             </Card>
           </Col>

@@ -101,5 +101,9 @@ export const endpoints = {
   },
   activation: {
     activation: `${API_V1}/activation`
+  },
+  credential: {
+    credential: `${API_V1}/credential`,
+    rerollKey: 'reroll_key'
   }
 };
