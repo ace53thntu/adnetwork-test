@@ -1,6 +1,6 @@
 import {RoutePaths} from 'constants/route-paths';
 import {AudiencePageLazy} from 'pages/Audience';
-import {AudienceDetailPage} from 'pages/Audience/components/audience-detail';
+import {AudienceDetailPageLazy} from 'pages/Audience/components/audience-detail';
 import {AudienceListPageLazy} from 'pages/Audience/components/audience-list';
 
 export const audiencePages = {
@@ -8,12 +8,12 @@ export const audiencePages = {
   element: <AudiencePageLazy />,
   children: [
     {
-      path: '/',
+      path: '',
       element: <AudienceListPageLazy />
     },
     {
-      path: '/:id',
-      element: <AudienceDetailPage />
+      path: ':id',
+      element: <AudienceDetailPageLazy />
     }
   ]
 };

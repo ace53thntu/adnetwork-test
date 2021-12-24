@@ -1,31 +1,31 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import moment from 'moment';
-import {
-  Badge,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button
-} from 'reactstrap';
-
+import {LoadingIndicator} from 'components/common';
 //---> Internal Modules
 import {List} from 'components/list';
 import {Pagination} from 'components/list/pagination';
 import Status from 'components/list/status';
+import {RoutePaths} from 'constants/route-paths';
+//---> External Modules
+import moment from 'moment';
+import {useDestructureAudiences} from 'pages/Audience/hooks';
 import {useGetAudiencesInfinity} from 'queries/audience';
 import {AUDIENCES_INFINITY} from 'queries/audience/constants';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {useDestructureAudiences} from 'pages/Audience/hooks';
-import {BodyContentStyled, NoAudienceStyled} from './styled';
-import {LoadingIndicator} from 'components/common';
-import ActionBar from './action-bar';
-import {useNavigate} from 'react-router';
-import {AudienceActivation} from '../audience-activation';
+//---> Build-in Modules
+import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router';
+import {
+  Badge,
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader
+} from 'reactstrap';
+import {capitalize} from 'utils/helpers/string.helpers';
+
+import {AudienceActivation} from '../audience-activation';
+import ActionBar from './action-bar';
+import {BodyContentStyled, NoAudienceStyled} from './styled';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -130,12 +130,12 @@ const AudienceList = () => {
   }, []);
 
   function onClickItem(item) {
-    navigate(`/audiences/${item?.uuid}`);
+    navigate(`/${RoutePaths.AUDIENCE}/${item?.uuid}`);
   }
 
   function onClickAction(actionIndex, item) {
     if (actionIndex === ActionIndexs.VIEW) {
-      navigate(`/audiences/${item?.uuid}`);
+      navigate(`/${RoutePaths.AUDIENCE}/${item?.uuid}`);
     }
   }
 
