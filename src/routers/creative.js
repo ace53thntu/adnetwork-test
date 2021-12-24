@@ -1,9 +1,9 @@
 import {RoutePaths} from 'constants/route-paths';
 import CreativePage from 'pages/Creative';
 import {
-  ConceptCreate,
-  ConceptDetail,
-  Concepts,
+  ConceptCreateLazy,
+  ConceptDetailLazy,
+  ConceptsLazy,
   CreativeLayout
 } from 'pages/Creative/components';
 
@@ -17,15 +17,15 @@ export const creativePages = {
     },
     {
       path: ':advertiserId',
-      element: <Concepts />
+      element: <ConceptsLazy />
     },
     {
       path: ':advertiserId/create',
-      element: <ConceptCreate />
+      element: <ConceptCreateLazy />
     },
     {
       path: ':advertiserId/:conceptId',
-      element: <ConceptDetail />
+      element: <ConceptDetailLazy />
     }
   ]
 };

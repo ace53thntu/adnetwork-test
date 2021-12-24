@@ -1,3 +1,16 @@
-import Concepts from './Concepts';
+import {ErrorBoundary} from 'components/common';
+import React from 'react';
 
-export {Concepts};
+const Concepts = React.lazy(() =>
+  import('./Concepts' /* webpackChunkName: "concepts" */)
+);
+
+function ConceptsLazy() {
+  return (
+    <ErrorBoundary>
+      <Concepts />
+    </ErrorBoundary>
+  );
+}
+
+export {ConceptsLazy};

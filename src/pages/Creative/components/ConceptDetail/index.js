@@ -1,3 +1,16 @@
-import ConceptDetail from './ConceptDetail';
+import {ErrorBoundary} from 'components/common';
+import React from 'react';
 
-export {ConceptDetail};
+const ConceptDetail = React.lazy(() =>
+  import('./ConceptDetail' /* webpackChunkName: "concept-detail" */)
+);
+
+function ConceptDetailLazy() {
+  return (
+    <ErrorBoundary>
+      <ConceptDetail />
+    </ErrorBoundary>
+  );
+}
+
+export {ConceptDetailLazy};

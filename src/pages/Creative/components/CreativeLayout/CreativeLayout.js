@@ -1,3 +1,4 @@
+import {ErrorBoundary} from 'components/common';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 // import PropTypes from 'prop-types';
@@ -19,7 +20,7 @@ function CreativeLayout(props) {
   }, [reduxDispatch]);
 
   return (
-    <>
+    <ErrorBoundary>
       <ExtendSidebar
         heading={<NavLink to="/creative">{t('creativeManagement')}</NavLink>}
       >
@@ -32,14 +33,16 @@ function CreativeLayout(props) {
         </div>
         <div className="divider" />
         <div className="border mb-2">
-          <AdvertisersTree />
+          <ErrorBoundary>
+            <AdvertisersTree />
+          </ErrorBoundary>
         </div>
       </ExtendSidebar>
 
       <AppContent>
         <Outlet />
       </AppContent>
-    </>
+    </ErrorBoundary>
   );
 }
 

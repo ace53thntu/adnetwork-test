@@ -10,11 +10,11 @@ import {userManagementPages} from './user';
 export const appRoutes = [
   dashboardPages,
   audiencePages,
+  creativePages,
   campaignPages,
   containerPages,
   inventoryMarketPages,
   organizationPages,
   userManagementPages,
-  creativePages,
   inventoryPages
 ];
