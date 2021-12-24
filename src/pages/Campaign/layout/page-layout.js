@@ -1,22 +1,20 @@
-//---> Build-in Modules
-import * as React from 'react';
-
+import AppContent from 'components/layouts/Admin/components/AppContent';
+//---> Internal Modules
+import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
+import {RoutePaths} from 'constants/route-paths';
 //---> External Modules
 import {useDebounce} from 'hooks/useDebounce';
+//---> Build-in Modules
+import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {Outlet} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import {Input} from 'reactstrap';
-
-//---> Internal Modules
-import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
-import AppContent from 'components/layouts/Admin/components/AppContent';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-
 import {searchCampaignRedux} from 'store/reducers/campaign';
+
 import {TreeSidebar} from '../sidebar-tree';
-import {RoutePaths} from 'constants/route-paths';
 
 function CampaignPageLayout(props) {
   const reduxDispatch = useDispatch();
@@ -40,7 +38,7 @@ function CampaignPageLayout(props) {
   };
 
   return (
-    <>
+    <React.Suspense fallback={<div>Loading...</div>}>
       <ExtendSidebar
         heading={
           <NavLink to={`/${RoutePaths.CAMPAIGN}`}>
@@ -65,7 +63,7 @@ function CampaignPageLayout(props) {
       <AppContent>
         <Outlet />
       </AppContent>
-    </>
+    </React.Suspense>
   );
 }
 

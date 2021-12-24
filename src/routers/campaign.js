@@ -1,20 +1,17 @@
 import {RoutePaths} from 'constants/route-paths';
 import {
-  CampaignCreate,
-  ListCampaignLayout,
+  CampaignCreateLazy,
+  CampaignDetailLazy,
+  CampaignEdit,
   CampaignPageLayout,
-  CampaignDetail,
-  CampaignEdit
+  ListCampaignLayoutLazy
 } from 'pages/Campaign';
 import {
   StrategyCreate,
   StrategyDetail,
   StrategyEdit
 } from 'pages/Campaign/strategy';
-
-// import {ROLES} from 'core/constants';
-
-// const {MANAGER, TRADER} = ROLES;
+import React from 'react';
 
 export const campaignPages = {
   path: RoutePaths.CAMPAIGN,
@@ -22,18 +19,15 @@ export const campaignPages = {
   children: [
     {
       path: '',
-      element: <ListCampaignLayout />
-      // canAccess: [MANAGER, TRADER]
+      element: <ListCampaignLayoutLazy />
     },
     {
       path: '/create',
-      element: <CampaignCreate />
-      // canAccess: [MANAGER, TRADER]
+      element: <CampaignCreateLazy />
     },
     {
       path: '/:campaignId',
-      element: <CampaignDetail />
-      // canAccess: [MANAGER, TRADER]
+      element: <CampaignDetailLazy />
     },
     {
       path: `/:campaignId/${RoutePaths.EDIT}`,

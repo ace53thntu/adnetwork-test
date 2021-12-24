@@ -1,15 +1,15 @@
 import {RoutePaths} from 'constants/route-paths';
-import {AudiencePage} from 'pages/Audience';
+import {AudiencePageLazy} from 'pages/Audience';
 import {AudienceDetailPage} from 'pages/Audience/components/audience-detail';
-import {AudienceListPage} from 'pages/Audience/components/audience-list';
+import {AudienceListPageLazy} from 'pages/Audience/components/audience-list';
 
 export const audiencePages = {
   path: RoutePaths.AUDIENCE,
-  element: <AudiencePage />,
+  element: <AudiencePageLazy />,
   children: [
     {
       path: '/',
-      element: <AudienceListPage />
+      element: <AudienceListPageLazy />
     },
     {
       path: '/:id',

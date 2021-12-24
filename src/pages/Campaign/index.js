@@ -1,7 +1,7 @@
-export {CampaignPageLayout, ListCampaignLayout} from './layout';
+export {CampaignPageLayout, ListCampaignLayoutLazy} from './layout';
 export {
   CampaignList,
-  CampaignCreate,
-  CampaignDetail,
+  CampaignCreateLazy,
+  CampaignDetailLazy,
   CampaignEdit
 } from './campaign-management';

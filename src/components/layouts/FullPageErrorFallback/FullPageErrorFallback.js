@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     flexDirection: 'column',
     color: theme.palette.error.main,
-    height: '100vh'
+    height: 'calc(100vh - 60px)'
   }
 }));
 

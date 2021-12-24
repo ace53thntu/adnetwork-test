@@ -3,7 +3,7 @@ import React from 'react';
 
 //---> Internal Modules
 import {AudienceContentLayout} from '../audience-layout';
-import {AudienceList} from '.';
+import AudienceList from './audience-list';
 
 function AudienceListPage(props) {
   return (
@@ -13,4 +13,4 @@ function AudienceListPage(props) {
   );
 }
 
-export default React.memo(AudienceListPage);
+export default AudienceListPage;

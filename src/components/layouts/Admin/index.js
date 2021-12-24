@@ -32,7 +32,7 @@ const AdminLayout = props => {
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback} onReset={reset}>
-      <>
+      <React.Suspense fallback={<div>Loading...</div>}>
         {resizeListener}
         <div
           className={cx(
@@ -69,7 +69,7 @@ const AdminLayout = props => {
           </>
           <ToastContainer autoClose={5000} />
         </div>
-      </>
+      </React.Suspense>
     </ErrorBoundary>
   );
 };

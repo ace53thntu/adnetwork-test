@@ -7,7 +7,6 @@ export const dashboardPages = {
     {
       path: '',
       element: <ReportDashboardPage />
-      // canAccess: [MANAGER, TRADER]
     },
     {
       path: `${RoutePaths.PAGE}/:pageId`,

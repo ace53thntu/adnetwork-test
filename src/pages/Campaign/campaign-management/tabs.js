@@ -1,17 +1,16 @@
-//---> Build-in Modules
-import React, {useMemo, useCallback, useState} from 'react';
-
+import {EntityTypes} from 'constants/report';
+import EntityReport from 'pages/entity-report';
+import {USER_ROLE} from 'pages/user-management/constants';
 //---> External Modules
 import PropTypes from 'prop-types';
+//---> Build-in Modules
+import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {Tabs} from '../components';
 import CampaignForm from './form';
 import CampaignStrategies from './strategies';
-import EntityReport from 'pages/entity-report';
-import {EntityTypes} from 'constants/report';
-import {USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
   isView: PropTypes.bool,

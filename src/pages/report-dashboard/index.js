@@ -1,13 +1,15 @@
+import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import Loading from 'components/common/loading';
 
-const ReportDashboard = React.lazy(() => import('./ReportDashboard'));
+const ReportDashboard = React.lazy(() =>
+  import('./ReportDashboard' /* webpackChunkName: "report-dashboard" */)
+);
 
 function ReportDashboardPage() {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <ErrorBoundary>
       <ReportDashboard />
-    </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

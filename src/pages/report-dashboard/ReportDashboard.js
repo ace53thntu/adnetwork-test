@@ -1,12 +1,13 @@
-// Build-in Modules
-import React from 'react';
-
 // Internl Modules
 import './_main.scss';
-import ReportList from './components/ReportList';
-import {useParams} from 'react-router';
-import ReportLayout from './ReportLayout';
+
 import {useGetReportPage} from 'queries/report-page';
+// Build-in Modules
+import React from 'react';
+import {useParams} from 'react-router';
+
+import ReportLayout from './ReportLayout';
+import ReportList from './components/ReportList';
 
 const ReportDashboard = () => {
   const {pageId} = useParams();
