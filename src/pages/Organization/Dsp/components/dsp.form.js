@@ -30,6 +30,9 @@ import {schemaValidate} from './validation';
 import DomainSelect from 'pages/Organization/components/domain-select';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
+import Credential from 'components/credential';
 
 const DspForm = ({
   modal = false,
@@ -40,6 +43,7 @@ const DspForm = ({
   dspId = ''
 }) => {
   const {t} = useTranslation();
+  const role = getRole();
   const {data: dspData, isFetched, isLoading} = useGetDsp(dspId);
   const {mutateAsync: createDsp} = useCreateDsp();
   const {mutateAsync: editDsp} = useEditDsp();
@@ -153,6 +157,13 @@ const DspForm = ({
                   />
                 </Col>
               </Row>
+              {isEdit && (role === USER_ROLE.DSP || role === USER_ROLE.ADMIN) && (
+                <Row>
+                  <Col md={12}>
+                    <Credential type={USER_ROLE.DSP} referenceId={dspId} />
+                  </Col>
+                </Row>
+              )}
             </ModalBody>
             <ModalFooter>
               <Button

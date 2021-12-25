@@ -77,9 +77,9 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
     setIsGenerating(true);
     try {
       const {data} = await regenerateCredential({id: credentialId});
-      const newScretKey = data?.data?.secret_key ?? '';
+      const newScretKey = data?.secret_key ?? '';
       setSecretKey(newScretKey);
-      ShowToast.success('Re-generated new credential successfully');
+      ShowToast.success('Generated new credential successfully');
     } catch (err) {
       ShowToast.error(err.msg ?? 'Fail to re-generate credential');
     } finally {
@@ -118,12 +118,11 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
         )}
         {isAdmin && !isUser && (
           <ButtonLoading
-            color="success"
+            className="btn-success ml-2"
             type="button"
             onClick={onClickGenerate}
             disabled={isFetching || isGenerating}
             isLoading={isGenerating}
-            className="ml-2"
           >
             Generate
           </ButtonLoading>

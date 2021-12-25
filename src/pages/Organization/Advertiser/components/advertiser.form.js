@@ -36,6 +36,9 @@ import {useGetDomains} from 'queries/domain';
 import {useDomainOptions} from 'pages/Organization/hooks';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
+import Credential from 'components/credential';
 
 const AdvertiserForm = ({
   modal = false,
@@ -47,6 +50,7 @@ const AdvertiserForm = ({
   advertiserId = ''
 }) => {
   const {t} = useTranslation();
+  const role = getRole();
   const {data: domains} = useGetDomains();
   const domainOptions = useDomainOptions({domainData: domains?.items || []});
   const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
@@ -160,6 +164,17 @@ const AdvertiserForm = ({
                   />
                 </Col>
               </Row>
+              {isEdit &&
+                (role === USER_ROLE.ADVERTISER || role === USER_ROLE.ADMIN) && (
+                  <Row>
+                    <Col md={12}>
+                      <Credential
+                        type={USER_ROLE.ADVERTISER}
+                        referenceId={advertiserId}
+                      />
+                    </Col>
+                  </Row>
+                )}
             </ModalBody>
             <ModalFooter>
               <Button color="link" onClick={toggle} type="button">

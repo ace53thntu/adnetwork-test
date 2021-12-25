@@ -37,6 +37,9 @@ import {useGetDomains} from 'queries/domain';
 import DomainSelect from '../../components/domain-select';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
+import Credential from 'components/credential';
 
 const PublisherForm = ({
   modal = false,
@@ -46,6 +49,7 @@ const PublisherForm = ({
   isEdit = false,
   publisherId = ''
 }) => {
+  const role = getRole();
   //---> Get domain options
   const {data: domainRes} = useGetDomains();
   const domainOptions = useDomainOptions({domainData: domainRes?.items || []});
@@ -197,6 +201,17 @@ const PublisherForm = ({
                   />
                 </Col>
               </Row>
+              {isEdit &&
+                (role === USER_ROLE.PUBLISHER || role === USER_ROLE.ADMIN) && (
+                  <Row>
+                    <Col md={12}>
+                      <Credential
+                        type={USER_ROLE.PUBLISHER}
+                        referenceId={publisherId}
+                      />
+                    </Col>
+                  </Row>
+                )}
             </ModalBody>
             <ModalFooter>
               <Button color="link" onClick={toggle} type="button">
