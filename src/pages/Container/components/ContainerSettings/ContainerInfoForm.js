@@ -132,13 +132,13 @@ function ContainerInfoForm(props) {
                 <Col sm={12} md={6}>
                   <Count
                     label={isMobile ? 'Screens' : 'Pages'}
-                    count={container?.source?.[source] || 0}
+                    count={`${container?.source?.[source] || 0}`}
                   />
                 </Col>
                 <Col sm={12} md={6}>
                   <Count
                     label="Inventories"
-                    count={container?.total_inventories || 0}
+                    count={`${container?.total_inventories || 0}`}
                     type="success"
                   />
                 </Col>

@@ -5,7 +5,7 @@ import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
 import OverviewTab from '../WebsiteTag/OverviewTab';
 import PagesAndEventsTab from '../WebsiteTag/PagesAndEventsTab';
 import {IOS_TAG_STEPS} from 'pages/Container/constants';
-import Inventories from '../InventoryForm/Inventories';
+import InventoryList from '../InventoryForm/InventoryList';
 
 function AndroidTag(props) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -26,7 +26,7 @@ function AndroidTag(props) {
         <TabPane tabId={0} className="mt-2">
           {activeStep === 0 && (
             <PagesAndEventsTab tabProps={tabProps}>
-              <Inventories inventories={props.inventories || []} />
+              <InventoryList inventories={props.inventories || []} />
             </PagesAndEventsTab>
           )}
         </TabPane>

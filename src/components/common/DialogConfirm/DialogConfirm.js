@@ -22,17 +22,35 @@ export default function DialogConfirm({
   handleAgree = () => {},
   title = 'Are you sure?',
   isLoading = false,
+  disableBackdropClick = false,
+  disableEscapeKeyDown = false,
   ...rest
 }) {
   const {t} = useTranslation();
   const classes = useStyles();
+
+  // Handle warning migrate MUI version
+  const onClose = (event, reason) => {
+    if (disableBackdropClick && reason === 'backdropClick') {
+      return false;
+    }
+
+    if (disableEscapeKeyDown && reason === 'escapeKeyDown') {
+      return false;
+    }
+
+    if (typeof handleClose === 'function') {
+      handleClose();
+    }
+  };
+
   return (
     <Dialog
       {...rest}
       fullWidth
       maxWidth={'xs'}
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >

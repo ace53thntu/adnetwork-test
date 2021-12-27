@@ -8,10 +8,6 @@ import {GET_PAGES} from './constants';
  * Create a Page
  */
 export function useCreatePage(containerId) {
-  console.log(
-    '🚀 ~ file: useCreatePage.js ~ line 11 ~ useCreatePage ~ containerId',
-    containerId
-  );
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 

@@ -18,6 +18,8 @@ import {
 
 import {toggleCreatePageModalRedux} from 'store/reducers/container';
 import Count from '../ContainerSettings/Count';
+import {useGetAllPage} from 'queries/page';
+import {SOURCES} from '../ContainerSourcePage/constants';
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
@@ -25,15 +27,37 @@ function ContainerSources(props) {
   const {t} = useTranslation();
 
   const countWebsiteTagPages = container?.source?.['web'] ?? 0;
-  const webPageId = container?.source?.['web']?.[0]?.id;
   const countIOSTagPages = container?.source?.['ios'] ?? 0;
-  const iosScreenId = container?.source?.['ios']?.[0]?.id;
-
   const countAndroidTagPages = container?.source?.['android'] ?? 0;
-  const androidScreenId = container?.source?.['android']?.[0]?.id;
-
   const importCount = container?.import_count ?? 0;
   const transferCount = container?.transfer_count ?? 0;
+
+  const {data: {items: webPage = []} = {}} = useGetAllPage({
+    containerId: container?.uuid,
+    enabled: !!container?.uuid && countWebsiteTagPages > 0,
+    params: {
+      limit: 1,
+      source: SOURCES.web
+    }
+  });
+  const {data: {items: iosPage = []} = {}} = useGetAllPage({
+    containerId: container?.uuid,
+    enabled: !!container?.uuid && countIOSTagPages > 0,
+    params: {
+      limit: 1,
+      source: SOURCES.ios
+    }
+  });
+
+  const {data: {items: androidPage = []} = {}} = useGetAllPage({
+    containerId: container?.uuid,
+    enabled: !!container?.uuid && countAndroidTagPages > 0,
+    params: {
+      limit: 1,
+      source: SOURCES.android
+    }
+  });
+
   // because API response data has tag is null
 
   const onHandleAddPage = () => {
@@ -75,7 +99,7 @@ function ContainerSources(props) {
               <Row>
                 {countWebsiteTagPages > 0 ? (
                   <Col sm={12} md={12}>
-                    <Link to={`./web/${webPageId}`}>
+                    <Link to={`./${SOURCES.web}/${webPage?.[0]?.uuid}`}>
                       <Count
                         label={t('websiteTag')}
                         count={`${countWebsiteTagPages} page(s)`}
@@ -86,7 +110,7 @@ function ContainerSources(props) {
                 ) : null}
                 {countIOSTagPages > 0 ? (
                   <Col sm={12} md={12}>
-                    <Link to={`./ios/${iosScreenId}`}>
+                    <Link to={`./${SOURCES.ios}/${iosPage?.[0]?.uuid}`}>
                       <Count
                         label={t('iOSTag')}
                         count={`${countIOSTagPages} screen(s)`}
@@ -98,7 +122,7 @@ function ContainerSources(props) {
                 ) : null}
                 {countAndroidTagPages > 0 ? (
                   <Col sm={12} md={12}>
-                    <Link to={`./android/${androidScreenId}`}>
+                    <Link to={`./${SOURCES.android}/${androidPage?.[0]?.uuid}`}>
                       <Count
                         label={t('androidTag')}
                         count={`${countAndroidTagPages} screen(s)`}

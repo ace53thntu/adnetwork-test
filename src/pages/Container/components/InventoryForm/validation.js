@@ -14,6 +14,9 @@ export const validationInventory = () => {
       market_type: Yup.object()
         .required('This field is required.')
         .typeError('This field is required.'),
+      format: Yup.object()
+        .required('This field is required.')
+        .typeError('This field is required.'),
       price_engine: Yup.object()
         .required('This field is required.')
         .typeError('This field is required.'),

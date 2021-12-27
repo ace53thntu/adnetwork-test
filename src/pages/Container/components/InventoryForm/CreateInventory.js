@@ -84,7 +84,6 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       size="lg"
       className="modal-dialog shadow-none"
       isOpen={isOpen}
-      toggle={toggle}
     >
       <FormProvider {...methods} key="create-event">
         <form

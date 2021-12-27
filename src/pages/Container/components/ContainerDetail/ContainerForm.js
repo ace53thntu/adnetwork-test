@@ -26,12 +26,11 @@ import {validationDescriptionTab} from './validattion';
 
 const propTypes = {
   container: PropTypes.object,
-  publisher: PropTypes.object,
   isEdit: PropTypes.bool
 };
 
 function ContainerForm(props) {
-  const {container, publisher, isEdit = false} = props;
+  const {container, isEdit = false} = props;
 
   const {t} = useTranslation();
   const navigate = useNavigate();
@@ -51,8 +50,8 @@ function ContainerForm(props) {
   );
 
   const formDefaultValues = React.useMemo(() => {
-    return mappingApiToForm({container, containerRedux, t, publisher});
-  }, [container, containerRedux, t, publisher]);
+    return mappingApiToForm({container, containerRedux, t});
+  }, [container, containerRedux, t]);
 
   const methods = useForm({
     defaultValues: formDefaultValues,
@@ -70,7 +69,11 @@ function ContainerForm(props) {
       setOpenConfirm(false);
       setIsLoading(false);
     };
-  }, []);
+  }, [reset, t]);
+
+  React.useEffect(() => {
+    reset(formDefaultValues);
+  }, [formDefaultValues, reset]);
 
   const onHandleSubmit = async values => {
     setIsLoading(true);

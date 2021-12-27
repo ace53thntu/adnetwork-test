@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
 
 import {WEB_TAG_STEPS} from '../../constants';
-import Inventories from '../InventoryForm/Inventories';
+import InventoryList from '../InventoryForm/InventoryList';
 import OverviewTab from './OverviewTab';
 import PagesAndEventsTab from './PagesAndEventsTab';
 
@@ -25,7 +25,7 @@ function WebsiteTag(props) {
         <TabPane tabId={0} className="mt-2">
           {activeStep === 0 && (
             <PagesAndEventsTab tabProps={tabProps}>
-              <Inventories inventories={props.inventories || []} />
+              <InventoryList inventories={props.inventories || []} />
             </PagesAndEventsTab>
           )}
         </TabPane>

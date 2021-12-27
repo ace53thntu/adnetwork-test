@@ -143,7 +143,7 @@ const InventoryFormContent = ({
 
           <Col sm={4}>
             <FormReactSelect
-              required={false}
+              required={true}
               name="format"
               label={t('format')}
               placeholder={t('selectFormat')}

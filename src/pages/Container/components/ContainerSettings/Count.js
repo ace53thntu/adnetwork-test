@@ -29,10 +29,10 @@ Count.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
   label: PropTypes.string,
-  count: PropTypes.number
+  count: PropTypes.string
 };
 Count.defaultProps = {
-  count: 0,
+  count: '',
   label: 'Pages',
   type: 'primary',
   className: ''

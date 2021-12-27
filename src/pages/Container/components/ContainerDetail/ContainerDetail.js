@@ -11,23 +11,17 @@ import {useDispatchSelectContainer} from 'pages/Container/hooks/useDispatchSelec
 import {ContainerBodyLayout} from '../Layouts';
 import ContainerForm from './ContainerForm';
 import ContainerSources from './ContainerSources';
-import {useGetPublisher} from 'queries/publisher';
 
 function ContainerDetail() {
+  const {t} = useTranslation();
   const {isFetched, container, error, isError} = useDispatchSelectContainer();
-  const {data: publisher, isFetched: fetchedPublisher} = useGetPublisher(
-    container?.publisher_uuid
-  );
-
   const [isFetching, setFetching] = React.useState(true);
 
-  const {t} = useTranslation();
-
   React.useEffect(() => {
-    if (isFetched && fetchedPublisher) {
+    if (isFetched) {
       setFetching(false);
     }
-  }, [fetchedPublisher, isFetched]);
+  }, [isFetched]);
 
   return (
     <ContainerBodyLayout
@@ -48,11 +42,7 @@ function ContainerDetail() {
                 {isFetching ? (
                   'Loading...'
                 ) : (
-                  <ContainerForm
-                    container={container}
-                    publisher={publisher}
-                    isEdit
-                  />
+                  <ContainerForm container={container} isEdit />
                 )}
               </CardBody>
             </Card>

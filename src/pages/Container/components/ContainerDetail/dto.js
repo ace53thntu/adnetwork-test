@@ -1,26 +1,37 @@
-export const mappingApiToForm = ({
-  container,
-  containerRedux,
-  t,
-  publisher = {}
-}) => {
+export const mappingApiToForm = ({container, containerRedux, t}) => {
   if (container) {
-    const {name = '', url = '', status = 'active'} = container;
+    const {
+      name = '',
+      url = '',
+      status = 'active',
+      publisher_uuid,
+      publisher_name
+    } = container;
     return {
       name,
       url,
       status,
-      publisher_uuid: {value: publisher?.uuid, label: publisher?.name}
+      publisher_uuid: publisher_uuid
+        ? {value: publisher_uuid, label: publisher_name}
+        : null
     };
   }
   if (containerRedux) {
-    const {name = '', url = '', status = 'active'} = containerRedux;
+    const {
+      name = '',
+      url = '',
+      status = 'active',
+      publisher_uuid,
+      publisher_name
+    } = containerRedux;
 
     return {
       name,
       url,
       status,
-      publisher_uuid: {value: publisher?.uuid, label: publisher?.name}
+      publisher_uuid: publisher_uuid
+        ? {value: publisher_uuid, label: publisher_name}
+        : null
     };
   }
 

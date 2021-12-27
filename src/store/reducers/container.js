@@ -35,8 +35,12 @@ const CREATED_PAGE = '@container/CREATED_PAGE';
 
 const CREATED_IMPORT_OR_TRANSFER = '@container/CREATED_IMPORT_OR_TRANSFER';
 const SELECT_PAGE_ID = '@container/SELECT_PAGE_ID';
+const SET_INVENTORY_PARAMS = '@container/SET_INVENTORY_PARAMS';
 
 // dispatch actions
+export const setInventoryParamsRedux = params => {
+  return createAction(SET_INVENTORY_PARAMS, {params});
+};
 export const resetContainerRedux = () => {
   return createAction(RESET, {});
 };
@@ -117,11 +121,13 @@ const containerInitialState = {
     perPage: 5
   },
   keyword: '',
-  shouldRefetchContainer: false
+  shouldRefetchContainer: false,
+  inventoryParams: null
 };
 
 const handleActions = {
   // [SELECT_PAGE_ID]: handleSelectPage,
+  [SET_INVENTORY_PARAMS]: handleSetInventoryParams,
   [RESET]: handleReset,
   [SHOULD_REFETCH_CONTAINER]: handleShouldRefetchContainer,
   [CONTAINERS]: handleSetContainers,
@@ -143,6 +149,10 @@ const handleActions = {
   [EVENT_PAGING]: handleEventPaging,
   [CREATED_IMPORT_OR_TRANSFER]: handleCreatedImport
 };
+
+function handleSetInventoryParams(state, action) {
+  state.inventoryParams = action.payload.params;
+}
 
 function handleReset(state) {
   state.containers = [];
@@ -429,17 +439,19 @@ function handleSetContainer(state, action) {
             );
 
             if (newSource) {
-              const sourceChildren = newSource?.map((sourceData, index) => {
-                const {id, name} = sourceData;
+              const pagesBySource = pages?.length > 0 ? pages : [];
 
+              const sourceChildren = pagesBySource?.map((sourceData, index) => {
+                const {id, name} = sourceData;
                 return {
                   id,
-                  name,
+                  name: name,
                   children: [],
                   numChildren: 0,
                   page: 0,
                   expanded: false,
                   selected: pageId === id,
+                  // selected: state.selectedPageId === id index === 0,
                   parentId: source,
                   isPage: true,
                   containerId: container.id
@@ -449,7 +461,7 @@ function handleSetContainer(state, action) {
                 id: source,
                 name: CONTAINER_TREE_SOURCES[source],
                 children: sourceChildren,
-                numChildren: newSource?.length ?? 0,
+                numChildren: sourceChildren?.length ?? 0,
                 page: 0,
                 expanded: true,
                 selected: false,

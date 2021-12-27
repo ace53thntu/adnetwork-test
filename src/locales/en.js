@@ -225,7 +225,7 @@ const en = {
   edit: 'Edit',
   createNew: 'Create New',
   containerDetail: 'Container detail',
-  containerDescription: 'Chose and create a container resource',
+  containerDescription: 'Choose and create a container resource',
   containerInfo: 'Container info',
   updateContainerSuccessfully: 'Update container successfully!',
   removeContainerSuccessfully: 'Remove container successfully!',

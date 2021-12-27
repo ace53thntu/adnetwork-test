@@ -11,7 +11,7 @@ export function useGetAllPage({containerId, enabled = false, params = {}}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_PAGES, containerId],
+    [GET_PAGES, containerId, params],
     () =>
       PageAPIRequest.getAllPage({
         params: {container_uuid: containerId, ...params},
