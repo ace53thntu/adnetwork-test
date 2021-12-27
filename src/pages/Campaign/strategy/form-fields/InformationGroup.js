@@ -9,9 +9,10 @@ import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import SelectStrategyItem from '../../components/SelectStrategyItem';
-import {FormTextInput} from 'components/forms';
+import {FormReactSelect, FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
+import {STRATEGY_TYPES} from 'pages/Campaign/constants';
 
 const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
   const {t} = useTranslation();
@@ -97,7 +98,18 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                 ) : null}
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="6">
+              <FormReactSelect
+                viewOnly={isView}
+                defaultValue={currentStrategy?.strategy_type}
+                options={STRATEGY_TYPES}
+                name="strategy_type"
+                label={t('type')}
+                placeholder={t('selectType')}
+                required
+              />
+            </Col>
+            <Col md="6">
               <SelectStrategyItem
                 viewOnly={isView}
                 listOptions={positions}
@@ -108,7 +120,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                 isMulti={true}
               />
             </Col>
-            <Col md="4">
+            <Col md="6">
               <FormTextInput
                 type="text"
                 placeholder="0"
@@ -118,7 +130,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                 isRequired={false}
               />
             </Col>
-            <Col md="4">
+            <Col md="6">
               <FormTextInput
                 type="text"
                 placeholder="0"

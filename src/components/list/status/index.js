@@ -31,6 +31,7 @@ Status.propTypes = {
     'warning',
     'default',
     'delete',
+    'secondary',
     'draft'
   ]),
   noHeader: PropTypes.bool

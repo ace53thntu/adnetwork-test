@@ -1,3 +1,5 @@
+import {capitalize} from 'lodash';
+
 export const apiToForm = ({strategyData = null, positions = []}) => {
   if (!strategyData) {
     return {};
@@ -19,7 +21,8 @@ export const apiToForm = ({strategyData = null, positions = []}) => {
     position_ids = null,
     start_at = null,
     end_at = null,
-    uuid
+    uuid,
+    strategy_type
   } = strategyData;
 
   const startDate = start_at ? new Date(start_at) : null;
@@ -48,6 +51,10 @@ export const apiToForm = ({strategyData = null, positions = []}) => {
     accepted_sub_contexts,
     accepted_placements,
     view_rate_prediction,
-    uuid
+    uuid,
+    id: uuid,
+    strategy_type: strategy_type
+      ? {value: strategy_type, label: capitalize(strategy_type)}
+      : null
   };
 };

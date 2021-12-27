@@ -32,7 +32,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
   };
 
   if (type !== 'user') {
-    params = {...params, reference_id: referenceId};
+    params = {...params, reference_uuid: referenceId};
   }
   const {data: {items = []} = {}, isFetching, isFetched} = useGetCredentials({
     params,

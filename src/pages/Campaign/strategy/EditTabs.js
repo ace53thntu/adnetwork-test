@@ -5,13 +5,13 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-
 import {useQueryString} from 'hooks';
 import StrategyForm from './form';
 import {Tabs} from '../components';
 import {useCampaignManager} from '../hooks';
 import Concept from './form-fields/Concept';
 import Summary from './form-fields/Summary';
+// import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
   currentStrategy = {},
@@ -57,9 +57,9 @@ const StrategyEditTabs = ({
         //   content: (
         //     <div>
         //       <Audience
-        //         listAudiences={LIST_AUDIENCES}
+        //         listAudiences={[]}
         //         goTo={goTo}
-        //         strategyData={strategyData}
+        //         currentStrategy={currentStrategy}
         //       />
         //     </div>
         //   )
@@ -82,6 +82,7 @@ const StrategyEditTabs = ({
                 currentStrategy={currentStrategy}
                 gotoCampaignManagement={gotoCampaignManagement}
                 goTo={goTo}
+                positions={positions}
               />
             </div>
           )
@@ -124,7 +125,7 @@ const StrategyEditTabs = ({
       case 'summary':
         return 3;
       default:
-        return 1;
+        return 0;
     }
   }, [currentTab]);
 

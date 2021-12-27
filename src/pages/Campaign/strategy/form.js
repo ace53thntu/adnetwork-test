@@ -1,4 +1,5 @@
 //---> External Modules
+import {RoutePaths} from 'constants/route-paths';
 import PropTypes from 'prop-types';
 //---> Internal Modules
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
@@ -40,7 +41,7 @@ const StrategyForm = ({
   positions = []
 }) => {
   const {t} = useTranslation();
-  const {id: strategyId} = useParams();
+  const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const StrategyForm = ({
         try {
           await editStrategy({straId: strategyId, data: req});
           ShowToast.success('Update success');
-          goTo({nextTab: 'audience'});
+          goTo({nextTab: 'concept'});
         } catch (error) {
           console.log(
             '🚀 ~ file: DescriptionStrategy.js ~ line 158 ~ error',
@@ -77,22 +78,14 @@ const StrategyForm = ({
           const strategyId = data?.uuid;
           ShowToast.success('Create success');
           navigate(
-            `/campaigns/${campaignId}/strategy/${strategyId}/edit?next_tab=audience`
+            `/${RoutePaths.CAMPAIGN}/${formData?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept`
           );
         } catch (error) {
           ShowToast.error(error?.msg);
         }
       }
     },
-    [
-      campaignId,
-      createStrategy,
-      editStrategy,
-      goTo,
-      isEdit,
-      navigate,
-      strategyId
-    ]
+    [createStrategy, editStrategy, goTo, isEdit, navigate, strategyId]
   );
 
   return (

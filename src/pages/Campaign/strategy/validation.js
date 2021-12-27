@@ -8,6 +8,7 @@ export const strategySchema = (isUpdate = false, t) => {
   return yupResolver(
     Yup.object().shape({
       campaign_uuid: Yup.object().nullable().required('This field is required'),
+      strategy_type: Yup.object().nullable().required('This field is required'),
       name: Yup.string().required('This field is required'),
       start_at: Yup.date().required(t('required')).typeError(t('required')),
       end_at: Yup.date()

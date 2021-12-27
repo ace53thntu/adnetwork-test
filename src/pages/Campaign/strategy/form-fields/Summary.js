@@ -1,10 +1,9 @@
 import React from 'react';
-import DescriptionStrategy from '../../components/DetailStrategyForm/DescriptionStrategy';
 import {Divider} from '../../components';
-import Audience from './Audience';
 import Concept from './Concept';
 import {Button} from 'reactstrap';
 import {useTranslation} from 'react-i18next';
+import StrategyForm from '../form';
 
 const Summary = ({
   campaignId,
@@ -13,24 +12,23 @@ const Summary = ({
   gotoCampaignManagement,
   isView,
   listCampaignOptions,
-  goTo
+  goTo,
+  positions = []
 }) => {
   const {t} = useTranslation();
 
   return (
     <>
-      <DescriptionStrategy
+      <StrategyForm
         campaignId={campaignId}
-        isEdit={isEdit}
+        isEdit
         currentStrategy={currentStrategy}
         gotoCampaignManagement={gotoCampaignManagement}
-        isView={isView}
-        listCampaignOptions={listCampaignOptions}
         goTo={goTo}
-        isSummary
+        positions={positions}
       />
       <Divider text={'Audience'} />
-      <Audience />
+      {/* <Audience /> */}
       <Divider text={'Concept'} />
       <Concept isSummary />
       <div className="d-block text-right mr-15">

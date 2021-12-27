@@ -12,7 +12,7 @@ import CappingManagement from '../capping';
 import {Divider, Tabs} from '../components';
 import {useCampaignManager} from '../hooks';
 import StrategyForm from './form';
-import Audience from './form-fields/Audience';
+// import Audience from './form-fields/Audience';
 import Concept from './form-fields/Concept';
 
 const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
@@ -41,12 +41,12 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
               />
               {/* <div className="pt-2"></div> */}
               <Divider text="Audience"></Divider>
-              <Audience
+              {/* <Audience
                 goTo={goTo}
                 listAudiences={[]}
                 dataStrategy={currentStrategy}
                 isView
-              />
+              /> */}
               <div className="pt-4"></div>
               <Divider text="Concept"></Divider>
               <Concept listConcept={currentStrategy?.concepts} isView />
@@ -91,10 +91,8 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
       case 1:
         setCurrentTab('capping');
         break;
+
       case 2:
-        setCurrentTab('audience');
-        break;
-      case 3:
         setCurrentTab('report');
         break;
       default:

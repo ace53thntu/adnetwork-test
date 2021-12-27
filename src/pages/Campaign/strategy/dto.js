@@ -17,7 +17,8 @@ export const destructureFormData = ({formData}) => {
     accepted_contexts,
     accepted_sub_contexts,
     accepted_placements,
-    view_rate_prediction
+    view_rate_prediction,
+    strategy_type
   } = formData;
 
   const positionIds = position_ids?.map(item => item?.value);
@@ -40,7 +41,8 @@ export const destructureFormData = ({formData}) => {
     accepted_placements,
     position_ids: positionIds,
     start_at: startDate,
-    end_at: endDate
+    end_at: endDate,
+    strategy_type: strategy_type ? strategy_type?.value : null
   };
 };
 

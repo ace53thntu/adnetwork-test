@@ -1,3 +1,14 @@
+export const STRATEGY_TYPES = [
+  {
+    value: 'normal',
+    label: 'Normal'
+  },
+  {
+    value: 'premium',
+    label: 'Premium'
+  }
+];
+
 export const CONV_EVENT_OPTIONS = [
   {label: 'home', value: 1},
   {label: 'view', value: 2},
