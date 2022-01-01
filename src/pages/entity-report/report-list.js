@@ -1,8 +1,7 @@
-//---> Build-in Modules
-import React from 'react';
-
 //---> External Modules
 import PropTypes from 'prop-types';
+//---> Build-in Modules
+import React from 'react';
 import {Card, CardBody, Col, Row} from 'reactstrap';
 
 //---> Internal Modules

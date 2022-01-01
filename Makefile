@@ -1,7 +1,6 @@
 APP := portal
 IMAGE_REPOSITORY = aicactus-prod/adsnetwork
 IMAGE_LOCAL = local-$(CI_PIPELINE_ID)-$(APP)
-IMAGE_REGISTRY_EU = eu.gcr.io/$(IMAGE_REPOSITORY)/$(APP)
 IMAGE_REGISTRY_ASIA = asia.gcr.io/$(IMAGE_REPOSITORY)/$(APP)
 IMAGE_DEPS_REGISTRY_EU = eu.gcr.io/$(IMAGE_REPOSITORY)/$(APP)-deps:${CI_COMMIT_REF_SLUG}
 
@@ -21,9 +20,7 @@ build-ci:
 
 push: IMAGE_TAG ?= latest
 push: build-ci
-	docker tag $(IMAGE_LOCAL) $(IMAGE_REGISTRY_EU):$(IMAGE_TAG)
 	docker tag $(IMAGE_LOCAL) $(IMAGE_REGISTRY_ASIA):$(IMAGE_TAG)
-	docker push $(IMAGE_REGISTRY_EU):$(IMAGE_TAG)
 	docker push $(IMAGE_REGISTRY_ASIA):$(IMAGE_TAG)
 
 deploy-staging: CLUSTER_NAME ?= dmp-build
