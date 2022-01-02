@@ -14,6 +14,7 @@ import {CampaignContentLayout} from '../layout';
 import {usePositionOptions} from '../hooks';
 import StrategyEditTabs from './EditTabs';
 import {StrategyContainerStyled} from './styled';
+import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 const StrategyEdit = () => {
   const {t} = useTranslation();
@@ -24,6 +25,7 @@ const StrategyEdit = () => {
   );
 
   const strategy = apiToForm({strategyData, positions: positionOptions});
+  useRedirectInCampaign();
 
   return (
     <CampaignContentLayout

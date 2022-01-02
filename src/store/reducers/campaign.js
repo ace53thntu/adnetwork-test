@@ -44,8 +44,18 @@ export const selectAdvertiserRedux = (advertiserId, advertiser) => {
 export const expandAdvertiserRedux = (advertiserId, state) => {
   return createAction(EXPAND_ADVERTISER, {advertiserId, state});
 };
-export const setAdvertiserRedux = (container, source, pageId, pages) => {
-  return createAction(SET_ADVERTISER, {container, source, pageId, pages});
+export const setAdvertiserRedux = (
+  advertiser,
+  campaigns,
+  strategyId,
+  strategies
+) => {
+  return createAction(SET_ADVERTISER, {
+    advertiser,
+    campaigns,
+    strategyId,
+    strategies
+  });
 };
 export const unExpandAdvertisersRedux = () => {
   return createAction(UN_EXPAND_ADVERTISERS, {});
@@ -56,16 +66,28 @@ export const expandCampaignRedux = (campaignId, state, advertiserId) => {
   return createAction(EXPAND_CAMPAIGN, {campaignId, state, advertiserId});
 };
 
-export const setCampaignRedux = (advertiserId, campaignId) => {
-  return createAction(SET_CAMPAIGN, {advertiserId, campaignId});
+export const setCampaignRedux = (advertiserId, campaignId, campaigns = []) => {
+  return createAction(SET_CAMPAIGN, {advertiserId, campaignId, campaigns});
 };
 
 // Strategy
 export const selectStrategyRedux = (strategyId, strategy) => {
   return createAction(SELECT_STRATEGY_ID, {strategyId, strategy});
 };
-export const setStrategyRedux = (advertiserId, campaignId, strategyId) => {
-  return createAction(SET_STRATEGY, {advertiserId, campaignId, strategyId});
+export const setStrategyRedux = (
+  advertiserId,
+  campaignId,
+  strategyId,
+  campaigns = [],
+  strategies = []
+) => {
+  return createAction(SET_STRATEGY, {
+    advertiserId,
+    campaignId,
+    strategyId,
+    campaigns,
+    strategies
+  });
 };
 
 export const searchCampaignRedux = keyword => {
@@ -174,7 +196,7 @@ function handleExpandAdvertiser(state, action) {
 }
 
 function handleSetAdvertiser(state, action) {
-  // const {advertiser, campaign, strategyId, strategies = []} = action.payload;
+  // const {advertiser, campaigns, strategyId, strategies = []} = action.payload;
   // const newNodes = [...state.advertisers].map(item => {
   //   if (item.id === advertiser.id) {
   //     //
@@ -413,7 +435,7 @@ function handleExpandCampaign(state, action) {
 }
 
 function handleSetCampaign(state, action) {
-  const {advertiserId, campaignId} = action.payload;
+  const {advertiserId, campaignId, campaigns = []} = action.payload;
   const newNodes = [...state.advertisers].map(item => {
     if (item.id === advertiserId) {
       //
@@ -423,7 +445,7 @@ function handleSetCampaign(state, action) {
           expanded: true,
           selected: false
         };
-        let children = [];
+        let children = [...campaigns];
         advertiserItem.children = children.map(child => {
           if (child.id === campaignId) {
             let campaignItem = {
@@ -452,7 +474,7 @@ function handleSetCampaign(state, action) {
           children: [...item.children].map(campItem => {
             if (campItem.id === campaignId) {
               return {
-                ...campItem,
+                ...unSelectedChild(campItem),
                 selected: true
               };
             }
@@ -468,10 +490,17 @@ function handleSetCampaign(state, action) {
   state.selectedContainId = advertiserId;
   state.selectedCampaign = campaignId;
   // state.selectedPageId = pageId;
+  state.alreadySetAdvertiser = true;
 }
 
 function handleSetStrategy(state, action) {
-  const {advertiserId, campaignId, strategyId} = action.payload;
+  const {
+    advertiserId,
+    campaignId,
+    strategyId,
+    campaigns,
+    strategies
+  } = action.payload;
   const newNodes = [...state.advertisers].map(item => {
     if (item.id === advertiserId) {
       //
@@ -481,13 +510,23 @@ function handleSetStrategy(state, action) {
           expanded: true,
           selected: false
         };
-        let children = [];
+        let children = [...campaigns];
+
         advertiserItem.children = children.map(child => {
           if (child.id === campaignId) {
             let campaignItem = {
               ...child,
               expanded: true,
-              selected: true
+              selected: false,
+              children: [...strategies].map(strateyItem => {
+                if (strateyItem.id === strategyId) {
+                  return {
+                    ...strateyItem,
+                    selected: true
+                  };
+                }
+                return unSelectedChild(strateyItem);
+              })
             };
 
             return campaignItem;
@@ -535,6 +574,7 @@ function handleSetStrategy(state, action) {
   state.selectedAdvertiserId = advertiserId;
   state.selectedCampaign = campaignId;
   state.selectedStrategyId = strategyId;
+  state.alreadySetAdvertiser = true;
 }
 
 function handleSearchCampaigns(state, action) {

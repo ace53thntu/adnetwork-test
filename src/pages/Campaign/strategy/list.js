@@ -27,6 +27,10 @@ const StrategyList = ({campaignId = undefined}) => {
   //---> Local states
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
+  console.log(
+    '🚀 ~ file: list.js ~ line 30 ~ StrategyList ~ currentStrategy',
+    currentStrategy
+  );
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   //--->
@@ -110,21 +114,21 @@ const StrategyList = ({campaignId = undefined}) => {
   function onClickItem(item) {
     setCurrentStrategy(item);
     navigate(
-      `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}`
+      `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.campaign?.advertiser_uuid}`
     );
   }
 
-  function onClickDelete(actionIndex, item) {
+  function onClickMenu(actionIndex, item) {
     if (actionIndex === 2) {
       setOpenDialog(true);
       setCurrentStrategy(item);
     } else if (actionIndex === 1) {
       navigate(
-        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}/edit`
+        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}/${RoutePaths.EDIT}?advertiser_id=${item?.campaign?.advertiser_uuid}`
       );
     } else {
       navigate(
-        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}`
+        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.campaign?.advertiser_uuid}`
       );
     }
   }
@@ -156,7 +160,7 @@ const StrategyList = ({campaignId = undefined}) => {
           columns={columns}
           showAction
           actions={['View', 'Edit', 'Delete']}
-          handleAction={onClickDelete}
+          handleAction={onClickMenu}
           handleClickItem={onClickItem}
         />
         {hasNextPage && (

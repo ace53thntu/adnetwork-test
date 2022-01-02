@@ -17,7 +17,10 @@ import {apiToForm} from 'entities/Campaign';
 const CampaignEdit = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
-  const {data: campaign, isFetching, isFetched} = useGetCampaign(campaignId);
+  const {data: campaign, isFetching, isFetched} = useGetCampaign({
+    cid: campaignId,
+    enabled: !!campaignId
+  });
   const campaignDestructure = apiToForm({campaign});
 
   return (

@@ -21,16 +21,12 @@ const propTypes = {
 
 const AdvertiserSelect = ({
   defaultValue = null,
-  name,
-  label,
-  placeholder,
+  name = '',
+  label = '',
+  placeholder = 'Select...',
   disabled = false,
   isRequired = false
 }) => {
-  console.log(
-    '🚀 ~ file: AdvertiserSelect.js ~ line 30 ~ defaultValue',
-    defaultValue
-  );
   const {
     formState: {isSubmitting}
   } = useFormContext();

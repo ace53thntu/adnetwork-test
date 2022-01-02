@@ -1,3 +1,37 @@
+export const StrategyViewTabs = {
+  DESCRIPTION: {
+    value: 0,
+    name: 'description'
+  },
+  CAPPING: {
+    value: 1,
+    name: 'capping'
+  },
+  REPORT: {
+    value: 2,
+    name: 'report'
+  }
+};
+
+export const StrategyEditTabs = {
+  DESCRIPTION: {
+    value: 0,
+    name: 'description'
+  },
+  CONCEPT: {
+    value: 1,
+    name: 'concept'
+  },
+  // AUDIENCE: {
+  //   value: 2,
+  //   name: 'audience'
+  // },
+  SUMMARY: {
+    value: 2,
+    name: 'summary'
+  }
+};
+
 export const STRATEGY_TYPES = [
   {
     value: 'normal',

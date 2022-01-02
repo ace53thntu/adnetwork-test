@@ -7,7 +7,7 @@ import {GET_CAMAPAIGN} from './constants';
 /**
  * Hook for get Campaign from API by query
  */
-export function useGetCampaign(cid) {
+export function useGetCampaign({cid, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,7 @@ export function useGetCampaign(cid) {
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!cid
+      enabled
     }
   );
 }

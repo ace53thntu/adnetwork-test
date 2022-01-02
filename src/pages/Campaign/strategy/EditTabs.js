@@ -6,11 +6,13 @@ import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {useQueryString} from 'hooks';
+import {StrategyEditTabs as EditTabs} from 'pages/Campaign/constants';
 import StrategyForm from './form';
 import {Tabs} from '../components';
-import {useCampaignManager} from '../hooks';
 import Concept from './form-fields/Concept';
-import Summary from './form-fields/Summary';
+import {ConceptTab, DescriptionTab, SummaryTab} from './strategy-tabs';
+import {FormContainer} from './form-container';
+import {FormAction} from './form-action';
 // import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
@@ -22,7 +24,6 @@ const StrategyEditTabs = ({
   const nextTab = query.get('next_tab');
 
   const {t} = useTranslation();
-  const {gotoCampaignManagement} = useCampaignManager();
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -36,20 +37,32 @@ const StrategyEditTabs = ({
     }
   }, [goTo, nextTab]);
 
+  const defaultProps = React.useMemo(
+    () => ({
+      isEdit: true,
+      currentStrategy,
+      goTo
+    }),
+    [currentStrategy, goTo]
+  );
+
   const tabDetail = useMemo(
     () =>
       [
         {
-          name: t('description'),
+          name: t(EditTabs.DESCRIPTION.name),
           content: (
-            <StrategyForm
-              campaignId={campaignId}
-              isEdit
-              currentStrategy={currentStrategy}
-              gotoCampaignManagement={gotoCampaignManagement}
-              goTo={goTo}
-              positions={positions}
-            />
+            <DescriptionTab>
+              <FormContainer {...defaultProps}>
+                <StrategyForm
+                  campaignId={campaignId}
+                  isEdit
+                  positions={positions}
+                  currentStrategy={currentStrategy}
+                />
+                <FormAction />
+              </FormContainer>
+            </DescriptionTab>
           )
         },
         // {
@@ -65,25 +78,32 @@ const StrategyEditTabs = ({
         //   )
         // },
         {
-          name: 'Concept',
+          name: t(EditTabs.CONCEPT.name),
           content: (
-            <div>
-              <Concept goTo={goTo} t={t} strategyData={currentStrategy} />
-            </div>
+            <ConceptTab>
+              <FormContainer {...defaultProps}>
+                <Concept goTo={goTo} strategyData={currentStrategy} />
+                <FormAction />
+              </FormContainer>
+            </ConceptTab>
           )
         },
         {
-          name: 'Summary',
+          name: t(EditTabs.SUMMARY.name),
           content: (
             <div>
-              <Summary
-                campaignId={campaignId}
-                isEdit
-                currentStrategy={currentStrategy}
-                gotoCampaignManagement={gotoCampaignManagement}
-                goTo={goTo}
-                positions={positions}
-              />
+              <SummaryTab>
+                <FormContainer {...{...defaultProps, isSummary: true}}>
+                  <StrategyForm
+                    campaignId={campaignId}
+                    isEdit
+                    positions={positions}
+                    currentStrategy={currentStrategy}
+                  />
+                  <Concept goTo={goTo} strategyData={currentStrategy} />
+                  <FormAction isSummary />
+                </FormContainer>
+              </SummaryTab>
             </div>
           )
         }
@@ -92,40 +112,41 @@ const StrategyEditTabs = ({
         title: name,
         getContent: () => content
       })),
-    [t, goTo, campaignId, currentStrategy, gotoCampaignManagement, positions]
+    [t, defaultProps, campaignId, positions, currentStrategy, goTo]
   );
 
   const getTab = index => {
     switch (index) {
-      case 0:
-        setCurrentTab('description');
+      case EditTabs.DESCRIPTION.value:
+        setCurrentTab(EditTabs.DESCRIPTION.name);
         break;
-      // case 1:
-      //   setCurrentTab('audience');
+      case EditTabs.CONCEPT.value:
+        setCurrentTab(EditTabs.CONCEPT.name);
+        break;
+      // case EditTabs.AUDIENCE.value:
+      //   setCurrentTab(EditTabs.AUDIENCE.value);
       //   break;
-      case 2:
-        setCurrentTab('concept');
-        break;
-      case 3:
-        setCurrentTab('summary');
+      case EditTabs.SUMMARY.value:
+        setCurrentTab(EditTabs.SUMMARY.name);
         break;
       default:
+        setCurrentTab(EditTabs.DESCRIPTION.name);
         break;
     }
   };
 
   const tabPicker = useCallback(() => {
     switch (currentTab) {
-      case 'description':
-        return 0;
-      // case 'audience':
-      //   return 1;
-      case 'concept':
-        return 2;
-      case 'summary':
-        return 3;
+      case EditTabs.DESCRIPTION.name:
+        return EditTabs.DESCRIPTION.value;
+      case EditTabs.CONCEPT.name:
+        return EditTabs.CONCEPT.value;
+      // case EditTabs.AUDIENCE.name:
+      // return EditTabs.AUDIENCE.value;
+      case EditTabs.SUMMARY.value:
+        return EditTabs.SUMMARY.name;
       default:
-        return 0;
+        return EditTabs.DESCRIPTION.value;
     }
   }, [currentTab]);
 

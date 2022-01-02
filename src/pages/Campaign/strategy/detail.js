@@ -9,6 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
 import {usePositionOptions} from '../hooks';
+import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
@@ -17,13 +18,14 @@ import StrategyViewTabs from './ViewTabs';
 
 const StrategyDetail = () => {
   const {t} = useTranslation();
-  const {strategyId} = useParams();
+  const {strategyId, campaignId} = useParams();
   const positions = usePositionOptions();
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );
 
   const strategy = apiToForm({strategyData, positions});
+  useRedirectInCampaign();
 
   return (
     <CampaignContentLayout
@@ -38,6 +40,7 @@ const StrategyDetail = () => {
               <StrategyViewTabs
                 currentStrategy={strategy}
                 positions={positions}
+                campaignId={campaignId}
               />
             </Col>
           </Row>

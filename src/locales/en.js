@@ -28,6 +28,9 @@ const en = {
   strategyCreate: 'Add new strategy',
   strategyPageDescription: '',
   inventoryList: 'Inventory List',
+  capping: 'Capping',
+  concept: 'Concept',
+
   // Card Header
   advertiserList: 'Advertiser List',
   inventoryReports: 'Inventory Reports',

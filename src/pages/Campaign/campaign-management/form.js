@@ -3,7 +3,7 @@ import React, {useCallback, useEffect} from 'react';
 
 //---> External Modules
 import {useForm, FormProvider, Controller} from 'react-hook-form';
-import {Container, Form, Col, Button, Label, FormGroup} from 'reactstrap';
+import {Container, Form, Col, Button, Label, FormGroup, Row} from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
@@ -19,6 +19,7 @@ import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import AdvertiserSelect from './form-fields/AdvertiserSelect';
 import {formToApi} from 'entities/Campaign';
+import {Collapse} from 'components/common';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -85,118 +86,134 @@ const CampaignForm = ({
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
             {/* Information */}
-            <FormGroup tag="fieldset" row className="border border-gray">
-              <legend className="col-form-label col-sm-2 ml-3 w-120px">
-                Information
-              </legend>
-              <Col md="6">
-                <AdvertiserSelect
-                  isRequired
-                  name={CAMPAIGN_KEYS.ADVERTISER_ID}
-                  label={t('advertiser')}
-                  placeholder={t('selectAAdvertiser')}
-                  disabled={!isCreate}
-                  defaultValue={currentCampaign?.advertiser_uuid}
-                />
-              </Col>
-              <Col md="6">
-                <FormTextInput
-                  type="text"
-                  placeholder={t('name')}
-                  id="campainName"
-                  name={CAMPAIGN_KEYS.NAME}
-                  label={t('name')}
-                  isRequired={true}
-                />
-              </Col>
+            <Collapse initialOpen={true} title="Information" unMount={false}>
+              <Row>
+                <Col md="6">
+                  <AdvertiserSelect
+                    isRequired
+                    name={CAMPAIGN_KEYS.ADVERTISER_ID}
+                    label={t('advertiser')}
+                    placeholder={t('selectAAdvertiser')}
+                    disabled={!isCreate}
+                    defaultValue={currentCampaign?.advertiser_uuid}
+                  />
+                </Col>
+                <Col md="6">
+                  <FormTextInput
+                    type="text"
+                    placeholder={t('name')}
+                    id="campainName"
+                    name={CAMPAIGN_KEYS.NAME}
+                    label={t('name')}
+                    isRequired={true}
+                    disabled={isView}
+                  />
+                </Col>
 
-              <Col xs="6">
-                <FormGroup>
-                  <Label for="startDate">
-                    <span className="text-danger">*</span>
-                    {t('startDate')}
-                  </Label>
-                  <Controller
-                    control={control}
-                    name={CAMPAIGN_KEYS.START_TIME}
-                    render={({onChange, onBlur, value, name}) => (
-                      <DatePicker
-                        selected={value}
-                        onChange={date => onChange(date)}
-                        className="form-control"
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="dd/mm/yyyy"
-                      />
-                    )}
-                  />
-                  {errors && errors[CAMPAIGN_KEYS.START_TIME] ? (
-                    <div className="invalid-feedback d-block">
-                      {errors[CAMPAIGN_KEYS.START_TIME].message}
-                    </div>
-                  ) : null}
-                </FormGroup>
-              </Col>
-              <Col xs="6">
-                <FormGroup>
-                  <Label for="endDate">
-                    <span className="text-danger">*</span>
-                    End date
-                  </Label>
-                  <Controller
-                    control={control}
-                    name={CAMPAIGN_KEYS.END_TIME}
-                    render={({onChange, onBlur, value, name}) => (
-                      <DatePicker
-                        selected={value}
-                        onChange={date => onChange(date)}
-                        className="form-control"
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="dd/mm/yyyy"
-                      />
-                    )}
-                  />
-                  {errors && errors[CAMPAIGN_KEYS.END_TIME] ? (
-                    <div className="invalid-feedback d-block">
-                      {errors[CAMPAIGN_KEYS.END_TIME]?.message}
-                    </div>
-                  ) : null}
-                </FormGroup>
-              </Col>
-            </FormGroup>
+                <Col xs="6">
+                  <FormGroup>
+                    <Label for="startDate">
+                      <span className="text-danger">*</span>
+                      {t('startDate')}
+                    </Label>
+                    <Controller
+                      control={control}
+                      name={CAMPAIGN_KEYS.START_TIME}
+                      render={({onChange, onBlur, value, name}) => (
+                        <DatePicker
+                          selected={value}
+                          onChange={date => onChange(date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          disabled={isView}
+                        />
+                      )}
+                    />
+                    {errors && errors[CAMPAIGN_KEYS.START_TIME] ? (
+                      <div className="invalid-feedback d-block">
+                        {errors[CAMPAIGN_KEYS.START_TIME].message}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
+                <Col xs="6">
+                  <FormGroup>
+                    <Label for="endDate">
+                      <span className="text-danger">*</span>
+                      End date
+                    </Label>
+                    <Controller
+                      control={control}
+                      name={CAMPAIGN_KEYS.END_TIME}
+                      render={({onChange, onBlur, value, name}) => (
+                        <DatePicker
+                          selected={value}
+                          onChange={date => onChange(date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          disabled={isView}
+                        />
+                      )}
+                    />
+                    {errors && errors[CAMPAIGN_KEYS.END_TIME] ? (
+                      <div className="invalid-feedback d-block">
+                        {errors[CAMPAIGN_KEYS.END_TIME]?.message}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Collapse>
+
             {/* Status */}
-            <FormGroup tag="fieldset" row className="border border-gray">
-              <legend className="col-form-label col-sm-1 ml-3">Status</legend>
-              <Col md="3">
-                <Label className="mr-5">Status</Label>
-                <Controller
-                  control={control}
-                  name={CAMPAIGN_KEYS.STATUS}
-                  render={({onChange, onBlur, value, name}) => (
-                    <ActiveToogle value={value} onChange={onChange} />
-                  )}
-                />
-              </Col>
-              <Col md="3">
-                <Label className="mr-5">Check Visit</Label>
-                <Controller
-                  control={control}
-                  name={CAMPAIGN_KEYS.CHECK_VISIT}
-                  render={({onChange, onBlur, value, name}) => (
-                    <ActiveToogle value={value} onChange={onChange} />
-                  )}
-                />
-              </Col>
-              <Col md="3">
-                <Label className="mr-5">Auto Realloc</Label>
-                <Controller
-                  control={control}
-                  name={CAMPAIGN_KEYS.AUTO_REALLOC}
-                  render={({onChange, onBlur, value, name}) => (
-                    <ActiveToogle value={value} onChange={onChange} />
-                  )}
-                />
-              </Col>
-            </FormGroup>
+            <Collapse initialOpen={true} title="Status" unMount={false}>
+              <Row>
+                <Col md="3">
+                  <Label className="mr-5">Status</Label>
+                  <Controller
+                    control={control}
+                    name={CAMPAIGN_KEYS.STATUS}
+                    render={({onChange, onBlur, value, name}) => (
+                      <ActiveToogle
+                        value={value}
+                        onChange={onChange}
+                        disabled={isView}
+                      />
+                    )}
+                  />
+                </Col>
+                <Col md="3">
+                  <Label className="mr-5">Check Visit</Label>
+                  <Controller
+                    control={control}
+                    name={CAMPAIGN_KEYS.CHECK_VISIT}
+                    render={({onChange, onBlur, value, name}) => (
+                      <ActiveToogle
+                        value={value}
+                        onChange={onChange}
+                        disabled={isView}
+                      />
+                    )}
+                  />
+                </Col>
+                <Col md="3">
+                  <Label className="mr-5">Auto Realloc</Label>
+                  <Controller
+                    control={control}
+                    name={CAMPAIGN_KEYS.AUTO_REALLOC}
+                    render={({onChange, onBlur, value, name}) => (
+                      <ActiveToogle
+                        value={value}
+                        onChange={onChange}
+                        disabled={isView}
+                      />
+                    )}
+                  />
+                </Col>
+              </Row>
+            </Collapse>
           </Container>
           <div className="d-block text-right mr-15">
             {isEdit || isCreate ? (

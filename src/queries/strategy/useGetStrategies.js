@@ -8,17 +8,18 @@ import {GET_STRATEGIES} from './constants';
 /**
  * Hook for get all strategies from API
  */
-export function useGetStrategies() {
+export function useGetStrategies({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    GET_STRATEGIES,
+    [GET_STRATEGIES, params],
     () =>
-      StrategyAPIRequest.getAllStrategy({options: {cancelToken}}).then(
+      StrategyAPIRequest.getAllStrategy({params, options: {cancelToken}}).then(
         res => res?.data ?? []
       ),
     {
-      suspense: false
+      suspense: false,
+      enabled
     }
   );
 }

@@ -5,12 +5,18 @@ import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {GET_CAMAPAIGNS} from './constants';
 
-export function useGetCampaigns() {
+export function useGetCampaigns({params, enabled = false}) {
+  const {cancelToken} = useCancelRequest();
+
   return useQuery(
-    GET_CAMAPAIGNS,
-    () => CampaignAPIRequest.getAllCampaign({}).then(res => res?.data ?? []),
+    [GET_CAMAPAIGNS, params],
+    () =>
+      CampaignAPIRequest.getAllCampaign({params, options: {cancelToken}}).then(
+        res => res?.data ?? []
+      ),
     {
-      suspense: false
+      suspense: false,
+      enabled
     }
   );
 }

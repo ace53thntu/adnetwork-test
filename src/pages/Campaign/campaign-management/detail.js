@@ -9,6 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
 import {CampaignTabs} from '.';
+import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
@@ -17,8 +18,12 @@ import {CampaignContainerStyled} from './styled';
 const CampaignDetail = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
-  const {data: campaign, isFetching, isFetched} = useGetCampaign(campaignId);
+  const {data: campaign, isFetching, isFetched} = useGetCampaign({
+    cid: campaignId,
+    enabled: !!campaignId
+  });
   const campaignDestructure = apiToForm({campaign});
+  useRedirectInCampaign();
 
   return (
     <CampaignContentLayout
