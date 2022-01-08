@@ -9,7 +9,7 @@ import {Col, Label, Row} from 'reactstrap';
 import {ActiveToogle} from 'components/forms';
 import {Collapse} from 'components/common';
 
-const StatusGroup = ({viewOnly}) => {
+const StatusGroup = ({isView = false}) => {
   const {control} = useFormContext();
 
   return (
@@ -25,7 +25,7 @@ const StatusGroup = ({viewOnly}) => {
                 <ActiveToogle
                   value={value}
                   onChange={onChange}
-                  disabled={viewOnly}
+                  disabled={isView}
                 />
               )}
             />
@@ -40,7 +40,7 @@ const StatusGroup = ({viewOnly}) => {
                 <ActiveToogle
                   value={value}
                   onChange={onChange}
-                  disabled={viewOnly}
+                  disabled={isView}
                 />
               )}
             />
@@ -54,7 +54,7 @@ const StatusGroup = ({viewOnly}) => {
                 <ActiveToogle
                   value={value}
                   onChange={onChange}
-                  disabled={viewOnly}
+                  disabled={isView}
                 />
               )}
             />

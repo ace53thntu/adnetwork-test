@@ -12,12 +12,12 @@ import {WEEK_DAYS} from '../constants';
 import {useGetDefaultWeekPart} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
 import {schemaValidateWeekPart} from './validation';
-import {mappingFormToApi} from './weekpart.dto';
 import {
   useCreateWeekpart,
   useEditWeekpart,
   useGetWeekpart
 } from 'queries/weekpart';
+import {mappingFormToApi} from 'entities/Weekpart';
 
 const FormWeekPark = ({onCloseForm = () => {}}) => {
   // Init translate

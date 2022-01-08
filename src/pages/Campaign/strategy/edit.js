@@ -40,6 +40,7 @@ const StrategyEdit = () => {
               <StrategyEditTabs
                 currentStrategy={strategy}
                 positions={positionOptions}
+                isCreate={false}
               />
             </Col>
           </Row>

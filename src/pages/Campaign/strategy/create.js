@@ -3,33 +3,39 @@ import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
-import {Card, CardBody, Col, Container, Row} from 'reactstrap';
-import {usePositionOptions} from '../hooks';
+import {Col, Row} from 'reactstrap';
 
 // Internal Modules
+import {apiToForm} from 'entities/Strategy';
 import {CampaignContentLayout} from '../layout';
-import StrategyForm from './form';
+import {usePositionOptions} from '../hooks';
+import StrategyEditTabs from './EditTabs';
+import {StrategyContainerStyled} from './styled';
+import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 const StrategyCreate = () => {
   const {t} = useTranslation();
   const positionOptions = usePositionOptions();
+
+  const strategy = apiToForm({strategyData: {}, positions: positionOptions});
+  useRedirectInCampaign();
 
   return (
     <CampaignContentLayout
       heading={t('strategyCreate')}
       subHeading={t('strategyPageDescription')}
     >
-      <Container fluid>
+      <StrategyContainerStyled fluid>
         <Row>
           <Col md="12">
-            <Card className="main-card mb-3">
-              <CardBody>
-                <StrategyForm isCreate positions={positionOptions} />
-              </CardBody>
-            </Card>
+            <StrategyEditTabs
+              currentStrategy={strategy}
+              positions={positionOptions}
+              isCreate
+            />
           </Col>
         </Row>
-      </Container>
+      </StrategyContainerStyled>
     </CampaignContentLayout>
   );
 };

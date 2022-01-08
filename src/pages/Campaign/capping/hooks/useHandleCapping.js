@@ -1,3 +1,5 @@
+import {useDeleteCapping} from 'queries/capping';
+import {useDeleteWeekpart} from 'queries/weekpart';
 import {useContext} from 'react';
 
 // import {useDeleteCapping} from 'core/queries/capping';
@@ -16,17 +18,25 @@ const useHandleCapping = () => {
     openConfirmDialog
   } = state;
 
-  // const {mutateAsync: deleteCapping} = useDeleteCapping();
-  const deleteCapping = new Promise(resolve => resolve('ok'));
-  // const {mutateAsync: deleteWeekPart} = useDeleteWeekPart();
-  const deleteWeekPart = new Promise(resolve => resolve('ok'));
+  const {mutateAsync: deleteCapping} = useDeleteCapping();
+  const {mutateAsync: deleteWeekPart} = useDeleteWeekpart();
 
   const handleShowCappingForm = () => {
-    setState({...state, showFormCapping: true, showFormWeekPart: false});
+    setState({
+      ...state,
+      showFormCapping: true,
+      showFormWeekPart: false,
+      typeText: 'Capping'
+    });
   };
 
   const handleShowWeekPartForm = () => {
-    setState({...state, showFormWeekPart: true, showFormCapping: false});
+    setState({
+      ...state,
+      showFormWeekPart: true,
+      showFormCapping: false,
+      typeText: 'Weekpart'
+    });
   };
 
   const handleCloseCappingForm = () => {
@@ -38,10 +48,6 @@ const useHandleCapping = () => {
   };
 
   function handleEdit({type, id}) {
-    console.log(
-      '🚀 ~ file: useHandleCapping.js ~ line 41 ~ handleEdit ~ id',
-      id
-    );
     if (type === 'capping') {
       setState({
         ...state,
@@ -82,7 +88,7 @@ const useHandleCapping = () => {
   const handleSubmitDelete = async () => {
     try {
       if (currentObjectType === 'capping') {
-        await deleteCapping({id: currentObject});
+        await deleteCapping({cappingId: currentObject});
         setState({
           ...state,
           showFormCapping: false,
@@ -90,7 +96,7 @@ const useHandleCapping = () => {
           currentObject: null
         });
       } else {
-        await deleteWeekPart(currentObject);
+        await deleteWeekPart({weekpartId: currentObject});
         setState({
           ...state,
           showFormWeekPart: false,

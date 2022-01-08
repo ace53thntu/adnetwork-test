@@ -9,13 +9,13 @@ import {Button, Col, Form, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
 import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
-import {CAPPING_TYPE} from '../constants';
 import {useGetDefaultCapping} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
 import {schemaValidate} from './validation';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateCapping, useEditCapping, useGetCapping} from 'queries/capping';
-import {mappingFormToApi} from './capping.dto';
+import {CAPPING_TYPE} from 'constants/capping';
+import {mappingFormToApi} from 'entities/Capping';
 
 const FormCapping = ({onCloseForm}) => {
   const {t} = useTranslation();

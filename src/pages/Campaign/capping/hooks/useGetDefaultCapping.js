@@ -1,9 +1,9 @@
 import {useMemo} from 'react';
-import {mappingApiToForm} from '../capping.dto';
+
+import {mappingApiToForm} from 'entities/Capping';
 
 export const useGetDefaultCapping = capping => {
   return useMemo(() => {
-    const data = mappingApiToForm({apiResp: capping});
-    return data;
+    return mappingApiToForm({apiResp: capping});
   }, [capping]);
 };

@@ -10,7 +10,11 @@ function RedirectToPreviousRoute(props) {
   const location = useLocation();
 
   if (location.state?.from?.pathname) {
-    return <Navigate to={location.state.from.pathname} />;
+    return (
+      <Navigate
+        to={`${location.state.from.pathname}${location.state.from.search}`}
+      />
+    );
   }
 
   return <Navigate to={to} />;

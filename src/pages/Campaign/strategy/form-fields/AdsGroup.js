@@ -7,7 +7,7 @@ import {FormTextInput} from 'components/forms';
 import {Collapse} from 'components/common';
 
 //---> Internal Modules
-const AdsGroup = ({viewOnly}) => {
+const AdsGroup = ({isView = false}) => {
   return (
     <Collapse initialOpen={true} title="Ads" unMount={false}>
       <Col sm={12}>
@@ -20,6 +20,7 @@ const AdsGroup = ({viewOnly}) => {
               name="accepted_layouts"
               label="Accepted layouts"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
           <Col md={4}>
@@ -30,6 +31,7 @@ const AdsGroup = ({viewOnly}) => {
               name="accepted_adunits"
               label="Accepted adunits"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
           <Col md={4}>
@@ -40,6 +42,7 @@ const AdsGroup = ({viewOnly}) => {
               name="accepted_contexts"
               label="Accepted contexts"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
           <Col md={4}>
@@ -50,6 +53,7 @@ const AdsGroup = ({viewOnly}) => {
               name="accepted_sub_contexts"
               label="Accepted sub contexts"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
           <Col md={4}>
@@ -60,6 +64,7 @@ const AdsGroup = ({viewOnly}) => {
               name="accepted_placements"
               label="Accepted placements"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
           <Col md={4}>
@@ -70,6 +75,7 @@ const AdsGroup = ({viewOnly}) => {
               name="view_rate_prediction"
               label="View rate prediction"
               isRequired={false}
+              disabled={isView}
             />
           </Col>
         </Row>

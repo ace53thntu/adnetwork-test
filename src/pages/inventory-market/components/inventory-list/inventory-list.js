@@ -31,46 +31,20 @@ import {Pagination} from 'components/list/pagination';
 import {InventoryDetails} from '..';
 import './styles.scss';
 import {isFalsy} from 'utils/validateObject';
+import {mappingFormToApi} from '../filter-bar/dto';
+import {
+  useFilterModeSelector,
+  useSearchTypeSelector
+} from 'store/reducers/inventory-market';
 
-const InventoryList = ({page, filterParams = null}) => {
-  let params = {
-    limit: DEFAULT_PAGINATION.perPage
-  };
+const ActionIndexs = {
+  VIEW: 0,
+  BID: 1,
+  DEAL: 2
+};
 
-  if (page) {
-    params.page_uuid = page?.uuid;
-  }
-
-  if (filterParams && !isFalsy(filterParams)) {
-    params = {...params, ...filterParams};
-  }
-
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetInventoriesInfinity({params, enabled: true});
-  const {data: positions = []} = useGetPositions();
-  const containerInventories = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      return [...acc, ...items];
-    }, []);
-  }, [pages]);
-
-  const inventories = useInventoriesByContainer({
-    data: containerInventories,
-    page,
-    positions
-  });
-  const {data: dspResp} = useGetDsps();
-  const dspOptions = useOptionsList({list: dspResp?.items});
-  const {data: audienceResp} = useGetAudiences();
-  const audienceOptions = useOptionsList({list: audienceResp?.items});
-
-  const columns = React.useMemo(() => {
+const useColumns = () => {
+  return React.useMemo(() => {
     return [
       {
         header: 'Name',
@@ -145,6 +119,55 @@ const InventoryList = ({page, filterParams = null}) => {
       }
     ];
   }, []);
+};
+
+const InventoryList = ({page, filterParams = null}) => {
+  const searchType = useSearchTypeSelector();
+  const filterMode = useFilterModeSelector();
+
+  let params = {
+    limit: DEFAULT_PAGINATION.perPage
+  };
+
+  if (page) {
+    params.page_uuid = page?.uuid;
+  }
+
+  if (filterParams && !isFalsy(filterParams)) {
+    const filterParamsDestructured = mappingFormToApi({
+      formData: filterParams,
+      searchType,
+      filterMode
+    });
+
+    params = {...params, ...filterParamsDestructured};
+  }
+
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetInventoriesInfinity({params, enabled: true});
+  const {data: positions = []} = useGetPositions();
+  const containerInventories = React.useMemo(() => {
+    return pages?.reduce((acc, item) => {
+      const {items = []} = item;
+      return [...acc, ...items];
+    }, []);
+  }, [pages]);
+
+  const inventories = useInventoriesByContainer({
+    data: containerInventories,
+    page,
+    positions
+  });
+  const {data: dspResp} = useGetDsps();
+  const dspOptions = useOptionsList({list: dspResp?.items});
+  const {data: audienceResp} = useGetAudiences();
+  const audienceOptions = useOptionsList({list: audienceResp?.items});
+  const columns = useColumns();
 
   //---> Define local states.
   const [openModal, setOpenModal] = useState(false);
@@ -181,17 +204,17 @@ const InventoryList = ({page, filterParams = null}) => {
   };
 
   const onClickAction = (actionIndex, currentItem) => {
-    if (actionIndex === 0) {
+    if (actionIndex === ActionIndexs.VIEW) {
       onClickView(currentItem);
       return;
     }
 
-    if (actionIndex === 1) {
+    if (actionIndex === ActionIndexs.BID) {
       onClickBid(currentItem);
       return;
     }
 
-    if (actionIndex === 2) {
+    if (actionIndex === ActionIndexs.DEAL) {
       onClickDeal(currentItem);
       return;
     }

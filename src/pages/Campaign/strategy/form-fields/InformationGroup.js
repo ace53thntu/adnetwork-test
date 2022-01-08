@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {Col, FormGroup, Label, Row} from 'reactstrap';
 import {Controller, useFormContext} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
+import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import SelectStrategyItem from '../../components/SelectStrategyItem';
@@ -14,7 +15,19 @@ import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
 import {STRATEGY_TYPES} from 'pages/Campaign/constants';
 
-const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
+const propTypes = {
+  currentStrategy: PropTypes.object,
+  isEdit: PropTypes.bool,
+  isView: PropTypes.bool,
+  positions: PropTypes.array
+};
+
+const InformationGroup = ({
+  currentStrategy = {},
+  isEdit = false,
+  isView,
+  positions = []
+}) => {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
 
@@ -62,6 +75,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                       className="form-control"
                       dateFormat="dd/MM/yyy"
                       placeholderText="dd/mm/yyyy"
+                      disabled={isView}
                     />
                   )}
                 />
@@ -88,6 +102,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                       className="form-control"
                       dateFormat="dd/MM/yyy"
                       placeholderText="dd/mm/yyyy"
+                      disabled={isView}
                     />
                   )}
                 />
@@ -100,7 +115,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
             </Col>
             <Col md="6">
               <FormReactSelect
-                viewOnly={isView}
+                disabled={isView}
                 defaultValue={currentStrategy?.strategy_type}
                 options={STRATEGY_TYPES}
                 name="strategy_type"
@@ -128,6 +143,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                 name="skip_delay"
                 label="Skip Delay"
                 isRequired={false}
+                disabled={isView}
               />
             </Col>
             <Col md="6">
@@ -138,6 +154,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
                 name="cpm"
                 label="Cpm"
                 isRequired={false}
+                disabled={isView}
               />
             </Col>
           </Row>
@@ -146,5 +163,7 @@ const InformationGroup = ({currentStrategy, isEdit, isView, positions}) => {
     </>
   );
 };
+
+InformationGroup.propTypes = propTypes;
 
 export default InformationGroup;

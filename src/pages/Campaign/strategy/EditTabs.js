@@ -13,13 +13,21 @@ import Concept from './form-fields/Concept';
 import {ConceptTab, DescriptionTab, SummaryTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
+import {useNavigate} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 // import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
   currentStrategy = {},
   campaignId,
-  positions = []
+  positions = [],
+  isCreate = false
 }) => {
+  console.log(
+    '🚀 ~ file: EditTabs.js ~ line 26 ~ currentStrategy',
+    currentStrategy
+  );
+  const navigate = useNavigate();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
 
@@ -39,11 +47,11 @@ const StrategyEditTabs = ({
 
   const defaultProps = React.useMemo(
     () => ({
-      isEdit: true,
+      isEdit: !isCreate,
       currentStrategy,
       goTo
     }),
-    [currentStrategy, goTo]
+    [currentStrategy, goTo, isCreate]
   );
 
   const tabDetail = useMemo(
@@ -56,7 +64,7 @@ const StrategyEditTabs = ({
               <FormContainer {...defaultProps}>
                 <StrategyForm
                   campaignId={campaignId}
-                  isEdit
+                  isEdit={!isCreate}
                   positions={positions}
                   currentStrategy={currentStrategy}
                 />
@@ -96,7 +104,7 @@ const StrategyEditTabs = ({
                 <FormContainer {...{...defaultProps, isSummary: true}}>
                   <StrategyForm
                     campaignId={campaignId}
-                    isEdit
+                    isEdit={!isCreate}
                     positions={positions}
                     currentStrategy={currentStrategy}
                   />
@@ -112,25 +120,34 @@ const StrategyEditTabs = ({
         title: name,
         getContent: () => content
       })),
-    [t, defaultProps, campaignId, positions, currentStrategy, goTo]
+    [t, defaultProps, campaignId, isCreate, positions, currentStrategy, goTo]
   );
 
   const getTab = index => {
+    console.log('INDEX ====', index);
+    const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.campaign?.advetiser_uuid}&next_tab=`;
     switch (index) {
       case EditTabs.DESCRIPTION.value:
         setCurrentTab(EditTabs.DESCRIPTION.name);
+        navigate(`${url}${EditTabs.DESCRIPTION.name}`);
         break;
       case EditTabs.CONCEPT.value:
         setCurrentTab(EditTabs.CONCEPT.name);
+        navigate(`${url}${EditTabs.CONCEPT.name}`);
+
         break;
       // case EditTabs.AUDIENCE.value:
       //   setCurrentTab(EditTabs.AUDIENCE.value);
       //   break;
       case EditTabs.SUMMARY.value:
         setCurrentTab(EditTabs.SUMMARY.name);
+        navigate(`${url}${EditTabs.SUMMARY.name}`);
+
         break;
       default:
         setCurrentTab(EditTabs.DESCRIPTION.name);
+        navigate(`${url}${EditTabs.DESCRIPTION.name}`);
+
         break;
     }
   };

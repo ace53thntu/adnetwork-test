@@ -64,7 +64,7 @@ const StrategyViewTabs = ({
                 <FormContainer {...defaultProps}>
                   <StrategyForm
                     campaignId={campaignId}
-                    isEdit
+                    isView
                     positions={positions}
                     currentStrategy={currentStrategy}
                   />

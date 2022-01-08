@@ -22,8 +22,12 @@ import {
   getInventoryFormats,
   getInventoryTypes
 } from 'pages/Container/constants';
-import {useSearchTypeSelector} from 'store/reducers/inventory-market';
+import {
+  useFilterParamsSelector,
+  useSearchTypeSelector
+} from 'store/reducers/inventory-market';
 import {InventoryListLayout} from './components/inventory-list-layout';
+import {isFalsy} from 'utils/validateObject';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -55,6 +59,7 @@ const InventoryMarket = () => {
     return containersRes?.items?.map(item => ({...item, id: item?.uuid})) || [];
   }, [containersRes?.items]);
   const searchType = useSearchTypeSelector();
+  const filterParams = useFilterParamsSelector();
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -120,7 +125,7 @@ const InventoryMarket = () => {
         </Row>
         <Row>
           <Col md="12">
-            {searchType ? (
+            {searchType || (filterParams && !isFalsy(filterParams)) ? (
               <InventoryListLayout />
             ) : (
               <Card className="main-card mb-3">
@@ -135,9 +140,7 @@ const InventoryMarket = () => {
                   <AccordionList
                     data={containers}
                     columns={columns}
-                    detailPanel={rowData => {
-                      return <ContainerPage data={rowData} />;
-                    }}
+                    detailPanel={rowData => <ContainerPage data={rowData} />}
                     detailCaption={t('pages')}
                   />
                 </CardBody>

@@ -1,4 +1,4 @@
-import {CAPPING_TYPE} from '../constants';
+import {CAPPING_TYPE} from 'constants/capping';
 
 /**
  * Mapping Form data to API request body format
@@ -6,30 +6,18 @@ import {CAPPING_TYPE} from '../constants';
  * @return Object - data with API request body format trustly
  */
 export const mappingFormToApi = ({formData = {}, strategyId}) => {
-  let {
-    week_day,
-    start_hour,
-    start_minute,
-    end_hour,
-    end_minute,
-    is_gmt,
-    status
-  } = formData;
-  week_day = week_day.map(item => item.value)?.toString();
-  start_hour = parseInt(start_hour, 10);
-  start_minute = parseInt(start_minute, 10);
-  end_hour = parseInt(end_hour, 10);
-  end_minute = parseInt(end_minute, 10);
-  const convertGmt = is_gmt === 'active' ? true : false;
+  const {ctype, time_frame, climit, smooth, status} = formData;
+  const ctypeValue = ctype?.value ?? '';
+  const timeFrameValue = parseInt(time_frame, 10) ?? null;
+  const climitValue = parseInt(climit, 10) ?? null;
+  const smoothValue = smooth === 'active' ? true : false;
 
   return {
-    week_day,
-    start_hour,
-    start_minute,
-    end_hour,
-    end_minute,
     strategy_uuid: strategyId,
-    is_gmt: convertGmt,
+    ctype: ctypeValue,
+    time_frame: timeFrameValue,
+    climit: climitValue,
+    smooth: smoothValue,
     status
   };
 };

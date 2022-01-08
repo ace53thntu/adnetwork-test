@@ -27,10 +27,6 @@ const StrategyList = ({campaignId = undefined}) => {
   //---> Local states
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
-  console.log(
-    '🚀 ~ file: list.js ~ line 30 ~ StrategyList ~ currentStrategy',
-    currentStrategy
-  );
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   //--->

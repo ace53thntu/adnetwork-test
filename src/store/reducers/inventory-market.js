@@ -52,7 +52,22 @@ const handleActions = {
 };
 
 function handleSetFilterMode(state, action) {
-  state.filterMode = action.payload.filterMode;
+  const {filterMode} = action.payload;
+  state.filterMode = filterMode;
+  state.searchType = '';
+  if (filterMode === FilterMode.BID) {
+    state.filterParams = {
+      ...InitFilterParams,
+      has_active_bid: true
+    };
+  }
+
+  if (filterMode === FilterMode.DEAL) {
+    state.filterParams = {
+      ...InitFilterParams,
+      has_active_deal: true
+    };
+  }
 }
 
 function handleResetFilter(state, action) {
@@ -63,7 +78,13 @@ function handleResetFilter(state, action) {
 
 function handleSetSearchType(state, action) {
   state.searchType = action.payload.searchType;
-  state.filterParams = InitFilterParams;
+  if (state.filterMode === FilterMode.BID) {
+    state.filterParams = {...InitFilterParams, has_active_bid: true};
+  } else if (state.filterMode === FilterMode.DEAL) {
+    state.filterParams = {...InitFilterParams, has_active_deal: true};
+  } else {
+    state.filterParams = InitFilterParams;
+  }
 }
 
 function handleSetFilterParams(state, action) {

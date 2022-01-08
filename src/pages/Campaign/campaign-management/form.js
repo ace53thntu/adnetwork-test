@@ -36,6 +36,7 @@ const CampaignForm = ({
   isView = false,
   currentCampaign = null
 }) => {
+  console.log('===== runnning');
   const {t} = useTranslation();
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign();

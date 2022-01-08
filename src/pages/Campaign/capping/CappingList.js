@@ -39,7 +39,7 @@ const INIT_WEEK_PART = {
 };
 
 const CappingList = () => {
-  const {id: strategyId} = useParams();
+  const {strategyId} = useParams();
   const {
     handleShowCappingForm,
     handleShowWeekPartForm,

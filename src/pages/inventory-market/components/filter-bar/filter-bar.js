@@ -22,7 +22,6 @@ import {
 } from 'store/reducers/inventory-market';
 import {filterSchema} from './validation';
 import {useTranslation} from 'react-i18next';
-import {mappingFormToApi} from './dto';
 import MarketTypeSelect from './market-type-select';
 import {FilterTypes} from 'constants/inventory-market';
 import FilterModeGroup from './filter-mode-group';
@@ -53,8 +52,7 @@ const FilterBar = ({children}) => {
   }
 
   function onSubmit(formData) {
-    const filterParams = mappingFormToApi(formData, searchType);
-    dispatch(setFilterParamsRedux(filterParams));
+    dispatch(setFilterParamsRedux(formData));
   }
 
   function onClearFilterSearch(evt) {

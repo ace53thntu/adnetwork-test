@@ -18,8 +18,8 @@ const propTypes = {
 };
 
 const StrategyForm = ({
-  isEdit,
-  isView,
+  isEdit = false,
+  isView = false,
   currentStrategy = null,
   positions = []
 }) => {
@@ -32,11 +32,12 @@ const StrategyForm = ({
         isEdit={isEdit}
         positions={positions}
       />
+
       {/* Status Group */}
-      <StatusGroup viewOnly={isView} currentStrategy={currentStrategy} />
+      <StatusGroup isView={isView} currentStrategy={currentStrategy} />
 
       {/* Ads Group */}
-      <AdsGroup viewOnly={isView} currentStrategy={currentStrategy} />
+      <AdsGroup isView={isView} currentStrategy={currentStrategy} />
 
       {/* Inventory Group */}
       {isEdit && <InventoryGroup />}
