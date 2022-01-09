@@ -9,7 +9,7 @@ import moment from 'moment';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {LoadingIndicator} from 'components/common';
 import {useTranslation} from 'react-i18next';
-import {useGetContainers} from 'queries/container';
+import {useGetContainersInfinity} from 'queries/container';
 import {AccordionList} from 'components/list';
 import {capitalize} from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
@@ -28,6 +28,8 @@ import {
 } from 'store/reducers/inventory-market';
 import {InventoryListLayout} from './components/inventory-list-layout';
 import {isFalsy} from 'utils/validateObject';
+import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Pagination} from 'components/list/pagination';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -51,13 +53,26 @@ const getStatus = ({row, statusProps}) => {
 const InventoryMarket = () => {
   const {t} = useTranslation();
   //---> Query list of containers
-  const {data: containersRes = [], isLoading} = useGetContainers({
-    params: {limit: 1000, page: 1},
+  const {
+    data: {pages = []} = {},
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage
+  } = useGetContainersInfinity({
+    params: {
+      limit: DEFAULT_PAGINATION.perPage
+    },
     enabled: true
   });
+
   const containers = React.useMemo(() => {
-    return containersRes?.items?.map(item => ({...item, id: item?.uuid})) || [];
-  }, [containersRes?.items]);
+    return pages?.reduce((acc, page) => {
+      const {items = []} = page;
+      const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...itemsDestructure];
+    }, []);
+  }, [pages]);
   const searchType = useSearchTypeSelector();
   const filterParams = useFilterParamsSelector();
 
@@ -130,7 +145,7 @@ const InventoryMarket = () => {
             ) : (
               <Card className="main-card mb-3">
                 {/* Render loading indicator */}
-                {isLoading && <LoadingIndicator />}
+                {isFetching && <LoadingIndicator />}
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
@@ -143,6 +158,13 @@ const InventoryMarket = () => {
                     detailPanel={rowData => <ContainerPage data={rowData} />}
                     detailCaption={t('pages')}
                   />
+                  {hasNextPage && (
+                    <Pagination
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      fetchNextPage={fetchNextPage}
+                    />
+                  )}
                 </CardBody>
               </Card>
             )}
