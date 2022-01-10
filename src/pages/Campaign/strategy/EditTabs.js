@@ -23,10 +23,6 @@ const StrategyEditTabs = ({
   positions = [],
   isCreate = false
 }) => {
-  console.log(
-    '🚀 ~ file: EditTabs.js ~ line 26 ~ currentStrategy',
-    currentStrategy
-  );
   const navigate = useNavigate();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
@@ -124,7 +120,6 @@ const StrategyEditTabs = ({
   );
 
   const getTab = index => {
-    console.log('INDEX ====', index);
     const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.campaign?.advetiser_uuid}&next_tab=`;
     switch (index) {
       case EditTabs.DESCRIPTION.value:

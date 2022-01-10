@@ -39,10 +39,7 @@ const propTypes = {
 const InventoryContentModal = ({containerId}) => {
   const dispatch = useDispatch();
   const strategyInventories = useStrategyInventorySelector();
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 40 ~ InventoryContentModal ~ strategyInventories',
-    strategyInventories
-  );
+
   let params = {
     limit: DEFAULT_PAGINATION.perPage
   };

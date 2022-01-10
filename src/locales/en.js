@@ -15,6 +15,8 @@ const en = {
   viewReport: 'View report',
   firstName: 'First name',
   lastName: 'Last name',
+  createStrategy: 'Create strategy',
+  backToList: 'Back to list',
 
   // Main Menu
   userManagement: 'User Management',

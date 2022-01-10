@@ -25,10 +25,6 @@ const CampaignTabs = ({
   isCreate = false,
   currentCampaign = null
 }) => {
-  console.log(
-    '🚀 ~ file: tabs.js ~ line 28 ~ currentCampaign',
-    currentCampaign
-  );
   const {t} = useTranslation();
   const ownerId = currentCampaign?.advertiser_uuid?.value;
   const entityId = currentCampaign?.uuid;

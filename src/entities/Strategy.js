@@ -1,7 +1,15 @@
 import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
 
-export const apiToForm = ({strategyData = null, positions = []}) => {
+export const apiToForm = ({
+  strategyData = null,
+  positions = [],
+  campaignDetail = null
+}) => {
+  console.log(
+    '🚀 ~ file: Strategy.js ~ line 9 ~ campaignDetail',
+    campaignDetail
+  );
   if (!strategyData) {
     return {};
   }
@@ -26,17 +34,17 @@ export const apiToForm = ({strategyData = null, positions = []}) => {
     strategy_type
   } = strategyData;
 
-  const startDate = start_at ? new Date(start_at) : null;
+  const startDate = start_at ? new Date(start_at) : new Date();
   const endDate = end_at ? new Date(end_at) : null;
   const positionIds = positions?.filter(item => {
     const foundPosition = position_ids?.includes(item?.value);
     return !!foundPosition;
   });
-
+  console.log('campaign ===', campaign);
   return {
     campaign_uuid: campaign
       ? {value: campaign?.uuid, label: campaign?.name}
-      : null,
+      : {value: campaignDetail?.uuid, label: campaignDetail?.name},
     name,
     start_at: startDate,
     end_at: endDate,
