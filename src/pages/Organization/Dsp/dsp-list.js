@@ -31,12 +31,15 @@ import {DEFAULT_PAGINATION} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 /**
  * @function DSP List Component
  * @returns JSX
  */
 const DspList = () => {
+  const navigate = useNavigate();
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
 
@@ -130,9 +133,22 @@ const DspList = () => {
   };
 
   //---> BEGIN: Handle delete
-  const onClickDelete = (actionIndex, item) => {
-    setCurrentDsp(item);
-    setShowDialog(true);
+  const onClickMenu = (actionIndex, item) => {
+    if (actionIndex === 0) {
+      navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${item?.uuid}`);
+      return;
+    }
+
+    if (actionIndex === 1) {
+      setCurrentDsp(item);
+      setOpenFormEdit(true);
+    }
+
+    if (actionIndex === 2) {
+      setCurrentDsp(item);
+      setShowDialog(true);
+      return;
+    }
   };
 
   const onCancelDelete = () => {
@@ -186,8 +202,8 @@ const DspList = () => {
                     data={dsps || []}
                     columns={columns}
                     showAction
-                    actions={['Delete']}
-                    handleAction={onClickDelete}
+                    actions={['View', 'Edit', 'Delete']}
+                    handleAction={onClickMenu}
                     handleClickItem={onClickItem}
                   />
                   {hasNextPage && (

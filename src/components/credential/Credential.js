@@ -39,8 +39,6 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
     enabled: enableApi
   });
 
-  console.log('🚀 ~ file: Credential.js ~ line 38 ~ Credential ~ items', items);
-
   const {mutateAsync: regenerateCredential} = useReGenerateCredential();
   const [secretKey, setSecretKey] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);

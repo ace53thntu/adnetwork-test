@@ -4,6 +4,10 @@ import React from 'react';
 const DspList = React.lazy(() =>
   import('./dsp-list' /* webpackChunkName: "dsp-list" */)
 );
+
+const DspView = React.lazy(() =>
+  import('./dsp-view' /* webpackChunkName: "dsp-view" */)
+);
 const DspReport = React.lazy(() =>
   import('./dsp-report' /* webpackChunkName: "dsp-report" */)
 );
@@ -16,6 +20,14 @@ function DspListPage() {
   );
 }
 
+function DspViewPage() {
+  return (
+    <ErrorBoundary>
+      <DspView />
+    </ErrorBoundary>
+  );
+}
+
 function DspReportPage() {
   return (
     <ErrorBoundary>
@@ -24,4 +36,4 @@ function DspReportPage() {
   );
 }
 
-export {DspListPage, DspReportPage};
+export {DspListPage, DspReportPage, DspViewPage};

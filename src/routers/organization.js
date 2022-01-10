@@ -3,7 +3,7 @@ import {
   AdvertiserListPage,
   AdvertiserReportPage
 } from 'pages/Organization/Advertiser';
-import {DspListPage, DspReportPage} from 'pages/Organization/Dsp';
+import {DspListPage, DspReportPage, DspViewPage} from 'pages/Organization/Dsp';
 import {
   PublisherListPage,
   PublisherReportPage
@@ -44,6 +44,10 @@ export const organizationPages = {
         {
           path: '',
           element: <DspListPage />
+        },
+        {
+          path: `:dspId`,
+          element: <DspViewPage />
         },
         {
           path: `:dspId/${RoutePaths.REPORT}`,
