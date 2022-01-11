@@ -12,27 +12,24 @@ import {
   ModalFooter,
   Form,
   Row,
-  Col,
-  Label
+  Col
 } from 'reactstrap';
-import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateDsp, useEditDsp, useGetDsp} from 'queries/dsp';
-import {INPUT_NAME} from '../constants';
 import {mappingFormToApi} from './dto';
 import {useDefaultDsp} from 'pages/Organization/hooks';
 import {schemaValidate} from './validation';
-import DomainSelect from 'pages/Organization/components/domain-select';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
+import {FormContent} from './form-content';
 
 const DspForm = ({
   modal = false,
@@ -55,7 +52,7 @@ const DspForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, reset} = methods;
+  const {handleSubmit, formState, reset} = methods;
 
   useEffect(() => {
     //---> Reset default value when API response
@@ -99,64 +96,17 @@ const DspForm = ({
 
   return (
     <Modal unmountOnClose isOpen={modal} className={className} size="lg">
-      <FormProvider {...methods}>
-        <Form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <BlockUi tag="div" blocking={formState.isSubmitting}>
-            <ModalHeader>{title}</ModalHeader>
-            <ModalBody>
+      <ModalHeader>{title}</ModalHeader>
+      <ModalBody>
+        <FormProvider {...methods}>
+          <Form
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+            id="dspForm"
+          >
+            <BlockUi tag="div" blocking={formState.isSubmitting}>
               {isLoading && <LoadingIndicator />}
-              <Row>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={INPUT_NAME.NAME}
-                    label={t('name')}
-                    placeholder={t('enterName')}
-                    isRequired
-                  />
-                </Col>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={INPUT_NAME.URL}
-                    label={t('url')}
-                    placeholder={t('enterUrl')}
-                    isRequired
-                  />
-                </Col>
-                {/* Domains */}
-                <Col sm={12}>
-                  <DomainSelect
-                    defaultValue={defaultValues?.domain}
-                    name={INPUT_NAME.DOMAIN}
-                    label={t('domain')}
-                    placeholder={t('selectDomain')}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.ACCESS_KEY}`}
-                    label={t('accessKey')}
-                    placeholder={t('enterAccessKey')}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={`${INPUT_NAME.CREDENTIAL}.${INPUT_NAME.SECRET_KEY}`}
-                    label={t('secretKey')}
-                    placeholder={t('enterSecretKey')}
-                  />
-                </Col>
-                {/* Status */}
-                <Col md="12">
-                  <Label className="mr-5">{t('status')}</Label>
-                  <Controller
-                    control={control}
-                    name={INPUT_NAME.STATUS}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle value={value} onChange={onChange} />
-                    )}
-                  />
-                </Col>
-              </Row>
+              <FormContent defaultValues={defaultValues} />
               {isEdit && (role === USER_ROLE.DSP || role === USER_ROLE.ADMIN) && (
                 <Row>
                   <Col md={12}>
@@ -164,38 +114,39 @@ const DspForm = ({
                   </Col>
                 </Row>
               )}
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="link"
-                onClick={() => {
-                  reset();
-                  toggle();
-                }}
-                type="button"
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                color="primary"
-                type="submit"
-                disabled={!formState.isDirty}
-              >
-                {t('save')}
-              </Button>
-              {isEdit && (
-                <Link
-                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}/${RoutePaths.REPORT}`}
-                >
-                  <Button color="success" type="button">
-                    {t('viewReport')}
-                  </Button>
-                </Link>
-              )}
-            </ModalFooter>
-          </BlockUi>
-        </Form>
-      </FormProvider>
+            </BlockUi>
+          </Form>
+        </FormProvider>
+      </ModalBody>
+      <ModalFooter>
+        <Button
+          color="link"
+          onClick={() => {
+            reset();
+            toggle();
+          }}
+          type="button"
+        >
+          {t('cancel')}
+        </Button>
+        <Button
+          color="primary"
+          type="submit"
+          disabled={!formState.isDirty}
+          form="dspForm"
+        >
+          {t('save')}
+        </Button>
+        {isEdit && (
+          <Link
+            to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}/${RoutePaths.REPORT}`}
+          >
+            <Button color="success" type="button">
+              {t('viewReport')}
+            </Button>
+          </Link>
+        )}
+      </ModalFooter>
     </Modal>
   );
 };

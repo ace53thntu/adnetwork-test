@@ -14,10 +14,17 @@ const propTypes = {
   defaultValue: PropTypes.object,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
-const DomainSelect = ({defaultValue = null, name, label, placeholder}) => {
+const DomainSelect = ({
+  defaultValue = null,
+  name,
+  label,
+  placeholder,
+  disabled = false
+}) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
@@ -34,7 +41,7 @@ const DomainSelect = ({defaultValue = null, name, label, placeholder}) => {
         page: 1
       }}
       defaultValue={defaultValue || null}
-      disabled={isSubmitting}
+      disabled={isSubmitting || disabled}
     />
   );
 };

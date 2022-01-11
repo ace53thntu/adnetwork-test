@@ -1,1 +1,1 @@
-export {DspForm} from './dsp.form';
+export {default as DspForm} from './dsp.form';
