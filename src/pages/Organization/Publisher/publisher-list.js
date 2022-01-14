@@ -20,9 +20,10 @@ import {useDeletePublisher, useGetPublishersInfinity} from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import PublisherLayout from './publisher-layout';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const PublisherList = () => {
   const reduxDispatch = useDispatch();
@@ -45,9 +46,10 @@ const PublisherList = () => {
   });
 
   const publishers = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      return [...acc, ...items];
+    return pages?.reduce((acc, page) => {
+      const data = getResponseData(page, IS_RESPONSE_ALL);
+      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...dataDestructured];
     }, []);
   }, [pages]);
 

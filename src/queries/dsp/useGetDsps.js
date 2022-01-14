@@ -1,7 +1,8 @@
 import {DspAPIRequest} from 'api/dsp.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_DSPS} from './constants';
 
@@ -32,14 +33,14 @@ export function useGetDspsInfinity({params, enabled = false}) {
     ({pageParam = 1}) =>
       DspAPIRequest.getAllDsp({
         params: {...params, page: pageParam},
-        options: {cancelToken}
-      }).then(res => res?.data ?? []),
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const nextPage = getResponsePagination(apiRes, IS_RESPONSE_ALL)
+          ?.nextPage;
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }

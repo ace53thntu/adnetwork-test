@@ -1,7 +1,8 @@
 import {AdvertiserAPIRequest} from 'api/advertiser.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_ADVERTISERS} from './constants';
 
@@ -14,7 +15,7 @@ export function useGetAdvertisers({params = {}, enabled = false}) {
       AdvertiserAPIRequest.getAllAdvertiser({
         params,
         options: {cancelToken}
-      }).then(res => res?.data ?? []),
+      }).then(res => res?.data || []),
     {
       suspense: false,
       enabled
@@ -30,14 +31,14 @@ export function useGetAdvertisersInfinity({params, enabled = false}) {
     ({pageParam = 1}) =>
       AdvertiserAPIRequest.getAllAdvertiser({
         params: {...params, page: pageParam},
-        options: {cancelToken}
-      }).then(res => res?.data ?? []),
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const nextPage = getResponsePagination(apiRes, IS_RESPONSE_ALL)
+          ?.nextPage;
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }

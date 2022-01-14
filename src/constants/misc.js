@@ -92,3 +92,5 @@ export const PAGINATION_HEADERS = {
   perPage: 'x-per-page',
   total: 'x-total-items'
 };
+
+export const IS_RESPONSE_ALL = true;

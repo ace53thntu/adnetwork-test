@@ -36,19 +36,19 @@ function SidebarTree(props) {
 
   const {advertisers: advertisersRedux} = useCampaignSelector();
 
-  const {data: {items: advertisers = []} = {}, isFetching} = useGetAdvertisers({
+  const {data: {items: advertisers = []} = {}, isFetched} = useGetAdvertisers({
     params: {limit: 1000, page: 1},
     enabled: true
   });
 
   React.useEffect(() => {
-    if (!isFetching) {
+    if (!isFetched) {
       const items = advertisersMapData(advertisers);
 
       dispatch(setAdvertisersRedux(items));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [advertisers, isFetching]);
+  }, [advertisers, isFetched]);
 
   React.useEffect(() => {
     return () => {

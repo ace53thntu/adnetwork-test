@@ -30,10 +30,11 @@ import UserCreate from './user-create';
 import UserEdit from './user-edit';
 import {UserForm} from './components';
 import {getUserRole} from './constants';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {useDispatch} from 'react-redux';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -63,13 +64,10 @@ const UserList = () => {
     enabled: true
   });
   const users = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      const userDestructure = items?.map(userItem => ({
-        ...userItem,
-        id: userItem?.uuid
-      }));
-      return [...acc, ...userDestructure];
+    return pages?.reduce((acc, page) => {
+      const data = getResponseData(page, IS_RESPONSE_ALL);
+      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...dataDestructured];
     }, []);
   }, [pages]);
 

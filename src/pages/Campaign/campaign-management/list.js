@@ -29,9 +29,11 @@ const CampaignList = () => {
     },
     enabled: true
   });
+  console.log('🚀 ~ file: list.js ~ line 22 ~ CampaignList ~ pages', pages);
+
   const campaigns = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
-      const {items = []} = page;
+      const items = page?.data || [];
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
       return [...acc, ...itemsDestructure];
     }, []);

@@ -35,6 +35,8 @@ import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {Pagination} from 'components/list/pagination';
+import {IS_RESPONSE_ALL} from 'constants/misc';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 /**
  * @function Advertiser List Component
@@ -64,9 +66,10 @@ const ListAdvertiser = () => {
   } = useGetAdvertisersInfinity({enabled: true});
 
   const advertisers = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      return [...acc, ...items];
+    return pages?.reduce((acc, page) => {
+      const data = getResponseData(page, IS_RESPONSE_ALL);
+      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...dataDestructured];
     }, []);
   }, [pages]);
 

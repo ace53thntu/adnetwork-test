@@ -39,7 +39,8 @@ export function useGetCampaignsInfinity({
           ...params,
           page: pageParam,
           per_page,
-          name
+          name,
+          isAllResponse: true
         },
         options: {
           cancelToken

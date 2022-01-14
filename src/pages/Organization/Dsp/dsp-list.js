@@ -27,12 +27,13 @@ import {useDeleteDsp, useGetDspsInfinity} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 /**
  * @function DSP List Component
@@ -68,9 +69,10 @@ const DspList = () => {
   });
 
   const dsps = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      return [...acc, ...items];
+    return pages?.reduce((acc, page) => {
+      const data = getResponseData(page, IS_RESPONSE_ALL);
+      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
+      return [...acc, ...dataDestructured];
     }, []);
   }, [pages]);
 
