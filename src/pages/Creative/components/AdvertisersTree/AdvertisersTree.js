@@ -18,11 +18,17 @@ import {
   setAdvertisersRedux,
   useCreativeSelector
 } from 'store/reducers/creative';
+import {
+  getResponseData,
+  getResponsePagination,
+  isValidResponse
+} from 'utils/helpers/misc.helpers';
 
 import {TreeContainer} from './AdvertisersTree.styles';
 import {advertisersMapData} from './dto';
 
 const LIMIT = 10;
+const IS_RESPONSE_ALL = true;
 
 function AdvertisersTree(props) {
   const navigate = useNavigate();
@@ -33,8 +39,6 @@ function AdvertisersTree(props) {
     selectedConceptId
   } = useCreativeSelector();
 
-  // const queryClient = useQueryClient();
-
   const [page, setPage] = React.useState(1);
   const [total, setTotal] = React.useState(1);
 
@@ -43,11 +47,18 @@ function AdvertisersTree(props) {
       params: {
         page: currentPage,
         limit: LIMIT
+      },
+      options: {
+        isResponseAll: IS_RESPONSE_ALL
       }
     });
-    if (res?.data?.items?.length) {
-      const items = advertisersMapData(res.data.items, currentPage);
-      setTotal(res.data?.total ?? 0);
+
+    if (isValidResponse(res, IS_RESPONSE_ALL)) {
+      const items = advertisersMapData(
+        getResponseData(res, IS_RESPONSE_ALL),
+        currentPage
+      );
+      setTotal(getResponsePagination(res).totalItems);
       dispatch(setAdvertisersRedux(items, currentPage));
     }
   }

@@ -148,10 +148,18 @@ export class XHRRequest {
       }
 
       const response = await this.axios(opts);
+      if (options?.isResponseAll) {
+        return response;
+      }
+
       return response.data;
     } catch (error) {
       if (error?.response) {
-        throw error.response.data;
+        if (options?.isResponseAll) {
+          throw error.response;
+        } else {
+          throw error.response.data;
+        }
       }
       if (error?.message) {
         throw error.message;
@@ -180,12 +188,13 @@ export class XHRRequest {
   get(action, params, options = {}) {
     const query = this.toQueryString(params);
     const path = query ? `${action}?${query}` : action;
-    const {headers = {}, cancelToken} = options;
+    const {headers = {}, cancelToken, isResponseAll = false} = options;
 
     return this.rest(path, null, {
       method: 'GET',
       headers,
-      cancelToken
+      cancelToken,
+      isResponseAll
     });
   }
 
