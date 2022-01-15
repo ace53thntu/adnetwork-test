@@ -80,7 +80,7 @@ const PublisherForm = ({
   useEffect(() => {
     //---> Reset default value when API response
     if (isFetched && defaultValues?.name) {
-      reset(defaultValues);
+      // reset(defaultValues);
     }
   }, [defaultValues, reset, isFetched]);
 

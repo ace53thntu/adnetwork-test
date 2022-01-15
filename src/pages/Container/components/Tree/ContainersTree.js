@@ -38,13 +38,14 @@ function ContainersTree(props) {
     container
   } = useContainerSelector();
 
-  const {data: {items: containers = []} = {}, isFetching} = useGetContainers({
+  const {data, isFetching} = useGetContainers({
     params: {limit: 1000, page: 1},
     enabled: true
   });
+  const containers = data?.data?.data || [];
 
   React.useEffect(() => {
-    if (!isFetching) {
+    if (!isFetching && containers?.length > 0) {
       const items = containersMapData(containers);
 
       dispatch(setContainersRedux(items));

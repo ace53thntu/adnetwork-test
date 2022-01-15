@@ -134,7 +134,10 @@ const Containers = props => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardBody>
-                  <Table data={containers?.items || []} columns={columns} />
+                  <Table
+                    data={containers?.data?.data || []}
+                    columns={columns}
+                  />
                 </CardBody>
               </Card>
             </Col>

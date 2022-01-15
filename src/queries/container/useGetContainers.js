@@ -1,5 +1,5 @@
 import {ContainerAPIRequest} from 'api/container.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
 
@@ -12,8 +12,8 @@ export function useGetContainers({params, enabled = false}) {
     () =>
       ContainerAPIRequest.getAllContainer({
         params,
-        options: {cancelToken}
-      }).then(res => res?.data ?? []),
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled
