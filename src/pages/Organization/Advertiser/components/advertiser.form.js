@@ -32,13 +32,12 @@ import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertise
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from './validation';
-import {useGetDomains} from 'queries/domain';
-import {useDomainOptions} from 'pages/Organization/hooks';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
+import DomainSelect from 'pages/Organization/components/domain-select';
 
 const AdvertiserForm = ({
   modal = false,
@@ -51,8 +50,6 @@ const AdvertiserForm = ({
 }) => {
   const {t} = useTranslation();
   const role = getRole();
-  const {data: domains} = useGetDomains();
-  const domainOptions = useDomainOptions({domainData: domains?.items || []});
   const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
     advertiserId
   );
@@ -139,12 +136,11 @@ const AdvertiserForm = ({
                 </Col>
                 {/* Domains */}
                 <Col sm={12}>
-                  <FormReactSelect
+                  <DomainSelect
+                    defaultValue={defaultValues?.[INPUT_NAME.DOMAINS]}
                     name={INPUT_NAME.DOMAINS}
                     label={t('domains')}
                     placeholder={t('selectDomains')}
-                    options={domainOptions}
-                    defaultValue={null}
                     multiple
                   />
                 </Col>

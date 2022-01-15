@@ -15,19 +15,21 @@ import {
 } from 'utils/helpers/misc.helpers';
 
 const propTypes = {
-  defaultValue: PropTypes.object,
+  defaultValue: PropTypes.any,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  multiple: PropTypes.bool
 };
 
 const DomainSelect = ({
   defaultValue = null,
-  name,
-  label,
-  placeholder,
-  disabled = false
+  name = '',
+  label = '',
+  placeholder = '',
+  disabled = false,
+  multiple = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -46,6 +48,7 @@ const DomainSelect = ({
       }}
       defaultValue={defaultValue || null}
       disabled={isSubmitting || disabled}
+      multiple={multiple}
     />
   );
 };

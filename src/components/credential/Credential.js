@@ -17,7 +17,7 @@ import {DEFAULT_PAGINATION} from 'constants/misc';
 const propTypes = {
   isUser: PropTypes.bool,
   type: PropTypes.string,
-  referenceId: PropTypes.number
+  referenceId: PropTypes.string
 };
 
 const Credential = ({isUser = false, type = 'user', referenceId}) => {
@@ -98,7 +98,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
           type="button"
           onClick={onClickCredential}
           disabled={isFetching || isGenerating || isFetched}
-          isLoading={isFetching}
+          loading={isFetching}
           className="btn-primary"
         >
           Credential
@@ -108,7 +108,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
             type="button"
             onClick={onClickReGenerate}
             disabled={isFetching || isGenerating}
-            isLoading={isGenerating}
+            loading={isGenerating}
             className="ml-2 btn-warning"
           >
             Re-Generate
@@ -120,7 +120,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
             type="button"
             onClick={onClickGenerate}
             disabled={isFetching || isGenerating}
-            isLoading={isGenerating}
+            loading={isGenerating}
           >
             Generate
           </ButtonLoading>
