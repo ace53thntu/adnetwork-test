@@ -9,7 +9,11 @@ import {useFormContext} from 'react-hook-form';
 //---> Internal Modules
 import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
 import {SelectPaginate} from 'components/forms';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
 
 const propTypes = {
   currentInventory: PropTypes.object
@@ -46,17 +50,27 @@ const useTrackerTemplatePagination = () => {
   const loadTrackerTemplate = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await TrackerTemplateAPIRequest.getAllTrackerTemplate({
-        params: {page, limit: DEFAULT_PAGINATION.perPage, name: search}
+        params: {
+          page,
+          limit: DEFAULT_PAGINATION.perPage,
+          name: search
+        },
+        options: {
+          isResponseAll: IS_RESPONSE_ALL
+        }
       });
 
-      const {items, total} = res?.data ?? [];
+      const data = getResponseData(res, IS_RESPONSE_ALL);
+      console.log('🚀 ~ file: TrackerTemplateSelect.js ~ line 64 ~ data', data);
+      const total = getResponsePagination(res)?.total;
+      const perPage = getResponsePagination(res)?.perPage;
 
-      const options = [...items].map(item => ({
+      const options = [...data].map(item => ({
         label: item.name,
         value: item.uuid
       }));
 
-      const hasMore = page < Math.ceil(total / DEFAULT_PAGINATION.perPage);
+      const hasMore = page < Math.ceil(total / perPage);
 
       return {
         options,

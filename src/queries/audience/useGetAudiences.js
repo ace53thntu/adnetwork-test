@@ -1,5 +1,5 @@
 import {AudienceAPIRequest} from 'api/audience.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
 
@@ -36,7 +36,8 @@ export function useGetAudiencesInfinity({
           name
         },
         options: {
-          cancelToken
+          cancelToken,
+          isResponseAll: IS_RESPONSE_ALL
         }
       }).then(res => res),
     {

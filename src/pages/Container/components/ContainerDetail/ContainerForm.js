@@ -144,9 +144,9 @@ function ContainerForm(props) {
                 name="status"
                 items={[
                   {
-                    id: 'inactive',
-                    label: t('inactive'),
-                    value: 'inactive'
+                    id: 'delete',
+                    label: t('delete'),
+                    value: 'delete'
                   },
                   {
                     id: 'active',

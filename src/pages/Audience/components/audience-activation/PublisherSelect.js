@@ -8,7 +8,11 @@ import {useFormContext} from 'react-hook-form';
 //---> Internal Modules
 import {PublisherAPIRequest} from 'api/publisher.api';
 import {SelectPaginate} from 'components/forms';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
 
 const propTypes = {
   defaultValue: PropTypes.object,
@@ -57,14 +61,16 @@ const usePublisherPagination = () => {
         params: {page, limit: DEFAULT_PAGINATION.perPage, name: search}
       });
 
-      const {items, total} = res?.data ?? [];
+      const data = getResponseData(res, IS_RESPONSE_ALL);
+      const total = getResponsePagination(res)?.total;
+      const perPage = getResponsePagination(res)?.perPage;
 
-      const options = [...items].map(item => ({
+      const options = [...data].map(item => ({
         label: item.name,
         value: item.uuid
       }));
 
-      const hasMore = page < Math.ceil(total / DEFAULT_PAGINATION.perPage);
+      const hasMore = page < Math.ceil(total / perPage);
 
       return {
         options,
