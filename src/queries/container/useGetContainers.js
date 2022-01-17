@@ -2,6 +2,7 @@ import {ContainerAPIRequest} from 'api/container.api';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_CONTAINERS} from './constants';
 
@@ -29,14 +30,17 @@ export function useGetContainersInfinity({params, enabled = false}) {
     ({pageParam = 1}) =>
       ContainerAPIRequest.getAllContainer({
         params: {...params, page: pageParam},
-        options: {cancelToken}
-      }).then(res => res?.data ?? []),
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const total = getResponsePagination(apiRes, IS_RESPONSE_ALL)?.total;
+        const perPage =
+          getResponsePagination(apiRes, IS_RESPONSE_ALL)?.perPage ||
+          DEFAULT_PAGINATION.perPage;
+        const nextPage = Math.ceil(total / perPage);
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }

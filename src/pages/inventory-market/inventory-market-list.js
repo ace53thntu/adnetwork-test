@@ -28,8 +28,9 @@ import {
 } from 'store/reducers/inventory-market';
 import {InventoryListLayout} from './components/inventory-list-layout';
 import {isFalsy} from 'utils/validateObject';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -68,7 +69,7 @@ const InventoryMarket = () => {
 
   const containers = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
-      const {items = []} = page;
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
       return [...acc, ...itemsDestructure];
     }, []);

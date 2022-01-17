@@ -1,5 +1,6 @@
 import {LoadingIndicator} from 'components/common';
 import {Pagination} from 'components/list/pagination';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import ReportItem from 'pages/entity-report/report-item';
 import {checkIsFollowed} from 'pages/report-dashboard/helpers';
@@ -13,6 +14,7 @@ import {useParams} from 'react-router-dom';
 import {Card, CardBody, Col, Row} from 'reactstrap';
 import {getUser} from 'utils/helpers/auth.helpers';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 import {ActionFooter, ActionHeader} from '../actions';
 //---> Internal Modules
@@ -41,8 +43,8 @@ const ReportList = ({pageDetails = {}}) => {
     enabled: true
   });
   const reports = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
+    return pages?.reduce((acc, page) => {
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       return [...acc, ...items];
     }, []);
   }, [pages]);

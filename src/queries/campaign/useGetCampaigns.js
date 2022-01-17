@@ -1,7 +1,8 @@
 import {CampaignAPIRequest} from 'api/campaign.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_CAMAPAIGNS} from './constants';
 
@@ -11,9 +12,10 @@ export function useGetCampaigns({params, enabled = false}) {
   return useQuery(
     [GET_CAMAPAIGNS, params],
     () =>
-      CampaignAPIRequest.getAllCampaign({params, options: {cancelToken}}).then(
-        res => res?.data ?? []
-      ),
+      CampaignAPIRequest.getAllCampaign({
+        params,
+        options: {cancelToken, isAllResponse: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled
@@ -39,19 +41,21 @@ export function useGetCampaignsInfinity({
           ...params,
           page: pageParam,
           per_page,
-          name,
-          isAllResponse: true
+          name
         },
         options: {
-          cancelToken
+          cancelToken,
+          isAllResponse: IS_RESPONSE_ALL
         }
-      }).then(res => res?.data),
+      }).then(res => res),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const total = getResponsePagination(apiRes)?.total;
+        const perPage =
+          getResponsePagination(apiRes)?.perPage || DEFAULT_PAGINATION.perPage;
+        const nextPage = Math.ceil(total / perPage);
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }

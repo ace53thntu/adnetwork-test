@@ -14,8 +14,8 @@ export function useGetAdvertisers({params = {}, enabled = false}) {
     () =>
       AdvertiserAPIRequest.getAllAdvertiser({
         params,
-        options: {cancelToken}
-      }).then(res => res?.data || []),
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled

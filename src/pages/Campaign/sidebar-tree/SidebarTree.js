@@ -17,7 +17,7 @@ import {
   setStrategyRedux,
   useCampaignSelector
 } from 'store/reducers/campaign';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useTreePagination} from 'hooks';
 import {CampaignTreeStyled} from './styled';
 import {useGetAdvertisers} from 'queries/advertiser';
@@ -27,6 +27,7 @@ import {GET_CAMAPAIGNS} from 'queries/campaign/constants';
 import {StrategyAPIRequest} from 'api/strategy.api';
 import {GET_STRATEGIES} from 'queries/strategy/constants';
 import {RoutePaths} from 'constants/route-paths';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 function SidebarTree(props) {
   const navigate = useNavigate();
@@ -36,19 +37,20 @@ function SidebarTree(props) {
 
   const {advertisers: advertisersRedux} = useCampaignSelector();
 
-  const {data: {items: advertisers = []} = {}, isFetched} = useGetAdvertisers({
+  const {data, isFetching} = useGetAdvertisers({
     params: {limit: 1000, page: 1},
     enabled: true
   });
+  const advertisers = getResponseData(data, IS_RESPONSE_ALL);
 
   React.useEffect(() => {
-    if (!isFetched) {
+    if (!isFetching) {
       const items = advertisersMapData(advertisers);
 
       dispatch(setAdvertisersRedux(items));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [advertisers, isFetched]);
+  }, [advertisers, isFetching]);
 
   React.useEffect(() => {
     return () => {
@@ -71,11 +73,13 @@ function SidebarTree(props) {
                 limit: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 advertiser_uuid: id
-              }
+              },
+              options: {isResponseAll: IS_RESPONSE_ALL}
             });
-            if (res?.data?.items) {
-              queryCache.setQueryData([GET_CAMAPAIGNS, id], res.data.items);
-              const currentSourceData = res.data.items ?? [];
+            const data = getResponseData(res, IS_RESPONSE_ALL);
+            if (data) {
+              queryCache.setQueryData([GET_CAMAPAIGNS, id], data);
+              const currentSourceData = data ?? [];
               currentSourceData.forEach((item, index) => {
                 children.push({
                   id: item.uuid,

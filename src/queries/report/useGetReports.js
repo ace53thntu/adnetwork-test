@@ -2,7 +2,8 @@ import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {ReportAPIRequest} from 'api/report.api';
 import {GET_REPORTS} from './constants';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 /**
  * Query get all reports
@@ -32,14 +33,17 @@ export function useGetReportsInfinite({
     [GET_REPORTS, params?.entity_uuid || 'all', params?.entity_type || 'all'],
     ({pageParam = 1}) =>
       ReportAPIRequest.getAllReport({
-        params: {...params, page: pageParam, limit: DEFAULT_PAGINATION.perPage}
-      }).then(res => res?.data ?? []),
+        params: {...params, page: pageParam, limit: DEFAULT_PAGINATION.perPage},
+        options: {isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const total = getResponsePagination(apiRes)?.total;
+        const perPage =
+          getResponsePagination(apiRes)?.perPage || DEFAULT_PAGINATION.perPage;
+        const nextPage = Math.ceil(total / perPage);
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }
