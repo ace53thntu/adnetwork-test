@@ -93,7 +93,7 @@ export const endpoints = {
     metric: `${API_V1}/metrics`
   },
   nativeAd: {
-    list: `${API_V1}/native-ads`,
+    list: `${API_V1}/native_ad`,
     asset: `${API_V1}/asset`
   },
   video: {

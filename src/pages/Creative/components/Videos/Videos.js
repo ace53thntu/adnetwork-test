@@ -7,8 +7,12 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
-import {toggleCreativeDetailDialog} from 'store/reducers/creative';
+import {
+  toggleCreateCreativeDialog,
+  toggleCreativeDetailDialog
+} from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {NotFound} from '../NotFound';
 
 import {SwiperItem} from '../SwiperItem';
 import {VideoDetail} from '../VideoDetail';
@@ -30,7 +34,7 @@ function Videos(props) {
   const {data: res} = useVideos({params});
   const {mutateAsync: deleteVideoRequest} = useDeleteVideo();
 
-  const videos = res?.items;
+  const videos = res;
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState(null);
@@ -65,6 +69,10 @@ function Videos(props) {
     }
   };
 
+  const handleOpenCreateCreativeDialog = () => {
+    dispatch(toggleCreateCreativeDialog());
+  };
+
   const swiperData = React.useMemo(() => {
     return videos?.map((video, idx) => {
       const {name, file = []} = video;
@@ -88,20 +96,25 @@ function Videos(props) {
 
   return (
     <>
+      <Row>
+        <Col>
+          <h5>Video Banners</h5>
+        </Col>
+      </Row>
       {swiperData?.length ? (
         <>
-          <Row>
-            <Col>
-              <h5>Video Banners</h5>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <SwiperList slides={swiperData} />
             </Col>
           </Row>
         </>
-      ) : null}
+      ) : (
+        <NotFound
+          entity="Video Banners"
+          onClick={handleOpenCreateCreativeDialog}
+        />
+      )}
 
       <DialogConfirm
         open={isOpen}

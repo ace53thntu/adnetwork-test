@@ -72,10 +72,6 @@ function AdvertisersTree(props) {
     if (selectedConceptId) {
       async function initConcept() {
         const res = await getConcepts(selectedAdvertiserId);
-        console.log(
-          '🚀 ~ file: AdvertisersTree.js ~ line 75 ~ initConcept ~ res',
-          res
-        );
         if (res?.data?.items?.length) {
           dispatch(loadConceptRedux(res.data.items));
         } else {

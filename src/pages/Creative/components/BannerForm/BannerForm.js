@@ -141,9 +141,10 @@ function BannerForm(props) {
         }
 
         setIsLoading(false);
-        dispatch(toggleCreateCreativeDialog());
+        // dispatch(toggleCreateCreativeDialog());
         ShowToast.success('Create Creative successfully!');
         client.invalidateQueries([GET_CREATIVES]);
+        handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
         ShowToast.error(error?.msg);

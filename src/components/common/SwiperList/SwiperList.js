@@ -12,6 +12,8 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 // install Virtual module
 SwiperCore.use([Virtual, Navigation]);
 
+const SLIDES_PER_VIEW = 4;
+
 function SwiperList(props) {
   const {slides, onAsyncNext} = props;
 
@@ -40,7 +42,7 @@ function SwiperList(props) {
     <Swiper
       virtual
       onSwiper={setSwiperRef}
-      slidesPerView={4}
+      slidesPerView={SLIDES_PER_VIEW}
       spaceBetween={15}
       pagination={{
         type: 'fraction',
@@ -58,8 +60,12 @@ function SwiperList(props) {
         </SwiperSlide>
       ))}
 
-      <div className="swiper-button-prev swiper-navigation-button"></div>
-      <div className="swiper-button-next swiper-navigation-button"></div>
+      {slides?.length > SLIDES_PER_VIEW && (
+        <>
+          <div className="swiper-button-prev swiper-navigation-button"></div>
+          <div className="swiper-button-next swiper-navigation-button"></div>
+        </>
+      )}
     </Swiper>
   );
 }

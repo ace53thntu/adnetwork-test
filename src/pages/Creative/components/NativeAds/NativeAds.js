@@ -7,10 +7,14 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
-import {toggleCreativeDetailDialog} from 'store/reducers/creative';
+import {
+  toggleCreateCreativeDialog,
+  toggleCreativeDetailDialog
+} from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {NativeAdDetail} from '../NativeAdDetail';
+import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
 
 function NativeAds(props) {
@@ -32,7 +36,7 @@ function NativeAds(props) {
   const {data: res} = useGetNativeAds({
     params
   });
-  const nativeAds = res?.items;
+  const nativeAds = res;
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState(null);
@@ -67,6 +71,10 @@ function NativeAds(props) {
     dispatch(toggleCreativeDetailDialog(nativeAd.uuid, 'nativeAd'));
   };
 
+  const handleOpenCreateCreativeDialog = () => {
+    dispatch(toggleCreateCreativeDialog());
+  };
+
   const swiperData = React.useMemo(() => {
     return nativeAds?.map((nativeAd, idx) => {
       const {name} = nativeAd;
@@ -88,20 +96,25 @@ function NativeAds(props) {
 
   return (
     <>
+      <Row>
+        <Col>
+          <h5>Native Banners</h5>
+        </Col>
+      </Row>
       {swiperData?.length ? (
         <>
-          <Row>
-            <Col>
-              <h5>Native Banners</h5>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <SwiperList slides={swiperData} />
             </Col>
           </Row>
         </>
-      ) : null}
+      ) : (
+        <NotFound
+          entity="Native Banners"
+          onClick={handleOpenCreateCreativeDialog}
+        />
+      )}
 
       <DialogConfirm
         open={isOpen}

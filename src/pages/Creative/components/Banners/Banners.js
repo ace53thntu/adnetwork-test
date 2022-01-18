@@ -7,10 +7,14 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
-import {toggleCreativeDetailDialog} from 'store/reducers/creative';
+import {
+  toggleCreateCreativeDialog,
+  toggleCreativeDetailDialog
+} from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {BannerDetail} from '../BannerDetail';
+import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
 
 function Banners(props) {
@@ -37,7 +41,7 @@ function Banners(props) {
   const [deleteId, setDeleteId] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const banners = res?.items;
+  const banners = res;
 
   const handleClose = () => {
     setIsOpen(false);
@@ -67,9 +71,13 @@ function Banners(props) {
   }, [client, deleteCreativeRequest, deleteId, params]);
 
   const handleOpenCreativeDetailDialog = React.useCallback(creative => {
-    dispatch(toggleCreativeDetailDialog(creative.uuid, 'banner'));
+    dispatch(toggleCreativeDetailDialog(creative?.uuid, 'banner'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleOpenCreateCreativeDialog = () => {
+    dispatch(toggleCreateCreativeDialog());
+  };
 
   const swiperData = React.useMemo(() => {
     return banners?.map((creative, idx) => {
@@ -93,20 +101,22 @@ function Banners(props) {
 
   return (
     <>
+      <Row>
+        <Col>
+          <h5>Banners</h5>
+        </Col>
+      </Row>
       {swiperData?.length ? (
         <>
-          <Row>
-            <Col>
-              <h5>Banners</h5>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <SwiperList slides={swiperData} />
             </Col>
           </Row>
         </>
-      ) : null}
+      ) : (
+        <NotFound entity="Banners" onClick={handleOpenCreateCreativeDialog} />
+      )}
 
       <DialogConfirm
         open={isOpen}
