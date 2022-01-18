@@ -13,7 +13,6 @@ import {
 } from 'pages/Container/constants';
 import {useCreateInventory} from 'queries/inventory';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 import {mappingInventoryFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
@@ -23,7 +22,6 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
-  const trackerTemplates = useTrackerTemplateOptions();
   const positions = usePositionOptions();
   const {mutateAsync: createInventory} = useCreateInventory();
 
@@ -65,17 +63,9 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       typeOptions: inventoryTypes,
       inventoryFormatOptions: inventoryFormats,
       positionOptions: positions,
-      trackerTemplateOptions: trackerTemplates,
       toggle
     }),
-    [
-      inventoryFormats,
-      inventoryTypes,
-      isLoading,
-      positions,
-      trackerTemplates,
-      toggle
-    ]
+    [inventoryFormats, inventoryTypes, isLoading, positions, toggle]
   );
 
   return (

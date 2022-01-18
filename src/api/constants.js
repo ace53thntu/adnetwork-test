@@ -8,7 +8,7 @@ export const endpoints = {
     refreshToken: `${API_V1}/auth/access_token`
   },
   user: {
-    user: `${API_V1}/user`,
+    user: `${API_V1}/users`,
     me: `${API_V1}/me`
   },
   container: {
@@ -44,7 +44,7 @@ export const endpoints = {
     adsdefaultContaiter: 'ads-defaults'
   },
   trackerTemplate: {
-    trackerTemplate: `${API_V1}/tracker-template`
+    trackerTemplate: `${API_V1}/tracker_template`
   },
   position: {
     position: `${API_V1}/position`

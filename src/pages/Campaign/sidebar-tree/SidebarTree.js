@@ -111,14 +111,13 @@ function SidebarTree(props) {
                 limit: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 campaign_uuid: campaignId
-              }
+              },
+              options: {isResponseAll: IS_RESPONSE_ALL}
             });
-            if (res?.data?.items) {
-              queryCache.setQueryData(
-                [GET_STRATEGIES, campaignId],
-                res.data.items
-              );
-              const currentSourceData = res.data.items ?? [];
+            const data = getResponseData(res, IS_RESPONSE_ALL);
+            if (data) {
+              queryCache.setQueryData([GET_STRATEGIES, campaignId], data);
+              const currentSourceData = data ?? [];
               currentSourceData.forEach((item, index) => {
                 children.push({
                   id: item.uuid,

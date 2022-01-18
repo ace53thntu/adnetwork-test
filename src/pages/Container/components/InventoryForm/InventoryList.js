@@ -12,7 +12,6 @@ import {
   Badge
 } from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import DialogConfirm from 'components/common/DialogConfirm';
@@ -27,20 +26,19 @@ import {
   getInventoryTypeColor
 } from 'pages/inventory-market/helpers';
 import {Pagination} from 'components/list/pagination';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const ActionIndexs = {
   EDIT: 0,
   DELETE: 1
 };
 
-const propTypes = {
-  inventories: PropTypes.array
-};
+const propTypes = {};
 
-function InventoryList({inventories = []}) {
+function InventoryList() {
   const {pageId} = useParams();
 
   const {mutateAsync: deleteInventory} = useDeleteInventory(pageId);
@@ -64,7 +62,7 @@ function InventoryList({inventories = []}) {
   });
   const containerInventories = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
-      const {items = []} = page;
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
       return [...acc, ...itemsDestructure];
     }, []);

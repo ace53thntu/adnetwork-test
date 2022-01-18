@@ -184,34 +184,6 @@ const CampaignForm = ({
                     )}
                   />
                 </Col>
-                <Col md="3">
-                  <Label className="mr-5">Check Visit</Label>
-                  <Controller
-                    control={control}
-                    name={CAMPAIGN_KEYS.CHECK_VISIT}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle
-                        value={value}
-                        onChange={onChange}
-                        disabled={isView}
-                      />
-                    )}
-                  />
-                </Col>
-                <Col md="3">
-                  <Label className="mr-5">Auto Realloc</Label>
-                  <Controller
-                    control={control}
-                    name={CAMPAIGN_KEYS.AUTO_REALLOC}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle
-                        value={value}
-                        onChange={onChange}
-                        disabled={isView}
-                      />
-                    )}
-                  />
-                </Col>
               </Row>
             </Collapse>
           </Container>

@@ -8,7 +8,11 @@ import {useFormContext} from 'react-hook-form';
 //---> Internal Modules
 import {CampaignAPIRequest} from 'api/campaign.api';
 import {SelectPaginate} from 'components/forms';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
 
 const propTypes = {
   defaultValue: PropTypes.object,
@@ -54,17 +58,21 @@ const useCampaignPagination = () => {
   const loadCampaign = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await CampaignAPIRequest.getAllCampaign({
-        params: {page, limit: DEFAULT_PAGINATION.perPage, name: search}
+        params: {page, limit: DEFAULT_PAGINATION.perPage, name: search},
+        options: {isResponseAll: IS_RESPONSE_ALL}
       });
 
-      const {items, total} = res?.data ?? [];
+      const data = getResponseData(res, IS_RESPONSE_ALL);
+      const total = getResponsePagination(res)?.total || 0;
+      const perPage =
+        getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
-      const options = [...items].map(item => ({
+      const options = [...data].map(item => ({
         label: item.name,
         value: item.uuid
       }));
 
-      const hasMore = page < Math.ceil(total / DEFAULT_PAGINATION.perPage);
+      const hasMore = page < Math.ceil(total / perPage);
 
       return {
         options,

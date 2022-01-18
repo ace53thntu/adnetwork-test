@@ -8,9 +8,7 @@ const CAMPAIGN_ENTITY = {
   name: '',
   status: 'active',
   start_time: null,
-  end_time: null,
-  check_visit: '',
-  auto_realloc: ''
+  end_time: null
 };
 
 export const apiToForm = ({campaign = null}) => {
@@ -20,9 +18,7 @@ export const apiToForm = ({campaign = null}) => {
       advertiser_uuid,
       advertiser_name,
       name,
-      status = 'active',
-      check_visit,
-      auto_realloc
+      status = 'active'
     } = campaign;
 
     let {start_time, end_time} = campaign;
@@ -40,9 +36,7 @@ export const apiToForm = ({campaign = null}) => {
       name,
       status,
       start_time,
-      end_time,
-      check_visit: check_visit ? 'active' : 'inactive',
-      auto_realloc: auto_realloc ? 'active' : 'inactive'
+      end_time
     };
   }
 

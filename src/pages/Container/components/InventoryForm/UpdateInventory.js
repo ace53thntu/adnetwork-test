@@ -10,7 +10,6 @@ import {getInventoryFormats, getInventoryTypes} from '../../constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useEditInventory, useGetInventory} from 'queries/inventory';
 import {useDefaultInventory} from 'pages/Container/hooks/useDefaultInventory';
-import {useTrackerTemplateOptions} from 'pages/Container/hooks/useTrackerTemplateOptions';
 import {usePositionOptions} from 'pages/Campaign/hooks';
 import {mappingInventoryFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
@@ -38,13 +37,11 @@ export default function UpdateInventory({
 }
 
 function FormUpdate({toggle, inventory, pageId}) {
-  const trackerTemplates = useTrackerTemplateOptions();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
   const positions = usePositionOptions();
   const defaultValues = useDefaultInventory({
     inventory,
-    trackerTemplates,
     positions
   });
   const methods = useForm({
@@ -91,18 +88,9 @@ function FormUpdate({toggle, inventory, pageId}) {
       typeOptions: inventoryTypes,
       inventoryFormatOptions: inventoryFormats,
       positionOptions: positions,
-      trackerTemplateOptions: trackerTemplates,
       toggle
     }),
-    [
-      inventory,
-      inventoryFormats,
-      inventoryTypes,
-      isLoading,
-      positions,
-      trackerTemplates,
-      toggle
-    ]
+    [inventory, inventoryFormats, inventoryTypes, isLoading, positions, toggle]
   );
 
   return (

@@ -1,7 +1,8 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery} from 'react-query';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_INVENTORIES} from './constants';
 /**
@@ -16,17 +17,20 @@ export function useGetInventoriesInfinity({params = {}, enabled = false}) {
       InventoryAPIRequest.getAllInventory({
         params: {...params, page: pageParam},
         options: {
-          cancelToken
+          cancelToken,
+          isResponseAll: IS_RESPONSE_ALL
         }
       }).then(res => {
-        return res?.data ?? {};
+        return res;
       }),
     {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = apiRes?.total;
-        const nextPage = Math.ceil(total / DEFAULT_PAGINATION.perPage);
+        const total = getResponsePagination(apiRes)?.total;
+        const perPage =
+          getResponsePagination(apiRes)?.perPage || DEFAULT_PAGINATION.perPage;
+        const nextPage = Math.ceil(total / perPage);
 
         return nextPage > pages?.length ? pages?.length + 1 : false;
       }
