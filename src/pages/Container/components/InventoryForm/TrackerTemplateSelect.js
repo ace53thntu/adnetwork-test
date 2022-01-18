@@ -29,7 +29,7 @@ const TrackerTemplateSelect = ({currentInventory = {}}) => {
   return (
     <SelectPaginate
       required
-      name="tracker_template_uuid"
+      name="tracker_uuid"
       label={t('trackerTemplate')}
       placeholder={t('selectTrackerTemplate')}
       loadOptions={loadTrackerTemplate}
@@ -61,7 +61,6 @@ const useTrackerTemplatePagination = () => {
       });
 
       const data = getResponseData(res, IS_RESPONSE_ALL);
-      console.log('🚀 ~ file: TrackerTemplateSelect.js ~ line 64 ~ data', data);
       const total = getResponsePagination(res)?.total;
       const perPage = getResponsePagination(res)?.perPage;
 

@@ -17,6 +17,8 @@ const en = {
   lastName: 'Last name',
   createStrategy: 'Create strategy',
   backToList: 'Back to list',
+  allowDeal: 'Allow deal',
+  firstParty: 'First party',
 
   // Main Menu
   userManagement: 'User Management',

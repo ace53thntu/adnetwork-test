@@ -28,7 +28,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const methods = useForm({
     defaultValues: {
       status: 'active',
-      enable_deal: 'active',
+      allow_deal: 'inactive',
       type: null
     },
     resolver: validationInventory()

@@ -35,7 +35,7 @@ const formName = {
   collect_type: 'collect_type',
   traits: 'traits',
   name: 'name',
-  enable_deal: 'enable_deal',
+  allow_deal: 'allow_deal',
   market_type: 'market_type'
 };
 
@@ -62,7 +62,7 @@ const InventoryFormContent = ({
   const {formState} = useFormContext();
   const isSubmitting = formState?.isSubmitting;
   const watchMarkType = useWatch({name: formName.market_type});
-  const watchEnableDeal = useWatch({name: formName.enable_deal});
+  const watchEnableDeal = useWatch({name: formName.allow_deal});
 
   return (
     <BlockUi tag="div" blocking={isLoading}>
@@ -82,9 +82,20 @@ const InventoryFormContent = ({
           </FormGroup>
           <FormGroup className="d-flex justify-content-end mb-0 ml-3">
             <FormToggle
-              name={formName.enable_deal}
+              name={formName.allow_deal}
               defaultCheckedValue="active"
-              label={t('enableDeal')}
+              label={t('allowDeal')}
+              values={{
+                checked: 'active',
+                unChecked: 'inactive'
+              }}
+            />
+          </FormGroup>
+          <FormGroup className="d-flex justify-content-end mb-0 ml-3">
+            <FormToggle
+              name={formName.first_party}
+              defaultCheckedValue="active"
+              label={t('firstParty')}
               values={{
                 checked: 'active',
                 unChecked: 'inactive'
@@ -173,14 +184,6 @@ const InventoryFormContent = ({
             </Col>
           )}
 
-          <Col sm={6}>
-            <FormTextInput
-              name="merge"
-              placeholder={`${t('merge')}`}
-              label={t('merge')}
-              disable={isSubmitting}
-            />
-          </Col>
           <Col sm={6}>
             <TrackerTemplateSelect currentInventory={inventory} />
           </Col>

@@ -64,7 +64,7 @@ const InventoryProperty = ({currentInventory = null}) => {
       <Row>
         <Col sm={12}>
           <FormReactSelect
-            name="metadata.tags"
+            name="tags"
             label={t('tags')}
             placeholder={t('selectTags')}
             optionLabelField="name"

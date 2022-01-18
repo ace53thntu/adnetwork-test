@@ -15,25 +15,25 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
         type,
         format,
         floor_price,
-        merge,
         metadata,
         fill_rate,
         click_rate,
         position_id,
-        tracker_template_uuid,
-        tracker_template_name,
+        tracker_uuid,
+        tracker_name,
         deal_floor_price,
-        enable_deal,
+        allow_deal,
         market_type,
         price_engine,
-        market_dsps = []
+        market_dsps = [],
+        tags
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
       const destructurePosition = positions.find(
         item => item.value === position_id
       );
-      const destructureTrackerTemplate = tracker_template_uuid
-        ? {value: tracker_template_uuid, label: tracker_template_name}
+      const destructureTrackerTemplate = tracker_uuid
+        ? {value: tracker_uuid, label: tracker_name}
         : null;
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
@@ -44,12 +44,13 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
             label: item?.name
           }))
         : [];
-      let parsedTags =
-        metadata?.tags && Object.keys(metadata?.tags).length > 0
-          ? Object.values(metadata.tags)?.map(item => item)
-          : [];
+      // let parsedTags =
+      //   metadata?.tags && Object.keys(metadata?.tags).length > 0
+      //     ? Object.values(metadata.tags)?.map(item => item)
+      //     : [];
 
-      metadata.tags = parsedTags;
+      // metadata.tags = parsedTags;
+      let tagsParsed = tags?.map(tag => ({value: tag, name: capitalize(tag)}));
       return {
         uuid,
         name,
@@ -58,20 +59,20 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
         format: destructureFormat,
         floor_price,
         deal_floor_price,
-        merge,
         metadata,
         fill_rate,
         click_rate,
         tracker_template_uuid: destructureTrackerTemplate,
         position_id: destructurePosition,
-        enable_deal: enable_deal ? 'active' : 'inactive',
+        allow_deal: allow_deal ? 'active' : 'inactive',
         market_type: market_type
           ? {value: market_type, label: capitalize(market_type)}
           : null,
         price_engine: price_engine
           ? {value: price_engine, label: capitalize(price_engine)}
           : null,
-        market_dsps: marketDsps || []
+        market_dsps: marketDsps || [],
+        tags: tagsParsed
       };
     }
     return {};
