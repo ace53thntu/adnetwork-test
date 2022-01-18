@@ -29,13 +29,19 @@ export function getResponsePagination(res) {
     const totalItems =
       headers?.['x-total-items'] ?? DEFAULT_PAGINATION_RESPONSE.totalItems;
 
-    return {
+    const result = {
       page,
       nextPage,
       lastPage,
       perPage,
       totalItems
     };
+
+    Object.keys(result).forEach(
+      key => (result[key] = parseInt(result[key], 10))
+    );
+
+    return result;
   }
   return DEFAULT_PAGINATION_RESPONSE;
 }

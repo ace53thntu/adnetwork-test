@@ -43,18 +43,18 @@ function ConceptList(props) {
   });
 
   React.useEffect(() => {
-    if (
+    const condition = !!(
       expandedIds.length &&
       selectedAdvertiserId === advertiserId &&
       expandedIds.includes(advertiserId)
-    ) {
+    );
+
+    if (condition) {
       const len = res?.pages?.length ?? 0;
       if (len > 1) {
         const items = res?.pages?.reduce((prev, cur) => {
-          const {
-            data: {items}
-          } = cur;
-          return [...prev, ...items];
+          const concepts = cur?.data?.data ?? [];
+          return [...prev, ...concepts];
         }, []);
         dispatch(loadConceptRedux(items));
       }
@@ -92,7 +92,7 @@ function ConceptList(props) {
           {res?.pages.map((group, i) => {
             return (
               <React.Fragment key={i}>
-                {group?.data?.items?.map((item, index) => (
+                {group?.data?.data?.map((item, index) => (
                   <ConceptListItem
                     key={index}
                     data={conceptItemRepoToView(item)}
