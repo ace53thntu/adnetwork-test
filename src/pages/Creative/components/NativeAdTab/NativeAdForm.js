@@ -1,7 +1,6 @@
 import {NativeAdAPI} from 'api/native-ad.api';
-import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
+import {BlockOverlay, CollapseBox} from 'components/common';
 import {EntityTypes} from 'constants/report';
-import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateNativeAd} from 'queries/native-ad';
@@ -31,6 +30,7 @@ import {
   nativeAdRawToFormValues
 } from './dto';
 import {createNativeAdResolver} from './validations';
+import Report from '../Report';
 
 const defaultValues = {
   name: '',
@@ -178,14 +178,12 @@ function NativeAdForm(props) {
 
       {/* BEGIN: Report */}
       {nativeAd?.uuid && (
-        <Collapse initialOpen={true} title="Report" unMount={false}>
-          <EntityReport
-            entity={EntityTypes.NAVTIVE_AD}
-            entityId={nativeAd?.uuid}
-            ownerId={selectedAdvertiserId}
-            ownerRole={USER_ROLE.ADVERTISER}
-          />
-        </Collapse>
+        <Report
+          entity={EntityTypes.NAVTIVE_AD}
+          entityId={nativeAd?.uuid}
+          ownerId={selectedAdvertiserId}
+          ownerRole={USER_ROLE.ADVERTISER}
+        />
       )}
 
       {/* END: Report */}

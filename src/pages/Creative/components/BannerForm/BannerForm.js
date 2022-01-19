@@ -1,5 +1,5 @@
 import {AlternativeAPI} from 'api/alternative.api';
-import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
+import {BlockOverlay, CollapseBox} from 'components/common';
 import {
   FormCheckbox,
   FormReactSelect,
@@ -7,7 +7,6 @@ import {
   FormTextInput
 } from 'components/forms';
 import {EntityTypes} from 'constants/report';
-import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateCreative, useUpdateCreative} from 'queries/creative';
@@ -43,6 +42,7 @@ import {
   creativeRepoToModel
 } from './dto';
 import {bannerFormValidationResolver} from './utils';
+import Report from '../Report';
 
 const defaultFormValues = {
   invocation_tag: '',
@@ -377,18 +377,12 @@ function BannerForm(props) {
       </FormProvider>
       {/* BEGIN: Report */}
       {creative?.uuid && (
-        <Collapse initialOpen={true} title="Reports" unMount={false}>
-          <Row>
-            <Col>
-              <EntityReport
-                entity={EntityTypes.CREATIVE}
-                entityId={creative?.uuid}
-                ownerId={selectedAdvertiserId}
-                ownerRole={USER_ROLE.ADVERTISER}
-              />
-            </Col>
-          </Row>
-        </Collapse>
+        <Report
+          entity={EntityTypes.CREATIVE}
+          entityId={creative?.uuid}
+          ownerId={selectedAdvertiserId}
+          ownerRole={USER_ROLE.ADVERTISER}
+        />
       )}
 
       {/* END: Report */}

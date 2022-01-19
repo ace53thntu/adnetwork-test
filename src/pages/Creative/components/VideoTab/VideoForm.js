@@ -1,6 +1,5 @@
-import {BlockOverlay, Collapse, CollapseBox} from 'components/common';
+import {BlockOverlay, CollapseBox} from 'components/common';
 import {EntityTypes} from 'constants/report';
-import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateVideo, useUpdateVideo} from 'queries/video';
@@ -24,6 +23,7 @@ import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
+import Report from '../Report';
 
 const defaultValues = {
   // concept_id: 1,
@@ -141,14 +141,12 @@ function VideoForm(props) {
       </FormProvider>
       {/* BEGIN: Report */}
       {rawData?.uuid && (
-        <Collapse initialOpen={true} title="Report" unMount={false}>
-          <EntityReport
-            entityId={rawData?.uuid}
-            entity={EntityTypes.CREATIVE}
-            ownerId={selectedAdvertiserId}
-            ownerRole={USER_ROLE.ADVERTISER}
-          />
-        </Collapse>
+        <Report
+          entityId={rawData?.uuid}
+          entity={EntityTypes.CREATIVE}
+          ownerId={selectedAdvertiserId}
+          ownerRole={USER_ROLE.ADVERTISER}
+        />
       )}
 
       {/* END: Report */}
