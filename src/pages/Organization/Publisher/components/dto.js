@@ -6,30 +6,15 @@
  * @param {Array} countriesArr - List of Countries
  * @returns data with Form format trustly
  */
-export const mappingApiToForm = ({
-  apiResp = {},
-  domainsArr = [],
-  countriesArr = []
-}) => {
-  const {
-    uuid = '',
-    name = '',
-    status = 'active',
-    domain = null,
-    metadata = {}
-  } = apiResp;
+export const mappingApiToForm = ({apiResp = {}}) => {
+  const {uuid = '', name = '', status = 'active', domain} = apiResp;
   //---> Get selected country
-  const selectedCountry = countriesArr?.find(
-    item => item?.value === metadata?.country
-  );
-  metadata.country = selectedCountry || null;
-  const destructureDomain = domain ? {value: domain, label: domain} : null;
+
   return {
     uuid,
     name,
     status,
-    domain: destructureDomain,
-    metadata
+    domain
   };
 };
 
@@ -39,13 +24,10 @@ export const mappingApiToForm = ({
  * @returns data with API request body format trustly
  */
 export const mappingFormToApi = ({formData}) => {
-  const {name, status, domain, metadata} = formData;
-  const desDomains = domain?.value || '';
-  metadata.country = metadata?.country?.value || '';
+  const {name, status, domain} = formData;
   return {
     name,
     status,
-    domain: desDomains,
-    metadata
+    domain
   };
 };
