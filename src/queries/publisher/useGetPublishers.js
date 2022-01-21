@@ -10,12 +10,24 @@ import {GET_PUBLISHERS} from './constants';
  * Query get all publishers
  * @returns Array data publishers
  */
-export function useGetPublishers() {
+export function useGetPublishers({
+  params,
+  enabled = false,
+  keepPreviousData = false
+}) {
+  const {cancelToken} = useCancelRequest();
+
   return useQuery(
-    GET_PUBLISHERS,
-    () => PublisherAPIRequest.getAllPublisher({}).then(res => res?.data ?? []),
+    [GET_PUBLISHERS, params],
+    () =>
+      PublisherAPIRequest.getAllPublisher({
+        params,
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
-      suspense: false
+      suspense: false,
+      enabled,
+      keepPreviousData
     }
   );
 }

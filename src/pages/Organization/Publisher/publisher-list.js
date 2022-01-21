@@ -16,14 +16,17 @@ import PublisherCreate from './publisher-create';
 import PublisherEdit from './publisher-edit';
 import {PublisherForm} from './components';
 import {LoadingIndicator} from 'components/common';
-import {useDeletePublisher, useGetPublishersInfinity} from 'queries/publisher';
+import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
 import PublisherLayout from './publisher-layout';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import CustomPagination from 'components/common/CustomPagination';
 
 const PublisherList = () => {
   const reduxDispatch = useDispatch();
@@ -32,26 +35,26 @@ const PublisherList = () => {
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetPublishersInfinity({
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const {data, isLoading, isPreviousData} = useGetPublishers({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      limit: DEFAULT_PAGINATION.perPage,
+      page: currentPage,
+      sort: 'created_at DESC'
     },
-    enabled: true
+    enabled: true,
+    keepPreviousData: true
   });
 
   const publishers = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const data = getResponseData(page, IS_RESPONSE_ALL);
-      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
-      return [...acc, ...dataDestructured];
-    }, []);
-  }, [pages]);
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
 
   const {
     mutateAsync: deletePublisher,
@@ -93,6 +96,11 @@ const PublisherList = () => {
       }
     ];
   }, []);
+
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
 
   const onToggleModal = () => {
     setOpenForm(prevState => !prevState);
@@ -139,8 +147,6 @@ const PublisherList = () => {
   return (
     <PublisherLayout>
       <Card className="main-card mb-3">
-        {isFetching && <LoadingIndicator />}
-
         <CardHeader style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>{t('publisherList')}</div>
           <div className="widget-content-right">
@@ -156,6 +162,7 @@ const PublisherList = () => {
           </div>
         </CardHeader>
         <CardBody style={{minHeight: '400px'}}>
+          {isLoading && <LoadingIndicator />}
           <List
             data={publishers || []}
             columns={columns}
@@ -164,13 +171,12 @@ const PublisherList = () => {
             handleAction={onHandleDelete}
             handleClickItem={onClickItem}
           />
-          {hasNextPage && (
-            <Pagination
-              hasNextPage={hasNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
-          )}
+          <CustomPagination
+            currentPage={currentPage}
+            totalCount={paginationInfo?.totalItems}
+            onPageChange={(evt, page) => onPageChange(evt, page)}
+            disabled={isPreviousData}
+          />
         </CardBody>
       </Card>
       {/* Advertiser Create */}

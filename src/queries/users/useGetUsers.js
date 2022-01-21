@@ -6,7 +6,11 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_USERS} from './constants';
 
-export function useGetUsers({params, enabled = false}) {
+export function useGetUsers({
+  params,
+  enabled = false,
+  keepPreviousData = false
+}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -17,6 +21,7 @@ export function useGetUsers({params, enabled = false}) {
         options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),
     {
+      keepPreviousData,
       suspense: false,
       enabled
     }

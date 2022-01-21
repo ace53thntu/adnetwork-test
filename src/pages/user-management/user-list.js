@@ -58,16 +58,13 @@ const UserList = () => {
   const {data, isLoading, isPreviousData} = useGetUsers({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
-      page: currentPage
+      page: currentPage,
+      sort: 'created_at DESC'
     },
-    enabled: true
+    enabled: true,
+    keepPreviousData: true
   });
-  console.log(
-    '🚀 ~ file: user-list.js ~ line 59 ~ UserList ~ isPreviousData',
-    isPreviousData
-  );
 
-  console.log('🚀 ~ file: user-list.js ~ line 64 ~ UserList ~ data', data);
   const users = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
     return dataDestructured?.map(item => ({...item, id: item?.uuid}));
@@ -75,10 +72,6 @@ const UserList = () => {
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
   }, [data]);
-  console.log(
-    '🚀 ~ file: user-list.js ~ line 71 ~ paginationInfo ~ paginationInfo',
-    paginationInfo
-  );
 
   //---> Mutation delete user
   const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
