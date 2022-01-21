@@ -25,16 +25,19 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useDeleteUser, useGetUsersInfinity} from 'queries/users';
+import {useDeleteUser, useGetUsers} from 'queries/users';
 import UserCreate from './user-create';
 import UserEdit from './user-edit';
 import {UserForm} from './components';
 import {getUserRole} from './constants';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {useDispatch} from 'react-redux';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import CustomPagination from 'components/common/CustomPagination';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -49,27 +52,33 @@ const UserList = () => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Users.
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetUsersInfinity({
+  const {data, isLoading, isPreviousData} = useGetUsers({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      limit: DEFAULT_PAGINATION.perPage,
+      page: currentPage
     },
     enabled: true
   });
-  const users = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const data = getResponseData(page, IS_RESPONSE_ALL);
-      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
-      return [...acc, ...dataDestructured];
-    }, []);
-  }, [pages]);
+  console.log(
+    '🚀 ~ file: user-list.js ~ line 59 ~ UserList ~ isPreviousData',
+    isPreviousData
+  );
+
+  console.log('🚀 ~ file: user-list.js ~ line 64 ~ UserList ~ data', data);
+  const users = useMemo(() => {
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
+  console.log(
+    '🚀 ~ file: user-list.js ~ line 71 ~ paginationInfo ~ paginationInfo',
+    paginationInfo
+  );
 
   //---> Mutation delete user
   const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
@@ -142,6 +151,11 @@ const UserList = () => {
     ];
   }, []);
 
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
+
   const onToggleModal = () => {
     setOpenForm(prevState => !prevState);
   };
@@ -192,8 +206,6 @@ const UserList = () => {
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
-                {isFetching && <LoadingIndicator />}
-
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
@@ -211,21 +223,25 @@ const UserList = () => {
                   </div>
                 </CardHeader>
                 <CardBody style={{minHeight: '400px'}}>
-                  <List
-                    data={users || []}
-                    columns={columns}
-                    showAction
-                    actions={['Delete']}
-                    handleAction={onClickDelete}
-                    handleClickItem={onClickItem}
-                  />
-                  {hasNextPage && (
-                    <Pagination
-                      hasNextPage={hasNextPage}
-                      isFetchingNextPage={isFetchingNextPage}
-                      fetchNextPage={fetchNextPage}
+                  {isLoading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    <List
+                      data={users || []}
+                      columns={columns}
+                      showAction
+                      actions={['Delete']}
+                      handleAction={onClickDelete}
+                      handleClickItem={onClickItem}
                     />
                   )}
+
+                  <CustomPagination
+                    currentPage={currentPage}
+                    totalCount={paginationInfo?.totalItems}
+                    onPageChange={(evt, page) => onPageChange(evt, page)}
+                    disabled={isPreviousData}
+                  />
                 </CardBody>
               </Card>
             </Col>

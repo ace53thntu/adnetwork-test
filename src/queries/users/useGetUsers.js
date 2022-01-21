@@ -6,12 +6,19 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_USERS} from './constants';
 
-export function useGetUsers() {
+export function useGetUsers({params, enabled = false}) {
+  const {cancelToken} = useCancelRequest();
+
   return useQuery(
-    GET_USERS,
-    () => UserAPIRequest.getAllUser({}).then(res => res?.data ?? []),
+    [GET_USERS, params],
+    () =>
+      UserAPIRequest.getAllUser({
+        params,
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
-      suspense: false
+      suspense: false,
+      enabled
     }
   );
 }
@@ -27,6 +34,7 @@ export function useGetUsersInfinity({params, enabled = false}) {
         options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),
     {
+      keepPreviousData: true,
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
