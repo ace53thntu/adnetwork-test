@@ -20,5 +20,11 @@ export const RoutePaths = {
   EDIT: 'edit',
   REPORT: 'report',
   INVENTORY: 'inventory',
-  PAGE: 'page'
+  PAGE: 'page',
+  SETTING: 'setting',
+  TRACKER: 'tracker',
+  POSITION: 'position',
+  KEYWORD: 'keyword',
+  DOMAIN_GROUP: 'domain-group',
+  DOMAIN: 'domain'
 };

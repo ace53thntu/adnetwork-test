@@ -90,6 +90,37 @@ export const UserManagementNav = (t, role) => {
   ];
 };
 
+export const SettingNav = (t, role) => {
+  return [
+    {
+      icon: 'pe-7s-settings',
+      label: t('setting'),
+      content: [
+        {
+          label: t('tracker'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.TRACKER}`
+        },
+        {
+          label: t('position'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.POSITION}`
+        },
+        {
+          label: t('keyword'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.KEYWORD}`
+        },
+        {
+          label: t('domainGroup'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.DOMAIN_GROUP}`
+        },
+        {
+          label: t('domain'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.DOMAIN}`
+        }
+      ]
+    }
+  ];
+};
+
 export const NAVIGATION_NAME_MAP = {
   '/overview': 'Overview',
   '/report/audiences': 'Audiences',
