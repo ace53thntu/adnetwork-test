@@ -1,4 +1,5 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
+
 import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
@@ -11,7 +12,7 @@ class AuthAPI extends XHRRequest {
 
   login = ({email, password}) => {
     return this.post(endpoints.auth.login, {
-      username: email,
+      email,
       password
     });
   };
