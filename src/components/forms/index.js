@@ -12,6 +12,7 @@ import {SelectPaginate} from './SelectPaginate/SelectPaginate';
 import {TextField} from './TextField/TextField';
 
 export {FormTagsInput} from './TagsInput';
+export * from './FormDatePicker';
 
 export {
   TextField,

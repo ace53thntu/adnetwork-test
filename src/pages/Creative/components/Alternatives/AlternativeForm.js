@@ -1,5 +1,5 @@
 import {BlockOverlay, StrapConfirmModal} from 'components/common';
-import {FormCheckbox, FormTextInput} from 'components/forms';
+import {FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -176,7 +176,7 @@ function AlternativeForm(props) {
                     applyFieldArray
                   />
                 </Col>
-                <Col>
+                {/* <Col>
                   <FormTextInput
                     placeholder=""
                     type="textarea"
@@ -191,12 +191,12 @@ function AlternativeForm(props) {
                     defaultValue={defaultValues?.products}
                     applyFieldArray
                   />
-                </Col>
+                </Col> */}
               </Row>
             </Col>
           </Row>
 
-          <Row>
+          {/* <Row>
             <Col>
               <FormTextInput
                 placeholder=""
@@ -245,7 +245,7 @@ function AlternativeForm(props) {
                 applyFieldArray
               />
             </Col>
-          </Row>
+          </Row> */}
 
           <Row>
             <Col md={2}>
@@ -261,7 +261,7 @@ function AlternativeForm(props) {
               />
             </Col>
 
-            <Col md={3}>
+            {/* <Col md={3}>
               <FormTextInput
                 placeholder=""
                 name={`${prefixName}.catalog_id`}
@@ -291,9 +291,9 @@ function AlternativeForm(props) {
                 disabled={isLoading}
                 applyFieldArray
               />
-            </Col>
+            </Col> */}
           </Row>
-          <Row>
+          {/* <Row>
             <Col>
               <FormTextInput
                 placeholder=""
@@ -316,7 +316,7 @@ function AlternativeForm(props) {
                 applyFieldArray
               />
             </Col>
-          </Row>
+          </Row> */}
         </Col>
         <Col md={5}>
           <UploadFile

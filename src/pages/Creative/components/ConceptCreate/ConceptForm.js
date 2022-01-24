@@ -1,4 +1,4 @@
-import {TextField} from 'components/forms';
+import {TextField, FormDatePicker, FormCheckbox} from 'components/forms';
 import PropTypes from 'prop-types';
 import {useCreateConcept, useUpdateConcept} from 'queries/concept';
 import * as React from 'react';
@@ -14,11 +14,14 @@ import {
 } from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
-import {createConceptModelToRepo} from './dto';
+import {conceptRepoToModel, createConceptModelToRepo} from './dto';
 import {createConceptResolver} from './utils';
 
 const formDefaultValues = {
-  name: ''
+  name: '',
+  startTime: new Date(),
+  endTime: null,
+  status: true
 };
 
 function ConceptForm(props) {
@@ -36,10 +39,7 @@ function ConceptForm(props) {
 
   const defaultValues = React.useMemo(() => {
     if (isEdit) {
-      const {name} = concept;
-      return {
-        name
-      };
+      return conceptRepoToModel(concept);
     } else {
       return formDefaultValues;
     }
@@ -52,11 +52,13 @@ function ConceptForm(props) {
 
   const {
     handleSubmit,
-    formState: {isDirty}
-    // reset
+    formState: {isDirty},
+    watch
   } = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const watchStartTime = watch('startTime');
 
   const onSubmit = async values => {
     const bodyRequest = createConceptModelToRepo(values, advertiserId);
@@ -105,8 +107,30 @@ function ConceptForm(props) {
                   label={'Name'}
                   isRequired={true}
                   disabled={isLoading}
-                  // plaintext={disabled}
                 />
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormDatePicker
+                  required
+                  name="startTime"
+                  label="Start time"
+                  defaultValue={defaultValues.startTime}
+                />
+              </Col>
+              <Col md={6}>
+                <FormDatePicker
+                  name="endTime"
+                  label="End time"
+                  defaultValue={defaultValues.endTime}
+                  minDate={watchStartTime}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormCheckbox name="status" label="Status" />
               </Col>
             </Row>
           </CardBody>
