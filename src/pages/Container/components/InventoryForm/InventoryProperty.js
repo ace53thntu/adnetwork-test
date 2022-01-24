@@ -38,7 +38,7 @@ const InventoryProperty = ({currentInventory = null}) => {
         <Col sm={4}>
           <ColorPicker
             name="metadata.background_color"
-            label={t('backgroudColor')}
+            label={t('backgroundColor')}
             defaultValue={currentInventory?.metadata?.background_color}
           />
         </Col>

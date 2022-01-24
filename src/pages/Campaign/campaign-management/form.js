@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
 import {CAMPAIGN_KEYS} from '../constants';
 import {validationCampaign} from './validation';
@@ -176,7 +176,7 @@ const CampaignForm = ({
                     control={control}
                     name={CAMPAIGN_KEYS.STATUS}
                     render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle
+                      <ActiveToggle
                         value={value}
                         onChange={onChange}
                         disabled={isView}

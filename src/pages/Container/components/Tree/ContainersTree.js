@@ -23,7 +23,8 @@ import {CONTAINER_TREE_SOURCES} from './constants';
 import {containersMapData} from './dto';
 import {TreeContainerStyled} from './ContainersTree.styles';
 import {GET_PAGES} from 'queries/page/constants';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const LIMIT = 1000;
 
@@ -42,7 +43,7 @@ function ContainersTree(props) {
     params: {limit: 1000, page: 1},
     enabled: true
   });
-  const containers = data?.data?.data || [];
+  const containers = getResponseData(data, IS_RESPONSE_ALL);
 
   React.useEffect(() => {
     if (!isFetching && containers?.length > 0) {
@@ -62,6 +63,7 @@ function ContainersTree(props) {
 
   const loadChildren = React.useCallback(
     async (node, pageLimit, currentPage) => {
+      console.log('🚀 ~ file: ContainersTree.js ~ line 66 ~ node', node);
       const {isContainer, id, expanded, isSource} = node;
 
       if (isContainer) {
@@ -128,11 +130,15 @@ function ContainersTree(props) {
                 page: currentPage,
                 container_uuid: parentId,
                 source: id
+              },
+              options: {
+                isResponseAll: IS_RESPONSE_ALL
               }
             });
-            if (res?.data?.items) {
-              queryCache.setQueryData([GET_PAGES, parentId], res.data.items);
-              const currentSourceData = res.data.items ?? [];
+            const data = getResponseData(res, IS_RESPONSE_ALL);
+            if (data) {
+              queryCache.setQueryData([GET_PAGES, parentId], data);
+              const currentSourceData = data ?? [];
               currentSourceData.forEach((item, index) => {
                 children.push({
                   id: item.uuid,

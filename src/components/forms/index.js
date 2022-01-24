@@ -1,4 +1,4 @@
-import {default as ActiveToogle} from './ActiveToogle';
+import {default as ActiveToggle} from './ActiveToggle';
 import {Checkbox} from './Checkbox/Checkbox';
 import {default as FormCheckbox} from './FormCheckbox/FormCheckbox';
 import {default as FormRadioGroup} from './FormRadioGroup/FormRadioGroup';
@@ -10,6 +10,7 @@ import {Select} from './Select/Select';
 import {default as SelectCreatable} from './SelectCreatable';
 import {SelectPaginate} from './SelectPaginate/SelectPaginate';
 import {TextField} from './TextField/TextField';
+import {default as ModalLayout} from './ModalLayout';
 
 export {FormTagsInput} from './TagsInput';
 export * from './FormDatePicker';
@@ -18,7 +19,7 @@ export {
   TextField,
   Checkbox,
   FormReactSelect,
-  ActiveToogle,
+  ActiveToggle,
   FormTextField,
   FormTextInput,
   Select,
@@ -26,5 +27,6 @@ export {
   FormToggle,
   SelectCreatable,
   FormRadioGroup,
-  FormCheckbox
+  FormCheckbox,
+  ModalLayout
 };

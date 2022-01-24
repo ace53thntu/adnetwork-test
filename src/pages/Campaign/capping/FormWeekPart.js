@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row, Button, Label} from 'reactstrap';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {FormTextInput, ActiveToogle, FormReactSelect} from 'components/forms';
+import {FormTextInput, ActiveToggle, FormReactSelect} from 'components/forms';
 import {WEEK_DAYS} from '../constants';
 import {useGetDefaultWeekPart} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
@@ -89,7 +89,7 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
                 name="status"
                 defaultValue={'active'}
                 render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
+                  <ActiveToggle value={value} onChange={onChange} />
                 )}
               />
             </Col>
@@ -100,7 +100,7 @@ const FormWeekPark = ({onCloseForm = () => {}}) => {
                 name="is_gmt"
                 defaultValue={'active'}
                 render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
+                  <ActiveToggle value={value} onChange={onChange} />
                 )}
               />
             </Col>

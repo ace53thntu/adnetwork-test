@@ -5,7 +5,7 @@
  * @flow
  */
 
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
 import {Col, Label, Row} from 'reactstrap';
@@ -37,7 +37,7 @@ export default function DealForm({
             name={INPUTS_NAME.STATUS}
             defaultValue={'active'}
             render={({onChange, onBlur, value, name}) => (
-              <ActiveToogle value={value} onChange={onChange} />
+              <ActiveToggle value={value} onChange={onChange} />
             )}
           />
         </Col>

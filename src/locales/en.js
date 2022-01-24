@@ -4,7 +4,7 @@ const en = {
   selectType: 'Select type',
   width: 'Width',
   height: 'Height',
-  backgroudColor: 'Background color',
+  backgroundColor: 'Background color',
   extension: 'Extension',
   duration: 'Duration',
   selectTrackerTemplate: 'Select tracker template',
@@ -34,6 +34,8 @@ const en = {
   inventoryList: 'Inventory List',
   capping: 'Capping',
   concept: 'Concept',
+  manageDomain: 'Manage Domain',
+  domainList: 'Domain list',
 
   // Card Header
   advertiserList: 'Advertiser List',
@@ -83,6 +85,9 @@ const en = {
   creative: 'Creative',
   dashboard: 'Dashboard',
   creativeManagement: 'Creative Management',
+  tracker: 'Tracker',
+  keyword: 'Keyword',
+  domainGroup: 'Domain Group',
 
   //overview
   totalUsers: 'Total Users',

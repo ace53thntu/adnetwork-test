@@ -16,7 +16,7 @@ import {
   Label
 } from 'reactstrap';
 import {Controller, FormProvider, useForm, useWatch} from 'react-hook-form';
-import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
@@ -167,7 +167,7 @@ const UserForm = ({
                     control={control}
                     name={INPUT_NAME.STATUS}
                     render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle value={value} onChange={onChange} />
+                      <ActiveToggle value={value} onChange={onChange} />
                     )}
                   />
                 </Col>

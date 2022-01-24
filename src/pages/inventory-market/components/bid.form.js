@@ -15,7 +15,7 @@ import {Col, Label, Row} from 'reactstrap';
 //---> Internal Modules
 import {AudienceSelect, DspSelect} from './form-elements';
 import TimeRange from './form-elements/time-range';
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import {INPUTS_NAME} from '../constants';
 import {Controller, useFormContext} from 'react-hook-form';
 
@@ -65,7 +65,7 @@ const InventoryBidForm = ({
             name={INPUTS_NAME.STATUS}
             defaultValue={'active'}
             render={({onChange, onBlur, value, name}) => (
-              <ActiveToogle value={value} onChange={onChange} />
+              <ActiveToggle value={value} onChange={onChange} />
             )}
           />
         </Col>

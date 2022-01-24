@@ -6,9 +6,14 @@ export const containersRepoToModel = raw => {
     name,
     importCount = 0,
     transferCount = 0,
-    source = {},
+    sources = {},
     total_pages
   } = raw;
+
+  const sourceConverted = sources?.reduce((acc, item) => {
+    acc = {...acc, [item]: 1};
+    return acc;
+  }, {});
 
   let result = {
     id,
@@ -20,7 +25,7 @@ export const containersRepoToModel = raw => {
     isContainer: true,
     importCount,
     transferCount,
-    source,
+    source: sourceConverted,
     numChildren: 0
   };
 

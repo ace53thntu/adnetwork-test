@@ -16,7 +16,7 @@ import {
   Label
 } from 'reactstrap';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
@@ -133,7 +133,7 @@ const PublisherForm = ({
                     control={control}
                     name={INPUT_NAME.STATUS}
                     render={({onChange, onBlur, value, name}) => (
-                      <ActiveToogle value={value} onChange={onChange} />
+                      <ActiveToggle value={value} onChange={onChange} />
                     )}
                   />
                 </Col>

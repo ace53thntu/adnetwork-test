@@ -6,7 +6,7 @@ import {Controller, useFormContext} from 'react-hook-form';
 import {Col, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
-import {ActiveToogle} from 'components/forms';
+import {ActiveToggle} from 'components/forms';
 import {Collapse} from 'components/common';
 
 const StatusGroup = ({isView = false}) => {
@@ -22,7 +22,7 @@ const StatusGroup = ({isView = false}) => {
               control={control}
               name="status"
               render={({onChange, onBlur, value, name}) => (
-                <ActiveToogle
+                <ActiveToggle
                   value={value}
                   onChange={onChange}
                   disabled={isView}
@@ -37,7 +37,7 @@ const StatusGroup = ({isView = false}) => {
               control={control}
               name="only_unskippable"
               render={({onChange, onBlur, value, name}) => (
-                <ActiveToogle
+                <ActiveToggle
                   value={value}
                   onChange={onChange}
                   disabled={isView}
@@ -51,7 +51,7 @@ const StatusGroup = ({isView = false}) => {
               control={control}
               name="only_skippable"
               render={({onChange, onBlur, value, name}) => (
-                <ActiveToogle
+                <ActiveToggle
                   value={value}
                   onChange={onChange}
                   disabled={isView}

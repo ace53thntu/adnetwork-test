@@ -25,6 +25,6 @@ export const RoutePaths = {
   TRACKER: 'tracker',
   POSITION: 'position',
   KEYWORD: 'keyword',
-  DOMAIN_GROUP: 'domain-group',
+  DOMAIN_GROUP: 'group-domain',
   DOMAIN: 'domain'
 };

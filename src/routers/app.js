@@ -6,6 +6,7 @@ import {dashboardPages} from './dashboard';
 import {inventoryMarketPages} from './inventory-market';
 import {organizationPages} from './organization';
 import {userManagementPages} from './user';
+import {settingPages} from './setting';
 
 export const appRoutes = [
   dashboardPages,
@@ -16,5 +17,6 @@ export const appRoutes = [
   containerPages,
   inventoryPages,
   organizationPages,
-  userManagementPages
+  userManagementPages,
+  settingPages
 ];

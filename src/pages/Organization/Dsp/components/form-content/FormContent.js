@@ -1,4 +1,4 @@
-import {ActiveToogle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import DomainSelect from 'pages/Organization/components/domain-select';
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
@@ -63,7 +63,7 @@ const FormContent = ({defaultValues = {}, isView = false}) => {
           control={control}
           name={INPUT_NAME.STATUS}
           render={({onChange, onBlur, value, name}) => (
-            <ActiveToogle value={value} onChange={onChange} disabled={isView} />
+            <ActiveToggle value={value} onChange={onChange} disabled={isView} />
           )}
         />
       </Col>

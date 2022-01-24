@@ -29,7 +29,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -41,7 +41,7 @@ const Nav = ({role}) => {
           // onSelected={onSelected}
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -52,7 +52,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -63,7 +63,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -73,7 +73,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -84,7 +84,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -94,7 +94,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <>
         <MetisMenu
@@ -104,7 +104,7 @@ const Nav = ({role}) => {
           classNameStateIcon="pe-7s-angle-down"
           LinkComponent={DefaultLink}
         />
-        <div className="divider" />
+        <div className="c-divider" />
       </>
       <MetisMenu
         content={UserManagementNav(t)}

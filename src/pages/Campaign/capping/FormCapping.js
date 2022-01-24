@@ -8,7 +8,7 @@ import {useParams} from 'react-router';
 import {Button, Col, Form, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
-import {ActiveToogle, FormReactSelect, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import {useGetDefaultCapping} from './hooks';
 import useHandleCapping from './hooks/useHandleCapping';
 import {schemaValidate} from './validation';
@@ -122,7 +122,7 @@ const FormCapping = ({onCloseForm}) => {
                 name="smooth"
                 defaultValue={'active'}
                 render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
+                  <ActiveToggle value={value} onChange={onChange} />
                 )}
               />
             </Col>
@@ -133,7 +133,7 @@ const FormCapping = ({onCloseForm}) => {
                 name="status"
                 defaultValue={'active'}
                 render={({onChange, onBlur, value, name}) => (
-                  <ActiveToogle value={value} onChange={onChange} />
+                  <ActiveToggle value={value} onChange={onChange} />
                 )}
               />
             </Col>
