@@ -61,6 +61,9 @@ export const endpoints = {
   domain: {
     domain: `${API_V1}/domain`
   },
+  domainGroup: {
+    domain: `${API_V1}/domain`
+  },
   audience: {
     audience: `${API_V1}/audience`
   },

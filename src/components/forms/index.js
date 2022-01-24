@@ -10,7 +10,7 @@ import {Select} from './Select/Select';
 import {default as SelectCreatable} from './SelectCreatable';
 import {SelectPaginate} from './SelectPaginate/SelectPaginate';
 import {TextField} from './TextField/TextField';
-import {default as ModalLayout} from './ModalLayout';
+import {ModalLayout} from './ModalLayout';
 
 export {FormTagsInput} from './TagsInput';
 export * from './FormDatePicker';

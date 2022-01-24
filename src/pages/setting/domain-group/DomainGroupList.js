@@ -31,15 +31,15 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import DomainCreate from './DomainCreate';
-import DomainEdit from './DomainEdit';
+import DomainCreate from './DomainGroupCreate';
+import DomainEdit from './DomainGroupEdit';
 import {ModalLayout} from 'components/forms';
 import DomainForm from './components/domain.form';
 import {useDeleteDomain, useGetDomain, useGetDomains} from 'queries/domain';
 
 const propTypes = {};
 
-const DomainList = () => {
+const DomainGroupList = () => {
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
 
@@ -254,6 +254,6 @@ const DomainList = () => {
   );
 };
 
-DomainList.propTypes = propTypes;
+DomainGroupList.propTypes = propTypes;
 
-export default DomainList;
+export default DomainGroupList;

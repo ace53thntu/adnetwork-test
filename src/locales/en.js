@@ -19,6 +19,7 @@ const en = {
   backToList: 'Back to list',
   allowDeal: 'Allow deal',
   firstParty: 'First party',
+  enterDomain: 'Enter domain',
 
   // Main Menu
   userManagement: 'User Management',
@@ -175,7 +176,7 @@ const en = {
   parameters: 'Parameters',
   aboutDescription:
     'Because an audience in this section is a segment in segment list, so in About is Segment detail of the segment',
-  commingSoon: 'Comming soon',
+  comingSoon: 'Coming soon',
 
   //segment
   searchSegment: 'Search segment',

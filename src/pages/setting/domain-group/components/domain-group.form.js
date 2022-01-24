@@ -35,7 +35,7 @@ const propTypes = {
   domain: PropTypes.any
 };
 
-const DomainForm = ({
+const DomainGroupForm = ({
   title = 'Create domain',
   isEdit = false,
   toggle = () => null,
@@ -125,6 +125,6 @@ const DomainForm = ({
   );
 };
 
-DomainForm.propTypes = propTypes;
+DomainGroupForm.propTypes = propTypes;
 
-export default DomainForm;
+export default DomainGroupForm;

@@ -109,7 +109,7 @@ const vn = {
   charts: 'Biểu đồ',
   parameters: 'Thông số',
   aboutDescription: '',
-  commingSoon: 'Sẽ đến sớm',
+  comingSoon: 'Tính năng đang phát triển',
 
   //segment
   searchSegment: 'Tìm kiếm segment',
