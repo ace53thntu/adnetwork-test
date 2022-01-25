@@ -94,3 +94,9 @@ export const PAGINATION_HEADERS = {
 };
 
 export const IS_RESPONSE_ALL = true;
+
+export const Statuses = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  DELETE: 'delete'
+};

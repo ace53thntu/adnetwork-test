@@ -1,15 +1,15 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {DomainGroupAPIRequest} from 'api/domain-group.api';
 import {IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_DOMAIN_GROUPS} from './constants';
 
 /**
  * Hook for get all domains
  * @returns Promise
  */
-export function useGetDomains({
+export function useGetDomainGroups({
   params,
   enabled = false,
   keepPreviousData = false
@@ -17,9 +17,9 @@ export function useGetDomains({
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_DOMAINS, params],
+    [GET_DOMAIN_GROUPS, params],
     () =>
-      DomainAPIRequest.getAllDomain({
+      DomainGroupAPIRequest.getAllDomainGroup({
         params,
         options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),

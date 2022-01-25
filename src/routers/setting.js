@@ -1,5 +1,5 @@
 import {RoutePaths} from 'constants/route-paths';
-import {DomainListPage} from 'pages/setting';
+import {DomainGroupListPage, DomainListPage} from 'pages/setting';
 
 export const settingPages = {
   path: RoutePaths.SETTING,
@@ -10,6 +10,15 @@ export const settingPages = {
         {
           path: '',
           element: <DomainListPage />
+        }
+      ]
+    },
+    {
+      path: `${RoutePaths.DOMAIN_GROUP}`,
+      children: [
+        {
+          path: '',
+          element: <DomainGroupListPage />
         }
       ]
     }

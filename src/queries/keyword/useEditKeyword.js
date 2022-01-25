@@ -1,20 +1,20 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {KeywordAPIRequest} from 'api/keyword.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_KEYWORDS} from './constants';
 
 /**
- * Update a Domain
+ * Update a Keyword
  */
-export function useEditDomain() {
+export function useEditKeyword() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    ({domainId, data}) =>
-      DomainAPIRequest.editDomain({
-        id: domainId,
+    ({keywordId, data}) =>
+      KeywordAPIRequest.editKeyword({
+        id: keywordId,
         data,
         options: {cancelToken}
       }),
@@ -23,7 +23,7 @@ export function useEditDomain() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_KEYWORDS]);
       }
     }
   );

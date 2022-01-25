@@ -1,25 +1,25 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {DomainGroupAPIRequest} from 'api/domain-group.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_DOMAIN_GROUPS} from './constants';
 
 /**
  * Delete a Domain
  */
-export function useDeleteDomain() {
+export function useDeleteDomainGroup() {
   const client = useQueryClient();
 
   return useMutation(
-    ({domainId}) =>
-      DomainAPIRequest.deleteDomain({
-        id: domainId
+    ({domainGroupId}) =>
+      DomainGroupAPIRequest.deleteDomainGroup({
+        id: domainGroupId
       }),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_DOMAIN_GROUPS]);
       }
     }
   );

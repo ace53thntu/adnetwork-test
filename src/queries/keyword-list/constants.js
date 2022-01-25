@@ -1,0 +1,2 @@
+export const GET_KEYWORD_LISTS = 'GET_KEYWORD_LISTS';
+export const GET_KEYWORD_LIST = 'GET_KEYWORD_LIST';

@@ -1,2 +1,2 @@
-export const GET_DOMAINS = 'GET_DOMAINS';
-export const GET_DOMAIN = 'GET_DOMAIN';
+export const GET_DOMAIN_GROUPS = 'GET_DOMAIN_GROUPS';
+export const GET_DOMAIN_GROUP = 'GET_DOMAIN_G';

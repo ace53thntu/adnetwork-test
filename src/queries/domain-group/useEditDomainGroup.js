@@ -1,24 +1,29 @@
-import {DomainAPIRequest} from 'api/domain.api';
+import {DomainGroupAPIRequest} from 'api/domain-group.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_DOMAIN_GROUPS} from './constants';
 
 /**
- * Create a Domain
+ * Update a Domain
  */
-export function useCreateDomain() {
+export function useEditDomainGroup() {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
   return useMutation(
-    data => DomainAPIRequest.createDomain({data, options: {cancelToken}}),
+    ({domainGroupId, data}) =>
+      DomainGroupAPIRequest.editDomainGroup({
+        id: domainGroupId,
+        data,
+        options: {cancelToken}
+      }),
     {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_DOMAIN_GROUPS]);
       }
     }
   );

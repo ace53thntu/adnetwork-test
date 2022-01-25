@@ -9,7 +9,8 @@ import {
   Row,
   Col,
   CardBody,
-  Container
+  Container,
+  Badge
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
@@ -34,8 +35,14 @@ import CustomPagination from 'components/common/CustomPagination';
 import DomainCreate from './DomainGroupCreate';
 import DomainEdit from './DomainGroupEdit';
 import {ModalLayout} from 'components/forms';
-import DomainForm from './components/domain.form';
-import {useDeleteDomain, useGetDomain, useGetDomains} from 'queries/domain';
+import DomainForm from './components/domain-group.form';
+import {
+  useDeleteDomainGroup,
+  useGetDomainGroup,
+  useGetDomainGroups
+} from 'queries/domain-group';
+import DomainGroupForm from './components/domain-group.form';
+import DomainBadge from './components/DomainBadge';
 
 const propTypes = {};
 
@@ -55,7 +62,7 @@ const DomainGroupList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Domains.
-  const {data, isLoading, isPreviousData} = useGetDomains({
+  const {data, isLoading, isPreviousData} = useGetDomainGroups({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -75,25 +82,41 @@ const DomainGroupList = () => {
 
   //---> Mutation delete domain
   const {
-    mutateAsync: deleteDomain,
+    mutateAsync: deleteDomainGroup,
     isLoading: isLoadingDelete
-  } = useDeleteDomain();
+  } = useDeleteDomainGroup();
 
-  const {data: domain} = useGetDomain({
-    domainId: currentDomain?.uuid,
+  const {data: domainGroup} = useGetDomainGroup({
+    domainGroupId: currentDomain?.uuid,
     enabled: !!currentDomain?.uuid
   });
   console.log(
     '🚀 ~ file: DomainList.js ~ line 84 ~ DomainList ~ domain',
-    domain
+    domainGroup
   );
 
   //---> Define columns
   const columns = useMemo(() => {
     return [
       {
-        header: 'Domain',
-        accessor: 'domain'
+        header: 'Name',
+        accessor: 'name'
+      },
+      {
+        header: 'Domains',
+        accessor: 'domain_list',
+        cell: row => <DomainBadge domains={row?.value || []} />
+      },
+      {
+        header: 'Shared',
+        accessor: 'shared',
+        cell: row => {
+          return (
+            <Badge color={row?.value ? 'primary' : 'warning'}>
+              {row?.value?.toString()}
+            </Badge>
+          );
+        }
       },
       {
         accessor: 'status',
@@ -154,10 +177,10 @@ const DomainGroupList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteDomain({domainId: currentDomain?.uuid});
-      ShowToast.success('Deleted domain successfully');
+      await deleteDomainGroup({domainGroupId: currentDomain?.uuid});
+      ShowToast.success('Deleted domain group successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete domain');
+      ShowToast.error(err || 'Fail to delete domain group');
     } finally {
       setShowDialog(false);
     }
@@ -167,7 +190,7 @@ const DomainGroupList = () => {
     <>
       <AppContent>
         <PageTitleAlt
-          heading={t('manageDomain')}
+          heading={t('manageDomainGroup')}
           subheading=""
           icon="pe-7s-global icon-gradient bg-tempting-azure"
         />
@@ -217,7 +240,7 @@ const DomainGroupList = () => {
           </Row>
         </Container>
       </AppContent>
-      {/* Create domain */}
+      {/* Create domain group */}
       <DomainCreate>
         {openForm && (
           <ModalLayout modal={openForm}>
@@ -225,15 +248,16 @@ const DomainGroupList = () => {
           </ModalLayout>
         )}
       </DomainCreate>
-      {/* Edit domain */}
+      {/* Edit domain group */}
       <DomainEdit>
         {openFormEdit && (
           <ModalLayout modal={openFormEdit}>
-            {domain ? (
-              <DomainForm
-                title="Edit domain"
+            {domainGroup ? (
+              <DomainGroupForm
+                title="Edit domain group"
                 toggle={onToggleModalEdit}
-                domain={domain}
+                domainGroup={domainGroup}
+                isEdit
               />
             ) : (
               <div>Loading...</div>
@@ -244,7 +268,7 @@ const DomainGroupList = () => {
       {showDialog && (
         <DialogConfirm
           open={showDialog}
-          title="Are you sure delete this Domain?"
+          title="Are you sure delete this Domain Group?"
           handleClose={onCancelDelete}
           handleAgree={onSubmitDelete}
           isLoading={isLoadingDelete}

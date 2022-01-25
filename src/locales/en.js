@@ -20,6 +20,7 @@ const en = {
   allowDeal: 'Allow deal',
   firstParty: 'First party',
   enterDomain: 'Enter domain',
+  shared: 'Shared',
 
   // Main Menu
   userManagement: 'User Management',
@@ -37,6 +38,7 @@ const en = {
   concept: 'Concept',
   manageDomain: 'Manage Domain',
   domainList: 'Domain list',
+  manageDomainGroup: 'Manage Domain Group',
 
   // Card Header
   advertiserList: 'Advertiser List',
@@ -160,7 +162,7 @@ const en = {
   acceptedContexts: 'Accepted contexts',
   acceptedPlacements: 'Accepted placements',
   recentStrategy: 'Recent strategies',
-  noAudienceAvaliable: 'No audience available',
+  noAudienceAvailable: 'No audience available',
 
   //report
   reportAudiences: 'Report Audiences',
@@ -221,12 +223,11 @@ const en = {
   groupBy: 'Group by',
   total: 'Total',
   recentAudiences: 'Recent Audiences',
-  managementAudiancesDescription: '',
+  managementAudiencesDescription: '',
   deleteAudienceSuccessfully: 'Delete Audience successfully!',
   audiencesList: 'Audiences List',
   compare: 'Compare',
   newAudience: 'New Audience',
-  noAudienceAvailable: 'No Audience available.',
 
   //container
   selectPublisher: 'Select publisher',

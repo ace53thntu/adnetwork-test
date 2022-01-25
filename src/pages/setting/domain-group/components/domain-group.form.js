@@ -23,31 +23,32 @@ import {InputNames} from '../constant';
 import {useTranslation} from 'react-i18next';
 import {useDefaultValues} from '../hook';
 import {schemaValidate} from './validation';
-import {useCreateDomain, useEditDomain} from 'queries/domain';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {formToApi} from 'entities/Domain';
+import {formToApi} from 'entities/DomainGroup';
+import {useCreateDomainGroup, useEditDomainGroup} from 'queries/domain-group';
+import DomainSelect from './DomainSelect';
 
 const propTypes = {
   title: PropTypes.string,
   toggle: PropTypes.func,
   isEdit: PropTypes.bool,
   isLoading: PropTypes.bool,
-  domain: PropTypes.any
+  domainGroup: PropTypes.any
 };
 
 const DomainGroupForm = ({
-  title = 'Create domain',
+  title = 'Create domain group',
   isEdit = false,
   toggle = () => null,
   isLoading = false,
-  domain = null
+  domainGroup = null
 }) => {
   const {t} = useTranslation();
   // React Query - hooks
-  const {mutateAsync: createDomain} = useCreateDomain();
-  const {mutateAsync: editDomain} = useEditDomain();
+  const {mutateAsync: createDomainGroup} = useCreateDomainGroup();
+  const {mutateAsync: editDomainGroup} = useEditDomainGroup();
 
-  const defaultValues = useDefaultValues({domain});
+  const defaultValues = useDefaultValues({domainGroup});
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t)
@@ -62,7 +63,7 @@ const DomainGroupForm = ({
     const data = formToApi({formData});
     if (!isEdit) {
       try {
-        await createDomain(data);
+        await createDomainGroup(data);
         ShowToast.success('Created domain successfully');
         toggle();
       } catch (err) {
@@ -70,11 +71,11 @@ const DomainGroupForm = ({
       }
     } else {
       try {
-        await editDomain({domainId: domain?.uuid, data});
-        ShowToast.success('Updated domain successfully');
+        await editDomainGroup({domainGroupId: domainGroup?.uuid, data});
+        ShowToast.success('Updated domain group successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update domain');
+        ShowToast.error(err?.msg || 'Fail to update domain group');
       }
     }
   }
@@ -87,19 +88,18 @@ const DomainGroupForm = ({
           <ModalBody>
             {isLoading && <LoadingIndicator />}
             <Row>
-              {/* Username */}
+              {/* Domain group name */}
               <Col sm={6}>
                 <FormTextInput
-                  name={InputNames.DOMAIN}
-                  label={t('domain')}
-                  placeholder={t('enterDomain')}
+                  name={InputNames.NAME}
+                  label={t('name')}
+                  placeholder={t('enterName')}
                   isRequired
-                  disabled={isEdit}
                 />
               </Col>
 
               {/* Status */}
-              <Col sm="6">
+              <Col sm="3">
                 <Label className="mr-5">{t('status')}</Label>
                 <Controller
                   control={control}
@@ -107,6 +107,34 @@ const DomainGroupForm = ({
                   render={({onChange, onBlur, value, name}) => (
                     <ActiveToggle value={value} onChange={onChange} />
                   )}
+                />
+              </Col>
+              {/* Shared */}
+              <Col sm="3">
+                <Label className="mr-5">{t('shared')}</Label>
+                <Controller
+                  control={control}
+                  name={InputNames.SHARED}
+                  render={({onChange, onBlur, value, name}) => (
+                    <ActiveToggle value={value} onChange={onChange} />
+                  )}
+                />
+              </Col>
+              <Col sm={12}>
+                <DomainSelect
+                  defaultValue={defaultValues?.[InputNames.DOMAINS]}
+                  name={InputNames.DOMAINS}
+                  label={t('domains')}
+                  placeholder={t('selectDomains')}
+                  multiple
+                />
+              </Col>
+              <Col sm={12}>
+                <FormTextInput
+                  name={InputNames.DESCRIPTION}
+                  label={t('description')}
+                  placeholder={t('enterDescription')}
+                  type="textarea"
                 />
               </Col>
             </Row>

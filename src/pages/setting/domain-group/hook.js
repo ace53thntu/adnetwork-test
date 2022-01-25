@@ -1,6 +1,6 @@
-import {apiToForm} from 'entities/Domain';
+import {apiToForm} from 'entities/DomainGroup';
 import React from 'react';
 
-export const useDefaultValues = ({domain = {}}) => {
-  return React.useMemo(() => apiToForm({domain}), [domain]);
+export const useDefaultValues = ({domainGroup = {}}) => {
+  return React.useMemo(() => apiToForm({domainGroup}), [domainGroup]);
 };

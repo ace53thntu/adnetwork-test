@@ -13,4 +13,18 @@ function DomainListPage() {
   );
 }
 
-export {DomainListPage};
+const DomainGroupList = React.lazy(() =>
+  import(
+    './domain-group/DomainGroupList' /* webpackChunkName: "domain-group-list" */
+  )
+);
+
+function DomainGroupListPage() {
+  return (
+    <ErrorBoundary>
+      <DomainGroupList />
+    </ErrorBoundary>
+  );
+}
+
+export {DomainListPage, DomainGroupListPage};

@@ -62,7 +62,7 @@ export const endpoints = {
     domain: `${API_V1}/domain`
   },
   domainGroup: {
-    domain: `${API_V1}/domain`
+    domainGroup: `${API_V1}/domain_group`
   },
   audience: {
     audience: `${API_V1}/audience`
@@ -108,5 +108,11 @@ export const endpoints = {
   credential: {
     credential: `${API_V1}/credential`,
     rerollKey: 'reroll_key'
+  },
+  keyword: {
+    keyword: `${API_V1}/keyword`
+  },
+  keywordList: {
+    keywordList: `${API_V1}/keyword_list`
   }
 };

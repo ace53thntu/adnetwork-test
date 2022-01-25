@@ -10,23 +10,31 @@ class DomainGroupAPI extends XHRRequest {
   }
 
   getAllDomainGroup = ({params, options}) => {
-    return this.get(endpoints.domain.domain, params, options);
+    return this.get(endpoints.domainGroup.domainGroup, params, options);
   };
 
   getDomainGroup = ({id, params = null, options}) => {
-    return this.get(`${endpoints.domain.domain}/${id}`, params, options);
+    return this.get(
+      `${endpoints.domainGroup.domainGroup}/${id}`,
+      params,
+      options
+    );
   };
 
   createDomainGroup = ({data, options}) => {
-    return this.post(endpoints.domain.domain, data, options);
+    return this.post(endpoints.domainGroup.domainGroup, data, options);
   };
 
   editDomainGroup = ({id, data, options}) => {
-    return this.put(`${endpoints.domain.domain}/${id}`, data, options);
+    return this.put(
+      `${endpoints.domainGroup.domainGroup}/${id}`,
+      data,
+      options
+    );
   };
 
   deleteDomainGroup = ({id, params}) => {
-    return this.delete(`${endpoints.domain.domain}/${id}`, params);
+    return this.delete(`${endpoints.domainGroup.domainGroup}/${id}`, params);
   };
 }
 

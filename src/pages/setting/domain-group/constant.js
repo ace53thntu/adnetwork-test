@@ -1,4 +1,7 @@
 export const InputNames = {
-  DOMAIN: 'domain',
-  STATUS: 'status'
+  NAME: 'name',
+  DESCRIPTION: 'description',
+  DOMAINS: 'domains',
+  STATUS: 'status',
+  SHARED: 'shared'
 };
