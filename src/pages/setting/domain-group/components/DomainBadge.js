@@ -13,7 +13,7 @@ const DomainBadge = ({domains = []}) => {
   }
 
   return domains?.map(domain => (
-    <Badge key={`pr-${domain?.uuid}`} color="info">
+    <Badge key={`pr-${domain?.uuid}`} color="info" className="mr-1">
       {domain?.domain}
     </Badge>
   ));

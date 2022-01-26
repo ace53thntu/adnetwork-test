@@ -105,8 +105,8 @@ export const SettingNav = (t, role) => {
           to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.POSITION}`
         },
         {
-          label: t('keyword'),
-          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.KEYWORD}`
+          label: t('keywordList'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.KEYWORD_LIST}`
         },
         {
           label: t('domainGroup'),

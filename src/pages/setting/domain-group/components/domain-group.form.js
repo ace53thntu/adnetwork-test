@@ -46,7 +46,7 @@ const DomainGroupForm = ({
   const {t} = useTranslation();
   // React Query - hooks
   const {mutateAsync: createDomainGroup} = useCreateDomainGroup();
-  const {mutateAsync: editDomainGroup} = useEditDomainGroup();
+  const {mutateAsync: editDomainGroup} = useEditDomainGroup(domainGroup?.uuid);
 
   const defaultValues = useDefaultValues({domainGroup});
   const methods = useForm({

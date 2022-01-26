@@ -4,6 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import classNames from 'clsx';
 
 import useStyles from './styles';
+import {Badge} from 'reactstrap';
 
 function Status(props) {
   const {color, label, noHeader} = props;
@@ -19,6 +20,16 @@ function Status(props) {
         noHeader && classes.noHeader
       )}
     />
+  );
+}
+
+export function CustomStatus(props) {
+  const {color, label} = props;
+
+  return (
+    <Badge size="small" color={color} pill>
+      {label}
+    </Badge>
   );
 }
 

@@ -113,6 +113,6 @@ export const endpoints = {
     keyword: `${API_V1}/keyword`
   },
   keywordList: {
-    keywordList: `${API_V1}/keyword_list`
+    keywordList: `${API_V1}/keywords_list`
   }
 };

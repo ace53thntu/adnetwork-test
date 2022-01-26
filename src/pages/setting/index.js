@@ -27,4 +27,16 @@ function DomainGroupListPage() {
   );
 }
 
-export {DomainListPage, DomainGroupListPage};
+const KeywordList = React.lazy(() =>
+  import('./keyword-list/KeywordList' /* webpackChunkName: "keyword-lists" */)
+);
+
+function KeywordListPage() {
+  return (
+    <ErrorBoundary>
+      <KeywordList />
+    </ErrorBoundary>
+  );
+}
+
+export {DomainListPage, DomainGroupListPage, KeywordListPage};

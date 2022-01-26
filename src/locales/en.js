@@ -21,6 +21,7 @@ const en = {
   firstParty: 'First party',
   enterDomain: 'Enter domain',
   shared: 'Shared',
+  keywords: 'Keywords',
 
   // Main Menu
   userManagement: 'User Management',
@@ -39,6 +40,7 @@ const en = {
   manageDomain: 'Manage Domain',
   domainList: 'Domain list',
   manageDomainGroup: 'Manage Domain Group',
+  manageKeywordList: 'Manage Keyword List',
 
   // Card Header
   advertiserList: 'Advertiser List',
@@ -90,6 +92,7 @@ const en = {
   creativeManagement: 'Creative Management',
   tracker: 'Tracker',
   keyword: 'Keyword',
+  keywordList: 'Keyword List',
   domainGroup: 'Domain Group',
 
   //overview

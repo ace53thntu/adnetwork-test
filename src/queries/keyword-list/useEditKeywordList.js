@@ -2,12 +2,12 @@ import {KeywordListAPIRequest} from 'api/keyword-list.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_KEYWORD_LISTS} from './constants';
+import {GET_KEYWORD_LIST, GET_KEYWORD_LISTS} from './constants';
 
 /**
  * Update a Keyword list
  */
-export function useEditKeywordList() {
+export function useEditKeywordList(keywordListId) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -24,6 +24,7 @@ export function useEditKeywordList() {
       },
       onSettled: () => {
         client.invalidateQueries([GET_KEYWORD_LISTS]);
+        client.invalidateQueries([GET_KEYWORD_LIST, keywordListId]);
       }
     }
   );

@@ -9,7 +9,8 @@ import {
   Row,
   Col,
   CardBody,
-  Container
+  Container,
+  Badge
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
@@ -19,7 +20,7 @@ import {useDispatch} from 'react-redux';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
-import Status from 'components/list/status';
+import {CustomStatus} from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -31,15 +32,20 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import DomainCreate from './DomainCreate';
-import DomainEdit from './DomainEdit';
 import {ModalLayout} from 'components/forms';
-import DomainForm from './components/domain.form';
-import {useDeleteDomain, useGetDomain, useGetDomains} from 'queries/domain';
+import {
+  useDeleteKeywordList,
+  useGetKeywordList,
+  useGetKeywordLists
+} from 'queries/keyword-list';
+import KeywordListCreate from './KeywordListCreate';
+import KeywordListEdit from './KeywordListEdit';
+import KeywordListForm from './components/keyword-list.form';
+import KeywordBadge from './components/KeywordBadge';
 
 const propTypes = {};
 
-const DomainList = () => {
+const KeywordList = () => {
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
 
@@ -48,14 +54,14 @@ const DomainList = () => {
   }, [reduxDispatch]);
 
   //---> Define local states.
-  const [currentDomain, setCurrentDomain] = React.useState(null);
+  const [currentKeywordList, setCurrentKeywordList] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Domains.
-  const {data, isLoading, isPreviousData} = useGetDomains({
+  const {data, isLoading, isPreviousData} = useGetKeywordLists({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -65,7 +71,7 @@ const DomainList = () => {
     keepPreviousData: true
   });
 
-  const domains = useMemo(() => {
+  const keywordLists = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
     return dataDestructured?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
@@ -73,27 +79,36 @@ const DomainList = () => {
     return getResponsePagination(data);
   }, [data]);
 
-  //---> Mutation delete domain
+  //---> Mutation delete keyword list
   const {
-    mutateAsync: deleteDomain,
+    mutateAsync: deleteKeywordList,
     isLoading: isLoadingDelete
-  } = useDeleteDomain();
+  } = useDeleteKeywordList();
 
-  const {data: domain} = useGetDomain({
-    domainId: currentDomain?.uuid,
-    enabled: !!currentDomain?.uuid
+  const {data: keywordList} = useGetKeywordList({
+    keywordListId: currentKeywordList?.uuid,
+    enabled: !!currentKeywordList?.uuid
   });
-  console.log(
-    '🚀 ~ file: DomainList.js ~ line 84 ~ DomainList ~ domain',
-    domain
-  );
 
   //---> Define columns
   const columns = useMemo(() => {
     return [
       {
-        header: 'Domain',
-        accessor: 'domain'
+        header: 'Name',
+        accessor: 'name'
+      },
+      {
+        header: 'Keywords',
+        accessor: 'keywords',
+        cell: row => <KeywordBadge keywords={row?.value || []} />
+      },
+      {
+        accessor: 'shared',
+        cell: row => (
+          <Badge color={row?.value ? 'primary' : 'warning'}>
+            {row?.value ? 'shared' : 'un-share'}
+          </Badge>
+        )
       },
       {
         accessor: 'status',
@@ -109,7 +124,7 @@ const DomainList = () => {
               statusProps.color = 'error';
               break;
           }
-          return <Status {...statusProps} />;
+          return <CustomStatus {...statusProps} />;
         }
       },
       {
@@ -139,13 +154,13 @@ const DomainList = () => {
   };
 
   const onClickItem = data => {
-    setCurrentDomain(data);
+    setCurrentKeywordList(data);
     setOpenFormEdit(true);
   };
 
   const onClickDelete = (actionIndex, item) => {
     setShowDialog(true);
-    setCurrentDomain(item);
+    setCurrentKeywordList(item);
   };
 
   const onCancelDelete = () => {
@@ -154,10 +169,10 @@ const DomainList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteDomain({domainId: currentDomain?.uuid});
-      ShowToast.success('Deleted domain successfully');
+      await deleteKeywordList({keywordListId: currentKeywordList?.uuid});
+      ShowToast.success('Deleted keyword list successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete domain');
+      ShowToast.error(err || 'Fail to delete keyword list');
     } finally {
       setShowDialog(false);
     }
@@ -167,9 +182,9 @@ const DomainList = () => {
     <>
       <AppContent>
         <PageTitleAlt
-          heading={t('manageDomain')}
+          heading={t('manageKeywordList')}
           subheading=""
-          icon="pe-7s-global icon-gradient bg-tempting-azure"
+          icon="pe-7s-search icon-gradient bg-tempting-azure"
         />
         <Container fluid>
           <Row>
@@ -178,7 +193,7 @@ const DomainList = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('domainList')}</div>
+                  <div>{t('keywordList')}</div>
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}
@@ -196,7 +211,7 @@ const DomainList = () => {
                     <LoadingIndicator />
                   ) : (
                     <List
-                      data={domains || []}
+                      data={keywordLists || []}
                       columns={columns}
                       showAction
                       actions={['Delete']}
@@ -217,23 +232,23 @@ const DomainList = () => {
           </Row>
         </Container>
       </AppContent>
-      {/* Create domain */}
-      <DomainCreate>
+      {/* Create keyword list */}
+      <KeywordListCreate>
         {openForm && (
           <ModalLayout modal={openForm}>
-            <DomainForm toggle={onToggleModal} />
+            <KeywordListForm toggle={onToggleModal} />
           </ModalLayout>
         )}
-      </DomainCreate>
-      {/* Edit domain */}
-      <DomainEdit>
+      </KeywordListCreate>
+      {/* Edit keyword list */}
+      <KeywordListEdit>
         {openFormEdit && (
           <ModalLayout modal={openFormEdit}>
-            {domain ? (
-              <DomainForm
-                title="Edit domain"
+            {keywordList ? (
+              <KeywordListForm
+                title="Edit keyword list"
                 toggle={onToggleModalEdit}
-                domain={domain}
+                keywordList={keywordList}
                 isEdit
               />
             ) : (
@@ -241,7 +256,7 @@ const DomainList = () => {
             )}
           </ModalLayout>
         )}
-      </DomainEdit>
+      </KeywordListEdit>
       {showDialog && (
         <DialogConfirm
           open={showDialog}
@@ -255,6 +270,6 @@ const DomainList = () => {
   );
 };
 
-DomainList.propTypes = propTypes;
+KeywordList.propTypes = propTypes;
 
-export default DomainList;
+export default KeywordList;

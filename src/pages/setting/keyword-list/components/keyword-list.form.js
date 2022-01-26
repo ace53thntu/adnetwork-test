@@ -23,31 +23,32 @@ import {InputNames} from '../constant';
 import {useTranslation} from 'react-i18next';
 import {useDefaultValues} from '../hook';
 import {schemaValidate} from './validation';
-import {useCreateDomain, useEditDomain} from 'queries/domain';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {formToApi} from 'entities/Domain';
+import {useCreateKeywordList, useEditKeywordList} from 'queries/keyword-list';
+import {formToApi} from 'entities/KeywordList';
+import KeywordSelectCreatable from './KeywordSelectCreatable';
 
 const propTypes = {
   title: PropTypes.string,
   toggle: PropTypes.func,
   isEdit: PropTypes.bool,
   isLoading: PropTypes.bool,
-  domain: PropTypes.any
+  keywordList: PropTypes.any
 };
 
-const DomainForm = ({
-  title = 'Create domain',
+const KeywordListForm = ({
+  title = 'Create keyword list',
   isEdit = false,
   toggle = () => null,
   isLoading = false,
-  domain = null
+  keywordList = null
 }) => {
   const {t} = useTranslation();
   // React Query - hooks
-  const {mutateAsync: createDomain} = useCreateDomain();
-  const {mutateAsync: editDomain} = useEditDomain();
+  const {mutateAsync: createKeywordList} = useCreateKeywordList();
+  const {mutateAsync: editKeywordList} = useEditKeywordList(keywordList?.uuid);
 
-  const defaultValues = useDefaultValues({domain});
+  const defaultValues = useDefaultValues({keywordList});
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t)
@@ -56,25 +57,25 @@ const DomainForm = ({
 
   async function onSubmit(formData) {
     console.log(
-      '🚀 ~ file: domain.form.js ~ line 19 ~ onSubmit ~ formData',
+      '🚀 ~ file: keyword list.form.js ~ line 19 ~ onSubmit ~ formData',
       formData
     );
     const data = formToApi({formData});
     if (!isEdit) {
       try {
-        await createDomain(data);
-        ShowToast.success('Created domain successfully');
+        await createKeywordList(data);
+        ShowToast.success('Created keyword list successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create domain');
+        ShowToast.error(err?.msg || 'Fail to create keyword list');
       }
     } else {
       try {
-        await editDomain({domainId: domain?.uuid, data});
-        ShowToast.success('Updated domain successfully');
+        await editKeywordList({keywordListId: keywordList?.uuid, data});
+        ShowToast.success('Updated keyword list successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update domain');
+        ShowToast.error(err?.msg || 'Fail to update keyword list');
       }
     }
   }
@@ -87,18 +88,18 @@ const DomainForm = ({
           <ModalBody>
             {isLoading && <LoadingIndicator />}
             <Row>
-              {/* Username */}
+              {/* Name */}
               <Col sm={6}>
                 <FormTextInput
-                  name={InputNames.DOMAIN}
-                  label={t('domain')}
-                  placeholder={t('enterDomain')}
+                  name={InputNames.NAME}
+                  label={t('name')}
+                  placeholder={t('enterName')}
                   isRequired
                 />
               </Col>
 
               {/* Status */}
-              <Col sm="6">
+              <Col sm="3">
                 <Label className="mr-5">{t('status')}</Label>
                 <Controller
                   control={control}
@@ -107,6 +108,28 @@ const DomainForm = ({
                     <ActiveToggle value={value} onChange={onChange} />
                   )}
                 />
+              </Col>
+              <Col sm="3">
+                <Label className="mr-5">{t('shared')}</Label>
+                <Controller
+                  control={control}
+                  name={InputNames.SHARED}
+                  render={({onChange, onBlur, value, name}) => (
+                    <ActiveToggle value={value} onChange={onChange} />
+                  )}
+                />
+              </Col>
+              {/* Description */}
+              <Col sm={12}>
+                <FormTextInput
+                  name={InputNames.DESCRIPTION}
+                  label={t('description')}
+                  placeholder={t('enterDescription')}
+                  type="textarea"
+                />
+              </Col>
+              <Col sm="12">
+                <KeywordSelectCreatable defaultValue={[]} />
               </Col>
             </Row>
           </ModalBody>
@@ -124,6 +147,6 @@ const DomainForm = ({
   );
 };
 
-DomainForm.propTypes = propTypes;
+KeywordListForm.propTypes = propTypes;
 
-export default DomainForm;
+export default KeywordListForm;

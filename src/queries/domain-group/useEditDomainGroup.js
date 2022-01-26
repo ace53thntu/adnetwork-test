@@ -7,7 +7,7 @@ import {GET_DOMAIN_GROUPS} from './constants';
 /**
  * Update a Domain
  */
-export function useEditDomainGroup() {
+export function useEditDomainGroup(domainGroupId) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
