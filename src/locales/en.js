@@ -41,6 +41,8 @@ const en = {
   domainList: 'Domain list',
   manageDomainGroup: 'Manage Domain Group',
   manageKeywordList: 'Manage Keyword List',
+  managePosition: 'Manage Position',
+  positionList: 'Position list',
 
   // Card Header
   advertiserList: 'Advertiser List',

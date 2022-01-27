@@ -2,7 +2,8 @@ import {RoutePaths} from 'constants/route-paths';
 import {
   DomainGroupListPage,
   DomainListPage,
-  KeywordListPage
+  KeywordListPage,
+  PositionListPage
 } from 'pages/setting';
 
 export const settingPages = {
@@ -32,6 +33,15 @@ export const settingPages = {
         {
           path: '',
           element: <KeywordListPage />
+        }
+      ]
+    },
+    {
+      path: `${RoutePaths.POSITION}`,
+      children: [
+        {
+          path: '',
+          element: <PositionListPage />
         }
       ]
     }

@@ -39,4 +39,16 @@ function KeywordListPage() {
   );
 }
 
-export {DomainListPage, DomainGroupListPage, KeywordListPage};
+const PositionList = React.lazy(() =>
+  import('./position/PositionList' /* webpackChunkName: "position-list" */)
+);
+
+function PositionListPage() {
+  return (
+    <ErrorBoundary>
+      <PositionList />
+    </ErrorBoundary>
+  );
+}
+
+export {DomainListPage, DomainGroupListPage, KeywordListPage, PositionListPage};
