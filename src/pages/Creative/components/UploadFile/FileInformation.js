@@ -36,12 +36,12 @@ function FileInformation(props) {
 
   return (
     <FileInformationContainer>
-      {ALLOWED_VIDEO_TYPES.includes(file.mimeType) ? (
+      {ALLOWED_VIDEO_TYPES.includes(file.mime_type) ? (
         <PreviewVideo controls src={`${FILE_DISPLAY_URL}/${file?.uuid}`} />
       ) : (
         <PreviewImage
           src={`${FILE_DISPLAY_URL}/${file?.uuid}`}
-          alt={file?.originalName ?? 'This is an image'}
+          alt={file?.original_name ?? 'This is an image'}
         />
       )}
 
@@ -56,7 +56,7 @@ function FileInformation(props) {
       )}
 
       <PreviewInfoContainer>
-        <span>{file.originalName}</span>
+        <span>{file.original_name}</span>
         <span>{readableBytes(file?.size ?? 0)}</span>
       </PreviewInfoContainer>
 

@@ -82,6 +82,10 @@ function Banners(props) {
   const swiperData = React.useMemo(() => {
     return banners?.map((creative, idx) => {
       const {name} = creative;
+      console.log(
+        '🚀 ~ file: Banners.js ~ line 85 ~ returnbanners?.map ~ creative',
+        creative
+      );
 
       const file = creative?.alternatives?.[0];
 

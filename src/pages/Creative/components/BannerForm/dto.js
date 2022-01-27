@@ -90,19 +90,19 @@ export function creativeRepoToModel(raw) {
 export function alternativeFormValuesToRepo(raw, creativeId) {
   const {
     priority,
-    min_products,
-    max_products,
-    product_width,
-    product_height,
-    catalog_id,
+    // min_products,
+    // max_products,
+    // product_width,
+    // product_height,
+    // catalog_id,
     name,
     sound,
     file,
-    description,
-    only_catalog_products,
-    product_query_string,
-    products,
-    extra_config
+    description
+    // only_catalog_products,
+    // product_query_string,
+    // products,
+    // extra_config
   } = raw;
 
   return {
@@ -113,15 +113,15 @@ export function alternativeFormValuesToRepo(raw, creativeId) {
     priority: parseInt(priority),
     sound,
     type: 'common',
-    catalog_id: parseInt(catalog_id),
-    only_catalog_products,
-    min_products: parseInt(min_products),
-    max_products: parseInt(max_products),
-    product_query_string,
-    product_width: parseInt(product_width),
-    product_height: parseInt(product_height),
-    products,
-    extra_config,
+    // catalog_id: parseInt(catalog_id),
+    // only_catalog_products,
+    // min_products: parseInt(min_products),
+    // max_products: parseInt(max_products),
+    // product_query_string,
+    // product_width: parseInt(product_width),
+    // product_height: parseInt(product_height),
+    // products,
+    // extra_config,
     status: 'active'
   };
 }
@@ -131,33 +131,34 @@ export function alternativeRepoToModel(raw) {
     name,
     sound = false,
     description = '',
-    catalog_id = '0',
-    extra_config = '',
-    max_products = '0',
-    min_products = '0',
-    only_catalog_products = false,
+    // catalog_id = '0',
+    // extra_config = '',
+    // max_products = '0',
+    // min_products = '0',
+    // only_catalog_products = false,
     priority = '0',
-    product_height = '0',
-    product_query_string = '',
-    product_width = '0',
-    products = '',
+    // product_height = '0',
+    // product_query_string = '',
+    // product_width = '0',
+    // products = '',
     file
+    // file_uuid
   } = raw;
 
   return {
     name,
     sound,
     description,
-    catalog_id: catalog_id.toString(),
-    extra_config,
-    max_products: max_products?.toString(),
-    min_products: min_products?.toString(),
-    only_catalog_products,
+    // catalog_id: catalog_id.toString(),
+    // extra_config,
+    // max_products: max_products?.toString(),
+    // min_products: min_products?.toString(),
+    // only_catalog_products,
     priority: priority.toString(),
-    product_height: product_height.toString(),
-    product_query_string,
-    product_width: product_width.toString(),
-    products,
+    // product_height: product_height.toString(),
+    // product_query_string,
+    // product_width: product_width.toString(),
+    // products,
     file
   };
 }

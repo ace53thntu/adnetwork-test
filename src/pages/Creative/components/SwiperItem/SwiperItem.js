@@ -26,14 +26,14 @@ function SwiperItem(props) {
     isVideo
   } = props;
 
-  const isVideoTypeOfVideo = ALLOWED_VIDEO_TYPES.includes(file?.mimeType);
+  const isVideoTypeOfVideo = ALLOWED_VIDEO_TYPES.includes(file?.mime_type);
 
   const isVideoTypeOfCreative = ALLOWED_VIDEO_TYPES.includes(
-    file?.file?.mimeType
+    file?.file?.mime_type
   );
 
   const isImgTypeOfCreative = ALLOWED_IMAGE_TYPES.includes(
-    file?.file?.mimeType
+    file?.file?.mime_type
   );
 
   const isNotAFile = !ASSET_TYPES_IS_FILE.includes(file?.type);

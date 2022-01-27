@@ -11,7 +11,7 @@ const alternativeDefaultValues = {
   name: '',
   description: '',
   priority: '0',
-  // sound: false,
+  sound: false,
   // min_products: '10',
   // max_products: '100',
   // product_query_string: '',

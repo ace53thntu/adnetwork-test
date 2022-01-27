@@ -1,5 +1,5 @@
 import {BlockOverlay, StrapConfirmModal} from 'components/common';
-import {FormTextInput} from 'components/forms';
+import {FormCheckbox, FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -281,6 +281,7 @@ function AlternativeForm(props) {
                 applyFieldArray
               />
             </Col>
+            */}
             <Col md={3}>
               <FormCheckbox
                 defaultValue={
@@ -291,7 +292,7 @@ function AlternativeForm(props) {
                 disabled={isLoading}
                 applyFieldArray
               />
-            </Col> */}
+            </Col>
           </Row>
           {/* <Row>
             <Col>

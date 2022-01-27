@@ -432,7 +432,7 @@ const en = {
   create: 'Create',
 
   creativeTabBanner: 'Banner',
-  creativeTabNativeBanner: 'Native Banner',
+  creativeTabNativeBanner: 'Native Ads',
   creativeTabVideo: 'Video'
 };
 

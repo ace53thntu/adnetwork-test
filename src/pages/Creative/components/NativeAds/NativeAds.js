@@ -98,7 +98,7 @@ function NativeAds(props) {
     <>
       <Row>
         <Col>
-          <h5>Native Banners</h5>
+          <h5>Native Ads</h5>
         </Col>
       </Row>
       {swiperData?.length ? (
@@ -111,7 +111,7 @@ function NativeAds(props) {
         </>
       ) : (
         <NotFound
-          entity="Native Banners"
+          entity="Native Ads"
           onClick={handleOpenCreateCreativeDialog}
         />
       )}
