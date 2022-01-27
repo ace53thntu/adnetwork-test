@@ -30,6 +30,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import Box from '@material-ui/core/Box';
 
 import {Alternatives} from '../Alternatives';
+import Report from '../Report';
 import {
   CREATIVE_FILE_TYPES,
   CREATIVE_TYPES,
@@ -42,7 +43,6 @@ import {
   creativeRepoToModel
 } from './dto';
 import {bannerFormValidationResolver} from './utils';
-import Report from '../Report';
 
 const defaultFormValues = {
   invocation_tag: '',
@@ -259,9 +259,52 @@ function BannerForm(props) {
                 </Col>
               </Row>
               <Row>
-                <Col md="8">
+                <Col>
                   <Row>
-                    <Col md={6}>
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="click_url"
+                        label="Click url"
+                        defaultValue={defaultValues.click_url}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <FormReactSelect
+                        options={CREATIVE_FILE_TYPES}
+                        placeholder=""
+                        name="file_type"
+                        label="File type"
+                        defaultValue={defaultValues.file_type}
+                      />
+                    </Col>
+
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="extra_trackers"
+                        label="Extra trackers"
+                        defaultValue={defaultValues.extra_trackers}
+                      />
+                    </Col>
+
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="width"
+                        label="Width"
+                        defaultValue={defaultValues.width}
+                      />
+                    </Col>
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="height"
+                        label="Height"
+                        defaultValue={defaultValues.height}
+                      />
+                    </Col>
+                    <Col md={4}>
                       <Row>
                         <Col md="4">
                           <FormCheckbox
@@ -289,80 +332,31 @@ function BannerForm(props) {
                         </Col>
                       </Row>
                     </Col>
-
-                    <Col md="6">
-                      <FormReactSelect
-                        options={INVOCATION_TAG_TYPES}
-                        placeholder=""
-                        name="invocation_tag_type"
-                        label="Invocation tag type"
-                        defaultValue={defaultValues.invocation_tag_type}
-                      />
-                    </Col>
-
-                    <Col md="6">
-                      <FormTextInput
-                        placeholder=""
-                        name="extra_trackers"
-                        label="Extra trackers"
-                        defaultValue={defaultValues.extra_trackers}
-                      />
-                    </Col>
-
-                    <Col md="6">
-                      <FormTextInput
-                        placeholder=""
-                        name="click_url"
-                        label="Click url"
-                        defaultValue={defaultValues.click_url}
-                      />
-                    </Col>
-                    <Col md="6">
-                      <FormTextInput
-                        placeholder=""
-                        name="width"
-                        label="Width"
-                        defaultValue={defaultValues.width}
-                      />
-                    </Col>
-                    <Col md="6">
-                      <FormTextInput
-                        placeholder=""
-                        name="height"
-                        label="Height"
-                        defaultValue={defaultValues.height}
-                      />
-                    </Col>
                   </Row>
                 </Col>
-
-                <Col md="4">
-                  <Row>
-                    <Col>
-                      <FormReactSelect
-                        options={CREATIVE_FILE_TYPES}
-                        placeholder=""
-                        name="file_type"
-                        label="File type"
-                        defaultValue={defaultValues.file_type}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <FormTextInput
-                        type="textarea"
-                        placeholder=""
-                        name="invocation_tag"
-                        label="Invocation tag"
-                        rows={4}
-                        style={{
-                          resize: 'none'
-                        }}
-                        defaultValue={defaultValues.invocation_tag}
-                      />
-                    </Col>
-                  </Row>
+              </Row>
+              <Row>
+                <Col md="12">
+                  <FormReactSelect
+                    options={INVOCATION_TAG_TYPES}
+                    placeholder=""
+                    name="invocation_tag_type"
+                    label="Invocation tag type"
+                    defaultValue={defaultValues.invocation_tag_type}
+                  />
+                </Col>
+                <Col md="12">
+                  <FormTextInput
+                    type="textarea"
+                    placeholder=""
+                    name="invocation_tag"
+                    label="Invocation tag"
+                    rows={4}
+                    // style={{
+                    //   resize: 'none'
+                    // }}
+                    defaultValue={defaultValues.invocation_tag}
+                  />
                 </Col>
               </Row>
             </CollapseBox>

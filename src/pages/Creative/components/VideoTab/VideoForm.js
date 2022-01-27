@@ -17,13 +17,14 @@ import {
   toggleCreativeDetailDialog,
   useCreativeSelector
 } from 'store/reducers/creative';
+import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import Report from '../Report';
 import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
-import Report from '../Report';
 
 const defaultValues = {
   // concept_id: 1,
@@ -110,6 +111,14 @@ function VideoForm(props) {
       }
     } else {
       // update
+      console.log('---getDefaultValues: ', getDefaultValues);
+      console.log('---values: ', values);
+      const diff = difference(values, getDefaultValues);
+      console.log(
+        '🚀 ~ file: VideoForm.js ~ line 116 ~ VideoForm ~ diff',
+        diff
+      );
+
       try {
         await updateVideoRequest({videoId: rawData.uuid, data: requestData});
         setIsLoading(false);

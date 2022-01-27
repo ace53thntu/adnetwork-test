@@ -29,29 +29,30 @@ function NativeAdInformationForm(props) {
         <Col md="4">
           <FormTextInput
             placeholder=""
+            name="extra_trackers"
+            label="Extra trackers"
+            defaultValue={defaultValues.extra_trackers}
+          />
+        </Col>
+        {/* <Col md="4">
+          <FormTextInput
+            placeholder=""
             name="dco_product"
             label="DCO product"
             defaultValue={defaultValues.dco_product}
           />
-        </Col>
+        </Col> */}
       </Row>
       <Row>
-        <Col md="4">
+        {/* <Col md="4">
           <FormTextInput
             placeholder=""
             name="product_query_string"
             label="Product query string"
             defaultValue={defaultValues.product_query_string}
           />
-        </Col>
-        <Col md="4">
-          <FormTextInput
-            placeholder=""
-            name="extra_trackers"
-            label="Extra trackers"
-            defaultValue={defaultValues.extra_trackers}
-          />
-        </Col>
+        </Col> */}
+
         {/* <Col md="4" className="d-flex align-items-center">
     <Forms.FormCheckbox
       name="active"

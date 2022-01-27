@@ -4,20 +4,20 @@ export function nativeAdRawToFormValues(raw) {
   const {
     name,
     click_url = '',
-    product_query_string = '',
+    // product_query_string = '',
     extra_trackers = '',
     // active = false,
-    dco_product = '',
+    // dco_product = '',
     assets = []
   } = raw;
 
   return {
     name,
     click_url,
-    product_query_string,
+    // product_query_string,
     extra_trackers,
     // active,
-    dco_product,
+    // dco_product,
     assets:
       assets?.map(({custom_id, file, type, value, uuid}) => ({
         custom_id,
@@ -34,17 +34,17 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
     name,
     // active = true,
     click_url = '',
-    dco_product = '',
-    extra_trackers = '',
-    product_query_string = ''
+    // dco_product = '',
+    extra_trackers = ''
+    // product_query_string = ''
   } = raw;
 
   const results = {
     name,
     click_url,
-    dco_product,
+    // dco_product,
     extra_trackers,
-    product_query_string,
+    // product_query_string,
     status: 'active'
     // catalog_id: null
   };

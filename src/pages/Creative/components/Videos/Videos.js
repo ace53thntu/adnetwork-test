@@ -12,8 +12,8 @@ import {
   toggleCreativeDetailDialog
 } from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {NotFound} from '../NotFound';
 
+import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
 import {VideoDetail} from '../VideoDetail';
 
@@ -51,9 +51,12 @@ function Videos(props) {
     setIsOpen(true);
   };
 
-  const handleClickName = video => {
-    dispatch(toggleCreativeDetailDialog(video.uuid, 'video'));
-  };
+  const handleClickName = React.useCallback(
+    video => {
+      dispatch(toggleCreativeDetailDialog(video.uuid, 'video'));
+    },
+    [dispatch]
+  );
 
   const handleAgree = async () => {
     setIsLoading(true);
@@ -75,24 +78,23 @@ function Videos(props) {
 
   const swiperData = React.useMemo(() => {
     return videos?.map((video, idx) => {
-      const {name, file = []} = video;
+      const {name, files = []} = video;
 
       const foundImgOrVideoAsset =
-        file?.find(file => file?.type === 'VIDEO') ?? null;
+        files?.find(file => file?.type === 'VIDEO') ?? null;
 
       return (
         <SwiperItem
           isVideo
           name={name}
-          file={foundImgOrVideoAsset || file[0]}
+          file={foundImgOrVideoAsset || files?.[0]}
           item={video}
           handleClickName={handleClickName}
           onDelete={() => handleDeleteVideo(video.uuid)}
         />
       );
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videos]);
+  }, [handleClickName, videos]);
 
   return (
     <>

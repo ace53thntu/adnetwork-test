@@ -22,6 +22,7 @@ import {
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import Report from '../Report';
 import Assets from './Assets';
 import NativeAdInformationForm from './NativeAdInformationForm';
 import {
@@ -30,13 +31,12 @@ import {
   nativeAdRawToFormValues
 } from './dto';
 import {createNativeAdResolver} from './validations';
-import Report from '../Report';
 
 const defaultValues = {
   name: '',
   click_url: '',
-  dco_product: '',
-  product_query_string: '',
+  // dco_product: '',
+  // product_query_string: '',
   extra_trackers: '',
   //
   assets: []

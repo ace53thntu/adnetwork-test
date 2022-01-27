@@ -1,5 +1,5 @@
 export function videoRepoToFormValues(raw) {
-  const {name, click_url = '', height, width, file} = raw;
+  const {name, click_url = '', height, width, files} = raw;
 
   const result = {
     name,
@@ -8,8 +8,8 @@ export function videoRepoToFormValues(raw) {
     height: height?.toString() ?? '1'
   };
 
-  if (file?.length) {
-    result.files = file?.map(file => ({
+  if (files?.length) {
+    result.files = files?.map(file => ({
       file: {
         ...file
       }
