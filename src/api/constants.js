@@ -46,6 +46,9 @@ export const endpoints = {
   trackerTemplate: {
     trackerTemplate: `${API_V1}/tracker_template`
   },
+  tracker: {
+    tracker: `${API_V1}/tracker`
+  },
   position: {
     position: `${API_V1}/position`
   },

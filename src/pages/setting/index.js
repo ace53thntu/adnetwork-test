@@ -51,4 +51,24 @@ function PositionListPage() {
   );
 }
 
-export {DomainListPage, DomainGroupListPage, KeywordListPage, PositionListPage};
+const TrackerTemplateList = React.lazy(() =>
+  import(
+    './tracker-template/TrackerTemplateList' /* webpackChunkName: "tracker-template-list" */
+  )
+);
+
+function TrackerTemplateListPage() {
+  return (
+    <ErrorBoundary>
+      <TrackerTemplateList />
+    </ErrorBoundary>
+  );
+}
+
+export {
+  DomainListPage,
+  DomainGroupListPage,
+  KeywordListPage,
+  PositionListPage,
+  TrackerTemplateListPage
+};

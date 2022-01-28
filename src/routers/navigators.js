@@ -94,8 +94,12 @@ export const SettingNav = (t, role) => {
   return [
     {
       icon: 'pe-7s-settings',
-      label: t('setting'),
+      label: t('settings'),
       content: [
+        {
+          label: t('trackerTemplate'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.TRACKER_TEMPLATE}`
+        },
         {
           label: t('tracker'),
           to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.TRACKER}`

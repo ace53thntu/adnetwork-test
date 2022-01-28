@@ -2,13 +2,13 @@ import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_TRACKER_TEMPLATES} from './constants';
+import {GET_TRACKER_TEMPLATE, GET_TRACKER_TEMPLATES} from './constants';
 
 /**
  * Hook to Update a Tracker Template
  * @param trackTempId - Tracker template ID
  */
-export function useEditTrackerTemplate() {
+export function useEditTrackerTemplate(trackerTemplateId) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -25,6 +25,7 @@ export function useEditTrackerTemplate() {
       },
       onSettled: () => {
         client.invalidateQueries([GET_TRACKER_TEMPLATES]);
+        client.invalidateQueries([GET_TRACKER_TEMPLATE, trackerTemplateId]);
       }
     }
   );

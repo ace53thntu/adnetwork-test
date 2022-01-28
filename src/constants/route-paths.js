@@ -23,6 +23,7 @@ export const RoutePaths = {
   PAGE: 'page',
   SETTING: 'setting',
   TRACKER: 'tracker',
+  TRACKER_TEMPLATE: 'template-tracker',
   POSITION: 'position',
   KEYWORD_LIST: 'keyword-list',
   DOMAIN_GROUP: 'group-domain',
