@@ -90,16 +90,17 @@ function VideoForm(props) {
 
   const onSubmit = async values => {
     setIsLoading(true);
-    let requestData = {};
-    if (values?.files?.length) {
-      const filtered = values.files.filter(item => item.file.file);
-      const fileIds = filtered.map(file => file.file.file.uuid);
-      requestData = videoFormValuesToRepo(values, conceptId, fileIds);
-    } else {
-      requestData = videoFormValuesToRepo(values, conceptId, []);
-    }
 
     if (isCreate) {
+      let requestData = {};
+      if (values?.files?.length) {
+        const filtered = values.files.filter(item => item.file);
+        const fileIds = filtered.map(file => file.file.uuid);
+        requestData = videoFormValuesToRepo(values, conceptId, fileIds);
+      } else {
+        requestData = videoFormValuesToRepo(values, conceptId, []);
+      }
+
       try {
         await createVideoRequest(requestData);
         setIsLoading(false);
@@ -111,16 +112,17 @@ function VideoForm(props) {
       }
     } else {
       // update
-      console.log('---getDefaultValues: ', getDefaultValues);
-      console.log('---values: ', values);
       const diff = difference(values, getDefaultValues);
-      console.log(
-        '🚀 ~ file: VideoForm.js ~ line 116 ~ VideoForm ~ diff',
-        diff
-      );
+
+      let fileIds = [];
+      if (values?.files?.length) {
+        const filtered = values.files.filter(item => item.file);
+        fileIds = filtered.map(file => file.file.uuid);
+      }
+      const requestBody = videoFormValuesToRepo(diff, conceptId, fileIds, true);
 
       try {
-        await updateVideoRequest({videoId: rawData.uuid, data: requestData});
+        await updateVideoRequest({videoId: rawData.uuid, data: requestBody});
         setIsLoading(false);
         handleSuccess('Update Video successfully!');
         handleCloseDialog();

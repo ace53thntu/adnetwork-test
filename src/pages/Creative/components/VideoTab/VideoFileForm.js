@@ -31,7 +31,7 @@ function VideoFileForm(props) {
           <div className="d-flex justify-content-center">
             <UploadFile
               isInArray
-              name={`${fileName}.file`}
+              name={`${fileName}`}
               maxSize={getAssetLimitFileSize(ASSET_TYPES[1].id)}
               accept={getAssetAcceptFile(ASSET_TYPES[1].id)}
               defaultValue={defaultValue}
