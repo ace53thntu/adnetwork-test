@@ -68,6 +68,8 @@ const en = {
   positionList: 'Position list',
   trackerTemplateList: 'Tracker Template List',
   manageTrackerTemplate: 'Manage Tracker Template',
+  manageTracker: 'Manage Tracker',
+  trackerList: 'Tracker list',
 
   // Card Header
   advertiserList: 'Advertiser List',

@@ -4,6 +4,7 @@ import {
   DomainListPage,
   KeywordListPage,
   PositionListPage,
+  TrackerListPage,
   TrackerTemplateListPage
 } from 'pages/setting';
 
@@ -52,6 +53,15 @@ export const settingPages = {
         {
           path: '',
           element: <TrackerTemplateListPage />
+        }
+      ]
+    },
+    {
+      path: `${RoutePaths.TRACKER}`,
+      children: [
+        {
+          path: '',
+          element: <TrackerListPage />
         }
       ]
     }
