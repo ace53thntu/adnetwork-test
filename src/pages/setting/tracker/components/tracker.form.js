@@ -4,7 +4,7 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import BlockUi from 'react-block-ui';
-import {FormProvider, useForm, Controller} from 'react-hook-form';
+import {FormProvider, useForm, Controller, useWatch} from 'react-hook-form';
 import {
   Button,
   Col,
@@ -18,14 +18,24 @@ import {
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
-import {ActiveToggle, FormTextInput} from 'components/forms';
-import {InputNames} from '../constant';
+import {ActiveToggle, FormReactSelect} from 'components/forms';
+import {
+  InputNames,
+  TrackerReferenceTypeOptions,
+  TrackerReferenceTypes
+} from '../constant';
 import {useTranslation} from 'react-i18next';
 import {useDefaultValues} from '../hook';
 import {schemaValidate} from './validation';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {formToApi} from 'entities/Tracker';
 import {useCreateTracker, useEditTracker} from 'queries/tracker';
+import TemplateSelect from './TemplateSelect';
+import CreativeSelect from './CreativeSelect';
+import VideoSelect from './VideoSelect';
+import NativeAdsSelect from './NativeAdsSelect';
+import InventorySelect from './InventorySelect';
+import FormCodeMirror from 'components/forms/FormCodeMirror';
 
 const propTypes = {
   title: PropTypes.string,
@@ -52,7 +62,12 @@ const TrackerForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control} = methods;
+  const {handleSubmit, formState, control, errors} = methods;
+  console.log('🚀 ~ file: tracker.form.js ~ line 66 ~ errors', errors);
+  const referenceTypeSelected = useWatch({
+    name: InputNames.REFERENCE_TYPE,
+    control
+  });
 
   async function onSubmit(formData) {
     const data = formToApi({formData});
@@ -83,13 +98,13 @@ const TrackerForm = ({
           <ModalBody>
             {isLoading && <LoadingIndicator />}
             <Row>
-              {/* Username */}
-              <Col sm={6}>
-                <FormTextInput
-                  name={InputNames.NAME}
-                  label={t('name')}
-                  placeholder={t('enterName')}
-                  isRequired
+              {/* Tracker Template */}
+              <Col sm="6">
+                <TemplateSelect
+                  name={InputNames.TEMPLATE_UUID}
+                  label={t('template')}
+                  placeholder={t('selectTemplate')}
+                  defaultValue={null}
                 />
               </Col>
 
@@ -102,6 +117,66 @@ const TrackerForm = ({
                   render={({onChange, onBlur, value, name}) => (
                     <ActiveToggle value={value} onChange={onChange} />
                   )}
+                />
+              </Col>
+
+              {/* Reference Type */}
+              <Col sm={6}>
+                <FormReactSelect
+                  name={InputNames.REFERENCE_TYPE}
+                  label={t('referenceType')}
+                  placeholder={t('selectReferenceType')}
+                  options={TrackerReferenceTypeOptions}
+                  defaultValue={null}
+                />
+              </Col>
+
+              <Col sm={6}>
+                {referenceTypeSelected?.value ===
+                  TrackerReferenceTypes.CREATIVE && (
+                  <CreativeSelect
+                    name={InputNames.REFERENCE_UUID}
+                    label={t('creative')}
+                    placeholder={t('selectCreative')}
+                    defaultValue={null}
+                  />
+                )}
+                {referenceTypeSelected?.value ===
+                  TrackerReferenceTypes.NATIVE_AD && (
+                  <NativeAdsSelect
+                    name={InputNames.REFERENCE_UUID}
+                    label={t('nativeAds')}
+                    placeholder={t('selectNativeAds')}
+                    defaultValue={null}
+                  />
+                )}
+                {referenceTypeSelected?.value ===
+                  TrackerReferenceTypes.VIDEO && (
+                  <VideoSelect
+                    name={InputNames.REFERENCE_UUID}
+                    label={t('video')}
+                    placeholder={t('selectVideo')}
+                    defaultValue={null}
+                  />
+                )}
+                {referenceTypeSelected?.value ===
+                  TrackerReferenceTypes.INVENTORY && (
+                  <InventorySelect
+                    name={InputNames.REFERENCE_UUID}
+                    label={t('inventory')}
+                    placeholder={t('selectInventory')}
+                    defaultValue={null}
+                  />
+                )}
+              </Col>
+
+              {/* Variables */}
+              <Col sm={12}>
+                <FormCodeMirror
+                  name={InputNames.VARIABLES}
+                  label={t('variables')}
+                  placeholder={`{"key": "value"}`}
+                  extension="JSON"
                 />
               </Col>
             </Row>

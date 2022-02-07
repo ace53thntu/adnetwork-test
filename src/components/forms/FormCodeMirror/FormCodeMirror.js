@@ -21,7 +21,7 @@ const propTypes = {
 };
 
 const HEIGHT = '150px';
-const Extensions = {
+export const CodeMirrorExtensions = {
   JAVASCRIPT: javascript(),
   HTML: html(),
   JSON: json()
@@ -52,7 +52,7 @@ const FormCodeMirror = ({
               name={rhfName}
               value={value}
               height={HEIGHT}
-              extensions={[Extensions[extension]]}
+              extensions={[CodeMirrorExtensions[extension]]}
               onChange={(value, viewUpdate) => {
                 onChange(value);
               }}

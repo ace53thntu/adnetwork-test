@@ -45,6 +45,10 @@ const en = {
   enterClickScript: 'Enter click script',
   enterClickUrlAppendParams: 'Enter click url append params',
   enterComplete: 'Enter complete',
+  referenceType: 'Reference type',
+  selectReferenceType: 'Select reference type',
+  template: 'Template',
+  selectTemplate: 'Select template',
 
   // Main Menu
   userManagement: 'User Management',
