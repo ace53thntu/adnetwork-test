@@ -17,7 +17,7 @@ import {
 } from 'store/reducers/container';
 import {CONTAINERS} from 'pages/Container/hooks/constants';
 import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
-import {FormRadioGroup, FormTextInput} from 'components/forms';
+import {FormRadioGroup, FormTextInput, FormToggle} from 'components/forms';
 import {useDeleteContainer, useEditContainer} from 'queries/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from './dto';
@@ -42,7 +42,9 @@ function ContainerForm(props) {
     container: containerRedux
   } = useContainerSelector();
 
-  const {mutateAsync: updateContainerRequest} = useEditContainer();
+  const {mutateAsync: updateContainerRequest} = useEditContainer(
+    container?.uuid
+  );
   const {mutateAsync: deleteContainerRequest} = useDeleteContainer();
 
   const filteredContainer = containersRedux.filter(cnt =>
@@ -138,6 +140,13 @@ function ContainerForm(props) {
                 placeholder={t('containerURL')}
                 label={t('containerURL')}
               />
+              <FormTextInput
+                name="cost"
+                label="Cost"
+                placeholder="0.0"
+                disable={isLoading}
+                isRequired
+              />
               <FormRadioGroup
                 inline
                 label={t('status')}
@@ -155,8 +164,19 @@ function ContainerForm(props) {
                   }
                 ]}
               />
+              <FormGroup className="d-flex  mb-0 ">
+                <FormToggle
+                  name="first_party"
+                  defaultCheckedValue="active"
+                  label={t('firstParty')}
+                  values={{
+                    checked: 'active',
+                    unChecked: 'inactive'
+                  }}
+                />
+              </FormGroup>
 
-              <FormGroup className="d-flex justify-content-between align-items-center">
+              <FormGroup className="d-flex justify-content-between align-items-center mt-3">
                 <ButtonLoading
                   loading={isLoading}
                   type="submit"

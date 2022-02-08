@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getInventoryFormats, getInventoryTypes} from '../constants';
 
-export const useDefaultInventory = ({inventory, positions = []}) => {
+export const useDefaultInventory = ({inventory}) => {
   return useMemo(() => {
     const inventoryTypes = getInventoryTypes();
     const inventoryFormats = getInventoryFormats();
@@ -18,9 +18,8 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
         metadata,
         fill_rate,
         click_rate,
-        position_id,
-        tracker_uuid,
-        tracker_name,
+        position_uuid,
+        position_name,
         deal_floor_price,
         allow_deal,
         market_type,
@@ -29,12 +28,9 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
         tags
       } = inventory;
       const destructureType = inventoryTypes.find(item => item.value === type);
-      const destructurePosition = positions.find(
-        item => item.value === position_id
-      );
-      const destructureTrackerTemplate = tracker_uuid
-        ? {value: tracker_uuid, label: tracker_name}
-        : null;
+      const destructurePosition =
+        {value: position_uuid, label: position_name} || null;
+
       const destructureFormat = inventoryFormats.find(
         item => item.value === format
       );
@@ -44,12 +40,6 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
             label: item?.name
           }))
         : [];
-      // let parsedTags =
-      //   metadata?.tags && Object.keys(metadata?.tags).length > 0
-      //     ? Object.values(metadata.tags)?.map(item => item)
-      //     : [];
-
-      // metadata.tags = parsedTags;
       let tagsParsed = tags?.map(tag => ({value: tag, name: capitalize(tag)}));
       return {
         uuid,
@@ -62,8 +52,7 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
         metadata,
         fill_rate,
         click_rate,
-        tracker_template_uuid: destructureTrackerTemplate,
-        position_id: destructurePosition,
+        position_uuid: destructurePosition,
         allow_deal: allow_deal ? 'active' : 'inactive',
         market_type: market_type
           ? {value: market_type, label: capitalize(market_type)}
@@ -76,5 +65,5 @@ export const useDefaultInventory = ({inventory, positions = []}) => {
       };
     }
     return {};
-  }, [inventory, positions]);
+  }, [inventory]);
 };

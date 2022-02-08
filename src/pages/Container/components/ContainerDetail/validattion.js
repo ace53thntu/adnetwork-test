@@ -3,6 +3,7 @@ import {ALL_TRACK_EVENTS} from 'pages/Container/constants';
 import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
+const VALID_NUMBER = /^\d*\.?\d*$/;
 
 export const validationDescriptionTab = containers => {
   return yupResolver(
@@ -35,7 +36,13 @@ export const validationDescriptionTab = containers => {
             return isValidURL(value);
           }
           return true;
-        })
+        }),
+      cost: Yup.string()
+        .required('This field is required')
+        .test('is-float', 'Invalid number', value =>
+          (value + '').match(VALID_NUMBER)
+        )
+        .typeError('Invalid number')
     })
   );
 };

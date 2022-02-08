@@ -2,12 +2,12 @@ import {ContainerAPIRequest} from 'api/container.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CONTAINERS} from './constants';
+import {GET_CONTAINER, GET_CONTAINERS} from './constants';
 
 /**
  * Update a Container
  */
-export function useEditContainer() {
+export function useEditContainer(cid) {
   const {cancelToken} = useCancelRequest();
   const client = useQueryClient();
 
@@ -24,6 +24,7 @@ export function useEditContainer() {
       },
       onSettled: () => {
         client.invalidateQueries([GET_CONTAINERS]);
+        client.invalidateQueries([GET_CONTAINER, cid]);
       }
     }
   );

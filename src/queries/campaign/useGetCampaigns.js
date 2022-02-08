@@ -6,7 +6,11 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_CAMPAIGNS} from './constants';
 
-export function useGetCampaigns({params, enabled = false}) {
+export function useGetCampaigns({
+  params,
+  enabled = false,
+  keepPreviousData = false
+}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -14,11 +18,12 @@ export function useGetCampaigns({params, enabled = false}) {
     () =>
       CampaignAPIRequest.getAllCampaign({
         params,
-        options: {cancelToken, isAllResponse: IS_RESPONSE_ALL}
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),
     {
       suspense: false,
-      enabled
+      enabled,
+      keepPreviousData
     }
   );
 }

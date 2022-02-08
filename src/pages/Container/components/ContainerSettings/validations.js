@@ -3,6 +3,8 @@ import * as Yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidURL} from 'utils/helpers/validations.helpers';
 
+const VALID_NUMBER = /^\d*\.?\d*$/;
+
 export const containerFormResolver = containers => {
   return yupResolver(
     Yup.object().shape({
@@ -34,7 +36,13 @@ export const containerFormResolver = containers => {
             return isValidURL(value);
           }
           return true;
-        })
+        }),
+      cost: Yup.string()
+        .required('This field is required')
+        .test('is-float', 'Invalid number', value =>
+          (value + '').match(VALID_NUMBER)
+        )
+        .typeError('Invalid number')
     })
   );
 };

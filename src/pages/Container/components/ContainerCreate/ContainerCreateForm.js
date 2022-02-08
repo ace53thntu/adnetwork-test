@@ -1,5 +1,5 @@
 import {ButtonLoading} from 'components/common';
-import {FormTextInput} from 'components/forms';
+import {FormRadioGroup, FormTextInput, FormToggle} from 'components/forms';
 import PropTypes from 'prop-types';
 import {useCreateContainer} from 'queries/container';
 import * as React from 'react';
@@ -7,7 +7,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {Button, ModalBody, ModalFooter} from 'reactstrap';
+import {Button, FormGroup, ModalBody, ModalFooter} from 'reactstrap';
 import {toggleCreateContainerModalRedux} from 'store/reducers/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingFormToApi} from '../ContainerDetail/dto';
@@ -25,7 +25,10 @@ function ContainerCreateForm(props) {
   const methods = useForm({
     defaultValues: {
       name: '',
-      url: ''
+      url: '',
+      status: 'active',
+      cost: '',
+      first_party: 'inactive'
     },
     resolver: containerFormResolver(containers)
   });
@@ -45,7 +48,7 @@ function ContainerCreateForm(props) {
       navigate(`/container/${data?.uuid}`);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(error?.msg || 'Fail to create Container');
     }
   };
 
@@ -71,6 +74,41 @@ function ContainerCreateForm(props) {
             label={'Container URL'}
             disable={isLoading}
           />
+          <FormTextInput
+            name="cost"
+            label="Cost"
+            placeholder="0.0"
+            disable={isLoading}
+            isRequired
+          />
+          <FormRadioGroup
+            inline
+            label={t('status')}
+            name="status"
+            items={[
+              {
+                id: 'delete',
+                label: t('delete'),
+                value: 'delete'
+              },
+              {
+                id: 'active',
+                label: t('active'),
+                value: 'active'
+              }
+            ]}
+          />
+          <FormGroup className="d-flex  mb-0 ">
+            <FormToggle
+              name="first_party"
+              defaultCheckedValue="active"
+              label={t('firstParty')}
+              values={{
+                checked: 'active',
+                unChecked: 'inactive'
+              }}
+            />
+          </FormGroup>
         </ModalBody>
 
         <ModalFooter>

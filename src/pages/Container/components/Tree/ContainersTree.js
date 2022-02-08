@@ -40,7 +40,7 @@ function ContainersTree(props) {
   } = useContainerSelector();
 
   const {data, isFetching} = useGetContainers({
-    params: {limit: 1000, page: 1},
+    params: {per_page: 1000, page: 1, sort: 'created_at DESC'},
     enabled: true
   });
   const containers = getResponseData(data, IS_RESPONSE_ALL);

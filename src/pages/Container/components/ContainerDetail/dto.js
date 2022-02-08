@@ -5,7 +5,9 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       url = '',
       status = 'active',
       publisher_uuid,
-      publisher_name
+      publisher_name,
+      first_party,
+      cost
     } = container;
     return {
       name,
@@ -13,7 +15,9 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       status,
       publisher_uuid: publisher_uuid
         ? {value: publisher_uuid, label: publisher_name}
-        : null
+        : null,
+      first_party: first_party ? 'active' : 'inactive',
+      cost
     };
   }
   if (containerRedux) {
@@ -22,7 +26,9 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       url = '',
       status = 'active',
       publisher_uuid,
-      publisher_name
+      publisher_name,
+      first_party = true,
+      cost
     } = containerRedux;
 
     return {
@@ -31,7 +37,9 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       status,
       publisher_uuid: publisher_uuid
         ? {value: publisher_uuid, label: publisher_name}
-        : null
+        : null,
+      first_party: first_party ? 'active' : 'inactive',
+      cost
     };
   }
 
@@ -43,16 +51,20 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       label: t('active'),
       value: 'active'
     },
-    publisher_uuid: null
+    publisher_uuid: null,
+    first_party: 'active',
+    cost: ''
   };
 };
 
 export const mappingFormToApi = formData => {
-  const {name, url, publisher_uuid, status} = formData;
+  const {name, url, publisher_uuid, status, first_party, cost} = formData;
   return {
     name,
     url,
     publisher_uuid: publisher_uuid?.value,
-    status
+    status,
+    first_party: first_party === 'active' ? true : false,
+    cost: parseFloat(cost) || 0
   };
 };

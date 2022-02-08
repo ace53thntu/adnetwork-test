@@ -23,10 +23,10 @@ import InventoryProperty from './InventoryProperty';
 import DspSelect from './DspSelect';
 import {MarketTypes, PriceEngines} from 'constants/inventory';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import TrackerTemplateSelect from './TrackerTemplateSelect';
 import {InputStatus} from 'constants/misc';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import PositionSelect from 'components/forms/PositionSelect';
 
 const formName = {
   properties: 'properties',
@@ -43,8 +43,6 @@ const propTypes = {
   isLoading: PropTypes.bool,
   typeOptions: PropTypes.array,
   inventoryFormatOptions: PropTypes.array,
-  positionOptions: PropTypes.array,
-  trackerTemplateOptions: PropTypes.array,
   inventory: PropTypes.object,
   toggle: PropTypes.func
 };
@@ -53,8 +51,6 @@ const InventoryFormContent = ({
   isLoading = false,
   typeOptions = [],
   inventoryFormatOptions = [],
-  positionOptions = [],
-  trackerTemplateOptions = [],
   inventory = {},
   toggle = () => null
 }) => {
@@ -183,23 +179,16 @@ const InventoryFormContent = ({
               />
             </Col>
           )}
-
-          <Col sm={6}>
-            <TrackerTemplateSelect currentInventory={inventory} />
-          </Col>
         </Row>
 
         <Row>
           <Col sm={12}>
-            <FormReactSelect
-              required={false}
-              name="position_id"
+            <PositionSelect
+              name="position_uuid"
               label={t('position')}
               placeholder="Select position"
-              optionLabelField="name"
-              options={positionOptions}
               disabled={isSubmitting}
-              multiple={false}
+              defaultValue={null}
             />
           </Col>
         </Row>

@@ -38,12 +38,16 @@ export const validationInventory = () => {
         return Yup.string().nullable().notRequired();
       }),
       metadata: Yup.object({
-        width: Yup.string().test('is-number', 'Invalid number', value => {
-          return validateFloatInput(value);
-        }),
-        height: Yup.string().test('is-number', 'Invalid number', value => {
-          return validateFloatInput(value);
-        }),
+        width: Yup.string()
+          .required('This field is required.')
+          .test('is-number', 'Invalid number', value => {
+            return validateFloatInput(value);
+          }),
+        height: Yup.string()
+          .required('This field is required.')
+          .test('is-number', 'Invalid number', value => {
+            return validateFloatInput(value);
+          }),
         duration: Yup.string().test('is-number', 'Invalid number', value => {
           return validateFloatInput(value);
         })

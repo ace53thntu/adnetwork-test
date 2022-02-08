@@ -1,12 +1,16 @@
 import {DialogConfirm, LoadingIndicator} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
 import {List} from 'components/list';
-import {Pagination} from 'components/list/pagination';
 import Status from 'components/list/status';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
-import {useDeleteCampaign, useGetCampaignsInfinity} from 'queries/campaign';
+import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
 import React from 'react';
 import {useNavigate} from 'react-router';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {CampaignListStyled} from './styled';
@@ -17,26 +21,25 @@ const propTypes = {};
 
 const CampaignList = () => {
   const navigate = useNavigate();
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetCampaignsInfinity({
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const {data, isLoading, isPreviousData} = useGetCampaigns({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      limit: DEFAULT_PAGINATION.perPage,
+      page: currentPage,
+      sort: 'created_at DESC'
     },
-    enabled: true
+    enabled: true,
+    keepPreviousData: true
   });
 
   const campaigns = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const items = page?.data || [];
-      const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
-      return [...acc, ...itemsDestructure];
-    }, []);
-  }, [pages]);
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
   const {mutateAsync: deleteCampaign} = useDeleteCampaign();
 
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -75,6 +78,11 @@ const CampaignList = () => {
     ];
   }, []);
 
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
+
   function onClickItem(item) {
     setCurrentCampaign(item);
     navigate(`/${RoutePaths.CAMPAIGN}/${item?.uuid}`);
@@ -105,7 +113,7 @@ const CampaignList = () => {
       await deleteCampaign({cid: currentCampaign?.uuid});
       ShowToast.success('Deleted campaign successfully');
     } catch (err) {
-      ShowToast.error(err?.message || 'Fail to detele Campaign');
+      ShowToast.error(err?.message || 'Fail to delete Campaign');
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);
@@ -115,7 +123,7 @@ const CampaignList = () => {
   return (
     <>
       <CampaignListStyled>
-        {isFetching && <LoadingIndicator />}
+        {isLoading && <LoadingIndicator />}
         <List
           data={campaigns || []}
           columns={columns}
@@ -124,13 +132,12 @@ const CampaignList = () => {
           handleAction={onClickDelete}
           handleClickItem={onClickItem}
         />
-        {hasNextPage && (
-          <Pagination
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
-        )}
+        <CustomPagination
+          currentPage={currentPage}
+          totalCount={paginationInfo?.totalItems}
+          onPageChange={(evt, page) => onPageChange(evt, page)}
+          disabled={isPreviousData}
+        />
       </CampaignListStyled>
       {openDialog && (
         <DialogConfirm

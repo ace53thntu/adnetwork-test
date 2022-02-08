@@ -16,13 +16,11 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingInventoryFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
-import {usePositionOptions} from 'pages/Campaign/hooks';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
-  const positions = usePositionOptions();
   const {mutateAsync: createInventory} = useCreateInventory();
 
   const methods = useForm({
@@ -39,7 +37,15 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onHandleSubmit = async values => {
+    console.log(
+      '🚀 ~ file: CreateInventory.js ~ line 40 ~ CreateInventory ~ values',
+      values
+    );
     const formData = mappingInventoryFormToApi({pageId, formData: values});
+    console.log(
+      '🚀 ~ file: CreateInventory.js ~ line 42 ~ CreateInventory ~ formData',
+      formData
+    );
     setIsLoading(true);
     try {
       await createInventory(formData);
@@ -62,10 +68,9 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       isLoading: isLoading,
       typeOptions: inventoryTypes,
       inventoryFormatOptions: inventoryFormats,
-      positionOptions: positions,
       toggle
     }),
-    [inventoryFormats, inventoryTypes, isLoading, positions, toggle]
+    [inventoryFormats, inventoryTypes, isLoading, toggle]
   );
 
   return (
