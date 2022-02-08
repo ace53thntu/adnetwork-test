@@ -1,2 +1,2 @@
-export const GET_CAMAPAIGNS = 'GET_CAMAPAIGNS';
-export const GET_CAMAPAIGN = 'GET_CAMAPAIGN';
+export const GET_CAMPAIGNS = 'GET_CAMPAIGNS';
+export const GET_CAMPAIGN = 'GET_CAMPAIGN';

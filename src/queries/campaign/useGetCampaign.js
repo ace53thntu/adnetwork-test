@@ -2,7 +2,7 @@ import {CampaignAPIRequest} from 'api/campaign.api';
 import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
-import {GET_CAMAPAIGN} from './constants';
+import {GET_CAMPAIGN} from './constants';
 
 /**
  * Hook for get Campaign from API by query
@@ -11,7 +11,7 @@ export function useGetCampaign({cid, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_CAMAPAIGN, cid],
+    [GET_CAMPAIGN, cid],
     () =>
       CampaignAPIRequest.getCampaign({
         id: cid,

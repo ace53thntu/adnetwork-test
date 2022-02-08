@@ -55,19 +55,24 @@ const TrackerForm = ({
   const {t} = useTranslation();
   // React Query - hooks
   const {mutateAsync: createTracker} = useCreateTracker();
-  const {mutateAsync: editTracker} = useEditTracker();
+  const {mutateAsync: editTracker} = useEditTracker(tracker?.uuid);
 
   const defaultValues = useDefaultValues({tracker});
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, errors} = methods;
-  console.log('🚀 ~ file: tracker.form.js ~ line 66 ~ errors', errors);
+  const {handleSubmit, formState, control, setValue} = methods;
   const referenceTypeSelected = useWatch({
     name: InputNames.REFERENCE_TYPE,
     control
   });
+
+  React.useEffect(() => {
+    if (referenceTypeSelected?.value !== defaultValues?.reference_type?.value) {
+      setValue(InputNames.REFERENCE_UUID, null);
+    }
+  }, [defaultValues?.reference_type?.value, referenceTypeSelected, setValue]);
 
   async function onSubmit(formData) {
     const data = formToApi({formData});

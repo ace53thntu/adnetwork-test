@@ -2,7 +2,7 @@ import {CampaignAPIRequest} from 'api/campaign.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CAMAPAIGNS} from './constants';
+import {GET_CAMPAIGNS} from './constants';
 
 /**
  * Create a Campaign
@@ -18,7 +18,7 @@ export function useCreateCampaign() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CAMAPAIGNS]);
+        client.invalidateQueries([GET_CAMPAIGNS]);
       }
     }
   );

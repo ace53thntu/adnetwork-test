@@ -1,7 +1,7 @@
 import {CampaignAPIRequest} from 'api/campaign.api';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_CAMAPAIGNS} from './constants';
+import {GET_CAMPAIGNS} from './constants';
 
 /**
  * Delete a Campaign
@@ -19,7 +19,7 @@ export function useDeleteCampaign() {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        client.invalidateQueries([GET_CAMAPAIGNS]);
+        client.invalidateQueries([GET_CAMPAIGNS]);
       }
     }
   );

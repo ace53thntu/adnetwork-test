@@ -9,7 +9,8 @@ import {
   Row,
   Col,
   CardBody,
-  Container
+  Container,
+  Badge
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
@@ -37,8 +38,24 @@ import {ModalLayout} from 'components/forms';
 import DomainForm from './components/tracker.form';
 import {useDeleteTracker, useGetTracker, useGetTrackers} from 'queries/tracker';
 import TrackerForm from './components/tracker.form';
+import {TrackerReferenceTypes} from './constant';
 
 const propTypes = {};
+
+const renderReferenceTypeColor = type => {
+  switch (type) {
+    case TrackerReferenceTypes.CREATIVE:
+      return 'primary';
+    case TrackerReferenceTypes.VIDEO:
+      return 'success';
+    case TrackerReferenceTypes.NATIVE_AD:
+      return 'warning';
+    case TrackerReferenceTypes.INVENTORY:
+      return 'info';
+    default:
+      return 'secondary';
+  }
+};
 
 const TrackerList = () => {
   const {t} = useTranslation();
@@ -89,8 +106,18 @@ const TrackerList = () => {
   const columns = useMemo(() => {
     return [
       {
-        header: 'Name',
-        accessor: 'name'
+        header: t('trackerTemplate'),
+        accessor: 'tracker_template',
+        cell: row => row?.value?.name
+      },
+      {
+        header: t('referenceType'),
+        accessor: 'reference_type',
+        cell: row => (
+          <Badge color={renderReferenceTypeColor(row?.value)}>
+            {row?.value}
+          </Badge>
+        )
       },
       {
         accessor: 'status',
@@ -115,7 +142,7 @@ const TrackerList = () => {
         cell: row => moment(row?.value).format('DD/MM/YYYY')
       }
     ];
-  }, []);
+  }, [t]);
 
   function onPageChange(evt, page) {
     evt.preventDefault();

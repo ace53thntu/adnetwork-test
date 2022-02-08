@@ -4,13 +4,13 @@ import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery, useQuery} from 'react-query';
 import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
-import {GET_CAMAPAIGNS} from './constants';
+import {GET_CAMPAIGNS} from './constants';
 
 export function useGetCampaigns({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_CAMAPAIGNS, params],
+    [GET_CAMPAIGNS, params],
     () =>
       CampaignAPIRequest.getAllCampaign({
         params,
@@ -25,22 +25,22 @@ export function useGetCampaigns({params, enabled = false}) {
 
 export function useGetCampaignsInfinity({
   page = DEFAULT_PAGINATION.page,
-  per_page = DEFAULT_PAGINATION.perPage,
+  limit = DEFAULT_PAGINATION.perPage,
   name = '',
   enabled = false,
   params = {},
-  key = GET_CAMAPAIGNS
+  key = GET_CAMPAIGNS
 }) {
   const {cancelToken} = useCancelRequest();
 
   return useInfiniteQuery(
-    [key, page, per_page, name, params],
+    [key, page, limit, name, params],
     ({pageParam = 1}) =>
       CampaignAPIRequest.getAllCampaign({
         params: {
           ...params,
           page: pageParam,
-          per_page,
+          limit,
           name
         },
         options: {

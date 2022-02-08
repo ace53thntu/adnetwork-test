@@ -54,8 +54,8 @@ export const formToApi = formData => {
     auto_realloc
   } = formData;
 
-  const formatStartDate = `${moment(start_time).format('DD-MM-YYYY')} 00:00:00`;
-  const formaEndDate = `${moment(end_time).format('DD-MM-YYYY')} 23:59:59`;
+  const formatStartDate = moment(start_time).toISOString();
+  const formaEndDate = moment(end_time).endOf('day').toISOString();
 
   return {
     [CAMPAIGN_KEYS.ADVERTISER_ID]: advertiser_uuid?.value || undefined,

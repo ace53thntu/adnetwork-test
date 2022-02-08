@@ -29,7 +29,6 @@ const CampaignList = () => {
     },
     enabled: true
   });
-  console.log('🚀 ~ file: list.js ~ line 22 ~ CampaignList ~ pages', pages);
 
   const campaigns = React.useMemo(() => {
     return pages?.reduce((acc, page) => {

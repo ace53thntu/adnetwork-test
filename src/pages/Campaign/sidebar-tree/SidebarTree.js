@@ -23,7 +23,7 @@ import {CampaignTreeStyled} from './styled';
 import {useGetAdvertisers} from 'queries/advertiser';
 import {advertisersMapData} from '../dto';
 import {CampaignAPIRequest} from 'api/campaign.api';
-import {GET_CAMAPAIGNS} from 'queries/campaign/constants';
+import {GET_CAMPAIGNS} from 'queries/campaign/constants';
 import {StrategyAPIRequest} from 'api/strategy.api';
 import {GET_STRATEGIES} from 'queries/strategy/constants';
 import {RoutePaths} from 'constants/route-paths';
@@ -78,7 +78,7 @@ function SidebarTree(props) {
             });
             const data = getResponseData(res, IS_RESPONSE_ALL);
             if (data) {
-              queryCache.setQueryData([GET_CAMAPAIGNS, id], data);
+              queryCache.setQueryData([GET_CAMPAIGNS, id], data);
               const currentSourceData = data ?? [];
               currentSourceData.forEach((item, index) => {
                 children.push({

@@ -49,6 +49,13 @@ const en = {
   selectReferenceType: 'Select reference type',
   template: 'Template',
   selectTemplate: 'Select template',
+  inventory: 'Inventory',
+  video: 'Video',
+  nativeAds: 'Native ads',
+  selectCreative: 'Select creative',
+  selectVideo: 'Select video',
+  selectNativeAds: 'Select native ads',
+  selectInventory: 'Select inventory',
 
   // Main Menu
   userManagement: 'User Management',

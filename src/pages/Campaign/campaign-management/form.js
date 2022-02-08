@@ -102,7 +102,7 @@ const CampaignForm = ({
                   <FormTextInput
                     type="text"
                     placeholder={t('name')}
-                    id="campainName"
+                    id="campaignName"
                     name={CAMPAIGN_KEYS.NAME}
                     label={t('name')}
                     isRequired={true}
@@ -164,12 +164,6 @@ const CampaignForm = ({
                     ) : null}
                   </FormGroup>
                 </Col>
-              </Row>
-            </Collapse>
-
-            {/* Status */}
-            <Collapse initialOpen={true} title="Status" unMount={false}>
-              <Row>
                 <Col md="3">
                   <Label className="mr-5">Status</Label>
                   <Controller
@@ -182,6 +176,58 @@ const CampaignForm = ({
                         disabled={isView}
                       />
                     )}
+                  />
+                </Col>
+              </Row>
+            </Collapse>
+
+            {/* Budget */}
+            <Collapse initialOpen={true} title={t('budget')} unMount={false}>
+              <Row>
+                <Col md="4">
+                  <FormTextInput
+                    type="number"
+                    placeholder={t('global')}
+                    name="budget.global"
+                    label={t('global')}
+                    isRequired={false}
+                  />
+                </Col>
+                <Col md="4">
+                  <FormTextInput
+                    type="number"
+                    placeholder={t('daily')}
+                    name="budget.daily"
+                    label={t('daily')}
+                    isRequired={false}
+                  />
+                </Col>
+              </Row>
+            </Collapse>
+
+            {/* Impression */}
+            <Collapse
+              initialOpen={true}
+              title={t('impression')}
+              unMount={false}
+            >
+              <Row>
+                <Col md="4">
+                  <FormTextInput
+                    type="number"
+                    placeholder={t('global')}
+                    name="impression.global"
+                    label={t('global')}
+                    isRequired={false}
+                  />
+                </Col>
+                <Col md="4">
+                  <FormTextInput
+                    type="number"
+                    placeholder={t('daily')}
+                    name="impression.daily"
+                    label={t('daily')}
+                    isRequired={false}
                   />
                 </Col>
               </Row>
