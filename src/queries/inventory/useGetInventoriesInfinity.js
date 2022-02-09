@@ -27,7 +27,7 @@ export function useGetInventoriesInfinity({params = {}, enabled = false}) {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = getResponsePagination(apiRes)?.total;
+        const total = getResponsePagination(apiRes)?.totalItems;
         const perPage =
           getResponsePagination(apiRes)?.perPage || DEFAULT_PAGINATION.perPage;
         const nextPage = Math.ceil(total / perPage);

@@ -62,7 +62,8 @@ const InventoryMarket = () => {
     isFetchingNextPage
   } = useGetContainersInfinity({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage,
+      sort: 'created_at DESC'
     },
     enabled: true
   });
@@ -94,6 +95,10 @@ const InventoryMarket = () => {
             </a>
           );
         }
+      },
+      {
+        header: 'Cost',
+        accessor: 'cost'
       },
       {
         accessor: 'status',

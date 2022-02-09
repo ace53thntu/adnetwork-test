@@ -1,21 +1,18 @@
 import {useMemo} from 'react';
 
-export const useInventoriesByContainer = ({data, page, positions}) => {
+export const useInventoriesByContainer = ({data, page}) => {
   return useMemo(() => {
     if (data) {
       const inventories = data?.map(item => {
-        const {position_id} = item;
-        const position = positions?.find(poItem => poItem.id === position_id);
         return {
           ...item,
           id: item.uuid,
-          page_name: page?.name,
-          position: position?.text ?? ''
+          page_name: page?.name
         };
       });
       return inventories;
     }
 
     return [];
-  }, [data, page?.name, positions]);
+  }, [data, page?.name]);
 };

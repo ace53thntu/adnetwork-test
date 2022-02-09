@@ -36,10 +36,14 @@ export function useGetContainersInfinity({params, enabled = false}) {
       suspense: false,
       enabled,
       getNextPageParam: (apiRes, pages) => {
-        const total = getResponsePagination(apiRes, IS_RESPONSE_ALL)?.total;
+        console.log(
+          '🚀 ~ file: useGetContainers.js ~ line 39 ~ useGetContainersInfinity ~ apiRes',
+          apiRes
+        );
+        const total = getResponsePagination(apiRes)?.totalItems;
+
         const perPage =
-          getResponsePagination(apiRes, IS_RESPONSE_ALL)?.perPage ||
-          DEFAULT_PAGINATION.perPage;
+          getResponsePagination(apiRes)?.perPage || DEFAULT_PAGINATION.perPage;
         const nextPage = Math.ceil(total / perPage);
 
         return nextPage > pages?.length ? pages?.length + 1 : false;

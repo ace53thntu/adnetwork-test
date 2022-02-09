@@ -63,7 +63,7 @@ const useCreativePagination = () => {
       });
 
       const items = getResponseData(res, IS_RESPONSE_ALL);
-      const total = getResponsePagination(res)?.total;
+      const total = getResponsePagination(res)?.totalItems;
       const perPage =
         getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 

@@ -20,13 +20,12 @@ import {
   getInventoryMarketTypeColor,
   getInventoryTypeColor
 } from '../../helpers';
-import {useGetPositions} from 'queries/position';
 import {useGetDsps} from 'queries/dsp';
 import {useOptionsList} from 'hooks';
 import {useGetAudiences} from 'queries/audience';
 
 import {useGetInventoriesInfinity} from 'queries/inventory';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {InventoryDetails} from '..';
 import './styles.scss';
@@ -36,8 +35,9 @@ import {
   useFilterModeSelector,
   useSearchTypeSelector
 } from 'store/reducers/inventory-market';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
-const ActionIndexs = {
+const ActionIndexes = {
   VIEW: 0,
   BID: 1,
   DEAL: 2
@@ -150,18 +150,17 @@ const InventoryList = ({page, filterParams = null}) => {
     isFetching,
     isFetchingNextPage
   } = useGetInventoriesInfinity({params, enabled: true});
-  const {data: positions = []} = useGetPositions();
+
   const containerInventories = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
+    return pages?.reduce((acc, page) => {
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       return [...acc, ...items];
     }, []);
   }, [pages]);
 
   const inventories = useInventoriesByContainer({
     data: containerInventories,
-    page,
-    positions
+    page
   });
   const {data: dspResp} = useGetDsps();
   const dspOptions = useOptionsList({list: dspResp?.items});
@@ -204,17 +203,17 @@ const InventoryList = ({page, filterParams = null}) => {
   };
 
   const onClickAction = (actionIndex, currentItem) => {
-    if (actionIndex === ActionIndexs.VIEW) {
+    if (actionIndex === ActionIndexes.VIEW) {
       onClickView(currentItem);
       return;
     }
 
-    if (actionIndex === ActionIndexs.BID) {
+    if (actionIndex === ActionIndexes.BID) {
       onClickBid(currentItem);
       return;
     }
 
-    if (actionIndex === ActionIndexs.DEAL) {
+    if (actionIndex === ActionIndexes.DEAL) {
       onClickDeal(currentItem);
       return;
     }

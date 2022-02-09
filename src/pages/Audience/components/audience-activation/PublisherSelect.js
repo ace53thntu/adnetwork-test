@@ -62,7 +62,7 @@ const usePublisherPagination = () => {
       });
 
       const data = getResponseData(res, IS_RESPONSE_ALL);
-      const total = getResponsePagination(res)?.total;
+      const total = getResponsePagination(res)?.totalItems;
       const perPage = getResponsePagination(res)?.perPage;
 
       const options = [...data].map(item => ({
