@@ -106,7 +106,7 @@ const DspForm = ({
           >
             <BlockUi tag="div" blocking={formState.isSubmitting}>
               {isLoading && <LoadingIndicator />}
-              <FormContent defaultValues={defaultValues} />
+              <FormContent defaultValues={defaultValues} isEdit={isEdit} />
               {isEdit && (role === USER_ROLE.DSP || role === USER_ROLE.ADMIN) && (
                 <Row>
                   <Col md={12}>

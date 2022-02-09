@@ -48,14 +48,14 @@ const DspView = ({children}) => {
         },
         {
           name: t('capping'),
-          content: <Capping />
+          content: <Capping referenceUuid={dspId} />
         }
       ].map(({name, content}, index) => ({
         key: index,
         title: name,
         getContent: () => content
       })),
-    [defaultValues, methods, t]
+    [defaultValues, dspId, methods, t]
   );
 
   const getTab = index => {

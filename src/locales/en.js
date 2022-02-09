@@ -56,6 +56,9 @@ const en = {
   selectVideo: 'Select video',
   selectNativeAds: 'Select native ads',
   selectInventory: 'Select inventory',
+  selectAudience: 'Select audience',
+  headerBiddingAvailable: 'Header bidding available',
+  biddingUrl: 'Bidding url',
 
   // Main Menu
   userManagement: 'User Management',

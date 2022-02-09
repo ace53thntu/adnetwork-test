@@ -6,11 +6,13 @@
  */
 
 import {ActiveToggle, FormTextInput} from 'components/forms';
+import DspSelect from 'components/forms/DspSelect';
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {Col, Label, Row} from 'reactstrap';
 import {INPUTS_NAME} from '../constants';
-import {AudienceSelect, DspSelect} from './form-elements';
+import {AudienceSelect} from './form-elements';
 import TimeRange from './form-elements/time-range';
 
 export default function DealForm({
@@ -18,6 +20,7 @@ export default function DealForm({
   audienceOptions,
   excludeDates = []
 }) {
+  const {t} = useTranslation();
   const {control} = useFormContext();
   return (
     <>
@@ -44,7 +47,11 @@ export default function DealForm({
       </Row>
       <Row>
         <Col sm="6">
-          <DspSelect options={dspOptions} />
+          <DspSelect
+            name="dsp_uuid"
+            label={t('dsp')}
+            placeholder={t('selectDsp')}
+          />
         </Col>
         <Col sm="6">
           <AudienceSelect options={audienceOptions} />

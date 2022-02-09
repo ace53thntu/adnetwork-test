@@ -92,8 +92,8 @@ const DspList = () => {
         cell: row => <TagsList tagsList={[row?.value] || []} />
       },
       {
-        header: 'Url',
-        accessor: 'url',
+        header: 'Bidding Url',
+        accessor: 'bidding_url',
         cell: row => <div title={row?.value}>{row?.value}</div>
       },
       {

@@ -54,8 +54,6 @@ const InventoryDetails = ({
   className = '',
   isBid = false,
   isDeal = false,
-  dspOptions = [],
-  audienceOptions = [],
   isEdit = false,
   params
 }) => {
@@ -101,7 +99,11 @@ const InventoryDetails = ({
   );
 
   async function executeDealInventory({formData}) {
-    const submitData = mappingFormToApi({formData, isDeal: true});
+    const submitData = mappingFormToApi({
+      formData,
+      isDeal: true,
+      inventoryId: inventoryData?.uuid
+    });
     try {
       await dealInventory({
         data: submitData,
@@ -116,7 +118,11 @@ const InventoryDetails = ({
   }
 
   async function executeBidInventory({formData}) {
-    const submitData = mappingFormToApi({formData, isDeal: false});
+    const submitData = mappingFormToApi({
+      formData,
+      isDeal: false,
+      inventoryId: inventoryData?.uuid
+    });
     try {
       await bidInventory({
         data: submitData,
@@ -198,7 +204,7 @@ const InventoryDetails = ({
                     {inventoryData?.position}
                   </InventoryPartial>
 
-                  {/* Witdh */}
+                  {/* Width */}
                   <InventoryPartial label="Width">
                     <Badge color="light" pill>
                       {inventoryData?.metadata?.width ?? 0}
@@ -225,21 +231,9 @@ const InventoryDetails = ({
                 </div>
               </CardBody>
             </Card>
-            {isBid && (
-              <InventoryBidForm
-                dspOptions={dspOptions}
-                audienceOptions={audienceOptions}
-                excludeDates={excludeDates}
-              />
-            )}
+            {isBid && <InventoryBidForm excludeDates={excludeDates} />}
             {/* Render date range picker */}
-            {isDeal && (
-              <DealForm
-                dspOptions={dspOptions}
-                audienceOptions={audienceOptions}
-                excludeDates={excludeDates}
-              />
-            )}
+            {isDeal && <DealForm excludeDates={excludeDates} />}
           </ModalBody>
           <ModalFooter>
             <Button color="link" onClick={toggle}>

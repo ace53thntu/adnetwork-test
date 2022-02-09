@@ -6,7 +6,7 @@ export const schemaValidate = t => {
   return yupResolver(
     yup.object().shape({
       name: yup.string().required(t('required')),
-      url: yup
+      bidding_url: yup
         .string()
         .required(t('required'))
         .test('is-url', 'Enter correct url!', value => {

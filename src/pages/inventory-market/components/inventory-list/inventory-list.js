@@ -20,9 +20,6 @@ import {
   getInventoryMarketTypeColor,
   getInventoryTypeColor
 } from '../../helpers';
-import {useGetDsps} from 'queries/dsp';
-import {useOptionsList} from 'hooks';
-import {useGetAudiences} from 'queries/audience';
 
 import {useGetInventoriesInfinity} from 'queries/inventory';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
@@ -162,10 +159,6 @@ const InventoryList = ({page, filterParams = null}) => {
     data: containerInventories,
     page
   });
-  const {data: dspResp} = useGetDsps();
-  const dspOptions = useOptionsList({list: dspResp?.items});
-  const {data: audienceResp} = useGetAudiences();
-  const audienceOptions = useOptionsList({list: audienceResp?.items});
   const columns = useColumns();
 
   //---> Define local states.
@@ -258,8 +251,6 @@ const InventoryList = ({page, filterParams = null}) => {
           inventoryData={selectedInventory}
           isDeal={isDeal}
           isBid={isBid}
-          dspOptions={dspOptions}
-          audienceOptions={audienceOptions}
           params={params}
         />
       </Modal>

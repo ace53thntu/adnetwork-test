@@ -13,33 +13,47 @@ import PropTypes from 'prop-types';
 import {Col, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
-import {AudienceSelect, DspSelect} from './form-elements';
 import TimeRange from './form-elements/time-range';
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import {INPUTS_NAME} from '../constants';
 import {Controller, useFormContext} from 'react-hook-form';
+import DspSelect from 'components/forms/DspSelect';
+import {useTranslation} from 'react-i18next';
+import AudienceSelect from 'components/forms/AudienceSelect';
 
-const InventoryBidForm = ({
-  dspOptions = [],
-  audienceOptions = [],
-  excludeBidDates = []
-}) => {
+const InventoryBidForm = ({excludeBidDates = []}) => {
+  const {t} = useTranslation();
   const {control} = useFormContext();
 
   return (
     <>
       <Row className="mt-3">
         <Col sm="4">
-          <DspSelect options={dspOptions} />
+          <DspSelect
+            name={INPUTS_NAME.DSP_UUID}
+            label={t('dsp')}
+            placeholder={t('selectDsp')}
+            defaultValue={null}
+          />
         </Col>
         <Col sm="4">
-          <AudienceSelect options={audienceOptions} />
+          <AudienceSelect
+            name={INPUTS_NAME.AUDIENCE_UUID}
+            label={t('audience')}
+            placeholder={t('selectAudience')}
+            defaultValue={null}
+            multiple
+          />
         </Col>
         <Col sm="4">
-          <FormTextInput
+          <Label className="mr-5">Header bidding</Label>
+          <Controller
+            control={control}
             name={INPUTS_NAME.HEADER_BIDDING}
-            label="Header bidding"
-            placeholder="0"
+            defaultValue={'active'}
+            render={({onChange, onBlur, value, name}) => (
+              <ActiveToggle value={value} onChange={onChange} />
+            )}
           />
         </Col>
       </Row>

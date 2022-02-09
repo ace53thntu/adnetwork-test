@@ -100,3 +100,17 @@ export const Statuses = {
   INACTIVE: 'inactive',
   DELETE: 'delete'
 };
+
+export const BudgetTimeFrames = {
+  DAILY: 86400,
+  GLOBAL: 0
+};
+
+export const CappingTypes = {
+  BDG_MNG: {value: 'BDG_MNG', label: 'Budget Manager'}, // capping by budget of manager ( admin )
+  BDG: {value: 'BDG', label: 'Budget'}, // capping by budget of client
+  IMP: {value: 'IMP', label: 'Impression'}, // capping by impression
+  DM: {value: 'DM', label: 'Domain'}, // capping by domain
+  SCHL: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
+  KW: {value: 'KW', label: 'Keyword'} // capping by keywords
+};

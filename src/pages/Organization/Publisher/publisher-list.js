@@ -39,7 +39,7 @@ const PublisherList = () => {
 
   const {data, isLoading, isPreviousData} = useGetPublishers({
     params: {
-      limit: DEFAULT_PAGINATION.perPage,
+      per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
       sort: 'created_at DESC'
     },
