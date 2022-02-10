@@ -1,5 +1,6 @@
 import ThemeOptions from './ThemeOptions';
 import {campaignReducer} from './campaign';
+import {commonReducer} from './common';
 import {containerReducer} from './container';
 import {creativeReducer} from './creative';
 import {entityReportReducer} from './entity-report';
@@ -12,5 +13,6 @@ export default {
   containerReducer,
   creativeReducer,
   entityReportReducer,
-  inventoryMarketReducer
+  inventoryMarketReducer,
+  commonReducer
 };

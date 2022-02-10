@@ -13,6 +13,7 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button} from 'reactstrap';
+import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
@@ -49,6 +50,7 @@ function NativeAdForm(props) {
   const {t} = useTranslation();
   const {conceptId} = useParams();
   const {selectedAdvertiserId} = useCreativeSelector();
+  const {isUploading} = useCommonSelector();
 
   const {mutateAsync: createNativeAdRequest} = useCreateNativeAd();
   const {mutateAsync: updateNativeAdRequest} = useUpdateNativeAd();
@@ -198,7 +200,7 @@ function NativeAdForm(props) {
         </Button>
         <Button
           color="primary"
-          disabled={!isDirty || isLoading}
+          disabled={!isDirty || isLoading || isUploading}
           type="submit"
           className="ml-2"
           form="native-ad-form"

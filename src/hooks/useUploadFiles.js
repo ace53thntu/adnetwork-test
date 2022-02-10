@@ -1,6 +1,8 @@
 import {useUploadFileRequest} from 'queries/uploader';
 import React from 'react';
 import {useDropzone} from 'react-dropzone';
+import {useDispatch} from 'react-redux';
+import {commonFileUploadingRedux} from 'store/reducers/common';
 import {getUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 
 const uploaderConfig = getUploaderConfig();
@@ -21,6 +23,7 @@ export function useUploadFile({
   filePath = fileTypePaths?.['BANNER'],
   isInArray = false
 }) {
+  const dispatch = useDispatch();
   const [files, setFiles] = React.useState([]);
   const [isUploading, setIsUploading] = React.useState(false);
 
@@ -36,6 +39,7 @@ export function useUploadFile({
           clearErrors(name);
         }
         setIsUploading(true);
+        dispatch(commonFileUploadingRedux(true));
 
         const formData = new FormData();
         formData.append('file_name', acceptedFiles[0].name);
@@ -53,9 +57,11 @@ export function useUploadFile({
           setFiles([fileObj]);
           onChange(fileObj);
           setIsUploading(false);
+          dispatch(commonFileUploadingRedux(false));
         } catch (error) {
           //
           setIsUploading(false);
+          dispatch(commonFileUploadingRedux(false));
           setError(name, {
             type: 'manual',
             message: error?.message ?? 'Something went wrong'
@@ -78,7 +84,8 @@ export function useUploadFile({
       name,
       onChange,
       setError,
-      uploadFileRequest
+      uploadFileRequest,
+      dispatch
     ]
   );
 
@@ -100,8 +107,9 @@ export function useUploadFile({
     return () => {
       // Make sure to revoke the data uris to avoid memory leaks
       files.forEach(file => URL.revokeObjectURL(file.preview));
+      dispatch(commonFileUploadingRedux(false));
     };
-  }, [files]);
+  }, [files, dispatch]);
 
   const removeFiles = React.useCallback(() => {
     files.forEach(file => URL.revokeObjectURL(file.preview));

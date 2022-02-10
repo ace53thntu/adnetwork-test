@@ -11,6 +11,7 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button} from 'reactstrap';
+import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
@@ -44,6 +45,7 @@ function VideoForm(props) {
   const {selectedAdvertiserId} = useCreativeSelector();
   const dispatch = useDispatch();
   const client = useQueryClient();
+  const {isUploading} = useCommonSelector();
 
   const {mutateAsync: createVideoRequest} = useCreateVideo();
   const {mutateAsync: updateVideoRequest} = useUpdateVideo();
@@ -172,7 +174,7 @@ function VideoForm(props) {
         </Button>
         <Button
           color="primary"
-          disabled={!isDirty}
+          disabled={!isDirty || isUploading}
           type="submit"
           className="ml-2"
           form="video-info-form"

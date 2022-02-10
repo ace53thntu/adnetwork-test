@@ -5,6 +5,7 @@ import {createReducer} from 'utils/helpers/createReducer.helpers';
 
 // dispatch action types
 const RESET = '@creative/RESET';
+
 const ADVERTISERS = '@creative/ADVERTISERS';
 const SELECT_ADVERTISER = '@creative/SELECT_ADVERTISER';
 const EXPAND_ADVERTISER = '@creative/EXPAND_ADVERTISER';
@@ -21,6 +22,7 @@ const DIRTY_FORM = '@creative/DIRTY_FORM';
 
 // dispatch actions
 export const resetCreativeRedux = () => createAction(RESET, {});
+
 export const setAdvertisersRedux = (data, page) =>
   createAction(ADVERTISERS, {data, page});
 export const selectAdvertiserRedux = id =>
@@ -57,7 +59,8 @@ const creativeInitialState = {
   toggleDetailDialog: false,
   detailOf: '',
   selectedCreativeId: null,
-  dirtyForm: false
+  dirtyForm: false,
+  isUploading: false
 };
 
 const handleActions = {
@@ -90,6 +93,7 @@ function handleReset(state) {
   state.toggleDetailDialog = false;
   state.selectedCreativeId = null;
   state.dirtyForm = false;
+  state.isUploading = false;
   state.detailOf = '';
 }
 

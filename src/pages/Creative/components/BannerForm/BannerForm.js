@@ -18,6 +18,7 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Button, Col, Row} from 'reactstrap';
+import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
@@ -68,6 +69,7 @@ const defaultFormValues = {
 function BannerForm(props) {
   const {isCreate, creative} = props;
   const {selectedAdvertiserId} = useCreativeSelector();
+  const {isUploading} = useCommonSelector();
 
   const client = useQueryClient();
   const dispatch = useDispatch();
@@ -390,7 +392,7 @@ function BannerForm(props) {
         </Button>
         <Button
           color="primary"
-          disabled={!isDirty || isLoading}
+          disabled={!isDirty || isLoading || isUploading}
           type="submit"
           className="ml-2"
           form="banner-form"
