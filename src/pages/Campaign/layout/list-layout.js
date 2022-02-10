@@ -15,7 +15,7 @@ const ListCampaignLayout = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const query = useQueryString();
-  const mode = query.get('mode') || 'strategy';
+  const mode = query.get('mode') || 'campaign';
   const {campaignId} = useParams();
   const [typeView, setTypeView] = React.useState('');
 
@@ -57,7 +57,7 @@ const ListCampaignLayout = () => {
     <CampaignContentLayout
       heading={t('campaignManagement')}
       subHeading={t('campaignPageDescription')}
-      actionPageTitle={actionPageTitle}
+      actionPageTitle={typeView === 'campaign' ? actionPageTitle : null}
     >
       <Container fluid>
         <div className="justify-content-end d-flex mb-3">

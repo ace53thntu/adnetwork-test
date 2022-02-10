@@ -7,7 +7,7 @@ import {Card, CardBody, Col, Container, Row} from 'reactstrap';
 
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
-import {CampaignTabs} from '.';
+import {CampaignEditTabs} from '.';
 import {apiToForm} from 'entities/Campaign';
 
 const CampaignCreate = () => {
@@ -24,7 +24,7 @@ const CampaignCreate = () => {
           <Col md="12">
             <Card className="main-card mb-3">
               <CardBody>
-                <CampaignTabs isCreate currentCampaign={currentCampaign} />
+                <CampaignEditTabs isCreate currentCampaign={currentCampaign} />
               </CardBody>
             </Card>
           </Col>

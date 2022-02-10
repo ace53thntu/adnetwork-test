@@ -11,7 +11,7 @@ import {Col, Row} from 'reactstrap';
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
 import {CampaignContainerStyled} from './styled';
-import {CampaignTabs} from '.';
+import {CampaignEditTabs} from '.';
 import {apiToForm} from 'entities/Campaign';
 
 const CampaignEdit = () => {
@@ -33,7 +33,7 @@ const CampaignEdit = () => {
         {isFetched && (
           <Row>
             <Col md="12">
-              <CampaignTabs isEdit currentCampaign={campaignDestructure} />
+              <CampaignEditTabs isEdit currentCampaign={campaignDestructure} />
             </Col>
           </Row>
         )}

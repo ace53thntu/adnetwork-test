@@ -8,12 +8,12 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
-import {CampaignTabs} from '.';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 // Internal Modules
 import {CampaignContentLayout} from '../layout';
 import {CampaignContainerStyled} from './styled';
+import CampaignViewTabs from './ViewTabs';
 
 const CampaignDetail = () => {
   const {t} = useTranslation();
@@ -35,7 +35,7 @@ const CampaignDetail = () => {
         {isFetched && (
           <Row>
             <Col md="12">
-              <CampaignTabs isView currentCampaign={campaignDestructure} />
+              <CampaignViewTabs currentCampaign={campaignDestructure} />
             </Col>
           </Row>
         )}

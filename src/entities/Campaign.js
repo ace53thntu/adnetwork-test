@@ -7,7 +7,7 @@ const CAMPAIGN_ENTITY = {
   advertiser_uuid: null,
   name: '',
   status: 'active',
-  start_time: null,
+  start_time: new Date(),
   end_time: null
 };
 
@@ -50,20 +50,62 @@ export const formToApi = formData => {
     status,
     start_time,
     end_time,
-    check_visit,
-    auto_realloc
+    budget,
+    impression,
+    domain_groups_white,
+    domain_groups_black,
+    keywords_list_white,
+    keywords_list_black
   } = formData;
 
-  const formatStartDate = moment(start_time).toISOString();
+  const formatStartDate = moment(start_time).isSame(moment(), 'day')
+    ? null
+    : moment(start_time).toISOString();
   const formaEndDate = moment(end_time).endOf('day').toISOString();
 
-  return {
+  const requestBody = {
     [CAMPAIGN_KEYS.ADVERTISER_ID]: advertiser_uuid?.value || undefined,
     [CAMPAIGN_KEYS.NAME]: name,
     [CAMPAIGN_KEYS.STATUS]: status,
     [CAMPAIGN_KEYS.START_TIME]: formatStartDate,
     [CAMPAIGN_KEYS.END_TIME]: formaEndDate,
-    [CAMPAIGN_KEYS.CHECK_VISIT]: check_visit === 'active' ? true : false,
-    [CAMPAIGN_KEYS.AUTO_REALLOC]: auto_realloc === 'active' ? true : false
+    [CAMPAIGN_KEYS.BUDGET]: {
+      global: parseFloat(budget?.global) || 0,
+      daily: parseFloat(budget?.daily)
+    },
+    [CAMPAIGN_KEYS.IMPRESSION]: {
+      global: parseFloat(impression?.global) || 0,
+      daily: parseFloat(impression?.daily)
+    }
   };
+
+  if (domain_groups_white && domain_groups_white?.length > 0) {
+    requestBody.domain_groups_white = Array.from(
+      domain_groups_white,
+      domain => domain?.value
+    );
+  }
+
+  if (domain_groups_black && domain_groups_black?.length > 0) {
+    requestBody.domain_groups_black = Array.from(
+      domain_groups_black,
+      domain => domain?.value
+    );
+  }
+
+  if (keywords_list_white && keywords_list_white?.length > 0) {
+    requestBody.keywords_list_white = Array.from(
+      keywords_list_white,
+      domain => domain?.value
+    );
+  }
+
+  if (keywords_list_black && keywords_list_black?.length > 0) {
+    requestBody.keywords_list_black = Array.from(
+      keywords_list_black,
+      domain => domain?.value
+    );
+  }
+
+  return requestBody;
 };

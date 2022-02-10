@@ -20,6 +20,8 @@ import {RoutePaths} from 'constants/route-paths';
 import AdvertiserSelect from './form-fields/AdvertiserSelect';
 import {formToApi} from 'entities/Campaign';
 import {Collapse} from 'components/common';
+import KeywordListSelect from 'components/forms/KeywordListSelect';
+import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -181,57 +183,119 @@ const CampaignForm = ({
               </Row>
             </Collapse>
 
-            {/* Budget */}
-            <Collapse initialOpen={true} title={t('budget')} unMount={false}>
-              <Row>
-                <Col md="4">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('global')}
-                    name="budget.global"
-                    label={t('global')}
-                    isRequired={false}
-                  />
-                </Col>
-                <Col md="4">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('daily')}
-                    name="budget.daily"
-                    label={t('daily')}
-                    isRequired={false}
-                  />
-                </Col>
-              </Row>
-            </Collapse>
+            {isCreate && (
+              <>
+                {/* Budget */}
+                <Collapse
+                  initialOpen={true}
+                  title={t('budget')}
+                  unMount={false}
+                >
+                  <Row>
+                    <Col md="4">
+                      <FormTextInput
+                        type="number"
+                        placeholder={t('global')}
+                        name="budget.global"
+                        label={t('global')}
+                        isRequired
+                      />
+                    </Col>
+                    <Col md="4">
+                      <FormTextInput
+                        type="number"
+                        placeholder={t('daily')}
+                        name="budget.daily"
+                        label={t('daily')}
+                        isRequired
+                      />
+                    </Col>
+                  </Row>
+                </Collapse>
 
-            {/* Impression */}
-            <Collapse
-              initialOpen={true}
-              title={t('impression')}
-              unMount={false}
-            >
-              <Row>
-                <Col md="4">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('global')}
-                    name="impression.global"
-                    label={t('global')}
-                    isRequired={false}
-                  />
-                </Col>
-                <Col md="4">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('daily')}
-                    name="impression.daily"
-                    label={t('daily')}
-                    isRequired={false}
-                  />
-                </Col>
-              </Row>
-            </Collapse>
+                {/* Impression */}
+                <Collapse
+                  initialOpen={true}
+                  title={t('impression')}
+                  unMount={false}
+                >
+                  <Row>
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder={t('global')}
+                        name="impression.global"
+                        label={t('global')}
+                        isRequired
+                      />
+                    </Col>
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder={t('daily')}
+                        name="impression.daily"
+                        label={t('daily')}
+                        isRequired
+                      />
+                    </Col>
+                  </Row>
+                </Collapse>
+
+                {/* Domain */}
+                <Collapse
+                  initialOpen={true}
+                  title={t('domain')}
+                  unMount={false}
+                >
+                  <Row>
+                    <Col md="6">
+                      <DomainGroupSelect
+                        name={CAMPAIGN_KEYS.DOMAIN_GROUP_WHITE}
+                        label={t('domainGroupWhite')}
+                        placeholder={t('selectDomainGroupWhite')}
+                        defaultValues={[]}
+                        multiple
+                      />
+                    </Col>
+                    <Col md="6">
+                      <DomainGroupSelect
+                        name={CAMPAIGN_KEYS.DOMAIN_GROUP_BLACK}
+                        label={t('domainGroupBlack')}
+                        placeholder={t('selectDomainGroupBlack')}
+                        defaultValues={[]}
+                        multiple
+                      />
+                    </Col>
+                  </Row>
+                </Collapse>
+
+                {/* Keyword */}
+                <Collapse
+                  initialOpen={true}
+                  title={t('keyword')}
+                  unMount={false}
+                >
+                  <Row>
+                    <Col md="6">
+                      <KeywordListSelect
+                        name={CAMPAIGN_KEYS.KEYWORD_LIST_WHITE}
+                        label={t('keywordListWhite')}
+                        placeholder={t('selectKeywordListWhite')}
+                        defaultValues={[]}
+                        multiple
+                      />
+                    </Col>
+                    <Col md="6">
+                      <KeywordListSelect
+                        name={CAMPAIGN_KEYS.KEYWORD_LIST_BLACK}
+                        label={t('keywordListBlack')}
+                        placeholder={t('selectKeywordListBlack')}
+                        defaultValues={[]}
+                        multiple
+                      />
+                    </Col>
+                  </Row>
+                </Collapse>
+              </>
+            )}
           </Container>
           <div className="d-block text-right mr-15">
             {isEdit || isCreate ? (

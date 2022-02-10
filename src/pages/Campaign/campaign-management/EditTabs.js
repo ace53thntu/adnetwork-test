@@ -1,6 +1,3 @@
-import {EntityTypes} from 'constants/report';
-import {EntityReport} from 'pages/entity-report';
-import {USER_ROLE} from 'pages/user-management/constants';
 //---> External Modules
 import PropTypes from 'prop-types';
 //---> Build-in Modules
@@ -19,15 +16,13 @@ const propTypes = {
   currentCampaign: PropTypes.any
 };
 
-const CampaignTabs = ({
+const CampaignEditTabs = ({
   isView = false,
   isEdit = false,
   isCreate = false,
   currentCampaign = null
 }) => {
   const {t} = useTranslation();
-  const ownerId = currentCampaign?.advertiser_uuid?.value;
-  const entityId = currentCampaign?.uuid;
   const [currentTab, setCurrentTab] = useState('description');
   const [campaignIdCreated, setCampaignIdCreated] = useState('');
 
@@ -51,16 +46,10 @@ const CampaignTabs = ({
             />
           )
         },
+
         {
-          name: isView ? t('report') : t('strategy'),
-          content: isView ? (
-            <EntityReport
-              entity={EntityTypes.CAMPAIGN}
-              entityId={entityId}
-              ownerId={ownerId}
-              ownerRole={USER_ROLE.ADVERTISER}
-            />
-          ) : (
+          name: t('strategy'),
+          content: (
             <CampaignStrategies
               goToTab={goToTab}
               campaignIdCreated={campaignIdCreated}
@@ -73,17 +62,7 @@ const CampaignTabs = ({
         title: name,
         getContent: () => content
       })),
-    [
-      t,
-      goToTab,
-      isEdit,
-      isCreate,
-      isView,
-      currentCampaign,
-      entityId,
-      ownerId,
-      campaignIdCreated
-    ]
+    [t, goToTab, isEdit, isCreate, isView, currentCampaign, campaignIdCreated]
   );
 
   const getTab = index => {
@@ -114,6 +93,6 @@ const CampaignTabs = ({
   );
 };
 
-CampaignTabs.propTypes = propTypes;
+CampaignEditTabs.propTypes = propTypes;
 
-export default CampaignTabs;
+export default CampaignEditTabs;

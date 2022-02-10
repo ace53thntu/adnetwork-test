@@ -59,6 +59,7 @@ const en = {
   selectAudience: 'Select audience',
   headerBiddingAvailable: 'Header bidding available',
   biddingUrl: 'Bidding url',
+  impression: 'Impression',
 
   // Main Menu
   userManagement: 'User Management',
@@ -137,6 +138,14 @@ const en = {
   keyword: 'Keyword',
   keywordList: 'Keyword List',
   domainGroup: 'Domain Group',
+  keywordListWhite: 'Keyword list white',
+  keywordListBlack: 'Keyword list black',
+  selectKeywordListWhite: 'Select keyword list white',
+  selectKeywordListBlack: 'Select keyword list black',
+  domainGroupWhite: 'Domain group white',
+  domainGroupBlack: 'Domain group black',
+  selectDomainGroupWhite: 'Select domain group white',
+  selectDomainGroupBlack: 'Select domain group black',
 
   //overview
   totalUsers: 'Total Users',

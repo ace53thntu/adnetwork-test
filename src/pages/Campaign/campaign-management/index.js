@@ -2,7 +2,7 @@ import {ErrorBoundary} from 'components/common';
 import React from 'react';
 
 export {default as CampaignList} from './list';
-export {default as CampaignTabs} from './tabs';
+export {default as CampaignEditTabs} from './EditTabs';
 
 const CampaignCreate = React.lazy(() =>
   import('./create' /* webpackChunkName: "campaign-create" */)

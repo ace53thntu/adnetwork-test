@@ -25,7 +25,7 @@ const CampaignList = () => {
 
   const {data, isLoading, isPreviousData} = useGetCampaigns({
     params: {
-      limit: DEFAULT_PAGINATION.perPage,
+      per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
       sort: 'created_at DESC'
     },

@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
-import {AdvertiserAPIRequest} from 'api/advertiser.api';
+import {KeywordListAPIRequest} from 'api/keyword-list.api';
 import {SelectPaginate} from 'components/forms';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL, Statuses} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
@@ -19,61 +19,65 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool,
-  isRequired: PropTypes.bool
+  multiple: PropTypes.bool,
+  required: PropTypes.bool
 };
 
-const AdvertiserSelect = ({
+const KeywordListSelect = ({
   defaultValue = null,
-  name = '',
-  label = '',
-  placeholder = 'Select...',
-  disabled = false,
-  isRequired = false
+  name,
+  label,
+  placeholder,
+  multiple = false,
+  required = false
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadAdvertiser} = useAdvertiserPagination();
+  const {loadKeywordList} = useKeywordListPagination();
 
   return (
     <SelectPaginate
-      required={isRequired}
+      required={required}
       name={name}
       label={label}
       placeholder={placeholder}
-      loadOptions={loadAdvertiser}
+      loadOptions={loadKeywordList}
       additional={{
         page: 1
       }}
       defaultValue={defaultValue || null}
-      disabled={disabled || isSubmitting}
+      disabled={isSubmitting}
+      multiple={multiple}
     />
   );
 };
 
-AdvertiserSelect.propTypes = propTypes;
+KeywordListSelect.propTypes = propTypes;
 
-export default AdvertiserSelect;
+export default KeywordListSelect;
 
-const useAdvertiserPagination = () => {
-  const loadAdvertiser = React.useCallback(
+const useKeywordListPagination = () => {
+  const loadKeywordList = React.useCallback(
     async (search, prevOptions, {page}) => {
-      const res = await AdvertiserAPIRequest.getAllAdvertiser({
+      const res = await KeywordListAPIRequest.getAllKeywordList({
         params: {
           page,
           limit: DEFAULT_PAGINATION.perPage,
           name: search,
-          status: Statuses.ACTIVE
+          status: 'active'
         },
-        options: {isResponseAll: IS_RESPONSE_ALL}
+        options: {
+          isResponseAll: IS_RESPONSE_ALL
+        }
       });
 
-      const data = getResponseData(res, IS_RESPONSE_ALL);
+      const items = getResponseData(res, IS_RESPONSE_ALL);
       const total = getResponsePagination(res)?.totalItems;
       const perPage =
         getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
-      const options = [...data].map(item => ({
+
+      const options = [...items].map(item => ({
         label: item.name,
         value: item.uuid
       }));
@@ -92,6 +96,6 @@ const useAdvertiserPagination = () => {
   );
 
   return {
-    loadAdvertiser
+    loadKeywordList
   };
 };

@@ -13,9 +13,10 @@ import {useDeleteStrategy, useGetStrategiesInfinity} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {StrategyListStyled} from './styled';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {RoutePaths} from 'constants/route-paths';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
@@ -33,7 +34,9 @@ const StrategyList = ({campaignId = undefined}) => {
   const navigate = useNavigate();
   const {mutateAsync: deleteStrategy} = useDeleteStrategy();
   const params = {
-    limit: DEFAULT_PAGINATION.perPage
+    per_page: DEFAULT_PAGINATION.perPage,
+    sort: 'created_at DESC',
+    status: 'active'
   };
 
   if (campaignId && campaignId !== 'create') {
@@ -51,8 +54,8 @@ const StrategyList = ({campaignId = undefined}) => {
   });
 
   const strategiesDestructure = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
+    return pages?.reduce((acc, page) => {
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       return [...acc, ...items];
     }, []);
   }, [pages]);

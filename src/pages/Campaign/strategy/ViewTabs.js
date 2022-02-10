@@ -11,7 +11,8 @@ import {Button} from 'reactstrap';
 import {RoutePaths} from 'constants/route-paths';
 import {useQueryString} from 'hooks';
 import {EntityReport} from 'pages/entity-report';
-import CappingManagement from '../capping';
+import {Capping} from '../components/capping';
+
 import {Divider, Tabs} from '../components';
 import StrategyForm from './form';
 import Concept from './form-fields/Concept';
@@ -91,7 +92,7 @@ const StrategyViewTabs = ({
         },
         {
           name: t(ViewTabs.CAPPING.name),
-          content: <CappingManagement />
+          content: <Capping referenceUuid={currentStrategy?.uuid} />
         },
         {
           name: t(ViewTabs.REPORT.name),

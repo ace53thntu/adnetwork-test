@@ -81,16 +81,21 @@ export const CAMPAIGN_KEYS = {
   MEDIA_COST: 'media_cost',
   TRACKING_COST: 'tracking_cost',
   CONV_EVENTS: 'conv_events',
-  BUGDET: 'budget',
-  BUGET_GLOBAL: 'global',
-  BUGET_DAILY: 'daily',
+  BUDGET: 'budget',
+  BUDGET_GLOBAL: 'global',
+  BUDGET_DAILY: 'daily',
   LABELS: 'labels',
   CHECK_VISIT: 'check_visit',
   AUTO_REALLOC: 'auto_realloc',
   FAMILIES: 'families',
   SPENT: 'spent',
   CONV_EVENT_IDS: 'conv_event_ids',
-  CONV_LABEL_IDS: 'conv_label_ids'
+  CONV_LABEL_IDS: 'conv_label_ids',
+  IMPRESSION: 'impression',
+  KEYWORD_LIST_WHITE: 'keywords_list_white',
+  KEYWORD_LIST_BLACK: 'keywords_list_black',
+  DOMAIN_GROUP_WHITE: 'domain_groups_white',
+  DOMAIN_GROUP_BLACK: 'domain_groups_black'
 };
 
 export const listEngine = [
