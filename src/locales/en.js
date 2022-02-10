@@ -132,7 +132,7 @@ const en = {
   reportCampaign: 'Report campaign',
   creative: 'Creative',
   dashboard: 'Dashboard',
-  creativeManagement: 'Creative Management',
+  creativeManagement: 'Concepts Management',
   tracker: 'Tracker',
   keyword: 'Keyword',
   keywordList: 'Keyword List',

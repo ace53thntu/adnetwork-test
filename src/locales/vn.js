@@ -28,7 +28,7 @@ const vn = {
   reportCampaign: 'Báo cáo campaign',
   creative: 'Creative',
   dashboard: 'Dashboard',
-  creativeManagement: 'Creative Management',
+  creativeManagement: 'Concepts Management',
 
   //overview
   totalUsers: 'Tổng người dùng',

@@ -64,6 +64,7 @@ function Alternatives(props) {
               itemIndex={index}
               defaultValues={item}
               handleRemoveAlternative={removeAlternativeField}
+              fieldId={item.id}
             />
           </Collapse>
         );

@@ -31,19 +31,18 @@ function AlternativeForm(props) {
 
   const client = useQueryClient();
   const {t} = useTranslation();
-  const {watch, trigger: formTrigger} = useFormContext();
+  const {watch, trigger: formTrigger, reset, getValues} = useFormContext();
   const {selectedCreativeId} = useCreativeSelector();
   const {mutateAsync: updateAlternativeRequest} = useUpdateAlternative();
   const {mutateAsync: deleteAlternativeRequest} = useDeleteAlternative();
   const {mutateAsync: createAlternativeRequest} = useCreateAlternative();
-
-  const isEdit = !!selectedCreativeId;
 
   const prefixName = `${formAlternativeName}[${itemIndex}]`;
 
   const watchAlternatives = watch(formAlternativeName);
   const watchCurrentAlt = watchAlternatives?.[itemIndex];
 
+  const isEdit = !!watchCurrentAlt?.rawId;
   const isDirty = !_.isEmpty(difference(watchCurrentAlt, defaultValues));
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -54,7 +53,7 @@ function AlternativeForm(props) {
   }
 
   async function handleAgree() {
-    if (!watchCurrentAlt?.rawId) {
+    if (!isEdit) {
       handleRemoveAlternative(itemIndex);
       handleClose();
     } else {
@@ -73,20 +72,37 @@ function AlternativeForm(props) {
     }
   }
 
+  function resetAltValues() {
+    const resetAltValues = watchAlternatives.map((val, idx) => {
+      if (idx === itemIndex) {
+        return _.omit(defaultValues, ['id']);
+      }
+      return val;
+    });
+    const formValues = getValues();
+    const resetFormValues = {
+      ...formValues,
+      [formAlternativeName]: resetAltValues
+    };
+    reset(resetFormValues);
+  }
+
   function handleCancel() {
     if (isEdit) {
       toggleCollapse();
+      resetAltValues();
     } else {
       handleRemoveAlternative(itemIndex);
     }
   }
 
   async function handleSave() {
-    if (!isEdit) {
-      toggleCollapse();
+    const resValid = await formTrigger(formAlternativeName);
+    if (!selectedCreativeId) {
+      if (resValid) {
+        toggleCollapse();
+      }
     } else {
-      const resValid = await formTrigger(formAlternativeName);
-
       if (resValid) {
         const requestData = alternativeFormValuesToRepo(
           watchCurrentAlt,
@@ -94,7 +110,7 @@ function AlternativeForm(props) {
         );
 
         setIsLoading(true);
-        if (watchCurrentAlt?.rawId) {
+        if (isEdit) {
           // update
           try {
             await updateAlternativeRequest({
@@ -125,7 +141,7 @@ function AlternativeForm(props) {
   }
 
   const handleRemove = () => {
-    if (!watchCurrentAlt?.rawId && !watchCurrentAlt?.file) {
+    if (!isEdit && !watchCurrentAlt?.file) {
       handleRemoveAlternative(itemIndex);
     } else {
       setIsOpen(true);
@@ -352,8 +368,9 @@ function AlternativeForm(props) {
               type="button"
               className="ml-2"
             >
-              {t('cancel')}
+              {isEdit ? 'Close ' : t('cancel')}
             </Button>
+
             <Button
               color="primary"
               disabled={isLoading || !isDirty}
@@ -380,7 +397,8 @@ function AlternativeForm(props) {
 AlternativeForm.propTypes = {
   toggleCollapse: PropTypes.func,
   itemIndex: PropTypes.number,
-  defaultValues: PropTypes.object
+  defaultValues: PropTypes.object,
+  fieldId: PropTypes.any
 };
 AlternativeForm.defaultProps = {};
 
