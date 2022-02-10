@@ -1,38 +1,26 @@
 import 'swiper/swiper.min.css';
-import 'swiper/components/pagination/pagination.min.css';
+// import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/navigation/navigation.min.css';
 
 import './SwiperList.styles.scss';
 
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import SwiperCore, {Navigation, Virtual} from 'swiper';
+import SwiperCore, {Lazy, Navigation, Virtual} from 'swiper';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
 // install Virtual module
-SwiperCore.use([Virtual, Navigation]);
+SwiperCore.use([Virtual, Navigation, Lazy]);
 
 const SLIDES_PER_VIEW = 4;
 
 function SwiperList(props) {
   const {slides, onAsyncNext} = props;
 
+  const slidesCount = slides?.length ?? 0;
+  const isEnableNavigation = slidesCount > SLIDES_PER_VIEW;
+
   const [swiperRef, setSwiperRef] = React.useState(null);
-
-  // const prepend = () => {
-  //   swiperRef.virtual.prependSlide([
-  //     'Slide ' + --prependNumber,
-  //     'Slide ' + --prependNumber
-  //   ]);
-  // };
-
-  // const append = () => {
-  //   swiperRef.virtual.appendSlide('Slide ' + ++appendNumber);
-  // };
-
-  // const slideTo = index => {
-  //   swiperRef.slideTo(index - 1, 0);
-  // };
 
   const onNext = () => {
     onAsyncNext?.(swiperRef);
@@ -48,10 +36,7 @@ function SwiperList(props) {
         type: 'fraction',
         clickable: true
       }}
-      navigation={{
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      }}
+      navigation={isEnableNavigation}
       onSlideNextTransitionStart={onNext}
     >
       {slides.map((slideContent, index) => (
@@ -59,13 +44,6 @@ function SwiperList(props) {
           {slideContent}
         </SwiperSlide>
       ))}
-
-      {slides?.length > SLIDES_PER_VIEW && (
-        <>
-          <div className="swiper-button-prev swiper-navigation-button"></div>
-          <div className="swiper-button-next swiper-navigation-button"></div>
-        </>
-      )}
     </Swiper>
   );
 }
