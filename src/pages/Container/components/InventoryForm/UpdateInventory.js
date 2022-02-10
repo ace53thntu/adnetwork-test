@@ -45,7 +45,11 @@ function FormUpdate({toggle, inventory, pageId}) {
     defaultValues,
     resolver: validationInventory([], true)
   });
-  const {handleSubmit, reset} = methods;
+  const {handleSubmit, reset, errors} = methods;
+  console.log(
+    '🚀 ~ file: UpdateInventory.js ~ line 49 ~ FormUpdate ~ errors',
+    errors
+  );
 
   const {mutateAsync: editInventory} = useEditInventory();
 

@@ -25,6 +25,7 @@ const InventoryProperty = ({currentInventory = null}) => {
             placeholder="0"
             label={t('width')}
             disable={formState.isSubmitting}
+            isRequired
           />
         </Col>
         <Col sm={4}>
@@ -33,6 +34,7 @@ const InventoryProperty = ({currentInventory = null}) => {
             placeholder="0"
             label={t('height')}
             disable={formState.isSubmitting}
+            isRequired
           />
         </Col>
         <Col sm={4}>

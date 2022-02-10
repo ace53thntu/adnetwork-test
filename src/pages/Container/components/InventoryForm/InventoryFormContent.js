@@ -36,7 +36,8 @@ const formName = {
   traits: 'traits',
   name: 'name',
   allow_deal: 'allow_deal',
-  market_type: 'market_type'
+  market_type: 'market_type',
+  first_party: 'first_party'
 };
 
 const propTypes = {

@@ -155,7 +155,7 @@ class TreeNode extends Component {
     e.stopPropagation();
     if (!disabled) {
       const {expanded, children} = this.state;
-      if (!expanded && children.length === 0) {
+      if (!expanded && children?.length === 0) {
         this.setState({expanderLoading: true});
         await callable(e, node);
         this.setState({expanderLoading: false});
