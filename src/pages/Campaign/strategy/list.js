@@ -62,9 +62,8 @@ const StrategyList = ({campaignId = undefined}) => {
 
   const strategies = React.useMemo(() => {
     return strategiesDestructure?.map(item => {
-      const campaign = item?.campaign;
-      const campaignName = campaign?.name;
-      const advertiserName = campaign?.advertiser_name;
+      const campaignName = item?.campaign_name;
+      const advertiserName = item?.advertiser_name;
       return {
         ...item,
         id: item?.uuid,
