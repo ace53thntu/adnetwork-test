@@ -13,6 +13,7 @@ import {
 } from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import {TABS} from '../CreativeCreate/constants';
 import {NativeAdDetail} from '../NativeAdDetail';
 import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
@@ -72,7 +73,7 @@ function NativeAds(props) {
   };
 
   const handleOpenCreateCreativeDialog = () => {
-    dispatch(toggleCreateCreativeDialog());
+    dispatch(toggleCreateCreativeDialog(TABS.nativeBanner));
   };
 
   const swiperData = React.useMemo(() => {

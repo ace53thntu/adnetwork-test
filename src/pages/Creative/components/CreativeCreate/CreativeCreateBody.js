@@ -14,9 +14,11 @@ import {TABS} from './constants';
 function CreativeCreateBody(props) {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const {dirtyForm: isDirty} = useCreativeSelector();
+  const {dirtyForm: isDirty, activeTab: activeTabRedux} = useCreativeSelector();
 
-  const [activeTab, setActiveTab] = React.useState(TABS.banner);
+  const [activeTab, setActiveTab] = React.useState(
+    activeTabRedux || TABS.banner
+  );
 
   const toggle = tab => {
     if (activeTab !== tab) {

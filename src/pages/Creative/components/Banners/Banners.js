@@ -14,6 +14,7 @@ import {
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {BannerDetail} from '../BannerDetail';
+import {TABS} from '../CreativeCreate/constants';
 import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
 
@@ -76,7 +77,7 @@ function Banners(props) {
   }, []);
 
   const handleOpenCreateCreativeDialog = () => {
-    dispatch(toggleCreateCreativeDialog());
+    dispatch(toggleCreateCreativeDialog(TABS.banner));
   };
 
   const swiperData = React.useMemo(() => {

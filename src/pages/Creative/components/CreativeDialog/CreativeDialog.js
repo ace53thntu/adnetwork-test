@@ -7,6 +7,8 @@ import {
   useCreativeSelector
 } from 'store/reducers/creative';
 
+import {TABS} from '../CreativeCreate/constants';
+
 function CreativeDialog(props) {
   const {children} = props;
 
@@ -15,7 +17,7 @@ function CreativeDialog(props) {
   const {isToggleCreateCreativeDialog} = useCreativeSelector();
 
   const handleCloseModal = () => {
-    dispatch(toggleCreateCreativeDialog());
+    dispatch(toggleCreateCreativeDialog(TABS.banner));
   };
 
   return (

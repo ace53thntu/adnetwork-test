@@ -13,6 +13,7 @@ import {
 } from 'store/reducers/creative';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import {TABS} from '../CreativeCreate/constants';
 import {NotFound} from '../NotFound';
 import {SwiperItem} from '../SwiperItem';
 import {VideoDetail} from '../VideoDetail';
@@ -73,7 +74,7 @@ function Videos(props) {
   };
 
   const handleOpenCreateCreativeDialog = () => {
-    dispatch(toggleCreateCreativeDialog());
+    dispatch(toggleCreateCreativeDialog(TABS.video));
   };
 
   const swiperData = React.useMemo(() => {

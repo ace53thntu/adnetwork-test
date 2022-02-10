@@ -1,4 +1,5 @@
 import {unSelectedChild} from 'pages/Creative/components/AdvertisersTree/utils';
+import {TABS} from 'pages/Creative/components/CreativeCreate/constants';
 import {useSelector} from 'react-redux';
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
@@ -40,8 +41,8 @@ export const updateConceptRedux = (conceptId, concept) =>
   createAction(UPDATE_CONCEPT, {conceptId, concept});
 export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
 
-export const toggleCreateCreativeDialog = () =>
-  createAction(TOGGLE_CREATE_CREATIVE_DIALOG, {});
+export const toggleCreateCreativeDialog = activeTab =>
+  createAction(TOGGLE_CREATE_CREATIVE_DIALOG, {activeTab});
 
 export const toggleCreativeDetailDialog = (creativeId, detailOf = '') =>
   createAction(TOGGLE_DETAIL_DIALOG, {creativeId, detailOf});
@@ -56,6 +57,7 @@ const creativeInitialState = {
   expandedIds: [],
   advertiserPage: 1,
   isToggleCreateCreativeDialog: false,
+  activeTab: TABS.banner,
   toggleDetailDialog: false,
   detailOf: '',
   selectedCreativeId: null,
@@ -90,6 +92,7 @@ function handleReset(state) {
   state.expandedIds = [];
   state.advertiserPage = 1;
   state.isToggleCreateCreativeDialog = false;
+  state.activeTab = TABS.banner;
   state.toggleDetailDialog = false;
   state.selectedCreativeId = null;
   state.dirtyForm = false;
@@ -304,6 +307,7 @@ function handleAddConcept(state, action) {
 
 function handleToggleCreateCreativeDialog(state, action) {
   state.isToggleCreateCreativeDialog = !state.isToggleCreateCreativeDialog;
+  state.activeTab = action.payload.activeTab || TABS.banner;
 }
 
 function handleToggleCreativeDetailDialog(state, action) {
