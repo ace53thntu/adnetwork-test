@@ -1,4 +1,4 @@
-import {TextField, FormDatePicker, FormCheckbox} from 'components/forms';
+import {FormCheckbox, FormDatePicker, TextField} from 'components/forms';
 import PropTypes from 'prop-types';
 import {useCreateConcept, useUpdateConcept} from 'queries/concept';
 import * as React from 'react';
@@ -130,7 +130,7 @@ function ConceptForm(props) {
             </Row>
             <Row>
               <Col>
-                <FormCheckbox name="status" label="Status" />
+                <FormCheckbox name="status" label="Active" />
               </Col>
             </Row>
           </CardBody>

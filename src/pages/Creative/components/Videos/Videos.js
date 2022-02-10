@@ -100,7 +100,7 @@ function Videos(props) {
     <>
       <Row>
         <Col>
-          <h5>Video Banners</h5>
+          <h5>Video</h5>
         </Col>
       </Row>
       {swiperData?.length ? (
@@ -112,10 +112,7 @@ function Videos(props) {
           </Row>
         </>
       ) : (
-        <NotFound
-          entity="Video Banners"
-          onClick={handleOpenCreateCreativeDialog}
-        />
+        <NotFound entity="Video" onClick={handleOpenCreateCreativeDialog} />
       )}
 
       <DialogConfirm

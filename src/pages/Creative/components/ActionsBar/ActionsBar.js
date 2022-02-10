@@ -12,13 +12,15 @@ import IconButton from '@material-ui/core/IconButton';
 // import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import {CloudUpload} from '@material-ui/icons';
-import FilterList from '@material-ui/icons/FilterList';
-import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import useStyles from './ActionsBar.styles';
 import CustomFilter from './CustomFilter';
+
+// import FilterList from '@material-ui/icons/FilterList';
+// import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
+// import ViewListIcon from '@material-ui/icons/ViewList';
+// import VisibilityIcon from '@material-ui/icons/Visibility';
+
 
 function ActionsBar(props) {
   const ref = React.useRef();
@@ -34,17 +36,17 @@ function ActionsBar(props) {
 
   useOnClickOutside(ref, () => setIsShowFilter(false));
 
-  const handleClickViewAsMenu = event => {
-    setAnchorViewAsEl(event.currentTarget);
-  };
+  // const handleClickViewAsMenu = event => {
+  //   setAnchorViewAsEl(event.currentTarget);
+  // };
   // eslint-disable-next-line no-unused-vars
   const handleCloseViewAsMenu = () => {
     setAnchorViewAsEl(null);
   };
 
-  const handleClickGroupByMenu = event => {
-    setAnchorGroupByEl(event.currentTarget);
-  };
+  // const handleClickGroupByMenu = event => {
+  //   setAnchorGroupByEl(event.currentTarget);
+  // };
   // eslint-disable-next-line no-unused-vars
   const handleCloseGroupByMenu = () => {
     setAnchorGroupByEl(null);
@@ -63,7 +65,7 @@ function ActionsBar(props) {
       </Collapse>
 
       <Grid item>
-        <IconButton color="default" onClick={handleClickViewAsMenu}>
+        {/* <IconButton color="default" onClick={handleClickViewAsMenu}>
           <Tooltip title="View as">
             <VisibilityIcon />
           </Tooltip>
@@ -85,7 +87,7 @@ function ActionsBar(props) {
           <Tooltip title="Select">
             <PhotoSizeSelectLargeIcon />
           </Tooltip>
-        </IconButton>
+        </IconButton> */}
         <IconButton
           color={'default'}
           onClick={handleToggleCreateCreativeDialog}
@@ -94,14 +96,14 @@ function ActionsBar(props) {
             <CloudUpload />
           </Tooltip>
         </IconButton>
-        <IconButton
+        {/* <IconButton
           color={isShowFilter ? 'primary' : 'default'}
           onClick={() => setIsShowFilter(!isShowFilter)}
         >
           <Tooltip title="Filter">
             <FilterList />
           </Tooltip>
-        </IconButton>
+        </IconButton> */}
       </Grid>
     </Grid>
   );
