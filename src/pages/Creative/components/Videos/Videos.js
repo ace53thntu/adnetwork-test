@@ -79,16 +79,16 @@ function Videos(props) {
 
   const swiperData = React.useMemo(() => {
     return videos?.map((video, idx) => {
-      const {name, files = []} = video;
+      const {name, file} = video;
 
-      const foundImgOrVideoAsset =
-        files?.find(file => file?.type === 'VIDEO') ?? null;
+      // const foundImgOrVideoAsset =
+      //   files?.find(file => file?.type === 'VIDEO') ?? null;
 
       return (
         <SwiperItem
           isVideo
           name={name}
-          file={foundImgOrVideoAsset || files?.[0]}
+          file={file}
           item={video}
           handleClickName={handleClickName}
           onDelete={() => handleDeleteVideo(video.uuid)}

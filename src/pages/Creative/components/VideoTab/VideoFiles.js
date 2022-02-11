@@ -15,6 +15,8 @@ function VideoFiles(props) {
     name: 'files'
   });
 
+  const limited = fields?.length >= 1;
+
   return (
     <Row>
       <Col>
@@ -42,20 +44,22 @@ function VideoFiles(props) {
             );
           })}
 
-          <div className="pb-5 ml-auto">
-            <Button
-              color="primary"
-              type="button"
-              className="mt-2"
-              onClick={() =>
-                append({
-                  file: null
-                })
-              }
-            >
-              Add File
-            </Button>
-          </div>
+          {!limited && (
+            <div className="pb-5 ml-auto">
+              <Button
+                color="primary"
+                type="button"
+                className="mt-2"
+                onClick={() =>
+                  append({
+                    file: null
+                  })
+                }
+              >
+                Add File
+              </Button>
+            </div>
+          )}
         </div>
       </Col>
     </Row>

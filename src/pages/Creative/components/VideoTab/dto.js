@@ -35,7 +35,7 @@ export function videoFormValuesToRepo(
     dtype: 'video',
     concept_uuid: conceptId,
     status: 'active',
-    file_uuids: []
+    file_uuid: null
   };
 
   if (width && _.isNumber(parseInt(width, 10))) {
@@ -47,7 +47,7 @@ export function videoFormValuesToRepo(
   }
 
   if (requestFiles?.length) {
-    obj.file_uuids = [...obj.file_uuids, ...requestFiles];
+    obj.file_uuid = requestFiles[0];
   }
 
   if (isUpdate) {
