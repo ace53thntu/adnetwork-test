@@ -90,6 +90,7 @@
     "source-map-explorer": "^2.5.2",
     "styled-components": "5.2.0",
     "swiper": "6.7.5",
+    "timezones-list": "^3.0.1",
     "uuid": "^8.3.0",
     "web-vitals": "^1.0.1",
     "yup": "0.29.1"

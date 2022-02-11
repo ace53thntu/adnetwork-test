@@ -29,7 +29,9 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     })) || [];
 
   return {
-    campaign_uuid: {value: campaign_uuid, label: campaign_name},
+    campaign_uuid: campaign_uuid
+      ? {value: campaign_uuid, label: campaign_name}
+      : {value: campaignDetail?.uuid, label: campaignDetail?.name},
     name,
     start_time: startDate,
     end_time: endDate,

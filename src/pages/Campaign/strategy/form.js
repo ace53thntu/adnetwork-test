@@ -10,6 +10,7 @@ import InventoryGroup from './form-fields/InventoryGroup';
 import {useWatch} from 'react-hook-form';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
+import ScheduleGroup from './form-fields/ScheduleGroup';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -35,6 +36,7 @@ const StrategyForm = ({
 
       {!isEdit && !isView && <BudgetGroup />}
       {!isEdit && !isView && <ImpressionGroup />}
+      {!isEdit && !isView && <ScheduleGroup />}
 
       {/* Inventory Group */}
       {typeSelected?.value === 'premium' && <InventoryGroup />}
