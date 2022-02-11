@@ -194,7 +194,6 @@ const CampaignForm = ({
                   <Row>
                     <Col md="4">
                       <FormTextInput
-                        type="number"
                         placeholder={t('global')}
                         name="budget.global"
                         label={t('global')}
@@ -203,7 +202,6 @@ const CampaignForm = ({
                     </Col>
                     <Col md="4">
                       <FormTextInput
-                        type="number"
                         placeholder={t('daily')}
                         name="budget.daily"
                         label={t('daily')}

@@ -20,9 +20,12 @@ import {RoutePaths} from 'constants/route-paths';
 const StrategyEditTabs = ({
   currentStrategy = {},
   campaignId,
-  positions = [],
   isCreate = false
 }) => {
+  console.log(
+    '🚀 ~ file: EditTabs.js ~ line 25 ~ currentStrategy',
+    currentStrategy
+  );
   const navigate = useNavigate();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
@@ -61,7 +64,6 @@ const StrategyEditTabs = ({
                 <StrategyForm
                   campaignId={campaignId}
                   isEdit={!isCreate}
-                  positions={positions}
                   currentStrategy={currentStrategy}
                 />
                 <FormAction />
@@ -85,7 +87,7 @@ const StrategyEditTabs = ({
           name: t(EditTabs.CONCEPT.name),
           content: (
             <ConceptTab>
-              <FormContainer {...defaultProps}>
+              <FormContainer {...defaultProps} isConcept>
                 <Concept goTo={goTo} strategyData={currentStrategy} />
                 <FormAction />
               </FormContainer>
@@ -101,7 +103,6 @@ const StrategyEditTabs = ({
                   <StrategyForm
                     campaignId={campaignId}
                     isEdit={!isCreate}
-                    positions={positions}
                     currentStrategy={currentStrategy}
                   />
                   <Concept goTo={goTo} strategyData={currentStrategy} />
@@ -116,11 +117,11 @@ const StrategyEditTabs = ({
         title: name,
         getContent: () => content
       })),
-    [t, defaultProps, campaignId, isCreate, positions, currentStrategy, goTo]
+    [t, defaultProps, campaignId, isCreate, currentStrategy, goTo]
   );
 
   const getTab = index => {
-    const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.campaign?.advetiser_uuid}&next_tab=`;
+    const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.advertiser_uuid}&next_tab=`;
     switch (index) {
       case EditTabs.DESCRIPTION.value:
         setCurrentTab(EditTabs.DESCRIPTION.name);

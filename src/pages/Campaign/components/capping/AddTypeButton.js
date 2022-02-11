@@ -24,11 +24,19 @@ export default function AddTypeButton({existedTypes = []}) {
         Add capping
       </DropdownToggle>
       <DropdownMenu>
-        {Object.entries(CappingTypes)?.map(([key, type]) => (
-          <DropdownItem key={key} disabled={existedTypes.includes(type?.value)}>
-            {type?.label}
-          </DropdownItem>
-        ))}
+        {Object.entries(CappingTypes)?.map(([key, type]) => {
+          if (type?.value === CappingTypes.SCHEDULE.value) {
+            return null;
+          }
+          return (
+            <DropdownItem
+              key={key}
+              disabled={existedTypes.includes(type?.value)}
+            >
+              {type?.label}
+            </DropdownItem>
+          );
+        })}
       </DropdownMenu>
     </UncontrolledButtonDropdown>
   );

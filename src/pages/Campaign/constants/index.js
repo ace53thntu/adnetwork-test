@@ -378,3 +378,26 @@ export const KPIS = [
     label: 'cpm'
   }
 ];
+
+export const StrategySources = [
+  {
+    value: 'ios',
+    label: 'IOS'
+  },
+  {
+    value: 'android',
+    label: 'Android'
+  },
+  {
+    value: 'web',
+    label: 'Web'
+  },
+  {
+    value: 'smarttv',
+    label: 'Smart TV'
+  },
+  {
+    value: 'others',
+    label: 'Others'
+  }
+];

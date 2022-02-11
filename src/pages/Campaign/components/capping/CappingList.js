@@ -121,11 +121,6 @@ const CappingList = ({referenceUuid = ''}) => {
         header: 'Budget',
         accessor: 'time_frame',
         cell: row => {
-          console.log(
-            '🚀 ~ file: CappingList.js ~ line 124 ~ columns ~ row',
-            row
-          );
-
           return (
             <>
               {row.original?.type === CappingTypes.BUDGET.value &&

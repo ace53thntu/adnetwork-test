@@ -16,9 +16,10 @@ import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
 import {useTranslation} from 'react-i18next';
 import {useGetContainersInfinity} from 'queries/container';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import InventoryContentModal from './InventoryContentModal';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const propTypes = {};
 
@@ -39,7 +40,7 @@ const InventoryModal = () => {
 
   const containers = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
-      const {items = []} = page;
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
       return [...acc, ...itemsDestructure];
     }, []);

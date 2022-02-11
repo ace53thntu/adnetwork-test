@@ -1,115 +1,96 @@
 import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
 
-export const apiToForm = ({
-  strategyData = null,
-  positions = [],
-  campaignDetail = null
-}) => {
-  console.log(
-    '🚀 ~ file: Strategy.js ~ line 9 ~ campaignDetail',
-    campaignDetail
-  );
+export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
   if (!strategyData) {
     return {};
   }
   const {
-    campaign,
+    campaign_uuid,
+    campaign_name,
     name = '',
-    skip_delay = '',
-    cpm = '',
-    view_rate_prediction = '',
     status = 'active',
-    only_unskippable = 'inactive',
-    only_skippable = 'inactive',
-    accepted_layouts = '',
-    accepted_adunits = '',
-    accepted_contexts = '',
-    accepted_sub_contexts = '',
-    accepted_placements = '',
-    position_ids = null,
-    start_at = null,
-    end_at = null,
+    positions = [],
+    start_time = null,
+    end_time = null,
     uuid,
-    strategy_type
+    strategy_type,
+    click_commission,
+    sources,
+    advertiser_uuid
   } = strategyData;
 
-  const startDate = start_at ? new Date(start_at) : new Date();
-  const endDate = end_at ? new Date(end_at) : null;
-  const positionIds = positions?.filter(item => {
-    const foundPosition = position_ids?.includes(item?.value);
-    return !!foundPosition;
-  });
-  console.log('campaign ===', campaign);
+  const startDate = start_time ? new Date(start_time) : new Date();
+  const endDate = end_time ? new Date(end_time) : null;
+  const sourceConverted =
+    sources?.map(item => ({
+      value: item,
+      label: capitalize(item)
+    })) || [];
+
   return {
-    campaign_uuid: campaign
-      ? {value: campaign?.uuid, label: campaign?.name}
-      : {value: campaignDetail?.uuid, label: campaignDetail?.name},
+    campaign_uuid: {value: campaign_uuid, label: campaign_name},
     name,
-    start_at: startDate,
-    end_at: endDate,
-    position_ids: positionIds,
-    cpm,
-    skip_delay,
+    start_time: startDate,
+    end_time: endDate,
+    position_uuids: positions
+      ? Array.from(positions, item => ({value: item.uuid, label: item.name}))
+      : [],
     status,
-    only_unskippable: only_unskippable ? 'active' : 'inactive',
-    only_skippable: only_skippable ? 'active' : 'inactive',
-    accepted_layouts,
-    accepted_adunits,
-    accepted_contexts,
-    accepted_sub_contexts,
-    accepted_placements,
-    view_rate_prediction,
     uuid,
     id: uuid,
     strategy_type: strategy_type
       ? {value: strategy_type, label: capitalize(strategy_type)}
-      : null
+      : null,
+    click_commission,
+    sources: sourceConverted,
+    advertiser_uuid
   };
 };
 
-export const formToApi = ({formData}) => {
+export const formToApi = ({formData, isConcept = false}) => {
+  if (isConcept) {
+    return {
+      concept_uuids: formData?.concept_uuids?.filter(item => item) || []
+    };
+  }
   const {
     campaign_uuid: campaign,
     name,
-    start_at,
-    end_at,
-    position_ids,
-    cpm,
-    skip_delay,
+    start_time,
+    end_time,
+    position_uuids,
     status,
-    only_unskippable,
-    only_skippable,
-    accepted_layouts,
-    accepted_adunits,
-    accepted_contexts,
-    accepted_sub_contexts,
-    accepted_placements,
-    view_rate_prediction,
-    strategy_type
+    strategy_type,
+    click_commission,
+    sources,
+    budget,
+    impression
   } = formData;
 
-  const positionIds = position_ids?.map(item => item?.value);
-  const startDate = `${moment(start_at).format('DD-MM-YYYY')} 00:00:00`;
-  const endDate = `${moment(end_at).format('DD-MM-YYYY')} 23:59:59`;
+  const positionIds = position_uuids?.map(item => item?.value);
+  const startDate = moment(start_time).isSame(moment(), 'day')
+    ? null
+    : moment(start_time).toISOString();
+  const endDate = moment(end_time).endOf('day').toISOString();
 
   return {
     campaign_uuid: campaign?.value,
     name: name?.trim(),
-    skip_delay: parseInt(skip_delay, 10) ?? null,
-    cpm: parseInt(cpm, 10) ?? null,
-    view_rate_prediction: parseFloat(view_rate_prediction) ?? null,
     status,
-    only_unskippable: only_unskippable === 'active' ? true : false,
-    only_skippable: only_skippable === 'active' ? true : false,
-    accepted_layouts,
-    accepted_adunits,
-    accepted_contexts,
-    accepted_sub_contexts,
-    accepted_placements,
-    position_ids: positionIds,
-    start_at: startDate,
-    end_at: endDate,
-    strategy_type: strategy_type ? strategy_type?.value : null
+    position_uuids: positionIds,
+    start_time: startDate,
+    end_time: endDate,
+    strategy_type: strategy_type ? strategy_type?.value : null,
+    click_commission: parseFloat(click_commission) || 0,
+    sources: Array.from(sources, item => item.value),
+    budget: {
+      daily: parseFloat(budget?.daily) || 0,
+      global: parseFloat(budget?.global) || 0
+    },
+    impression: {
+      daily: parseFloat(impression?.daily) || 0,
+      global: parseFloat(impression?.global) || 0
+    }
   };
 };

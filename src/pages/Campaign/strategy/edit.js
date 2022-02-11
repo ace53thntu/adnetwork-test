@@ -11,7 +11,6 @@ import {LoadingIndicator} from 'components/common';
 import {apiToForm} from 'entities/Strategy';
 import {useGetStrategy} from 'queries/strategy';
 import {CampaignContentLayout} from '../layout';
-import {usePositionOptions} from '../hooks';
 import StrategyEditTabs from './EditTabs';
 import {StrategyContainerStyled} from './styled';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
@@ -19,12 +18,11 @@ import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 const StrategyEdit = () => {
   const {t} = useTranslation();
   const {strategyId} = useParams();
-  const positionOptions = usePositionOptions();
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );
 
-  const strategy = apiToForm({strategyData, positions: positionOptions});
+  const strategy = apiToForm({strategyData});
   useRedirectInCampaign();
 
   return (
@@ -39,8 +37,8 @@ const StrategyEdit = () => {
             <Col md="12">
               <StrategyEditTabs
                 currentStrategy={strategy}
-                positions={positionOptions}
                 isCreate={false}
+                campaignId={strategyData?.campaign_uuid}
               />
             </Col>
           </Row>

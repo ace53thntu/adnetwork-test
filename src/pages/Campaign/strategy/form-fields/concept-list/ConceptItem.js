@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 import {CustomInput, ListGroupItem} from 'reactstrap';
 
 const propTypes = {
-  conceptItem: Proptypes.oneOfType([Proptypes.any, Proptypes.object]),
-  conceptIdx: Proptypes.number,
-  isView: Proptypes.bool
+  conceptItem: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
+  conceptIdx: PropTypes.number,
+  isView: PropTypes.bool
 };
 
 const ConceptItem = ({conceptItem = {}, conceptIdx = 0, isView = false}) => {
@@ -22,7 +22,7 @@ const ConceptItem = ({conceptItem = {}, conceptIdx = 0, isView = false}) => {
             <CustomInput
               type="checkbox"
               label={conceptItem?.name}
-              name={`concept_ids[${conceptIdx}]`}
+              name={`concept_uuids[${conceptIdx}]`}
               id={`concept-${conceptItem?.id}`}
               innerRef={register()}
               value={conceptItem?.id}

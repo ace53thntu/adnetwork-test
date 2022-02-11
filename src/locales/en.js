@@ -146,6 +146,9 @@ const en = {
   domainGroupBlack: 'Domain group black',
   selectDomainGroupWhite: 'Select domain group white',
   selectDomainGroupBlack: 'Select domain group black',
+  clickCommission: 'Click commission',
+  source: 'Source',
+  selectSource: 'Select source',
 
   //overview
   totalUsers: 'Total Users',

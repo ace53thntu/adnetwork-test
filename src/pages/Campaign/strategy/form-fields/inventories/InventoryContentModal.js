@@ -18,7 +18,7 @@ import {List} from 'components/list';
 import NoDataAvailable from 'components/list/no-data';
 
 import {useGetInventoriesInfinity} from 'queries/inventory';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {
   getInventoryMarketTypeColor,
@@ -31,6 +31,7 @@ import {
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 import {useStrategyInventories} from 'pages/Campaign/hooks/useStrategyInventories';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -57,7 +58,7 @@ const InventoryContentModal = ({containerId}) => {
   } = useGetInventoriesInfinity({params, enabled: true});
   const inventories = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
-      const {items = []} = page;
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
 
       return [...acc, ...itemsDestructure];

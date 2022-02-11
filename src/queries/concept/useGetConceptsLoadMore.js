@@ -1,25 +1,25 @@
 import {ConceptAPI} from 'api/concept.api';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useInfiniteQuery} from 'react-query';
 import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_CONCEPTS_LOAD_MORE} from './constants';
 
-export function useGetConceptsLoadMore({advertiserId, limit, enabled = true}) {
+export function useGetConceptsLoadMore({params, enabled = true}) {
   const {cancelToken} = useCancelRequest();
 
   return useInfiniteQuery(
-    [GET_CONCEPTS_LOAD_MORE, advertiserId],
+    [GET_CONCEPTS_LOAD_MORE, params],
     ({pageParam = 1}) => {
       return ConceptAPI.getConcepts({
         params: {
           page: pageParam,
-          limit,
-          advertiser_uuid: advertiserId
+          ...params
         },
         options: {
           cancelToken,
-          isResponseAll: true
+          isResponseAll: IS_RESPONSE_ALL
         }
       }).then(res => res);
     },
@@ -27,9 +27,9 @@ export function useGetConceptsLoadMore({advertiserId, limit, enabled = true}) {
       suspense: false,
       enabled,
       getNextPageParam: (res, pages) => {
-        const {totalItems} = getResponsePagination(res);
-        const lastPage = Math.ceil(totalItems / limit);
-        return lastPage > pages.length ? pages.length + 1 : false;
+        const nextPage = getResponsePagination(res)?.nextPage;
+
+        return nextPage > pages?.length ? pages?.length + 1 : false;
       }
     }
   );

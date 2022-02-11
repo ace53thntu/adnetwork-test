@@ -8,7 +8,6 @@ import {Col, Row} from 'reactstrap';
 // Internal Modules
 import {apiToForm} from 'entities/Strategy';
 import {CampaignContentLayout} from '../layout';
-import {usePositionOptions} from '../hooks';
 import StrategyEditTabs from './EditTabs';
 import {StrategyContainerStyled} from './styled';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
@@ -24,11 +23,8 @@ const StrategyCreate = () => {
     enabled: !!campaignId
   });
 
-  const positionOptions = usePositionOptions();
-
   const strategy = apiToForm({
     strategyData: {},
-    positions: positionOptions,
     campaignDetail
   });
   useRedirectInCampaign();
@@ -43,11 +39,7 @@ const StrategyCreate = () => {
         {isFetched && (
           <Row>
             <Col md="12">
-              <StrategyEditTabs
-                currentStrategy={strategy}
-                positions={positionOptions}
-                isCreate
-              />
+              <StrategyEditTabs currentStrategy={strategy} isCreate />
             </Col>
           </Row>
         )}

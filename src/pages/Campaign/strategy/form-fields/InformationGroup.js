@@ -4,32 +4,27 @@ import React, {Fragment} from 'react';
 //---> External Modules
 import {useTranslation} from 'react-i18next';
 import {Col, FormGroup, Label, Row} from 'reactstrap';
-import {Controller, useFormContext} from 'react-hook-form';
+import {Controller, useFormContext, useWatch} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import SelectStrategyItem from '../../components/SelectStrategyItem';
-import {FormReactSelect, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
-import {STRATEGY_TYPES} from 'pages/Campaign/constants';
+import {StrategySources, STRATEGY_TYPES} from 'pages/Campaign/constants';
+import PositionSelect from 'components/forms/PositionSelect';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
   isEdit: PropTypes.bool,
-  isView: PropTypes.bool,
-  positions: PropTypes.array
+  isView: PropTypes.bool
 };
 
-const InformationGroup = ({
-  currentStrategy = {},
-  isEdit = false,
-  isView,
-  positions = []
-}) => {
+const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
+  const startDate = useWatch({name: 'start_time', control});
 
   return (
     <>
@@ -67,7 +62,7 @@ const InformationGroup = ({
                 </Label>
                 <Controller
                   control={control}
-                  name="start_at"
+                  name="start_time"
                   render={({onChange, onBlur, value, name}) => (
                     <DatePicker
                       selected={value}
@@ -76,12 +71,13 @@ const InformationGroup = ({
                       dateFormat="dd/MM/yyy"
                       placeholderText="dd/mm/yyyy"
                       disabled={isView}
+                      minDate={new Date()}
                     />
                   )}
                 />
-                {errors && errors['start_at'] ? (
+                {errors && errors['start_time'] ? (
                   <div className="invalid-feedback d-block">
-                    {errors['start_at'].message}
+                    {errors['start_time'].message}
                   </div>
                 ) : null}
               </FormGroup>
@@ -94,7 +90,7 @@ const InformationGroup = ({
                 </Label>
                 <Controller
                   control={control}
-                  name="end_at"
+                  name="end_time"
                   render={({onChange, onBlur, value, name}) => (
                     <DatePicker
                       selected={value}
@@ -103,12 +99,16 @@ const InformationGroup = ({
                       dateFormat="dd/MM/yyy"
                       placeholderText="dd/mm/yyyy"
                       disabled={isView}
+                      minDate={startDate}
+                      startDate={startDate}
+                      endDate={value}
+                      selectsEnd
                     />
                   )}
                 />
-                {errors && errors['end_at'] ? (
+                {errors && errors['end_time'] ? (
                   <div className="invalid-feedback d-block">
-                    {errors['end_at']?.message}
+                    {errors['end_time']?.message}
                   </div>
                 ) : null}
               </FormGroup>
@@ -125,36 +125,47 @@ const InformationGroup = ({
               />
             </Col>
             <Col md="6">
-              <SelectStrategyItem
-                viewOnly={isView}
-                listOptions={positions}
-                currentStrategy={currentStrategy}
-                name="position_ids"
+              <PositionSelect
+                disabled={isView}
+                defaultValue={currentStrategy?.position_uuids}
+                name="position_uuids"
                 label={t('position')}
                 placeholder={t('position')}
-                isMulti={true}
+                multiple={true}
+              />
+            </Col>
+            <Col md="6">
+              <FormReactSelect
+                disabled={isView}
+                defaultValue={currentStrategy?.sources}
+                options={StrategySources}
+                name="sources"
+                label={t('source')}
+                placeholder={t('selectSource')}
+                required
+                multiple
               />
             </Col>
             <Col md="6">
               <FormTextInput
-                type="text"
-                placeholder="0"
-                id="skip_delay"
-                name="skip_delay"
-                label="Skip Delay"
-                isRequired={false}
+                name="click_commission"
+                label={t('clickCommission')}
+                placeholder="0.0"
                 disabled={isView}
               />
             </Col>
-            <Col md="6">
-              <FormTextInput
-                type="text"
-                placeholder="0"
-                id="cpm"
-                name="cpm"
-                label="Cpm"
-                isRequired={false}
-                disabled={isView}
+            <Col md="3">
+              <Label className="mr-5">Status</Label>
+              <Controller
+                control={control}
+                name="status"
+                render={({onChange, onBlur, value, name}) => (
+                  <ActiveToggle
+                    value={value}
+                    onChange={onChange}
+                    disabled={isView}
+                  />
+                )}
               />
             </Col>
           </Row>

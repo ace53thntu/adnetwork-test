@@ -61,7 +61,12 @@ const usePositionPagination = () => {
   const loadPosition = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await PositionAPIRequest.getAllPosition({
-        params: {page, limit: DEFAULT_PAGINATION.perPage, name: search},
+        params: {
+          page,
+          limit: DEFAULT_PAGINATION.perPage,
+          name: search,
+          status: 'active'
+        },
         options: {isResponseAll: IS_RESPONSE_ALL}
       });
 

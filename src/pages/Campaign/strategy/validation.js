@@ -2,29 +2,28 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 const VALID_NUMBER = /^\d*\.?\d*$/;
-const REGEX_NUMBER = /^[0-9]*$/;
 
-export const strategySchema = (isUpdate = false, t) => {
+export const strategySchema = (isUpdate = false, t, isConcept = false) => {
+  if (isConcept) {
+    return yupResolver(
+      Yup.object().shape({
+        concept_uuids: Yup.array()
+          .required(t('required'))
+          .typeError(t('required'))
+      })
+    );
+  }
   return yupResolver(
     Yup.object().shape({
-      campaign_uuid: Yup.object().nullable().required('This field is required'),
-      strategy_type: Yup.object().nullable().required('This field is required'),
-      name: Yup.string().required('This field is required'),
-      start_at: Yup.date().required(t('required')).typeError(t('required')),
-      end_at: Yup.date()
-        .min(Yup.ref(`${'start_at'}`), "End date can't be before start date")
+      campaign_uuid: Yup.object().nullable().required(t('required')),
+      strategy_type: Yup.object().nullable().required(t('required')),
+      name: Yup.string().required(t('required')),
+      start_time: Yup.date().required(t('required')).typeError(t('required')),
+      end_time: Yup.date()
+        .min(Yup.ref(`${'start_time'}`), "End date can't be before start date")
         .typeError(t('required')),
-      cpm: Yup.string()
-        .test('is-number', 'Invalid number', value =>
-          (value + '').match(REGEX_NUMBER)
-        )
-        .typeError('Invalid number'),
-      skip_delay: Yup.string()
-        .test('is-number', 'Invalid number', value =>
-          (value + '').match(REGEX_NUMBER)
-        )
-        .typeError('Invalid number'),
-      view_rate_prediction: Yup.string()
+      click_commission: Yup.string()
+        .nullable()
         .test('is-float', 'Invalid number', value =>
           (value + '').match(VALID_NUMBER)
         )

@@ -124,7 +124,7 @@ export const getInventoryTypes = () => {
 };
 
 export const getInventoryFormats = () => {
-  return ['banner', 'video', 'nativeAds'].map(item => {
+  return ['banner', 'video', 'native-ads'].map(item => {
     return {
       label: capitalizeFirstLetter(item),
       value: item

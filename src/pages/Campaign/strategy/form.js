@@ -5,24 +5,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import AdsGroup from './form-fields/AdsGroup';
 import InformationGroup from './form-fields/InformationGroup';
 import InventoryGroup from './form-fields/InventoryGroup';
-import StatusGroup from './form-fields/StatusGroup';
+import {useWatch} from 'react-hook-form';
+import BudgetGroup from './form-fields/BudgetGroup';
+import ImpressionGroup from './form-fields/ImpressionGroup';
 
 const propTypes = {
   isEdit: PropTypes.bool,
   isView: PropTypes.bool,
-  currentStrategy: PropTypes.any,
-  positions: PropTypes.array
+  currentStrategy: PropTypes.any
 };
 
 const StrategyForm = ({
   isEdit = false,
   isView = false,
-  currentStrategy = null,
-  positions = []
+  currentStrategy = null
 }) => {
+  const typeSelected = useWatch({name: 'strategy_type'});
+
   return (
     <>
       {/* Information Group */}
@@ -30,17 +31,13 @@ const StrategyForm = ({
         isView={isView}
         currentStrategy={currentStrategy}
         isEdit={isEdit}
-        positions={positions}
       />
 
-      {/* Status Group */}
-      <StatusGroup isView={isView} currentStrategy={currentStrategy} />
-
-      {/* Ads Group */}
-      <AdsGroup isView={isView} currentStrategy={currentStrategy} />
+      {!isEdit && !isView && <BudgetGroup />}
+      {!isEdit && !isView && <ImpressionGroup />}
 
       {/* Inventory Group */}
-      {isEdit && <InventoryGroup />}
+      {typeSelected?.value === 'premium' && <InventoryGroup />}
     </>
   );
 };

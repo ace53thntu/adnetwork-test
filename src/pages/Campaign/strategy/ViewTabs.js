@@ -26,15 +26,10 @@ import {FormAction} from './form-action';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
-  campaignId: PropTypes.string,
-  positions: PropTypes.array
+  campaignId: PropTypes.string
 };
 
-const StrategyViewTabs = ({
-  currentStrategy = {},
-  campaignId,
-  positions = []
-}) => {
+const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
   const {t} = useTranslation();
   const query = useQueryString();
   const ownerId = query.get('advertiser_id');
@@ -66,7 +61,6 @@ const StrategyViewTabs = ({
                   <StrategyForm
                     campaignId={campaignId}
                     isView
-                    positions={positions}
                     currentStrategy={currentStrategy}
                   />
                   {/* <Divider text="Audience"></Divider> */}
@@ -110,15 +104,7 @@ const StrategyViewTabs = ({
         title: name,
         getContent: () => content
       })),
-    [
-      campaignId,
-      currentStrategy,
-      defaultProps,
-      ownerId,
-      positions,
-      strategyEditPath,
-      t
-    ]
+    [campaignId, currentStrategy, defaultProps, ownerId, strategyEditPath, t]
   );
 
   const getTab = index => {

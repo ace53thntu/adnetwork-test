@@ -112,7 +112,7 @@ const StrategyList = ({campaignId = undefined}) => {
   function onClickItem(item) {
     setCurrentStrategy(item);
     navigate(
-      `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.campaign?.advertiser_uuid}`
+      `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.advertiser_uuid}`
     );
   }
 

@@ -21,7 +21,8 @@ const propTypes = {
   isEdit: PropTypes.bool,
   isView: PropTypes.bool,
   currentStrategy: PropTypes.any,
-  isSummary: PropTypes.bool
+  isSummary: PropTypes.bool,
+  isConcept: PropTypes.bool
 };
 
 const FormContainer = ({
@@ -30,8 +31,13 @@ const FormContainer = ({
   isView = false,
   currentStrategy = null,
   isSummary = false,
-  children
+  children,
+  isConcept = false
 }) => {
+  console.log(
+    '🚀 ~ file: FormContainer.js ~ line 35 ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
@@ -42,14 +48,15 @@ const FormContainer = ({
     defaultValues: {
       ...currentStrategy
     },
-    resolver: strategySchema(isEdit, t)
+    resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit} = methods;
+  const {handleSubmit, errors} = methods;
+  console.log('🚀 ~ file: FormContainer.js ~ line 49 ~ errors', errors);
 
   const onSubmit = useCallback(
     async formData => {
-      const req = formToApi({formData});
+      const req = formToApi({formData, isConcept});
       console.log('======== FORM DATA', req);
       if (isEdit) {
         try {
@@ -77,7 +84,15 @@ const FormContainer = ({
         }
       }
     },
-    [createStrategy, editStrategy, goTo, isEdit, navigate, strategyId]
+    [
+      createStrategy,
+      editStrategy,
+      goTo,
+      isConcept,
+      isEdit,
+      navigate,
+      strategyId
+    ]
   );
 
   return (

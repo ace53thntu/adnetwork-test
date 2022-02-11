@@ -9,9 +9,10 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {useGetConceptsLoadMore} from 'queries/concept';
 import {ConceptList} from './concept-list';
 import {useQueryString} from 'hooks';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {LoadingIndicator} from 'components/common';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
   const query = useQueryString();
@@ -22,10 +23,16 @@ const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage
-  } = useGetConceptsLoadMore({advertiserId, limit: DEFAULT_PAGINATION.perPage});
+  } = useGetConceptsLoadMore({
+    params: {
+      advertiserId,
+      per_page: DEFAULT_PAGINATION.perPage,
+      status: 'active'
+    }
+  });
   const concepts = React.useMemo(() => {
     return pages?.reduce((acc, page = {}) => {
-      const {data: {items = []} = []} = page;
+      const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructured = items?.map(item => ({...item, id: item?.uuid}));
       acc = [...acc, ...itemsDestructured];
       return acc;
@@ -35,7 +42,7 @@ const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
 
   useEffect(() => {
     if (strategyData) {
-      const concepts = [{id: 1}];
+      const concepts = [];
       if (concepts && concepts.length > 0) {
         concepts.forEach((element, idx) => {
           setValue(`concept_ids[${idx}]`, element?.id);
