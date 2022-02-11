@@ -20,8 +20,7 @@ import {
 } from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
-import CappingForm from './CappingForm';
-import {formToApi} from './dto';
+import {formToApi, getExistedType} from './dto';
 import {
   ButtonLoading,
   DialogConfirm,
@@ -41,18 +40,20 @@ import {
   useEditCapping,
   useGetCappings
 } from 'queries/capping';
+import AddTypeButton from './AddTypeButton';
+import CappingFormContainer from './CappingFormContainer';
 
 const renderCappingTypeColor = type => {
   switch (type) {
-    case CappingTypes.BDG?.value:
+    case CappingTypes.BUDGET?.value:
       return 'primary';
-    case CappingTypes.IMP?.value:
+    case CappingTypes.IMPRESSION?.value:
       return 'success';
-    case CappingTypes.DM?.value:
+    case CappingTypes.DOMAIN?.value:
       return 'warning';
-    case CappingTypes.KW?.value:
+    case CappingTypes.KEYWORD?.value:
       return 'info';
-    case CappingTypes.SCHL?.value:
+    case CappingTypes.SCHEDULE?.value:
       return 'light';
     default:
       return 'secondary';
@@ -91,6 +92,8 @@ const CappingList = ({referenceUuid = ''}) => {
     return cappingData?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
 
+  const existedTypes = getExistedType(cappings);
+
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
   }, [data]);
@@ -103,27 +106,43 @@ const CappingList = ({referenceUuid = ''}) => {
         accessor: 'type',
         cell: row => (
           <Badge color={renderCappingTypeColor(row?.value)}>
-            {CappingTypes[row?.value]?.label}
+            {Object.entries(CappingTypes).find(
+              ([key, type]) => type.value === row?.value
+            )?.[1]?.label || ''}
           </Badge>
         )
       },
       {
         header: 'Target',
-        accessor: 'target'
+        accessor: 'target',
+        cell: row => row?.value?.toString() || ''
       },
       {
         header: 'Budget',
         accessor: 'time_frame',
-        cell: row => (
-          <Badge
-            color={
-              row?.value === BudgetTimeFrames.DAILY ? 'primary' : 'success'
-            }
-            pill
-          >
-            {row?.value === BudgetTimeFrames.DAILY ? 'Daily' : 'Global'}
-          </Badge>
-        )
+        cell: row => {
+          console.log(
+            '🚀 ~ file: CappingList.js ~ line 124 ~ columns ~ row',
+            row
+          );
+
+          return (
+            <>
+              {row.original?.type === CappingTypes.BUDGET.value &&
+                row?.value === BudgetTimeFrames.DAILY && (
+                  <Badge color="primary" pill>
+                    {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
+                  </Badge>
+                )}
+              {(row.original?.type === CappingTypes.BUDGET.value &&
+                row?.value) === BudgetTimeFrames.GLOBAL && (
+                <Badge color="success" pill>
+                  {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
+                </Badge>
+              )}
+            </>
+          );
+        }
       },
       {
         accessor: 'status',
@@ -172,7 +191,7 @@ const CappingList = ({referenceUuid = ''}) => {
   }
 
   async function onEditCapping(formData) {
-    const requestBody = formToApi({formData});
+    const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {
       await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
@@ -207,6 +226,9 @@ const CappingList = ({referenceUuid = ''}) => {
 
   return (
     <div>
+      <div className="d-flex justify-content-end mb-2">
+        <AddTypeButton existedTypes={existedTypes} />
+      </div>
       {isLoading && <LoadingIndicator />}
 
       {/* Capping List */}
@@ -230,7 +252,10 @@ const CappingList = ({referenceUuid = ''}) => {
         <Modal isOpen={openForm} size="lg">
           <ModalHeader>Edit capping</ModalHeader>
           <ModalBody>
-            <CappingForm capping={activeCapping} onSubmit={onEditCapping} />
+            <CappingFormContainer
+              cappingId={activeCapping?.uuid}
+              onSubmit={onEditCapping}
+            />
           </ModalBody>
           <ModalFooter>
             <Button color="link" className="mr-2" onClick={toggleModal}>

@@ -95,7 +95,11 @@ export const CAMPAIGN_KEYS = {
   KEYWORD_LIST_WHITE: 'keywords_list_white',
   KEYWORD_LIST_BLACK: 'keywords_list_black',
   DOMAIN_GROUP_WHITE: 'domain_groups_white',
-  DOMAIN_GROUP_BLACK: 'domain_groups_black'
+  DOMAIN_GROUP_BLACK: 'domain_groups_black',
+  KEYWORD_LIST_WHITE_UUID: 'keywords_list_white_uuid',
+  KEYWORD_LIST_BLACK_UUID: 'keywords_list_black_uuid',
+  DOMAIN_GROUP_WHITE_UUID: 'domain_group_white_list_uuid',
+  DOMAIN_GROUP_BLACK_UUID: 'domain_group_black_list_uuid'
 };
 
 export const listEngine = [

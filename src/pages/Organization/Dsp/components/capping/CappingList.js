@@ -86,7 +86,10 @@ const CappingList = ({referenceUuid}) => {
       {
         header: 'Capping type',
         accessor: 'type',
-        cell: row => CappingTypes[row?.value]?.label
+        cell: row =>
+          Object.entries(CappingTypes).find(
+            ([key, type]) => type.value === row?.value
+          )?.[1]?.label || ''
       },
       {
         header: 'Target',
