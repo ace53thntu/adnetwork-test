@@ -77,7 +77,7 @@ const FormContainer = ({
           const strategyId = data?.uuid;
           ShowToast.success('Create success');
           navigate(
-            `/${RoutePaths.CAMPAIGN}/${formData?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept`
+            `/${RoutePaths.CAMPAIGN}/${formData?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
           ShowToast.error(error?.msg);

@@ -10,18 +10,32 @@ import PropTypes from 'prop-types';
 import {ButtonLoading} from 'components/common';
 import {useCampaignManager} from 'pages/Campaign/hooks';
 import {useFormContext} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
 
 const propTypes = {
   isView: PropTypes.bool,
-  isSummary: PropTypes.bool
+  isSummary: PropTypes.bool,
+  currentStrategy: PropTypes.object
 };
 
-const FormAction = ({isView = false, isSummary = false}) => {
+const FormAction = ({
+  isView = false,
+  isSummary = false,
+  currentStrategy = {}
+}) => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const {gotoCampaignManagement} = useCampaignManager();
   const {
     formState: {isSubmitting, isDirty}
   } = useFormContext();
+
+  function goToView() {
+    navigate(
+      `/${RoutePaths.CAMPAIGN}/${currentStrategy?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}?advertiser_id=${currentStrategy?.advertiser_uuid}&next_tab=description`
+    );
+  }
 
   return (
     <>
@@ -31,8 +45,17 @@ const FormAction = ({isView = false, isSummary = false}) => {
             onClick={gotoCampaignManagement}
             className="mr-2"
             color="link"
+            type="button"
           >
             {t('cancel')}
+          </Button>
+          <Button
+            onClick={goToView}
+            className="mr-2"
+            color="link"
+            type="button"
+          >
+            {t('goToView')}
           </Button>
           <ButtonLoading
             type="submit"

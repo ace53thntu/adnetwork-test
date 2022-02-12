@@ -1,3 +1,4 @@
+import {RoutePaths} from 'constants/route-paths';
 import {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 
@@ -26,12 +27,14 @@ const useCampaignManager = () => {
   );
 
   const gotoCampaignManagement = useCallback(() => {
-    navigate('/campaigns');
+    navigate(`/${RoutePaths.CAMPAIGN}`);
   }, [navigate]);
 
   const goToViewStrategy = useCallback(
     ({campaignId, id}) => {
-      navigate(`/campaigns/${campaignId}/strategy/${id}`);
+      navigate(
+        `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${id}`
+      );
     },
     [navigate]
   );

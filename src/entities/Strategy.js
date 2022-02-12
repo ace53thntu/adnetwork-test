@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
+import {getTimeZoneOffset} from 'utils/metrics';
 
 export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
   if (!strategyData) {
@@ -17,7 +18,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     strategy_type,
     click_commission,
     sources,
-    advertiser_uuid
+    advertiser_uuid,
+    concepts = []
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -27,6 +29,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
       value: item,
       label: capitalize(item)
     })) || [];
+
+  const conceptsConverted = concepts?.map(item => item?.uuid) || [];
 
   return {
     campaign_uuid: campaign_uuid
@@ -46,7 +50,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
       : null,
     click_commission,
     sources: sourceConverted,
-    advertiser_uuid
+    advertiser_uuid,
+    concept_uuids: conceptsConverted
   };
 };
 
@@ -67,14 +72,29 @@ export const formToApi = ({formData, isConcept = false}) => {
     click_commission,
     sources,
     budget,
-    impression
+    impression,
+    schedule
   } = formData;
+  console.log(
+    '🚀 ~ file: Strategy.js ~ line 73 ~ formToApi ~ schedule',
+    schedule
+  );
 
   const positionIds = position_uuids?.map(item => item?.value);
   const startDate = moment(start_time).isSame(moment(), 'day')
     ? null
     : moment(start_time).toISOString();
   const endDate = moment(end_time).endOf('day').toISOString();
+
+  const scheduleStartHour = moment(schedule?.start_time).hours();
+  const scheduleStartMinute = moment(schedule?.start_time).minutes();
+  const scheduleEndHour = moment(schedule?.end_time).hours();
+  const scheduleEndMinute = moment(schedule?.end_time).minutes();
+  console.log(
+    '🚀 ~ file: Strategy.js ~ line 85 ~ formToApi ~ scheduleStartHour',
+    scheduleStartHour,
+    scheduleStartMinute
+  );
 
   return {
     campaign_uuid: campaign?.value,
@@ -87,12 +107,20 @@ export const formToApi = ({formData, isConcept = false}) => {
     click_commission: parseFloat(click_commission) || 0,
     sources: Array.from(sources, item => item.value),
     budget: {
-      daily: parseFloat(budget?.daily) || 0,
-      global: parseFloat(budget?.global) || 0
+      daily: parseInt(budget?.daily) || 0,
+      global: parseInt(budget?.global) || 0
     },
     impression: {
-      daily: parseFloat(impression?.daily) || 0,
-      global: parseFloat(impression?.global) || 0
+      daily: parseInt(impression?.daily) || 0,
+      global: parseInt(impression?.global) || 0
+    },
+    schedule: {
+      week_days: Array.from(schedule?.week_days, item => item?.value) || [],
+      start_hour: parseInt(scheduleStartHour, 10),
+      start_minute: parseInt(scheduleStartMinute, 10),
+      end_hour: parseInt(scheduleEndHour, 10),
+      end_minute: parseInt(scheduleEndMinute, 10),
+      time_zone: `${getTimeZoneOffset()}`
     }
   };
 };

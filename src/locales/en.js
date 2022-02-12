@@ -149,6 +149,7 @@ const en = {
   clickCommission: 'Click commission',
   source: 'Source',
   selectSource: 'Select source',
+  schedule: 'Schedule',
 
   //overview
   totalUsers: 'Total Users',

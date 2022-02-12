@@ -16,13 +16,15 @@ const generateDummyData = () =>
 const propTypes = {
   items: PropTypes.array,
   tab: PropTypes.func,
-  getTab: PropTypes.func
+  getTab: PropTypes.func,
+  isCreate: PropTypes.bool
 };
 
 const AnimatedLinesTabs = ({
   items = generateDummyData(),
   tab = () => 0,
-  getTab = () => null
+  getTab = () => null,
+  isCreate = false
 }) => {
   const tabConfig = React.useMemo(
     () => ({
@@ -47,7 +49,10 @@ const AnimatedLinesTabs = ({
     <React.Fragment>
       <CSSTransition timeout={0} classNames="TabsAnimation">
         <div>
-          <Card className={`mb-3 ${cardTabsClassName} card-tabs-animated`}>
+          <Card
+            className={`mb-3 ${cardTabsClassName} card-tabs-animated`}
+            style={{pointerEvents: isCreate ? 'none' : ''}}
+          >
             <Tabs tabsWrapperClass="card-header" {...tabConfig} />
           </Card>
         </div>

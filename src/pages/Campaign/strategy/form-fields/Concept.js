@@ -25,7 +25,7 @@ const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
     isFetchingNextPage
   } = useGetConceptsLoadMore({
     params: {
-      advertiserId,
+      advertiser_uuid: advertiserId,
       per_page: DEFAULT_PAGINATION.perPage,
       status: 'active'
     }

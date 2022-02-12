@@ -66,7 +66,7 @@ const StrategyEditTabs = ({
                   isEdit={!isCreate}
                   currentStrategy={currentStrategy}
                 />
-                <FormAction />
+                <FormAction currentStrategy={currentStrategy} />
               </FormContainer>
             </DescriptionTab>
           )
@@ -89,7 +89,7 @@ const StrategyEditTabs = ({
             <ConceptTab>
               <FormContainer {...defaultProps} isConcept>
                 <Concept goTo={goTo} strategyData={currentStrategy} />
-                <FormAction />
+                <FormAction currentStrategy={currentStrategy} />
               </FormContainer>
             </ConceptTab>
           )
@@ -106,7 +106,7 @@ const StrategyEditTabs = ({
                     currentStrategy={currentStrategy}
                   />
                   <Concept goTo={goTo} strategyData={currentStrategy} />
-                  <FormAction isSummary />
+                  <FormAction isSummary currentStrategy={currentStrategy} />
                 </FormContainer>
               </SummaryTab>
             </div>
@@ -163,7 +163,14 @@ const StrategyEditTabs = ({
     }
   }, [currentTab]);
 
-  return <Tabs items={tabDetail} tab={tabPicker} getTab={getTab} />;
+  return (
+    <Tabs
+      items={tabDetail}
+      tab={tabPicker}
+      getTab={getTab}
+      isCreate={isCreate}
+    />
+  );
 };
 
 export default StrategyEditTabs;
