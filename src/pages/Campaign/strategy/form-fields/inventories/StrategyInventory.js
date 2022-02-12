@@ -1,15 +1,16 @@
+// Build-in Modules
 import React from 'react';
 
+// External Modules
 import {Badge} from 'reactstrap';
+import {useFormContext} from 'react-hook-form';
 
+// Internal Modules
 import {useStrategyInventorySelector} from 'store/reducers/campaign';
 import {List} from 'components/list';
-import {
-  getInventoryMarketTypeColor,
-  getInventoryTypeColor
-} from 'pages/inventory-market/helpers';
 
 const StrategyInventory = () => {
+  const {register} = useFormContext();
   const strategyInventories = useStrategyInventorySelector();
 
   const columns = React.useMemo(() => {
@@ -18,51 +19,13 @@ const StrategyInventory = () => {
         header: 'Name',
         accessor: 'name'
       },
-
       {
-        header: 'Type',
-        accessor: 'type',
-        cell: row => (
-          <Badge color={getInventoryTypeColor({type: row?.value})}>
-            {row?.value}
-          </Badge>
-        )
+        header: 'Container name',
+        accessor: 'container_name'
       },
       {
-        header: 'Market Type',
-        accessor: 'market_type',
-        cell: row => (
-          <Badge color={getInventoryMarketTypeColor({type: row?.value})}>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Floor price',
-        accessor: 'floor_price',
-        cell: row => (
-          <Badge color="warning" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Fill Rate',
-        accessor: 'fill_rate',
-        cell: row => (
-          <Badge color="info" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Click Rate',
-        accessor: 'click_rate',
-        cell: row => (
-          <Badge color="light" pill>
-            {row?.value}
-          </Badge>
-        )
+        header: 'Position',
+        accessor: 'position_name'
       },
       {
         header: 'Deal Floor Price',
@@ -94,6 +57,17 @@ const StrategyInventory = () => {
           onClickAction(actionIndex, currentItem)
         }
       />
+      {strategyInventories?.map((inventoryItem, inventoryIndex) => {
+        return (
+          <input
+            key={`pr-${inventoryItem?.uuid}`}
+            type="hidden"
+            name={`inventories_bid[${inventoryIndex}].uuid`}
+            value={inventoryItem?.uuid}
+            ref={register()}
+          />
+        );
+      })}
     </>
   );
 };

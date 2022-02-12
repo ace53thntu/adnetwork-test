@@ -14,7 +14,13 @@ import {Pagination} from 'components/list/pagination';
 import {LoadingIndicator} from 'components/common';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 
-const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
+const Concept = ({
+  goTo,
+  strategyData,
+  isSummary = false,
+  isView = false,
+  conceptList = []
+}) => {
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id');
   const {
@@ -31,13 +37,18 @@ const Concept = ({goTo, strategyData, isSummary = false, isView = false}) => {
     }
   });
   const concepts = React.useMemo(() => {
-    return pages?.reduce((acc, page = {}) => {
-      const items = getResponseData(page, IS_RESPONSE_ALL);
-      const itemsDestructured = items?.map(item => ({...item, id: item?.uuid}));
-      acc = [...acc, ...itemsDestructured];
-      return acc;
-    }, []);
-  }, [pages]);
+    return isView
+      ? conceptList
+      : pages?.reduce((acc, page = {}) => {
+          const items = getResponseData(page, IS_RESPONSE_ALL);
+          const itemsDestructured = items?.map(item => ({
+            ...item,
+            id: item?.uuid
+          }));
+          acc = [...acc, ...itemsDestructured];
+          return acc;
+        }, []);
+  }, [isView, conceptList, pages]);
   const {setValue} = useFormContext();
 
   useEffect(() => {

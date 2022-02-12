@@ -19,15 +19,18 @@ const ConceptItem = ({conceptItem = {}, conceptIdx = 0, isView = false}) => {
       <div className="widget-content p-0">
         <div className="widget-content-wrapper">
           <div className="widget-content-left flex2">
-            <CustomInput
-              type="checkbox"
-              label={conceptItem?.name}
-              name={`concept_uuids[${conceptIdx}]`}
-              id={`concept-${conceptItem?.id}`}
-              innerRef={register()}
-              value={conceptItem?.id}
-              disabled={isView}
-            />
+            {!isView ? (
+              <CustomInput
+                type="checkbox"
+                label={conceptItem?.name}
+                name={`concept_uuids[${conceptIdx}]`}
+                id={`concept-${conceptItem?.id}`}
+                innerRef={register()}
+                value={conceptItem?.id}
+              />
+            ) : (
+              conceptItem?.name
+            )}
           </div>
           <div className="widget-content-right ml-3">
             <div className="badge badge-pill badge-success">

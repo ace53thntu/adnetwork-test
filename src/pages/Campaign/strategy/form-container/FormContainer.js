@@ -34,10 +34,6 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
-  console.log(
-    '🚀 ~ file: FormContainer.js ~ line 35 ~ currentStrategy',
-    currentStrategy
-  );
   const {t} = useTranslation();
   const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
@@ -64,10 +60,6 @@ const FormContainer = ({
           ShowToast.success('Update success');
           goTo({nextTab: 'concept'});
         } catch (error) {
-          console.log(
-            '🚀 ~ file: DescriptionStrategy.js ~ line 158 ~ error',
-            error
-          );
           ShowToast.error(error?.msg);
         }
       } else {

@@ -72,7 +72,11 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
               /> */}
                   <div className="pt-4"></div>
                   <Divider text="Concept"></Divider>
-                  <Concept listConcept={currentStrategy?.concepts} isView />
+                  <Concept
+                    conceptList={currentStrategy?.concepts}
+                    isView
+                    strategyData={currentStrategy}
+                  />
                   <div style={{textAlign: 'right'}}>
                     <Link to={strategyEditPath}>
                       <Button color="link">{t('goToEdit')}</Button>

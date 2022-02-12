@@ -51,7 +51,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     click_commission,
     sources: sourceConverted,
     advertiser_uuid,
-    concept_uuids: conceptsConverted
+    concept_uuids: conceptsConverted,
+    concepts
   };
 };
 

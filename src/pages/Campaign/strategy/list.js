@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 //---> Internal Modules
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
-import Status from 'components/list/status';
+import {CustomStatus} from 'components/list/status';
 import {useDeleteStrategy, useGetStrategiesInfinity} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -103,7 +103,7 @@ const StrategyList = ({campaignId = undefined}) => {
               statusProps.color = 'error';
               break;
           }
-          return <Status {...statusProps} />;
+          return <CustomStatus {...statusProps} />;
         }
       }
     ];

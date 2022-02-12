@@ -12,6 +12,7 @@ const en = {
   selectCampaign: 'Select Campaign',
   company: 'Company',
   goToEdit: 'Go to edit',
+  goToView: 'Go to view',
   viewReport: 'View report',
   firstName: 'First name',
   lastName: 'Last name',
