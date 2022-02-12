@@ -97,7 +97,7 @@ export const formToApi = ({formData, isConcept = false}) => {
     scheduleStartMinute
   );
 
-  return {
+  const strategyReturn = {
     campaign_uuid: campaign?.value,
     name: name?.trim(),
     status,
@@ -124,4 +124,11 @@ export const formToApi = ({formData, isConcept = false}) => {
       time_zone: `${getTimeZoneOffset()}`
     }
   };
+
+  if (strategy_type === 'premium') {
+    const inventoriesBid = formData?.inventories_bid || [];
+    strategyReturn.inventories_bid = inventoriesBid;
+  }
+
+  return strategyReturn;
 };

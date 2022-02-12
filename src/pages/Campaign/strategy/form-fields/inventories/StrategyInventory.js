@@ -6,10 +6,16 @@ import {Badge} from 'reactstrap';
 import {useFormContext} from 'react-hook-form';
 
 // Internal Modules
-import {useStrategyInventorySelector} from 'store/reducers/campaign';
+import {
+  removeInventoryStrategyRedux,
+  useStrategyInventorySelector
+} from 'store/reducers/campaign';
 import {List} from 'components/list';
+import {useDispatch} from 'react-redux';
+import {DialogConfirm} from 'components/common';
 
 const StrategyInventory = () => {
+  const dispatch = useDispatch();
   const {register} = useFormContext();
   const strategyInventories = useStrategyInventorySelector();
 
@@ -44,6 +50,8 @@ const StrategyInventory = () => {
       '🚀 ~ file: StrategyInventory.js ~ line 80 ~ onClickAction ~ currentItem',
       currentItem
     );
+
+    dispatch(removeInventoryStrategyRedux(currentItem?.uuid));
   }
 
   return (
@@ -68,6 +76,7 @@ const StrategyInventory = () => {
           />
         );
       })}
+      <DialogConfirm />
     </>
   );
 };

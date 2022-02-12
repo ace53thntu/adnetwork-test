@@ -26,8 +26,12 @@ const SET_STRATEGY = `${PREFIX}/SET_STRATEGY`;
 
 const SELECT_STRATEGY_ID = `${PREFIX}/SELECT_STRATEGY_ID`;
 const SET_STRATEGY_INVENTORY_LIST = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST`;
+const REMOVE_INVENTORY_STRATEGY = `${PREFIX}/REMOVE_INVENTORY_STRATEGY`;
 
 // dispatch actions
+export const removeInventoryStrategyRedux = (inventoryId = []) => {
+  return createAction(REMOVE_INVENTORY_STRATEGY, {inventoryId});
+};
 export const setStrategyInventoryListRedux = (inventoryList = []) => {
   return createAction(SET_STRATEGY_INVENTORY_LIST, {inventoryList});
 };
@@ -109,6 +113,7 @@ const campaignInitialState = {
 };
 
 const handleActions = {
+  [REMOVE_INVENTORY_STRATEGY]: removeInventoryStrategyList,
   [SET_STRATEGY_INVENTORY_LIST]: handleSetStrategyInventoryList,
   [RESET]: handleReset,
   [SET_ADVERTISERS]: handleSetAdvertisers,
@@ -121,6 +126,13 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function removeInventoryStrategyList(state, action) {
+  const {inventoryId} = action.payload;
+  state.inventoryList = state.inventoryList?.filter(
+    item => item.uuid !== inventoryId
+  );
+}
 
 function handleSetStrategyInventoryList(state, action) {
   const {inventoryList} = action.payload;

@@ -5,6 +5,7 @@ import CSSTransition from 'react-transition-group/CSSTransition';
 import Tabs from 'react-responsive-tabs';
 import {Card} from 'reactstrap';
 import dummyData from './dummyData';
+import './style.scss';
 
 const generateDummyData = () =>
   dummyData.map(({name, biography}, index) => ({
@@ -49,11 +50,13 @@ const AnimatedLinesTabs = ({
     <React.Fragment>
       <CSSTransition timeout={0} classNames="TabsAnimation">
         <div>
-          <Card
-            className={`mb-3 ${cardTabsClassName} card-tabs-animated`}
-            style={{pointerEvents: isCreate ? 'none' : ''}}
-          >
-            <Tabs tabsWrapperClass="card-header" {...tabConfig} />
+          <Card className={`mb-3 ${cardTabsClassName} card-tabs-animated`}>
+            <Tabs
+              tabsWrapperClass={`card-header ${
+                isCreate ? 'card-header-create' : ''
+              }`}
+              {...tabConfig}
+            />
           </Card>
         </div>
       </CSSTransition>
