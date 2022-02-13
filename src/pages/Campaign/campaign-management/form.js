@@ -7,6 +7,7 @@ import {Container, Form, Col, Button, Label, FormGroup, Row} from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
+import {useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
@@ -39,6 +40,7 @@ const CampaignForm = ({
   currentCampaign = null
 }) => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign();
 
@@ -46,11 +48,10 @@ const CampaignForm = ({
 
   const methods = useForm({
     defaultValues: currentCampaign,
-    resolver: validationCampaign(t)
+    resolver: validationCampaign(t, isEdit)
   });
 
   const {handleSubmit, reset, control, errors} = methods;
-  console.log('🚀 ~ file: form.js ~ line 53 ~ errors', errors);
 
   useEffect(() => {
     if (isView || isEdit) {
@@ -64,23 +65,31 @@ const CampaignForm = ({
 
       if (isEdit) {
         try {
-          await updateCampaign({campId: campaignId, data: requestBody});
+          const {data} = await updateCampaign({
+            campId: campaignId,
+            data: requestBody
+          });
           ShowToast.success('Updated Campaign successfully!');
-          goToTab({nextTab: 'strategies'});
+          navigate(
+            `/${RoutePaths.CAMPAIGN}/${data?.uuid}/${RoutePaths.EDIT}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
+          );
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to update Campaign');
         }
       } else {
         try {
           const {data} = await createCampaign(requestBody);
-          goToTab({nextTab: 'strategies', campaignIdCreated: data?.uuid});
+          navigate(
+            `/${RoutePaths.CAMPAIGN}/${data?.uuid}/${RoutePaths.EDIT}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
+          );
+
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to create Campaign');
         }
       }
     },
-    [campaignId, createCampaign, goToTab, isEdit, updateCampaign]
+    [campaignId, createCampaign, isEdit, navigate, updateCampaign]
   );
 
   return (

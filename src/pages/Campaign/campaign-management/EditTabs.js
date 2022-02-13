@@ -1,4 +1,5 @@
 //---> External Modules
+import {useQueryString} from 'hooks';
 import PropTypes from 'prop-types';
 //---> Build-in Modules
 import React, {useCallback, useMemo, useState} from 'react';
@@ -23,8 +24,16 @@ const CampaignEditTabs = ({
   currentCampaign = null
 }) => {
   const {t} = useTranslation();
+  const query = useQueryString();
+  const nextTab = query.get('next_tab');
   const [currentTab, setCurrentTab] = useState('description');
   const [campaignIdCreated, setCampaignIdCreated] = useState('');
+
+  React.useEffect(() => {
+    if (nextTab) {
+      setCurrentTab({nextTab});
+    }
+  }, [nextTab]);
 
   const goToTab = useCallback(({nextTab, campaignIdCreated}) => {
     setCurrentTab(nextTab);
@@ -88,7 +97,12 @@ const CampaignEditTabs = ({
   }, [currentTab]);
   return (
     <div>
-      <Tabs items={tabDetail} tab={tabPicker} getTab={getTab} />
+      <Tabs
+        items={tabDetail}
+        tab={tabPicker}
+        getTab={getTab}
+        isCreate={isCreate}
+      />
     </div>
   );
 };

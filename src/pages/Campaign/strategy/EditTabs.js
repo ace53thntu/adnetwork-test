@@ -22,10 +22,6 @@ const StrategyEditTabs = ({
   campaignId,
   isCreate = false
 }) => {
-  console.log(
-    '🚀 ~ file: EditTabs.js ~ line 25 ~ currentStrategy',
-    currentStrategy
-  );
   const navigate = useNavigate();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
