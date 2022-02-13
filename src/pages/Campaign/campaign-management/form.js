@@ -50,6 +50,7 @@ const CampaignForm = ({
   });
 
   const {handleSubmit, reset, control, errors} = methods;
+  console.log('🚀 ~ file: form.js ~ line 53 ~ errors', errors);
 
   useEffect(() => {
     if (isView || isEdit) {
