@@ -15,7 +15,8 @@ function VideoFiles(props) {
     name: 'files'
   });
 
-  const limited = fields?.length >= 1;
+  // const limited = fields?.length >= 1;
+  const limited = false;
 
   return (
     <Row>
