@@ -120,11 +120,11 @@ const StrategyEditTabs = ({
     const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.advertiser_uuid}&next_tab=`;
     switch (index) {
       case EditTabs.DESCRIPTION.value:
-        setCurrentTab(EditTabs.DESCRIPTION.name);
+        // setCurrentTab(EditTabs.DESCRIPTION.name);
         navigate(`${url}${EditTabs.DESCRIPTION.name}`);
         break;
       case EditTabs.CONCEPT.value:
-        setCurrentTab(EditTabs.CONCEPT.name);
+        // setCurrentTab(EditTabs.CONCEPT.name);
         navigate(`${url}${EditTabs.CONCEPT.name}`);
 
         break;
@@ -132,12 +132,12 @@ const StrategyEditTabs = ({
       //   setCurrentTab(EditTabs.AUDIENCE.value);
       //   break;
       case EditTabs.SUMMARY.value:
-        setCurrentTab(EditTabs.SUMMARY.name);
+        // setCurrentTab(EditTabs.SUMMARY.name);
         navigate(`${url}${EditTabs.SUMMARY.name}`);
 
         break;
       default:
-        setCurrentTab(EditTabs.DESCRIPTION.name);
+        // setCurrentTab(EditTabs.DESCRIPTION.name);
         navigate(`${url}${EditTabs.DESCRIPTION.name}`);
 
         break;

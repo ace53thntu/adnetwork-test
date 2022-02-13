@@ -9,7 +9,7 @@
 import React from 'react';
 
 //---> External Modules
-import {Badge, Button} from 'reactstrap';
+import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
@@ -26,8 +26,8 @@ import {
 } from 'pages/inventory-market/helpers';
 import DealFloorPriceInput from './DealFloorPriceInput';
 import {
-  setStrategyInventoryListRedux,
-  useStrategyInventorySelector
+  setStrategyInventoryTempListRedux,
+  useStrategyInventoryTempSelector
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 import {useStrategyInventories} from 'pages/Campaign/hooks/useStrategyInventories';
@@ -38,8 +38,11 @@ const propTypes = {
 };
 
 const InventoryContentModal = ({containerId}) => {
+  // Local states
+  const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
+
   const dispatch = useDispatch();
-  const strategyInventories = useStrategyInventorySelector();
+  const strategyInventoriesTemp = useStrategyInventoryTempSelector();
 
   let params = {
     limit: DEFAULT_PAGINATION.perPage
@@ -66,40 +69,26 @@ const InventoryContentModal = ({containerId}) => {
   }, [pages]);
   const inventoriesMapping = useStrategyInventories({
     inventories,
-    strategyInventories
+    strategyInventories: strategyInventoriesTemp
   });
 
-  const onClickAddInventory = React.useCallback(
-    (evt, _inventory) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-
-      let tmpArr = [...strategyInventories];
-      const inventoryFound = tmpArr?.find(
-        item => item?.uuid === _inventory?.uuid
-      );
-      if (!inventoryFound) {
-        tmpArr.push(_inventory);
-      } else {
-        tmpArr = tmpArr.filter(item => item?.uuid !== _inventory?.uuid);
-      }
-      dispatch(setStrategyInventoryListRedux(tmpArr));
-    },
-    [dispatch, strategyInventories]
-  );
+  React.useEffect(() => {
+    const idsTemp = strategyInventoriesTemp?.map(item => item?.uuid);
+    setInventoryIdsChecked(idsTemp);
+  }, [strategyInventoriesTemp]);
 
   const onChangeDealFloorPrice = React.useCallback(
     (value, _inventoryId) => {
-      let tmpArr = [...strategyInventories];
+      let tmpArr = [...strategyInventoriesTemp];
       tmpArr = tmpArr.map(item => {
         if (item?.uuid === _inventoryId) {
           return {...item, deal_floor_price: value};
         }
         return item;
       });
-      dispatch(setStrategyInventoryListRedux(tmpArr));
+      dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
     },
-    [dispatch, strategyInventories]
+    [dispatch, strategyInventoriesTemp]
   );
 
   const columns = React.useMemo(() => {
@@ -165,33 +154,9 @@ const InventoryContentModal = ({containerId}) => {
             }
           />
         )
-      },
-      {
-        header: 'Actions',
-        accessor: 'action',
-        cell: row => {
-          const isAdded = row?.original?.is_added || false;
-          return (
-            <Button
-              className="mb-2 mr-2 btn-icon btn-icon-only btn-shadow btn-dashed"
-              outline
-              color={isAdded ? 'danger' : 'primary'}
-              type="button"
-              onClick={evt => onClickAddInventory(evt, row?.original)}
-            >
-              <i
-                className={`${
-                  isAdded ? 'pe-7s-less' : 'pe-7s-plus'
-                } btn-icon-wrapper`}
-              ></i>
-            </Button>
-          );
-        }
       }
     ];
-  }, [onChangeDealFloorPrice, onClickAddInventory]);
-
-  //---> Define local states.
+  }, [onChangeDealFloorPrice]);
 
   const onClickItem = item => {};
 
@@ -203,6 +168,27 @@ const InventoryContentModal = ({containerId}) => {
       return;
     }
   };
+
+  function onChangeCheckBox(evt, index, item) {
+    const {checked} = evt.target;
+    let tmpArr = [];
+    let tmpIdsArr = [];
+
+    if (checked) {
+      tmpIdsArr = [...inventoryIdsChecked].concat(item?.uuid);
+      tmpArr = [...strategyInventoriesTemp].concat(item);
+    } else {
+      tmpIdsArr = [...inventoryIdsChecked].filter(
+        tmpItem => tmpItem !== item.uuid
+      );
+      tmpArr = [...strategyInventoriesTemp].filter(
+        tmpItem => tmpItem.uuid !== item.uuid
+      );
+    }
+    setInventoryIdsChecked([...tmpIdsArr]);
+
+    dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
+  }
 
   return (
     <React.Fragment>
@@ -218,6 +204,9 @@ const InventoryContentModal = ({containerId}) => {
               onClickAction(actionIndex, currentItem)
             }
             isShowInventoryHighlight={false}
+            checkable
+            checkedValues={inventoryIdsChecked}
+            onChangeCheckBox={onChangeCheckBox}
           />
           {hasNextPage && (
             <Pagination

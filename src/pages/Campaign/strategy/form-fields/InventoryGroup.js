@@ -3,20 +3,21 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {Col, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap';
+import {Col, Button, FormText} from 'reactstrap';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
 import {InventoryModal, StrategyInventory} from './inventories';
-import {InventoryModalStyled} from './styled';
-import {useTranslation} from 'react-i18next';
+import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
+import {useStrategyInventorySelector} from 'store/reducers/campaign';
 
 const propTypes = {
   isView: PropTypes.bool
 };
 
 const InventoryGroup = ({isView = false}) => {
-  const {t} = useTranslation();
+  const strategyInventories = useStrategyInventorySelector();
+
   const [openModal, setOpenModal] = React.useState(false);
 
   function onToggleModal() {
@@ -26,27 +27,21 @@ const InventoryGroup = ({isView = false}) => {
   return (
     <Collapse initialOpen={true} title="Inventory" unMount={false}>
       <Col sm={12}>
+        {strategyInventories?.length === 0 && (
+          <FormText>
+            <RequiredLabelPrefix />
+            Please add at least one inventory.
+          </FormText>
+        )}
+
         <div>
           <Button type="button" onClick={onToggleModal} color="primary">
             Add Inventory
           </Button>
         </div>
-        <StrategyInventory />
+        <StrategyInventory strategyInventories={strategyInventories} />
       </Col>
-      <InventoryModalStyled toggle={onToggleModal} isOpen={openModal}>
-        <ModalHeader toggle={onToggleModal}>{t('inventoryList')}</ModalHeader>
-        <ModalBody>
-          <InventoryModal />
-        </ModalBody>
-        <ModalFooter>
-          <Button type="button" onClick={onToggleModal} color="link">
-            {t('cancel')}
-          </Button>
-          <Button type="button" color="primary" onClick={onToggleModal}>
-            {t('add')}
-          </Button>
-        </ModalFooter>
-      </InventoryModalStyled>
+      <InventoryModal openModal={openModal} onToggleModal={onToggleModal} />
     </Collapse>
   );
 };

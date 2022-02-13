@@ -27,7 +27,18 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
         .test('is-float', 'Invalid number', value =>
           (value + '').match(VALID_NUMBER)
         )
-        .typeError('Invalid number')
+        .typeError('Invalid number'),
+      inventories_bid: Yup.array()
+        .of(
+          Yup.object({
+            uuid: Yup.string()
+          })
+        )
+        .required(t('required')),
+      sources: Yup.array().required(t('required')).typeError(t('required')),
+      position_uuids: Yup.array()
+        .required(t('required'))
+        .typeError(t('required'))
     })
   );
 };

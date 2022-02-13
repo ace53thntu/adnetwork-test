@@ -12,7 +12,7 @@ const DealFloorPriceInput = ({
   defaultValue = 0,
   onChangeInputGlobal = () => null
 }) => {
-  const [inputval, setInputVal] = React.useState(0);
+  const [inputVal, setInputVal] = React.useState(0);
 
   React.useEffect(() => {
     setInputVal(defaultValue);
@@ -24,7 +24,7 @@ const DealFloorPriceInput = ({
     onChangeInputGlobal(value);
   }
 
-  return <Input value={inputval} onChange={onChangeInput} />;
+  return <Input value={inputVal} onChange={onChangeInput} />;
 };
 
 DealFloorPriceInput.propTypes = propTypes;

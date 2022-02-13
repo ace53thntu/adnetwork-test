@@ -30,7 +30,8 @@ function List(props) {
     selectedValue,
     disabled,
     noTruncate,
-    isShowInventoryHighlight
+    isShowInventoryHighlight,
+    onChangeCheckBox
   } = props;
 
   const classes = useListStyles();
@@ -74,6 +75,7 @@ function List(props) {
                     inputProps={{
                       'aria-labelledby': `checkbox-list-label-${item?.id}`
                     }}
+                    onChange={evt => onChangeCheckBox(evt, itemIndex, item)}
                   />
                 </ListItemIcon>
               ) : null}
@@ -235,7 +237,8 @@ List.propTypes = {
   checkable: PropTypes.bool,
   selectable: PropTypes.bool,
   selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  isShowInventoryHighlight: PropTypes.bool
+  isShowInventoryHighlight: PropTypes.bool,
+  onChangeCheckBox: PropTypes.func
 };
 
 List.defaultProps = {
@@ -248,7 +251,8 @@ List.defaultProps = {
   selectable: false,
   selectedValue: '',
   disabled: false,
-  isShowInventoryHighlight: false
+  isShowInventoryHighlight: false,
+  onChangeCheckBox: () => null
 };
 
 export default List;

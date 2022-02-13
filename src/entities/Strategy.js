@@ -19,7 +19,9 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     click_commission,
     sources,
     advertiser_uuid,
-    concepts = []
+    concepts = [],
+    inventories = [],
+    inventories_bid = []
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -39,9 +41,10 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     name,
     start_time: startDate,
     end_time: endDate,
-    position_uuids: positions
-      ? Array.from(positions, item => ({value: item.uuid, label: item.name}))
-      : [],
+    position_uuids:
+      positions?.length > 0
+        ? Array.from(positions, item => ({value: item.uuid, label: item.name}))
+        : [],
     status,
     uuid,
     id: uuid,
@@ -52,7 +55,9 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     sources: sourceConverted,
     advertiser_uuid,
     concept_uuids: conceptsConverted,
-    concepts
+    concepts,
+    inventories,
+    inventories_bid
   };
 };
 
@@ -106,7 +111,7 @@ export const formToApi = ({formData, isConcept = false}) => {
     end_time: endDate,
     strategy_type: strategy_type ? strategy_type?.value : null,
     click_commission: parseFloat(click_commission) || 0,
-    sources: Array.from(sources, item => item.value),
+    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     budget: {
       daily: parseInt(budget?.daily) || 0,
       global: parseInt(budget?.global) || 0
@@ -116,7 +121,10 @@ export const formToApi = ({formData, isConcept = false}) => {
       global: parseInt(impression?.global) || 0
     },
     schedule: {
-      week_days: Array.from(schedule?.week_days, item => item?.value) || [],
+      week_days:
+        schedule?.week_days?.length > 0
+          ? Array.from(schedule?.week_days, item => item?.value)
+          : [],
       start_hour: parseInt(scheduleStartHour, 10),
       start_minute: parseInt(scheduleStartMinute, 10),
       end_hour: parseInt(scheduleEndHour, 10),
@@ -125,7 +133,7 @@ export const formToApi = ({formData, isConcept = false}) => {
     }
   };
 
-  if (strategy_type === 'premium') {
+  if (strategy_type?.value === 'premium') {
     const inventoriesBid = formData?.inventories_bid || [];
     strategyReturn.inventories_bid = inventoriesBid;
   }

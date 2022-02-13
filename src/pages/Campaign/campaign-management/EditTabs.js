@@ -1,9 +1,11 @@
 //---> External Modules
+import {RoutePaths} from 'constants/route-paths';
 import {useQueryString} from 'hooks';
 import PropTypes from 'prop-types';
 //---> Build-in Modules
 import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
 
 //---> Internal Modules
 import {Tabs} from '../components';
@@ -23,7 +25,12 @@ const CampaignEditTabs = ({
   isCreate = false,
   currentCampaign = null
 }) => {
+  console.log(
+    '🚀 ~ file: EditTabs.js ~ line 28 ~ currentCampaign',
+    currentCampaign
+  );
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const query = useQueryString();
   const nextTab = query.get('next_tab');
   const [currentTab, setCurrentTab] = useState('description');
@@ -75,12 +82,17 @@ const CampaignEditTabs = ({
   );
 
   const getTab = index => {
+    const url = `/${RoutePaths.CAMPAIGN}/${currentCampaign?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentCampaign?.advertiser_uuid?.value}&next_tab=`;
+
     switch (index) {
       case 0:
-        setCurrentTab('description');
+        // setCurrentTab('description');
+        navigate(`${url}description`);
         break;
       case 1:
-        setCurrentTab('strategies');
+        // setCurrentTab('strategies');
+        navigate(`${url}strategies`);
+
         break;
       default:
         break;
@@ -91,8 +103,10 @@ const CampaignEditTabs = ({
     switch (currentTab) {
       case 'description':
         return 0;
-      default:
+      case 'strategies':
         return 1;
+      default:
+        return 0;
     }
   }, [currentTab]);
   return (

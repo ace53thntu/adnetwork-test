@@ -17,6 +17,7 @@ import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {RoutePaths} from 'constants/route-paths';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import NoDataAvailable from 'components/list/no-data';
 
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
@@ -142,7 +143,7 @@ const StrategyList = ({campaignId = undefined}) => {
       await deleteStrategy({cid: currentStrategy?.uuid});
       ShowToast.success('Deleted strategy successfully');
     } catch (err) {
-      ShowToast.error(err?.message || 'Fail to detele strategy');
+      ShowToast.error(err?.message || 'Fail to delete strategy');
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);
@@ -153,14 +154,19 @@ const StrategyList = ({campaignId = undefined}) => {
     <>
       <StrategyListStyled>
         {isFetching && <LoadingIndicator />}
-        <List
-          data={strategies || []}
-          columns={columns}
-          showAction
-          actions={['View', 'Edit', 'Delete']}
-          handleAction={onClickMenu}
-          handleClickItem={onClickItem}
-        />
+        {strategies?.length > 0 ? (
+          <List
+            data={strategies || []}
+            columns={columns}
+            showAction
+            actions={['View', 'Edit', 'Delete']}
+            handleAction={onClickMenu}
+            handleClickItem={onClickItem}
+          />
+        ) : (
+          <NoDataAvailable />
+        )}
+
         {hasNextPage && (
           <Pagination
             hasNextPage={hasNextPage}

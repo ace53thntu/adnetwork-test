@@ -14,6 +14,10 @@ import {StrategyList} from '../strategy';
 const CampaignStrategies = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
+  console.log(
+    '🚀 ~ file: strategies.js ~ line 17 ~ CampaignStrategies ~ campaignId',
+    campaignId
+  );
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id');
 

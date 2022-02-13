@@ -26,14 +26,18 @@ const SET_STRATEGY = `${PREFIX}/SET_STRATEGY`;
 
 const SELECT_STRATEGY_ID = `${PREFIX}/SELECT_STRATEGY_ID`;
 const SET_STRATEGY_INVENTORY_LIST = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST`;
+const SET_STRATEGY_INVENTORY_LIST_TEMP = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST_TEMP`;
 const REMOVE_INVENTORY_STRATEGY = `${PREFIX}/REMOVE_INVENTORY_STRATEGY`;
 
 // dispatch actions
 export const removeInventoryStrategyRedux = (inventoryId = []) => {
   return createAction(REMOVE_INVENTORY_STRATEGY, {inventoryId});
 };
-export const setStrategyInventoryListRedux = (inventoryList = []) => {
+export const setStrategyInventoryListRedux = ({inventoryList = []}) => {
   return createAction(SET_STRATEGY_INVENTORY_LIST, {inventoryList});
+};
+export const setStrategyInventoryTempListRedux = ({inventoryList = []}) => {
+  return createAction(SET_STRATEGY_INVENTORY_LIST_TEMP, {inventoryList});
 };
 export const resetCampaignRedux = () => {
   return createAction(RESET, {});
@@ -109,12 +113,14 @@ const campaignInitialState = {
   selectedStrategyId: null,
   alreadySetAdvertiser: false,
   keyword: '',
-  inventoryList: []
+  inventoryList: [],
+  inventoryTempList: []
 };
 
 const handleActions = {
   [REMOVE_INVENTORY_STRATEGY]: removeInventoryStrategyList,
   [SET_STRATEGY_INVENTORY_LIST]: handleSetStrategyInventoryList,
+  [SET_STRATEGY_INVENTORY_LIST_TEMP]: setStrategyInventoryTempList,
   [RESET]: handleReset,
   [SET_ADVERTISERS]: handleSetAdvertisers,
   [SET_ADVERTISER]: handleSetAdvertiser,
@@ -137,6 +143,11 @@ function removeInventoryStrategyList(state, action) {
 function handleSetStrategyInventoryList(state, action) {
   const {inventoryList} = action.payload;
   state.inventoryList = inventoryList;
+}
+
+function setStrategyInventoryTempList(state, action) {
+  const {inventoryList} = action.payload;
+  state.inventoryTempList = inventoryList;
 }
 
 function handleReset(state) {
@@ -619,6 +630,12 @@ const makeSelectStrategyInventory = () =>
     a => a.inventoryList
   );
 
+const makeSelectStrategyInventoryTemp = () =>
+  createSelector(
+    state => state.campaignReducer,
+    a => a.inventoryTempList
+  );
+
 // hook to use container reducer
 export function useCampaignSelector() {
   const state = useSelector(state => state.campaignReducer);
@@ -626,8 +643,19 @@ export function useCampaignSelector() {
 }
 
 export function useStrategyInventorySelector() {
-  const selectSearchType = React.useMemo(makeSelectStrategyInventory, []);
-  return useSelector(state => selectSearchType(state));
+  const selectStrategyInventories = React.useMemo(
+    makeSelectStrategyInventory,
+    []
+  );
+  return useSelector(state => selectStrategyInventories(state));
+}
+
+export function useStrategyInventoryTempSelector() {
+  const selectInventoriesTemp = React.useMemo(
+    makeSelectStrategyInventoryTemp,
+    []
+  );
+  return useSelector(state => selectInventoriesTemp(state));
 }
 
 export const campaignReducer = (

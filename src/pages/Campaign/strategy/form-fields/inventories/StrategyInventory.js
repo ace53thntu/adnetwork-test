@@ -2,22 +2,35 @@
 import React from 'react';
 
 // External Modules
+import PropTypes from 'prop-types';
 import {Badge} from 'reactstrap';
-import {useFormContext} from 'react-hook-form';
+import {Controller, useFormContext} from 'react-hook-form';
 
 // Internal Modules
-import {
-  removeInventoryStrategyRedux,
-  useStrategyInventorySelector
-} from 'store/reducers/campaign';
+import {removeInventoryStrategyRedux} from 'store/reducers/campaign';
 import {List} from 'components/list';
 import {useDispatch} from 'react-redux';
 import {DialogConfirm} from 'components/common';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
-const StrategyInventory = () => {
+const propTypes = {
+  strategyInventories: PropTypes.array
+};
+
+const StrategyInventory = ({strategyInventories = []}) => {
   const dispatch = useDispatch();
-  const {register} = useFormContext();
-  const strategyInventories = useStrategyInventorySelector();
+  const {errors, setValue, control} = useFormContext();
+
+  React.useEffect(() => {
+    const inventoriesConverted = strategyInventories?.map(item => ({
+      uuid: item.uuid
+    }));
+
+    setValue('inventories_bid', inventoriesConverted, {
+      shouldValidate: true,
+      shouldDirty: true
+    });
+  }, [setValue, strategyInventories]);
 
   const columns = React.useMemo(() => {
     return [
@@ -46,16 +59,14 @@ const StrategyInventory = () => {
   }, []);
 
   function onClickAction(actionIndex, currentItem) {
-    console.log(
-      '🚀 ~ file: StrategyInventory.js ~ line 80 ~ onClickAction ~ currentItem',
-      currentItem
-    );
-
     dispatch(removeInventoryStrategyRedux(currentItem?.uuid));
   }
 
   return (
     <>
+      {errors?.inventories_bid && (
+        <ErrorMessage message={errors?.inventories_bid?.message} />
+      )}
       <List
         showAction
         data={strategyInventories}
@@ -65,15 +76,16 @@ const StrategyInventory = () => {
           onClickAction(actionIndex, currentItem)
         }
       />
+
       {strategyInventories?.map((inventoryItem, inventoryIndex) => {
         return (
-          <input
-            key={`pr-${inventoryItem?.uuid}`}
-            type="hidden"
-            name={`inventories_bid[${inventoryIndex}].uuid`}
-            value={inventoryItem?.uuid}
-            ref={register()}
-          />
+          <div key={`pr-${inventoryItem?.uuid}`}>
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].uuid`}
+              control={control}
+            />
+          </div>
         );
       })}
       <DialogConfirm />
@@ -81,4 +93,6 @@ const StrategyInventory = () => {
   );
 };
 
-export default StrategyInventory;
+StrategyInventory.propTypes = propTypes;
+
+export default React.memo(StrategyInventory);

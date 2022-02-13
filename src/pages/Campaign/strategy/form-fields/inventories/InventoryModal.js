@@ -8,23 +8,39 @@
 //---> Build-in Modules
 import React from 'react';
 
+//---> External Modules
+import PropTypes from 'prop-types';
+import {Button, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import {useTranslation} from 'react-i18next';
+
 //---> Internal Modules
 import {AccordionList} from 'components/list';
 import {capitalize} from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
 import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
-import {useTranslation} from 'react-i18next';
 import {useGetContainersInfinity} from 'queries/container';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import InventoryContentModal from './InventoryContentModal';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import {InventoryModalStyled} from '../styled';
+import {useDispatch} from 'react-redux';
+import {
+  setStrategyInventoryListRedux,
+  useStrategyInventoryTempSelector
+} from 'store/reducers/campaign';
 
-const propTypes = {};
+const propTypes = {
+  onToggleModal: PropTypes.func,
+  openModal: PropTypes.bool
+};
 
-const InventoryModal = () => {
+const InventoryModal = ({onToggleModal = () => null, openModal = false}) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
+  const strategyInventoriesTemp = useStrategyInventoryTempSelector();
+
   const {
     data: {pages = []} = {},
     hasNextPage,
@@ -82,29 +98,51 @@ const InventoryModal = () => {
     ];
   }, []);
 
+  function onAddInventories(inventories = []) {
+    dispatch(
+      setStrategyInventoryListRedux({inventoryList: strategyInventoriesTemp})
+    );
+    onToggleModal();
+  }
+
   return (
-    <React.Fragment>
-      {isFetching && <LoadingIndicator />}
-      {containers?.length > 0 ? (
-        <AccordionList
-          data={containers}
-          columns={columns}
-          detailPanel={rowData => {
-            return <InventoryContentModal containerId={rowData?.uuid} />;
-          }}
-          detailCaption={t('inventories')}
-        />
-      ) : (
-        <NoDataAvailable />
-      )}
-      {hasNextPage && (
-        <Pagination
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      )}
-    </React.Fragment>
+    <InventoryModalStyled
+      toggle={onToggleModal}
+      isOpen={openModal}
+      unMount={false}
+    >
+      <ModalHeader toggle={onToggleModal}>{t('inventoryList')}</ModalHeader>
+      <ModalBody>
+        {isFetching && <LoadingIndicator />}
+        {containers?.length > 0 ? (
+          <AccordionList
+            data={containers}
+            columns={columns}
+            detailPanel={rowData => {
+              return <InventoryContentModal containerId={rowData?.uuid} />;
+            }}
+            detailCaption={t('inventories')}
+          />
+        ) : (
+          <NoDataAvailable />
+        )}
+        {hasNextPage && (
+          <Pagination
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        )}
+      </ModalBody>
+      <ModalFooter>
+        <Button type="button" onClick={onToggleModal} color="link">
+          {t('cancel')}
+        </Button>
+        <Button type="button" color="primary" onClick={onAddInventories}>
+          {t('add')}
+        </Button>
+      </ModalFooter>
+    </InventoryModalStyled>
   );
 };
 
