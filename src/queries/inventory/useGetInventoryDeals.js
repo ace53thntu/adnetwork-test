@@ -1,27 +1,29 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
 import {GET_INVENTORY_DEAL} from './constants';
 
 /**
- * Hook for get Inventory Dealed from API by query
+ * Hook for get Inventory Deal from API by query
  */
-export function useGetInventoryDeals({inventoryId, isDeal = false}) {
+export function useGetInventoryDeals({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_INVENTORY_DEAL, inventoryId],
+    [GET_INVENTORY_DEAL, params],
     () =>
       InventoryAPIRequest.getInventoryDeal({
-        id: inventoryId,
+        params,
         options: {
-          cancelToken
+          cancelToken,
+          isResponseAll: IS_RESPONSE_ALL
         }
-      }).then(res => res?.data ?? []),
+      }).then(res => res),
     {
       suspense: false,
-      enabled: !!inventoryId && isDeal
+      enabled
     }
   );
 }

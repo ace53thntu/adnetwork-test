@@ -38,6 +38,10 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useExcludePeriod} from '../hooks';
 import {useQueryClient} from 'react-query';
 import {GET_INVENTORIES} from 'queries/inventory/constants';
+import {getResponseData} from 'utils/helpers/misc.helpers';
+import {IS_RESPONSE_ALL} from 'constants/misc';
+import {schemaValidate} from './validation';
+import {useTranslation} from 'react-i18next';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -57,33 +61,60 @@ const InventoryDetails = ({
   isEdit = false,
   params
 }) => {
+  const {t} = useTranslation();
   let title = isBid ? 'Bid:' : '';
   title = isDeal ? 'Deal:' : title;
   const classes = useStyles();
   const client = useQueryClient();
 
   //---> Executing queries
-  const {data: listDeals} = useGetInventoryDeals({
-    inventoryId: inventoryData?.uuid,
-    isDeal
+  const {data: dealsResp} = useGetInventoryDeals({
+    params: {
+      inventory_uuid: inventoryData?.uuid
+    },
+    enabled: !!inventoryData?.uuid && isDeal
   });
-  const {data: bidsList} = useGetInventoryBids({
-    inventoryId: inventoryData?.uuid,
-    isBid
+  const listDeals = React.useMemo(() => {
+    return getResponseData(dealsResp, IS_RESPONSE_ALL);
+  }, [dealsResp]);
+
+  const {data: bidsResp} = useGetInventoryBids({
+    params: {inventory_uuid: inventoryData?.uuid},
+    enabled: isBid && !!inventoryData?.uuid
   });
+  const bidsList = React.useMemo(() => {
+    return getResponseData(bidsResp, IS_RESPONSE_ALL);
+  }, [bidsResp]);
+
   const {mutateAsync: dealInventory} = useDealInventory(
     inventoryData?.page_uuid
   );
   const {mutateAsync: bidInventory} = useBidInventory(inventoryData?.page_uuid);
 
   const methods = useForm({
-    defaultValues: {
-      [INPUTS_NAME.NAME]: '',
-      [INPUTS_NAME.STATUS]: 'active',
-      [INPUTS_NAME.DSP_UUID]: '',
-      [INPUTS_NAME.START_AT]: null,
-      [INPUTS_NAME.END_AT]: null
-    }
+    defaultValues: isBid
+      ? {
+          [INPUTS_NAME.STATUS]: 'active',
+          [INPUTS_NAME.DSP_UUID]: '',
+          [INPUTS_NAME.START_AT]: new Date(),
+          [INPUTS_NAME.END_AT]: null,
+          [INPUTS_NAME.HEADER_BIDDING]: 'inactive',
+          [INPUTS_NAME.BUDGET]: {
+            [INPUTS_NAME.GLOBAL]: '',
+            [INPUTS_NAME.DAILY]: ''
+          }
+        }
+      : {
+          [INPUTS_NAME.NAME]: '',
+          [INPUTS_NAME.STATUS]: 'active',
+          [INPUTS_NAME.DSP_UUID]: '',
+          [INPUTS_NAME.START_AT]: new Date(),
+          [INPUTS_NAME.END_AT]: null,
+          [INPUTS_NAME.HEADER_BIDDING]: 'inactive',
+          [INPUTS_NAME.DEAL_PRICE]: '',
+          [INPUTS_NAME.LIMIT_IMPRESSION]: ''
+        },
+    resolver: schemaValidate(t, isBid)
   });
   const {handleSubmit, formState, watch} = methods;
   const selectedDsp = watch(INPUTS_NAME.DSP_UUID);

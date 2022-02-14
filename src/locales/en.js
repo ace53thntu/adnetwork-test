@@ -59,6 +59,7 @@ const en = {
   selectInventory: 'Select inventory',
   selectAudience: 'Select audience',
   headerBiddingAvailable: 'Header bidding available',
+  headerBidding: 'Header bidding',
   biddingUrl: 'Bidding url',
   impression: 'Impression',
 

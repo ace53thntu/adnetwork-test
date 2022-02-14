@@ -19,7 +19,8 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  multiple: PropTypes.bool
+  multiple: PropTypes.bool,
+  required: PropTypes.bool
 };
 
 const AudienceSelect = ({
@@ -27,7 +28,8 @@ const AudienceSelect = ({
   name,
   label,
   placeholder,
-  multiple = false
+  multiple = false,
+  required = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -36,7 +38,7 @@ const AudienceSelect = ({
 
   return (
     <SelectPaginate
-      required
+      required={required}
       name={name}
       label={label}
       placeholder={placeholder}

@@ -23,8 +23,8 @@ export const endpoints = {
     inventoryContainer: 'inventories',
     deal: 'deal',
     dsp: 'dsp',
-    bidInventory: 'inventory_bid',
-    dealInventory: 'inventory_deal'
+    bidInventory: `${API_V1}/inventory_bid`,
+    dealInventory: `${API_V1}/inventory_deal`
   },
   advertiser: {
     advertiser: `${API_V1}/advertiser`

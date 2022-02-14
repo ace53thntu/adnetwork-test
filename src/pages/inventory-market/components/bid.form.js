@@ -21,7 +21,7 @@ import DspSelect from 'components/forms/DspSelect';
 import {useTranslation} from 'react-i18next';
 import AudienceSelect from 'components/forms/AudienceSelect';
 
-const InventoryBidForm = ({excludeBidDates = []}) => {
+const InventoryBidForm = ({excludeDates = []}) => {
   const {t} = useTranslation();
   const {control} = useFormContext();
 
@@ -50,7 +50,7 @@ const InventoryBidForm = ({excludeBidDates = []}) => {
           <Controller
             control={control}
             name={INPUTS_NAME.HEADER_BIDDING}
-            defaultValue={'active'}
+            defaultValue={'inactive'}
             render={({onChange, onBlur, value, name}) => (
               <ActiveToggle value={value} onChange={onChange} />
             )}
@@ -63,6 +63,7 @@ const InventoryBidForm = ({excludeBidDates = []}) => {
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.GLOBAL}`}
             label="Budget global"
             placeholder="0"
+            isRequired
           />
         </Col>
         <Col sm="4">
@@ -70,6 +71,7 @@ const InventoryBidForm = ({excludeBidDates = []}) => {
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.DAILY}`}
             label="Budget daily"
             placeholder="0"
+            isRequired
           />
         </Col>
         <Col sm="4">
@@ -84,7 +86,7 @@ const InventoryBidForm = ({excludeBidDates = []}) => {
           />
         </Col>
       </Row>
-      <TimeRange excludeDates={excludeBidDates} />
+      <TimeRange excludeDates={excludeDates} />
     </>
   );
 };

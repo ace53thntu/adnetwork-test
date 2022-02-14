@@ -12,7 +12,6 @@ import {Controller, useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Col, Label, Row} from 'reactstrap';
 import {INPUTS_NAME} from '../constants';
-import {AudienceSelect} from './form-elements';
 import TimeRange from './form-elements/time-range';
 
 export default function DealForm({
@@ -25,7 +24,7 @@ export default function DealForm({
   return (
     <>
       <Row className="mt-3">
-        <Col sm="8">
+        <Col sm="6">
           <FormTextInput
             name={INPUTS_NAME.NAME}
             label="Name"
@@ -33,7 +32,7 @@ export default function DealForm({
             isRequired
           />
         </Col>
-        <Col sm="4">
+        <Col sm="3">
           <Label className="mr-5">Status</Label>
           <Controller
             control={control}
@@ -44,17 +43,41 @@ export default function DealForm({
             )}
           />
         </Col>
+        <Col sm="3">
+          <Label className="mr-5">{t('headerBidding')}</Label>
+          <Controller
+            control={control}
+            name={INPUTS_NAME.HEADER_BIDDING}
+            defaultValue={'inactive'}
+            render={({onChange, onBlur, value, name}) => (
+              <ActiveToggle value={value} onChange={onChange} />
+            )}
+          />
+        </Col>
       </Row>
       <Row>
         <Col sm="6">
-          <DspSelect
-            name="dsp_uuid"
-            label={t('dsp')}
-            placeholder={t('selectDsp')}
+          <FormTextInput
+            name={INPUTS_NAME.LIMIT_IMPRESSION}
+            label="Limit impression"
+            placeholder="0"
+            isRequired
           />
         </Col>
         <Col sm="6">
-          <AudienceSelect options={audienceOptions} />
+          <FormTextInput
+            name={INPUTS_NAME.DEAL_PRICE}
+            label="Deal price"
+            placeholder="0.0"
+            isRequired
+          />
+        </Col>
+        <Col sm="6">
+          <DspSelect
+            name={INPUTS_NAME.DSP_UUID}
+            label={t('dsp')}
+            placeholder={t('selectDsp')}
+          />
         </Col>
       </Row>
       <TimeRange excludeDates={excludeDates} />

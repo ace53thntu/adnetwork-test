@@ -20,12 +20,12 @@ export default function AudienceSelect({options = []}) {
   const {register} = useFormContext();
 
   React.useEffect(() => {
-    register(INPUTS_NAME.AUDICEN_UUID);
+    register(INPUTS_NAME.AUDIENCE_UUID);
   }, [register]);
 
   return (
     <FormReactSelect
-      name={INPUTS_NAME.AUDICEN_UUID}
+      name={INPUTS_NAME.AUDIENCE_UUID}
       options={options}
       label="Audience"
       placeholder="Select audience..."

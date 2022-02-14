@@ -14,6 +14,10 @@ import EndAt from './end-at';
 export default function TimeRange({excludeDates = []}) {
   const {t} = useTranslation();
   const {errors, register} = useFormContext();
+  console.log(
+    '🚀 ~ file: time-range.js ~ line 17 ~ TimeRange ~ errors',
+    errors
+  );
 
   React.useEffect(() => {
     register([INPUTS_NAME.END_AT]);

@@ -48,6 +48,10 @@ const useColumns = () => {
         accessor: 'name'
       },
       {
+        header: 'Container Name',
+        accessor: 'container_name'
+      },
+      {
         header: 'Page Name',
         accessor: 'page_name'
       },
@@ -75,42 +79,6 @@ const useColumns = () => {
         cell: row => (
           <Badge color="warning" pill>
             {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Fill Rate',
-        accessor: 'fill_rate',
-        cell: row => (
-          <Badge color="info" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Click Rate',
-        accessor: 'click_rate',
-        cell: row => (
-          <Badge color="light" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Total Bids',
-        accessor: 'total_active_bids',
-        cell: row => (
-          <Badge color="light" pill>
-            {row?.value || 0}
-          </Badge>
-        )
-      },
-      {
-        header: 'Total Deal',
-        accessor: 'total_active_deals',
-        cell: row => (
-          <Badge color="light" pill>
-            {row?.value || 0}
           </Badge>
         )
       }
@@ -156,8 +124,7 @@ const InventoryList = ({page, filterParams = null}) => {
   }, [pages]);
 
   const inventories = useInventoriesByContainer({
-    data: containerInventories,
-    page
+    data: containerInventories
   });
   const columns = useColumns();
 
