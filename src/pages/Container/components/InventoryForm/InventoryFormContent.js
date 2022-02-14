@@ -27,6 +27,7 @@ import {InputStatus} from 'constants/misc';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
+import InventorySnippet from '../Snippets/InventorySnippet';
 
 const formName = {
   properties: 'properties',
@@ -46,6 +47,13 @@ const propTypes = {
   inventoryFormatOptions: PropTypes.array,
   inventory: PropTypes.object,
   toggle: PropTypes.func
+};
+
+const inventoryCodeSnippet = inventoryId => {
+  return `window.AicactusSDK.requestAds([{
+    inventoryId: ${inventoryId},
+    placementId: "//your placement ID in DOM"
+  }]);`;
 };
 
 const InventoryFormContent = ({
@@ -194,6 +202,11 @@ const InventoryFormContent = ({
           </Col>
         </Row>
         <InventoryProperty currentInventory={inventory} />
+        {inventory?.uuid && (
+          <InventorySnippet>
+            {inventoryCodeSnippet(inventory?.id || '')}
+          </InventorySnippet>
+        )}
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" onClick={toggle}>

@@ -34,7 +34,13 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
             uuid: Yup.string()
           })
         )
-        .required(t('required')),
+        .when('strategy_type', strategyType => {
+          if (strategyType?.value === 'premium') {
+            return Yup.array().required(t('required')).typeError(t('required'));
+          }
+          return Yup.array().nullable().notRequired();
+        }),
+
       sources: Yup.array().required(t('required')).typeError(t('required')),
       position_uuids: Yup.array()
         .required(t('required'))

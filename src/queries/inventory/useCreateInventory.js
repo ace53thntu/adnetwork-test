@@ -1,8 +1,9 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORY_BY_PAGE} from './constants';
+import {GET_INVENTORIES} from './constants';
 
 /**
  * Create a Inventory
@@ -19,8 +20,8 @@ export function useCreateInventory() {
       },
       onSettled: data => {
         client.invalidateQueries([
-          GET_INVENTORY_BY_PAGE,
-          data?.data?.page_uuid
+          GET_INVENTORIES,
+          {limit: DEFAULT_PAGINATION.perPage, page_uuid: data?.data?.page_uuid}
         ]);
       }
     }
