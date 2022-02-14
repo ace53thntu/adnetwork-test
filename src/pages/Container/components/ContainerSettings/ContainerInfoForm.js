@@ -27,7 +27,7 @@ import {containerFormResolver} from './validations';
 
 const defaultValue = containerId => `
 <script type="text/javascript">
-window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=document.createElement("script");e.async=!0,e.type="text/javascript",e.src="${SDK_CDN}?t="+Date.now(),e.addEventListener?e.addEventListener("load",function(e){"function"==typeof t&&t(e)},!1):e.onreadystatechange=function(){("complete"==this.readyState||"loaded"==this.readyState)&&t(window.event)};let a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(e,a)},${SDK_NAME}.load(function(){${SDK_NAME}.initialize({containerId:"${containerId}@web"}),${SDK_NAME}.callMethodsFromContainer()});
+window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=document.createElement("script");e.async=!0,e.type="text/javascript",e.src="${SDK_CDN}?t="+Date.now(),e.addEventListener?e.addEventListener("load",function(e){"function"==typeof t&&t(e)},!1):e.onreadystatechange=function(){("complete"==this.readyState||"loaded"==this.readyState)&&t(window.event)};let a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(e,a)},${SDK_NAME}.load(function(){${SDK_NAME}.initialize({containerId:"${containerId}@web", type: ["adnetwork"]}),${SDK_NAME}.callMethodsFromContainer()});
 </script>
 `;
 
