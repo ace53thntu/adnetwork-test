@@ -176,6 +176,10 @@ const InventoryFormContent = ({
               placeholder="0.0"
               label={t('floorPrice')}
               disabled={isSubmitting}
+              decimalSeparator="."
+              groupSeparator=","
+              disableGroupSeparators={true}
+              decimalsLimit={10}
             />
           </Col>
           {watchEnableDeal === InputStatus.ACTIVE && (
@@ -185,6 +189,11 @@ const InventoryFormContent = ({
                 placeholder="0.0"
                 label={t('dealFloorPrice')}
                 disabled={isSubmitting}
+                decimalSeparator="."
+                groupSeparator=","
+                disableGroupSeparators={true}
+                decimalsLimit={10}
+                required
               />
             </Col>
           )}

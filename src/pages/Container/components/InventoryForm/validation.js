@@ -17,6 +17,9 @@ export const validationInventory = () => {
       format: Yup.object()
         .required('This field is required.')
         .typeError('This field is required.'),
+      position_uuid: Yup.object()
+        .required('This field is required.')
+        .typeError('This field is required.'),
       price_engine: Yup.object()
         .required('This field is required.')
         .typeError('This field is required.'),
@@ -31,9 +34,22 @@ export const validationInventory = () => {
           return Yup.array().nullable().notRequired();
         }),
       floor_price: Yup.string().required('This field is required.'),
-      deal_floor_price: Yup.string().when('enable_deal', value => {
+      deal_floor_price: Yup.string().when('allow_deal', value => {
         if (value === InputStatus.ACTIVE) {
-          return Yup.string().required('This field is required.');
+          return Yup.string()
+            .required('This field is required.')
+            .test({
+              name: 'floor_price',
+              exclusive: false,
+              params: {},
+              // eslint-disable-next-line no-template-curly-in-string
+              message:
+                'The deal floor price must be greater than the floor price',
+              test: function (value) {
+                // You can access the budget global field with `this.parent`.
+                return parseFloat(value) > parseFloat(this.parent?.floor_price);
+              }
+            });
         }
         return Yup.string().nullable().notRequired();
       }),

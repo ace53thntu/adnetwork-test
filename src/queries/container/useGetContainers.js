@@ -6,7 +6,7 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_CONTAINERS} from './constants';
 
-export function useGetContainers({params, enabled = false}) {
+export function useGetContainers({params, enabled = false, suspense = true}) {
   const {cancelToken} = useCancelRequest();
   return useQuery(
     GET_CONTAINERS,
@@ -16,7 +16,7 @@ export function useGetContainers({params, enabled = false}) {
         options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),
     {
-      suspense: false,
+      suspense,
       enabled
     }
   );

@@ -1,7 +1,7 @@
 export const CONTAINER_TREE_SOURCES = {
-  android: 'Android tag',
-  ios: 'iOS tag',
-  web: 'Website tag',
+  android: 'Android',
+  ios: 'iOS',
+  web: 'Website',
   import: 'Manual importation',
   transfer: 'Schedule transfer'
 };

@@ -17,7 +17,7 @@ import {
 } from 'store/reducers/container';
 import {CONTAINERS} from 'pages/Container/hooks/constants';
 import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
-import {FormRadioGroup, FormTextInput, FormToggle} from 'components/forms';
+import {FormTextInput, FormToggle} from 'components/forms';
 import {useDeleteContainer, useEditContainer} from 'queries/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from './dto';
@@ -147,34 +147,31 @@ function ContainerForm(props) {
                 disable={isLoading}
                 isRequired
               />
-              <FormRadioGroup
-                inline
-                label={t('status')}
-                name="status"
-                items={[
-                  {
-                    id: 'delete',
-                    label: t('delete'),
-                    value: 'delete'
-                  },
-                  {
-                    id: 'active',
-                    label: t('active'),
-                    value: 'active'
-                  }
-                ]}
-              />
-              <FormGroup className="d-flex  mb-0 ">
-                <FormToggle
-                  name="first_party"
-                  defaultCheckedValue="active"
-                  label={t('firstParty')}
-                  values={{
-                    checked: 'active',
-                    unChecked: 'inactive'
-                  }}
-                />
-              </FormGroup>
+              <div className="d-flex">
+                <FormGroup className="d-flex  mb-0 ">
+                  <FormToggle
+                    name="status"
+                    defaultCheckedValue="active"
+                    label={t('status')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+
+                <FormGroup className="d-flex  mb-0 ml-3">
+                  <FormToggle
+                    name="first_party"
+                    defaultCheckedValue="active"
+                    label={t('firstParty')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+              </div>
 
               <FormGroup className="d-flex justify-content-between align-items-center mt-3">
                 <ButtonLoading

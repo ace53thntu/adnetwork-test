@@ -1,5 +1,5 @@
 import {BlockOverlay, ButtonLoading} from 'components/common';
-import {FormRadioGroup, FormTextInput} from 'components/forms';
+import {FormTextInput, FormToggle} from 'components/forms';
 import {SDK_CDN, SDK_NAME} from 'constants/container';
 import PropTypes from 'prop-types';
 import {useEditContainer} from 'queries/container';
@@ -104,29 +104,16 @@ function ContainerInfoForm(props) {
                 placeholder="Container URL..."
                 label="Container URL"
                 disable={formState.isSubmitting}
+                isRequired
               />
-              <FormRadioGroup
-                inline
-                label="Status"
+              <FormToggle
                 name="status"
-                items={[
-                  {
-                    id: 'draft',
-                    label: 'Draft',
-                    value: 'draft'
-                  },
-                  {
-                    id: 'pending',
-                    label: 'Pending',
-                    value: 'pending'
-                  },
-                  {
-                    id: 'active',
-                    label: 'Active',
-                    value: 'active'
-                  }
-                ]}
-                disabled={formState.isSubmitting}
+                defaultCheckedValue="active"
+                label={t('status')}
+                values={{
+                  checked: 'active',
+                  unChecked: 'inactive'
+                }}
               />
 
               <Row>

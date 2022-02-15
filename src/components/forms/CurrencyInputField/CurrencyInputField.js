@@ -39,7 +39,9 @@ const CurrencyInputField = props => {
     prefix = '',
     groupSeparator = '.',
     decimalSeparator = ',',
-    disabled = false
+    disabled = false,
+    disableGroupSeparators = false,
+    decimalsLimit = 2
   } = props;
   const {control, errors} = useFormContext();
 
@@ -67,7 +69,9 @@ const CurrencyInputField = props => {
               prefix={prefix}
               step={1}
               groupSeparator={groupSeparator}
+              disableGroupSeparators={disableGroupSeparators}
               decimalSeparator={decimalSeparator}
+              decimalsLimit={decimalsLimit}
               disabled={disabled}
             />
           );

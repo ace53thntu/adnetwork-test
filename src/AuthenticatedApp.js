@@ -9,10 +9,7 @@ import {setUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 
 function AuthenticatedApp(props) {
   const role = getRole();
-  console.log(
-    '🚀 ~ file: AuthenticatedApp.js ~ line 10 ~ AuthenticatedApp ~ role',
-    role
-  );
+
   const {data: authUser, isFetching} = useGetMe({enable: true});
 
   const {data: configRes, isFetching: isFetchingConfig} = useGetUploaderConfig({
@@ -33,7 +30,6 @@ function AuthenticatedApp(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetchingConfig]);
-  console.log('authenticatedRoutes', authenticatedRoutes);
 
   if (role === USER_ROLE.ADMIN) {
     routes = authenticatedRoutes;

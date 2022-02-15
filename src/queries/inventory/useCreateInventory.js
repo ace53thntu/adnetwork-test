@@ -21,7 +21,10 @@ export function useCreateInventory() {
       onSettled: data => {
         client.invalidateQueries([
           GET_INVENTORIES,
-          {limit: DEFAULT_PAGINATION.perPage, page_uuid: data?.data?.page_uuid}
+          {
+            per_page: DEFAULT_PAGINATION.perPage,
+            page_uuid: data?.data?.page_uuid
+          }
         ]);
       }
     }

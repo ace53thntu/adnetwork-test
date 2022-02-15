@@ -30,7 +30,7 @@ export const containerFormResolver = containers => {
         }),
       url: Yup.string()
         .nullable()
-        .notRequired()
+        .required('This field is required')
         .test('is-url', 'Enter correct url!', value => {
           if (value.length) {
             return isValidURL(value);
