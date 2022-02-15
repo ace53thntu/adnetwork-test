@@ -25,10 +25,6 @@ const CampaignEditTabs = ({
   isCreate = false,
   currentCampaign = null
 }) => {
-  console.log(
-    '🚀 ~ file: EditTabs.js ~ line 28 ~ currentCampaign',
-    currentCampaign
-  );
   const {t} = useTranslation();
   const navigate = useNavigate();
   const query = useQueryString();

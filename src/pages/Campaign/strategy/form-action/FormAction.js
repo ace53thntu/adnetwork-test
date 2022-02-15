@@ -22,6 +22,7 @@ const propTypes = {
 const FormAction = ({
   isView = false,
   isSummary = false,
+  isCreate = false,
   currentStrategy = {}
 }) => {
   const {t} = useTranslation();
@@ -49,14 +50,17 @@ const FormAction = ({
           >
             {t('cancel')}
           </Button>
-          <Button
-            onClick={goToView}
-            className="mr-2"
-            color="link"
-            type="button"
-          >
-            {t('goToView')}
-          </Button>
+          {!isCreate && (
+            <Button
+              onClick={goToView}
+              className="mr-2"
+              color="link"
+              type="button"
+            >
+              {t('goToView')}
+            </Button>
+          )}
+
           <ButtonLoading
             type="submit"
             className="btn-primary"

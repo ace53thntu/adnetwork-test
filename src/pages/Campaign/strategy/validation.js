@@ -44,7 +44,10 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
       sources: Yup.array().required(t('required')).typeError(t('required')),
       position_uuids: Yup.array()
         .required(t('required'))
-        .typeError(t('required'))
+        .typeError(t('required')),
+      schedule: Yup.object({
+        week_days: Yup.array().required(t('required')).typeError(t('required'))
+      })
     })
   );
 };

@@ -22,6 +22,8 @@ import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {GET_PAGES} from 'queries/page/constants';
 import {PageAPIRequest} from 'api/page.api';
 import {TAG_FROM_SOURCE} from 'constants/container';
+import {IS_RESPONSE_ALL} from 'constants/misc';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 function PageCreateForm({pageTags = []}) {
   const queryCache = useQueryClient();
@@ -120,12 +122,17 @@ function PageCreateForm({pageTags = []}) {
             source: pageSource,
             limit: 1000,
             page: 1
+          },
+          options: {
+            isResponseAll: IS_RESPONSE_ALL
           }
         });
+        const pagesData = getResponseData(pageRes, IS_RESPONSE_ALL);
 
         const container = containerRes.data;
         const pageId = data?.uuid;
-        const pages = pageRes?.data?.items?.map(item => {
+
+        const pages = pagesData?.map(item => {
           return {
             id: item.uuid,
             name: item.name,

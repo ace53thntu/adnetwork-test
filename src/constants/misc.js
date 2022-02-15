@@ -45,7 +45,8 @@ export const ROLES = {
   administrator: 'administrator',
   organisation: 'organisation',
   agency: 'agency',
-  advertiser: 'advertiser'
+  advertiser: 'advertiser',
+  publisher: 'publisher'
 };
 
 export const DEFAULT_PAGINATION = {

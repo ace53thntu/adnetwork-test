@@ -62,7 +62,10 @@ const StrategyEditTabs = ({
                   isEdit={!isCreate}
                   currentStrategy={currentStrategy}
                 />
-                <FormAction currentStrategy={currentStrategy} />
+                <FormAction
+                  currentStrategy={currentStrategy}
+                  isCreate={isCreate}
+                />
               </FormContainer>
             </DescriptionTab>
           )

@@ -271,11 +271,11 @@ function handleSetContainer(state, action) {
           selected: false
         };
 
-        const {
-          import_count,
-          transfer_count,
-          source: containerSource
-        } = container;
+        const {import_count, transfer_count, sources} = container;
+        const containerSource = sources?.reduce((acc, item) => {
+          acc = {...acc, [item]: 1};
+          return acc;
+        }, {});
 
         if (source === 'import' && import_count === 0) {
           containerItem.selected = true;
@@ -340,6 +340,7 @@ function handleSetContainer(state, action) {
 
             if (child.id !== 'import' && child.id !== 'transfer') {
               const pagesBySource = pages?.length > 0 ? pages : child?.children;
+
               const sourceChildren = pagesBySource?.map((sourceData, index) => {
                 const {id, name} = sourceData;
 

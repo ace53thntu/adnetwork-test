@@ -73,6 +73,11 @@ function ContainersTree(props) {
           const {importCount, transferCount, source} = node;
           let children = [];
           if (!!source && Object.keys(source).length) {
+            console.log(
+              '🚀 ~ file: ContainersTree.js ~ line 74 ~ source',
+              source
+            );
+
             Object.keys(source).forEach((sourceKey, index) => {
               children.push({
                 id: sourceKey,
@@ -136,6 +141,7 @@ function ContainersTree(props) {
               }
             });
             const data = getResponseData(res, IS_RESPONSE_ALL);
+            console.log('🚀 ~ file: ContainersTree.js ~ line 139 ~ data', data);
             if (data) {
               queryCache.setQueryData([GET_PAGES, parentId], data);
               const currentSourceData = data ?? [];

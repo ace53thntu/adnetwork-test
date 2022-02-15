@@ -7,9 +7,19 @@ import {useDispatch} from 'react-redux';
 import {useNavigate, useParams} from 'react-router';
 import {useGetContainer} from 'queries/container';
 import {useGetAllPage} from 'queries/page';
+import {getResponseData} from 'utils/helpers/misc.helpers';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 
 export function useRedirectInContainer() {
   const {cid: containerId, source, pageId} = useParams();
+  console.log(
+    '🚀 ~ file: useRedirectInContainer.js ~ line 15 ~ useRedirectInContainer ~ source',
+    source
+  );
+  console.log(
+    '🚀 ~ file: useRedirectInContainer.js ~ line 15 ~ useRedirectInContainer ~ pageId',
+    pageId
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,13 +44,18 @@ export function useRedirectInContainer() {
     [containerRes]
   );
 
-  const {data: {items: pages = []} = {}, status: pageStatus} = useGetAllPage({
+  const {data, status: pageStatus} = useGetAllPage({
     containerId,
     params: {
       source
     },
     enabled: !!containerId && isFetched
   });
+  const pages = getResponseData(data, IS_RESPONSE_ALL);
+  console.log(
+    '🚀 ~ file: useRedirectInContainer.js ~ line 47 ~ useRedirectInContainer ~ pages',
+    pages
+  );
 
   const destructurePages = React.useMemo(
     () =>
@@ -60,6 +75,10 @@ export function useRedirectInContainer() {
         return pageNode;
       }),
     [containerId, pages, source]
+  );
+  console.log(
+    '🚀 ~ file: useRedirectInContainer.js ~ line 71 ~ useRedirectInContainer ~ destructurePages',
+    destructurePages
   );
 
   React.useEffect(() => {

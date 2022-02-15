@@ -14,6 +14,10 @@ export const containersRepoToModel = raw => {
     acc = {...acc, [item]: 1};
     return acc;
   }, {});
+  console.log(
+    '🚀 ~ file: dto.js ~ line 17 ~ sourceConverted ~ sourceConverted',
+    sourceConverted
+  );
 
   let result = {
     id,

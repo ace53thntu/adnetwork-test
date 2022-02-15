@@ -7,10 +7,12 @@ import {
 import {ContainerSourceLazy} from 'pages/Container/components/ContainerSource';
 import {ContainerSourcePageLazy} from 'pages/Container/components/ContainerSourcePage';
 import {InventoryReportPage} from 'pages/Container/components/inventory-report';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 export const containerPages = {
   path: RoutePaths.CONTAINER,
   element: <ContainerLayout />,
+  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER],
   children: [
     {
       path: '',
