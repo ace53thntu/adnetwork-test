@@ -1,6 +1,5 @@
 // import PropTypes from 'prop-types';
 import {ContainerAPIRequest} from 'api/container.api';
-import {PublisherAPIRequest} from 'api/publisher.api';
 import * as React from 'react';
 import {useParams} from 'react-router';
 import ContainerInfoForm from './ContainerInfoForm';
@@ -10,35 +9,8 @@ import ContainerInfoForm from './ContainerInfoForm';
 function ContainerSettings(props) {
   const {cid: containerId} = useParams();
 
-  // const {cid: containerId} = useParams();
-  // console.log(
-  //   '🚀 ~ file: ContainerSettings.js ~ line 11 ~ ContainerSettings ~ containerId',
-  //   containerId
-  // );
-
-  // const {data: container, status} = useGetContainer({
-  //   containerId,
-  //   enabled: !!containerId
-  // });
-
-  // const {data: pages = []} = useGetPages({
-  //   containerId,
-  //   source,
-  //   enabled: !!container
-  // });
-  // const {data: events = []} = useG({
-  //   pageId,
-  //   enabled: !!pages,
-  //   page: 1,
-  //   perPage: 10000
-  // });
-  // const {data: containers = [], status} = useContainers({
-  //   enabled: !!events,
-  //   suspense: false,
-  //   partnerId
-  // });
-
   const [container, setContainer] = React.useState(null);
+
   const [status, setStatus] = React.useState('');
 
   React.useEffect(() => {
@@ -47,10 +19,8 @@ function ContainerSettings(props) {
         const {data} = await ContainerAPIRequest.getContainer({
           id: containerId
         });
-        const {data: publisher} = await PublisherAPIRequest.getPublisher({
-          id: data?.publisher_uuid
-        });
-        setContainer({...data, publisher});
+
+        setContainer({...data});
         setStatus('success');
       } catch (err) {
         setStatus('error');
@@ -61,8 +31,12 @@ function ContainerSettings(props) {
     }
   }, [containerId]);
 
-  const pagesCount = 0; //pages?.length ?? 0;
-  const eventsCounts = 0; //events?.length ?? 0;
+  const pagesCount = container?.total_pages || 0;
+  const inventoriesCounts = container?.pages?.reduce((acc, item) => {
+    const {total_inventories = 0} = item;
+    acc += total_inventories;
+    return acc;
+  }, 0);
   const filteredContainer = []; //containers?.filter(cnt => cnt.id !== container?.id);
 
   if (status !== 'success' && status !== 'error') {
@@ -76,7 +50,7 @@ function ContainerSettings(props) {
   return (
     <ContainerInfoForm
       pagesCount={pagesCount}
-      eventsCounts={eventsCounts}
+      inventoriesCounts={inventoriesCounts}
       containers={filteredContainer}
       container={container}
     />

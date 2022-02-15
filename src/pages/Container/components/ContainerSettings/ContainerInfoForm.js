@@ -33,6 +33,7 @@ window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=d
 
 function ContainerInfoForm(props) {
   const {t} = useTranslation();
+  const {pagesCount, inventoriesCounts} = props;
   const {containerRedux} = useContainerSelector();
   const {containers, container} = props;
   const dispatch = useDispatch();
@@ -132,13 +133,13 @@ function ContainerInfoForm(props) {
                 <Col sm={12} md={6}>
                   <Count
                     label={isMobile ? 'Screens' : 'Pages'}
-                    count={`${container?.source?.[source] || 0}`}
+                    count={`${pagesCount || 0}`}
                   />
                 </Col>
                 <Col sm={12} md={6}>
                   <Count
                     label="Inventories"
-                    count={`${container?.total_inventories || 0}`}
+                    count={`${inventoriesCounts || 0}`}
                     type="success"
                   />
                 </Col>

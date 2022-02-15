@@ -9,6 +9,7 @@ import PagesAndEventsTab from './PagesAndEventsTab';
 
 function WebsiteTag(props) {
   const [activeStep, setActiveStep] = React.useState(0);
+
   const ACTIVE_STEP = WEB_TAG_STEPS[activeStep];
 
   const tabProps = {
