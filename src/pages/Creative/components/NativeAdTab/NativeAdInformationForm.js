@@ -20,6 +20,7 @@ function NativeAdInformationForm(props) {
         </Col>
         <Col md="4">
           <FormTextInput
+            isRequired
             placeholder=""
             name="click_url"
             label="Click URL"

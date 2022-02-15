@@ -8,6 +8,7 @@ export function createNativeAdResolver(isEdit = false) {
   return yupResolver(
     Yup.object().shape({
       name: Yup.string().required('Required.'),
+      click_url: Yup.string().required('Required.'),
       assets: Yup.array()
         .nullable()
         .of(

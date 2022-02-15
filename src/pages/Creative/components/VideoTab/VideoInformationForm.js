@@ -19,6 +19,7 @@ function VideoInformationForm(props) {
       </Col>
       <Col md={3}>
         <FormTextInput
+          isRequired
           placeholder=""
           name="click_url"
           label="Click URL"

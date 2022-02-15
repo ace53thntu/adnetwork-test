@@ -50,7 +50,7 @@ const defaultFormValues = {
   invocation_tag_type: INVOCATION_TAG_TYPES[0],
   extra_trackers: '',
 
-  creative_type: CREATIVE_TYPES[0], // third_party, first_party
+  creative_type: CREATIVE_TYPES[1], // third_party, first_party
   tags: [],
 
   click_url: '',
