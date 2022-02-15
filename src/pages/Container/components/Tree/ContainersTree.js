@@ -25,6 +25,8 @@ import {TreeContainerStyled} from './ContainersTree.styles';
 import {GET_PAGES} from 'queries/page/constants';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import {getRole, getUser} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const LIMIT = 1000;
 
@@ -39,8 +41,19 @@ function ContainersTree(props) {
     container
   } = useContainerSelector();
 
+  const role = getRole();
+  const user = getUser();
+  const params = {
+    per_page: 1000,
+    page: DEFAULT_PAGINATION.page,
+    sort: 'created_at DESC'
+  };
+  if (role === USER_ROLE.PUBLISHER) {
+    params.publisher_uuid = user?.uuid;
+  }
+
   const {data, isFetching} = useGetContainers({
-    params: {per_page: 1000, page: 1, sort: 'created_at DESC'},
+    params,
     enabled: true
   });
   const containers = getResponseData(data, IS_RESPONSE_ALL);

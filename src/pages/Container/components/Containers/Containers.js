@@ -22,6 +22,9 @@ import Table, {
 import {useGetContainers} from 'queries/container/useGetContainers';
 import '../../style.scss';
 import {ContainerBodyLayout} from '../Layouts';
+import {getRole, getUser} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 
 const STATUS_OPTIONS = [
   {
@@ -41,9 +44,19 @@ const STATUS_OPTIONS = [
 const Containers = props => {
   const {t} = useTranslation();
   const navigate = useNavigate();
+  const role = getRole();
+  const user = getUser();
+  const params = {
+    per_page: 1000,
+    page: DEFAULT_PAGINATION.page,
+    sort: 'created_at DESC'
+  };
+  if (role === USER_ROLE.PUBLISHER) {
+    params.publisher_uuid = user?.uuid;
+  }
 
   const {data: containers} = useGetContainers({
-    params: {limit: 1000, page: 1},
+    params,
     enabled: true
   });
 

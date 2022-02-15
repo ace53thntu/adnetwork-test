@@ -57,7 +57,7 @@ function InventoryList() {
     isFetching,
     isFetchingNextPage
   } = useGetInventoriesInfinity({
-    params: {limit: DEFAULT_PAGINATION.perPage, page_uuid: pageId},
+    params: {per_page: DEFAULT_PAGINATION.perPage, page_uuid: pageId},
     enabled: !!pageId
   });
   const containerInventories = React.useMemo(() => {
