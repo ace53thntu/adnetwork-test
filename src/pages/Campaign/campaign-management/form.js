@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 
 //---> External Modules
 import {useForm, FormProvider, Controller} from 'react-hook-form';
@@ -42,7 +42,7 @@ const CampaignForm = ({
   const {t} = useTranslation();
   const navigate = useNavigate();
   const {mutateAsync: createCampaign} = useCreateCampaign();
-  const {mutateAsync: updateCampaign} = useEditCampaign();
+  const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
 
   const {campaignId} = useParams();
 
@@ -51,13 +51,7 @@ const CampaignForm = ({
     resolver: validationCampaign(t, isEdit)
   });
 
-  const {handleSubmit, reset, control, errors} = methods;
-
-  useEffect(() => {
-    if (isView || isEdit) {
-      reset(currentCampaign);
-    }
-  }, [currentCampaign, isEdit, isView, reset]);
+  const {handleSubmit, control, errors} = methods;
 
   const onSubmit = useCallback(
     async formData => {
@@ -69,6 +63,7 @@ const CampaignForm = ({
             campId: campaignId,
             data: requestBody
           });
+          // reset();
           ShowToast.success('Updated Campaign successfully!');
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.uuid}/${RoutePaths.EDIT}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`

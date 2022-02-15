@@ -53,21 +53,22 @@ const FormContainer = ({
     resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit, errors} = methods;
-  console.log('🚀 ~ file: FormContainer.js ~ line 49 ~ errors', errors);
+  const {handleSubmit} = methods;
 
   React.useEffect(() => {
-    dispatch(
-      setStrategyInventoryTempListRedux({
-        inventoryList: currentStrategy?.inventories
-      })
-    );
-    dispatch(
-      setStrategyInventoryListRedux({
-        inventoryList: currentStrategy?.inventories
-      })
-    );
-  }, [currentStrategy?.inventories, dispatch]);
+    if (isEdit || isView) {
+      dispatch(
+        setStrategyInventoryTempListRedux({
+          inventoryList: currentStrategy?.inventories
+        })
+      );
+      dispatch(
+        setStrategyInventoryListRedux({
+          inventoryList: currentStrategy?.inventories
+        })
+      );
+    }
+  }, [currentStrategy, dispatch, isEdit, isView]);
 
   const onSubmit = useCallback(
     async formData => {

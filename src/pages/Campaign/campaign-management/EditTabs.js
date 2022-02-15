@@ -38,7 +38,7 @@ const CampaignEditTabs = ({
 
   React.useEffect(() => {
     if (nextTab) {
-      setCurrentTab({nextTab});
+      setCurrentTab(nextTab);
     }
   }, [nextTab]);
 
