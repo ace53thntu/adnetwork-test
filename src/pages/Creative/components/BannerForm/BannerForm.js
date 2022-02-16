@@ -265,6 +265,7 @@ function BannerForm(props) {
                   <Row>
                     <Col md="4">
                       <FormTextInput
+                        isRequired
                         placeholder=""
                         name="click_url"
                         label="Click url"

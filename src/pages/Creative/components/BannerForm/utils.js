@@ -6,6 +6,7 @@ export const bannerFormValidationResolver = () => {
   return yupResolver(
     Yup.object().shape({
       name: Yup.string().required('Creative name is required.'),
+      click_url: Yup.string().required('Required.'),
       // concept_id: isRequiredConcept
       //   ? Yup.object().required('Concept is required.').nullable()
       //   : Yup.object(),
