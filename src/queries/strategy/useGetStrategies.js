@@ -15,9 +15,10 @@ export function useGetStrategies({params, enabled = false}) {
   return useQuery(
     [GET_STRATEGIES, params],
     () =>
-      StrategyAPIRequest.getAllStrategy({params, options: {cancelToken}}).then(
-        res => res?.data ?? []
-      ),
+      StrategyAPIRequest.getAllStrategy({
+        params,
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled

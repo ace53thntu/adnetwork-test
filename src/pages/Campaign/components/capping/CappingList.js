@@ -42,6 +42,7 @@ import {
 } from 'queries/capping';
 import AddTypeButton from './AddTypeButton';
 import CappingFormContainer from './CappingFormContainer';
+import {WEEK_DAYS} from 'pages/Campaign/constants';
 
 const renderCappingTypeColor = type => {
   switch (type) {
@@ -117,26 +118,50 @@ const CappingList = ({referenceUuid = ''}) => {
         accessor: 'target',
         cell: row => row?.value?.toString() || ''
       },
+
       {
         header: 'Budget',
         accessor: 'time_frame',
         cell: row => {
           return (
             <>
-              {row.original?.type === CappingTypes.BUDGET.value &&
+              {[
+                CappingTypes.BUDGET.value,
+                CappingTypes.IMPRESSION.value
+              ].includes(row.original?.type) &&
                 row?.value === BudgetTimeFrames.DAILY && (
                   <Badge color="primary" pill>
                     {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
                   </Badge>
                 )}
-              {(row.original?.type === CappingTypes.BUDGET.value &&
-                row?.value) === BudgetTimeFrames.GLOBAL && (
+              {([
+                CappingTypes.BUDGET.value,
+                CappingTypes.IMPRESSION.value
+              ].includes(row.original?.type) && row?.value) ===
+                BudgetTimeFrames.GLOBAL && (
                 <Badge color="success" pill>
                   {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
                 </Badge>
               )}
             </>
           );
+        }
+      },
+      {
+        header: 'Week days',
+        accessor: 'week_days',
+        cell: row => {
+          if (Array.isArray(row?.value)) {
+            return row?.value?.map(item => {
+              const weekDayFound = WEEK_DAYS.find(
+                weekDayItem => weekDayItem.value === item
+              );
+              if (weekDayFound)
+                return <Badge className="mr-2">{weekDayFound?.label}</Badge>;
+              else return '';
+            });
+          }
+          return null;
         }
       },
       {

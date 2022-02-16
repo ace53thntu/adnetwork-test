@@ -8,8 +8,9 @@ import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
 import {useQueryString} from 'hooks';
 import {useGetCampaigns} from 'queries/campaign';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {useGetStrategies} from 'queries/strategy';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 export function useRedirectInCampaign() {
   const {campaignId, strategyId} = useParams();
@@ -20,28 +21,24 @@ export function useRedirectInCampaign() {
   const dispatch = useDispatch();
   const {isLoading, alreadySetAdvertiser} = useCampaignSelector();
 
-  const {
-    data: {items: campaigns = []} = {},
-    status: campaignsStatus,
-    isFetched
-  } = useGetCampaigns({
+  const {data: campRes, status: campaignsStatus, isFetched} = useGetCampaigns({
     params: {
       advertiser_uuid: advertiserId,
-      limit: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage
     },
     enabled: !!advertiserId
   });
+  const campaigns = getResponseData(campRes, IS_RESPONSE_ALL);
 
-  const {
-    data: {items: strategies = []} = {},
-    status: strategyStatus
-  } = useGetStrategies({
+  const {data: straRes, status: strategyStatus} = useGetStrategies({
     params: {
       campaign_uuid: campaignId,
-      limit: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage
     },
     enabled: !!campaignId && isFetched
   });
+
+  const strategies = getResponseData(straRes, IS_RESPONSE_ALL);
 
   const destructureCampaigns = React.useMemo(
     () =>

@@ -1,7 +1,7 @@
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import CustomPagination from 'components/common/CustomPagination';
 import {List} from 'components/list';
-import Status from 'components/list/status';
+import {CustomStatus} from 'components/list/status';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
@@ -72,7 +72,7 @@ const CampaignList = () => {
               statusProps.color = 'error';
               break;
           }
-          return <Status {...statusProps} />;
+          return <CustomStatus {...statusProps} />;
         }
       }
     ];
