@@ -140,10 +140,10 @@ const StrategyList = ({campaignId = undefined}) => {
     //---> Delete campaign
     setIsDeleting(true);
     try {
-      await deleteStrategy({cid: currentStrategy?.uuid});
+      await deleteStrategy({straId: currentStrategy?.uuid});
       ShowToast.success('Deleted strategy successfully');
     } catch (err) {
-      ShowToast.error(err?.message || 'Fail to delete strategy');
+      ShowToast.error(err?.msg || 'Fail to delete strategy');
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);

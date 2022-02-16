@@ -395,9 +395,9 @@ export const StrategySources = [
   {
     value: 'smarttv',
     label: 'Smart TV'
-  },
-  {
-    value: 'others',
-    label: 'Others'
   }
+  // {
+  //   value: 'others',
+  //   label: 'Others'
+  // }
 ];
