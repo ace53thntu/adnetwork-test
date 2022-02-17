@@ -10,7 +10,11 @@ const propTypes = {
   isView: PropTypes.bool
 };
 
-const ConceptList = ({concepts = [], isView = false}) => {
+const ConceptList = ({
+  concepts = [],
+  isView = false,
+  conceptsSelected = []
+}) => {
   return (
     <ListGroup className="mb-3">
       {concepts?.map((conceptItem, conceptIdx) => {
@@ -20,6 +24,11 @@ const ConceptList = ({concepts = [], isView = false}) => {
             conceptItem={conceptItem}
             conceptIdx={conceptIdx}
             isView={isView}
+            defaultValue={
+              conceptsSelected?.find(
+                conceptSelected => conceptSelected?.uuid === conceptItem?.uuid
+              )?.uuid || ''
+            }
           />
         );
       })}

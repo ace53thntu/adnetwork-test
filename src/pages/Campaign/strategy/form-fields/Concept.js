@@ -1,8 +1,7 @@
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React from 'react';
 
 //---> External Modules
-import {useFormContext} from 'react-hook-form';
 import {Button} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
@@ -36,6 +35,7 @@ const Concept = ({
       status: 'active'
     }
   });
+  const conceptsSelected = strategyData?.concepts || [];
   const concepts = React.useMemo(() => {
     return isView
       ? conceptList
@@ -49,24 +49,16 @@ const Concept = ({
           return acc;
         }, []);
   }, [isView, conceptList, pages]);
-  const {setValue} = useFormContext();
-
-  useEffect(() => {
-    if (strategyData) {
-      const concepts = [];
-      if (concepts && concepts.length > 0) {
-        concepts.forEach((element, idx) => {
-          setValue(`concept_ids[${idx}]`, element?.id);
-        });
-      }
-    }
-  }, [setValue, strategyData]);
 
   return (
     <>
       {isFetching && <LoadingIndicator />}
-      <ConceptList concepts={concepts} isView={isView} />
-      {hasNextPage && (
+      <ConceptList
+        concepts={concepts}
+        isView={isView}
+        conceptsSelected={conceptsSelected}
+      />
+      {hasNextPage && !isView && (
         <Pagination
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}

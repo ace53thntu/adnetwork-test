@@ -2,7 +2,7 @@
 import React, {useCallback} from 'react';
 
 //---> External Modules
-import {useForm, FormProvider, Controller} from 'react-hook-form';
+import {useForm, FormProvider, Controller, useWatch} from 'react-hook-form';
 import {Container, Form, Col, Button, Label, FormGroup, Row} from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import {useTranslation} from 'react-i18next';
@@ -52,6 +52,8 @@ const CampaignForm = ({
   });
 
   const {handleSubmit, control, errors} = methods;
+  console.log('🚀 ~ file: form.js ~ line 55 ~ errors', errors);
+  const startDate = useWatch({name: 'start_time', control});
 
   const onSubmit = useCallback(
     async formData => {
@@ -161,6 +163,10 @@ const CampaignForm = ({
                           dateFormat="dd/MM/yyyy"
                           placeholderText="dd/mm/yyyy"
                           disabled={isView}
+                          minDate={startDate}
+                          startDate={startDate}
+                          endDate={value}
+                          selectsEnd
                         />
                       )}
                     />

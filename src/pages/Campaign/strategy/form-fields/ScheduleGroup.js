@@ -17,7 +17,6 @@ const ScheduleGroup = () => {
       <Row>
         <Col md="6">
           <FormReactSelect
-            required
             name="schedule.week_days"
             label={'Week days'}
             placeholder={'Select'}

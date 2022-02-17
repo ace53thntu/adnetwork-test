@@ -18,6 +18,7 @@ import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 const StrategyEdit = () => {
   const {t} = useTranslation();
   const {strategyId} = useParams();
+
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );

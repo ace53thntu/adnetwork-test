@@ -61,7 +61,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
   };
 };
 
-export const formToApi = ({formData, isConcept = false}) => {
+export const formToApi = ({formData, isConcept = false, isSummary = false}) => {
   if (isConcept) {
     return {
       concept_uuids: formData?.concept_uuids?.filter(item => item) || []
@@ -81,13 +81,9 @@ export const formToApi = ({formData, isConcept = false}) => {
     impression,
     schedule
   } = formData;
-  console.log(
-    '🚀 ~ file: Strategy.js ~ line 73 ~ formToApi ~ schedule',
-    schedule
-  );
 
   const positionIds = position_uuids?.map(item => item?.value);
-  const startDate = moment(start_time).isSame(moment(), 'day')
+  let startDate = moment(start_time).isSame(moment(), 'day')
     ? null
     : moment(start_time).toISOString();
   const endDate = moment(end_time).endOf('day').toISOString();
@@ -96,11 +92,11 @@ export const formToApi = ({formData, isConcept = false}) => {
   const scheduleStartMinute = moment(schedule?.start_time).minutes();
   const scheduleEndHour = moment(schedule?.end_time).hours();
   const scheduleEndMinute = moment(schedule?.end_time).minutes();
-  console.log(
-    '🚀 ~ file: Strategy.js ~ line 85 ~ formToApi ~ scheduleStartHour',
-    scheduleStartHour,
-    scheduleStartMinute
-  );
+
+  // Set start time is null if start time < now
+  if (moment(start_time).isBefore(moment(), 'day')) {
+    startDate = null;
+  }
 
   const strategyReturn = {
     campaign_uuid: campaign?.value,
@@ -136,6 +132,11 @@ export const formToApi = ({formData, isConcept = false}) => {
   if (strategy_type?.value === 'premium') {
     const inventoriesBid = formData?.inventories_bid || [];
     strategyReturn.inventories_bid = inventoriesBid;
+  }
+
+  if (isSummary) {
+    strategyReturn.concept_uuids =
+      formData?.concept_uuids?.filter(item => item) || [];
   }
 
   return strategyReturn;

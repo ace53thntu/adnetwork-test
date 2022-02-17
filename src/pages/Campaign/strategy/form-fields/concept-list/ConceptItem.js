@@ -10,8 +10,17 @@ const propTypes = {
   isView: PropTypes.bool
 };
 
-const ConceptItem = ({conceptItem = {}, conceptIdx = 0, isView = false}) => {
-  const {register} = useFormContext();
+const ConceptItem = ({
+  conceptItem = {},
+  conceptIdx = 0,
+  defaultValue = '',
+  isView = false
+}) => {
+  const {register, setValue} = useFormContext();
+
+  React.useEffect(() => {
+    setValue(`concept_uuids[${conceptIdx}]`, defaultValue);
+  }, [conceptIdx, defaultValue, setValue]);
 
   return (
     <ListGroupItem>
@@ -26,7 +35,7 @@ const ConceptItem = ({conceptItem = {}, conceptIdx = 0, isView = false}) => {
                 name={`concept_uuids[${conceptIdx}]`}
                 id={`concept-${conceptItem?.id}`}
                 innerRef={register()}
-                value={conceptItem?.id}
+                defaultValue={conceptItem?.id}
               />
             ) : (
               conceptItem?.name

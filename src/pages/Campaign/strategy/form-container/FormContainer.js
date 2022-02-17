@@ -39,6 +39,10 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
+  console.log(
+    '🚀 ~ file: FormContainer.js ~ line 42 ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();
@@ -53,7 +57,8 @@ const FormContainer = ({
     resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit} = methods;
+  const {handleSubmit, errors} = methods;
+  console.log('🚀 ~ file: FormContainer.js ~ line 57 ~ errors', errors);
 
   React.useEffect(() => {
     if (isEdit || isView) {
@@ -73,13 +78,21 @@ const FormContainer = ({
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
-      const req = formToApi({formData, isConcept});
+      const req = formToApi({formData, isConcept, isSummary});
       console.log('======== FORM DATA', req);
       if (isEdit) {
         try {
-          await editStrategy({straId: strategyId, data: req});
-          ShowToast.success('Update success');
-          goTo({nextTab: 'concept'});
+          const {data} = await editStrategy({straId: strategyId, data: req});
+          ShowToast.success('Updated strategy successfully');
+          if (isConcept) {
+            navigate(
+              `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=summary&advertiser_id=${data?.advertiser_uuid}`
+            );
+          } else {
+            navigate(
+              `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
+            );
+          }
         } catch (error) {
           ShowToast.error(error?.msg);
         }
@@ -88,9 +101,9 @@ const FormContainer = ({
           const {data} = await createStrategy(req);
 
           const strategyId = data?.uuid;
-          ShowToast.success('Create success');
+          ShowToast.success('Created strategy successfully');
           navigate(
-            `/${RoutePaths.CAMPAIGN}/${formData?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
+            `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
           ShowToast.error(error?.msg);
@@ -100,9 +113,9 @@ const FormContainer = ({
     [
       createStrategy,
       editStrategy,
-      goTo,
       isConcept,
       isEdit,
+      isSummary,
       navigate,
       strategyId
     ]

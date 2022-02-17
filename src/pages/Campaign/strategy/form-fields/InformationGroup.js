@@ -71,7 +71,6 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
                       dateFormat="dd/MM/yyy"
                       placeholderText="dd/mm/yyyy"
                       disabled={isView}
-                      minDate={new Date()}
                     />
                   )}
                 />
@@ -142,7 +141,6 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
                 name="sources"
                 label={t('source')}
                 placeholder={t('selectSource')}
-                required
                 multiple
               />
             </Col>

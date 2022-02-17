@@ -20,7 +20,8 @@ import {RoutePaths} from 'constants/route-paths';
 const StrategyEditTabs = ({
   currentStrategy = {},
   campaignId,
-  isCreate = false
+  isCreate = false,
+  concepts
 }) => {
   const navigate = useNavigate();
   const query = useQueryString();
@@ -98,7 +99,7 @@ const StrategyEditTabs = ({
           content: (
             <div>
               <SummaryTab>
-                <FormContainer {...{...defaultProps, isSummary: true}}>
+                <FormContainer {...defaultProps} isSummary>
                   <StrategyForm
                     campaignId={campaignId}
                     isEdit={!isCreate}
@@ -155,8 +156,8 @@ const StrategyEditTabs = ({
         return EditTabs.CONCEPT.value;
       // case EditTabs.AUDIENCE.name:
       // return EditTabs.AUDIENCE.value;
-      case EditTabs.SUMMARY.value:
-        return EditTabs.SUMMARY.name;
+      case EditTabs.SUMMARY.name:
+        return EditTabs.SUMMARY.value;
       default:
         return EditTabs.DESCRIPTION.value;
     }

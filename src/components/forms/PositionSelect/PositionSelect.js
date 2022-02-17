@@ -20,7 +20,8 @@ const propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
-  multiple: PropTypes.bool
+  multiple: PropTypes.bool,
+  required: PropTypes.bool
 };
 
 const PositionSelect = ({
@@ -29,7 +30,8 @@ const PositionSelect = ({
   label = '',
   placeholder = '',
   disabled = false,
-  multiple = false
+  multiple = false,
+  required = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -38,7 +40,7 @@ const PositionSelect = ({
 
   return (
     <SelectPaginate
-      required
+      required={required}
       name={name}
       label={label}
       placeholder={placeholder}

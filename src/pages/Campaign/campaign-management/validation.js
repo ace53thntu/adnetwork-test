@@ -4,7 +4,7 @@ import {CAMPAIGN_KEYS} from '../constants';
 
 export const validationCampaign = (t, isEdit = false) => {
   const basicSchema = {
-    advertiser: yup.object().typeError('Required!'),
+    advertiser: yup.object().required(t('required')).typeError(t('required')),
     name: yup.string().required('Required!'),
     [CAMPAIGN_KEYS.START_TIME]: yup
       .date()
@@ -25,10 +25,23 @@ export const validationCampaign = (t, isEdit = false) => {
         [CAMPAIGN_KEYS.BUDGET]: yup.object().shape({
           [CAMPAIGN_KEYS.BUDGET_GLOBAL]: yup
             .string()
+            .when('daily', (value, schema) => {
+              if (!value) {
+                return schema.required(
+                  'Budget global or budget daily is required'
+                );
+              }
+
+              return schema;
+            })
             .test(
               'is-number',
               'The budget global must be a integer number and greater than 0.',
               val => {
+                if (!val) {
+                  return true;
+                }
+
                 const reg = /^\d+$/;
                 const parsed = parseInt(val, 10);
                 const isNumber = reg.test(val);
@@ -40,10 +53,14 @@ export const validationCampaign = (t, isEdit = false) => {
             ),
           [CAMPAIGN_KEYS.BUDGET_DAILY]: yup
             .string()
+
             .test(
               'is-number',
               'The budget daily must be a integer number and greater than 0.',
               val => {
+                if (!val) {
+                  return true;
+                }
                 const reg = /^\d+$/;
                 const parsed = parseInt(val, 10);
                 const isNumber = reg.test(val);
@@ -60,9 +77,15 @@ export const validationCampaign = (t, isEdit = false) => {
               // eslint-disable-next-line no-template-curly-in-string
               message: 'The budget daily must be less than the global',
               test: function (value) {
+                if (!value) {
+                  return true;
+                }
+
                 // You can access the budget global field with `this.parent`.
                 return (
-                  value < parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
+                  value &&
+                  parseInt(value) <
+                    parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
                 );
               }
             })
@@ -70,10 +93,22 @@ export const validationCampaign = (t, isEdit = false) => {
         [CAMPAIGN_KEYS.IMPRESSION]: yup.object().shape({
           [CAMPAIGN_KEYS.BUDGET_GLOBAL]: yup
             .string()
+            .when('daily', (value, schema) => {
+              if (!value) {
+                return schema.required(
+                  'Budget global or budget daily is required'
+                );
+              }
+
+              return schema;
+            })
             .test(
               'is-number',
               'The impression global must be a integer number and greater than 0.',
               val => {
+                if (!val) {
+                  return true;
+                }
                 const reg = /^\d+$/;
                 const parsed = parseInt(val, 10);
                 const isNumber = reg.test(val);
@@ -88,7 +123,11 @@ export const validationCampaign = (t, isEdit = false) => {
             .test(
               'is-number',
               'The impression daily must be a integer number and greater than 0.',
+
               val => {
+                if (!val) {
+                  return true;
+                }
                 const reg = /^\d+$/;
                 const parsed = parseInt(val, 10);
                 const isNumber = reg.test(val);
@@ -105,9 +144,14 @@ export const validationCampaign = (t, isEdit = false) => {
               // eslint-disable-next-line no-template-curly-in-string
               message: 'The impression daily must be less than the global',
               test: function (value) {
+                if (!value) {
+                  return true;
+                }
+
                 // You can access the budget global field with `this.parent`.
                 return (
-                  value < parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
+                  parseInt(value) <
+                  parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
                 );
               }
             })
