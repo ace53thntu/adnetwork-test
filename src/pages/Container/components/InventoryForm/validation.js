@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {InputStatus} from 'constants/misc';
-import {validateFloatInput} from 'utils/yupValidations';
+import {validateFloatInput, validateNumberInput} from 'utils/yupValidations';
 
 export const validationInventory = () => {
   return yupResolver(
@@ -66,7 +66,27 @@ export const validationInventory = () => {
           }),
         duration: Yup.string().test('is-number', 'Invalid number', value => {
           return validateFloatInput(value);
-        })
+        }),
+        min_bitrate: Yup.string().test('is-number', 'Invalid number', value => {
+          return validateNumberInput(value);
+        }),
+        max_bitrate: Yup.string().test('is-number', 'Invalid number', value => {
+          return validateNumberInput(value);
+        }),
+        min_duration: Yup.string().test(
+          'is-number',
+          'Invalid number',
+          value => {
+            return validateNumberInput(value);
+          }
+        ),
+        max_duration: Yup.string().test(
+          'is-number',
+          'Invalid number',
+          value => {
+            return validateNumberInput(value);
+          }
+        )
       })
     })
   );

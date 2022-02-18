@@ -17,6 +17,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
   } = formData;
 
   const formatData = format?.value || '';
+
   const minimumPriceData = parseFloat(floor_price) || 0;
   const dealFloorPriceData = parseFloat(deal_floor_price) || 0;
   const formatMetadata = {
@@ -24,8 +25,19 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     duration: parseInt(metadata?.duration, 10) || 0,
     width: parseInt(metadata?.width, 10) || 0,
     height: parseInt(metadata?.height, 10) || 0
-    // tags: Object.assign({}, metadata?.tags)
   };
+
+  // Metadata video format
+  if (formatData === 'video') {
+    formatMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || 0;
+    formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || 0;
+    formatMetadata.min_duration = parseInt(metadata?.min_duration, 10) || 0;
+    formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || 0;
+    formatMetadata.protocols =
+      metadata?.protocols?.length > 0
+        ? Array.from(metadata?.protocols, item => item.value)
+        : [];
+  }
   const tags = formTags?.map(item => item?.value);
 
   const marketDsps = market_dsps

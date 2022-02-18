@@ -2,7 +2,7 @@
 import React from 'react';
 
 //---> External Modules
-import {useFormContext} from 'react-hook-form';
+import {useFormContext, useWatch} from 'react-hook-form';
 import {Col, Row} from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 
@@ -10,11 +10,13 @@ import {useTranslation} from 'react-i18next';
 import {FormReactSelect, FormTextInput} from 'components/forms';
 import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
+import {ProtocolOptions} from 'constants/misc';
 
 const InventoryProperty = ({currentInventory = null}) => {
   const {t} = useTranslation();
-  const {formState} = useFormContext();
+  const {formState, control} = useFormContext();
   const inventoryTags = getInventoryTags();
+  const formatTypeSelected = useWatch({name: 'format', control});
 
   return (
     <>
@@ -45,6 +47,52 @@ const InventoryProperty = ({currentInventory = null}) => {
           />
         </Col>
       </Row>
+      {formatTypeSelected?.value === 'video' && (
+        <Row>
+          <Col sm={3}>
+            <FormTextInput
+              name="metadata.min_bitrate"
+              placeholder="0"
+              label={t('minBitrate')}
+              disable={formState.isSubmitting}
+            />
+          </Col>
+          <Col sm={3}>
+            <FormTextInput
+              name="metadata.max_bitrate"
+              placeholder="0"
+              label={t('maxBitrate')}
+              disable={formState.isSubmitting}
+            />
+          </Col>
+          <Col sm={3}>
+            <FormTextInput
+              name="metadata.min_duration"
+              placeholder="0"
+              label={t('minDuration')}
+              disable={formState.isSubmitting}
+            />
+          </Col>
+          <Col sm={3}>
+            <FormTextInput
+              name="metadata.max_duration"
+              placeholder="0"
+              label={t('maxDuration')}
+              disable={formState.isSubmitting}
+            />
+          </Col>
+          <Col sm="12">
+            <FormReactSelect
+              name="metadata.protocols"
+              label={t('protocols')}
+              placeholder={t('selectProtocol')}
+              options={ProtocolOptions}
+              multiple
+            />
+          </Col>
+        </Row>
+      )}
+
       <Row>
         <Col sm={4}>
           <FormTextInput

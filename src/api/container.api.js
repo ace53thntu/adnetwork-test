@@ -10,10 +10,6 @@ class ContainerAPI extends XHRRequest {
   }
 
   getAllContainer = ({params, options}) => {
-    console.log(
-      '🚀 ~ file: container.api.js ~ line 13 ~ ContainerAPI ~ params',
-      params
-    );
     return this.get(endpoints.container.container, params, options);
   };
 

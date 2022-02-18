@@ -62,6 +62,12 @@ const en = {
   headerBidding: 'Header bidding',
   biddingUrl: 'Bidding url',
   impression: 'Impression',
+  minBitrate: 'Min bitrate',
+  maxBitrate: 'Max bitrate',
+  minDuration: 'Min Duration',
+  maxDuration: 'Max Duration',
+  protocols: 'Protocols',
+  selectProtocol: 'Select protocol...',
 
   // Main Menu
   userManagement: 'User Management',

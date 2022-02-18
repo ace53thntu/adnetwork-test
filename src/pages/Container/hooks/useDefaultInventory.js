@@ -1,3 +1,4 @@
+import {ProtocolOptions} from 'constants/misc';
 import {useMemo} from 'react';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getInventoryFormats, getInventoryTypes} from '../constants';
@@ -41,6 +42,20 @@ export const useDefaultInventory = ({inventory}) => {
           }))
         : [];
       let tagsParsed = tags?.map(tag => ({value: tag, name: capitalize(tag)}));
+      const protocols =
+        metadata?.protocols?.length > 0
+          ? metadata?.protocols?.map(item => {
+              const protocolFound = ProtocolOptions?.find(
+                option => option.value === item
+              );
+              if (protocolFound) {
+                return protocolFound;
+              }
+              return null;
+            })
+          : [];
+      metadata.protocols = protocols;
+
       return {
         uuid,
         name,
