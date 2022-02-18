@@ -14,7 +14,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
-import {formToApi} from 'entities/Strategy';
+import {apiToForm, formToApi} from 'entities/Strategy';
 import {
   setStrategyInventoryListRedux,
   setStrategyInventoryTempListRedux
@@ -57,7 +57,7 @@ const FormContainer = ({
     resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit, errors} = methods;
+  const {handleSubmit, errors, reset} = methods;
   console.log('🚀 ~ file: FormContainer.js ~ line 57 ~ errors', errors);
 
   React.useEffect(() => {
@@ -83,6 +83,8 @@ const FormContainer = ({
       if (isEdit) {
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
+          const defaultValueUpdated = apiToForm({strategyData: data});
+          reset(defaultValueUpdated);
           ShowToast.success('Updated strategy successfully');
           if (isConcept) {
             navigate(
@@ -117,6 +119,7 @@ const FormContainer = ({
       isEdit,
       isSummary,
       navigate,
+      reset,
       strategyId
     ]
   );

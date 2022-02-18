@@ -221,6 +221,10 @@ const CappingList = ({referenceUuid = ''}) => {
       toggleModal();
       setActiveCapping(null);
     } catch (err) {
+      console.log(
+        '🚀 ~ file: CappingList.js ~ line 199 ~ onEditCapping ~ err',
+        err
+      );
       setIsSubmitting(false);
 
       ShowToast.error(err?.msg || 'Fail to update capping');
