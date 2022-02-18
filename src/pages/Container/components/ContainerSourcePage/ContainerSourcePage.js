@@ -1,7 +1,5 @@
 // import PropTypes from 'prop-types';
-import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useRedirectInContainer} from 'pages/Container/hooks/useRedirectInContainer';
-import {useGetInventoryByPage} from 'queries/inventory';
 import * as React from 'react';
 import {useParams} from 'react-router';
 import {Col, Container, Row} from 'reactstrap';
@@ -13,11 +11,8 @@ import {WebsiteTag} from '../WebsiteTag';
 import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
 
 function ContainerSourcePage(props) {
-  const {source, pageId} = useParams();
+  const {source} = useParams();
   const {isFetching, isError, error} = useRedirectInContainer();
-  const {data: {items: inventories = []} = {}} = useGetInventoryByPage(pageId, {
-    per_page: DEFAULT_PAGINATION.perPage
-  });
 
   const _renderBySource = () => {
     if (isError) {
@@ -31,13 +26,13 @@ function ContainerSourcePage(props) {
     }
 
     if (source === SOURCES.web) {
-      return <WebsiteTag inventories={inventories} />;
+      return <WebsiteTag />;
     }
     if (source === SOURCES.android) {
-      return <AndroidTag inventories={inventories} />;
+      return <AndroidTag />;
     }
     if (source === SOURCES.ios) {
-      return <IosTag inventories={inventories} />;
+      return <IosTag />;
     }
   };
 

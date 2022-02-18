@@ -31,7 +31,7 @@ import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 
-const ActionIndexs = {
+const ActionIndexes = {
   EDIT: 0,
   DELETE: 1
 };
@@ -114,13 +114,13 @@ function InventoryList() {
   };
 
   function onClickAction(actionIndex, currentItem) {
-    if (actionIndex === ActionIndexs.EDIT) {
+    if (actionIndex === ActionIndexes.EDIT) {
       setIsOpenUpdate(true);
       setInventoryId(currentItem?.uuid);
       return;
     }
 
-    if (actionIndex === ActionIndexs.DELETE) {
+    if (actionIndex === ActionIndexes.DELETE) {
       setInventoryId(currentItem?.uuid);
       setOpenConfirm(true);
     }

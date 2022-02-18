@@ -26,7 +26,7 @@ function WebsiteTag(props) {
         <TabPane tabId={0} className="mt-2">
           {activeStep === 0 && (
             <PagesAndEventsTab tabProps={tabProps}>
-              <InventoryList inventories={props.inventories || []} />
+              <InventoryList />
             </PagesAndEventsTab>
           )}
         </TabPane>
