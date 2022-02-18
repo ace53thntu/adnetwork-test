@@ -1,4 +1,4 @@
-import {CappingTypes} from 'constants/misc';
+import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import moment from 'moment';
 import {getTimeZoneOffset} from 'utils/metrics';
 
@@ -65,7 +65,11 @@ export const formToApi = ({formData, type}) => {
 export const getExistedType = cappings => {
   return cappings.reduce((acc, capping) => {
     if (!acc.includes(capping?.type)) {
-      acc.push(capping.type);
+      acc.push({
+        type: capping.type,
+        sub_type:
+          capping.time_frame === BudgetTimeFrames.DAILY ? 'daily' : 'global'
+      });
     }
     return acc;
   }, []);

@@ -115,3 +115,22 @@ export const CappingTypes = {
   SCHEDULE: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
   KEYWORD: {value: 'KW', label: 'Keyword'} // capping by keywords
 };
+
+export const CappingTypeButtons = [
+  {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
+  {type: 'BDG', sub_type: 'daily', label: 'Budget daily'},
+  {type: 'BDG', sub_type: 'global', label: 'Budget global'},
+  {type: 'IMP', sub_type: 'daily', label: 'Impression daily'},
+  {type: 'IMP', sub_type: 'global', label: 'Impression global'},
+  {type: 'DM', sub_type: '', label: 'Domain'},
+  {type: 'KW', sub_type: '', label: 'Keyword'},
+  {type: 'SCHL', sub_type: '', label: 'Schedule'}
+];
+
+export const CappingReferenceTypes = {
+  CAMPAIGN: 'campaign',
+  STRATEGY: 'strategy',
+  DSP: 'dsp',
+  INVENTORY: 'inventory',
+  ADVERTISER: 'advertiser'
+};

@@ -1,4 +1,5 @@
 // import PropTypes from 'prop-types';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useRedirectInContainer} from 'pages/Container/hooks/useRedirectInContainer';
 import {useGetInventoryByPage} from 'queries/inventory';
 import * as React from 'react';
@@ -14,7 +15,9 @@ import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
 function ContainerSourcePage(props) {
   const {source, pageId} = useParams();
   const {isFetching, isError, error} = useRedirectInContainer();
-  const {data: {items: inventories = []} = {}} = useGetInventoryByPage(pageId);
+  const {data: {items: inventories = []} = {}} = useGetInventoryByPage(pageId, {
+    per_page: DEFAULT_PAGINATION.perPage
+  });
 
   const _renderBySource = () => {
     if (isError) {

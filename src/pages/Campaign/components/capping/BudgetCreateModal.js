@@ -22,26 +22,117 @@ import {
 import {schemaValidate} from './validation';
 import {ButtonLoading} from 'components/common';
 import {ActiveToggle, FormTextInput} from 'components/forms';
-import {CappingTypes} from 'constants/misc';
+import {
+  BudgetTimeFrames,
+  CappingReferenceTypes,
+  CappingTypes
+} from 'constants/misc';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
-const propTypes = {
-  openForm: PropTypes.bool,
-  toggleModal: PropTypes.func
-};
+import {useCreateCapping} from 'queries/capping';
 
-const BudgetCreateModal = ({openForm = false, toggleModal = () => null}) => {
-  const {t} = useTranslation();
-  const methods = useForm({
-    defaultValues: {
+const initializingDefaultValues = ({cappingType, referenceType = ''}) => {
+  if (
+    [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+      cappingType?.type
+    )
+  ) {
+    return {
       target: '',
       status: 'active'
-    },
+    };
+  }
+
+  if (CappingTypes.DOMAIN.value === cappingType.type) {
+    return {
+      domain_group_white_list_uuid: [],
+      domain_group_black_list_uuid: [],
+      status: 'active'
+    };
+  }
+
+  if (CappingTypes.KEYWORD.value === cappingType.type) {
+    return {
+      keywords_list_white_uuid: [],
+      keywords_list_black_uuid: [],
+      status: 'active'
+    };
+  }
+
+  if (
+    CappingTypes.SCHEDULE.value === cappingType.type &&
+    referenceType === CappingReferenceTypes.STRATEGY
+  ) {
+    return {
+      schedule: {
+        week_days: [],
+        start_time: null,
+        end_time: null,
+        time_zone: '+7'
+      },
+      status: 'active'
+    };
+  }
+};
+
+const propTypes = {
+  openForm: PropTypes.bool,
+  toggleModal: PropTypes.func,
+  cappingType: PropTypes.object,
+  referenceType: PropTypes.string,
+  referenceUuid: PropTypes.string
+};
+
+const BudgetCreateModal = ({
+  openForm = false,
+  toggleModal = () => null,
+  cappingType = {},
+  referenceType = '',
+  referenceUuid = ''
+}) => {
+  console.log(
+    '🚀 ~ file: BudgetCreateModal.js ~ line 88 ~ cappingType',
+    cappingType
+  );
+  const {t} = useTranslation();
+  const {mutateAsync: createCapping} = useCreateCapping();
+  const methods = useForm({
+    defaultValues: initializingDefaultValues({cappingType, referenceType}),
     resolver: schemaValidate(t, CappingTypes.BUDGET.value)
   });
 
   const {handleSubmit, formState, control} = methods;
 
-  function onSubmit(formData) {}
+  async function onSubmit(formData) {
+    console.log(
+      '🚀 ~ file: BudgetCreateModal.js ~ line 94 ~ onSubmit ~ formData',
+      formData
+    );
+    const bodyRequest = {
+      reference_type: referenceType,
+      reference_uuid: referenceUuid,
+      type: cappingType?.type,
+      target: formData?.target ? parseInt(formData?.target, 10) : 0,
+      status: formData?.status
+    };
+
+    if (
+      [
+        CappingTypes.BUDGET_MANAGER.value,
+        CappingTypes.BUDGET.value,
+        CappingTypes.IMPRESSION.value
+      ].includes(cappingType.type)
+    ) {
+      if (cappingType.sub_type === BudgetTimeFrames.DAILY) {
+        bodyRequest.time_frame = BudgetTimeFrames.DAILY;
+      } else {
+        bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
+      }
+    }
+
+    try {
+      await createCapping(bodyRequest);
+    } catch (err) {}
+  }
 
   return (
     <Modal isOpen={openForm} size="lg">
@@ -54,36 +145,34 @@ const BudgetCreateModal = ({openForm = false, toggleModal = () => null}) => {
               onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
             >
-              <Row>
-                <Col md="6">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('global')}
-                    name="budget.global"
-                    label={t('global')}
-                    isRequired
-                  />
-                </Col>
-                <Col md="6">
-                  <FormTextInput
-                    type="number"
-                    placeholder={t('daily')}
-                    name="budget.daily"
-                    label={t('daily')}
-                    isRequired
-                  />
-                </Col>
-                <Col md="3">
-                  <Label className="mr-5">Status</Label>
-                  <Controller
-                    control={control}
-                    name={CAMPAIGN_KEYS.STATUS}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToggle value={value} onChange={onChange} />
-                    )}
-                  />
-                </Col>
-              </Row>
+              {[
+                CappingTypes.BUDGET_MANAGER.value,
+                CappingTypes.BUDGET.value,
+                CappingTypes.IMPRESSION.value
+              ].includes(cappingType.type) && (
+                <Row>
+                  <Col md="6">
+                    <FormTextInput
+                      type="number"
+                      placeholder={t('target')}
+                      name="target"
+                      label={t('target')}
+                      isRequired
+                    />
+                  </Col>
+
+                  <Col md="3">
+                    <Label className="mr-5">Status</Label>
+                    <Controller
+                      control={control}
+                      name={CAMPAIGN_KEYS.STATUS}
+                      render={({onChange, onBlur, value, name}) => (
+                        <ActiveToggle value={value} onChange={onChange} />
+                      )}
+                    />
+                  </Col>
+                </Row>
+              )}
             </Form>
           </FormProvider>
         </ModalBody>

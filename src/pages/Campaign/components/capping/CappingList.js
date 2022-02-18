@@ -65,7 +65,7 @@ const propTypes = {
   referenceUuid: PropTypes.string.isRequired
 };
 
-const CappingList = ({referenceUuid = ''}) => {
+const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   const {t} = useTranslation();
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
@@ -221,10 +221,6 @@ const CappingList = ({referenceUuid = ''}) => {
       toggleModal();
       setActiveCapping(null);
     } catch (err) {
-      console.log(
-        '🚀 ~ file: CappingList.js ~ line 199 ~ onEditCapping ~ err',
-        err
-      );
       setIsSubmitting(false);
 
       ShowToast.error(err?.msg || 'Fail to update capping');
@@ -251,7 +247,11 @@ const CappingList = ({referenceUuid = ''}) => {
   return (
     <div>
       <div className="d-flex justify-content-end mb-2">
-        <AddTypeButton existedTypes={existedTypes} />
+        <AddTypeButton
+          existedTypes={existedTypes}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+        />
       </div>
       {isLoading && <LoadingIndicator />}
 

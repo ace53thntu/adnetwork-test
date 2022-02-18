@@ -158,7 +158,7 @@ function InventoryList() {
           </Button>
         </div>
       </CardHeader>
-      <div className="scroll-area-lg">
+      <div className="scroll-area-lg" style={{height: 430}}>
         <PerfectScrollbar>
           <CardBody>
             {isFetching && <LoadingIndicator />}

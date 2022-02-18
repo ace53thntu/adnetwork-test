@@ -12,6 +12,7 @@ import CampaignForm from './form';
 import {EntityTypes} from 'constants/report';
 import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
+import {CappingReferenceTypes} from 'constants/misc';
 
 const propTypes = {
   currentCampaign: PropTypes.any
@@ -42,7 +43,12 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
         },
         {
           name: t('capping'),
-          content: <Capping referenceUuid={currentCampaign?.uuid} />
+          content: (
+            <Capping
+              referenceUuid={currentCampaign?.uuid}
+              referenceType={CappingReferenceTypes.CAMPAIGN}
+            />
+          )
         },
         {
           name: t('report'),
