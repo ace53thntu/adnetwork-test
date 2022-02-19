@@ -9,20 +9,12 @@
 import React from 'react';
 
 //---> External Modules
-import {
-  Button,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Card,
-  CardBody,
-  Badge
-} from 'reactstrap';
+import {Button, ModalHeader, ModalBody, ModalFooter, Badge} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import {makeStyles} from '@material-ui/core';
 
 //---> Internal Modules
-import {getInventoryTypeColor} from '../helpers';
+import {getInventoryMarketTypeColor, getInventoryTypeColor} from '../helpers';
 import {INPUTS_NAME} from '../constants';
 import {mappingFormToApi} from './dto';
 import {
@@ -42,6 +34,8 @@ import {getResponseData} from 'utils/helpers/misc.helpers';
 import {IS_RESPONSE_ALL} from 'constants/misc';
 import {schemaValidate} from './validation';
 import {useTranslation} from 'react-i18next';
+import {BidDealTabs} from './bid-deal-tabs';
+import {Collapse} from 'components/common';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -179,84 +173,91 @@ const InventoryDetails = ({
         id="bidInventory"
       >
         <BlockUi tag="div" blocking={formState.isSubmitting}>
-          <ModalHeader>
+          <ModalHeader toggle={toggle}>
             {title} {inventoryData?.name}
           </ModalHeader>
           <ModalBody>
-            <Card className="mb-3">
-              <CardBody className={classes.bgHover}>
-                <div className="d-flex flex-wrap">
-                  {/* Type */}
-                  <InventoryPartial label="Type">
-                    <Badge
-                      color={getInventoryTypeColor({type: inventoryData?.type})}
-                    >
-                      {inventoryData?.type}
-                    </Badge>
-                  </InventoryPartial>
+            <Collapse unMount={false} initialOpen title="Description">
+              <div className={`d-flex flex-wrap ${classes.bgHover}`}>
+                {/* Type */}
+                <InventoryPartial label="Type">
+                  <Badge
+                    color={getInventoryTypeColor({type: inventoryData?.type})}
+                  >
+                    {inventoryData?.type}
+                  </Badge>
+                </InventoryPartial>
+                <InventoryPartial label="Market Type">
+                  <Badge
+                    color={getInventoryMarketTypeColor({
+                      type: inventoryData?.market_type
+                    })}
+                  >
+                    {inventoryData?.market_type}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Click rate */}
-                  <InventoryPartial label="Click rate">
-                    <Badge color="light" pill>
-                      {inventoryData?.click_rate ?? 0}
-                    </Badge>
-                  </InventoryPartial>
+                {/* Click rate */}
+                <InventoryPartial label="Click rate">
+                  <Badge color="light" pill>
+                    {inventoryData?.click_rate ?? 0}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Fill rate */}
-                  <InventoryPartial label="Fill rate">
-                    <Badge color="info" pill>
-                      {inventoryData?.fill_rate ?? 0}
-                    </Badge>
-                  </InventoryPartial>
+                {/* Fill rate */}
+                <InventoryPartial label="Fill rate">
+                  <Badge color="info" pill>
+                    {inventoryData?.fill_rate ?? 0}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Minimum Price */}
-                  <InventoryPartial label="Floor price">
-                    <Badge color="warning" pill>
-                      {inventoryData?.floor_price ?? 0}
-                    </Badge>
-                  </InventoryPartial>
+                {/* Minimum Price */}
+                <InventoryPartial label="Floor price">
+                  <Badge color="warning" pill>
+                    {inventoryData?.floor_price ?? 0}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Format */}
-                  <InventoryPartial label="Format">
-                    {inventoryData?.format}
-                  </InventoryPartial>
-                  {/* Merge */}
-                  <InventoryPartial label="Merge">
-                    {inventoryData?.merge}
-                  </InventoryPartial>
+                {/* Format */}
+                <InventoryPartial label="Format">
+                  {inventoryData?.format}
+                </InventoryPartial>
 
-                  {/* Position */}
-                  <InventoryPartial label="Position">
-                    {inventoryData?.position}
-                  </InventoryPartial>
+                {/* Position */}
+                <InventoryPartial label="Position">
+                  {inventoryData?.position_name}
+                </InventoryPartial>
 
-                  {/* Width */}
-                  <InventoryPartial label="Width">
-                    <Badge color="light" pill>
-                      {inventoryData?.metadata?.width ?? 0}
-                    </Badge>
-                  </InventoryPartial>
+                {/* Width */}
+                <InventoryPartial label="Width">
+                  <Badge color="light" pill>
+                    {inventoryData?.metadata?.width ?? 0}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Height */}
-                  <InventoryPartial label="Height">
-                    <Badge color="light" pill>
-                      {inventoryData?.metadata?.height ?? 0}
-                    </Badge>
-                  </InventoryPartial>
+                {/* Height */}
+                <InventoryPartial label="Height">
+                  <Badge color="light" pill>
+                    {inventoryData?.metadata?.height ?? 0}
+                  </Badge>
+                </InventoryPartial>
 
-                  {/* Background color */}
-                  <InventoryPartial label="Background color">
-                    <span
-                      style={{
-                        color: inventoryData?.metadata?.background_color ?? ''
-                      }}
-                    >
-                      {inventoryData?.metadata?.background_color}
-                    </span>
-                  </InventoryPartial>
-                </div>
-              </CardBody>
-            </Card>
+                {/* Background color */}
+                <InventoryPartial label="Background color">
+                  <span
+                    style={{
+                      color: inventoryData?.metadata?.background_color ?? ''
+                    }}
+                  >
+                    {inventoryData?.metadata?.background_color}
+                  </span>
+                </InventoryPartial>
+              </div>
+            </Collapse>
+
+            {!isBid && !isDeal && (
+              <BidDealTabs inventoryId={inventoryData?.uuid} />
+            )}
             {isBid && <InventoryBidForm excludeDates={excludeDates} />}
             {/* Render date range picker */}
             {isDeal && <DealForm excludeDates={excludeDates} />}

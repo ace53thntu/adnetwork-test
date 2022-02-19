@@ -211,6 +211,7 @@ const InventoryList = ({page, filterParams = null}) => {
         size="lg"
         className="modal-dialog shadow-none"
         isOpen={openModal}
+        style={{maxWidth: 1000}}
       >
         <InventoryDetails
           modal={openModal}

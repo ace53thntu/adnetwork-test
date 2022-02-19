@@ -93,6 +93,8 @@ const en = {
   manageTrackerTemplate: 'Manage Tracker Template',
   manageTracker: 'Manage Tracker',
   trackerList: 'Tracker list',
+  dealList: 'Deal list',
+  bidList: 'Bid list',
 
   // Card Header
   advertiserList: 'Advertiser List',
