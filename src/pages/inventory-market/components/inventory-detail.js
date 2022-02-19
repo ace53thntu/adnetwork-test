@@ -124,10 +124,6 @@ const InventoryDetails = ({
     dataList: isBid ? bidsList : listDeals,
     dsp: selectedDsp?.value
   });
-  console.log(
-    '🚀 ~ file: inventory-detail.js ~ line 90 ~ excludeDates',
-    excludeDates
-  );
 
   async function executeDealInventory({formData}) {
     const submitData = mappingFormToApi({
@@ -143,7 +139,6 @@ const InventoryDetails = ({
       ShowToast.success('Deal inventory successfully');
       toggle();
     } catch (error) {
-      console.log('🚀 ~ file: inventory-detail.js ~ line 75 ~ error', error);
       ShowToast.error(error?.msg || 'Fail to deal inventory');
     }
   }

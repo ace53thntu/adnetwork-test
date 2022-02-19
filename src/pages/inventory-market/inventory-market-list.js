@@ -98,7 +98,8 @@ const InventoryMarket = () => {
       },
       {
         header: 'Cost',
-        accessor: 'cost'
+        accessor: 'cost',
+        cell: row => row?.value?.toString() || ''
       },
       {
         accessor: 'status',

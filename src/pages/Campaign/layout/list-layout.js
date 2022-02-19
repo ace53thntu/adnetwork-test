@@ -17,7 +17,7 @@ const ListCampaignLayout = () => {
   const query = useQueryString();
   const mode = query.get('mode') || 'campaign';
   const {campaignId} = useParams();
-  const [typeView, setTypeView] = React.useState('');
+  const [typeView, setTypeView] = React.useState(mode);
 
   const goToCreate = React.useCallback(() => {
     if (typeView === 'campaign') {

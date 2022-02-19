@@ -102,6 +102,10 @@ function SidebarTree(props) {
         }
       }
       if (isCampaign) {
+        console.log(
+          '🚀 ~ file: SidebarTree.js ~ line 105 ~ isCampaign',
+          isCampaign
+        );
         if (!expanded) {
           const {parentId, id: campaignId} = node;
           let children = [];
