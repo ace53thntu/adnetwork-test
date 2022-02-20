@@ -38,10 +38,12 @@ const CustomPagination = props => {
   }
 
   const onNext = evt => {
+    evt.preventDaufault();
     onPageChange(evt, currentPage + 1);
   };
 
   const onPrevious = evt => {
+    evt.preventDaufault();
     onPageChange(evt, currentPage - 1);
   };
 
@@ -67,7 +69,9 @@ const CustomPagination = props => {
           if (pageNumber === DOTS) {
             return (
               <PaginationItem key={`pr-dot`} disabled={disabled}>
-                <PaginationLink href="#">&#8230;</PaginationLink>
+                <PaginationLink href="#" onClick={evt => evt.preventDefault()}>
+                  &#8230;
+                </PaginationLink>
               </PaginationItem>
             );
           }

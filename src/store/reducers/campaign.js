@@ -141,12 +141,12 @@ function removeInventoryStrategyList(state, action) {
 }
 
 function handleSetStrategyInventoryList(state, action) {
-  const {inventoryList} = action.payload;
+  const {inventoryList = []} = action.payload;
   state.inventoryList = inventoryList;
 }
 
 function setStrategyInventoryTempList(state, action) {
-  const {inventoryList} = action.payload;
+  const {inventoryList = []} = action.payload;
   state.inventoryTempList = inventoryList;
 }
 

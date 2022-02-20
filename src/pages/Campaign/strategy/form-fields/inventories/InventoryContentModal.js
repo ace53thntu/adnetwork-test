@@ -40,6 +40,10 @@ const propTypes = {
 const InventoryContentModal = ({containerId}) => {
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 43 ~ InventoryContentModal ~ inventoryIdsChecked',
+    inventoryIdsChecked
+  );
 
   const dispatch = useDispatch();
   const strategyInventoriesTemp = useStrategyInventoryTempSelector();
@@ -73,7 +77,10 @@ const InventoryContentModal = ({containerId}) => {
   });
 
   React.useEffect(() => {
-    const idsTemp = strategyInventoriesTemp?.map(item => item?.uuid);
+    const idsTemp =
+      strategyInventoriesTemp?.length > 0
+        ? strategyInventoriesTemp?.map(item => item?.uuid)
+        : [];
     setInventoryIdsChecked(idsTemp);
   }, [strategyInventoriesTemp]);
 

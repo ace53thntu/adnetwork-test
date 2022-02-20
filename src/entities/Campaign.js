@@ -58,10 +58,15 @@ export const formToApi = formData => {
     keywords_list_black
   } = formData;
 
-  const formatStartDate = moment(start_time).isSame(moment(), 'day')
+  let formatStartDate = moment(start_time).isSame(moment(), 'day')
     ? null
     : moment(start_time).toISOString();
   const formaEndDate = moment(end_time).endOf('day').toISOString();
+
+  // Set start time is null if start time < now
+  if (moment(start_time).isBefore(moment(), 'day')) {
+    formatStartDate = null;
+  }
 
   const requestBody = {
     [CAMPAIGN_KEYS.ADVERTISER_ID]: advertiser_uuid?.value || undefined,

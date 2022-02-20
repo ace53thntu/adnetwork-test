@@ -4,7 +4,10 @@ import {CAMPAIGN_KEYS} from '../constants';
 
 export const validationCampaign = (t, isEdit = false) => {
   const basicSchema = {
-    advertiser: yup.object().required(t('required')).typeError(t('required')),
+    advertiser_uuid: yup
+      .object()
+      .required(t('required'))
+      .typeError(t('required')),
     name: yup.string().required('Required!'),
     [CAMPAIGN_KEYS.START_TIME]: yup
       .date()
