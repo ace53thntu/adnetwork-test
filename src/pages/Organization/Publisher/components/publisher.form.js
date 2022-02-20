@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 //---> External Modules
@@ -23,13 +23,8 @@ import BlockUi from 'react-block-ui';
 import {INPUT_NAME} from '../constants';
 import {mappingFormToApi} from './dto';
 import {useDefaultPublisher} from 'pages/Organization/hooks/useDefaultPublisher';
-import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {
-  useCreatePublisher,
-  useEditPublisher,
-  useGetPublisher
-} from 'queries/publisher';
+import {useCreatePublisher, useEditPublisher} from 'queries/publisher';
 import {schemaValidate} from './validation';
 import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
@@ -43,12 +38,11 @@ const PublisherForm = ({
   className = '',
   title = 'Create new Publisher',
   isEdit = false,
-  publisherId = ''
+  publisher = null
 }) => {
   const role = getRole();
-
   const {t} = useTranslation();
-  const {data: publisher, isFetched, isLoading} = useGetPublisher(publisherId);
+  const publisherId = publisher?.uuid || '';
   const {mutateAsync: createPublisher} = useCreatePublisher();
   const {mutateAsync: editPublisher} = useEditPublisher();
   const defaultValues = useDefaultPublisher({
@@ -59,14 +53,7 @@ const PublisherForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, reset} = methods;
-
-  useEffect(() => {
-    //---> Reset default value when API response
-    if (isFetched && defaultValues?.name) {
-      // reset(defaultValues);
-    }
-  }, [defaultValues, reset, isFetched]);
+  const {handleSubmit, formState, control} = methods;
 
   /**
    * Submit form
@@ -85,7 +72,6 @@ const PublisherForm = ({
         ShowToast.success('Created publisher successfully');
         toggle();
       } catch (err) {
-        console.log('🚀 ~ file: publisher.form.js ~ line 61 ~ err', err);
         ShowToast.error(err?.msg || 'Fail to create publisher');
       }
     } else {
@@ -107,7 +93,6 @@ const PublisherForm = ({
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader>{title}</ModalHeader>
             <ModalBody>
-              {isLoading && <LoadingIndicator />}
               <Row>
                 <Col sm={12}>
                   <FormTextInput

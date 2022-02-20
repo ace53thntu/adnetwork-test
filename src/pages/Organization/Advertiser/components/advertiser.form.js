@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 //---> External Modules
@@ -23,13 +23,8 @@ import BlockUi from 'react-block-ui';
 import {INPUT_NAME} from '../constants';
 import SelectTag from './SelectTag';
 import {mappingFormToApi} from './dto';
-import {
-  useCreateAdvertiser,
-  useEditAdvertiser,
-  useGetAdvertiser
-} from 'queries/advertiser';
+import {useCreateAdvertiser, useEditAdvertiser} from 'queries/advertiser';
 import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
-import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from './validation';
 import {Link} from 'react-router-dom';
@@ -37,7 +32,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
-import DomainSelect from 'pages/Organization/components/domain-select';
+import DomainSelect from './DomainSelect';
 
 const AdvertiserForm = ({
   modal = false,
@@ -46,13 +41,11 @@ const AdvertiserForm = ({
   title = 'Create new Advertiser',
   IABsOptions = [],
   isEdit = false,
-  advertiserId = ''
+  advertiser = ''
 }) => {
   const {t} = useTranslation();
   const role = getRole();
-  const {data: advertiser, isFetched, isLoading} = useGetAdvertiser(
-    advertiserId
-  );
+  const advertiserId = advertiser?.uuid || '';
   const {mutateAsync: createAdvertiser} = useCreateAdvertiser();
   const {mutateAsync: editAdvertiser} = useEditAdvertiser();
   const defaultValues = useDefaultAdvertiser({
@@ -64,14 +57,7 @@ const AdvertiserForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, reset} = methods;
-
-  useEffect(() => {
-    //---> Reset default value when API response
-    if (isFetched && defaultValues?.name) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, reset, isFetched]);
+  const {handleSubmit, formState, control} = methods;
 
   /**
    * Submit form
@@ -113,7 +99,6 @@ const AdvertiserForm = ({
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader>{title}</ModalHeader>
             <ModalBody>
-              {isLoading && <LoadingIndicator />}
               <Row>
                 <Col sm={12}>
                   <FormTextInput
@@ -136,13 +121,7 @@ const AdvertiserForm = ({
                 </Col>
                 {/* Domains */}
                 <Col sm={12}>
-                  <DomainSelect
-                    defaultValue={defaultValues?.[INPUT_NAME.DOMAINS]}
-                    name={INPUT_NAME.DOMAINS}
-                    label={t('domains')}
-                    placeholder={t('selectDomains')}
-                    multiple
-                  />
+                  <DomainSelect defaultValue={defaultValues?.tags || []} />
                 </Col>
                 {/* Tags */}
                 <Col sm={12}>

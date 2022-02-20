@@ -9,7 +9,6 @@ import {Col, Label, Row} from 'reactstrap';
 
 // Internal Modules
 import {ActiveToggle, FormTextInput} from 'components/forms';
-import DomainSelect from 'pages/Organization/components/domain-select';
 import {INPUT_NAME} from '../../constants';
 
 const propTypes = {
@@ -44,12 +43,11 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
       </Col>
       {/* Domains */}
       <Col sm={12}>
-        <DomainSelect
-          defaultValue={defaultValues?.domain}
+        <FormTextInput
           name={INPUT_NAME.DOMAIN}
           label={t('domain')}
-          placeholder={t('selectDomain')}
-          disabled={isView}
+          placeholder={t('domain')}
+          isRequired
         />
       </Col>
       <Col sm={12}>

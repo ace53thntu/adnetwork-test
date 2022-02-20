@@ -6,7 +6,6 @@ export const DOMAIN_GROUP_ENTITY = {
   name: '',
   description: '',
   domains: [],
-  shared: 'inactive',
   status: Statuses.ACTIVE
 };
 
@@ -17,8 +16,7 @@ export const apiToForm = ({domainGroup = null}) => {
       name,
       description,
       domain_list,
-      status = Statuses.ACTIVE,
-      shared = false
+      status = Statuses.ACTIVE
     } = domainGroup;
 
     const domains = domain_list?.map(domain => ({
@@ -32,8 +30,7 @@ export const apiToForm = ({domainGroup = null}) => {
       name,
       description,
       domains,
-      status,
-      shared: shared ? 'active' : 'inactive'
+      status
     };
   }
 
@@ -42,13 +39,7 @@ export const apiToForm = ({domainGroup = null}) => {
 
 export const formToApi = ({formData = {}}) => {
   if (formData) {
-    const {
-      name,
-      description,
-      domains,
-      status = Statuses.ACTIVE,
-      shared = 'inactive'
-    } = formData;
+    const {name, description, domains, status = Statuses.ACTIVE} = formData;
 
     const domainList =
       domains?.length > 0 ? Array.from(domains, domain => domain?.value) : [];
@@ -57,8 +48,7 @@ export const formToApi = ({formData = {}}) => {
       name,
       description,
       domains: domainList,
-      status,
-      shared: shared === 'active' ? true : false
+      status
     };
   }
 

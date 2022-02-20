@@ -2,7 +2,7 @@ import {DomainAPIRequest} from 'api/domain.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAINS} from './constants';
+import {GET_DOMAIN, GET_DOMAINS} from './constants';
 
 /**
  * Update a Domain
@@ -22,8 +22,9 @@ export function useEditDomain() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
+      onSettled: data => {
         client.invalidateQueries([GET_DOMAINS]);
+        client.invalidateQueries([GET_DOMAIN, data?.uuid]);
       }
     }
   );

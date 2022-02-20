@@ -61,7 +61,7 @@ const PositionList = () => {
   //---> Query get list of Positions.
   const {data, isLoading, isPreviousData} = useGetPositions({
     params: {
-      limit: DEFAULT_PAGINATION.perPage,
+      per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
       sort: 'created_at DESC'
     },

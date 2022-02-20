@@ -52,7 +52,8 @@ const DspForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, reset} = methods;
+  const {handleSubmit, formState, reset, errors} = methods;
+  console.log('🚀 ~ file: dsp.form.js ~ line 56 ~ errors', errors);
 
   useEffect(() => {
     //---> Reset default value when API response

@@ -55,6 +55,7 @@ const KeywordSelectCreatable = ({defaultValue = []}) => {
       placeholder={t('typeAndEnter')}
       label={t('keywords')}
       errors={errors}
+      required
     />
   );
 };

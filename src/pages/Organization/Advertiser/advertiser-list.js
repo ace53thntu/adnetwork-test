@@ -16,10 +16,7 @@ import {useTranslation} from 'react-i18next';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
-import {
-  useDeleteAdvertiser,
-  useGetAdvertisersInfinity
-} from 'queries/advertiser';
+import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {List} from 'components/list';
@@ -34,9 +31,12 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {Pagination} from 'components/list/pagination';
-import {IS_RESPONSE_ALL} from 'constants/misc';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import CustomPagination from 'components/common/CustomPagination';
 
 /**
  * @function Advertiser List Component
@@ -56,22 +56,27 @@ const ListAdvertiser = () => {
   const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
 
-  //---> Query get list of advertisers.
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetAdvertisersInfinity({enabled: true});
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  //---> QUery get list of Advertiser.
+  const {data, isFetching, isPreviousData} = useGetAdvertisers({
+    params: {
+      per_page: DEFAULT_PAGINATION.perPage,
+      page: currentPage,
+      sort: 'created_at DESC'
+    },
+    enabled: true,
+    keepPreviousData: true
+  });
 
   const advertisers = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const data = getResponseData(page, IS_RESPONSE_ALL);
-      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
-      return [...acc, ...dataDestructured];
-    }, []);
-  }, [pages]);
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
 
   //---> Get list of IABs.
   const {data: IABs} = useGetIABs();
@@ -119,6 +124,11 @@ const ListAdvertiser = () => {
       }
     ];
   }, []);
+
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
 
   const onToggleModal = () => {
     setOpenForm(prevState => !prevState);
@@ -197,13 +207,12 @@ const ListAdvertiser = () => {
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />
-                  {hasNextPage && (
-                    <Pagination
-                      hasNextPage={hasNextPage}
-                      isFetchingNextPage={isFetchingNextPage}
-                      fetchNextPage={fetchNextPage}
-                    />
-                  )}
+                  <CustomPagination
+                    currentPage={currentPage}
+                    totalCount={paginationInfo?.totalItems}
+                    onPageChange={(evt, page) => onPageChange(evt, page)}
+                    disabled={isPreviousData}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -221,18 +230,17 @@ const ListAdvertiser = () => {
         )}
       </AdvertiserCreate>
       {/* Advertiser Edit */}
-      <AdvertiserEdit>
-        {openFormEdit && (
-          <AdvertiserForm
-            modal={openFormEdit}
-            toggle={onToggleModalEdit}
-            IABsOptions={IABsOptions}
-            title="Edit Advertiser"
-            isEdit
-            advertiserId={currentAdvertiser?.uuid}
-          />
-        )}
-      </AdvertiserEdit>
+      {openFormEdit && (
+        <AdvertiserEdit
+          modal={openFormEdit}
+          toggle={onToggleModalEdit}
+          IABsOptions={IABsOptions}
+          title="Edit Advertiser"
+          isEdit
+          advertiserId={currentAdvertiser?.uuid}
+        />
+      )}
+
       {showDialog && (
         <DialogConfirm
           open={showDialog}

@@ -2,7 +2,7 @@ import {DomainGroupAPIRequest} from 'api/domain-group.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_DOMAIN_GROUPS} from './constants';
+import {GET_DOMAIN_GROUP, GET_DOMAIN_GROUPS} from './constants';
 
 /**
  * Update a Domain
@@ -22,8 +22,9 @@ export function useEditDomainGroup(domainGroupId) {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
+      onSettled: dataResp => {
         client.invalidateQueries([GET_DOMAIN_GROUPS]);
+        client.invalidateQueries([GET_DOMAIN_GROUP, dataResp?.data?.uuid]);
       }
     }
   );

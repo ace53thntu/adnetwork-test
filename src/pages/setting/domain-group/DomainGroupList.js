@@ -9,8 +9,7 @@ import {
   Row,
   Col,
   CardBody,
-  Container,
-  Badge
+  Container
 } from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
@@ -90,10 +89,6 @@ const DomainGroupList = () => {
     domainGroupId: currentDomain?.uuid,
     enabled: !!currentDomain?.uuid
   });
-  console.log(
-    '🚀 ~ file: DomainList.js ~ line 84 ~ DomainList ~ domain',
-    domainGroup
-  );
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -106,17 +101,6 @@ const DomainGroupList = () => {
         header: 'Domains',
         accessor: 'domain_list',
         cell: row => <DomainBadge domains={row?.value || []} />
-      },
-      {
-        header: 'Shared',
-        accessor: 'shared',
-        cell: row => {
-          return (
-            <Badge color={row?.value ? 'primary' : 'warning'}>
-              {row?.value?.toString()}
-            </Badge>
-          );
-        }
       },
       {
         accessor: 'status',

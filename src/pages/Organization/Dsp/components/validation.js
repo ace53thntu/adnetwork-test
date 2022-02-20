@@ -1,5 +1,5 @@
 import {yupResolver} from '@hookform/resolvers/yup';
-import {isValidURL} from 'utils/helpers/validations.helpers';
+import {isValidDomain, isValidURL} from 'utils/helpers/validations.helpers';
 import * as yup from 'yup';
 
 export const schemaValidate = t => {
@@ -12,7 +12,11 @@ export const schemaValidate = t => {
         .test('is-url', 'Enter correct url!', value => {
           return isValidURL(value);
         }),
-      domain: yup.object().required(t('required')).typeError(t('required'))
+      domain: yup
+        .string()
+        .required(t('required'))
+        .test('valid-domain', 'Invalid domain', val => isValidDomain(val))
+        .typeError(t('required'))
     })
   );
 };

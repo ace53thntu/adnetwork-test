@@ -15,3 +15,11 @@ export function isValidUsername(str) {
   // eslint-disable-next-line no-useless-escape
   return /^[0-9a-zA-Z_.\-]+$/.test(str);
 }
+
+export const isValidDomain = domain => {
+  const regexDomain = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/g;
+  if (!domain) {
+    return true;
+  }
+  return regexDomain.test(domain);
+};

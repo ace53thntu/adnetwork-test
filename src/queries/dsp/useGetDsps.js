@@ -10,17 +10,24 @@ import {GET_DSPS} from './constants';
  * Query get all DSPs
  * @returns Array data DSP
  */
-export function useGetDsps() {
+export function useGetDsps({
+  params,
+  enabled = false,
+  keepPreviousData = false
+}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    GET_DSPS,
+    [GET_DSPS, params],
     () =>
-      DspAPIRequest.getAllDsp({options: {cancelToken}}).then(
-        res => res?.data ?? []
-      ),
+      DspAPIRequest.getAllDsp({
+        params,
+        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
-      suspense: false
+      suspense: false,
+      keepPreviousData,
+      enabled
     }
   );
 }

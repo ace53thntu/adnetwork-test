@@ -110,7 +110,7 @@ const DomainGroupForm = ({
                 />
               </Col>
               {/* Shared */}
-              <Col sm="3">
+              {/* <Col sm="3">
                 <Label className="mr-5">{t('shared')}</Label>
                 <Controller
                   control={control}
@@ -119,7 +119,7 @@ const DomainGroupForm = ({
                     <ActiveToggle value={value} onChange={onChange} />
                   )}
                 />
-              </Col>
+              </Col> */}
               <Col sm={12}>
                 <DomainSelect
                   defaultValue={defaultValues?.[InputNames.DOMAINS]}

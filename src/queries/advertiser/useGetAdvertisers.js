@@ -6,7 +6,11 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 
 import {GET_ADVERTISERS} from './constants';
 
-export function useGetAdvertisers({params = {}, enabled = false}) {
+export function useGetAdvertisers({
+  params = {},
+  enabled = false,
+  keepPreviousData = false
+}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -18,7 +22,8 @@ export function useGetAdvertisers({params = {}, enabled = false}) {
       }).then(res => res),
     {
       suspense: false,
-      enabled
+      enabled,
+      keepPreviousData
     }
   );
 }

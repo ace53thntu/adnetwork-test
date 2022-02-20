@@ -184,17 +184,14 @@ const PublisherList = () => {
         {openForm && <PublisherForm modal={openForm} toggle={onToggleModal} />}
       </PublisherCreate>
       {/* Advertiser Edit */}
-      <PublisherEdit>
-        {openFormEdit && (
-          <PublisherForm
-            modal={openFormEdit}
-            toggle={onToggleModalEdit}
-            title="Edit Publisher"
-            isEdit
-            publisherId={currentPublisher?.uuid}
-          />
-        )}
-      </PublisherEdit>
+      <PublisherEdit
+        modal={openFormEdit}
+        toggle={onToggleModalEdit}
+        title="Edit Publisher"
+        isEdit
+        publisherId={currentPublisher?.uuid}
+      />
+
       {showDialog && (
         <DialogConfirm
           open={showDialog}

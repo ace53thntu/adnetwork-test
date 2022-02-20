@@ -23,17 +23,20 @@ import LoadingIndicator from 'components/common/LoadingIndicator';
 import DspForm from './components/dsp.form';
 import DspCreate from './dsp-create';
 import DspEdit from './dsp-edit';
-import {useDeleteDsp, useGetDspsInfinity} from 'queries/dsp';
+import {useDeleteDsp, useGetDsps} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import CustomPagination from 'components/common/CustomPagination';
 
 /**
  * @function DSP List Component
@@ -53,28 +56,27 @@ const DspList = () => {
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentDsp, setCurrentDsp] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> QUery get list of DSP.
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetDspsInfinity({
+  const {data, isFetching, isPreviousData} = useGetDsps({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage,
+      page: currentPage,
+      sort: 'created_at DESC'
     },
-    enabled: true
+    enabled: true,
+    keepPreviousData: true
   });
 
   const dsps = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const data = getResponseData(page, IS_RESPONSE_ALL);
-      const dataDestructured = data?.map(item => ({...item, id: item?.uuid}));
-      return [...acc, ...dataDestructured];
-    }, []);
-  }, [pages]);
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
 
   //---> Mutation delete a DSP
   const {mutateAsync: deleteDsp, isLoading: isLoadingDelete} = useDeleteDsp();
@@ -115,6 +117,11 @@ const DspList = () => {
       }
     ];
   }, []);
+
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
 
   const onToggleModal = () => {
     setOpenForm(prevState => !prevState);
@@ -208,13 +215,12 @@ const DspList = () => {
                     handleAction={onClickMenu}
                     handleClickItem={onClickItem}
                   />
-                  {hasNextPage && (
-                    <Pagination
-                      hasNextPage={hasNextPage}
-                      isFetchingNextPage={isFetchingNextPage}
-                      fetchNextPage={fetchNextPage}
-                    />
-                  )}
+                  <CustomPagination
+                    currentPage={currentPage}
+                    totalCount={paginationInfo?.totalItems}
+                    onPageChange={(evt, page) => onPageChange(evt, page)}
+                    disabled={isPreviousData}
+                  />
                 </CardBody>
               </Card>
             </Col>

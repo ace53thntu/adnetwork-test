@@ -2,7 +2,7 @@ import {PublisherAPIRequest} from 'api/publisher.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_PUBLISHERS} from './constants';
+import {GET_PUBLISHER, GET_PUBLISHERS} from './constants';
 
 /**
  * Update a Publisher
@@ -22,8 +22,9 @@ export function useEditPublisher() {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
+      onSettled: dataRes => {
         client.invalidateQueries([GET_PUBLISHERS]);
+        client.invalidateQueries([GET_PUBLISHER, dataRes?.data?.uuid]);
       }
     }
   );

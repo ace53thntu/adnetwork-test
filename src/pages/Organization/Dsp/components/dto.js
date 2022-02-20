@@ -18,14 +18,7 @@ export const mappingApiToForm = ({dspData}) => {
     status = dspData?.status;
     bidding_url = dspData?.bidding_url;
     //---> Destructure Domains selected.
-    domain = dspData?.domain
-      ? {
-          value: dspData?.domain,
-          label: dspData?.domain
-        }
-      : null;
-    // TODO: Update list domains.
-
+    domain = dspData?.domain;
     credential = dspData?.credential;
     budget = dspData?.budget;
     header_bidding_available = dspData?.header_bidding_available
@@ -51,34 +44,39 @@ export const mappingApiToForm = ({dspData}) => {
  * @param {*} formData - API response data
  * @returns data with API request body format trustly
  */
-export const mappingFormToApi = ({formData}) => {
+export const mappingFormToApi = ({formData, isEdit}) => {
   const {
     name,
     status,
     bidding_url,
     domain,
     credential,
-    budget,
     header_bidding_available,
     priority
   } = formData;
   const destructureName = name?.trim() || '';
   const destructureUrl = bidding_url?.trim() || '';
-  const daily = parseFloat(budget.daily) || 0;
-  const global = parseFloat(budget.global) || 0;
 
-  return {
+  const returnData = {
     name: destructureName,
     status,
     bidding_url: destructureUrl,
     credential,
-    domain: domain?.value || '',
-    budget: {
-      daily,
-      global
-    },
+    domain,
     header_bidding_available:
       header_bidding_available === 'active' ? true : false,
     priority: parseInt(priority, 10) || 0
   };
+
+  if (!isEdit) {
+    const daily = parseFloat(formData?.budget?.daily) || 0;
+    const global = parseFloat(formData?.budget?.global) || 0;
+    const budget = {
+      daily,
+      global
+    };
+    returnData.budget = budget;
+  }
+
+  return returnData;
 };
