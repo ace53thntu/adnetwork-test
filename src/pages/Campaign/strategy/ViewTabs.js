@@ -13,7 +13,7 @@ import {useQueryString} from 'hooks';
 import {EntityReport} from 'pages/entity-report';
 import {Capping} from '../components/capping';
 
-import {Divider, Tabs} from '../components';
+import {Tabs} from '../components';
 import StrategyForm from './form';
 import Concept from './form-fields/Concept';
 import {StrategyViewTabs as ViewTabs} from '../constants';
@@ -22,6 +22,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import {DescriptionTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
+import {Collapse} from 'components/common';
 // import Audience from './form-fields/Audience';
 
 const propTypes = {
@@ -55,7 +56,6 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
           name: t('description'),
           content: (
             <>
-              <Divider text="Information"></Divider>
               <DescriptionTab>
                 <FormContainer {...defaultProps}>
                   <StrategyForm
@@ -70,13 +70,13 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                 dataStrategy={currentStrategy}
                 isView
               /> */}
-                  <div className="pt-4"></div>
-                  <Divider text="Concept"></Divider>
-                  <Concept
-                    conceptList={currentStrategy?.concepts}
-                    isView
-                    strategyData={currentStrategy}
-                  />
+                  <Collapse unMoun={false} initialOpen title={t('concepts')}>
+                    <Concept
+                      conceptList={currentStrategy?.concepts}
+                      isView
+                      strategyData={currentStrategy}
+                    />
+                  </Collapse>
                   <div style={{textAlign: 'right'}}>
                     <Link to={strategyEditPath}>
                       <Button color="link">{t('goToEdit')}</Button>

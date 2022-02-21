@@ -40,13 +40,12 @@ const propTypes = {
 const InventoryContentModal = ({containerId}) => {
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 43 ~ InventoryContentModal ~ inventoryIdsChecked',
-    inventoryIdsChecked
-  );
 
   const dispatch = useDispatch();
-  const strategyInventoriesTemp = useStrategyInventoryTempSelector();
+  let strategyInventoriesTemp = useStrategyInventoryTempSelector();
+  if (!strategyInventoriesTemp) {
+    strategyInventoriesTemp = [];
+  }
 
   let params = {
     limit: DEFAULT_PAGINATION.perPage
@@ -76,13 +75,13 @@ const InventoryContentModal = ({containerId}) => {
     strategyInventories: strategyInventoriesTemp
   });
 
-  React.useEffect(() => {
-    const idsTemp =
-      strategyInventoriesTemp?.length > 0
-        ? strategyInventoriesTemp?.map(item => item?.uuid)
-        : [];
-    setInventoryIdsChecked(idsTemp);
-  }, [strategyInventoriesTemp]);
+  // React.useEffect(() => {
+  //   const idsTemp =
+  //     strategyInventoriesTemp?.length > 0
+  //       ? strategyInventoriesTemp?.map(item => item?.uuid)
+  //       : [];
+  //   setInventoryIdsChecked(idsTemp);
+  // }, [strategyInventoriesTemp]);
 
   const onChangeDealFloorPrice = React.useCallback(
     (value, _inventoryId) => {

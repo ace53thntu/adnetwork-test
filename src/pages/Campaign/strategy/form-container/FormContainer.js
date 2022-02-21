@@ -39,10 +39,6 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
-  console.log(
-    '🚀 ~ file: FormContainer.js ~ line 42 ~ currentStrategy',
-    currentStrategy
-  );
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();
@@ -57,8 +53,7 @@ const FormContainer = ({
     resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit, errors, reset} = methods;
-  console.log('🚀 ~ file: FormContainer.js ~ line 57 ~ errors', errors);
+  const {handleSubmit, reset} = methods;
 
   React.useEffect(() => {
     if (isEdit || isView) {

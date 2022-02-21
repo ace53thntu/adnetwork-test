@@ -95,6 +95,7 @@ const en = {
   trackerList: 'Tracker list',
   dealList: 'Deal list',
   bidList: 'Bid list',
+  concepts: 'Concepts',
 
   // Card Header
   advertiserList: 'Advertiser List',

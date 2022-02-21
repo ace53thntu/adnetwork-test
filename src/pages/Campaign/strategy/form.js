@@ -39,7 +39,7 @@ const StrategyForm = ({
       {!isEdit && !isView && <ScheduleGroup />}
 
       {/* Inventory Group */}
-      {typeSelected?.value === 'premium' && <InventoryGroup />}
+      {typeSelected?.value === 'premium' && <InventoryGroup isView={isView} />}
     </>
   );
 };
