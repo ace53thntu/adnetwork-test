@@ -1,28 +1,53 @@
 // Build-in Modules
-import {LoadingIndicator} from 'components/common';
-import {apiToForm} from 'entities/Strategy';
-import {useGetStrategy} from 'queries/strategy';
+
 import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
+import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
-import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 
 // Internal Modules
+import {LoadingIndicator} from 'components/common';
+import {apiToForm} from 'entities/Strategy';
+import {useGetStrategy} from 'queries/strategy';
+import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
+import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {CampaignContentLayout} from '../layout';
 import {StrategyContainerStyled} from './styled';
 import StrategyViewTabs from './ViewTabs';
 
 const StrategyDetail = () => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
+  const [isInitalied, setInitialied] = React.useState(false);
+
   const {strategyId, campaignId} = useParams();
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );
 
   const strategy = apiToForm({strategyData});
+
+  // Initializing inventory in strategy
+  React.useEffect(() => {
+    if (
+      strategy &&
+      Object.keys(strategy).length > 0 &&
+      status === 'success' &&
+      !isInitalied
+    ) {
+      dispatch(
+        initStrategyInventoryListRedux({
+          inventoryList: strategy?.inventories,
+          inventoryTempList: strategy?.inventories
+        })
+      );
+      setInitialied(true);
+    }
+  }, [strategy, dispatch, isFetched, isInitalied, status]);
+
   useRedirectInCampaign();
 
   return (

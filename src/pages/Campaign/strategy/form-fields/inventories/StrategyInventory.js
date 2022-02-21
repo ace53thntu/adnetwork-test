@@ -19,6 +19,9 @@ const propTypes = {
 
 const StrategyInventory = ({strategyInventories = []}) => {
   const dispatch = useDispatch();
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [activeInventory, setActiveInventory] = React.useState(null);
+
   const {errors, setValue, control} = useFormContext();
 
   React.useEffect(() => {
@@ -59,7 +62,17 @@ const StrategyInventory = ({strategyInventories = []}) => {
   }, []);
 
   function onClickAction(actionIndex, currentItem) {
-    dispatch(removeInventoryStrategyRedux(currentItem?.uuid));
+    setOpenDialog(true);
+    setActiveInventory(currentItem);
+  }
+
+  function onCancelDelete() {
+    setOpenDialog(false);
+  }
+
+  function onSubmitDelete() {
+    dispatch(removeInventoryStrategyRedux(activeInventory?.uuid));
+    setOpenDialog(false);
   }
 
   return (
@@ -88,7 +101,12 @@ const StrategyInventory = ({strategyInventories = []}) => {
           </div>
         );
       })}
-      <DialogConfirm />
+      <DialogConfirm
+        open={openDialog}
+        title="Are you sure remove this inventory"
+        handleClose={onCancelDelete}
+        handleAgree={onSubmitDelete}
+      />
     </>
   );
 };

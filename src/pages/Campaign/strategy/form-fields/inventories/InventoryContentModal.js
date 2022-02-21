@@ -75,13 +75,13 @@ const InventoryContentModal = ({containerId}) => {
     strategyInventories: strategyInventoriesTemp
   });
 
-  // React.useEffect(() => {
-  //   const idsTemp =
-  //     strategyInventoriesTemp?.length > 0
-  //       ? strategyInventoriesTemp?.map(item => item?.uuid)
-  //       : [];
-  //   setInventoryIdsChecked(idsTemp);
-  // }, [strategyInventoriesTemp]);
+  React.useEffect(() => {
+    const idsTemp =
+      strategyInventoriesTemp?.length > 0
+        ? strategyInventoriesTemp?.map(item => item?.uuid)
+        : [];
+    setInventoryIdsChecked(idsTemp);
+  }, [strategyInventoriesTemp]);
 
   const onChangeDealFloorPrice = React.useCallback(
     (value, _inventoryId) => {
@@ -192,6 +192,10 @@ const InventoryContentModal = ({containerId}) => {
       );
     }
     setInventoryIdsChecked([...tmpIdsArr]);
+    console.log(
+      '🚀 ~ file: InventoryContentModal.js ~ line 193 ~ onChangeCheckBox ~ tmpArr',
+      tmpArr
+    );
 
     dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
   }

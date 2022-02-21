@@ -61,7 +61,12 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
   };
 };
 
-export const formToApi = ({formData, isConcept = false, isSummary = false}) => {
+export const formToApi = ({
+  formData,
+  currentStrategy,
+  isConcept = false,
+  isSummary = false
+}) => {
   if (isConcept) {
     return {
       concept_uuids: formData?.concept_uuids?.filter(item => item) || []
@@ -94,7 +99,11 @@ export const formToApi = ({formData, isConcept = false, isSummary = false}) => {
   const scheduleEndMinute = moment(schedule?.end_time).minutes();
 
   // Set start time is null if start time < now
-  if (moment(start_time).isBefore(moment(), 'day')) {
+  if (
+    moment(start_time).isBefore(moment(), 'day') ||
+    (currentStrategy?.start_time &&
+      moment(currentStrategy?.start_time).isSame(start_time, 'day'))
+  ) {
     startDate = null;
   }
 

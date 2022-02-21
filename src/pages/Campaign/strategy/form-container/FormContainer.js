@@ -15,11 +15,6 @@ import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
 import {apiToForm, formToApi} from 'entities/Strategy';
-import {
-  setStrategyInventoryListRedux,
-  setStrategyInventoryTempListRedux
-} from 'store/reducers/campaign';
-import {useDispatch} from 'react-redux';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -40,7 +35,6 @@ const FormContainer = ({
   isConcept = false
 }) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
   const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
@@ -55,25 +49,10 @@ const FormContainer = ({
 
   const {handleSubmit, reset} = methods;
 
-  React.useEffect(() => {
-    if (isEdit || isView) {
-      dispatch(
-        setStrategyInventoryTempListRedux({
-          inventoryList: currentStrategy?.inventories
-        })
-      );
-      dispatch(
-        setStrategyInventoryListRedux({
-          inventoryList: currentStrategy?.inventories
-        })
-      );
-    }
-  }, [currentStrategy, dispatch, isEdit, isView]);
-
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
-      const req = formToApi({formData, isConcept, isSummary});
+      const req = formToApi({formData, isConcept, isSummary, currentStrategy});
       console.log('======== FORM DATA', req);
       if (isEdit) {
         try {
@@ -109,6 +88,7 @@ const FormContainer = ({
     },
     [
       createStrategy,
+      currentStrategy,
       editStrategy,
       isConcept,
       isEdit,

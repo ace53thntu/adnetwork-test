@@ -106,11 +106,7 @@ const InventoryModal = ({onToggleModal = () => null, openModal = false}) => {
   }
 
   return (
-    <InventoryModalStyled
-      toggle={onToggleModal}
-      isOpen={openModal}
-      unMount={false}
-    >
+    <InventoryModalStyled toggle={onToggleModal} isOpen={openModal} unMount>
       <ModalHeader toggle={onToggleModal}>{t('inventoryList')}</ModalHeader>
       <ModalBody>
         {isFetching && <LoadingIndicator />}
