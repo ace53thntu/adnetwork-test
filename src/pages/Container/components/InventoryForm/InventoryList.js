@@ -41,14 +41,17 @@ const propTypes = {};
 function InventoryList() {
   const {pageId} = useParams();
 
-  const {mutateAsync: deleteInventory} = useDeleteInventory(pageId);
-
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [inventoryId, setInventoryId] = useState('');
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const params = {
+    per_page: DEFAULT_PAGINATION.perPage,
+    page_uuid: pageId,
+    sort: 'created_at DESC'
+  };
 
   const {
     data: {pages = []} = {},
@@ -57,13 +60,14 @@ function InventoryList() {
     isFetching,
     isFetchingNextPage
   } = useGetInventoriesInfinity({
-    params: {
-      per_page: DEFAULT_PAGINATION.perPage,
-      page_uuid: pageId,
-      sort: 'created_at DESC'
-    },
+    params,
     enabled: !!pageId
   });
+  const {mutateAsync: deleteInventory} = useDeleteInventory({
+    pageId,
+    queryKeyParam: params
+  });
+
   const containerInventories = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
       const items = getResponseData(page, IS_RESPONSE_ALL);

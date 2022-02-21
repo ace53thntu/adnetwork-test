@@ -41,7 +41,7 @@ export const useDefaultInventory = ({inventory}) => {
             label: item?.name
           }))
         : [];
-      let tagsParsed = tags?.map(tag => ({value: tag, name: capitalize(tag)}));
+      let tagsParsed = tags?.map(tag => ({value: tag, label: capitalize(tag)}));
       const protocols =
         metadata?.protocols?.length > 0
           ? metadata?.protocols?.map(item => {

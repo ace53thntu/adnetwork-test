@@ -71,7 +71,7 @@ function ContainerForm(props) {
       setOpenConfirm(false);
       setIsLoading(false);
     };
-  }, [reset, t]);
+  }, []);
 
   React.useEffect(() => {
     reset(formDefaultValues);

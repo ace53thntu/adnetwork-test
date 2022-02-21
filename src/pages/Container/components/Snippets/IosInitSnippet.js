@@ -3,6 +3,14 @@ import React from 'react';
 import ReactPrismjs from '@uiw/react-prismjs';
 import {SDK_NAME} from 'constants/container';
 
+const sourceScript = containerId => `// ContainerID AiCactus
+let configuration = AiCactusConfig(writeKey: "${containerId}@ios")
+// Enable this to record certain application events automatically!
+configuration.trackApplicationLifecycleEvents = true
+// Enable this to record screen views automatically!
+configuration.recordScreenViews = true
+${SDK_NAME}.setup(with: configuration)`;
+
 function IosInitSnippet({containerId}) {
   return (
     <div className="aicactus-snippet-container">
@@ -19,13 +27,7 @@ function IosInitSnippet({containerId}) {
       method, set up the SDK like so:
       <ReactPrismjs
         language="javascript"
-        source={`// ContainerID AiCactus
-        let configuration = AiCactusConfig(writeKey: "${containerId}@ios")
-        // Enable this to record certain application events automatically!
-        configuration.trackApplicationLifecycleEvents = true
-        // Enable this to record screen views automatically!
-        configuration.recordScreenViews = true
-        ${SDK_NAME}.setup(with: configuration)`}
+        source={sourceScript(containerId)}
         className=""
       />
       And of course, import the SDK in the files that you use it by adding the

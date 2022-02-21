@@ -25,6 +25,10 @@ function FormToggle({
     register({name});
   }, [name, register]);
 
+  useEffect(() => {
+    setIsChecked(currentValue === values?.checked);
+  }, [currentValue, name, values?.checked]);
+
   const onHandleToggle = useCallback(() => {
     if (isChecked) {
       setValue(name, values.unChecked, {

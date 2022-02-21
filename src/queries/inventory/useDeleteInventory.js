@@ -1,5 +1,4 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
-import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useMutation, useQueryClient} from 'react-query';
 
 import {GET_INVENTORIES, GET_INVENTORY_BY_PAGE} from './constants';
@@ -7,7 +6,7 @@ import {GET_INVENTORIES, GET_INVENTORY_BY_PAGE} from './constants';
 /**
  * Delete a Inventory
  */
-export function useDeleteInventory(pageId) {
+export function useDeleteInventory({pageId, queryKeyParam}) {
   const client = useQueryClient();
 
   return useMutation(
@@ -20,12 +19,8 @@ export function useDeleteInventory(pageId) {
         return typeof rollback === 'function' ? rollback() : null;
       },
       onSettled: () => {
-        console.log('useGetInventoryByPage', pageId);
         client.invalidateQueries([GET_INVENTORY_BY_PAGE, pageId]);
-        client.invalidateQueries([
-          GET_INVENTORIES,
-          {limit: DEFAULT_PAGINATION.perPage, page_uuid: pageId}
-        ]);
+        client.invalidateQueries([GET_INVENTORIES, queryKeyParam]);
       }
     }
   );

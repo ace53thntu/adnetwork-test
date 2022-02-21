@@ -46,11 +46,7 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
   return {
     name: '',
     url: '',
-    status: {
-      id: 'active',
-      label: t('active'),
-      value: 'active'
-    },
+    status: 'active',
     publisher_uuid: null,
     first_party: 'active',
     cost: ''

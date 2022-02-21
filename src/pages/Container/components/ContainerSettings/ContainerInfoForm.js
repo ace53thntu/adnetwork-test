@@ -8,7 +8,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
-import {CardBody, CardFooter, Col, Row} from 'reactstrap';
+import {CardBody, CardFooter, Col, FormGroup, Row} from 'reactstrap';
 import {
   updatedContainerRedux,
   useContainerSelector
@@ -56,7 +56,11 @@ function ContainerInfoForm(props) {
     defaultValues: formDefaultValues,
     resolver: containerFormResolver(containers)
   });
-  const {handleSubmit, formState, reset} = methods;
+  const {handleSubmit, formState, reset, errors} = methods;
+  console.log(
+    '🚀 ~ file: ContainerInfoForm.js ~ line 60 ~ ContainerInfoForm ~ errors',
+    errors
+  );
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -106,15 +110,38 @@ function ContainerInfoForm(props) {
                 disable={formState.isSubmitting}
                 isRequired
               />
-              <FormToggle
-                name="status"
-                defaultCheckedValue="active"
-                label={t('status')}
-                values={{
-                  checked: 'active',
-                  unChecked: 'inactive'
-                }}
+              <FormTextInput
+                name="cost"
+                label="Cost"
+                placeholder="0.0"
+                disable={isLoading}
+                isRequired
               />
+              <div className="d-flex mb-2">
+                <FormGroup className="d-flex  mb-0 ml-3">
+                  <FormToggle
+                    name="status"
+                    defaultCheckedValue="active"
+                    label={t('status')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+
+                <FormGroup className="d-flex  mb-0 ml-3">
+                  <FormToggle
+                    name="first_party"
+                    defaultCheckedValue="active"
+                    label={t('firstParty')}
+                    values={{
+                      checked: 'active',
+                      unChecked: 'inactive'
+                    }}
+                  />
+                </FormGroup>
+              </div>
 
               <Row>
                 <Col sm={12} md={6}>
