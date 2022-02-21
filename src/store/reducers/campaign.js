@@ -155,6 +155,9 @@ function removeInventoryStrategyList(state, action) {
   state.inventoryList = state.inventoryList?.filter(
     item => item.uuid !== inventoryId
   );
+  state.inventoryTempList = state.inventoryTempList?.filter(
+    item => item.uuid !== inventoryId
+  );
 }
 
 function handleSetStrategyInventoryList(state, action) {

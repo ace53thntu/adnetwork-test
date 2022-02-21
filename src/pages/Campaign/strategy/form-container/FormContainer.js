@@ -15,6 +15,8 @@ import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
 import {apiToForm, formToApi} from 'entities/Strategy';
+import {useDispatch} from 'react-redux';
+import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -35,6 +37,7 @@ const FormContainer = ({
   isConcept = false
 }) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
   const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
@@ -60,6 +63,12 @@ const FormContainer = ({
           const defaultValueUpdated = apiToForm({strategyData: data});
           reset(defaultValueUpdated);
           ShowToast.success('Updated strategy successfully');
+          dispatch(
+            initStrategyInventoryListRedux({
+              inventoryList: data?.inventories || [],
+              inventoryTempList: data?.inventories || []
+            })
+          );
           if (isConcept) {
             navigate(
               `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=summary&advertiser_id=${data?.advertiser_uuid}`
@@ -89,6 +98,7 @@ const FormContainer = ({
     [
       createStrategy,
       currentStrategy,
+      dispatch,
       editStrategy,
       isConcept,
       isEdit,
