@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export const containersRepoToModel = raw => {
+export const containersRepoToModel = (raw, containerId = '') => {
   const {
     uuid: id,
     name,
@@ -21,7 +21,7 @@ export const containersRepoToModel = raw => {
     children: [],
     page: 0,
     expanded: false,
-    selected: false,
+    selected: id === containerId ? true : false,
     isContainer: true,
     importCount,
     transferCount,
@@ -42,9 +42,10 @@ export const containersRepoToModel = raw => {
   return result;
 };
 
-export const containersMapData = (data = []) => {
+export const containersMapData = (data = [], container = null) => {
+  const containerId = container?.uuid || '';
   if (_.isArray(data)) {
-    return data.map((item, index) => containersRepoToModel(item));
+    return data.map((item, index) => containersRepoToModel(item, containerId));
   }
   return [];
 };

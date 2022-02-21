@@ -61,7 +61,7 @@ function ContainersTree(props) {
 
   React.useEffect(() => {
     if (!isFetching && containers?.length > 0) {
-      const items = containersMapData(containers);
+      const items = containersMapData(containers, container);
 
       dispatch(setContainersRedux(items));
     }

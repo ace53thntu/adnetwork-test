@@ -130,6 +130,8 @@ function PageCreateForm({pageTags = []}) {
         const pagesData = getResponseData(pageRes, IS_RESPONSE_ALL);
 
         const container = containerRes.data;
+        container.source = pageSource;
+        container.id = container.uuid;
         const pageId = data?.uuid;
 
         const pages = pagesData?.map(item => {

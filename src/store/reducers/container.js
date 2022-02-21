@@ -433,7 +433,7 @@ function handleSetContainer(state, action) {
           };
         } else {
           if (source !== 'import' && source !== 'transfer') {
-            const newSource = container.source?.[source];
+            const newSource = source;
 
             let children = item.children.map(child =>
               unSelectedAndUnExpanded(child)

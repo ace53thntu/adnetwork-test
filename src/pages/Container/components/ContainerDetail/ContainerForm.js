@@ -82,20 +82,14 @@ function ContainerForm(props) {
     try {
       let containerId = container?.uuid ?? containerRedux?.uuid;
       const formData = mappingFormToApi(values);
-      await updateContainerRequest({
+      const {data} = await updateContainerRequest({
         cid: containerId,
         data: formData
       });
       setIsLoading(false);
       ShowToast.success(t('updateContainerSuccessfully'));
       reset(values);
-      dispatch(
-        updatedContainerRedux({
-          ...container,
-          ...containerRedux,
-          ...values
-        })
-      );
+      dispatch(updatedContainerRedux({...data, id: data?.uuid}));
     } catch (error) {
       setIsLoading(false);
       ShowToast.error(error?.message);
