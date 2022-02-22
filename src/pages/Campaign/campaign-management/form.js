@@ -23,6 +23,8 @@ import {formToApi} from 'entities/Campaign';
 import {Collapse} from 'components/common';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
+import {useQueryClient} from 'react-query';
+import {GET_CAMPAIGN} from 'queries/campaign/constants';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -39,6 +41,8 @@ const CampaignForm = ({
   isView = false,
   currentCampaign = null
 }) => {
+  const client = useQueryClient();
+
   const {t} = useTranslation();
   const navigate = useNavigate();
   const {mutateAsync: createCampaign} = useCreateCampaign();
@@ -52,7 +56,6 @@ const CampaignForm = ({
   });
 
   const {handleSubmit, control, errors} = methods;
-  console.log('🚀 ~ file: form.js ~ line 55 ~ errors', errors);
   const startDate = useWatch({name: 'start_time', control});
 
   const onSubmit = useCallback(
@@ -66,9 +69,10 @@ const CampaignForm = ({
             data: requestBody
           });
           // reset();
+          await client.invalidateQueries([GET_CAMPAIGN, data?.uuid]);
           ShowToast.success('Updated Campaign successfully!');
           navigate(
-            `/${RoutePaths.CAMPAIGN}/${data?.uuid}/${RoutePaths.EDIT}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
+            `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to update Campaign');
@@ -77,7 +81,7 @@ const CampaignForm = ({
         try {
           const {data} = await createCampaign(requestBody);
           navigate(
-            `/${RoutePaths.CAMPAIGN}/${data?.uuid}/${RoutePaths.EDIT}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
+            `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
           );
 
           ShowToast.success('Created Campaign successfully!');
@@ -86,7 +90,7 @@ const CampaignForm = ({
         }
       }
     },
-    [campaignId, createCampaign, isEdit, navigate, updateCampaign]
+    [campaignId, client, createCampaign, isEdit, navigate, updateCampaign]
   );
 
   return (

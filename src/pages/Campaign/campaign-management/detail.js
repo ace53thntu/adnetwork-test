@@ -18,10 +18,12 @@ import CampaignViewTabs from './ViewTabs';
 const CampaignDetail = () => {
   const {t} = useTranslation();
   const {campaignId} = useParams();
+
   const {data: campaign, isFetching, isFetched} = useGetCampaign({
     cid: campaignId,
     enabled: !!campaignId
   });
+
   const campaignDestructure = apiToForm({campaign});
   useRedirectInCampaign();
 

@@ -10,7 +10,6 @@ import {useNavigate} from 'react-router-dom';
 //---> Internal Modules
 import {Tabs} from '../components';
 import CampaignForm from './form';
-import CampaignStrategies from './strategies';
 
 const propTypes = {
   isView: PropTypes.bool,
@@ -30,7 +29,6 @@ const CampaignEditTabs = ({
   const query = useQueryString();
   const nextTab = query.get('next_tab');
   const [currentTab, setCurrentTab] = useState('description');
-  const [campaignIdCreated, setCampaignIdCreated] = useState('');
 
   React.useEffect(() => {
     if (nextTab) {
@@ -40,7 +38,6 @@ const CampaignEditTabs = ({
 
   const goToTab = useCallback(({nextTab, campaignIdCreated}) => {
     setCurrentTab(nextTab);
-    setCampaignIdCreated(campaignIdCreated);
   }, []);
 
   const tabDetail = useMemo(
@@ -57,24 +54,24 @@ const CampaignEditTabs = ({
               currentCampaign={currentCampaign}
             />
           )
-        },
-
-        {
-          name: t('strategy'),
-          content: (
-            <CampaignStrategies
-              goToTab={goToTab}
-              campaignIdCreated={campaignIdCreated}
-              strategies={currentCampaign?.strategies}
-            />
-          )
         }
+
+        // {
+        //   name: t('strategy'),
+        //   content: (
+        //     <CampaignStrategies
+        //       goToTab={goToTab}
+        //       campaignIdCreated={campaignIdCreated}
+        //       strategies={currentCampaign?.strategies}
+        //     />
+        //   )
+        // }
       ].map(({name, content}, index) => ({
         key: index,
         title: name,
         getContent: () => content
       })),
-    [t, goToTab, isEdit, isCreate, isView, currentCampaign, campaignIdCreated]
+    [t, goToTab, isEdit, isCreate, isView, currentCampaign]
   );
 
   const getTab = index => {
@@ -85,11 +82,11 @@ const CampaignEditTabs = ({
         // setCurrentTab('description');
         navigate(`${url}description`);
         break;
-      case 1:
-        // setCurrentTab('strategies');
-        navigate(`${url}strategies`);
+      // case 1:
+      //   // setCurrentTab('strategies');
+      //   navigate(`${url}strategies`);
 
-        break;
+      // break;
       default:
         break;
     }
@@ -99,8 +96,8 @@ const CampaignEditTabs = ({
     switch (currentTab) {
       case 'description':
         return 0;
-      case 'strategies':
-        return 1;
+      // case 'strategies':
+      //   return 1;
       default:
         return 0;
     }

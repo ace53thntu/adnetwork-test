@@ -18,7 +18,7 @@ export function useGetCampaign({cid, enabled = false}) {
         options: {
           cancelToken
         }
-      }).then(res => res?.data ?? {}),
+      }).then(res => res?.data),
     {
       suspense: false,
       enabled

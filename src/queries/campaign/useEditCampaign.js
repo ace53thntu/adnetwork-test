@@ -22,9 +22,9 @@ export function useEditCampaign(campaignId) {
       onError: (err, variables, rollback) => {
         return typeof rollback === 'function' ? rollback() : null;
       },
-      onSettled: () => {
+      onSettled: apiResp => {
         client.invalidateQueries([GET_CAMPAIGNS]);
-        client.invalidateQueries([GET_CAMPAIGN, campaignId]);
+        client.invalidateQueries([GET_CAMPAIGN, apiResp?.data?.uuid]);
       }
     }
   );
