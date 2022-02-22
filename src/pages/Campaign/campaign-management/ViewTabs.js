@@ -13,6 +13,14 @@ import {EntityTypes} from 'constants/report';
 import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {CappingReferenceTypes} from 'constants/misc';
+import CampaignStrategies from './strategies';
+
+const TabIndexes = {
+  DESCRTIPION: 0,
+  STRATEGY: 1,
+  CAPPING: 2,
+  REPORT: 3
+};
 
 const propTypes = {
   currentCampaign: PropTypes.any
@@ -38,6 +46,15 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
               goToTab={goToTab}
               isView
               currentCampaign={currentCampaign}
+            />
+          )
+        },
+        {
+          name: t('strategy'),
+          content: (
+            <CampaignStrategies
+              goToTab={goToTab}
+              strategies={currentCampaign?.strategies}
             />
           )
         },
@@ -71,13 +88,16 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
 
   const getTab = index => {
     switch (index) {
-      case 0:
+      case TabIndexes.DESCRTIPION:
         setCurrentTab('description');
         break;
-      case 1:
+      case TabIndexes.STRATEGY:
+        setCurrentTab('strategies');
+        break;
+      case TabIndexes.CAPPING:
         setCurrentTab('capping');
         break;
-      case 2:
+      case TabIndexes.REPORT:
         setCurrentTab('report');
         break;
       default:
@@ -89,13 +109,15 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
   const tabPicker = useCallback(() => {
     switch (currentTab) {
       case 'description':
-        return 0;
+        return TabIndexes.DESCRTIPION;
+      case 'strategies':
+        return TabIndexes.STRATEGY;
       case 'capping':
-        return 1;
+        return TabIndexes.CAPPING;
       case 'report':
-        return 2;
+        return TabIndexes.REPORT;
       default:
-        return 0;
+        return TabIndexes.DESCRTIPION;
     }
   }, [currentTab]);
   return (

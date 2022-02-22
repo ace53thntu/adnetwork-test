@@ -2,7 +2,6 @@
 import React from 'react';
 
 //---> External Modules
-import {Button} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {useGetConceptsLoadMore} from 'queries/concept';
@@ -66,13 +65,13 @@ const Concept = ({
         />
       )}
       {!concepts || concepts.length === 0 ? (
-        <Button color="link">
+        <div>
           <FontAwesomeIcon
             icon={faExclamationTriangle}
             className="text-warning"
           />{' '}
           You don't have any concept
-        </Button>
+        </div>
       ) : null}
     </>
   );

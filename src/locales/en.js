@@ -212,8 +212,7 @@ const en = {
   status: 'Status',
   process: 'Process',
   createCampaign: 'Create campaign',
-  campaignPageDescription:
-    'Wide selection of buttons that feature different styles for backgrounds, borders and hover options!',
+  campaignPageDescription: '',
   loading: 'Loading...',
   description: 'Description',
   selectAAdvertiser: 'Select a advertiser',
@@ -400,8 +399,7 @@ const en = {
   activation: 'Activation',
   activate: 'Activate',
   validation: 'Validation',
-  strategyManagerDescription:
-    'Wide selection of buttons that feature different styles for backgrounds, borders and hover options!',
+  strategyManagerDescription: '',
   budgetMustBeANumber: 'Budget must be a number',
   strategyNameIsExisted: 'Strategy name is existed',
   selectACampaign: 'Select a campaign',
