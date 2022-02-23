@@ -3,12 +3,12 @@ import React from 'react';
 
 // External Modules
 import PropTypes from 'prop-types';
-import {Controller, FormProvider, useForm} from 'react-hook-form';
+import {FormProvider, useForm} from 'react-hook-form';
 import {Badge, Col, Form, Label, Row} from 'reactstrap';
 import moment from 'moment';
 
 // Internal Modules
-import {ActiveToggle, FormTextInput} from 'components/forms';
+import {FormTextInput} from 'components/forms';
 import {useTranslation} from 'react-i18next';
 import {schemaValidate} from './validation';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
@@ -79,10 +79,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       const endDateTime = moment(
         `${endDate} ${capping.end_hour}:${capping.end_minute}`
       ).format('YYYY-MM-DD HH:mm');
-      console.log(
-        '🚀 ~ file: CappingForm.js ~ line 79 ~ defaultValues ~ startDateTime',
-        startDateTime
-      );
+
       return {
         week_days: weekDays,
         start_time: new Date(startDateTime) || null,
@@ -91,16 +88,16 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       };
     }
   }, [capping, cappingType]);
-  console.log(
-    '🚀 ~ file: CappingForm.js ~ line 62 ~ defaultValues ~ defaultValues',
-    defaultValues
-  );
 
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t, cappingType)
   });
-  const {handleSubmit, control} = methods;
+  const {handleSubmit, errors} = methods;
+  console.log(
+    '🚀 ~ file: CappingForm.js ~ line 97 ~ CappingForm ~ errors',
+    errors
+  );
 
   return (
     <div>
@@ -114,7 +111,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
             {(cappingType === CappingTypes.BUDGET.value ||
               cappingType === CappingTypes.BUDGET_MANAGER.value ||
               cappingType === CappingTypes.IMPRESSION.value) && (
-              <Col sm={4}>
+              <Col sm={6}>
                 <FormTextInput
                   name="target"
                   label="Target"
@@ -124,20 +121,8 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               </Col>
             )}
 
-            {/* Status */}
-            <Col md="4">
-              <Label className="mr-5">{t('status')}</Label>
-              <Controller
-                control={control}
-                name="status"
-                render={({onChange, onBlur, value, name}) => (
-                  <ActiveToggle value={value} onChange={onChange} />
-                )}
-              />
-            </Col>
-
             {/* Type */}
-            <Col md="4">
+            <Col md="6">
               <Label className="mr-5">{t('type')}</Label>
               <div>
                 <Badge color="primary">

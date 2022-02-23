@@ -20,14 +20,13 @@ export const schemaValidate = (t, cappingType) => {
           .test('is-float', 'Invalid number', value =>
             (value + '').match(VALID_NUMBER)
           )
-          .typeError('Invalid number'),
-        status: yup.string().required(t('required'))
+          .typeError('Invalid number')
       })
     );
   }
   return yupResolver(
     yup.object().shape({
-      status: yup.string().required(t('required'))
+      // status: yup.string().required(t('required'))
     })
   );
 };

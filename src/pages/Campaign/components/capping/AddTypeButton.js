@@ -13,9 +13,11 @@ import PropTypes from 'prop-types';
 //---> Internal Modules
 import {CappingTypeButtons, CappingTypes} from 'constants/misc';
 import BudgetCreateModal from './BudgetCreateModal';
+import DomainCreateModal from './DomainCreateModal';
+import KeywordCreateModal from './KeywordCreateModal';
 
 const disabledExistedType = ({existedTypes, currentType}) => {
-  return existedTypes.find(existedType => {
+  const typeFound = existedTypes.find(existedType => {
     if (
       existedType.type === currentType.type &&
       existedType.sub_type === currentType.sub_type
@@ -25,6 +27,11 @@ const disabledExistedType = ({existedTypes, currentType}) => {
 
     return false;
   });
+
+  if (typeFound) {
+    return true;
+  }
+  return false;
 };
 
 const propTypes = {
@@ -40,7 +47,6 @@ const AddTypeButton = ({
 }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
-  console.log('🚀 ~ file: AddTypeButton.js ~ line 43 ~ activeType', activeType);
 
   function toggleModal() {
     setOpenModal(prevState => !prevState);
@@ -48,7 +54,6 @@ const AddTypeButton = ({
 
   function openCappingCreate(evt, item) {
     evt.preventDefault();
-    console.log('===== current type', item);
     setOpenModal(true);
     setActiveType(item);
   }
@@ -61,7 +66,13 @@ const AddTypeButton = ({
         </DropdownToggle>
         <DropdownMenu>
           {CappingTypeButtons?.map((item, idx) => {
-            if (item?.type === CappingTypes.SCHEDULE.value) {
+            if (
+              referenceType === 'campaign' &&
+              item?.type === CappingTypes.SCHEDULE.value
+            ) {
+              return null;
+            }
+            if (item?.type === CappingTypes.BUDGET_MANAGER.value) {
               return null;
             }
             return (
@@ -80,13 +91,37 @@ const AddTypeButton = ({
         </DropdownMenu>
       </UncontrolledButtonDropdown>
 
-      <BudgetCreateModal
-        openForm={openModal}
-        toggleModal={toggleModal}
-        cappingType={activeType}
-        referenceType={referenceType}
-        referenceUuid={referenceUuid}
-      />
+      {[CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+        activeType.type
+      ) && (
+        <BudgetCreateModal
+          openForm={openModal}
+          toggleModal={toggleModal}
+          cappingType={activeType}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+        />
+      )}
+
+      {activeType.type === CappingTypes.DOMAIN.value && (
+        <DomainCreateModal
+          openForm={openModal}
+          toggleModal={toggleModal}
+          cappingType={activeType}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+        />
+      )}
+
+      {activeType.type === CappingTypes.KEYWORD.value && (
+        <KeywordCreateModal
+          openForm={openModal}
+          toggleModal={toggleModal}
+          cappingType={activeType}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+        />
+      )}
     </>
   );
 };

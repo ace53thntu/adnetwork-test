@@ -4,33 +4,18 @@ import React from 'react';
 // External Modules
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
-import {
-  Badge,
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader
-} from 'reactstrap';
+import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 // Internal Modules
-import {
-  getResponseData,
-  getResponsePagination
-} from 'utils/helpers/misc.helpers';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {formToApi, getExistedType} from './dto';
+import {formToApi, getExistedType, getListByType} from './dto';
 import {
   ButtonLoading,
   DialogConfirm,
   LoadingIndicator
 } from 'components/common';
-import CustomPagination from 'components/common/CustomPagination';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
 import {
-  BudgetTimeFrames,
   CappingTypes,
   DEFAULT_PAGINATION,
   IS_RESPONSE_ALL
@@ -42,24 +27,9 @@ import {
 } from 'queries/capping';
 import AddTypeButton from './AddTypeButton';
 import CappingFormContainer from './CappingFormContainer';
-import {WEEK_DAYS} from 'pages/Campaign/constants';
-
-const renderCappingTypeColor = type => {
-  switch (type) {
-    case CappingTypes.BUDGET?.value:
-      return 'primary';
-    case CappingTypes.IMPRESSION?.value:
-      return 'success';
-    case CappingTypes.DOMAIN?.value:
-      return 'warning';
-    case CappingTypes.KEYWORD?.value:
-      return 'info';
-    case CappingTypes.SCHEDULE?.value:
-      return 'light';
-    default:
-      return 'secondary';
-  }
-};
+import BudgetList from './BudgetList';
+import DomainList from './DomainList';
+import KeywordList from './KeywordList';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired
@@ -70,21 +40,19 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
-  const [currentPage, setCurrentPage] = React.useState(1);
   const [openForm, setOpenForm] = React.useState(false);
   const [activeCapping, setActiveCapping] = React.useState(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
 
-  const {data, isLoading, isPreviousData} = useGetCappings({
+  const {data, isLoading} = useGetCappings({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
-      page: currentPage,
+      page: DEFAULT_PAGINATION.page,
       sort: 'created_at DESC',
       reference_uuid: referenceUuid
     },
-    enabled: !!referenceUuid,
-    keepPreviousData: true
+    enabled: !!referenceUuid
   });
 
   const cappings = React.useMemo(() => {
@@ -93,101 +61,23 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     return cappingData?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
 
+  const budgetList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.BUDGET.value});
+  }, [cappings]);
+
+  const impressionList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
+  }, [cappings]);
+
+  const domainList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.DOMAIN.value});
+  }, [cappings]);
+
+  const keywordList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.KEYWORD.value});
+  }, [cappings]);
+
   const existedTypes = getExistedType(cappings);
-
-  const paginationInfo = React.useMemo(() => {
-    return getResponsePagination(data);
-  }, [data]);
-
-  //---> Define columns
-  const columns = React.useMemo(() => {
-    return [
-      {
-        header: 'Capping type',
-        accessor: 'type',
-        cell: row => (
-          <Badge color={renderCappingTypeColor(row?.value)}>
-            {Object.entries(CappingTypes).find(
-              ([key, type]) => type.value === row?.value
-            )?.[1]?.label || ''}
-          </Badge>
-        )
-      },
-      {
-        header: 'Target',
-        accessor: 'target',
-        cell: row => row?.value?.toString() || ''
-      },
-
-      {
-        header: 'Budget',
-        accessor: 'time_frame',
-        cell: row => {
-          return (
-            <>
-              {[
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) &&
-                row?.value === BudgetTimeFrames.DAILY && (
-                  <Badge color="primary" pill>
-                    {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
-                  </Badge>
-                )}
-              {([
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) && row?.value) ===
-                BudgetTimeFrames.GLOBAL && (
-                <Badge color="success" pill>
-                  {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
-                </Badge>
-              )}
-            </>
-          );
-        }
-      },
-      {
-        header: 'Week days',
-        accessor: 'week_days',
-        cell: row => {
-          if (Array.isArray(row?.value)) {
-            return row?.value?.map(item => {
-              const weekDayFound = WEEK_DAYS.find(
-                weekDayItem => weekDayItem.value === item
-              );
-              if (weekDayFound)
-                return <Badge className="mr-2">{weekDayFound?.label}</Badge>;
-              else return '';
-            });
-          }
-          return null;
-        }
-      },
-      {
-        accessor: 'status',
-        cell: row => {
-          let statusProps = {
-            label: capitalize(row?.value)
-          };
-          switch (row.value) {
-            case 'active':
-              statusProps.color = 'success';
-              break;
-            default:
-              statusProps.color = 'error';
-              break;
-          }
-          return <CustomStatus {...statusProps} />;
-        }
-      }
-    ];
-  }, []);
-
-  function onPageChange(evt, page) {
-    evt.preventDefault();
-    setCurrentPage(page);
-  }
 
   function toggleModal() {
     setOpenForm(prevState => !prevState);
@@ -211,6 +101,10 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   }
 
   async function onEditCapping(formData) {
+    console.log(
+      '🚀 ~ file: CappingList.js ~ line 122 ~ onEditCapping ~ formData',
+      formData
+    );
     const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {
@@ -256,24 +150,35 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
       {isLoading && <LoadingIndicator />}
 
       {/* Capping List */}
-      <List
-        data={cappings || []}
-        columns={columns}
-        showAction
-        actions={[t('edit'), t('delete')]}
-        handleAction={onClickMenu}
-        handleClickItem={onClickItem}
+
+      <BudgetList
+        list={budgetList}
+        onClickMenu={onClickMenu}
+        onClickItem={onClickItem}
       />
-      <CustomPagination
-        currentPage={currentPage}
-        totalCount={paginationInfo?.totalItems}
-        onPageChange={(evt, page) => onPageChange(evt, page)}
-        disabled={isPreviousData}
+
+      <BudgetList
+        title="Impression"
+        list={impressionList}
+        onClickMenu={onClickMenu}
+        onClickItem={onClickItem}
+      />
+
+      <DomainList
+        list={domainList}
+        onClickMenu={onClickMenu}
+        onClickItem={onClickItem}
+      />
+
+      <KeywordList
+        list={keywordList}
+        onClickMenu={onClickMenu}
+        onClickItem={onClickItem}
       />
 
       {/* Capping Form */}
       {openForm && (
-        <Modal isOpen={openForm} size="lg">
+        <Modal isOpen={openForm}>
           <ModalHeader>Edit capping</ModalHeader>
           <ModalBody>
             <CappingFormContainer

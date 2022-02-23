@@ -12,10 +12,6 @@ const CAMPAIGN_ENTITY = {
 };
 
 export const apiToForm = ({campaign = null}) => {
-  console.log(
-    '🚀 ~ file: Campaign.js ~ line 15 ~ apiToForm ~ campaign',
-    campaign
-  );
   if (campaign) {
     const {
       uuid: id,
