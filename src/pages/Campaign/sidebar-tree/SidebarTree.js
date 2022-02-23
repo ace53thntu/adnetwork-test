@@ -11,6 +11,7 @@ import {Tree, minimalTheme} from 'components/common/TreeLazy';
 import {
   expandAdvertiserRedux,
   expandCampaignRedux,
+  loadCampaignRedux,
   resetCampaignRedux,
   setAdvertisersRedux,
   setCampaignRedux,
@@ -18,39 +19,80 @@ import {
   useCampaignSelector
 } from 'store/reducers/campaign';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {useTreePagination} from 'hooks';
 import {CampaignTreeStyled} from './styled';
-import {useGetAdvertisers} from 'queries/advertiser';
 import {advertisersMapData} from '../dto';
 import {CampaignAPIRequest} from 'api/campaign.api';
-import {GET_CAMPAIGNS} from 'queries/campaign/constants';
 import {StrategyAPIRequest} from 'api/strategy.api';
 import {GET_STRATEGIES} from 'queries/strategy/constants';
 import {RoutePaths} from 'constants/route-paths';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {
+  getResponseData,
+  getResponsePagination,
+  isValidResponse
+} from 'utils/helpers/misc.helpers';
+import {AdvertiserAPIRequest} from 'api/advertiser.api';
+import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 
 function SidebarTree(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryCache = useQueryClient();
-  const {handleLoadMoreInRoot} = useTreePagination();
 
-  const {advertisers: advertisersRedux} = useCampaignSelector();
+  const {
+    advertisers: advertisersRedux,
+    selectedAdvertiserId,
+    selectedCampaignId
+  } = useCampaignSelector();
 
-  const {data, isFetching} = useGetAdvertisers({
-    params: {limit: 1000, page: 1},
-    enabled: true
-  });
-  const advertisers = getResponseData(data, IS_RESPONSE_ALL);
+  const [page, setPage] = React.useState(DEFAULT_PAGINATION.page);
+  const [total, setTotal] = React.useState(1);
+
+  async function init(currentPage) {
+    const res = await AdvertiserAPIRequest.getAllAdvertiser({
+      params: {
+        page: currentPage,
+        per_page: DEFAULT_PAGINATION.perPage
+      },
+      options: {
+        isResponseAll: IS_RESPONSE_ALL
+      }
+    });
+
+    if (isValidResponse(res, IS_RESPONSE_ALL)) {
+      const items = advertisersMapData(
+        getResponseData(res, IS_RESPONSE_ALL),
+        currentPage
+      );
+      setTotal(getResponsePagination(res)?.totalItems);
+      dispatch(setAdvertisersRedux(items, currentPage));
+    }
+  }
 
   React.useEffect(() => {
-    if (!isFetching) {
-      const items = advertisersMapData(advertisers);
-
-      dispatch(setAdvertisersRedux(items));
-    }
+    init(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [advertisers, isFetching]);
+  }, []);
+
+  useDeepCompareEffect(() => {
+    if (selectedCampaignId) {
+      async function initCampaign() {
+        const res = await getCampaigns(selectedAdvertiserId);
+
+        if (res?.data?.length) {
+          dispatch(loadCampaignRedux(res?.data));
+        } else {
+          dispatch(loadCampaignRedux([]));
+        }
+      }
+
+      const isExpanded = advertisersRedux?.find(
+        item => item.id === selectedAdvertiserId
+      )?.children?.length;
+      if (!isExpanded) {
+        initCampaign();
+      }
+    }
+  }, [selectedAdvertiserId, advertisersRedux, dispatch]);
 
   React.useEffect(() => {
     return () => {
@@ -59,26 +101,86 @@ function SidebarTree(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getCampaigns = advId => {
+    try {
+      return CampaignAPIRequest.getAllCampaign({
+        params: {
+          advertiser_uuid: advId
+        }
+      });
+    } catch (error) {
+      return [];
+    }
+  };
+
   const loadChildren = React.useCallback(
     async (node, pageLimit, currentPage) => {
       const {isAdvertiser, id, expanded, isCampaign} = node;
       if (isAdvertiser) {
         if (expanded) {
-          //
+          // Campaign pagination
+          // let children = [];
+          // let campaignTotal = 0;
+          // let totalItems = 0;
+          // try {
+          //   const res = await CampaignAPIRequest.getAllCampaign({
+          //     params: {
+          //       per_page: DEFAULT_PAGINATION.perPage,
+          //       page: currentPage,
+          //       advertiser_uuid: id
+          //     },
+          //     options: {isResponseAll: IS_RESPONSE_ALL}
+          //   });
+          //   const data = getResponseData(res, IS_RESPONSE_ALL);
+          //   totalItems = getResponsePagination(res)?.totalItems || 0;
+          //   campaignTotal = Math.ceil(totalItems / pageLimit);
+          //   if (data) {
+          //     const currentSourceData = data ?? [];
+          //     currentSourceData.forEach((item, index) => {
+          //       children.push({
+          //         id: item.uuid,
+          //         name: item.name,
+          //         children: [],
+          //         numChildren: item?.total_strategies || 0,
+          //         page: 0,
+          //         totalPage: campaignTotal,
+          //         expanded: false,
+          //         selected: false,
+          //         parentId: id,
+          //         isCampaign: true,
+          //         advertiserId: id
+          //       });
+          //     });
+          //   }
+          // } catch (error) {
+          //   //
+          // }
+          // const currentAdvertisers = advertisersRedux?.map(item => {
+          //   if (item.id === node.id) {
+          //     return {
+          //       ...item,
+          //       page: currentPage,
+          //       totalPage: campaignTotal,
+          //       children: [...item.children, ...children]
+          //     };
+          //   }
+          //   return item;
+          // });
+          // dispatch(setAdvertisersRedux(currentAdvertisers, page));
         } else {
           let children = [];
           try {
             const res = await CampaignAPIRequest.getAllCampaign({
               params: {
-                limit: DEFAULT_PAGINATION.perPage,
+                per_page: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 advertiser_uuid: id
               },
               options: {isResponseAll: IS_RESPONSE_ALL}
             });
             const data = getResponseData(res, IS_RESPONSE_ALL);
+
             if (data) {
-              queryCache.setQueryData([GET_CAMPAIGNS, id], data);
               const currentSourceData = data ?? [];
               currentSourceData.forEach((item, index) => {
                 children.push({
@@ -102,17 +204,13 @@ function SidebarTree(props) {
         }
       }
       if (isCampaign) {
-        console.log(
-          '🚀 ~ file: SidebarTree.js ~ line 105 ~ isCampaign',
-          isCampaign
-        );
         if (!expanded) {
           const {parentId, id: campaignId} = node;
           let children = [];
           try {
             const res = await StrategyAPIRequest.getAllStrategy({
               params: {
-                limit: DEFAULT_PAGINATION.perPage,
+                per_page: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 campaign_uuid: campaignId
               },
@@ -142,6 +240,8 @@ function SidebarTree(props) {
             //
           }
           return children;
+        } else {
+          console.log('LOADMORE');
         }
       }
     },
@@ -185,6 +285,15 @@ function SidebarTree(props) {
     },
     [dispatch, navigate]
   );
+  const totalPage = Math.ceil(total / 10);
+
+  const handleLoadMoreInRoot = React.useCallback(() => {
+    if (totalPage > page) {
+      setPage(page + 1);
+      init(page + 1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, totalPage]);
 
   return (
     <CampaignTreeStyled>
@@ -198,6 +307,7 @@ function SidebarTree(props) {
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
+        isLast={page === totalPage}
       />
     </CampaignTreeStyled>
   );

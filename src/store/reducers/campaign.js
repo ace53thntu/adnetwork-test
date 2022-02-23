@@ -29,8 +29,12 @@ const SET_STRATEGY_INVENTORY_LIST = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST`;
 const SET_STRATEGY_INVENTORY_LIST_TEMP = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST_TEMP`;
 const REMOVE_INVENTORY_STRATEGY = `${PREFIX}/REMOVE_INVENTORY_STRATEGY`;
 const INIT_INVENTORY_STRATEGY = `${PREFIX}/INIT_INVENTORY_STRATEGY`;
+const LOAD_CAMPAIGN = `${PREFIX}/LOAD_CAMPAIGN`;
 
 // dispatch actions
+export const loadCampaignRedux = campaigns =>
+  createAction(LOAD_CAMPAIGN, {campaigns});
+
 export const initStrategyInventoryListRedux = ({
   inventoryList = [],
   inventoryTempList = []
@@ -53,8 +57,8 @@ export const resetCampaignRedux = () => {
   return createAction(RESET, {});
 };
 
-export const setAdvertisersRedux = data => {
-  return createAction(SET_ADVERTISERS, {data});
+export const setAdvertisersRedux = (data, page) => {
+  return createAction(SET_ADVERTISERS, {data, page});
 };
 export const selectAdvertiserRedux = (advertiserId, advertiser) => {
   return createAction(SELECT_ADVERTISER_ID, {advertiserId, advertiser});
@@ -124,10 +128,12 @@ const campaignInitialState = {
   alreadySetAdvertiser: false,
   keyword: '',
   inventoryList: [],
-  inventoryTempList: []
+  inventoryTempList: [],
+  advertiserPage: 1
 };
 
 const handleActions = {
+  [LOAD_CAMPAIGN]: handleLoadCampaign,
   [INIT_INVENTORY_STRATEGY]: initInventoryStrategyList,
   [REMOVE_INVENTORY_STRATEGY]: removeInventoryStrategyList,
   [SET_STRATEGY_INVENTORY_LIST]: handleSetStrategyInventoryList,
@@ -143,6 +149,36 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function handleLoadCampaign(state, action) {
+  const {campaigns} = action.payload;
+
+  const newNodes = [...state.advertisers].map(item => {
+    const childLen = item.children?.length ?? 0;
+    if (
+      item.id === state.selectedAdvertiserId &&
+      campaigns.length !== childLen
+    ) {
+      return {
+        ...item,
+        expanded: true,
+        children: [...campaigns]?.map(({uuid, name}) => ({
+          id: uuid,
+          name,
+          children: [],
+          numChildren: 0,
+          page: 0,
+          expanded: false,
+          selected: state.selectedCampaignId === uuid,
+          parentId: state.selectedAdvertiserId,
+          isCampaign: true
+        }))
+      };
+    }
+    return item;
+  });
+  state.advertisers = newNodes;
+}
 
 function initInventoryStrategyList(state, action) {
   const {inventoryList = [], inventoryTempList = []} = action.payload;
@@ -181,13 +217,21 @@ function handleReset(state) {
   state.selectedStrategyId = null;
   state.alreadySetAdvertiser = false;
   state.keyword = '';
+  state.advertiserPage = 1;
 }
 
 function handleSetAdvertisers(state, action) {
-  const {data} = action.payload;
+  const {page, data} = action.payload;
 
-  state.advertisers = data;
-  state.advertisersTemp = data;
+  if (page > state.advertiserPage) {
+    state.advertiserPage = page;
+    state.advertisers = [...state.advertisers, ...data];
+    state.advertisersTemp = [...state.advertisersTemp, ...data];
+  } else {
+    state.advertisers = data;
+    state.advertisersTemp = data;
+  }
+
   state.isLoading = false;
 }
 

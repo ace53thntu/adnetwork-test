@@ -32,10 +32,6 @@ const CustomPagination = props => {
     siblingCount,
     pageSize
   });
-  console.log(
-    '🚀 ~ file: CustomPagination.js ~ line 35 ~ paginationRange',
-    paginationRange
-  );
 
   if (currentPage === 0 || paginationRange.length < 2) {
     return null;

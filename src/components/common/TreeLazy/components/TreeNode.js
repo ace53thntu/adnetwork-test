@@ -78,8 +78,13 @@ class TreeNode extends Component {
       paginated &&
       pageLimit
     ) {
+      console.log('====== load more');
       state.page += 1;
       const loadedChildren = await loadChildren(node, pageLimit, state.page);
+      console.log(
+        '🚀 ~ file: TreeNode.js ~ line 84 ~ TreeNode ~ loadMore= ~ loadedChildren',
+        loadedChildren
+      );
       state.children = state.children.concat(
         parse ? parse(loadedChildren) : loadedChildren
       );
