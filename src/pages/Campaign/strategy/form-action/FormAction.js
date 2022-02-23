@@ -29,7 +29,7 @@ const FormAction = ({
   const navigate = useNavigate();
   const {gotoCampaignManagement} = useCampaignManager();
   const {
-    formState: {isSubmitting, isDirty}
+    formState: {isSubmitting}
   } = useFormContext();
 
   function goToView() {
@@ -42,6 +42,8 @@ const FormAction = ({
     <>
       {!isView && (
         <div className="d-block text-right mr-15">
+          <hr />
+
           <Button
             onClick={gotoCampaignManagement}
             className="mr-2"
@@ -65,9 +67,9 @@ const FormAction = ({
             type="submit"
             className="btn-primary"
             loading={isSubmitting}
-            disabled={!isDirty || isSubmitting}
+            disabled={isSubmitting}
           >
-            {isSummary ? t('save') : t('saveAndNext')}
+            {isSummary ? t('finish') : t('saveAndNext')}
           </ButtonLoading>
         </div>
       )}

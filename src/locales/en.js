@@ -233,6 +233,7 @@ const en = {
   acceptedPlacements: 'Accepted placements',
   recentStrategy: 'Recent strategies',
   noAudienceAvailable: 'No audience available',
+  finish: 'Finish',
 
   //report
   reportAudiences: 'Report Audiences',

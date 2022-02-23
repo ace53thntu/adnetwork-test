@@ -15,6 +15,7 @@ import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {Collapse} from 'components/common';
 // import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
@@ -105,7 +106,9 @@ const StrategyEditTabs = ({
                     isEdit={!isCreate}
                     currentStrategy={currentStrategy}
                   />
-                  <Concept goTo={goTo} strategyData={currentStrategy} />
+                  <Collapse title={t('concepts')} initialOpen unMount={false}>
+                    <Concept goTo={goTo} strategyData={currentStrategy} />
+                  </Collapse>
                   <FormAction isSummary currentStrategy={currentStrategy} />
                 </FormContainer>
               </SummaryTab>

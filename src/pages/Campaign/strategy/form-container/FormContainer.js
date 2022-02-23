@@ -36,6 +36,10 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
+  console.log(
+    '🚀 ~ file: FormContainer.js ~ line 39 ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();
@@ -50,14 +54,59 @@ const FormContainer = ({
     resolver: strategySchema(isEdit, t, isConcept)
   });
 
-  const {handleSubmit, reset} = methods;
+  const {
+    handleSubmit,
+    reset,
+    formState: {isDirty}
+  } = methods;
+  console.log('🚀 ~ file: FormContainer.js ~ line 54 ~ isDirty', isDirty);
+
+  const redirectPageAfterSave = useCallback(
+    ({
+      _strategyId,
+      _campaignId,
+      _advertiserId,
+      _isConcept = false,
+      _isSummary = false
+    }) => {
+      if (_isConcept) {
+        navigate(
+          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=summary&advertiser_id=${_advertiserId}`
+        );
+        return;
+      }
+
+      if (_isSummary) {
+        navigate(
+          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}?next_tab=description&advertiser_id=${_advertiserId}`
+        );
+        return;
+      }
+
+      navigate(
+        `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/edit?next_tab=concept&advertiser_id=${_advertiserId}`
+      );
+    },
+    [navigate]
+  );
 
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
       const req = formToApi({formData, isConcept, isSummary, currentStrategy});
       console.log('======== FORM DATA', req);
+
       if (isEdit) {
+        if (!isDirty) {
+          redirectPageAfterSave({
+            _strategyId: currentStrategy?.uuid,
+            _campaignId: currentStrategy?.campaign_uuid?.value,
+            _advertiserId: currentStrategy?.advertiser_uuid,
+            _isConcept: isConcept,
+            _isSummary: isSummary
+          });
+          return;
+        }
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
           const defaultValueUpdated = apiToForm({strategyData: data});
@@ -69,15 +118,14 @@ const FormContainer = ({
               inventoryTempList: data?.inventories || []
             })
           );
-          if (isConcept) {
-            navigate(
-              `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=summary&advertiser_id=${data?.advertiser_uuid}`
-            );
-          } else {
-            navigate(
-              `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
-            );
-          }
+
+          redirectPageAfterSave({
+            _strategyId: currentStrategy?.uuid,
+            _campaignId: currentStrategy?.campaign_uuid?.value,
+            _advertiserId: currentStrategy?.advertiser_uuid,
+            _isConcept: isConcept,
+            _isSummary: isSummary
+          });
         } catch (error) {
           ShowToast.error(error?.msg);
         }
@@ -101,9 +149,11 @@ const FormContainer = ({
       dispatch,
       editStrategy,
       isConcept,
+      isDirty,
       isEdit,
       isSummary,
       navigate,
+      redirectPageAfterSave,
       reset,
       strategyId
     ]
