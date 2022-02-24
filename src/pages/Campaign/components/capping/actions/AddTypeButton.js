@@ -12,9 +12,9 @@ import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import {CappingTypeButtons, CappingTypes} from 'constants/misc';
-import BudgetCreateModal from './BudgetCreateModal';
-import DomainCreateModal from './DomainCreateModal';
-import KeywordCreateModal from './KeywordCreateModal';
+import BudgetCreateModal from '../modal/BudgetCreateModal';
+import DomainCreateModal from '../modal/DomainCreateModal';
+import KeywordCreateModal from '../modal/KeywordCreateModal';
 
 const disabledExistedType = ({existedTypes, currentType}) => {
   const typeFound = existedTypes.find(existedType => {

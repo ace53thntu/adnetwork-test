@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
-import {renderCappingTypeColor} from './dto';
+import {renderCappingTypeColor} from '../dto';
 import {Collapse} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
-import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
+import {CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
 
@@ -23,8 +23,8 @@ const propTypes = {
   title: PropTypes.string
 };
 
-const BudgetList = ({
-  title = 'Budget',
+const ScheduleList = ({
+  title = 'Keyword',
   list = [],
   onClickMenu = () => null,
   onClickItem = () => null
@@ -46,40 +46,27 @@ const BudgetList = ({
         )
       },
       {
-        header: 'Target',
-        accessor: 'target',
-        cell: row => row?.value?.toString() || ''
-      },
-
-      {
-        header: 'Budget',
-        accessor: 'time_frame',
+        header: 'Keyword white list',
+        accessor: 'keywords_list_white',
         cell: row => {
-          return (
-            <>
-              {[
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) &&
-                row?.value === BudgetTimeFrames.DAILY && (
-                  <Badge color="primary" pill>
-                    {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
-                  </Badge>
-                )}
-              {([
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) && row?.value) ===
-                BudgetTimeFrames.GLOBAL && (
-                <Badge color="success" pill>
-                  {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
-                </Badge>
-              )}
-            </>
-          );
+          const dataList = row?.value;
+          if (isArray(dataList)) {
+            return dataList.map(item => item.name || '');
+          }
+          return null;
         }
       },
-
+      {
+        header: 'Keyword black list',
+        accessor: 'keywords_list_black',
+        cell: row => {
+          const dataList = row?.value;
+          if (isArray(dataList)) {
+            return dataList.map(item => item.name || '');
+          }
+          return null;
+        }
+      },
       {
         accessor: 'status',
         cell: row => {
@@ -118,6 +105,6 @@ const BudgetList = ({
   );
 };
 
-BudgetList.propTypes = propTypes;
+ScheduleList.propTypes = propTypes;
 
-export default React.memo(BudgetList);
+export default React.memo(ScheduleList);

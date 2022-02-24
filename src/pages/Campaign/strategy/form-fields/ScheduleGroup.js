@@ -30,7 +30,6 @@ export const ScheduleFormFields = ({
       <Row>
         <Col md="12">
           <FormReactSelect
-            required
             name={weekDayName}
             label={'Week days'}
             placeholder={'Select'}

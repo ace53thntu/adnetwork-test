@@ -1,1 +1,1 @@
-export {default as Capping} from './CappingList';
+export {default as Capping} from './list/CappingList';

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
-import {renderCappingTypeColor} from './dto';
+import {renderCappingTypeColor} from '../dto';
 import {Collapse} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';

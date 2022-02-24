@@ -18,12 +18,13 @@ import {
 } from 'reactstrap';
 
 // Internal Modules
-import {schemaValidate} from './validation';
+import {schemaValidate} from '../validation';
 import {ButtonLoading} from 'components/common';
-import {FormTextInput} from 'components/forms';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
-import {initializingDefaultValues} from './dto';
+import DomainGroupSelect from 'components/forms/DomainGroupSelect';
+import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
+import {initializingDefaultValues} from '../dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const propTypes = {
@@ -34,7 +35,7 @@ const propTypes = {
   referenceUuid: PropTypes.string
 };
 
-const BudgetCreateModal = ({
+const DomainCreateModal = ({
   openForm = false,
   toggleModal = () => null,
   cappingType = {},
@@ -45,7 +46,7 @@ const BudgetCreateModal = ({
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
     defaultValues: initializingDefaultValues({cappingType, referenceType}),
-    resolver: schemaValidate(t, CappingTypes.BUDGET.value)
+    resolver: schemaValidate(t, CappingTypes.DOMAIN.value)
   });
 
   const {handleSubmit, formState} = methods;
@@ -83,44 +84,36 @@ const BudgetCreateModal = ({
   }
 
   return (
-    <Modal isOpen={openForm}>
-      <ModalHeader>Edit capping</ModalHeader>
+    <Modal isOpen={openForm} size="lg">
+      <ModalHeader>Create capping</ModalHeader>
       <BlockUi tag="div" blocking={formState.isSubmitting}>
         <ModalBody>
           <FormProvider {...methods}>
             <Form
-              id="budgetForm"
+              id="domainForm"
               onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
             >
-              {[
-                CappingTypes.BUDGET_MANAGER.value,
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(cappingType.type) && (
-                <Row>
-                  <Col md="6">
-                    <FormTextInput
-                      type="number"
-                      placeholder={t('target')}
-                      name="target"
-                      label={t('target')}
-                      isRequired
-                    />
-                  </Col>
-
-                  {/* <Col md="3">
-                    <Label className="mr-5">Status</Label>
-                    <Controller
-                      control={control}
-                      name={CAMPAIGN_KEYS.STATUS}
-                      render={({onChange, onBlur, value, name}) => (
-                        <ActiveToggle value={value} onChange={onChange} />
-                      )}
-                    />
-                  </Col> */}
-                </Row>
-              )}
+              <Row>
+                <Col md="6">
+                  <DomainGroupSelect
+                    name={CAMPAIGN_KEYS.DOMAIN_GROUP_WHITE_UUID}
+                    label={t('domainGroupWhite')}
+                    placeholder={t('selectDomainGroupWhite')}
+                    defaultValues={[]}
+                    multiple
+                  />
+                </Col>
+                <Col md="6">
+                  <DomainGroupSelect
+                    name={CAMPAIGN_KEYS.DOMAIN_GROUP_BLACK_UUID}
+                    label={t('domainGroupBlack')}
+                    placeholder={t('selectDomainGroupBlack')}
+                    defaultValues={[]}
+                    multiple
+                  />
+                </Col>
+              </Row>
             </Form>
           </FormProvider>
         </ModalBody>
@@ -131,7 +124,7 @@ const BudgetCreateModal = ({
           <ButtonLoading
             type="submit"
             className="mr-2 btn-primary"
-            form="budgetForm"
+            form="domainForm"
             loading={formState.isSubmitting}
           >
             {t('save')}
@@ -142,6 +135,6 @@ const BudgetCreateModal = ({
   );
 };
 
-BudgetCreateModal.propTypes = propTypes;
+DomainCreateModal.propTypes = propTypes;
 
-export default BudgetCreateModal;
+export default DomainCreateModal;

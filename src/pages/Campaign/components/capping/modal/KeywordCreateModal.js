@@ -18,12 +18,12 @@ import {
 } from 'reactstrap';
 
 // Internal Modules
-import {schemaValidate} from './validation';
+import {schemaValidate} from '../validation';
 import {ButtonLoading} from 'components/common';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
-import {initializingDefaultValues} from './dto';
+import {initializingDefaultValues} from '../dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 

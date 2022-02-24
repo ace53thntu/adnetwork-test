@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
-import {renderCappingTypeColor} from './dto';
+import {renderCappingTypeColor} from '../dto';
 import {Collapse} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
@@ -46,8 +46,8 @@ const KeywordList = ({
         )
       },
       {
-        header: 'Keyword group white list',
-        accessor: 'keyword_group_white_list',
+        header: 'Keyword white list',
+        accessor: 'keywords_list_white',
         cell: row => {
           const dataList = row?.value;
           if (isArray(dataList)) {
@@ -56,10 +56,9 @@ const KeywordList = ({
           return null;
         }
       },
-
       {
-        header: 'Keyword group black list',
-        accessor: 'keyword_group_black_list',
+        header: 'Keyword black list',
+        accessor: 'keywords_list_black',
         cell: row => {
           const dataList = row?.value;
           if (isArray(dataList)) {
@@ -68,7 +67,6 @@ const KeywordList = ({
           return null;
         }
       },
-
       {
         accessor: 'status',
         cell: row => {

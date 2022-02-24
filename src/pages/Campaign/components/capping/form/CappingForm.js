@@ -10,12 +10,12 @@ import moment from 'moment';
 // Internal Modules
 import {FormTextInput} from 'components/forms';
 import {useTranslation} from 'react-i18next';
-import {schemaValidate} from './validation';
+import {schemaValidate} from '../validation';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 import {CappingTypes} from 'constants/misc';
-import {ScheduleFormFields} from '../../strategy/form-fields/ScheduleGroup';
+import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 
 const propTypes = {

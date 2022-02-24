@@ -3,18 +3,12 @@ import React from 'react';
 
 // External Modules
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 // Internal Modules
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {formToApi, getExistedType, getListByType} from './dto';
-import {
-  ButtonLoading,
-  DialogConfirm,
-  LoadingIndicator
-} from 'components/common';
+import {formToApi, getExistedType, getListByType} from '../dto';
+import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {
   CappingTypes,
   DEFAULT_PAGINATION,
@@ -25,8 +19,8 @@ import {
   useEditCapping,
   useGetCappings
 } from 'queries/capping';
-import AddTypeButton from './AddTypeButton';
-import CappingFormContainer from './CappingFormContainer';
+import AddTypeButton from '../actions/AddTypeButton';
+import CappingFormContainer from '../form/CappingFormContainer';
 import BudgetList from './BudgetList';
 import DomainList from './DomainList';
 import KeywordList from './KeywordList';
@@ -36,7 +30,6 @@ const propTypes = {
 };
 
 const CappingList = ({referenceUuid = '', referenceType = ''}) => {
-  const {t} = useTranslation();
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -67,6 +60,10 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
   const impressionList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
+  }, [cappings]);
+
+  const budgetManagerList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.BUDGET_MANAGER.value});
   }, [cappings]);
 
   const domainList = React.useMemo(() => {
@@ -151,55 +148,58 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
       {/* Capping List */}
 
-      <BudgetList
-        list={budgetList}
-        onClickMenu={onClickMenu}
-        onClickItem={onClickItem}
-      />
+      {budgetList?.length > 0 && (
+        <BudgetList
+          list={budgetList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
 
-      <BudgetList
-        title="Impression"
-        list={impressionList}
-        onClickMenu={onClickMenu}
-        onClickItem={onClickItem}
-      />
+      {impressionList?.length > 0 && (
+        <BudgetList
+          title="Impression"
+          list={impressionList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
 
-      <DomainList
-        list={domainList}
-        onClickMenu={onClickMenu}
-        onClickItem={onClickItem}
-      />
+      {domainList?.length > 0 && (
+        <DomainList
+          list={domainList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
 
-      <KeywordList
-        list={keywordList}
-        onClickMenu={onClickMenu}
-        onClickItem={onClickItem}
-      />
+      {keywordList?.length > 0 && (
+        <KeywordList
+          list={keywordList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
+
+      {budgetManagerList?.length > 0 && (
+        <BudgetList
+          title="Budget manager"
+          list={budgetManagerList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          isManager
+        />
+      )}
 
       {/* Capping Form */}
       {openForm && (
-        <Modal isOpen={openForm}>
-          <ModalHeader>Edit capping</ModalHeader>
-          <ModalBody>
-            <CappingFormContainer
-              cappingId={activeCapping?.uuid}
-              onSubmit={onEditCapping}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button color="link" className="mr-2" onClick={toggleModal}>
-              Close
-            </Button>
-            <ButtonLoading
-              type="submit"
-              className="mr-2 btn-primary"
-              form="cappingForm"
-              loading={isSubmitting}
-            >
-              {t('save')}
-            </ButtonLoading>
-          </ModalFooter>
-        </Modal>
+        <CappingFormContainer
+          cappingId={activeCapping?.uuid}
+          onSubmit={onEditCapping}
+          isSubmitting={isSubmitting}
+          openForm={openForm}
+          toggleModal={toggleModal}
+        />
       )}
 
       {openDialog && (
