@@ -15,24 +15,7 @@ import {CappingTypeButtons, CappingTypes} from 'constants/misc';
 import BudgetCreateModal from '../modal/BudgetCreateModal';
 import DomainCreateModal from '../modal/DomainCreateModal';
 import KeywordCreateModal from '../modal/KeywordCreateModal';
-
-const disabledExistedType = ({existedTypes, currentType}) => {
-  const typeFound = existedTypes.find(existedType => {
-    if (
-      existedType.type === currentType.type &&
-      existedType.sub_type === currentType.sub_type
-    ) {
-      return true;
-    }
-
-    return false;
-  });
-
-  if (typeFound) {
-    return true;
-  }
-  return false;
-};
+import {disabledExistedType} from '../dto';
 
 const propTypes = {
   existedTypes: PropTypes.array,
@@ -40,10 +23,16 @@ const propTypes = {
   referenceUuid: PropTypes.string
 };
 
+/**
+ * @Component Add Type Button Component
+ * @param {*}
+ * @returns
+ */
 const AddTypeButton = ({
   existedTypes = [],
   referenceType = 'campaign',
-  referenceUuid = ''
+  referenceUuid = '',
+  cappings = []
 }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
@@ -67,14 +56,13 @@ const AddTypeButton = ({
         <DropdownMenu>
           {CappingTypeButtons?.map((item, idx) => {
             if (
-              referenceType === 'campaign' &&
-              item?.type === CappingTypes.SCHEDULE.value
+              (referenceType === 'campaign' &&
+                item?.type === CappingTypes.SCHEDULE.value) ||
+              item?.type === CappingTypes.BUDGET_MANAGER.value
             ) {
               return null;
             }
-            if (item?.type === CappingTypes.BUDGET_MANAGER.value) {
-              return null;
-            }
+
             return (
               <DropdownItem
                 key={`pr-${item.type}-${item.sub_type}`}
@@ -100,6 +88,8 @@ const AddTypeButton = ({
           cappingType={activeType}
           referenceType={referenceType}
           referenceUuid={referenceUuid}
+          existedTypes={existedTypes}
+          cappings={cappings}
         />
       )}
 

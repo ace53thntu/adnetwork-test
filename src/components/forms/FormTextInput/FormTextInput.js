@@ -15,6 +15,7 @@ const FormTextInput = ({
   disable,
   disabled,
   style,
+  readOnly = false,
   ...rest
 }) => {
   const {errors, register} = useFormContext();
@@ -46,6 +47,7 @@ const FormTextInput = ({
         invalid={!!errorMessage}
         disabled={disable || disabled}
         style={style}
+        readOnly={readOnly}
       />
       {!!errorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
     </FormGroup>

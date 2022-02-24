@@ -109,8 +109,8 @@ export const BudgetTimeFrames = {
 
 export const CappingTypes = {
   BUDGET_MANAGER: {value: 'BDG_MNG', label: 'Budget Manager'}, // capping by budget of manager ( admin )
-  BUDGET: {value: 'BDG', label: 'Budget'}, // capping by budget of client
-  IMPRESSION: {value: 'IMP', label: 'Impression'}, // capping by impression
+  BUDGET: {value: 'BDG', label: 'Budget', api_key: 'budget'}, // capping by budget of client
+  IMPRESSION: {value: 'IMP', label: 'Impression', api_key: 'impression'}, // capping by impression
   DOMAIN: {value: 'DM', label: 'Domain'}, // capping by domain
   SCHEDULE: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
   KEYWORD: {value: 'KW', label: 'Keyword'} // capping by keywords
@@ -118,10 +118,8 @@ export const CappingTypes = {
 
 export const CappingTypeButtons = [
   {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
-  {type: 'BDG', sub_type: 'daily', label: 'Budget daily'},
-  {type: 'BDG', sub_type: 'global', label: 'Budget global'},
-  {type: 'IMP', sub_type: 'daily', label: 'Impression daily'},
-  {type: 'IMP', sub_type: 'global', label: 'Impression global'},
+  {type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
+  {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},
   {type: 'DM', sub_type: '', label: 'Domain'},
   {type: 'KW', sub_type: '', label: 'Keyword'},
   {type: 'SCHL', sub_type: '', label: 'Schedule'}

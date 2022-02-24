@@ -20,7 +20,7 @@ import {
 // Internal Modules
 import {schemaValidate} from '../validation';
 import {ButtonLoading} from 'components/common';
-import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
+import {CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import {initializingDefaultValues} from '../dto';
@@ -52,27 +52,20 @@ const KeywordCreateModal = ({
   const {handleSubmit, formState} = methods;
 
   async function onSubmit(formData) {
-    const bodyRequest = {
+    let bodyRequest = {
       reference_type: referenceType,
       reference_uuid: referenceUuid,
       type: cappingType?.type,
-      target: formData?.target ? parseInt(formData?.target, 10) : 0,
-      status: formData?.status
+      status: 'active'
     };
-
-    if (
-      [
-        CappingTypes.BUDGET_MANAGER.value,
-        CappingTypes.BUDGET.value,
-        CappingTypes.IMPRESSION.value
-      ].includes(cappingType.type)
-    ) {
-      if (cappingType.sub_type === BudgetTimeFrames.DAILY) {
-        bodyRequest.time_frame = BudgetTimeFrames.DAILY;
-      } else {
-        bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
-      }
-    }
+    bodyRequest.keywords_list_white_uuid =
+      formData?.keywords_list_white_uuid?.length > 0
+        ? Array.from(formData?.keywords_list_white_uuid, item => item.value)
+        : [];
+    bodyRequest.keywords_list_black_uuid =
+      formData?.keywords_list_black_uuid?.length > 0
+        ? Array.from(formData?.keywords_list_black_uuid, item => item.value)
+        : [];
 
     try {
       await createCapping(bodyRequest);

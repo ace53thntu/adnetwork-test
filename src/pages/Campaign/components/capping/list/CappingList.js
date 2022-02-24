@@ -142,6 +142,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           existedTypes={existedTypes}
           referenceType={referenceType}
           referenceUuid={referenceUuid}
+          cappings={cappings}
         />
       </div>
       {isLoading && <LoadingIndicator />}

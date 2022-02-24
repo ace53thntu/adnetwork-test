@@ -18,12 +18,11 @@ import {
 } from 'reactstrap';
 
 // Internal Modules
-import {schemaValidate} from '../validation';
+import {schemaValidateCreateBudget} from '../validation';
 import {ButtonLoading} from 'components/common';
 import {FormTextInput} from 'components/forms';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
-import {initializingDefaultValues} from '../dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 const propTypes = {
@@ -31,7 +30,8 @@ const propTypes = {
   toggleModal: PropTypes.func,
   cappingType: PropTypes.object,
   referenceType: PropTypes.string,
-  referenceUuid: PropTypes.string
+  referenceUuid: PropTypes.string,
+  existedTypes: PropTypes.array
 };
 
 const BudgetCreateModal = ({
@@ -39,38 +39,59 @@ const BudgetCreateModal = ({
   toggleModal = () => null,
   cappingType = {},
   referenceType = '',
-  referenceUuid = ''
+  referenceUuid = '',
+  existedTypes = [],
+  cappings = []
 }) => {
   const {t} = useTranslation();
+  const budgetGLobal = cappings?.find(
+    item =>
+      item.type === cappingType.type &&
+      item.time_frame === BudgetTimeFrames.GLOBAL
+  );
+  const budgetDaily = cappings?.find(
+    item =>
+      item.type === cappingType.value &&
+      item.time_frame === BudgetTimeFrames.DAILY
+  );
+
+  const defaultValues = {
+    global: budgetGLobal ? budgetGLobal.target : '',
+    daily: budgetDaily ? budgetDaily.target : ''
+  };
+
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
-    defaultValues: initializingDefaultValues({cappingType, referenceType}),
-    resolver: schemaValidate(t, CappingTypes.BUDGET.value)
+    defaultValues,
+    resolver: schemaValidateCreateBudget(t)
   });
 
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, reset} = methods;
 
   async function onSubmit(formData) {
-    const bodyRequest = {
+    console.log(
+      '🚀 ~ file: BudgetCreateModal.js ~ line 79 ~ onSubmit ~ formData',
+      formData
+    );
+    let bodyRequest = {
       reference_type: referenceType,
       reference_uuid: referenceUuid,
       type: cappingType?.type,
-      target: formData?.target ? parseInt(formData?.target, 10) : 0,
-      status: formData?.status
+      status: 'active'
     };
 
-    if (
-      [
-        CappingTypes.BUDGET_MANAGER.value,
-        CappingTypes.BUDGET.value,
-        CappingTypes.IMPRESSION.value
-      ].includes(cappingType.type)
-    ) {
-      if (cappingType.sub_type === BudgetTimeFrames.DAILY) {
-        bodyRequest.time_frame = BudgetTimeFrames.DAILY;
-      } else {
-        bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
-      }
+    if (formData?.global && !budgetGLobal) {
+      bodyRequest[cappingType.api_key] = {
+        global: parseInt(formData?.global)
+      };
+      bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
+    }
+
+    if (formData?.daily && !budgetDaily) {
+      bodyRequest[cappingType.api_key] = {
+        daily: parseInt(formData?.daily)
+      };
+      bodyRequest.time_frame = BudgetTimeFrames.DAILY;
     }
 
     try {
@@ -82,9 +103,13 @@ const BudgetCreateModal = ({
     }
   }
 
+  React.useEffect(() => {
+    return () => reset({global: '', daily: ''});
+  }, [reset]);
+
   return (
-    <Modal isOpen={openForm}>
-      <ModalHeader>Edit capping</ModalHeader>
+    <Modal isOpen={openForm} size="lg">
+      <ModalHeader>Create new Capping</ModalHeader>
       <BlockUi tag="div" blocking={formState.isSubmitting}>
         <ModalBody>
           <FormProvider {...methods}>
@@ -102,23 +127,23 @@ const BudgetCreateModal = ({
                   <Col md="6">
                     <FormTextInput
                       type="number"
-                      placeholder={t('target')}
-                      name="target"
-                      label={t('target')}
+                      placeholder={t('global')}
+                      name="global"
+                      label={t('global')}
                       isRequired
+                      readOnly={!!budgetGLobal}
                     />
                   </Col>
-
-                  {/* <Col md="3">
-                    <Label className="mr-5">Status</Label>
-                    <Controller
-                      control={control}
-                      name={CAMPAIGN_KEYS.STATUS}
-                      render={({onChange, onBlur, value, name}) => (
-                        <ActiveToggle value={value} onChange={onChange} />
-                      )}
+                  <Col md="6">
+                    <FormTextInput
+                      type="number"
+                      placeholder={t('daily')}
+                      name="daily"
+                      label={t('daily')}
+                      isRequired
+                      readOnly={!!budgetDaily}
                     />
-                  </Col> */}
+                  </Col>
                 </Row>
               )}
             </Form>

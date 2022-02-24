@@ -20,7 +20,7 @@ import {
 // Internal Modules
 import {schemaValidate} from '../validation';
 import {ButtonLoading} from 'components/common';
-import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
+import {CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
@@ -52,27 +52,20 @@ const DomainCreateModal = ({
   const {handleSubmit, formState} = methods;
 
   async function onSubmit(formData) {
-    const bodyRequest = {
+    let bodyRequest = {
       reference_type: referenceType,
       reference_uuid: referenceUuid,
       type: cappingType?.type,
-      target: formData?.target ? parseInt(formData?.target, 10) : 0,
-      status: formData?.status
+      status: 'active'
     };
-
-    if (
-      [
-        CappingTypes.BUDGET_MANAGER.value,
-        CappingTypes.BUDGET.value,
-        CappingTypes.IMPRESSION.value
-      ].includes(cappingType.type)
-    ) {
-      if (cappingType.sub_type === BudgetTimeFrames.DAILY) {
-        bodyRequest.time_frame = BudgetTimeFrames.DAILY;
-      } else {
-        bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
-      }
-    }
+    bodyRequest.domain_group_white_list_uuid =
+      formData?.domain_group_white_list_uuid?.length > 0
+        ? Array.from(formData?.domain_group_white_list_uuid, item => item.value)
+        : [];
+    bodyRequest.domain_group_black_list_uuid =
+      formData?.domain_group_black_list_uuid?.length > 0
+        ? Array.from(formData?.domain_group_black_list_uuid, item => item.value)
+        : [];
 
     try {
       await createCapping(bodyRequest);
@@ -126,6 +119,7 @@ const DomainCreateModal = ({
             className="mr-2 btn-primary"
             form="domainForm"
             loading={formState.isSubmitting}
+            disabled={!formState.isDirty}
           >
             {t('save')}
           </ButtonLoading>

@@ -150,3 +150,51 @@ export const renderCappingTypeColor = type => {
 export const getListByType = ({cappings, type}) => {
   return cappings?.filter(item => item.type === type);
 };
+
+export const disabledExistedType = ({existedTypes, currentType}) => {
+  if (currentType.type === CappingTypes.BUDGET.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.BUDGET.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Budget
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.IMPRESSION.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.IMPRESSION.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.KEYWORD.value) {
+    const typeFound = existedTypes.find(
+      existedType => existedType.type === CappingTypes.KEYWORD.value
+    );
+
+    if (typeFound) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.DOMAIN.value) {
+    const typeFound = existedTypes.find(
+      existedType => existedType.type === CappingTypes.DOMAIN.value
+    );
+
+    if (typeFound) {
+      return true;
+    }
+    return false;
+  }
+};
