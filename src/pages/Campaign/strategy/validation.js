@@ -7,9 +7,9 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
   if (isConcept) {
     return yupResolver(
       Yup.object().shape({
-        concept_uuids: Yup.array()
-          .required(t('required'))
-          .typeError(t('required'))
+        concept_uuids: Yup.array().nullable().notRequired()
+        // .required(t('required'))
+        // .typeError(t('required'))
       })
     );
   }

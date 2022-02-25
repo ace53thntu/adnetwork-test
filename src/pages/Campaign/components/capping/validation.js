@@ -93,3 +93,17 @@ export const schemaValidateCreateBudget = t => {
     })
   );
 };
+
+export const schemaValidateCreateSchedule = t => {
+  return yupResolver(
+    yup.object().shape({
+      week_days: yup.array().required(t('required')).typeError(t('required')),
+      start_time: yup.date().notRequired(t('required')),
+      end_time: yup
+        .date()
+        .notRequired()
+        .min(yup.ref(`start_time`), "End date can't be before start date")
+        .typeError(t('required'))
+    })
+  );
+};

@@ -24,6 +24,7 @@ import CappingFormContainer from '../form/CappingFormContainer';
 import BudgetList from './BudgetList';
 import DomainList from './DomainList';
 import KeywordList from './KeywordList';
+import ScheduleList from './ScheduleList';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired
@@ -72,6 +73,10 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
   const keywordList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.KEYWORD.value});
+  }, [cappings]);
+
+  const scheduleList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.SCHEDULE.value});
   }, [cappings]);
 
   const existedTypes = getExistedType(cappings);
@@ -179,6 +184,15 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           list={keywordList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+        />
+      )}
+
+      {scheduleList?.length > 0 && (
+        <ScheduleList
+          list={scheduleList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          isManager
         />
       )}
 

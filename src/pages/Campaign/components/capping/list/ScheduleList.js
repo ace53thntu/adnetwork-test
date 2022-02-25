@@ -3,18 +3,17 @@ import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
-import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
-import {renderCappingTypeColor} from '../dto';
 import {Collapse} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
-import {CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
+import {WEEK_DAYS} from 'pages/Campaign/constants';
+import {Chip} from '@material-ui/core';
 
 const propTypes = {
   list: PropTypes.array,
@@ -24,7 +23,7 @@ const propTypes = {
 };
 
 const ScheduleList = ({
-  title = 'Keyword',
+  title = 'Schedule',
   list = [],
   onClickMenu = () => null,
   onClickItem = () => null
@@ -35,37 +34,39 @@ const ScheduleList = ({
   const columns = React.useMemo(() => {
     return [
       {
-        header: 'Capping type',
-        accessor: 'type',
-        cell: row => (
-          <Badge color={renderCappingTypeColor(row?.value)}>
-            {Object.entries(CappingTypes).find(
-              ([key, type]) => type.value === row?.value
-            )?.[1]?.label || ''}
-          </Badge>
-        )
-      },
-      {
-        header: 'Keyword white list',
-        accessor: 'keywords_list_white',
+        header: 'Week days',
+        accessor: 'week_days',
         cell: row => {
-          const dataList = row?.value;
-          if (isArray(dataList)) {
-            return dataList.map(item => item.name || '');
-          }
-          return null;
+          return row?.value?.map(item => (
+            <Chip
+              className="ml-1 mb-1"
+              size="small"
+              label={
+                WEEK_DAYS.find(weekDay => weekDay.value === item)?.label || ''
+              }
+            />
+          ));
         }
       },
       {
-        header: 'Keyword black list',
-        accessor: 'keywords_list_black',
-        cell: row => {
-          const dataList = row?.value;
-          if (isArray(dataList)) {
-            return dataList.map(item => item.name || '');
-          }
-          return null;
-        }
+        header: 'Start hour',
+        accessor: 'start_hour',
+        cell: row => row?.value?.toString()
+      },
+      {
+        header: 'Start minute',
+        accessor: 'start_minute',
+        cell: row => row?.value?.toString()
+      },
+      {
+        header: 'End hour',
+        accessor: 'end_hour',
+        cell: row => row?.value?.toString()
+      },
+      {
+        header: 'End minute',
+        accessor: 'end_minute',
+        cell: row => row?.value?.toString()
       },
       {
         accessor: 'status',

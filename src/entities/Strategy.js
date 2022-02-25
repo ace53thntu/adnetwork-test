@@ -93,11 +93,6 @@ export const formToApi = ({
     : moment(start_time).toISOString();
   const endDate = moment(end_time).endOf('day').toISOString();
 
-  const scheduleStartHour = moment(schedule?.start_time).hours();
-  const scheduleStartMinute = moment(schedule?.start_time).minutes();
-  const scheduleEndHour = moment(schedule?.end_time).hours();
-  const scheduleEndMinute = moment(schedule?.end_time).minutes();
-
   // Set start time is null if start time < now
   if (
     moment(start_time).isBefore(moment(), 'day') ||
@@ -107,7 +102,7 @@ export const formToApi = ({
     startDate = null;
   }
 
-  const strategyReturn = {
+  let strategyReturn = {
     campaign_uuid: campaign?.value,
     name: name?.trim(),
     status,
@@ -124,8 +119,15 @@ export const formToApi = ({
     impression: {
       daily: parseInt(impression?.daily) || 0,
       global: parseInt(impression?.global) || 0
-    },
-    schedule: {
+    }
+  };
+
+  if (schedule?.week_days?.length > 0) {
+    const scheduleStartHour = moment(schedule?.start_time).hours();
+    const scheduleStartMinute = moment(schedule?.start_time).minutes();
+    const scheduleEndHour = moment(schedule?.end_time).hours();
+    const scheduleEndMinute = moment(schedule?.end_time).minutes();
+    strategyReturn.schedule = {
       week_days:
         schedule?.week_days?.length > 0
           ? Array.from(schedule?.week_days, item => item?.value)
@@ -135,8 +137,8 @@ export const formToApi = ({
       end_hour: parseInt(scheduleEndHour, 10),
       end_minute: parseInt(scheduleEndMinute, 10),
       time_zone: `${getTimeZoneOffset()}`
-    }
-  };
+    };
+  }
 
   if (strategy_type?.value === 'premium') {
     const inventoriesBid = formData?.inventories_bid || [];

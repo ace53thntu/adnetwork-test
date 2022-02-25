@@ -23,6 +23,7 @@ import {DescriptionTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
 import {Collapse} from 'components/common';
+import {CappingReferenceTypes} from 'constants/misc';
 // import Audience from './form-fields/Audience';
 
 const propTypes = {
@@ -90,7 +91,12 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
         },
         {
           name: t(ViewTabs.CAPPING.name),
-          content: <Capping referenceUuid={currentStrategy?.uuid} />
+          content: (
+            <Capping
+              referenceUuid={currentStrategy?.uuid}
+              referenceType={CappingReferenceTypes.STRATEGY}
+            />
+          )
         },
         {
           name: t(ViewTabs.REPORT.name),

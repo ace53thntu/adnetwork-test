@@ -16,6 +16,7 @@ import BudgetCreateModal from '../modal/BudgetCreateModal';
 import DomainCreateModal from '../modal/DomainCreateModal';
 import KeywordCreateModal from '../modal/KeywordCreateModal';
 import {disabledExistedType} from '../dto';
+import ScheduleCreateModal from '../modal/ScheduleCreateModal';
 
 const propTypes = {
   existedTypes: PropTypes.array,
@@ -79,21 +80,22 @@ const AddTypeButton = ({
         </DropdownMenu>
       </UncontrolledButtonDropdown>
 
-      {[CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
-        activeType.type
-      ) && (
-        <BudgetCreateModal
-          openForm={openModal}
-          toggleModal={toggleModal}
-          cappingType={activeType}
-          referenceType={referenceType}
-          referenceUuid={referenceUuid}
-          existedTypes={existedTypes}
-          cappings={cappings}
-        />
-      )}
+      {openModal &&
+        [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+          activeType.type
+        ) && (
+          <BudgetCreateModal
+            openForm={openModal}
+            toggleModal={toggleModal}
+            cappingType={activeType}
+            referenceType={referenceType}
+            referenceUuid={referenceUuid}
+            existedTypes={existedTypes}
+            cappings={cappings}
+          />
+        )}
 
-      {activeType.type === CappingTypes.DOMAIN.value && (
+      {openModal && activeType.type === CappingTypes.DOMAIN.value && (
         <DomainCreateModal
           openForm={openModal}
           toggleModal={toggleModal}
@@ -103,8 +105,18 @@ const AddTypeButton = ({
         />
       )}
 
-      {activeType.type === CappingTypes.KEYWORD.value && (
+      {openModal && activeType.type === CappingTypes.KEYWORD.value && (
         <KeywordCreateModal
+          openForm={openModal}
+          toggleModal={toggleModal}
+          cappingType={activeType}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+        />
+      )}
+
+      {openModal && activeType.type === CappingTypes.SCHEDULE.value && (
+        <ScheduleCreateModal
           openForm={openModal}
           toggleModal={toggleModal}
           cappingType={activeType}

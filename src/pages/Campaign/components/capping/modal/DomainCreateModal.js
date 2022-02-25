@@ -18,9 +18,7 @@ import {
 } from 'reactstrap';
 
 // Internal Modules
-import {schemaValidate} from '../validation';
 import {ButtonLoading} from 'components/common';
-import {CappingTypes} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
@@ -45,8 +43,7 @@ const DomainCreateModal = ({
   const {t} = useTranslation();
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
-    defaultValues: initializingDefaultValues({cappingType, referenceType}),
-    resolver: schemaValidate(t, CappingTypes.DOMAIN.value)
+    defaultValues: initializingDefaultValues({cappingType, referenceType})
   });
 
   const {handleSubmit, formState} = methods;

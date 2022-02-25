@@ -53,9 +53,10 @@ const FormContainer = ({
   const {
     handleSubmit,
     reset,
-    formState: {isDirty}
+    formState: {isDirty},
+    errors
   } = methods;
-  console.log('🚀 ~ file: FormContainer.js ~ line 54 ~ isDirty', isDirty);
+  console.log('🚀 ~ file: FormContainer.js ~ line 59 ~ errors', errors);
 
   const redirectPageAfterSave = useCallback(
     ({
@@ -132,7 +133,7 @@ const FormContainer = ({
           const strategyId = data?.uuid;
           ShowToast.success('Created strategy successfully');
           navigate(
-            `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid?.value}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
+            `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
           ShowToast.error(error?.msg);
