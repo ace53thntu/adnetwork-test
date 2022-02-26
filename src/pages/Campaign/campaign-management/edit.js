@@ -5,7 +5,7 @@ import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
 
 // Internal Modules
@@ -16,6 +16,7 @@ import {apiToForm} from 'entities/Campaign';
 
 const CampaignEdit = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const {campaignId} = useParams();
   const {data: campaign, isFetching, isFetched} = useGetCampaign({
     cid: campaignId,
@@ -23,10 +24,24 @@ const CampaignEdit = () => {
   });
   const campaignDestructure = apiToForm({campaign});
 
+  const goToCreate = React.useCallback(() => {
+    navigate(`/campaign/create`);
+  }, [navigate]);
+
+  const actionPageTitle = React.useMemo(
+    () => ({
+      actions: t('createNewCampaign'),
+
+      onClick: goToCreate
+    }),
+    [goToCreate, t]
+  );
+
   return (
     <CampaignContentLayout
       heading={t('campaignEdit')}
       subHeading={t('campaignPageDescription')}
+      actionPageTitle={actionPageTitle}
     >
       <CampaignContainerStyled fluid>
         {isFetching && <LoadingIndicator />}
