@@ -9,7 +9,7 @@
 import React from 'react';
 
 //---> External Modules
-import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {AccordionList} from 'components/list';
@@ -18,7 +18,6 @@ import Status from 'components/list/status';
 import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
 import {useGetPagesByContainer} from 'queries/page';
-import {useTranslation} from 'react-i18next';
 import {InventoryContainer} from '.';
 
 const ContainerPage = ({data}) => {
@@ -63,17 +62,6 @@ const ContainerPage = ({data}) => {
                 break;
             }
             return <Status {...statusProps} noHeader />;
-          } else {
-            return null;
-          }
-        }
-      },
-      {
-        header: 'Created at',
-        accessor: 'created_at',
-        cell: row => {
-          if (row.value) {
-            return row.value ? moment(row.value).format('DD/MM/YYYY') : null;
           } else {
             return null;
           }

@@ -3,19 +3,18 @@ import React from 'react';
 
 //---> External Modules
 import {Card, CardHeader, Row, Col, CardBody, Container} from 'reactstrap';
-import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {LoadingIndicator} from 'components/common';
-import {useTranslation} from 'react-i18next';
 import {useGetContainersInfinity} from 'queries/container';
 import {AccordionList} from 'components/list';
 import {capitalize} from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
 import {ContainerPage} from './components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {useDispatch} from 'react-redux';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {FilterBar, FilterBarForm} from './components/filter-bar';
 import {
@@ -109,13 +108,6 @@ const InventoryMarket = () => {
           };
           statusProps = getStatus({row, statusProps});
           return <Status {...statusProps} noHeader />;
-        }
-      },
-      {
-        header: 'Created at',
-        accessor: 'created_at',
-        cell: row => {
-          return row.value ? moment(row.value).format('DD/MM/YYYY') : null;
         }
       }
     ];

@@ -14,6 +14,7 @@ import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {CustomStatus} from 'components/list/status';
 import {capitalize} from 'utils/helpers/string.helpers';
+import NoDataAvailable from 'components/list/no-data';
 
 const propTypes = {
   inventoryId: PropTypes.string.isRequired
@@ -23,7 +24,8 @@ const DealList = ({inventoryId}) => {
   const columns = useColumns();
   const {data} = useGetInventoryDeals({
     params: {
-      per_page: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage,
+      inventory_uuid: inventoryId
     },
     enabled: !!inventoryId
   });
@@ -38,20 +40,28 @@ const DealList = ({inventoryId}) => {
   function onClickAction() {}
 
   return (
-    <div className="scroll-area-lg" style={{height: 430}}>
-      <PerfectScrollbar>
-        <List
-          showAction
-          data={deals || []}
-          columns={columns}
-          actions={['Edit', 'Delete']}
-          handleClickItem={onHandleClickRow}
-          handleAction={(actionIndex, currentItem) =>
-            onClickAction(actionIndex, currentItem)
-          }
-        />
-      </PerfectScrollbar>
-    </div>
+    <>
+      {' '}
+      {deals?.length > 0 ? (
+        <div className="scroll-area-lg" style={{height: 330}}>
+          <PerfectScrollbar>
+            <List
+              showAction
+              data={deals || []}
+              columns={columns}
+              actions={['Edit', 'Delete']}
+              handleClickItem={onHandleClickRow}
+              handleAction={(actionIndex, currentItem) =>
+                onClickAction(actionIndex, currentItem)
+              }
+            />
+            )
+          </PerfectScrollbar>
+        </div>
+      ) : (
+        <NoDataAvailable />
+      )}
+    </>
   );
 };
 
