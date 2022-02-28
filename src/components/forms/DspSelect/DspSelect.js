@@ -68,7 +68,8 @@ const useDspPagination = () => {
 
     const options = [...items].map(item => ({
       label: item.name,
-      value: item.uuid
+      value: item.uuid,
+      header_bidding_available: item?.header_bidding_available || false
     }));
 
     const hasMore = page < Math.ceil(total / perPage);

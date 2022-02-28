@@ -188,7 +188,7 @@ const InventoryList = ({page, filterParams = null}) => {
             showAction
             data={inventories}
             columns={columns}
-            actions={['View', 'Bid', 'Deal']}
+            actions={['View', 'Create Bid', 'Create Deal']}
             handleClickItem={onClickItem}
             handleAction={(actionIndex, currentItem) =>
               onClickAction(actionIndex, currentItem)
