@@ -64,7 +64,8 @@ class Tree extends Component {
       paginated,
       doubleClickSelect,
       // handleLoadMoreInRoot,
-      isLast = true
+      isLast = true,
+      isCreative = false
     } = this.props;
 
     const parsedNodes = parse ? parse(nodes) : nodes;
@@ -95,6 +96,7 @@ class Tree extends Component {
               useLocalState={useLocalState}
               paginated={paginated}
               doubleClickSelect={doubleClickSelect}
+              isCreative={isCreative}
             />
           );
         })}

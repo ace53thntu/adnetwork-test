@@ -58,7 +58,8 @@ function AdvertisersTree(props) {
         getResponseData(res, IS_RESPONSE_ALL),
         currentPage
       );
-      setTotal(getResponsePagination(res).totalItems);
+      const totalItems = getResponsePagination(res).totalItems;
+      setTotal(totalItems);
       dispatch(setAdvertisersRedux(items, currentPage));
     }
   }
@@ -96,11 +97,12 @@ function AdvertisersTree(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getConcepts = advId => {
+  const getConcepts = (advId, page = 1) => {
     try {
       return ConceptAPI.getConcepts({
         params: {
-          advertiser_uuid: advId
+          advertiser_uuid: advId,
+          page
         }
       });
     } catch (error) {
@@ -110,13 +112,29 @@ function AdvertisersTree(props) {
 
   const loadChildren = React.useCallback(
     async (node, pageLimit, currentPage) => {
-      const {isAdvertiser, id, expanded} = node;
-
+      const {isAdvertiser, id, expanded, page} = node;
       if (isAdvertiser) {
         if (expanded) {
-          //
+          const res = await getConcepts(id, page + 1);
+          if (res?.data?.length) {
+            const items = res.data;
+            const newChildren = items?.map(({uuid, name}) => ({
+              id: uuid,
+              name,
+              children: [],
+              numChildren: 0,
+              page: 0,
+              expanded: false,
+              selected: false,
+              parentId: node.id,
+              isConcept: true,
+              isAdvertiser: false
+            }));
+            return newChildren;
+          }
+          return [];
         } else {
-          const res = await getConcepts(id);
+          const res = await getConcepts(id, 1);
           if (res?.data?.length) {
             const items = res.data;
 
@@ -197,6 +215,7 @@ function AdvertisersTree(props) {
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
+        isCreative
       />
     </TreeContainer>
   );

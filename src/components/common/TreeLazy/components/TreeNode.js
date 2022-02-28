@@ -13,7 +13,7 @@ class TreeNode extends Component {
   // are also reflected in the local state.
 
   static getDerivedStateFromProps({node, useLocalState}, state) {
-    const {selected, expanded, children} = state;
+    const {selected, expanded, children, isCreative} = state;
 
     if (!useLocalState && node.name !== state.name) {
       return {
@@ -28,6 +28,21 @@ class TreeNode extends Component {
         selected: node.selected,
         expanded: node.expanded
       };
+    }
+
+    if (isCreative) {
+      if (
+        !useLocalState &&
+        (selected !== node.selected ||
+          expanded !== node.expanded ||
+          !deepEquals(children, node.children))
+      ) {
+        return {
+          selected: node.selected,
+          expanded: node.expanded,
+          children: children
+        };
+      }
     }
 
     if (
@@ -47,7 +62,7 @@ class TreeNode extends Component {
 
   constructor(props) {
     super(props);
-    const {node} = props;
+    const {node, isCreative} = props;
     const {expanded, selected, children, page, name, numChildren} = node;
     this.state = {
       expanderLoading: false,
@@ -57,7 +72,8 @@ class TreeNode extends Component {
       children,
       page,
       name,
-      numChildren
+      numChildren,
+      isCreative
     };
   }
 
@@ -81,10 +97,6 @@ class TreeNode extends Component {
       console.log('====== load more');
       state.page += 1;
       const loadedChildren = await loadChildren(node, pageLimit, state.page);
-      console.log(
-        '🚀 ~ file: TreeNode.js ~ line 84 ~ TreeNode ~ loadMore= ~ loadedChildren',
-        loadedChildren
-      );
       state.children = state.children.concat(
         parse ? parse(loadedChildren) : loadedChildren
       );
