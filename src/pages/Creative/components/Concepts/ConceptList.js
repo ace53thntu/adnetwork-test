@@ -37,9 +37,11 @@ function ConceptList(props) {
     isFetchingNextPage,
     status
   } = useGetConceptsLoadMore({
-    advertiserId,
-    limit: LIMIT,
-    enabled: !!advertiserId
+    enabled: !!advertiserId,
+    params: {
+      advertiser_uuid: advertiserId,
+      limit: LIMIT
+    }
   });
 
   React.useEffect(() => {
