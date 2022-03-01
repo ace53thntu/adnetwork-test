@@ -74,6 +74,10 @@ const FilterBarForm = ({children, typeOptions = [], formatOptions = []}) => {
               placeholder="0.00"
               label="Floor price"
               name="floor_price"
+              decimalSeparator="."
+              groupSeparator=","
+              disableGroupSeparators={true}
+              decimalsLimit={10}
             />
           </FormFieldItem>
           <FormFieldItem>
@@ -81,20 +85,10 @@ const FilterBarForm = ({children, typeOptions = [], formatOptions = []}) => {
               placeholder="0.00"
               label="Deal price"
               name="deal_price"
-            />
-          </FormFieldItem>
-          <FormFieldItem>
-            <FormTextInput
-              placeholder="0.0"
-              label="Fill rate"
-              name="fill_rate"
-            />
-          </FormFieldItem>
-          <FormFieldItem>
-            <FormTextInput
-              placeholder="0.0"
-              label="Click rate"
-              name="click_rate"
+              decimalSeparator="."
+              groupSeparator=","
+              disableGroupSeparators={true}
+              decimalsLimit={10}
             />
           </FormFieldItem>
         </React.Fragment>

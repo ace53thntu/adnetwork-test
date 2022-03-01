@@ -62,7 +62,8 @@ const InventoryMarket = () => {
   } = useGetContainersInfinity({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
-      sort: 'created_at DESC'
+      sort: 'created_at DESC',
+      has_inventory: true
     },
     enabled: true
   });

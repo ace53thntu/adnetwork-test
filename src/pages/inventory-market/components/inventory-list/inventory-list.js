@@ -74,6 +74,21 @@ const useColumns = () => {
         )
       },
       {
+        header: 'Format',
+        accessor: 'format'
+      },
+      {
+        header: 'Deal floor price',
+        accessor: 'deal_floor_price',
+        cell: row => {
+          if (row?.original?.allow_deal) {
+            return row.value;
+          }
+
+          return 'N/A';
+        }
+      },
+      {
         header: 'Floor price',
         accessor: 'floor_price',
         cell: row => (
@@ -145,6 +160,8 @@ const InventoryList = ({page, filterParams = null}) => {
 
   const onClickView = currentItem => {
     setOpenModal(true);
+    setIsBid(false);
+    setIsDeal(false);
     setSelectedInventory(currentItem);
   };
 
