@@ -114,7 +114,7 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
             </Col>
             <Col md="6">
               <FormReactSelect
-                disabled={isView}
+                disabled={isView || isEdit}
                 defaultValue={currentStrategy?.strategy_type}
                 options={STRATEGY_TYPES}
                 name="strategy_type"
