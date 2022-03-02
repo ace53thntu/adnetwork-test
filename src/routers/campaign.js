@@ -11,11 +11,13 @@ import {
   StrategyDetailLazy,
   StrategyEditLazy
 } from 'pages/Campaign/strategy';
+import {USER_ROLE} from 'pages/user-management/constants';
 import React from 'react';
 
 export const campaignPages = {
   path: RoutePaths.CAMPAIGN,
   element: <CampaignPageLayout />,
+  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER],
   children: [
     {
       path: '',

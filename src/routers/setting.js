@@ -7,9 +7,11 @@ import {
   TrackerListPage,
   TrackerTemplateListPage
 } from 'pages/setting';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 export const settingPages = {
   path: RoutePaths.SETTING,
+  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER],
   children: [
     {
       path: `${RoutePaths.DOMAIN}`,

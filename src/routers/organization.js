@@ -8,9 +8,11 @@ import {
   PublisherListPage,
   PublisherReportPage
 } from 'pages/Organization/Publisher';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 export const organizationPages = {
   path: RoutePaths.ORGANIZATION,
+  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER],
   children: [
     {
       path: `${RoutePaths.ADVERTISER}`,

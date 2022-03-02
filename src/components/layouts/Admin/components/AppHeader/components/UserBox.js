@@ -17,19 +17,21 @@ import {
   UncontrolledButtonDropdown
 } from 'reactstrap';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {getUser} from 'utils/helpers/auth.helpers';
+import {getRole, getUser} from 'utils/helpers/auth.helpers';
 import Emitter from 'utils/helpers/emitter.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
 
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {RoutePaths} from 'constants/route-paths';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const UserBox = () => {
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
   const {logout} = useAuth();
   const userInfo = getUser();
+  const role = getRole();
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [currentUser, setCurrentUser] = useState(userInfo);
@@ -107,7 +109,7 @@ const UserBox = () => {
                               {currentUser?.full_name ?? currentUser?.username}
                             </div>
                             <div className="widget-subheading opacity-8">
-                              {capitalize('admin')}
+                              {role ? capitalize(role) : ''}
                             </div>
                           </div>
                           <div className="widget-content-right mr-2">
@@ -135,13 +137,15 @@ const UserBox = () => {
                       <NavItem className="nav-item-header">
                         {t('setting')}
                       </NavItem>
-                      <NavItem>
-                        <NavLinkTrap tag="span">
-                          <NavLink to={`/${RoutePaths.USER}`}>
-                            {t('users')}
-                          </NavLink>
-                        </NavLinkTrap>
-                      </NavItem>
+                      {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+                        <NavItem>
+                          <NavLinkTrap tag="span">
+                            <NavLink to={`/${RoutePaths.USER}`}>
+                              {t('users')}
+                            </NavLink>
+                          </NavLinkTrap>
+                        </NavItem>
+                      )}
                       <NavItem>
                         <NavLinkTrap tag="span">
                           <NavLink
