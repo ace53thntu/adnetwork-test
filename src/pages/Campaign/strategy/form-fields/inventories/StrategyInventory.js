@@ -18,6 +18,10 @@ const propTypes = {
 };
 
 const StrategyInventory = ({strategyInventories = []}) => {
+  console.log(
+    '🚀 ~ file: StrategyInventory.js ~ line 21 ~ StrategyInventory ~ strategyInventories',
+    strategyInventories
+  );
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);
@@ -26,7 +30,8 @@ const StrategyInventory = ({strategyInventories = []}) => {
 
   React.useEffect(() => {
     const inventoriesConverted = strategyInventories?.map(item => ({
-      uuid: item.uuid
+      uuid: item.uuid,
+      price: item.deal_floor_price
     }));
 
     setValue('inventories_bid', inventoriesConverted, {
@@ -50,7 +55,7 @@ const StrategyInventory = ({strategyInventories = []}) => {
         accessor: 'position_name'
       },
       {
-        header: 'Deal Floor Price',
+        header: 'Deal Price',
         accessor: 'deal_floor_price',
         cell: row => (
           <Badge color="light" pill>
@@ -96,6 +101,11 @@ const StrategyInventory = ({strategyInventories = []}) => {
             <Controller
               render={({field}) => <input {...field} type="hidden" />}
               name={`inventories_bid[${inventoryIndex}].uuid`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].price`}
               control={control}
             />
           </div>

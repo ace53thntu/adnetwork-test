@@ -7,26 +7,15 @@ export const useStrategyInventories = ({
 }) => {
   return React.useMemo(() => {
     if (validArray({list: inventories})) {
-      if (!strategyInventories) {
-        return inventories;
-      }
-
-      return inventories.map(invItem => {
-        let dealFloorPrice = 0;
-        let isAdded = false;
-        const inventoryFound = strategyInventories.find(
+      return inventories.filter(invItem => {
+        const inventoryFound = strategyInventories?.find(
           strategyInvItem => strategyInvItem?.uuid === invItem?.uuid
         );
-        if (inventoryFound) {
-          dealFloorPrice = inventoryFound?.deal_floor_price;
-          isAdded = true;
+        if (!inventoryFound) {
+          return true;
         }
 
-        return {
-          ...invItem,
-          deal_floor_price: dealFloorPrice,
-          is_added: isAdded
-        };
+        return false;
       });
     }
 

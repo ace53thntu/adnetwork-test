@@ -49,7 +49,9 @@ const InventoryModal = ({onToggleModal = () => null, openModal = false}) => {
     isFetchingNextPage
   } = useGetContainersInfinity({
     params: {
-      limit: DEFAULT_PAGINATION.perPage
+      per_page: DEFAULT_PAGINATION.perPage,
+      has_inventory: true,
+      status: 'active'
     },
     enabled: true
   });

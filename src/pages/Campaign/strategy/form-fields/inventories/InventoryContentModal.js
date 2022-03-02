@@ -27,11 +27,13 @@ import {
 import DealFloorPriceInput from './DealFloorPriceInput';
 import {
   setStrategyInventoryTempListRedux,
+  useStrategyInventorySelector,
   useStrategyInventoryTempSelector
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 import {useStrategyInventories} from 'pages/Campaign/hooks/useStrategyInventories';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -42,13 +44,16 @@ const InventoryContentModal = ({containerId}) => {
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
 
   const dispatch = useDispatch();
+  let strategyInventories = useStrategyInventorySelector();
+
   let strategyInventoriesTemp = useStrategyInventoryTempSelector();
   if (!strategyInventoriesTemp) {
     strategyInventoriesTemp = [];
   }
 
   let params = {
-    limit: DEFAULT_PAGINATION.perPage
+    per_page: DEFAULT_PAGINATION.perPage,
+    allow_deal: true
   };
 
   if (containerId) {
@@ -72,20 +77,32 @@ const InventoryContentModal = ({containerId}) => {
   }, [pages]);
   const inventoriesMapping = useStrategyInventories({
     inventories,
-    strategyInventories: strategyInventoriesTemp
+    strategyInventories
   });
 
-  React.useEffect(() => {
+  const initChecked = React.useCallback(list => {
+    setInventoryIdsChecked(list);
+  }, []);
+
+  useDeepCompareEffect(() => {
     const idsTemp =
       strategyInventoriesTemp?.length > 0
         ? strategyInventoriesTemp?.map(item => item?.uuid)
         : [];
-    setInventoryIdsChecked(idsTemp);
-  }, [strategyInventoriesTemp]);
+    initChecked(idsTemp);
+  }, [initChecked, strategyInventoriesTemp]);
 
   const onChangeDealFloorPrice = React.useCallback(
     (value, _inventoryId) => {
+      console.log(
+        '🚀 ~ file: InventoryContentModal.js ~ line 88 ~ InventoryContentModal ~ value',
+        value
+      );
       let tmpArr = [...strategyInventoriesTemp];
+      console.log(
+        '🚀 ~ file: InventoryContentModal.js ~ line 98 ~ InventoryContentModal ~ tmpArr',
+        tmpArr
+      );
       tmpArr = tmpArr.map(item => {
         if (item?.uuid === _inventoryId) {
           return {...item, deal_floor_price: value};
@@ -114,6 +131,10 @@ const InventoryContentModal = ({containerId}) => {
         )
       },
       {
+        header: 'Format',
+        accessor: 'format'
+      },
+      {
         header: 'Market Type',
         accessor: 'market_type',
         cell: row => (
@@ -132,22 +153,9 @@ const InventoryContentModal = ({containerId}) => {
         )
       },
       {
-        header: 'Fill Rate',
-        accessor: 'fill_rate',
-        cell: row => (
-          <Badge color="info" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
-        header: 'Click Rate',
-        accessor: 'click_rate',
-        cell: row => (
-          <Badge color="light" pill>
-            {row?.value}
-          </Badge>
-        )
+        header: 'Position',
+        accessor: 'position_name',
+        cell: row => <div>{row?.value}</div>
       },
       {
         header: 'Deal Floor Price',
