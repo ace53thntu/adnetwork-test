@@ -57,14 +57,16 @@ export const formToApi = ({formData, type}) => {
     const scheduleEndHour = moment(formData?.end_time).hours();
     const scheduleEndMinute = moment(formData?.end_time).minutes();
     return {
-      week_days: isArray(formData?.week_days)
-        ? Array.from(formData?.week_days, item => item.value)
-        : [],
-      start_hour: parseInt(scheduleStartHour, 10),
-      start_minute: parseInt(scheduleStartMinute, 10),
-      end_hour: parseInt(scheduleEndHour, 10),
-      end_minute: parseInt(scheduleEndMinute, 10),
-      time_zone: `${getTimeZoneOffset()}`,
+      schedule: {
+        week_days: isArray(formData?.week_days)
+          ? Array.from(formData?.week_days, item => item.value)
+          : [],
+        start_hour: parseInt(scheduleStartHour, 10),
+        start_minute: parseInt(scheduleStartMinute, 10),
+        end_hour: parseInt(scheduleEndHour, 10),
+        end_minute: parseInt(scheduleEndMinute, 10),
+        time_zone: `${getTimeZoneOffset()}`
+      },
       status
     };
   }

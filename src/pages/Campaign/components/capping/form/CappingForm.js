@@ -93,11 +93,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
     defaultValues,
     resolver: schemaValidate(t, cappingType)
   });
-  const {handleSubmit, errors} = methods;
-  console.log(
-    '🚀 ~ file: CappingForm.js ~ line 97 ~ CappingForm ~ errors',
-    errors
-  );
+  const {handleSubmit} = methods;
 
   return (
     <div>
