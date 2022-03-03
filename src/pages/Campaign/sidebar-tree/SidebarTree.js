@@ -13,6 +13,7 @@ import {
   expandCampaignRedux,
   loadCampaignRedux,
   resetCampaignRedux,
+  setAdvertiserRedux,
   setAdvertisersRedux,
   setCampaignRedux,
   setStrategyRedux,
@@ -270,17 +271,22 @@ function SidebarTree(props) {
         advertiserId
       } = node;
       if (isAdvertiser) {
+        navigate(`/${RoutePaths.CAMPAIGN}?mode=campaign&advertiser_id=${id}`);
+        dispatch(setAdvertiserRedux(id));
+
         return;
       }
       if (isCampaign) {
         dispatch(setCampaignRedux(advertiserId, id));
         navigate(`/${RoutePaths.CAMPAIGN}/${id}?advertiser_id=${advertiserId}`);
+        return;
       }
       if (isStrategy) {
         dispatch(setStrategyRedux(advertiserId, parentId, id));
         navigate(
           `/${RoutePaths.CAMPAIGN}/${parentId}/${RoutePaths.STRATEGY}/${id}?advertiser_id=${advertiserId}`
         );
+        return;
       }
     },
     [dispatch, navigate]

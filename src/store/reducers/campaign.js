@@ -66,17 +66,9 @@ export const selectAdvertiserRedux = (advertiserId, advertiser) => {
 export const expandAdvertiserRedux = (advertiserId, state) => {
   return createAction(EXPAND_ADVERTISER, {advertiserId, state});
 };
-export const setAdvertiserRedux = (
-  advertiser,
-  campaigns,
-  strategyId,
-  strategies
-) => {
+export const setAdvertiserRedux = advertiserId => {
   return createAction(SET_ADVERTISER, {
-    advertiser,
-    campaigns,
-    strategyId,
-    strategies
+    advertiserId
   });
 };
 export const unExpandAdvertisersRedux = () => {
@@ -283,204 +275,21 @@ function handleExpandAdvertiser(state, action) {
 }
 
 function handleSetAdvertiser(state, action) {
-  // const {advertiser, campaigns, strategyId, strategies = []} = action.payload;
-  // const newNodes = [...state.advertisers].map(item => {
-  //   if (item.id === advertiser.id) {
-  //     //
-  //     if (!item.expanded) {
-  //       let advertiserItem = {
-  //         ...item,
-  //         expanded: true,
-  //         selected: false
-  //       };
-  //       let children = [];
-  //       advertiserItem.children = children.map(child => {
-  //         if (child.id === campaign.id) {
-  //           let campaignItem = {
-  //             ...child,
-  //             expanded: true,
-  //             selected: false
-  //           };
-  //           if (child.id !== 'import' && child.id !== 'transfer') {
-  //             const pagesBySource = pages?.length > 0 ? pages : child?.children;
-  //             const sourceChildren = pagesBySource?.map((sourceData, index) => {
-  //               const {id, name} = sourceData;
-  //               return {
-  //                 id,
-  //                 name: name,
-  //                 children: [],
-  //                 numChildren: 0,
-  //                 page: 0,
-  //                 expanded: false,
-  //                 selected: pageId === id,
-  //                 parentId: child.id,
-  //                 isPage: true,
-  //                 containerId: container.id
-  //               };
-  //             });
-  //             sourceItem.children = sourceChildren;
-  //           } else {
-  //             sourceItem.selected = true;
-  //           }
-  //           return sourceItem;
-  //         }
-  //         return {
-  //           ...child,
-  //           selected: false,
-  //           expanded: false
-  //         };
-  //       });
-  //       if (item.numChildren <= 0) {
-  //         containerItem.numChildren = containerItem.children.length;
-  //       }
-  //       return containerItem;
-  //     } else {
-  //       const isExistSource = !!item.children.find(
-  //         sourceNe => sourceNe.id === source
-  //       );
-  //       if (isExistSource) {
-  //         return {
-  //           ...item,
-  //           expanded: true,
-  //           selected: false,
-  //           children: [...item.children].map(child => {
-  //             if (child.id === source) {
-  //               let sourceItem = {
-  //                 ...child,
-  //                 expanded: true,
-  //                 selected: false
-  //               };
-  //               const pagesBySource =
-  //                 pages?.length > 0 ? pages : child?.children;
-  //               const sourceChildren = pagesBySource?.map(
-  //                 (sourceData, index) => {
-  //                   const {id, name} = sourceData;
-  //                   return {
-  //                     id,
-  //                     name: name,
-  //                     children: [],
-  //                     numChildren: 0,
-  //                     page: 0,
-  //                     expanded: false,
-  //                     selected: pageId === id,
-  //                     // selected: state.selectedPageId === id index === 0,
-  //                     parentId: child.id,
-  //                     isPage: true,
-  //                     containerId: container.id
-  //                   };
-  //                 }
-  //               );
-  //               sourceItem.children = sourceChildren;
-  //               if (source === 'import' || source === 'transfer') {
-  //                 sourceItem.selected = true;
-  //               }
-  //               return sourceItem;
-  //             }
-  //             return {
-  //               ...child,
-  //               selected: false,
-  //               children: child?.children
-  //                 ? original(child.children)?.map(unSelectedChild) ?? []
-  //                 : []
-  //             };
-  //           })
-  //         };
-  //       } else {
-  //         if (source !== 'import' && source !== 'transfer') {
-  //           const newSource = container.source?.[source];
-  //           let children = item.children.map(child =>
-  //             unSelectedAndUnExpanded(child)
-  //           );
-  //           if (newSource) {
-  //             const sourceChildren = newSource?.map((sourceData, index) => {
-  //               const {id, name} = sourceData;
-  //               return {
-  //                 id,
-  //                 name,
-  //                 children: [],
-  //                 numChildren: 0,
-  //                 page: 0,
-  //                 expanded: false,
-  //                 selected: pageId === id,
-  //                 parentId: source,
-  //                 isPage: true,
-  //                 containerId: container.id
-  //               };
-  //             });
-  //             children.push({
-  //               id: source,
-  //               name: CONTAINER_TREE_SOURCES[source],
-  //               children: sourceChildren,
-  //               numChildren: newSource?.length ?? 0,
-  //               page: 0,
-  //               expanded: true,
-  //               selected: false,
-  //               parentId: container.id,
-  //               isSource: true
-  //             });
-  //             let containerItem = {
-  //               ...item,
-  //               source: {
-  //                 ...item.source,
-  //                 [source]: newSource?.length ?? 0
-  //               },
-  //               expanded: true,
-  //               selected: false,
-  //               children,
-  //               numChildren: children.length
-  //             };
-  //             return containerItem;
-  //           }
-  //           let containerItem = {
-  //             ...item,
-  //             expanded: true,
-  //             selected: false,
-  //             children,
-  //             numChildren: children.length
-  //           };
-  //           return containerItem;
-  //         } else {
-  //           const {import_count, transfer_count} = container;
-  //           let containerItem = {
-  //             ...item,
-  //             expanded:
-  //               source === 'import'
-  //                 ? import_count > 0
-  //                 : source !== 'transfer'
-  //                 ? transfer_count > 0
-  //                 : false,
-  //             selected: false
-  //           };
-  //           if (source === 'import' && import_count === 0) {
-  //             containerItem.selected = true;
-  //           }
-  //           if (source === 'transfer' && transfer_count === 0) {
-  //             containerItem.selected = true;
-  //           }
-  //           let children = item.children.map(child => {
-  //             if (child.id === source) {
-  //               return {
-  //                 ...child,
-  //                 selected: true
-  //               };
-  //             }
-  //             return unSelectedChild(child);
-  //           });
-  //           containerItem.children = children;
-  //           return containerItem;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return unSelectedChild(item);
-  // });
-  // state.containers = newNodes;
-  // state.containersTemp = newNodes.map(item => unSelectedChild(item));
-  // state.container = container;
-  // state.selectedContainerId = container.uuid;
-  // state.selectedSource = source;
-  // state.selectedPageId = pageId;
-  // state.alreadySetContainer = pageId ? true : false;
+  const {advertiserId} = action.payload;
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === advertiserId) {
+      const newItem = unSelectedChild(item);
+      return {
+        ...newItem,
+        selected: true
+      };
+    }
+
+    return unSelectedChild(item);
+  });
+  state.advertisers = newNodes;
+  state.advertisersTemp = newNodes.map(item => unSelectedChild(item));
+  state.selectedAdvertiserId = advertiserId;
 }
 
 function handleUnExpandContainers(state, action) {
@@ -574,7 +383,7 @@ function handleSetCampaign(state, action) {
   });
   state.advertisers = newNodes;
   state.advertisersTemp = newNodes.map(item => unSelectedChild(item));
-  state.selectedContainId = advertiserId;
+  state.selectedAdvertiserId = advertiserId;
   state.selectedCampaign = campaignId;
   // state.selectedPageId = pageId;
   state.alreadySetAdvertiser = true;

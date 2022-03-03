@@ -6,7 +6,10 @@ export const useInventoriesByContainer = ({data}) => {
       const inventories = data?.map(item => {
         return {
           ...item,
-          id: item.uuid
+          id: item.uuid,
+          actions: item.allow_deal
+            ? ['View', 'Create bid', 'Create deal']
+            : ['View', 'Create bid']
         };
       });
       return inventories;

@@ -16,20 +16,24 @@ const ListCampaignLayout = () => {
   const navigate = useNavigate();
   const query = useQueryString();
   const mode = query.get('mode') || 'campaign';
+  const advertiserId = query.get('advertiser_id') || '';
+
   const {campaignId} = useParams();
   const [typeView, setTypeView] = React.useState(mode);
 
+  const advertiserQuery = advertiserId ? `advertiser_id=${advertiserId}` : '';
+
   const goToCreate = React.useCallback(() => {
     if (typeView === 'campaign') {
-      navigate(`/campaign/create`);
+      navigate(`/campaign/create?${advertiserQuery}`);
       return;
     }
 
     if (typeView === 'strategy') {
-      navigate(`/campaign/${campaignId}/strategy/create`);
+      navigate(`/campaign/${campaignId}/strategy/create?${advertiserQuery}`);
       return;
     }
-  }, [navigate, typeView, campaignId]);
+  }, [typeView, navigate, advertiserQuery, campaignId]);
 
   const actionPageTitle = React.useMemo(
     () => ({

@@ -4,6 +4,7 @@ import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
+import {useQueryString} from 'hooks';
 import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
 import React from 'react';
 import {useNavigate} from 'react-router';
@@ -21,14 +22,22 @@ const propTypes = {};
 
 const CampaignList = () => {
   const navigate = useNavigate();
+  const query = useQueryString();
+  const advertiserId = query.get('advertiser_id') || '';
+
   const [currentPage, setCurrentPage] = React.useState(1);
+  const params = {
+    per_page: DEFAULT_PAGINATION.perPage,
+    page: currentPage,
+    sort: 'created_at DESC'
+  };
+
+  if (advertiserId) {
+    params.advertiser_uuid = advertiserId;
+  }
 
   const {data, isLoading, isPreviousData} = useGetCampaigns({
-    params: {
-      per_page: DEFAULT_PAGINATION.perPage,
-      page: currentPage,
-      sort: 'created_at DESC'
-    },
+    params,
     enabled: true,
     keepPreviousData: true
   });
