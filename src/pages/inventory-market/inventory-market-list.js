@@ -30,6 +30,8 @@ import {isFalsy} from 'utils/validateObject';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -52,6 +54,7 @@ const getStatus = ({row, statusProps}) => {
 
 const InventoryMarket = () => {
   const {t} = useTranslation();
+  const role = getRole();
   //---> Query list of containers
   const {
     data: {pages = []} = {},
@@ -83,7 +86,8 @@ const InventoryMarket = () => {
     return [
       {
         header: 'Name',
-        accessor: 'name'
+        accessor: 'name',
+        md: 10
       },
       {
         header: 'Url',
@@ -109,10 +113,23 @@ const InventoryMarket = () => {
           };
           statusProps = getStatus({row, statusProps});
           return <Status {...statusProps} noHeader />;
-        }
+        },
+        md: 2
       }
-    ];
-  }, []);
+    ].filter(item => {
+      if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+        if (['cost', 'url'].includes(item.accessor)) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    });
+  }, [role]);
+  console.log(
+    '🚀 ~ file: inventory-market-list.js ~ line 127 ~ columns ~ columns',
+    columns
+  );
 
   const reduxDispatch = useDispatch();
 

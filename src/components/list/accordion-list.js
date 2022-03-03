@@ -87,14 +87,22 @@ function AccordionList(props) {
             >
               <Grid container spacing={2} className={classes.content}>
                 {columns.map((column, index) => {
-                  const {header, accessor, cell} = column;
+                  const {
+                    header,
+                    accessor,
+                    cell,
+                    md = 6,
+                    xs = 6,
+                    sm = 6
+                  } = column;
+
                   return (
                     <Grid
                       item
-                      md
+                      md={md}
                       zeroMinWidth
-                      xs={6}
-                      sm={6}
+                      xs={xs}
+                      sm={sm}
                       key={index}
                       className={!header ? classesList.noHeader : ''}
                     >

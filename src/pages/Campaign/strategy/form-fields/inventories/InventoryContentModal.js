@@ -34,12 +34,16 @@ import {useDispatch} from 'react-redux';
 import {useStrategyInventories} from 'pages/Campaign/hooks/useStrategyInventories';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 const propTypes = {
   containerId: PropTypes.string
 };
 
 const InventoryContentModal = ({containerId}) => {
+  const role = getRole();
+
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
 
@@ -94,15 +98,7 @@ const InventoryContentModal = ({containerId}) => {
 
   const onChangeDealFloorPrice = React.useCallback(
     (value, _inventoryId) => {
-      console.log(
-        '🚀 ~ file: InventoryContentModal.js ~ line 88 ~ InventoryContentModal ~ value',
-        value
-      );
       let tmpArr = [...strategyInventoriesTemp];
-      console.log(
-        '🚀 ~ file: InventoryContentModal.js ~ line 98 ~ InventoryContentModal ~ tmpArr',
-        tmpArr
-      );
       tmpArr = tmpArr.map(item => {
         if (item?.uuid === _inventoryId) {
           return {...item, deal_floor_price: value};
@@ -169,8 +165,20 @@ const InventoryContentModal = ({containerId}) => {
           />
         )
       }
-    ];
-  }, [onChangeDealFloorPrice]);
+    ].filter(item => {
+      if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+        if (
+          ['market_type', 'deal_floor_price', 'floor_price'].includes(
+            item.accessor
+          )
+        ) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    });
+  }, [onChangeDealFloorPrice, role]);
 
   const onClickItem = item => {};
 

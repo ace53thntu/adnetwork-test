@@ -33,6 +33,8 @@ import {
   useSearchTypeSelector
 } from 'store/reducers/inventory-market';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 const ActionIndexes = {
   VIEW: 0,
@@ -40,7 +42,7 @@ const ActionIndexes = {
   DEAL: 2
 };
 
-const useColumns = () => {
+const useColumns = role => {
   return React.useMemo(() => {
     return [
       {
@@ -97,11 +99,25 @@ const useColumns = () => {
           </Badge>
         )
       }
-    ];
-  }, []);
+    ].filter(item => {
+      if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+        if (
+          ['market_type', 'deal_floor_price', 'floor_price'].includes(
+            item.accessor
+          )
+        ) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    });
+  }, [role]);
 };
 
 const InventoryList = ({page, filterParams = null}) => {
+  const role = getRole();
+
   const searchType = useSearchTypeSelector();
   const filterMode = useFilterModeSelector();
 
@@ -141,7 +157,7 @@ const InventoryList = ({page, filterParams = null}) => {
   const inventories = useInventoriesByContainer({
     data: containerInventories
   });
-  const columns = useColumns();
+  const columns = useColumns(role);
 
   //---> Define local states.
   const [openModal, setOpenModal] = useState(false);
