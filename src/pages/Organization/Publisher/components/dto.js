@@ -1,20 +1,28 @@
 /**
  * @function mappingApiToForm
- * @description Mapping API respone to form data format
- * @param {Objecy} apiResp - API response data
+ * @description Mapping API response to form data format
+ * @param {Object} apiResp - API response data
  * @param {Array} domainsArr - List of domains
  * @param {Array} countriesArr - List of Countries
  * @returns data with Form format trustly
  */
 export const mappingApiToForm = ({apiResp = {}}) => {
-  const {uuid = '', name = '', status = 'active', domain} = apiResp;
-  //---> Get selected country
+  if (apiResp) {
+    const {uuid = '', name = '', status = 'active', domain} = apiResp;
+    //---> Get selected country
 
+    return {
+      uuid,
+      name,
+      status,
+      domain
+    };
+  }
   return {
-    uuid,
-    name,
-    status,
-    domain
+    uuid: '',
+    name: '',
+    status: 'active',
+    domain: null
   };
 };
 
