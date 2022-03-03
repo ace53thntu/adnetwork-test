@@ -102,17 +102,25 @@ function List(props) {
 
               <Grid container spacing={2}>
                 {columns?.map((column, index) => {
-                  const {header, accessor, cell} = column;
+                  const {
+                    header,
+                    accessor,
+                    cell,
+                    xs = 6,
+                    sm = 6,
+                    ...rest
+                  } = column;
 
                   return (
                     <GridStyled
                       item
                       md
                       zeroMinWidth
-                      xs={6}
-                      sm={6}
+                      xs={xs}
+                      sm={sm}
                       key={index}
                       className={!header ? classes.noHeader : ''}
+                      {...rest}
                     >
                       {header ? <Header text={header} /> : null}
                       {cell ? (
