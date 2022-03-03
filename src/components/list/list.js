@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+
 import Checkbox from '@material-ui/core/Checkbox';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
@@ -9,8 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Radio from '@material-ui/core/Radio';
 import SettingsIcon from '@material-ui/icons/Settings';
-import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+
 import BodyText from './body-text';
 import Header from './header';
 import ListItem from './list-item';
@@ -36,18 +38,22 @@ function List(props) {
 
   const classes = useListStyles();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [currentItem, setCurrentItem] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [currentItem, setCurrentItem] = React.useState(null);
+  const [selectedId, setSelectedId] = React.useState(null);
+
   const open = Boolean(anchorEl);
 
   const handleOpenMenu = (event, item) => {
-    actions?.length && setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget);
     actions?.length && setCurrentItem(item);
+    item?.actions?.length && setSelectedId(item.id);
   };
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setCurrentItem(null);
+    setSelectedId(null);
   };
 
   return (
@@ -137,6 +143,41 @@ function List(props) {
                   >
                     <SettingsIcon />
                   </IconButton>
+                  {item?.actions?.length ? (
+                    <Menu
+                      id="setting-action-menu"
+                      anchorEl={anchorEl}
+                      open={selectedId === item.id}
+                      onClose={handleCloseMenu}
+                      TransitionComponent={Fade}
+                      elevation={0}
+                      anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right'
+                      }}
+                      getContentAnchorEl={null}
+                      classes={{
+                        paper: classes.paperMenu
+                      }}
+                      keepMounted={false}
+                    >
+                      {item.actions.map((action, idx) => (
+                        <MenuItem
+                          key={idx}
+                          onClick={() => {
+                            handleAction(idx, item);
+                            handleCloseMenu();
+                          }}
+                        >
+                          {action}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  ) : null}
                 </ListItemSecondaryAction>
               ) : null}
             </ListItem>
