@@ -12,7 +12,7 @@ import {renderCappingTypeColor} from '../dto';
 import {Collapse} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
-import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
+import {CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
 
@@ -20,14 +20,12 @@ const propTypes = {
   list: PropTypes.array,
   onClickItem: PropTypes.func,
   onClickMenu: PropTypes.func,
-  title: PropTypes.string,
-  isManager: PropTypes.bool
+  title: PropTypes.string
 };
 
-const BudgetList = ({
-  title = 'Budget',
+const KeywordList = ({
+  title = 'Keyword',
   list = [],
-  isManager = false,
   onClickMenu = () => null,
   onClickItem = () => null
 }) => {
@@ -48,45 +46,27 @@ const BudgetList = ({
         )
       },
       {
-        header: 'Target',
-        accessor: 'target',
-        cell: row => row?.value?.toString() || ''
-      },
-
-      {
-        header: 'Budget',
-        accessor: 'time_frame',
+        header: 'Keyword white list',
+        accessor: 'keywords_list_white',
         cell: row => {
-          return (
-            <>
-              {[
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) &&
-                row?.value === BudgetTimeFrames.DAILY && (
-                  <Badge color="primary" pill>
-                    {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
-                  </Badge>
-                )}
-              {([
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
-              ].includes(row.original?.type) && row?.value) ===
-                BudgetTimeFrames.GLOBAL && (
-                <Badge color="success" pill>
-                  {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
-                </Badge>
-              )}
-              {isManager && (
-                <Badge color="primary" pill>
-                  global
-                </Badge>
-              )}
-            </>
-          );
+          const dataList = row?.value;
+          if (isArray(dataList)) {
+            return dataList.map(item => item.name || '');
+          }
+          return null;
         }
       },
-
+      {
+        header: 'Keyword black list',
+        accessor: 'keywords_list_black',
+        cell: row => {
+          const dataList = row?.value;
+          if (isArray(dataList)) {
+            return dataList.map(item => item.name || '');
+          }
+          return null;
+        }
+      },
       {
         accessor: 'status',
         cell: row => {
@@ -105,9 +85,7 @@ const BudgetList = ({
         }
       }
     ];
-  }, [isManager]);
-
-  const actions = !isManager ? [t('edit')] : [t('edit')];
+  }, []);
 
   return (
     <Collapse title={title} initialOpen unMount={false}>
@@ -116,7 +94,7 @@ const BudgetList = ({
           data={list || []}
           columns={columns}
           showAction
-          actions={actions}
+          actions={[t('edit'), t('delete')]}
           handleAction={onClickMenu}
           handleClickItem={onClickItem}
         />
@@ -127,6 +105,6 @@ const BudgetList = ({
   );
 };
 
-BudgetList.propTypes = propTypes;
+KeywordList.propTypes = propTypes;
 
-export default React.memo(BudgetList);
+export default React.memo(KeywordList);

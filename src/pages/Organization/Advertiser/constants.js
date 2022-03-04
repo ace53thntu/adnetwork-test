@@ -3,5 +3,8 @@ export const INPUT_NAME = {
   STATUS: 'status',
   DOMAINS: 'domains',
   IABS: 'iabs',
-  TAGS: 'tags'
+  TAGS: 'tags',
+  BUDGET: 'budget',
+  GLOBAL: 'global',
+  DAILY: 'daily'
 };

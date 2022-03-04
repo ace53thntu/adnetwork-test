@@ -1,37 +1,44 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 
-import DspLayout from './dsp-layout';
-import {useGetDsp} from 'queries/dsp';
 import Tabs from './components/Tabs';
 import {useTranslation} from 'react-i18next';
 import {Capping} from './components/capping';
 import {FormProvider, useForm} from 'react-hook-form';
 import {FormContent} from './components/form-content';
-import {useDefaultDsp} from '../hooks';
+import {useDefaultAdvertiser, useIABsOptions} from '../hooks';
+import {useGetAdvertiser} from 'queries/advertiser';
+import {useGetIABs} from 'queries/iabs';
+import AdvertiserLayout from './advertiser-layout';
 
-const DspView = ({children}) => {
-  const {dspId} = useParams();
-  const {data: dspData, isFetched} = useGetDsp(dspId);
-  const defaultValues = useDefaultDsp({
-    dspData
+const AdvertiserView = ({children}) => {
+  const {advertiserId} = useParams();
+  const {data: advertiserData, isFetched, status} = useGetAdvertiser(
+    advertiserId
+  );
+
+  const {data: IABs} = useGetIABs();
+  const IABsOptions = useIABsOptions({IABs});
+  const defaultValues = useDefaultAdvertiser({
+    advertiser: advertiserData,
+    iabsArr: IABsOptions
   });
 
-  const {t} = useTranslation();
-  const methods = useForm({defaultValues});
-  const {reset} = methods;
+  return isFetched && status === 'success' ? (
+    <AdvertiserContent
+      defaultValues={defaultValues}
+      IABsOptions={IABsOptions}
+      advertiserId={advertiserId}
+    />
+  ) : null;
+};
 
-  React.useEffect(() => {
-    if (isFetched) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, isFetched, reset]);
+const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
+  const {t} = useTranslation();
+
+  const methods = useForm({defaultValues});
 
   const [currentTab, setCurrentTab] = React.useState('description');
-
-  // const goToTab = React.useCallback(({nextTab, campaignIdCreated}) => {
-  //   setCurrentTab(nextTab);
-  // }, []);
 
   const tabDetail = React.useMemo(
     () =>
@@ -40,22 +47,28 @@ const DspView = ({children}) => {
           name: t('description'),
           content: (
             <FormProvider {...methods}>
-              <form id="dspForm">
-                <FormContent defaultValues={defaultValues} isView />
+              <form id="advertiserForm">
+                <FormContent
+                  defaultValues={defaultValues}
+                  isView
+                  IABsOptions={IABsOptions}
+                />
               </form>
             </FormProvider>
           )
         },
         {
           name: t('capping'),
-          content: <Capping referenceUuid={dspId} referenceType="dsp" />
+          content: (
+            <Capping referenceUuid={advertiserId} referenceType="advertiser" />
+          )
         }
       ].map(({name, content}, index) => ({
         key: index,
         title: name,
         getContent: () => content
       })),
-    [defaultValues, dspId, methods, t]
+    [IABsOptions, advertiserId, defaultValues, methods, t]
   );
 
   const getTab = index => {
@@ -83,12 +96,12 @@ const DspView = ({children}) => {
   }, [currentTab]);
 
   return (
-    <DspLayout pageTitle="Dsp Details">
+    <AdvertiserLayout pageTitle="Advertiser Details">
       <div>
         <Tabs items={tabDetail} tab={tabPicker} getTab={getTab} />
       </div>
-    </DspLayout>
+    </AdvertiserLayout>
   );
 };
 
-export default React.memo(DspView);
+export default React.memo(AdvertiserView);

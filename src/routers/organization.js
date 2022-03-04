@@ -1,7 +1,8 @@
 import {RoutePaths} from 'constants/route-paths';
 import {
   AdvertiserListPage,
-  AdvertiserReportPage
+  AdvertiserReportPage,
+  AdvertiserViewPage
 } from 'pages/Organization/Advertiser';
 import {DspListPage, DspReportPage, DspViewPage} from 'pages/Organization/Dsp';
 import {
@@ -20,6 +21,10 @@ export const organizationPages = {
         {
           path: '',
           element: <AdvertiserListPage />
+        },
+        {
+          path: `:advertiserId`,
+          element: <AdvertiserViewPage />
         },
         {
           path: `:advertiserId/${RoutePaths.REPORT}`,

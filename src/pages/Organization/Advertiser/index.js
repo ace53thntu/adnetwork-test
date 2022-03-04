@@ -1,5 +1,7 @@
 import React from 'react';
 import Loading from 'components/common/loading';
+import {ErrorBoundary} from 'components/common';
+import AdvertiserView from './advertiser-view';
 
 const AdvertiserList = React.lazy(() => import('./advertiser-list'));
 const AdvertiserReport = React.lazy(() => import('./advertiser-report'));
@@ -20,4 +22,12 @@ function AdvertiserReportPage() {
   );
 }
 
-export {AdvertiserListPage, AdvertiserReportPage};
+function AdvertiserViewPage() {
+  return (
+    <ErrorBoundary>
+      <AdvertiserView />
+    </ErrorBoundary>
+  );
+}
+
+export {AdvertiserListPage, AdvertiserReportPage, AdvertiserViewPage};

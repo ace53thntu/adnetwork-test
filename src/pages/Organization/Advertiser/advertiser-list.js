@@ -37,12 +37,15 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
+import {RoutePaths} from 'constants/route-paths';
+import {useNavigate} from 'react-router-dom';
 
 /**
  * @function Advertiser List Component
  * @returns JSX
  */
 const ListAdvertiser = () => {
+  const navigate = useNavigate();
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
 
@@ -149,8 +152,23 @@ const ListAdvertiser = () => {
   };
 
   const onClickDelete = (actionIndex, item) => {
-    setShowDialog(true);
-    setCurrentAdvertiser(item);
+    if (actionIndex === 0) {
+      navigate(
+        `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${item?.uuid}`
+      );
+      return;
+    }
+
+    if (actionIndex === 1) {
+      setCurrentAdvertiser(item);
+      setOpenFormEdit(true);
+    }
+
+    if (actionIndex === 2) {
+      setCurrentAdvertiser(item);
+      setShowDialog(true);
+      return;
+    }
   };
 
   const onCancelDelete = () => {
@@ -203,7 +221,7 @@ const ListAdvertiser = () => {
                     data={advertisers || []}
                     columns={columns}
                     showAction
-                    actions={['Delete']}
+                    actions={['View', 'Edit', 'Delete']}
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />

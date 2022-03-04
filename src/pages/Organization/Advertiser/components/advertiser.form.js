@@ -12,16 +12,12 @@ import {
   ModalFooter,
   Form,
   Row,
-  Col,
-  Label
+  Col
 } from 'reactstrap';
-import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
+import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
-import {INPUT_NAME} from '../constants';
-import SelectTag from './SelectTag';
 import {mappingFormToApi} from './dto';
 import {useCreateAdvertiser, useEditAdvertiser} from 'queries/advertiser';
 import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
@@ -32,7 +28,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
-import DomainSelect from './DomainSelect';
+import {FormContent} from './form-content';
 
 const AdvertiserForm = ({
   modal = false,
@@ -57,7 +53,7 @@ const AdvertiserForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control} = methods;
+  const {handleSubmit, formState} = methods;
 
   /**
    * Submit form
@@ -99,46 +95,11 @@ const AdvertiserForm = ({
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader>{title}</ModalHeader>
             <ModalBody>
-              <Row>
-                <Col sm={12}>
-                  <FormTextInput
-                    name={INPUT_NAME.NAME}
-                    label={t('name')}
-                    placeholder={t('enterName')}
-                    isRequired
-                  />
-                </Col>
-                {/* IABs */}
-                <Col sm={12}>
-                  <FormReactSelect
-                    name={INPUT_NAME.IABS}
-                    label={t('iabs')}
-                    placeholder={t('selectIABs')}
-                    options={IABsOptions}
-                    defaultValue={null}
-                    multiple
-                  />
-                </Col>
-                {/* Domains */}
-                <Col sm={12}>
-                  <DomainSelect defaultValue={defaultValues?.tags || []} />
-                </Col>
-                {/* Tags */}
-                <Col sm={12}>
-                  <SelectTag defaultValue={defaultValues?.tags || []} />
-                </Col>
-                {/* Status */}
-                <Col md="12">
-                  <Label className="mr-5">{t('status')}</Label>
-                  <Controller
-                    control={control}
-                    name={INPUT_NAME.STATUS}
-                    render={({onChange, onBlur, value, name}) => (
-                      <ActiveToggle value={value} onChange={onChange} />
-                    )}
-                  />
-                </Col>
-              </Row>
+              <FormContent
+                defaultValues={defaultValues}
+                isEdit={isEdit}
+                IABsOptions={IABsOptions}
+              />
               {isEdit &&
                 (role === USER_ROLE.ADVERTISER || role === USER_ROLE.ADMIN) && (
                   <Row>

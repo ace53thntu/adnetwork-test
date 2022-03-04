@@ -11,7 +11,7 @@ export const mappingApiToForm = ({apiResp}) => {};
  * @returns data with API request body format trustly
  */
 export const mappingFormToApi = ({formData}) => {
-  const {name, status, iabs, domains, tags} = formData;
+  const {name, status, iabs, domains, tags, budget} = formData;
   const desIABs = iabs?.map(item => item.value) || null;
   const desDomains = domains?.map(item => item.value) || null;
   const desTags = tags?.map(item => item.value) || null;
@@ -21,6 +21,7 @@ export const mappingFormToApi = ({formData}) => {
     status,
     iabs: desIABs,
     domains: desDomains,
-    tags: desTags
+    tags: desTags,
+    budget
   };
 };
