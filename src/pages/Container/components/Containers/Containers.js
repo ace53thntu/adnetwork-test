@@ -52,7 +52,7 @@ const Containers = props => {
     sort: 'created_at DESC'
   };
   if (role === USER_ROLE.PUBLISHER) {
-    params.publisher_uuid = user?.uuid;
+    params.publisher_uuid = user?.reference_uuid;
   }
 
   const {data: containers} = useGetContainers({

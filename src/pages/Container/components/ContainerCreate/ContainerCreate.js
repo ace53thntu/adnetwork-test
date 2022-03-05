@@ -9,6 +9,10 @@ import {useContainerSelector} from 'store/reducers/container';
 
 function ContainerCreate(props) {
   const {containers, isLoading} = useContainerSelector();
+  console.log(
+    '🚀 ~ file: ContainerCreate.js ~ line 12 ~ ContainerCreate ~ isLoading',
+    isLoading
+  );
 
   return (
     <>

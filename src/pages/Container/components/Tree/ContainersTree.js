@@ -34,6 +34,7 @@ function ContainersTree(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryCache = useQueryClient();
+  const [isSet, setIsSet] = React.useState(false);
 
   const {
     containers: containersRedux,
@@ -49,10 +50,10 @@ function ContainersTree(props) {
     sort: 'created_at DESC'
   };
   if (role === USER_ROLE.PUBLISHER) {
-    params.publisher_uuid = user?.uuid;
+    params.publisher_uuid = user?.reference_uuid;
   }
 
-  const {data, isFetching} = useGetContainers({
+  const {data, isFetched} = useGetContainers({
     params,
     enabled: true
   });
@@ -60,17 +61,26 @@ function ContainersTree(props) {
   const containers = getResponseData(data, IS_RESPONSE_ALL);
 
   React.useEffect(() => {
-    if (!isFetching && containers?.length > 0) {
+    if (isFetched && containers && !isSet) {
       const items = containersMapData(containers, container);
 
       dispatch(setContainersRedux(items));
+      setIsSet(true);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [containers, isFetching]);
+  }, [containers, isFetched, container, isSet]);
 
   React.useEffect(() => {
     return () => {
       dispatch(resetContainerRedux());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      setIsSet(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
