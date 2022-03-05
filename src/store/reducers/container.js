@@ -47,8 +47,8 @@ export const resetContainerRedux = () => {
 export const shouldRefetchContainerRedux = flag => {
   return createAction(SHOULD_REFETCH_CONTAINER, {flag});
 };
-export const setContainersRedux = data => {
-  return createAction(CONTAINERS, {data});
+export const setContainersRedux = (data, page = 1) => {
+  return createAction(CONTAINERS, {data, page});
 };
 export const selectContainerRedux = (containerId, container) => {
   return createAction(SELECT_CONTAINER_ID, {containerId, container});
@@ -122,7 +122,8 @@ const containerInitialState = {
   },
   keyword: '',
   shouldRefetchContainer: false,
-  inventoryParams: null
+  inventoryParams: null,
+  containerPage: 1
 };
 
 const handleActions = {
@@ -181,10 +182,17 @@ function handleShouldRefetchContainer(state, action) {
 }
 
 function handleSetContainers(state, action) {
-  const {data} = action.payload;
+  const {page, data} = action.payload;
 
-  state.containers = data;
-  state.containersTemp = data;
+  if (page > state.containerPage) {
+    state.containerPage = page;
+    state.containers = [...state.containers, ...data];
+    state.containersTemp = [...state.containersTemp, ...data];
+  } else {
+    state.containers = data;
+    state.containersTemp = data;
+  }
+
   state.isLoading = false;
 }
 

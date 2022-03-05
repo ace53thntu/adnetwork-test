@@ -9,7 +9,6 @@ import {useQueryClient} from 'react-query';
 //---> Internal Modules
 import {PageAPIRequest} from 'api/page.api';
 import {Tree, minimalTheme} from 'components/common/TreeLazy';
-import {useGetContainers} from 'queries/container';
 import {
   expandContainerRedux,
   expandSourceRedux,
@@ -24,63 +23,56 @@ import {containersMapData} from './dto';
 import {TreeContainerStyled} from './ContainersTree.styles';
 import {GET_PAGES} from 'queries/page/constants';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {getResponseData} from 'utils/helpers/misc.helpers';
-import {getRole, getUser} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
-
-const LIMIT = 1000;
+import {
+  getResponseData,
+  getResponsePagination,
+  isValidResponse
+} from 'utils/helpers/misc.helpers';
+import {ContainerAPIRequest} from 'api/container.api';
 
 function ContainersTree(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryCache = useQueryClient();
-  const [isSet, setIsSet] = React.useState(false);
 
   const {
     containers: containersRedux,
     selectedSource,
     container
   } = useContainerSelector();
+  const [page, setPage] = React.useState(DEFAULT_PAGINATION.page);
+  const [total, setTotal] = React.useState(1);
 
-  const role = getRole();
-  const user = getUser();
-  const params = {
-    per_page: 1000,
-    page: DEFAULT_PAGINATION.page,
-    sort: 'created_at DESC'
-  };
-  if (role === USER_ROLE.PUBLISHER) {
-    params.publisher_uuid = user?.reference_uuid;
+  async function init(currentPage) {
+    const res = await ContainerAPIRequest.getAllContainer({
+      params: {
+        page: currentPage,
+        per_page: DEFAULT_PAGINATION.perPage,
+        sort: 'created_at DESC'
+      },
+      options: {
+        isResponseAll: IS_RESPONSE_ALL
+      }
+    });
+
+    if (isValidResponse(res, IS_RESPONSE_ALL)) {
+      const items = containersMapData(
+        getResponseData(res, IS_RESPONSE_ALL),
+        currentPage
+      );
+      setTotal(getResponsePagination(res)?.totalItems);
+      dispatch(setContainersRedux(items, currentPage));
+    }
   }
 
-  const {data, isFetched} = useGetContainers({
-    params,
-    enabled: true
-  });
-
-  const containers = getResponseData(data, IS_RESPONSE_ALL);
-
   React.useEffect(() => {
-    if (isFetched && containers && !isSet) {
-      const items = containersMapData(containers, container);
-
-      dispatch(setContainersRedux(items));
-      setIsSet(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [containers, isFetched, container, isSet]);
-
-  React.useEffect(() => {
-    return () => {
-      dispatch(resetContainerRedux());
-    };
+    init(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
     return () => {
-      setIsSet(false);
+      dispatch(resetContainerRedux());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -218,17 +210,29 @@ function ContainersTree(props) {
     [navigate, selectedSource?.length, dispatch, container]
   );
 
+  const totalPage = Math.ceil(total / 10);
+
+  const handleLoadMoreInRoot = React.useCallback(() => {
+    if (totalPage > page) {
+      setPage(page + 1);
+      init(page + 1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, totalPage]);
+
   return (
     <TreeContainerStyled>
       <Tree
         paginated
-        pageLimit={containers?.length ?? LIMIT}
+        pageLimit={DEFAULT_PAGINATION.perPage}
         theme={minimalTheme}
         nodes={containersRedux}
         Checkbox={() => null}
         loadChildren={loadChildren}
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
+        handleLoadMoreInRoot={handleLoadMoreInRoot}
+        isLast={page === totalPage}
       />
     </TreeContainerStyled>
   );
