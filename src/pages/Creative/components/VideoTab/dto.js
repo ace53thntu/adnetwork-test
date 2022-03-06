@@ -1,13 +1,24 @@
 import _ from 'lodash';
+import {VideoServeTypes, VideoTypes} from './constants';
 
 export function videoRepoToFormValues(raw) {
-  const {name, click_url = '', height, width, files} = raw;
+  const {
+    name,
+    click_url = '',
+    height,
+    width,
+    files,
+    video_type,
+    serve_type
+  } = raw;
 
   const result = {
     name,
     click_url,
     width: width?.toString() ?? '1',
-    height: height?.toString() ?? '1'
+    height: height?.toString() ?? '1',
+    video_type: VideoTypes.find(item => item.value === video_type) || null,
+    serve_type: VideoServeTypes.find(item => item.value === serve_type) || null
   };
 
   if (files?.length) {
@@ -27,7 +38,7 @@ export function videoFormValuesToRepo(
   requestFiles = [],
   isUpdate = false
 ) {
-  const {name, click_url, width, height} = raw;
+  const {name, click_url, width, height, video_type, serve_type} = raw;
 
   let obj = {
     name,
@@ -35,7 +46,9 @@ export function videoFormValuesToRepo(
     dtype: 'video',
     concept_uuid: conceptId,
     status: 'active',
-    files_uuid: []
+    files_uuid: [],
+    video_type: video_type?.value || '',
+    serve_type: serve_type?.value || ''
   };
 
   if (width && _.isNumber(parseInt(width, 10))) {

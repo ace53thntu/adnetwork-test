@@ -1,7 +1,8 @@
-import {FormTextInput} from 'components/forms';
+import {FormReactSelect, FormTextInput} from 'components/forms';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, Row} from 'reactstrap';
+import {VideoServeTypes, VideoTypes} from './constants';
 
 function VideoInformationForm(props) {
   const {defaultValues} = props;
@@ -40,6 +41,24 @@ function VideoInformationForm(props) {
           name="height"
           label="Height"
           defaultValue={defaultValues.height}
+        />
+      </Col>
+      <Col md={3}>
+        <FormReactSelect
+          placeholder=""
+          name="serve_type"
+          label="Serve type"
+          defaultValue={defaultValues.serve_type}
+          options={VideoServeTypes}
+        />
+      </Col>
+      <Col md={3}>
+        <FormReactSelect
+          placeholder=""
+          name="video_type"
+          label="Video type"
+          defaultValue={defaultValues.video_type}
+          options={VideoTypes}
         />
       </Col>
     </Row>

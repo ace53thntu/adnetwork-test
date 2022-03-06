@@ -16,7 +16,7 @@ const propTypes = {
 
 const Report = ({entityId = '', entity = '', ownerId = '', ownerRole = ''}) => {
   return (
-    <Collapse initialOpen={true} title="Reports" unMount={false}>
+    <Collapse initialOpen={false} title="Reports" unMount={false}>
       <ReportBody
         entity={entity}
         entityId={entityId}
