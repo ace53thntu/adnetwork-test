@@ -109,7 +109,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "ci": "git-cz",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "preinstall": "yarn config set network-timeout 10000000"
   },
   "eslintConfig": {
     "extends": [
