@@ -8,9 +8,6 @@ include:
   - project: 'aicactus/common/ci'
     file: '/gitlab-ci/deploy.yaml'
 
-# variables:
-#   DOCKER_HOST: tcp://gitlab-ci-dind.gitlab-ci.svc.cluster.local:2375
-
 stages:
   - label
   - build
@@ -19,8 +16,6 @@ stages:
 
 Build:
   extends: .build
-  script:
-    - make build-ci
 
 Push images to registry:
   extends: .push

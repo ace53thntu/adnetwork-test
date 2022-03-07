@@ -2,24 +2,12 @@ APP := portal
 IMAGE_REPOSITORY = aicactus-prod/adsnetwork
 IMAGE_LOCAL = local-$(CI_PIPELINE_ID)-$(APP)
 IMAGE_REGISTRY_ASIA = asia.gcr.io/$(IMAGE_REPOSITORY)/$(APP)
-IMAGE_DEPS_REGISTRY_EU = eu.gcr.io/$(IMAGE_REPOSITORY)/$(APP)-deps:${CI_COMMIT_REF_SLUG}
 
 build:
 	docker build -t $(IMAGE_LOCAL) .
 
-ifeq (,$(CI_COMMIT_TAG))
-build-ci: YARN_BUILD=build
-else
-build-ci: YARN_BUILD=build
-endif
-build-ci:
-#	docker pull $(IMAGE_DEPS_REGISTRY_EU) || :
-#	docker build --target deps --cache-from $(IMAGE_DEPS_REGISTRY_EU) -t $(IMAGE_DEPS_REGISTRY_EU) .
-#	docker push $(IMAGE_DEPS_REGISTRY_EU)
-	docker build --build-arg YARN_BUILD=$(YARN_BUILD) --cache-from $(IMAGE_DEPS_REGISTRY_EU) -t $(IMAGE_LOCAL) .
-
 push: IMAGE_TAG ?= latest
-push: build-ci
+push: build
 	docker tag $(IMAGE_LOCAL) $(IMAGE_REGISTRY_ASIA):$(IMAGE_TAG)
 	docker push $(IMAGE_REGISTRY_ASIA):$(IMAGE_TAG)
 

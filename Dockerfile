@@ -3,7 +3,7 @@ FROM node:12 AS deps
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc ./
 
 RUN yarn install
 
@@ -12,7 +12,7 @@ FROM deps AS builder
 
 COPY . .
 
-ARG YARN_BUILD=build:staging
+ARG YARN_BUILD=build
 RUN yarn $YARN_BUILD
 
 # Release
