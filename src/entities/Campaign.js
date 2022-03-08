@@ -11,7 +11,7 @@ const CAMPAIGN_ENTITY = {
   end_time: null
 };
 
-export const apiToForm = ({campaign = null}) => {
+export const apiToForm = ({campaign = null, advertiser = null}) => {
   if (campaign) {
     const {
       uuid: id,
@@ -26,13 +26,15 @@ export const apiToForm = ({campaign = null}) => {
     end_time = end_time ? new Date(end_time) : null;
 
     // Get advertiser selected
-    const advertiser = advertiser_uuid
+    let advertiserDestructured = null;
+
+    advertiserDestructured = advertiser_uuid
       ? {value: advertiser_uuid, label: advertiser_name}
       : null;
     return {
       uuid: id,
       id,
-      advertiser_uuid: advertiser,
+      advertiser_uuid: advertiserDestructured,
       name,
       status,
       start_time,
@@ -40,7 +42,12 @@ export const apiToForm = ({campaign = null}) => {
     };
   }
 
-  return CAMPAIGN_ENTITY;
+  let advertiserDestructured = null;
+  if (advertiser) {
+    advertiserDestructured =
+      {value: advertiser.uuid, label: advertiser.name} || null;
+  }
+  return {...CAMPAIGN_ENTITY, advertiser_uuid: advertiserDestructured};
 };
 
 export const formToApi = formData => {

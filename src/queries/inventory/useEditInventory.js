@@ -1,8 +1,9 @@
 import {InventoryAPIRequest} from 'api/inventory.api';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORY, GET_INVENTORY_BY_PAGE} from './constants';
+import {GET_INVENTORIES, GET_INVENTORY} from './constants';
 
 /**
  * Update a Inventory
@@ -24,8 +25,12 @@ export function useEditInventory() {
       },
       onSettled: data => {
         client.invalidateQueries([
-          GET_INVENTORY_BY_PAGE,
-          data?.data?.page_uuid
+          GET_INVENTORIES,
+          {
+            per_page: DEFAULT_PAGINATION.perPage,
+            page_uuid: data?.data?.page_uuid,
+            sort: 'created_at DESC'
+          }
         ]);
         client.invalidateQueries([GET_INVENTORY, data?.data?.uuid]);
       }

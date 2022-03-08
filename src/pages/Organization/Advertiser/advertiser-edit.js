@@ -5,7 +5,8 @@ import {AdvertiserForm} from './components';
 
 const AdvertiserEdit = ({advertiserId, ...rest}) => {
   const {data: advertiser, isFetched, status, isFetching} = useGetAdvertiser(
-    advertiserId
+    advertiserId,
+    !!advertiserId
   );
 
   return (

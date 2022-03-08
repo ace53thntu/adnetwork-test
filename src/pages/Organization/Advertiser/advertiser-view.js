@@ -14,7 +14,8 @@ import AdvertiserLayout from './advertiser-layout';
 const AdvertiserView = ({children}) => {
   const {advertiserId} = useParams();
   const {data: advertiserData, isFetched, status} = useGetAdvertiser(
-    advertiserId
+    advertiserId,
+    !!advertiserId
   );
 
   const {data: IABs} = useGetIABs();

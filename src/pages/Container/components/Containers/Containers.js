@@ -34,10 +34,6 @@ const STATUS_OPTIONS = [
   {
     value: 'inactive',
     label: 'Inactive'
-  },
-  {
-    value: 'draft',
-    label: 'Draft'
   }
 ];
 

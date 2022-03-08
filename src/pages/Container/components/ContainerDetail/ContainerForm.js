@@ -86,6 +86,7 @@ function ContainerForm(props) {
         cid: containerId,
         data: formData
       });
+
       setIsLoading(false);
       ShowToast.success(t('updateContainerSuccessfully'));
       reset(values);

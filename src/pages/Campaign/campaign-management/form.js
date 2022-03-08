@@ -23,6 +23,8 @@ import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
 import DomainGroup from './form-fields/DomainGroup';
+import {updateCampaignRedux} from 'store/reducers/campaign';
+import {useDispatch} from 'react-redux';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -43,6 +45,8 @@ const CampaignForm = ({
 
   const {t} = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
 
@@ -69,9 +73,10 @@ const CampaignForm = ({
           // reset();
           await client.invalidateQueries([GET_CAMPAIGN, data?.uuid]);
           ShowToast.success('Updated Campaign successfully!');
-          navigate(
-            `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
-          );
+          dispatch(updateCampaignRedux(data));
+          // navigate(
+          //   `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
+          // );
         } catch (error) {
           ShowToast.error(error?.msg || 'Fail to update Campaign');
         }
@@ -88,7 +93,15 @@ const CampaignForm = ({
         }
       }
     },
-    [campaignId, client, createCampaign, isEdit, navigate, updateCampaign]
+    [
+      campaignId,
+      client,
+      createCampaign,
+      dispatch,
+      isEdit,
+      navigate,
+      updateCampaign
+    ]
   );
 
   return (

@@ -8,7 +8,7 @@ import {GET_ADVERTISER} from './constants';
  * Hook for get Advertiser from API by query
  * @param advId - Advertiser ID
  */
-export function useGetAdvertiser(advId) {
+export function useGetAdvertiser(advId, enabled = false) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -22,7 +22,7 @@ export function useGetAdvertiser(advId) {
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!advId
+      enabled
     }
   );
 }

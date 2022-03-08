@@ -61,7 +61,11 @@ const CustomPagination = props => {
           onClick={evt => onPageChange(evt, firstPage)}
         >
           {/* eslint-disable-next-line no-script-url */}
-          <PaginationLink first href="javascript:;" />
+          <PaginationLink
+            first
+            href="#"
+            onClick={evt => evt.preventDefault()}
+          />
         </PaginationItem>
         <PaginationItem
           disabled={disabled || currentPage === firstPage}
@@ -71,7 +75,7 @@ const CustomPagination = props => {
             previous
             onClick={onPrevious}
             // eslint-disable-next-line no-script-url
-            href="javascript:;"
+            href="#"
             disabled={disabled || currentPage === firstPage}
           />
         </PaginationItem>
@@ -81,7 +85,7 @@ const CustomPagination = props => {
               <PaginationItem key={`pr-dot-${idx}`} disabled={disabled}>
                 <PaginationLink
                   //  eslint-disable-next-line no-script-url
-                  href="javascript:;"
+                  href="#"
                   onClick={evt => evt.preventDefault()}
                 >
                   &#8230;
@@ -98,7 +102,9 @@ const CustomPagination = props => {
               onClick={evt => onPageChange(evt, pageNumber)}
             >
               {/* eslint-disable-next-line no-script-url */}
-              <PaginationLink href="javascript:;">{pageNumber}</PaginationLink>
+              <PaginationLink href="#" onClick={evt => evt.preventDefault()}>
+                {pageNumber}
+              </PaginationLink>
             </PaginationItem>
           );
         })}
@@ -107,14 +113,14 @@ const CustomPagination = props => {
           onClick={onNext}
         >
           {/* eslint-disable-next-line no-script-url */}
-          <PaginationLink href="javascript:;" next />
+          <PaginationLink href="#" onClick={evt => evt.preventDefault()} next />
         </PaginationItem>
         <PaginationItem
           disabled={disabled || currentPage === lastPage}
           onClick={evt => onPageChange(evt, lastPage)}
         >
           {/* eslint-disable-next-line no-script-url */}
-          <PaginationLink href="javascript:;" last />
+          <PaginationLink href="#" onClick={evt => evt.preventDefault()} last />
         </PaginationItem>
       </Pagination>
     </div>

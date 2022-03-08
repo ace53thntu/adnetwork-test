@@ -130,6 +130,10 @@ function AdvertisersTree(props) {
               isConcept: true,
               isAdvertiser: false
             }));
+            console.log(
+              '🚀 ~ file: AdvertisersTree.js ~ line 133 ~ newChildren ~ newChildren',
+              newChildren
+            );
             return newChildren;
           }
           return [];

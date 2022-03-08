@@ -87,7 +87,11 @@ const ListCampaignLayout = () => {
           <Col md="12">
             <Card className="main-card mb-3">
               <CardBody>
-                {typeView === 'campaign' ? <CampaignList /> : <StrategyList />}
+                {typeView === 'campaign' ? (
+                  <CampaignList />
+                ) : (
+                  <StrategyList status="active" />
+                )}
               </CardBody>
             </Card>
           </Col>

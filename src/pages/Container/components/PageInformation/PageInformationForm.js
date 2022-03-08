@@ -76,7 +76,7 @@ function PageInformationForm(props) {
       reset(values);
       dispatch(
         updatePageRedux({
-          pageId: rawData.id,
+          pageId: rawData.uuid,
           name: bodyRequest.name
         })
       );

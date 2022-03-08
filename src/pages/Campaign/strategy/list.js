@@ -22,10 +22,11 @@ import NoDataAvailable from 'components/list/no-data';
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
 const propTypes = {
-  campaignId: PropTypes.any
+  campaignId: PropTypes.any,
+  status: PropTypes.string
 };
 
-const StrategyList = ({campaignId = undefined}) => {
+const StrategyList = ({campaignId = undefined, status = ''}) => {
   //---> Local states
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
@@ -34,11 +35,15 @@ const StrategyList = ({campaignId = undefined}) => {
   //--->
   const navigate = useNavigate();
   const {mutateAsync: deleteStrategy} = useDeleteStrategy();
+
   const params = {
     per_page: DEFAULT_PAGINATION.perPage,
-    sort: 'created_at DESC',
-    status: 'active'
+    sort: 'created_at DESC'
   };
+
+  if (status) {
+    params.status = status;
+  }
 
   if (campaignId && campaignId !== 'create') {
     params.campaign_uuid = campaignId;

@@ -30,8 +30,12 @@ const SET_STRATEGY_INVENTORY_LIST_TEMP = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST_
 const REMOVE_INVENTORY_STRATEGY = `${PREFIX}/REMOVE_INVENTORY_STRATEGY`;
 const INIT_INVENTORY_STRATEGY = `${PREFIX}/INIT_INVENTORY_STRATEGY`;
 const LOAD_CAMPAIGN = `${PREFIX}/LOAD_CAMPAIGN`;
+const UPDATE_CAMPAIGN = `${PREFIX}/UPDATE_CAMPAIGN`;
 
 // dispatch actions
+export const updateCampaignRedux = campaign =>
+  createAction(UPDATE_CAMPAIGN, {campaign});
+
 export const loadCampaignRedux = campaigns =>
   createAction(LOAD_CAMPAIGN, {campaigns});
 
@@ -125,6 +129,7 @@ const campaignInitialState = {
 };
 
 const handleActions = {
+  [UPDATE_CAMPAIGN]: handleUpdateCampaign,
   [LOAD_CAMPAIGN]: handleLoadCampaign,
   [INIT_INVENTORY_STRATEGY]: initInventoryStrategyList,
   [REMOVE_INVENTORY_STRATEGY]: removeInventoryStrategyList,
@@ -141,6 +146,31 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function handleUpdateCampaign(state, action) {
+  const {campaign} = action.payload;
+  console.log(
+    '🚀 ~ file: campaign.js ~ line 153 ~ handleUpdateCampaign ~ campaign',
+    campaign
+  );
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.children.length > 0) {
+      const newChildren = item.children.map(campItem => {
+        if (campItem.id === campaign.uuid) {
+          return {...campItem, name: campaign.name};
+        }
+        return campItem;
+      });
+      return {
+        ...item,
+        children: newChildren
+      };
+    }
+
+    return item;
+  });
+  state.advertisers = newNodes;
+}
 
 function handleLoadCampaign(state, action) {
   const {campaigns} = action.payload;
