@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import {Controller, useFormContext} from 'react-hook-form';
 import {Label} from 'reactstrap';
 import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -20,7 +21,7 @@ const TimePicker = ({
   required = false,
   minTime = null
 }) => {
-  const {control} = useFormContext();
+  const {control, errors} = useFormContext();
 
   return (
     <div>
@@ -52,6 +53,9 @@ const TimePicker = ({
           )}
         />
       </div>
+      {errors && errors[name] && (
+        <ErrorMessage message={errors?.[name]?.message || ''} />
+      )}
     </div>
   );
 };
