@@ -4,7 +4,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {Button} from 'reactstrap';
 
 //---> Internal Modules
@@ -22,7 +22,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import {DescriptionTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
-import {Collapse} from 'components/common';
+import {CollapseBox} from 'components/common';
 import {CappingReferenceTypes} from 'constants/misc';
 // import Audience from './form-fields/Audience';
 
@@ -35,7 +35,8 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
   const {t} = useTranslation();
   const query = useQueryString();
   const ownerId = query.get('advertiser_id');
-  const strategyEditPath = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${ownerId}`;
+  const {strategyId} = useParams();
+  const strategyEditPath = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${strategyId}/${RoutePaths.EDIT}?advertiser_id=${ownerId}`;
   const [currentTab, setCurrentTab] = useState('description');
   const goTo = useCallback(({nextTab}) => {
     setCurrentTab(nextTab);
@@ -71,13 +72,13 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                 dataStrategy={currentStrategy}
                 isView
               /> */}
-                  <Collapse unMoun={false} initialOpen title={t('concepts')}>
+                  <CollapseBox unMoun={false} open title={t('concepts')}>
                     <Concept
                       conceptList={currentStrategy?.concepts}
                       isView
                       strategyData={currentStrategy}
                     />
-                  </Collapse>
+                  </CollapseBox>
                   <div style={{textAlign: 'right'}}>
                     <Link to={strategyEditPath}>
                       <Button color="link">{t('goToEdit')}</Button>

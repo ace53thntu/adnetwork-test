@@ -1,4 +1,4 @@
-import {Collapse} from 'components/common';
+import {CollapseBox} from 'components/common';
 import {FormTextInput} from 'components/forms';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -10,7 +10,7 @@ const BudgetGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <Collapse initialOpen={true} title={t('budget')} unMount={false}>
+    <CollapseBox open title={t('budget')} unMount={false}>
       <Row>
         <Col md="4">
           <FormTextInput
@@ -29,7 +29,7 @@ const BudgetGroup = () => {
           />
         </Col>
       </Row>
-    </Collapse>
+    </CollapseBox>
   );
 };
 

@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 //---> Internal Modules
 import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
-import {Collapse} from 'components/common/Collapse';
+import {CollapseBox} from 'components/common/Collapse';
 import {StrategySources, STRATEGY_TYPES} from 'pages/Campaign/constants';
 import PositionSelect from 'components/forms/PositionSelect';
 
@@ -29,7 +29,7 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
   return (
     <>
       {/* Information */}
-      <Collapse initialOpen={true} title="Information" unMount={false}>
+      <CollapseBox open title="Information" unMount={false}>
         <Col sm={12}>
           <Row>
             <Col md="6">
@@ -168,7 +168,7 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
             </Col>
           </Row>
         </Col>
-      </Collapse>
+      </CollapseBox>
     </>
   );
 };

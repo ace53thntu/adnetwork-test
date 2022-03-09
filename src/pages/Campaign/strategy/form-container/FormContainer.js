@@ -53,10 +53,8 @@ const FormContainer = ({
   const {
     handleSubmit,
     reset,
-    formState: {isDirty},
-    errors
+    formState: {isDirty}
   } = methods;
-  console.log('🚀 ~ file: FormContainer.js ~ line 59 ~ errors', errors);
 
   const redirectPageAfterSave = useCallback(
     ({

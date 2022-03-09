@@ -22,8 +22,8 @@ const StrategyDetail = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [isInitalied, setInitialied] = React.useState(false);
-
   const {strategyId, campaignId} = useParams();
+
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );

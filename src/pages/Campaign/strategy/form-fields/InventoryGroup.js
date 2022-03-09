@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {Col, Button, FormText} from 'reactstrap';
 
 //---> Internal Modules
-import {Collapse} from 'components/common';
+import {CollapseBox} from 'components/common';
 import {InventoryModal, StrategyInventory} from './inventories';
 import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
 import {useStrategyInventorySelector} from 'store/reducers/campaign';
@@ -27,7 +27,7 @@ const InventoryGroup = ({isView = false}) => {
   }
 
   return (
-    <Collapse initialOpen title={t('inventories')} unMount={false}>
+    <CollapseBox open title={t('inventories')} unMount={false}>
       <Col sm={12}>
         {strategyInventories?.length === 0 && (
           <FormText>
@@ -49,7 +49,7 @@ const InventoryGroup = ({isView = false}) => {
         />
       </Col>
       <InventoryModal openModal={openModal} onToggleModal={onToggleModal} />
-    </Collapse>
+    </CollapseBox>
   );
 };
 
