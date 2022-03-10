@@ -11,28 +11,25 @@ export function mappingFormToApi({
   ownerRole,
   ownerUuid
 }) {
-  const {api, properties} = formData;
-  let {unit, time_range, distribution_by} = api;
+  const {api, properties, report_type, report_source} = formData;
+  let {unit, time_range, report_by} = api;
   unit = unit?.value;
   time_range = time_range?.value;
-  distribution_by = distribution_by?.value;
+  const reportSource = report_source?.value;
 
   const data = {
     name: `${entityType} report - ${moment().format(DATE_FORMAT_STR)}`,
-    type: 'overview',
-    service: 'service',
-    entity_uuid: entityId,
-    entity_type: entityType,
-    owner_role: ownerRole,
-    owner_uuid: ownerUuid,
+    source_uuid: entityId,
+    report_type: report_type?.value,
+    report_source: reportSource,
+    status: 'active',
     properties: {...properties, metric_set: metricSet},
     api: {
-      unit,
+      time_unit: unit,
       time_range,
-      distribution_by,
-      metric_type: metricType
-    },
-    status: 'active'
+      report_by: report_by?.value,
+      report_by_uuid: entityId
+    }
   };
 
   return data;

@@ -2,18 +2,10 @@ import * as React from 'react';
 import {ButtonGroup, Button} from 'reactstrap';
 import {useFormContext, useWatch} from 'react-hook-form';
 import {INPUT_NAME, METRIC_TIMERANGES} from 'constants/report';
-import {useDispatch} from 'react-redux';
-import {
-  setMetricUrlRedux,
-  useMetricUrlSelector
-} from 'store/reducers/entity-report';
-import {replaceQueryParam} from 'utils/query';
 import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {ErrorMessageStyled} from './styled';
 
 export default function TimeRange({defaultValue}) {
-  const dispatch = useDispatch();
-  const metricUrl = useMetricUrlSelector();
   const {register, setValue, errors, control} = useFormContext();
   const currentUnit = useWatch({name: INPUT_NAME.UNIT, control});
 
@@ -36,19 +28,18 @@ export default function TimeRange({defaultValue}) {
     ) {
       //---> If time range only 1 unit -> using this unit is default,
       //---> Else get unit from user selection.
-      const unit = currentUnit?.value || selectedOption?.units?.[0]?.value;
-      let newUrl = replaceQueryParam({
-        url: metricUrl,
-        paramName: 'range',
-        paramValue: selectedOption?.value
-      });
-
-      newUrl = replaceQueryParam({
-        url: newUrl,
-        paramName: 'unit',
-        paramValue: unit
-      });
-      dispatch(setMetricUrlRedux(newUrl));
+      // const unit = currentUnit?.value || selectedOption?.units?.[0]?.value;
+      // let newUrl = replaceQueryParam({
+      //   url: metricUrl,
+      //   paramName: 'range',
+      //   paramValue: selectedOption?.value
+      // });
+      // newUrl = replaceQueryParam({
+      //   url: newUrl,
+      //   paramName: 'unit',
+      //   paramValue: unit
+      // });
+      // dispatch(setMetricUrlRedux(newUrl));
     }
   };
 

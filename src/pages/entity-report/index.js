@@ -5,10 +5,10 @@ const EntityReportLz = React.lazy(() =>
   import('./entity-report' /* webpackChunkName: "entity-report" */)
 );
 
-function EntityReport() {
+function EntityReport(props) {
   return (
     <ErrorBoundary>
-      <EntityReportLz />
+      <EntityReportLz {...props} />
     </ErrorBoundary>
   );
 }

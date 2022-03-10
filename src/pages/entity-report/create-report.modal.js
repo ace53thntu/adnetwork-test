@@ -26,23 +26,23 @@ import ConfigChart from './components/form/ConfigChart';
 import './styles/styles.scss';
 import {mappingFormToApi} from './dto';
 import {schemaValidate} from './components/form/validation';
-import SelectDistribution from './components/form/SelectDistribution';
-import SelectMetricType from './components/form/SelectMetricType';
 import CustomPieChart from './components/form/CustomPieChart';
 import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
   INPUT_NAME,
-  METRIC_SETS,
-  METRIC_TYPE_OPTIONS
+  METRIC_SETS
 } from 'constants/report';
-import {getDistributions} from 'utils/metrics';
-import {useGetMetrics} from 'queries/metric/useGetMetrics';
+import {getReportSources} from 'utils/metrics';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport} from 'queries/report';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {useChartData} from './hooks';
-import {useMetricUrlSelector} from 'store/reducers/entity-report';
+import {useMetricsDataSelector} from 'store/reducers/entity-report';
+import {FormReactSelect} from 'components/forms';
+import {ReportBys, ReportTypes} from './constants.js';
+import {useTranslation} from 'react-i18next';
+import ReportSourceSelect from './components/form/ReportSourceSelect';
 
 const initDefaultValue = ({
   initColors = [],
@@ -62,9 +62,9 @@ const initDefaultValue = ({
     api: {
       unit: null,
       time_range: null,
-      distribution_by: {label: capitalize(entityType), value: distributionBy},
-      metric_type: {label: `Distribution ${entityType}`, value: metricType}
-    }
+      report_by: {label: capitalize(entityType), value: entityType}
+    },
+    report_source: {label: capitalize(entityType), value: entityType}
   };
 };
 
@@ -86,15 +86,13 @@ export default function ModalReportForm({
   ownerRole,
   ownerId
 }) {
+  const {t} = useTranslation();
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
-  const metricUrl = useMetricUrlSelector();
+  const metrics = useMetricsDataSelector();
 
-  const distributionOptions = getDistributions();
-  // Data sample
-  const {data: metrics} = useGetMetrics({
-    url: metricUrl
-  });
+  const reportSourceOptions = getReportSources();
+
   const defaultValues = isEdit
     ? currentReport
     : initDefaultValue({initColors, metricType, distributionBy, entityType});
@@ -124,7 +122,10 @@ export default function ModalReportForm({
       ownerRole,
       ownerUuid: ownerId
     });
-
+    console.log(
+      '🚀 ~ file: create-report.modal.js ~ line 131 ~ submitData',
+      submitData
+    );
     if (!isEdit) {
       try {
         await createReport(submitData);
@@ -171,19 +172,29 @@ export default function ModalReportForm({
                     </Col>
                   </Row>
                   <Row className="mt-2">
-                    <Col md={4}>
-                      <SelectDistribution
-                        defaultValue={defaultValues?.api?.distribution_by}
-                        distributionOptions={distributionOptions}
+                    <Col md={3}>
+                      <ReportSourceSelect
+                        defaultValue={defaultValues?.report_source}
+                        reportSourceOptions={reportSourceOptions}
                       />
                     </Col>
-                    <Col md={4}>
-                      <SelectMetricType
-                        metricTypeOptions={METRIC_TYPE_OPTIONS}
-                        defaultValue={defaultValues?.api?.metric_type}
+                    <Col md={3}>
+                      <FormReactSelect
+                        name="api.report_by"
+                        label={t('reportBy')}
+                        placeholder={t('selectReportBy')}
+                        options={ReportBys}
                       />
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
+                      <FormReactSelect
+                        name="report_type"
+                        label={t('reportType')}
+                        placeholder={t('selectReportType')}
+                        options={ReportTypes}
+                      />
+                    </Col>
+                    <Col md={3}>
                       <Label>&nbsp;</Label>
                       <ConfigChart
                         chartTypeDefault={defaultValues?.properties?.chart_type}

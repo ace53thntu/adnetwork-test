@@ -21,6 +21,7 @@ const EntityReport = ({
   ownerId,
   ownerRole
 }) => {
+  console.log('🚀 ~ file: entity-report.js ~ line 24 ~ entityId', entityId);
   const entityType = entity;
   const distributionBy =
     entityType === EntityTypes.ORGANIZATION ? 'manager' : entityType;

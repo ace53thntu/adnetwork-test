@@ -2,24 +2,24 @@ import {FormReactSelect} from 'components/forms';
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
 
-export default function SelectDistribution({
+export default function ReportSourceSelect({
   defaultValue,
-  distributionOptions
+  reportSourceOptions = []
 }) {
   const {setValue} = useFormContext();
 
   React.useEffect(() => {
     if (defaultValue) {
-      setValue('api.distribution_by', defaultValue);
+      setValue('report_source', defaultValue);
     }
   }, [defaultValue, setValue]);
 
   return (
     <FormReactSelect
-      name={'api.distribution_by'}
-      options={distributionOptions}
-      label={<span className="font-weight-bold">Distribution by</span>}
-      placeholder="Select distribution..."
+      name={'report_source'}
+      options={reportSourceOptions}
+      label={<span className="font-weight-bold">Report source</span>}
+      placeholder="Select report source..."
       disabled
     />
   );

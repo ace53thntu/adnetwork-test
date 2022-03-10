@@ -1,4 +1,5 @@
 import {HASH_PATH, RoutePaths} from 'constants/route-paths';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 export const ReportNav = t => {
   return [
@@ -58,24 +59,50 @@ export const InventoryMarketNav = (t, role) => {
 };
 
 export const OrganizationNav = (t, role) => {
+  let content = [];
+  if ([USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+    content = [
+      {
+        label: t('publisher'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`
+      },
+      {
+        label: t('dsp'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`
+      },
+      {
+        label: t('advertiser'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`
+      }
+    ];
+  } else if (USER_ROLE.PUBLISHER === role) {
+    content = [
+      {
+        label: t('publisher'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`
+      }
+    ];
+  } else if (USER_ROLE.ADVERTISER === role) {
+    content = [
+      {
+        label: t('advertiser'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`
+      }
+    ];
+  } else if (USER_ROLE.DSP === role) {
+    content = [
+      {
+        label: t('dsp'),
+        to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`
+      }
+    ];
+  }
+
   return [
     {
       icon: 'pe-7s-users',
       label: t('organization'),
-      content: [
-        {
-          label: t('publisher'),
-          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`
-        },
-        {
-          label: t('dsp'),
-          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`
-        },
-        {
-          label: t('advertiser'),
-          to: `${HASH_PATH}/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`
-        }
-      ]
+      content
     }
   ];
 };

@@ -4,7 +4,6 @@ import {
   DEFAULT_TIME_UNIT,
   REPORT_VIEW_TYPES
 } from 'constants/report';
-import moment from 'moment';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {useGenerateReportUrl} from 'queries/report';
@@ -13,7 +12,10 @@ import React from 'react';
 import {FormProvider, useForm, useWatch} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {Button, FormGroup, Label, Spinner} from 'reactstrap';
-import {setMetricUrlRedux} from 'store/reducers/entity-report';
+import {
+  setMetricBodyRedux,
+  setMetricDataRedux
+} from 'store/reducers/entity-report';
 
 //---> Internal Modules
 import ModalReportForm from './create-report.modal';
@@ -62,29 +64,23 @@ const ReportForm = ({
 
   const onSubmit = async () => {
     setIsLoading(true);
-    const data = {
-      name: `Strategy report - ${moment().format('DD-MM-YYYY hh:mm')}`,
-      type: 'overview',
-      service: 'service',
-      entity_uuid: entityId,
-      entity_type: entityType,
-      properties: {
-        config: {
-          chart_type: 'bar',
-          color: 'red',
-          metric_set: seletedMetricSet?.code || ''
-        }
-      },
-      api: {
-        unit: DEFAULT_TIME_UNIT,
-        time_range: DEFAULT_TIME_RANGE,
-        distribution_by: distributionBy,
-        metric_type: metricType
-      }
+    const requestBody = {
+      source_uuid: entityId,
+      report_by_uuid: entityId,
+      report_type: 'trending',
+      time_unit: DEFAULT_TIME_UNIT,
+      time_range: DEFAULT_TIME_RANGE,
+      report_source: entityType,
+      report_by: entityType
     };
     try {
-      const {data: {url} = {}} = await generateReportUrl(data);
-      dispatch(setMetricUrlRedux(url));
+      const {data} = await generateReportUrl(requestBody);
+      console.log(
+        '🚀 ~ file: report.form.js ~ line 80 ~ onSubmit ~ data',
+        data
+      );
+      dispatch(setMetricBodyRedux(requestBody));
+      dispatch(setMetricDataRedux(data));
       toggleModalReportForm();
     } catch (error) {
       // TODO: handle error generate report

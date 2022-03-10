@@ -30,11 +30,7 @@ class ReportAPI extends XHRRequest {
   };
 
   generateReportUrl = ({data, options} = {}) => {
-    return this.post(
-      `${endpoints.report.report}/${endpoints.report.url}`,
-      data,
-      options
-    );
+    return this.post(`${endpoints.metric.metric}/report`, data, options);
   };
 }
 

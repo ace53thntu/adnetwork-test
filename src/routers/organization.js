@@ -13,7 +13,13 @@ import {USER_ROLE} from 'pages/user-management/constants';
 
 export const organizationPages = {
   path: RoutePaths.ORGANIZATION,
-  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER],
+  canAccess: [
+    USER_ROLE.ADMIN,
+    USER_ROLE.MANAGER,
+    USER_ROLE.ADVERTISER,
+    USER_ROLE.DSP,
+    USER_ROLE.PUBLISHER
+  ],
   children: [
     {
       path: `${RoutePaths.ADVERTISER}`,
@@ -30,7 +36,8 @@ export const organizationPages = {
           path: `:advertiserId/${RoutePaths.REPORT}`,
           element: <AdvertiserReportPage />
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: `${RoutePaths.PUBLISHER}`,
@@ -43,7 +50,8 @@ export const organizationPages = {
           path: `:publisherId/${RoutePaths.REPORT}`,
           element: <PublisherReportPage />
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     },
     {
       path: `${RoutePaths.DSP}`,
@@ -60,7 +68,8 @@ export const organizationPages = {
           path: `:dspId/${RoutePaths.REPORT}`,
           element: <DspReportPage />
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
     }
   ]
 };

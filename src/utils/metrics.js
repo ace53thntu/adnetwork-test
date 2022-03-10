@@ -1,4 +1,4 @@
-import {DISTRIBUTIONS, METRIC_UNITS} from 'constants/report';
+import {DISTRIBUTIONS, METRIC_UNITS, REPORT_SOURCES} from 'constants/report';
 import {capitalize} from './helpers/string.helpers';
 import timezones from 'timezones-list';
 import moment from 'moment-timezone';
@@ -9,6 +9,10 @@ export const getMetricUnits = () => {
 
 export const getDistributions = () => {
   return DISTRIBUTIONS.map(item => ({value: item, label: capitalize(item)}));
+};
+
+export const getReportSources = () => {
+  return REPORT_SOURCES.map(item => ({value: item, label: capitalize(item)}));
 };
 
 export const generateTimeZoneList = () => {

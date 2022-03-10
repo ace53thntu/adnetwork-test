@@ -105,10 +105,10 @@ const Nav = ({role: roleProp}) => {
           <div className="c-divider" />
         </>
       )}
-      {[ADMIN, MANAGER].includes(role) && (
+      {[ADMIN, MANAGER, ADVERTISER, PUBLISHER, DSP].includes(role) && (
         <>
           <MetisMenu
-            content={OrganizationNav(t)}
+            content={OrganizationNav(t, role)}
             className="vertical-nav-menu"
             iconNamePrefix=""
             classNameStateIcon="pe-7s-angle-down"

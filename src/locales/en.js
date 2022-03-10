@@ -68,7 +68,10 @@ const en = {
   maxDuration: 'Max Duration',
   protocols: 'Protocols',
   selectProtocol: 'Select protocol...',
-
+  reportType: 'Report type',
+  selectReportType: 'Select report type',
+  reportBy: 'Report by',
+  selectReportBy: 'Select report by',
   // Main Menu
   userManagement: 'User Management',
 

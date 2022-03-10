@@ -123,6 +123,16 @@ export const DISTRIBUTIONS = [
   'department'
 ];
 
+export const REPORT_SOURCES = [
+  'advertiser',
+  'campaign',
+  'strategy',
+  'concept',
+  'creative',
+  'native_ad',
+  'video'
+];
+
 export const INPUT_NAME = {
   COLOR: 'properties.color',
   CHART_TYPE: 'properties.chart_type',
