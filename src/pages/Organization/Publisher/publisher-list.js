@@ -27,9 +27,12 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const PublisherList = () => {
   const reduxDispatch = useDispatch();
+  const role = getRole();
   const {t} = useTranslation();
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
@@ -149,25 +152,33 @@ const PublisherList = () => {
       <Card className="main-card mb-3">
         <CardHeader style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>{t('publisherList')}</div>
-          <div className="widget-content-right">
-            <Button
-              onClick={onClickAdd}
-              className="btn-icon"
-              size="sm"
-              color="primary"
-            >
-              <i className="pe-7s-plus btn-icon-wrapper"></i>
-              {t('create')}
-            </Button>
-          </div>
+          {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+            <div className="widget-content-right">
+              <Button
+                onClick={onClickAdd}
+                className="btn-icon"
+                size="sm"
+                color="primary"
+              >
+                <i className="pe-7s-plus btn-icon-wrapper"></i>
+                {t('create')}
+              </Button>
+            </div>
+          )}
         </CardHeader>
         <CardBody style={{minHeight: '400px'}}>
           {isLoading && <LoadingIndicator />}
           <List
             data={publishers || []}
             columns={columns}
-            showAction
-            actions={['Delete']}
+            showAction={
+              [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) ? true : false
+            }
+            actions={
+              [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+                ? ['Delete']
+                : []
+            }
             handleAction={onHandleDelete}
             handleClickItem={onClickItem}
           />

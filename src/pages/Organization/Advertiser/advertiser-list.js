@@ -39,12 +39,16 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import {RoutePaths} from 'constants/route-paths';
 import {useNavigate} from 'react-router-dom';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 /**
  * @function Advertiser List Component
  * @returns JSX
  */
 const ListAdvertiser = () => {
+  const role = getRole();
+
   const navigate = useNavigate();
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
@@ -153,15 +157,14 @@ const ListAdvertiser = () => {
 
   const onClickDelete = (actionIndex, item) => {
     if (actionIndex === 0) {
+      setCurrentAdvertiser(item);
+      setOpenFormEdit(true);
+    }
+    if (actionIndex === 1) {
       navigate(
         `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${item?.uuid}`
       );
       return;
-    }
-
-    if (actionIndex === 1) {
-      setCurrentAdvertiser(item);
-      setOpenFormEdit(true);
     }
 
     if (actionIndex === 2) {
@@ -204,24 +207,30 @@ const ListAdvertiser = () => {
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
                   <div>{t('advertiserList')}</div>
-                  <div className="widget-content-right">
-                    <Button
-                      onClick={onClickAdd}
-                      className="btn-icon btn-shadow"
-                      size="sm"
-                      color="primary"
-                    >
-                      <i className="pe-7s-plus btn-icon-wrapper"></i>
-                      {t('create')}
-                    </Button>
-                  </div>
+                  {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+                    <div className="widget-content-right">
+                      <Button
+                        onClick={onClickAdd}
+                        className="btn-icon btn-shadow"
+                        size="sm"
+                        color="primary"
+                      >
+                        <i className="pe-7s-plus btn-icon-wrapper"></i>
+                        {t('create')}
+                      </Button>
+                    </div>
+                  )}
                 </CardHeader>
                 <CardBody style={{minHeight: '400px'}}>
                   <List
                     data={advertisers || []}
                     columns={columns}
                     showAction
-                    actions={['View', 'Edit', 'Delete']}
+                    actions={
+                      [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+                        ? ['Edit', 'View', 'Delete']
+                        : ['Edit']
+                    }
                     handleAction={onClickDelete}
                     handleClickItem={onClickItem}
                   />

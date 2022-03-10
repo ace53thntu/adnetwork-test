@@ -12,6 +12,8 @@ import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import {LoadingIndicator} from 'components/common';
 import {useGetReportsInfinite} from 'queries/report/useGetReports';
 import {Pagination} from 'components/list/pagination';
+import {getResponseData} from 'utils/helpers/misc.helpers';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 
 const NUMBER_OF_PAGE = 10;
 
@@ -21,30 +23,28 @@ const EntityReport = ({
   ownerId,
   ownerRole
 }) => {
-  console.log('🚀 ~ file: entity-report.js ~ line 24 ~ entityId', entityId);
   const entityType = entity;
   const distributionBy =
     entityType === EntityTypes.ORGANIZATION ? 'manager' : entityType;
   const metricType = METRIC_TYPES[entity];
   const {
-    data: {pages = []} = {},
+    data: {pages} = {},
     hasNextPage,
     fetchNextPage,
     isFetching,
     isFetchingNextPage
   } = useGetReportsInfinite({
     params: {
-      entity_uuid: entityId,
-      entity_type: entityType,
-      limit: NUMBER_OF_PAGE
+      source_uuid: entityId,
+      per_pge: NUMBER_OF_PAGE
     },
     enabled: true
   });
 
   const reports = React.useMemo(() => {
-    return pages?.reduce((acc, item) => {
-      const {items = []} = item;
-      return [...acc, ...items];
+    return pages?.reduce((acc, page) => {
+      const reportData = getResponseData(page, IS_RESPONSE_ALL);
+      return [...acc, ...reportData];
     }, []);
   }, [pages]);
 

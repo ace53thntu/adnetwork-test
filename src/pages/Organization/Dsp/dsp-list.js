@@ -37,12 +37,16 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 /**
  * @function DSP List Component
  * @returns JSX
  */
 const DspList = () => {
+  const role = getRole();
+
   const navigate = useNavigate();
   const {t} = useTranslation();
   const reduxDispatch = useDispatch();
@@ -144,13 +148,12 @@ const DspList = () => {
   //---> BEGIN: Handle delete
   const onClickMenu = (actionIndex, item) => {
     if (actionIndex === 0) {
-      navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${item?.uuid}`);
-      return;
-    }
-
-    if (actionIndex === 1) {
       setCurrentDsp(item);
       setOpenFormEdit(true);
+    }
+    if (actionIndex === 1) {
+      navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${item?.uuid}`);
+      return;
     }
 
     if (actionIndex === 2) {
@@ -194,24 +197,30 @@ const DspList = () => {
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
                   <div>{t('dspList')}</div>
-                  <div className="widget-content-right">
-                    <Button
-                      onClick={onClickAdd}
-                      className="btn-icon btn-shadow"
-                      size="sm"
-                      color="primary"
-                    >
-                      <i className="pe-7s-plus btn-icon-wrapper"></i>
-                      {t('create')}
-                    </Button>
-                  </div>
+                  {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+                    <div className="widget-content-right">
+                      <Button
+                        onClick={onClickAdd}
+                        className="btn-icon btn-shadow"
+                        size="sm"
+                        color="primary"
+                      >
+                        <i className="pe-7s-plus btn-icon-wrapper"></i>
+                        {t('create')}
+                      </Button>
+                    </div>
+                  )}
                 </CardHeader>
                 <CardBody style={{minHeight: '400px'}}>
                   <List
                     data={dsps || []}
                     columns={columns}
                     showAction
-                    actions={['View', 'Edit', 'Delete']}
+                    actions={
+                      [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+                        ? ['Edit', 'View', 'Delete']
+                        : ['Edit']
+                    }
                     handleAction={onClickMenu}
                     handleClickItem={onClickItem}
                   />

@@ -12,7 +12,11 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 export function useGetReports({params, enabled = false}) {
   return useQuery(
     [GET_REPORTS, params?.entity_uuid || 'all', params?.entity_type || 'all'],
-    () => ReportAPIRequest.getAllReport({params}).then(res => res?.data ?? []),
+    () =>
+      ReportAPIRequest.getAllReport({
+        params,
+        options: {isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
       suspense: false,
       enabled
