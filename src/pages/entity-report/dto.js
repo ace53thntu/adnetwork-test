@@ -33,11 +33,14 @@ export function mappingFormToApi({
       time_unit: unit,
       time_range,
       report_by: report_by?.value,
-      report_by_uuid: entityId,
-      start_time: formatStartDate,
-      end_time: formatEndDate
+      report_by_uuid: entityId
     }
   };
+
+  if (report_type === 'distribution') {
+    data.api.start_time = formatStartDate;
+    data.api.end_time = formatEndDate;
+  }
 
   return data;
 }

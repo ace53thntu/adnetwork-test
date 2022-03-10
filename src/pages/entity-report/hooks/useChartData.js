@@ -98,6 +98,10 @@ export const useChartData = ({
 }) => {
   return useMemo(() => {
     if (metricData) {
+      console.log(
+        '🚀 ~ file: useChartData.js ~ line 101 ~ returnuseMemo ~ metricData',
+        metricData
+      );
       const {items: metrics = {}, start_time, end_time} = metricData;
       const startTime = moment(start_time);
       const endTime = moment(end_time);
