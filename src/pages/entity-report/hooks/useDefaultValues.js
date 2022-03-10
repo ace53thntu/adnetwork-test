@@ -1,20 +1,38 @@
-import {METRIC_TIMERANGES, METRIC_TYPE_OPTIONS} from 'constants/report';
-import {getDistributions} from 'utils/metrics';
+import {METRIC_TIMERANGES} from 'constants/report';
+import {getReportSources} from 'utils/metrics';
 import React from 'react';
+import {ReportBys, ReportTypes} from '../constants.js';
 
 export const useDefaultValues = ({reportItem}) => {
+  console.log(
+    '🚀 ~ file: useDefaultValues.js ~ line 7 ~ useDefaultValues ~ reportItem',
+    reportItem
+  );
   return React.useMemo(() => {
     const {api = {}, properties = {}} = reportItem;
-    let {unit, time_range, distribution_by, metric_type} = api;
+    let {report_source, report_type} = reportItem;
+    let {time_unit, time_range, report_by, start_time, end_time} = api;
     time_range = METRIC_TIMERANGES.find(item => item.value === time_range);
-    unit = time_range?.units?.find(item => item?.value === unit);
-    distribution_by = getDistributions().find(
-      item => item?.value === distribution_by
+    time_unit = time_range?.units?.find(item => item?.value === time_unit);
+    report_source = getReportSources().find(
+      item => item?.value === report_source
     );
-    metric_type = METRIC_TYPE_OPTIONS.find(item => item?.value === metric_type);
+    report_by = ReportBys.find(item => item?.value === report_by);
+    report_type = ReportTypes.find(item => item?.value === report_type);
+    if (start_time === '0001-01-01T00:00:00Z') {
+      start_time = null;
+    }
+    if (end_time === '0001-01-01T00:00:00Z') {
+      end_time = null;
+    }
+    start_time = start_time ? new Date(start_time) : new Date();
+    end_time = end_time ? new Date(end_time) : null;
+
     return {
       properties,
-      api: {time_range, unit, distribution_by, metric_type}
+      api: {time_range, time_unit, report_by, start_time, end_time},
+      report_type,
+      report_source
     };
   }, [reportItem]);
 };

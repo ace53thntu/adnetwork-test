@@ -3,7 +3,6 @@ import './styles/styles.scss';
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {METRIC_SETS} from 'constants/report';
 import PropTypes from 'prop-types';
-import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useDeleteReport} from 'queries/report';
 import React from 'react';
 import {Button} from 'reactstrap';
@@ -28,7 +27,9 @@ export default function ReportItem({
   isViewed = false,
   isSelected = false,
   modeSelectReport = false,
-  handleSelectedReport = () => null
+  handleSelectedReport = () => null,
+  metrics = null,
+  isFetching = true
 }) {
   const {
     uuid: reportId,
@@ -42,9 +43,6 @@ export default function ReportItem({
   const colors = parseColors(color);
 
   const {mutateAsync: deleteReport} = useDeleteReport();
-  const {data: metrics = null, isFetched, isFetching} = useGetMetrics({
-    url: reportUrl
-  });
 
   const metricData = useChartData({
     type: chartType,
@@ -138,30 +136,29 @@ export default function ReportItem({
           </div>
         )}
         {isFetching && <LoadingIndicator type="ball-clip-rotate-multiple" />}
-        {isFetched &&
-          (metricData ? (
-            <div>
-              <ChartItem
-                series={metricData?.series}
-                categories={metricData?.categories}
-                nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
-                chartType={chartType}
-                color={colors}
-                reportId={reportId}
-                unit={unit}
-                metricSet={metricSet}
-                data={metricData?.series?.[0]?.data || []}
-              />
-              <MetricInfo
-                timeRange={timeRange}
-                unit={unit}
-                distributionBy={distributionBy}
-                metricType={metricType}
-              />
-            </div>
-          ) : (
-            <div>No report</div>
-          ))}
+        {metricData ? (
+          <div>
+            <ChartItem
+              series={metricData?.series}
+              categories={metricData?.categories}
+              nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
+              chartType={chartType}
+              color={colors}
+              reportId={reportId}
+              unit={unit}
+              metricSet={metricSet}
+              data={metricData?.series?.[0]?.data || []}
+            />
+            <MetricInfo
+              timeRange={timeRange}
+              unit={unit}
+              distributionBy={distributionBy}
+              metricType={metricType}
+            />
+          </div>
+        ) : (
+          <div>No report</div>
+        )}
       </ReportItemStyled>
 
       {openModal && defaultValues && (

@@ -5,7 +5,7 @@ import React from 'react';
 import {Card, CardBody, Col, Row} from 'reactstrap';
 
 //---> Internal Modules
-import ReportItem from './report-item';
+import ReportItemContainer from './ReportItemContainer';
 
 const ReportList = ({
   reports = [],
@@ -18,18 +18,18 @@ const ReportList = ({
     <Row>
       {reports?.map((reportItem = {}) => {
         const {uuid: id, status} = reportItem;
+        console.log(
+          '🚀 ~ file: report-list.js ~ line 22 ~ {reports?.map ~ reportItem',
+          reportItem
+        );
 
         return status === 'active' ? (
           <Col key={`pr-${id}`} sm={6} className="mb-3">
             <Card className="chart-item">
               <CardBody style={{padding: 0}}>
-                <ReportItem
-                  entityId={entityId}
-                  entityType={entityType}
+                <ReportItemContainer
                   reportItem={reportItem}
-                  metricType={metricType}
-                  distributionBy={distributionBy}
-                />
+                ></ReportItemContainer>
               </CardBody>
             </Card>
           </Col>

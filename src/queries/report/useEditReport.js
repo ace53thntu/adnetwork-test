@@ -12,9 +12,9 @@ export function useEditReport() {
   const client = useQueryClient();
 
   return useMutation(
-    ({pubId, data}) =>
+    ({reportId, data}) =>
       ReportAPIRequest.editReport({
-        id: pubId,
+        id: reportId,
         data,
         options: {cancelToken}
       }),

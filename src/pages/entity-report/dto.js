@@ -12,10 +12,15 @@ export function mappingFormToApi({
   ownerUuid
 }) {
   const {api, properties, report_type, report_source} = formData;
-  let {unit, time_range, report_by} = api;
+  let {unit, time_range, report_by, start_time, end_time} = api;
   unit = unit?.value;
   time_range = time_range?.value;
   const reportSource = report_source?.value;
+
+  let formatStartDate = moment(start_time).isSame(moment(), 'day')
+    ? null
+    : moment(start_time).toISOString();
+  const formatEndDate = moment(end_time).endOf('day').toISOString();
 
   const data = {
     name: `${entityType} report - ${moment().format(DATE_FORMAT_STR)}`,
@@ -28,7 +33,9 @@ export function mappingFormToApi({
       time_unit: unit,
       time_range,
       report_by: report_by?.value,
-      report_by_uuid: entityId
+      report_by_uuid: entityId,
+      start_time: formatStartDate,
+      end_time: formatEndDate
     }
   };
 

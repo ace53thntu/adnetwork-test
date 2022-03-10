@@ -3,7 +3,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 
 //---> External Modules
-import {FormProvider, useForm} from 'react-hook-form';
+import {Controller, FormProvider, useForm, useWatch} from 'react-hook-form';
 import {
   Button,
   Modal,
@@ -14,9 +14,11 @@ import {
   Col,
   Card,
   CardBody,
-  Label
+  Label,
+  FormGroup
 } from 'reactstrap';
 import BlockUi from 'react-block-ui';
+import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import FormControlUnit from './components/form/FormControlUnit';
@@ -109,8 +111,10 @@ export default function ModalReportForm({
     defaultValues,
     resolver: schemaValidate()
   });
-  const {handleSubmit, formState, watch} = methods;
-  const selectedType = watch(INPUT_NAME.CHART_TYPE);
+  const {handleSubmit, formState, control, errors} = methods;
+  const selectedType = useWatch({name: INPUT_NAME.CHART_TYPE, control});
+  const reportType = useWatch({name: 'report_type', control});
+  const startDate = useWatch({name: 'api.start_time', control});
 
   const onSubmit = async formData => {
     const submitData = mappingFormToApi({
@@ -136,7 +140,7 @@ export default function ModalReportForm({
       }
     } else {
       try {
-        await updateReport({reportId: reportItem?.id, data: submitData});
+        await updateReport({reportId: reportItem?.uuid, data: submitData});
         ShowToast.success('Updated report successfully');
         toggle();
       } catch (error) {
@@ -203,6 +207,66 @@ export default function ModalReportForm({
                       />
                     </Col>
                   </Row>
+                  {reportType?.value === 'distribution' && (
+                    <Row>
+                      <Col xs="4">
+                        <FormGroup>
+                          <Label for="startDate">
+                            <span className="text-danger">*</span>
+                            {t('startDate')}
+                          </Label>
+                          <Controller
+                            control={control}
+                            name="api.start_time"
+                            render={({onChange, onBlur, value, name}) => (
+                              <DatePicker
+                                selected={value}
+                                onChange={date => onChange(date)}
+                                className="form-control"
+                                dateFormat="dd/MM/yyyy"
+                                placeholderText="dd/mm/yyyy"
+                              />
+                            )}
+                          />
+                          {errors && errors['api']?.['start_time'] ? (
+                            <div className="invalid-feedback d-block">
+                              {errors['api']?.['start_time']?.message}
+                            </div>
+                          ) : null}
+                        </FormGroup>
+                      </Col>
+                      <Col xs="4">
+                        <FormGroup>
+                          <Label for="endDate">
+                            <span className="text-danger">*</span>
+                            End date
+                          </Label>
+                          <Controller
+                            control={control}
+                            name="api.end_time"
+                            render={({onChange, onBlur, value, name}) => (
+                              <DatePicker
+                                selected={value}
+                                onChange={date => onChange(date)}
+                                className="form-control"
+                                dateFormat="dd/MM/yyyy"
+                                placeholderText="dd/mm/yyyy"
+                                minDate={startDate}
+                                startDate={startDate}
+                                endDate={value}
+                                selectsEnd
+                              />
+                            )}
+                          />
+                          {errors && errors['api']?.['end_time'] ? (
+                            <div className="invalid-feedback d-block">
+                              {errors['api']?.['end_time']?.message}
+                            </div>
+                          ) : null}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  )}
                 </>
               )}
 
