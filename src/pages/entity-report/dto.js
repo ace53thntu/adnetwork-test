@@ -12,8 +12,8 @@ export function mappingFormToApi({
   ownerUuid
 }) {
   const {api, properties, report_type, report_source} = formData;
-  let {unit, time_range, report_by, start_time, end_time} = api;
-  unit = unit?.value;
+  let {time_unit, time_range, report_by, start_time, end_time} = api;
+  time_unit = time_unit?.value;
   time_range = time_range?.value;
   const reportSource = report_source?.value;
 
@@ -30,7 +30,7 @@ export function mappingFormToApi({
     status: 'active',
     properties: {...properties, metric_set: metricSet},
     api: {
-      time_unit: unit,
+      time_unit,
       time_range,
       report_by: report_by?.value,
       report_by_uuid: entityId

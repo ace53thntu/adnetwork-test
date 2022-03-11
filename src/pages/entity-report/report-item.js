@@ -35,7 +35,8 @@ export default function ReportItem({
     uuid: reportId,
     url: reportUrl,
     properties,
-    api: {unit, time_range: timeRange} = {}
+    api: {time_unit: unit, time_range: timeRange, report_by} = {},
+    report_source
   } = reportItem;
   const color = properties?.color || [DefaultColor];
   const chartType = properties?.chart_type || 'line';
@@ -50,7 +51,7 @@ export default function ReportItem({
     unit,
     timeRange,
     metricSet,
-    entityId: entityId
+    entityId
   });
 
   const defaultValues = useDefaultValues({reportItem});
@@ -152,8 +153,8 @@ export default function ReportItem({
             <MetricInfo
               timeRange={timeRange}
               unit={unit}
-              distributionBy={distributionBy}
-              metricType={metricType}
+              reportSource={report_source}
+              reportBy={report_by}
             />
           </div>
         ) : (

@@ -38,6 +38,7 @@ const EntityReport = ({
       source_uuid: entityId,
       per_pge: NUMBER_OF_PAGE
     },
+    reportType: entityType,
     enabled: true
   });
 

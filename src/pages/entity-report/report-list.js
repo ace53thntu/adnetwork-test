@@ -18,10 +18,6 @@ const ReportList = ({
     <Row>
       {reports?.map((reportItem = {}) => {
         const {uuid: id, status} = reportItem;
-        console.log(
-          '🚀 ~ file: report-list.js ~ line 22 ~ {reports?.map ~ reportItem',
-          reportItem
-        );
 
         return status === 'active' ? (
           <Col key={`pr-${id}`} sm={6} className="mb-3">

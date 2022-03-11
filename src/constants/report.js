@@ -114,7 +114,7 @@ export const DISTRIBUTIONS = [
   'at',
   'strategy',
   'adx',
-  'native-ad',
+  'native_ad',
   'video',
   'domain',
   'deal',
@@ -137,7 +137,7 @@ export const INPUT_NAME = {
   COLOR: 'properties.color',
   CHART_TYPE: 'properties.chart_type',
   TIME_RANGE: 'api.time_range',
-  UNIT: 'api.unit'
+  UNIT: 'api.time_unit'
 };
 
 export const DEFAULT_TIME_RANGE = 'l1m';
@@ -146,8 +146,8 @@ export const DEFAULT_TIME_UNIT = 'day';
 export const FORMAT_BY_UNIT = {
   month: 'YYYY-MM',
   day: 'YYYY-MM-DD',
-  hour: 'YYYY-MM-DD HH:mm',
-  minute: 'YYYY-MM-DD HH:mm',
+  hour: 'YYYY-MM-DD HH[:00:00]',
+  minute: 'YYYY-MM-DD HH:mm[:00]',
   second: 'HH:mm:ss'
 };
 
@@ -475,7 +475,7 @@ export const EntityTypes = {
   PUBLISHER: 'publisher',
   DSP: 'dsp',
   VIDEO: 'video',
-  NAVTIVE_AD: 'native-ad',
+  NAVTIVE_AD: 'native_ad',
   CREATIVE: 'creative',
   INVENTORY: 'inventory'
 };

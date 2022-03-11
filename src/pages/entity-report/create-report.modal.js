@@ -52,10 +52,6 @@ const initDefaultValue = ({
   distributionBy,
   entityType
 }) => {
-  console.log(
-    '🚀 ~ file: create-report.modal.js ~ line 53 ~ entityType',
-    entityType
-  );
   return {
     properties: {
       color: JSON.stringify(initColors),
@@ -112,6 +108,7 @@ export default function ModalReportForm({
     resolver: schemaValidate()
   });
   const {handleSubmit, formState, control, errors} = methods;
+  console.log('🚀 ~ file: create-report.modal.js ~ line 112 ~ errors', errors);
   const selectedType = useWatch({name: INPUT_NAME.CHART_TYPE, control});
   const reportType = useWatch({name: 'report_type', control});
   const startDate = useWatch({name: 'api.start_time', control});
@@ -171,7 +168,7 @@ export default function ModalReportForm({
                         defaultValue={defaultValues?.api?.time_range}
                       />
                       <FormControlUnit
-                        defaultValue={defaultValues?.api?.unit}
+                        defaultValue={defaultValues?.api?.time_unit}
                       />
                     </Col>
                   </Row>

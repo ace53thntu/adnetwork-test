@@ -10,19 +10,28 @@ export default function FormControlUnit({defaultValue}) {
   const [activeUnit, setActiveUnit] = React.useState(null);
 
   const {watch, register, setValue, errors} = useFormContext();
-  const error = errors?.api?.unit || undefined;
+  const error = errors?.api?.time_unit || undefined;
   const timeRangeSelected = watch('api.time_range');
 
   React.useEffect(() => {
     //---> Reset select unit when time range changed
-    if (timeRangeSelected) {
-      setActiveUnit(null);
-      setValue(INPUT_NAME.UNIT, '', {
-        shouldValidate: true,
-        shouldDirty: true
-      });
+    if (typeof timeRangeSelected === 'string') {
+      try {
+        const timeRangeParsed = JSON.parse(timeRangeSelected);
+        const existedUnit = timeRangeParsed?.units?.find(
+          item => item.value === defaultValue?.value
+        );
+        if (!existedUnit) {
+          //---> Only reset if new time range select not include current unit
+          setActiveUnit(null);
+          setValue(INPUT_NAME.UNIT, '', {
+            shouldValidate: true,
+            shouldDirty: true
+          });
+        }
+      } catch (err) {}
     }
-  }, [setValue, timeRangeSelected]);
+  }, [defaultValue?.value, setValue, timeRangeSelected]);
 
   const units = React.useMemo(() => {
     try {
