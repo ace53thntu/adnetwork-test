@@ -39,8 +39,8 @@ class TreeNode extends Component {
       ) {
         return {
           selected: node.selected,
-          expanded: node.expanded,
-          children: children
+          expanded,
+          children
         };
       }
     }
@@ -94,9 +94,13 @@ class TreeNode extends Component {
       paginated &&
       pageLimit
     ) {
-      console.log('====== load more');
       state.page += 1;
-      const loadedChildren = await loadChildren(node, pageLimit, state.page);
+      const loadedChildren = await loadChildren(
+        node,
+        pageLimit,
+        state.page,
+        state
+      );
       state.children = state.children.concat(
         parse ? parse(loadedChildren) : loadedChildren
       );
@@ -130,7 +134,12 @@ class TreeNode extends Component {
       (!paginated && state.children.length < node.numChildren)
     ) {
       state.page += 1;
-      const loadedChildren = await loadChildren(node, pageLimit, state.page);
+      const loadedChildren = await loadChildren(
+        node,
+        pageLimit,
+        state.page,
+        state
+      );
       state.children = parse ? parse(loadedChildren) : loadedChildren;
     }
     state.expanded = !state.expanded;

@@ -1,13 +1,18 @@
+import {AdvertiserAPIRequest} from 'api/advertiser.api';
+import {CampaignAPIRequest} from 'api/campaign.api';
+import {StrategyAPIRequest} from 'api/strategy.api';
+//---> Internal Modules
+import {Tree, minimalTheme} from 'components/common/TreeLazy';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
+import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
+import {GET_STRATEGIES} from 'queries/strategy/constants';
 //---> Build-in Modules
 import * as React from 'react';
-
+import {useQueryClient} from 'react-query';
 //---> External Modules
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {useQueryClient} from 'react-query';
-
-//---> Internal Modules
-import {Tree, minimalTheme} from 'components/common/TreeLazy';
 import {
   expandAdvertiserRedux,
   expandCampaignRedux,
@@ -19,20 +24,14 @@ import {
   setStrategyRedux,
   useCampaignSelector
 } from 'store/reducers/campaign';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {CampaignTreeStyled} from './styled';
-import {advertisersMapData} from '../dto';
-import {CampaignAPIRequest} from 'api/campaign.api';
-import {StrategyAPIRequest} from 'api/strategy.api';
-import {GET_STRATEGIES} from 'queries/strategy/constants';
-import {RoutePaths} from 'constants/route-paths';
 import {
   getResponseData,
   getResponsePagination,
   isValidResponse
 } from 'utils/helpers/misc.helpers';
-import {AdvertiserAPIRequest} from 'api/advertiser.api';
-import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
+
+import {advertisersMapData} from '../dto';
+import {CampaignTreeStyled} from './styled';
 
 function SidebarTree(props) {
   const navigate = useNavigate();
@@ -64,7 +63,7 @@ function SidebarTree(props) {
         getResponseData(res, IS_RESPONSE_ALL),
         currentPage
       );
-      setTotal(getResponsePagination(res)?.totalItems);
+      setTotal(getResponsePagination(res).totalItems);
       dispatch(setAdvertisersRedux(items, currentPage));
     }
   }
@@ -115,47 +114,51 @@ function SidebarTree(props) {
   };
 
   const loadChildren = React.useCallback(
-    async (node, pageLimit, currentPage) => {
-      const {isAdvertiser, id, expanded, isCampaign} = node;
+    async (node, pageLimit, currentPage, state) => {
+      const {isAdvertiser, id, isCampaign} = node;
+
       if (isAdvertiser) {
-        if (expanded) {
+        if (state.expanded) {
           // Campaign pagination
-          // let children = [];
-          // let campaignTotal = 0;
-          // let totalItems = 0;
-          // try {
-          //   const res = await CampaignAPIRequest.getAllCampaign({
-          //     params: {
-          //       per_page: DEFAULT_PAGINATION.perPage,
-          //       page: currentPage,
-          //       advertiser_uuid: id
-          //     },
-          //     options: {isResponseAll: IS_RESPONSE_ALL}
-          //   });
-          //   const data = getResponseData(res, IS_RESPONSE_ALL);
-          //   totalItems = getResponsePagination(res)?.totalItems || 0;
-          //   campaignTotal = Math.ceil(totalItems / pageLimit);
-          //   if (data) {
-          //     const currentSourceData = data ?? [];
-          //     currentSourceData.forEach((item, index) => {
-          //       children.push({
-          //         id: item.uuid,
-          //         name: item.name,
-          //         children: [],
-          //         numChildren: item?.total_strategies || 0,
-          //         page: 0,
-          //         totalPage: campaignTotal,
-          //         expanded: false,
-          //         selected: false,
-          //         parentId: id,
-          //         isCampaign: true,
-          //         advertiserId: id
-          //       });
-          //     });
-          //   }
-          // } catch (error) {
-          //   //
-          // }
+          let children = [];
+          let campaignTotal = 0;
+          let totalItems = 0;
+          try {
+            const res = await CampaignAPIRequest.getAllCampaign({
+              params: {
+                // per_page: DEFAULT_PAGINATION.perPage,
+                per_page: 2,
+                page: currentPage,
+                advertiser_uuid: id
+              },
+              options: {isResponseAll: IS_RESPONSE_ALL}
+            });
+            const data = getResponseData(res, IS_RESPONSE_ALL);
+            totalItems = getResponsePagination(res)?.totalItems || 0;
+            campaignTotal = Math.ceil(totalItems / pageLimit);
+            if (data) {
+              const currentSourceData = data ?? [];
+              currentSourceData.forEach((item, index) => {
+                children.push({
+                  id: item.uuid,
+                  name: item.name,
+                  children: [],
+                  numChildren: item?.total_strategies || 0,
+                  page: 0,
+                  totalPage: campaignTotal,
+                  expanded: false,
+                  selected: false,
+                  parentId: id,
+                  isCampaign: true,
+                  advertiserId: id
+                });
+              });
+            }
+          } catch (error) {
+            //
+          }
+
+          // TODO - xem lại đoạn code này.
           // const currentAdvertisers = advertisersRedux?.map(item => {
           //   if (item.id === node.id) {
           //     return {
@@ -168,12 +171,14 @@ function SidebarTree(props) {
           //   return item;
           // });
           // dispatch(setAdvertisersRedux(currentAdvertisers, page));
+          return children;
         } else {
           let children = [];
           try {
             const res = await CampaignAPIRequest.getAllCampaign({
               params: {
-                per_page: DEFAULT_PAGINATION.perPage,
+                // per_page: DEFAULT_PAGINATION.perPage,
+                per_page: 2,
                 page: currentPage,
                 advertiser_uuid: id
               },
@@ -204,8 +209,9 @@ function SidebarTree(props) {
           return children;
         }
       }
+
       if (isCampaign) {
-        if (!expanded) {
+        if (!state.expanded) {
           const {parentId, id: campaignId} = node;
           let children = [];
           try {
@@ -240,6 +246,7 @@ function SidebarTree(props) {
           } catch (error) {
             //
           }
+
           return children;
         } else {
           console.log('LOADMORE');
@@ -291,6 +298,7 @@ function SidebarTree(props) {
     },
     [dispatch, navigate]
   );
+
   const totalPage = Math.ceil(total / 10);
 
   const handleLoadMoreInRoot = React.useCallback(() => {
@@ -307,13 +315,14 @@ function SidebarTree(props) {
         paginated
         pageLimit={DEFAULT_PAGINATION.perPage}
         theme={minimalTheme}
-        nodes={advertisersRedux}
+        nodes={JSON.parse(JSON.stringify(advertisersRedux))}
         Checkbox={() => null}
         loadChildren={loadChildren}
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
         isLast={page === totalPage}
+        isCreative
       />
     </CampaignTreeStyled>
   );

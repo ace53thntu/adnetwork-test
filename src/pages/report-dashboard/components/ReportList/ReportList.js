@@ -188,7 +188,6 @@ const ReportList = ({pageDetails = {}}) => {
                         isSelected={modeSelectReport}
                         distributionBy={distributionBy}
                         metricType={metricType}
-                        isFetching={false}
                       />
                     </CardBody>
                   </Card>

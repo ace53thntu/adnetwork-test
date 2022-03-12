@@ -4,13 +4,16 @@ import React from 'react';
 import {ReportBys, ReportTypes} from '../constants.js';
 
 export const useDefaultValues = ({reportItem}) => {
+  console.log(
+    '🚀 ~ file: useDefaultValues.js ~ line 7 ~ useDefaultValues ~ reportItem',
+    reportItem
+  );
   return React.useMemo(() => {
     const {api = {}, properties = {}} = reportItem;
     let {report_source, report_type} = reportItem;
     let {time_unit, time_range, report_by, start_time, end_time} = api;
     time_range = METRIC_TIMERANGES.find(item => item.value === time_range);
     time_unit = time_range?.units?.find(item => item?.value === time_unit);
-
     report_source = getReportSources().find(
       item => item?.value === report_source
     );

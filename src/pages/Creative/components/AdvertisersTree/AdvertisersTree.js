@@ -111,11 +111,12 @@ function AdvertisersTree(props) {
   };
 
   const loadChildren = React.useCallback(
-    async (node, pageLimit, currentPage) => {
-      const {isAdvertiser, id, expanded, page} = node;
+    async (node, pageLimit, currentPage, state) => {
+      const {isAdvertiser, id} = node;
+
       if (isAdvertiser) {
-        if (expanded) {
-          const res = await getConcepts(id, page + 1);
+        if (state.expanded) {
+          const res = await getConcepts(id, currentPage);
           if (res?.data?.length) {
             const items = res.data;
             const newChildren = items?.map(({uuid, name}) => ({
@@ -130,10 +131,6 @@ function AdvertisersTree(props) {
               isConcept: true,
               isAdvertiser: false
             }));
-            console.log(
-              '🚀 ~ file: AdvertisersTree.js ~ line 133 ~ newChildren ~ newChildren',
-              newChildren
-            );
             return newChildren;
           }
           return [];

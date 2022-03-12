@@ -156,7 +156,7 @@ function VideoForm(props) {
       {rawData?.uuid && (
         <Report
           entityId={rawData?.uuid}
-          entity={EntityTypes.VIDEO}
+          entity={EntityTypes.CREATIVE}
           ownerId={selectedAdvertiserId}
           ownerRole={USER_ROLE.ADVERTISER}
         />

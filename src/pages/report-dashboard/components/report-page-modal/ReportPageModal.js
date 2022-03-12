@@ -166,8 +166,8 @@ export default function ModalReportPage({
                 chartType,
                 color,
                 unit,
-                report_source,
-                report_by,
+                distribution_by,
+                metric_type,
                 time_range
               } = item;
               return (
@@ -187,8 +187,8 @@ export default function ModalReportPage({
                       <MetricInfo
                         timeRange={time_range}
                         unit={unit}
-                        reportSource={report_source}
-                        reportBy={report_by}
+                        distributionBy={distribution_by}
+                        metricType={metric_type}
                       />
                     </CardBody>
                   </Card>
