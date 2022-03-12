@@ -27,7 +27,7 @@ const PAGE = 0;
 const ReportList = ({pageDetails = {}}) => {
   const currentUser = getUser();
   const {pageId} = useParams();
-  let params = {per_page: PER_PAGE, active: true, page: PAGE};
+  let params = {per_page: PER_PAGE, status: 'active', page: PAGE};
   if (pageId) {
     params = {...params, report_page_id: pageId};
   }
