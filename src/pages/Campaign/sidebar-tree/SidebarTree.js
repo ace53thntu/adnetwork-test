@@ -115,7 +115,7 @@ function SidebarTree(props) {
 
   const loadChildren = React.useCallback(
     async (node, pageLimit, currentPage, state) => {
-      const {isAdvertiser, id, isCampaign} = node;
+      const {isAdvertiser, id, isCampaign, expanded} = node;
 
       if (isAdvertiser) {
         if (state.expanded) {
@@ -211,13 +211,14 @@ function SidebarTree(props) {
       }
 
       if (isCampaign) {
-        if (!state.expanded) {
+        if (!expanded) {
           const {parentId, id: campaignId} = node;
           let children = [];
           try {
             const res = await StrategyAPIRequest.getAllStrategy({
               params: {
-                per_page: DEFAULT_PAGINATION.perPage,
+                // per_page: DEFAULT_PAGINATION.perPage,
+                per_page: 1,
                 page: currentPage,
                 campaign_uuid: campaignId
               },
@@ -246,7 +247,6 @@ function SidebarTree(props) {
           } catch (error) {
             //
           }
-
           return children;
         } else {
           console.log('LOADMORE');
