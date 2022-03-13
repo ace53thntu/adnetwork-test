@@ -42,3 +42,22 @@ export const ReportBys = [
     label: 'Video'
   }
 ];
+
+export const Sources = [
+  {
+    value: 'ios',
+    label: 'IOS'
+  },
+  {
+    value: 'android',
+    label: 'Android'
+  },
+  {
+    value: 'web',
+    label: 'Web'
+  },
+  {
+    value: 'tv',
+    label: 'Smart TV'
+  }
+];

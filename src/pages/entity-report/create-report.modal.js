@@ -12,8 +12,6 @@ import {
   ModalFooter,
   Row,
   Col,
-  Card,
-  CardBody,
   Label,
   FormGroup
 } from 'reactstrap';
@@ -22,19 +20,12 @@ import DatePicker from 'react-datepicker';
 
 //---> Internal Modules
 import FormControlUnit from './components/form/FormControlUnit';
-import CustomLineChart from './components/form/CustomLineChart';
 import TimeRange from './components/form/TimeRange';
 import ConfigChart from './components/form/ConfigChart';
 import './styles/styles.scss';
 import {mappingFormToApi} from './dto';
 import {schemaValidate} from './components/form/validation';
-import CustomPieChart from './components/form/CustomPieChart';
-import {
-  DEFAULT_TIME_RANGE,
-  DEFAULT_TIME_UNIT,
-  INPUT_NAME,
-  METRIC_SETS
-} from 'constants/report';
+import {DEFAULT_TIME_RANGE, DEFAULT_TIME_UNIT} from 'constants/report';
 import {getReportSources} from 'utils/metrics';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport} from 'queries/report';
@@ -42,9 +33,11 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import {useChartData} from './hooks';
 import {useMetricsDataSelector} from 'store/reducers/entity-report';
 import {FormReactSelect} from 'components/forms';
-import {ReportBys, ReportTypes} from './constants.js';
+import {ReportTypes} from './constants.js';
 import {useTranslation} from 'react-i18next';
 import ReportSourceSelect from './components/form/ReportSourceSelect';
+import ChartPreview from './components/ChartPreview';
+import ReportByGroup from './components/form/ReportByGroup';
 
 const initDefaultValue = ({
   initColors = [],
@@ -112,7 +105,6 @@ export default function ModalReportForm({
     resolver: schemaValidate()
   });
   const {handleSubmit, formState, control, errors} = methods;
-  const selectedType = useWatch({name: INPUT_NAME.CHART_TYPE, control});
   const reportType = useWatch({name: 'report_type', control});
   const startDate = useWatch({name: 'api.start_time', control});
 
@@ -160,7 +152,11 @@ export default function ModalReportForm({
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
           <BlockUi tag="div" blocking={formState.isSubmitting}>
             <ModalHeader toggle={toggle}>
-              {isViewed ? 'View Report' : isEdit ? 'Edit Report' : 'Add Report'}
+              {isViewed
+                ? t('viewReport')
+                : isEdit
+                ? t('editReport')
+                : t('addReport')}
             </ModalHeader>
             <ModalBody>
               {!isViewed && (
@@ -184,22 +180,78 @@ export default function ModalReportForm({
                     </Col>
                     <Col md={3}>
                       <FormReactSelect
-                        name="api.report_by"
-                        label={t('reportBy')}
-                        placeholder={t('selectReportBy')}
-                        options={ReportBys}
-                      />
-                    </Col>
-                    <Col md={3}>
-                      <FormReactSelect
                         name="report_type"
                         label={t('reportType')}
                         placeholder={t('selectReportType')}
                         options={ReportTypes}
+                        labelBold
                       />
                     </Col>
+                    <ReportByGroup reportSource={entityType} />
+                  </Row>
+                  <Row className="mb-3">
+                    {reportType?.value === 'distribution' && (
+                      <>
+                        <Col xs="4">
+                          <FormGroup>
+                            <Label for="startDate" className="font-weight-bold">
+                              <span className="text-danger">*</span>
+                              {t('startDate')}
+                            </Label>
+                            <Controller
+                              control={control}
+                              name="api.start_time"
+                              render={({onChange, onBlur, value, name}) => (
+                                <DatePicker
+                                  selected={value}
+                                  onChange={date => onChange(date)}
+                                  className="form-control"
+                                  dateFormat="dd/MM/yyyy"
+                                  placeholderText="dd/mm/yyyy"
+                                />
+                              )}
+                            />
+                            {errors && errors['api']?.['start_time'] ? (
+                              <div className="invalid-feedback d-block">
+                                {errors['api']?.['start_time']?.message}
+                              </div>
+                            ) : null}
+                          </FormGroup>
+                        </Col>
+                        <Col xs="4">
+                          <FormGroup>
+                            <Label for="endDate" className="font-weight-bold">
+                              <span className="text-danger">*</span>
+                              End date
+                            </Label>
+                            <Controller
+                              control={control}
+                              name="api.end_time"
+                              render={({onChange, onBlur, value, name}) => (
+                                <DatePicker
+                                  selected={value}
+                                  onChange={date => onChange(date)}
+                                  className="form-control"
+                                  dateFormat="dd/MM/yyyy"
+                                  placeholderText="dd/mm/yyyy"
+                                  minDate={startDate}
+                                  startDate={startDate}
+                                  endDate={value}
+                                  selectsEnd
+                                />
+                              )}
+                            />
+                            {errors && errors['api']?.['end_time'] ? (
+                              <div className="invalid-feedback d-block">
+                                {errors['api']?.['end_time']?.message}
+                              </div>
+                            ) : null}
+                          </FormGroup>
+                        </Col>
+                      </>
+                    )}
                     <Col md={3}>
-                      <Label>&nbsp;</Label>
+                      <Label className="font-weight-bold">Properties</Label>
                       <ConfigChart
                         chartTypeDefault={defaultValues?.properties?.chart_type}
                         colorDefault={defaultValues?.properties?.color}
@@ -207,108 +259,15 @@ export default function ModalReportForm({
                       />
                     </Col>
                   </Row>
-                  {reportType?.value === 'distribution' && (
-                    <Row>
-                      <Col xs="4">
-                        <FormGroup>
-                          <Label for="startDate">
-                            <span className="text-danger">*</span>
-                            {t('startDate')}
-                          </Label>
-                          <Controller
-                            control={control}
-                            name="api.start_time"
-                            render={({onChange, onBlur, value, name}) => (
-                              <DatePicker
-                                selected={value}
-                                onChange={date => onChange(date)}
-                                className="form-control"
-                                dateFormat="dd/MM/yyyy"
-                                placeholderText="dd/mm/yyyy"
-                              />
-                            )}
-                          />
-                          {errors && errors['api']?.['start_time'] ? (
-                            <div className="invalid-feedback d-block">
-                              {errors['api']?.['start_time']?.message}
-                            </div>
-                          ) : null}
-                        </FormGroup>
-                      </Col>
-                      <Col xs="4">
-                        <FormGroup>
-                          <Label for="endDate">
-                            <span className="text-danger">*</span>
-                            End date
-                          </Label>
-                          <Controller
-                            control={control}
-                            name="api.end_time"
-                            render={({onChange, onBlur, value, name}) => (
-                              <DatePicker
-                                selected={value}
-                                onChange={date => onChange(date)}
-                                className="form-control"
-                                dateFormat="dd/MM/yyyy"
-                                placeholderText="dd/mm/yyyy"
-                                minDate={startDate}
-                                startDate={startDate}
-                                endDate={value}
-                                selectsEnd
-                              />
-                            )}
-                          />
-                          {errors && errors['api']?.['end_time'] ? (
-                            <div className="invalid-feedback d-block">
-                              {errors['api']?.['end_time']?.message}
-                            </div>
-                          ) : null}
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  )}
                 </>
               )}
 
               {/* Chart preview */}
-              <Row className="chart-preview">
-                <Col sm="12">
-                  <Card>
-                    <CardBody
-                      style={{
-                        padding: 10,
-                        width: selectedType === 'pie' ? '450px' : '100%',
-                        margin: '0 auto'
-                      }}
-                    >
-                      {(selectedType === 'line' ||
-                        selectedType === 'multiline' ||
-                        selectedType === 'bar') && (
-                        <CustomLineChart
-                          series={chartData?.series}
-                          categories={chartData?.categories}
-                          nameOfSeries={
-                            METRIC_SETS?.[metricSet?.code]?.label || 'No label'
-                          }
-                          unit={unit || DEFAULT_TIME_UNIT}
-                          metricSet={metricSet}
-                        />
-                      )}
-                      {selectedType === 'pie' && (
-                        <CustomPieChart
-                          series={chartData?.series}
-                          categories={chartData?.categories}
-                          nameOfSeries={
-                            METRIC_SETS?.[metricSet?.code]?.label || 'No label'
-                          }
-                          unit={unit || DEFAULT_TIME_UNIT}
-                          metricSet={metricSet}
-                        />
-                      )}
-                    </CardBody>
-                  </Card>
-                </Col>
-              </Row>
+              <ChartPreview
+                chartData={chartData}
+                unit={unit}
+                metricSet={metricSet}
+              />
             </ModalBody>
             <ModalFooter>
               <Button type="button" color="link" onClick={toggle}>

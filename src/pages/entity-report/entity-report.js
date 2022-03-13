@@ -24,6 +24,7 @@ const EntityReport = ({
   ownerRole
 }) => {
   const entityType = entity;
+  console.log('🚀 ~ file: entity-report.js ~ line 27 ~ entityType', entityType);
   const distributionBy =
     entityType === EntityTypes.ORGANIZATION ? 'manager' : entityType;
   const metricType = METRIC_TYPES[entity];

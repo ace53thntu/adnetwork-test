@@ -44,13 +44,13 @@ const ReportForm = ({
     }
   });
   const {handleSubmit, control, reset} = methods;
-  const seletedMetricSet = useWatch({name: 'metric_set', control});
+  const selectedMetricSet = useWatch({name: 'metric_set', control});
   const colors = React.useMemo(() => {
-    const colors = seletedMetricSet?.map(item => {
+    const colors = selectedMetricSet?.map(item => {
       return randomHex();
     });
     return colors;
-  }, [seletedMetricSet]);
+  }, [selectedMetricSet]);
 
   const toggleModalReportForm = () => {
     setShowReportForm(prevState => !prevState);
@@ -113,7 +113,7 @@ const ReportForm = ({
                   <Button
                     type="submit"
                     color="primary"
-                    disabled={isLoading || !seletedMetricSet}
+                    disabled={isLoading || !selectedMetricSet}
                     form="formReport"
                   >
                     {isLoading ? (
@@ -134,7 +134,7 @@ const ReportForm = ({
         <ModalReportForm
           modal={showReportForm}
           toggle={toggleModalReportForm}
-          metricSet={seletedMetricSet}
+          metricSet={selectedMetricSet}
           initColors={colors}
           metricType={metricType}
           distributionBy={distributionBy}

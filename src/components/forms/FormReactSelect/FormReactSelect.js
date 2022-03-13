@@ -16,6 +16,7 @@ function FormReactSelect({
   defaultValue = null,
   menuPlacement = 'bottom',
   isClearable = false,
+  labelBold = false,
   ...rest
 }) {
   const {errors, control} = useFormContext();
@@ -39,7 +40,7 @@ function FormReactSelect({
     <>
       <FormGroup>
         {label && (
-          <Label for="">
+          <Label for="" className={labelBold ? 'font-weight-bold' : ''}>
             {required && <span className="text-danger"> *</span>}
             {label}
           </Label>

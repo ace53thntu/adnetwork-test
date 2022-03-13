@@ -16,7 +16,7 @@ import {CappingReferenceTypes} from 'constants/misc';
 import CampaignStrategies from './strategies';
 
 const TabIndexes = {
-  DESCRTIPION: 0,
+  DESCRIPTION: 0,
   STRATEGY: 1,
   CAPPING: 2,
   REPORT: 3
@@ -88,7 +88,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
 
   const getTab = index => {
     switch (index) {
-      case TabIndexes.DESCRTIPION:
+      case TabIndexes.DESCRIPTION:
         setCurrentTab('description');
         break;
       case TabIndexes.STRATEGY:
@@ -109,7 +109,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
   const tabPicker = useCallback(() => {
     switch (currentTab) {
       case 'description':
-        return TabIndexes.DESCRTIPION;
+        return TabIndexes.DESCRIPTION;
       case 'strategies':
         return TabIndexes.STRATEGY;
       case 'capping':
@@ -117,7 +117,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
       case 'report':
         return TabIndexes.REPORT;
       default:
-        return TabIndexes.DESCRTIPION;
+        return TabIndexes.DESCRIPTION;
     }
   }, [currentTab]);
   return (

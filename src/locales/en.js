@@ -14,6 +14,8 @@ const en = {
   goToEdit: 'Go to edit',
   goToView: 'Go to view',
   viewReport: 'View report',
+  editReport: 'Edit report',
+  addReport: 'Add report',
   firstName: 'First name',
   lastName: 'Last name',
   createStrategy: 'Create strategy',
@@ -72,6 +74,9 @@ const en = {
   selectReportType: 'Select report type',
   reportBy: 'Report by',
   selectReportBy: 'Select report by',
+  selectStrategy: 'Select strategy',
+  selectConcept: 'Select concept',
+
   // Main Menu
   userManagement: 'User Management',
 
