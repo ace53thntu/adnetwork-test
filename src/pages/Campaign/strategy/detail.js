@@ -21,7 +21,7 @@ import StrategyViewTabs from './ViewTabs';
 const StrategyDetail = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const [isInitalied, setInitialied] = React.useState(false);
+  const [isInitialized, setInitialized] = React.useState(false);
   const {strategyId, campaignId} = useParams();
 
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
@@ -36,7 +36,7 @@ const StrategyDetail = () => {
       strategy &&
       Object.keys(strategy).length > 0 &&
       status === 'success' &&
-      !isInitalied
+      !isInitialized
     ) {
       dispatch(
         initStrategyInventoryListRedux({
@@ -44,9 +44,9 @@ const StrategyDetail = () => {
           inventoryTempList: strategy?.inventories
         })
       );
-      setInitialied(true);
+      setInitialized(true);
     }
-  }, [strategy, dispatch, isFetched, isInitalied, status]);
+  }, [strategy, dispatch, isFetched, isInitialized, status]);
 
   useRedirectInCampaign();
 

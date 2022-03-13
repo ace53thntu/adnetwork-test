@@ -72,7 +72,7 @@ const useColumns = () => {
     return [
       {
         header: 'DSP',
-        accessor: 'dsp'
+        accessor: 'dsp_name'
       },
       {
         header: 'Start date',

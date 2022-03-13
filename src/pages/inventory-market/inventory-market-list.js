@@ -87,7 +87,8 @@ const InventoryMarket = () => {
       {
         header: 'Name',
         accessor: 'name',
-        md: 10
+        md: 6,
+        sm: 2
       },
       {
         header: 'Url',
@@ -98,12 +99,16 @@ const InventoryMarket = () => {
               {row.value}
             </a>
           );
-        }
+        },
+        md: 2,
+        sm: 2
       },
       {
         header: 'Cost',
         accessor: 'cost',
-        cell: row => row?.value?.toString() || ''
+        cell: row => row?.value?.toString() || '',
+        md: 2,
+        sm: 2
       },
       {
         accessor: 'status',
@@ -114,7 +119,8 @@ const InventoryMarket = () => {
           statusProps = getStatus({row, statusProps});
           return <Status {...statusProps} noHeader />;
         },
-        md: 2
+        md: 2,
+        sm: 2
       }
     ].filter(item => {
       if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
@@ -126,10 +132,6 @@ const InventoryMarket = () => {
       return true;
     });
   }, [role]);
-  console.log(
-    '🚀 ~ file: inventory-market-list.js ~ line 127 ~ columns ~ columns',
-    columns
-  );
 
   const reduxDispatch = useDispatch();
 

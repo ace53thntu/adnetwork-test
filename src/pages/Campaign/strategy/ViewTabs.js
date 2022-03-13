@@ -72,7 +72,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                 dataStrategy={currentStrategy}
                 isView
               /> */}
-                  <CollapseBox unMoun={false} open title={t('concepts')}>
+                  <CollapseBox unMount={false} open title={t('concepts')}>
                     <Concept
                       conceptList={currentStrategy?.concepts}
                       isView

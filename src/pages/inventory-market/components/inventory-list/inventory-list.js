@@ -170,6 +170,8 @@ const InventoryList = ({page, filterParams = null}) => {
   };
 
   const onClickItem = item => {
+    setIsBid(false);
+    setIsDeal(false);
     setOpenModal(true);
     setSelectedInventory(item);
   };

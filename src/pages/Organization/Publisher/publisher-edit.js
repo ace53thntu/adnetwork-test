@@ -15,7 +15,8 @@ const propTypes = {
 
 const PublisherEdit = ({publisherId, ...rest}) => {
   const {data: publisher, isFetched, status, isLoading} = useGetPublisher(
-    publisherId
+    publisherId,
+    !!publisherId
   );
 
   return (

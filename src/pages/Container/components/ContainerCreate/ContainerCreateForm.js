@@ -24,9 +24,10 @@ import {containersMapData} from '../Tree/dto';
 
 function ContainerCreateForm(props) {
   const {t} = useTranslation();
-  const {containers} = props;
+  const {containers, publisher} = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const {mutateAsync: createContainerRequest} = useCreateContainer();
 
   const methods = useForm({
@@ -35,7 +36,10 @@ function ContainerCreateForm(props) {
       url: '',
       status: 'active',
       cost: '',
-      first_party: 'inactive'
+      first_party: 'inactive',
+      publisher_uuid: publisher
+        ? {value: publisher?.uuid, label: publisher?.name}
+        : null
     },
     resolver: containerFormResolver(containers)
   });
@@ -90,7 +94,11 @@ function ContainerCreateForm(props) {
         <ModalBody>
           <Row>
             <Col sm="12">
-              <PublisherSelect currentContainer={null} isEdit={false} />
+              <PublisherSelect
+                currentContainer={null}
+                isEdit={false}
+                disabled
+              />
             </Col>
             <Col sm="12">
               <FormTextInput

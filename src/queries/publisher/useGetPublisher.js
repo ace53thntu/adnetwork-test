@@ -7,7 +7,7 @@ import {GET_PUBLISHER} from './constants';
 /**
  * Hook for get Publisher from API by query
  */
-export function useGetPublisher(pubId) {
+export function useGetPublisher(pubId, enabled = false) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,7 @@ export function useGetPublisher(pubId) {
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!pubId
+      enabled
     }
   );
 }

@@ -152,7 +152,6 @@ const InventoryDetails = ({
       ShowToast.success('Bid inventory successfully');
       toggle();
     } catch (error) {
-      console.log('🚀 ~ file: inventory-detail.js ~ line 75 ~ error', error);
       ShowToast.error(error?.msg || 'Fail to bid inventory');
     }
   }
@@ -199,15 +198,8 @@ const InventoryDetails = ({
 
                 {/* Click rate */}
                 <InventoryPartial label="Click rate">
-                  <Badge color="light" pill>
-                    {inventoryData?.click_rate ?? 0}
-                  </Badge>
-                </InventoryPartial>
-
-                {/* Fill rate */}
-                <InventoryPartial label="Fill rate">
                   <Badge color="info" pill>
-                    {inventoryData?.fill_rate ?? 0}
+                    {inventoryData?.click_rate ?? 0}
                   </Badge>
                 </InventoryPartial>
 
@@ -221,6 +213,13 @@ const InventoryDetails = ({
                 {/* Format */}
                 <InventoryPartial label="Format">
                   {inventoryData?.format}
+                </InventoryPartial>
+
+                {/* Fill rate */}
+                <InventoryPartial label="Fill rate">
+                  <Badge color="info" pill>
+                    {inventoryData?.fill_rate ?? 0}
+                  </Badge>
                 </InventoryPartial>
 
                 {/* Position */}
