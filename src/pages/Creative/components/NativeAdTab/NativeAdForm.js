@@ -181,7 +181,7 @@ function NativeAdForm(props) {
       {/* BEGIN: Report */}
       {nativeAd?.uuid && (
         <Report
-          entity={EntityTypes.NAVTIVE_AD}
+          entity={EntityTypes.NATIVE_AD}
           entityId={nativeAd?.uuid}
           ownerId={selectedAdvertiserId}
           ownerRole={USER_ROLE.ADVERTISER}

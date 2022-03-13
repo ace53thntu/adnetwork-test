@@ -31,10 +31,11 @@ export function useGetReports({params, enabled = false}) {
 export function useGetReportsInfinite({
   params,
   enabled = false,
-  page = DEFAULT_PAGINATION.page
+  page = DEFAULT_PAGINATION.page,
+  reportType
 }) {
   return useInfiniteQuery(
-    [GET_REPORTS, params?.entity_uuid || 'all', params?.entity_type || 'all'],
+    [GET_REPORTS, params?.source_uuid || 'all', reportType || 'all'],
     ({pageParam = 1}) =>
       ReportAPIRequest.getAllReport({
         params: {...params, page: pageParam, limit: DEFAULT_PAGINATION.perPage},

@@ -9,7 +9,14 @@ import ReportItem from './report-item';
 
 const ReportItemContainer = ({reportItem, children}) => {
   const {source_uuid, report_source, report_type, api} = reportItem;
-  const {time_range, time_unit, report_by, start_time, end_time} = api;
+  const {
+    time_range,
+    time_unit,
+    report_by,
+    start_time,
+    end_time,
+    report_by_uuid
+  } = api;
   const dispatch = useDispatch();
   const {mutateAsync: generateReportUrl, isLoading} = useGenerateReportUrl();
   const [metricData, setMetricData] = React.useState(null);
@@ -17,8 +24,8 @@ const ReportItemContainer = ({reportItem, children}) => {
   React.useEffect(() => {
     async function getMetric() {
       const requestBody = {
-        source_uuid: source_uuid,
-        report_by_uuid: source_uuid,
+        source_uuid,
+        report_by_uuid,
         report_type,
         time_unit,
         time_range,
@@ -44,6 +51,7 @@ const ReportItemContainer = ({reportItem, children}) => {
     end_time,
     generateReportUrl,
     report_by,
+    report_by_uuid,
     report_source,
     report_type,
     source_uuid,

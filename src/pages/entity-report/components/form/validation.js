@@ -5,7 +5,7 @@ export const schemaValidate = t => {
   return yupResolver(
     yup.object().shape({
       api: yup.object({
-        unit: yup.object().when('time_range', (timeRange, schema) => {
+        time_unit: yup.object().when('time_range', (timeRange, schema) => {
           if (timeRange?.units.length > 1) {
             return yup
               .object()

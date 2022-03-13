@@ -81,6 +81,10 @@ export default function ModalReportForm({
   ownerRole,
   ownerId
 }) {
+  console.log(
+    '🚀 ~ file: create-report.modal.js ~ line 84 ~ currentReport',
+    currentReport
+  );
   const {t} = useTranslation();
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
@@ -167,7 +171,7 @@ export default function ModalReportForm({
                         defaultValue={defaultValues?.api?.time_range}
                       />
                       <FormControlUnit
-                        defaultValue={defaultValues?.api?.unit}
+                        defaultValue={defaultValues?.api?.time_unit}
                       />
                     </Col>
                   </Row>

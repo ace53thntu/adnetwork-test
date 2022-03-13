@@ -39,7 +39,7 @@ const ChartItem = ({
         } else if (chartType === 'pie') {
           return <R2ChartPie series={series} color={color} />;
         } else {
-          return <div>Up comming</div>;
+          return <div>Up coming</div>;
         }
       })()}
     </div>

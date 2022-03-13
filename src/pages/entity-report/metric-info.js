@@ -2,7 +2,7 @@ import {METRIC_TIMERANGES} from 'constants/report';
 import React, {memo} from 'react';
 import {Badge} from 'reactstrap';
 
-const MetricInfo = ({timeRange, unit, distributionBy, metricType}) => {
+const MetricInfo = ({timeRange, unit, reportSource, reportBy}) => {
   const timeRanges = METRIC_TIMERANGES.reduce((acc, item) => {
     const {value} = item;
     acc = {...acc, [value]: item};
@@ -28,18 +28,18 @@ const MetricInfo = ({timeRange, unit, distributionBy, metricType}) => {
       </div>
       <div className="mr-3">
         <span className="mr-1" style={{fontSize: 12}}>
-          Distribution by:
+          Report source:
         </span>
         <Badge color="light" style={{backgroundColor: '#e0f2ff'}}>
-          {distributionBy}
+          {reportSource}
         </Badge>
       </div>
       <div className="mr-3">
         <span className="mr-1" style={{fontSize: 12}}>
-          Metric type:
+          Report by:
         </span>
         <Badge color="light" style={{backgroundColor: '#e0f2ff'}}>
-          {metricType}
+          {reportBy}
         </Badge>
       </div>
     </div>

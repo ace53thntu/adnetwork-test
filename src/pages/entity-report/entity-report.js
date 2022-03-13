@@ -39,7 +39,8 @@ const EntityReport = ({
       source_uuid: entityId,
       per_pge: NUMBER_OF_PAGE
     },
-    enabled: true
+    enabled: true,
+    reportType: entityType
   });
 
   const reports = React.useMemo(() => {
