@@ -393,12 +393,14 @@ function handleSetCampaign(state, action) {
         }
         return advertiserItem;
       } else {
+        console.log('~ handleSetCampaign item.expanded', item.expanded);
         return {
           ...item,
           expanded: true,
           selected: false,
           children: [...item.children].map(campItem => {
             if (campItem.id === campaignId) {
+              console.log('=== Selected campaignId', campaignId);
               return {
                 ...unSelectedChild(campItem),
                 selected: true

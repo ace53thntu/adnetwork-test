@@ -20,7 +20,6 @@ export function mappingFormToApi({
     end_time,
     report_by_uuid
   } = api;
-  console.log('🚀 ~ file: dto.js ~ line 16 ~ report_by_uuid', report_by_uuid);
   time_unit = time_unit?.value;
   time_range = time_range?.value;
   const reportSource = report_source?.value;

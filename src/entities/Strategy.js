@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
@@ -151,4 +152,12 @@ export const formToApi = ({
   }
 
   return strategyReturn;
+};
+
+export const isConceptsChanged = ({newConcepts, oldConcepts}) => {
+  if (_.isEqual(newConcepts, oldConcepts)) {
+    return false;
+  }
+
+  return true;
 };

@@ -126,8 +126,7 @@ function SidebarTree(props) {
           try {
             const res = await CampaignAPIRequest.getAllCampaign({
               params: {
-                // per_page: DEFAULT_PAGINATION.perPage,
-                per_page: 2,
+                per_page: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 advertiser_uuid: id
               },
@@ -158,27 +157,13 @@ function SidebarTree(props) {
             //
           }
 
-          // TODO - xem lại đoạn code này.
-          // const currentAdvertisers = advertisersRedux?.map(item => {
-          //   if (item.id === node.id) {
-          //     return {
-          //       ...item,
-          //       page: currentPage,
-          //       totalPage: campaignTotal,
-          //       children: [...item.children, ...children]
-          //     };
-          //   }
-          //   return item;
-          // });
-          // dispatch(setAdvertisersRedux(currentAdvertisers, page));
           return children;
         } else {
           let children = [];
           try {
             const res = await CampaignAPIRequest.getAllCampaign({
               params: {
-                // per_page: DEFAULT_PAGINATION.perPage,
-                per_page: 2,
+                per_page: DEFAULT_PAGINATION.perPage,
                 page: currentPage,
                 advertiser_uuid: id
               },
@@ -217,8 +202,8 @@ function SidebarTree(props) {
           try {
             const res = await StrategyAPIRequest.getAllStrategy({
               params: {
-                // per_page: DEFAULT_PAGINATION.perPage,
-                per_page: 1,
+                per_page: DEFAULT_PAGINATION.perPage,
+                // per_page: 1,
                 page: currentPage,
                 campaign_uuid: campaignId
               },
@@ -249,7 +234,42 @@ function SidebarTree(props) {
           }
           return children;
         } else {
-          console.log('LOADMORE');
+          const {parentId, id: campaignId} = node;
+          let children = [];
+          try {
+            const res = await StrategyAPIRequest.getAllStrategy({
+              params: {
+                per_page: DEFAULT_PAGINATION.perPage,
+                // per_page: 1,
+                page: currentPage,
+                campaign_uuid: campaignId
+              },
+              options: {isResponseAll: IS_RESPONSE_ALL}
+            });
+            const data = getResponseData(res, IS_RESPONSE_ALL);
+            if (data) {
+              queryCache.setQueryData([GET_STRATEGIES, campaignId], data);
+              const currentSourceData = data ?? [];
+              currentSourceData.forEach((item, index) => {
+                children.push({
+                  id: item.uuid,
+                  name: item.name,
+                  children: [],
+                  numChildren: 0,
+                  page: 0,
+                  expanded: false,
+                  selected: false,
+                  parentId: campaignId,
+                  isStrategy: true,
+                  campaignId: campaignId,
+                  advertiserId: parentId
+                });
+              });
+            }
+          } catch (error) {
+            //
+          }
+          return children;
         }
       }
     },

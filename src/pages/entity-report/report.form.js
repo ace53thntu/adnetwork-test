@@ -75,10 +75,7 @@ const ReportForm = ({
     };
     try {
       const {data} = await generateReportUrl(requestBody);
-      console.log(
-        '🚀 ~ file: report.form.js ~ line 80 ~ onSubmit ~ data',
-        data
-      );
+
       dispatch(setMetricBodyRedux(requestBody));
       dispatch(setMetricDataRedux(data));
       toggleModalReportForm();

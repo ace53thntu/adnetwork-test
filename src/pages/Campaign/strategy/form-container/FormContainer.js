@@ -14,7 +14,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
-import {apiToForm, formToApi} from 'entities/Strategy';
+import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
 import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 
@@ -102,6 +102,26 @@ const FormContainer = ({
           });
           return;
         }
+
+        //---> Check concepts is changed
+        const conceptUuids = formData.concept_uuids?.filter(cont => cont) || [];
+        if (
+          isConcept &&
+          !isConceptsChanged({
+            newConcepts: conceptUuids,
+            oldConcepts: currentStrategy.concept_uuids
+          })
+        ) {
+          redirectPageAfterSave({
+            _strategyId: currentStrategy?.uuid,
+            _campaignId: currentStrategy?.campaign_uuid?.value,
+            _advertiserId: currentStrategy?.advertiser_uuid,
+            _isConcept: isConcept,
+            _isSummary: isSummary
+          });
+          return;
+        }
+
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
           const defaultValueUpdated = apiToForm({strategyData: data});

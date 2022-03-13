@@ -32,11 +32,6 @@ const propTypes = {
 };
 
 const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
-  console.log(
-    '🚀 ~ file: ViewTabs.js ~ line 35 ~ StrategyViewTabs ~ currentStrategy',
-    currentStrategy,
-    currentStrategy.uuid
-  );
   const {t} = useTranslation();
   const query = useQueryString();
   const ownerId = query.get('advertiser_id');

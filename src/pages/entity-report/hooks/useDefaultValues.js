@@ -4,10 +4,6 @@ import React from 'react';
 import {ReportBys, ReportTypes} from '../constants.js';
 
 export const useDefaultValues = ({reportItem}) => {
-  console.log(
-    '🚀 ~ file: useDefaultValues.js ~ line 7 ~ useDefaultValues ~ reportItem',
-    reportItem
-  );
   return React.useMemo(() => {
     const {api = {}, properties = {}} = reportItem;
     let {report_source, report_type} = reportItem;

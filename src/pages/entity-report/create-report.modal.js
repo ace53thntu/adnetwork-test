@@ -45,10 +45,6 @@ const initDefaultValue = ({
   distributionBy,
   entityType
 }) => {
-  console.log(
-    '🚀 ~ file: create-report.modal.js ~ line 53 ~ entityType',
-    entityType
-  );
   return {
     properties: {
       color: JSON.stringify(initColors),
@@ -81,10 +77,6 @@ export default function ModalReportForm({
   ownerRole,
   ownerId
 }) {
-  console.log(
-    '🚀 ~ file: create-report.modal.js ~ line 84 ~ currentReport',
-    currentReport
-  );
   const {t} = useTranslation();
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();

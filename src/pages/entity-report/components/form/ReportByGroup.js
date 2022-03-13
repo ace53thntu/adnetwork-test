@@ -80,10 +80,6 @@ const ReportByGroup = ({reportSource}) => {
 
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});
-  console.log(
-    '🚀 ~ file: ReportByGroup.js ~ line 36 ~ ReportByGroup ~ reportBySelected',
-    reportBySelected
-  );
 
   return (
     <>
