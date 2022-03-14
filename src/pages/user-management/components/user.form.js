@@ -114,7 +114,7 @@ const UserForm = ({
                     label={t('username')}
                     placeholder={t('enterUsername')}
                     isRequired
-                    disabled={isEdit}
+                    readOnly={isEdit}
                   />
                 </Col>
                 {/* Email */}
@@ -124,7 +124,7 @@ const UserForm = ({
                     label={t('email')}
                     placeholder={t('enterEmail')}
                     isRequired
-                    disabled={isEdit}
+                    readOnly={isEdit}
                   />
                 </Col>
 

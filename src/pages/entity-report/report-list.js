@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 //---> Build-in Modules
 import React from 'react';
 import {Card, CardBody, Col, Row} from 'reactstrap';
+import NoReportAvailable from './components/NoReportAvailable';
 
 //---> Internal Modules
 import ReportItemContainer from './ReportItemContainer';
@@ -23,9 +24,7 @@ const ReportList = ({
           <Col key={`pr-${id}`} sm={6} className="mb-3">
             <Card className="chart-item">
               <CardBody style={{padding: 0}}>
-                <ReportItemContainer
-                  reportItem={reportItem}
-                ></ReportItemContainer>
+                <ReportItemContainer report={reportItem} />
               </CardBody>
             </Card>
           </Col>
@@ -33,17 +32,7 @@ const ReportList = ({
       })}
       {(!reports || reports.length === 0) && (
         <Col sm={12}>
-          <div
-            style={{
-              textAlign: 'center',
-              fontWeight: 600,
-              width: '100%',
-              backgroundColor: 'hsl(0,0%,95%)',
-              padding: '15px 0'
-            }}
-          >
-            No report
-          </div>
+          <NoReportAvailable />
         </Col>
       )}
     </Row>

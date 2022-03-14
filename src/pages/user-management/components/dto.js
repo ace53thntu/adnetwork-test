@@ -1,3 +1,5 @@
+import {USER_ROLE} from '../constants';
+
 /**
  * @function mappingApiToForm
  * @description Mapping API respone to form data format
@@ -18,25 +20,26 @@ export const mappingApiToForm = ({
     language = null,
     role = null,
     status = 'active',
-    publisher_uuid = '',
-    dsp_uuid = '',
-    advertiser_uuid = '',
     password = '',
-    publisher_name = '',
-    advertiser_name = '',
-    dsp_name = '',
-    company = ''
+    company = '',
+    reference_name,
+    reference_uuid
   } = apiResp;
   const foundLanguage =
     languagesArr?.find(item => item.value === language) || null;
   const foundRole = rolesArr?.find(item => item.value === role) || null;
-  const foundPublisher = publisher_uuid
-    ? {value: publisher_uuid, label: publisher_name}
-    : null;
-  const foundAdvertiser = advertiser_uuid
-    ? {value: advertiser_uuid, label: advertiser_name}
-    : null;
-  const foundDsp = dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null;
+  const foundPublisher =
+    role === USER_ROLE.PUBLISHER
+      ? {value: reference_uuid, label: reference_name}
+      : null;
+  const foundAdvertiser =
+    role === USER_ROLE.ADVERTISER
+      ? {value: reference_uuid, label: reference_name}
+      : null;
+  const foundDsp =
+    role === USER_ROLE.DSP
+      ? {value: reference_uuid, label: reference_name}
+      : null;
 
   return {
     uuid,

@@ -1,72 +1,50 @@
+//---> Buid-in Modules
 import React from 'react';
-import {useGenerateReportUrl} from 'queries/report';
-import {useDispatch} from 'react-redux';
-import {
-  setMetricBodyRedux,
-  setMetricDataRedux
-} from 'store/reducers/entity-report';
+
+//---> External Modules
+import PropTypes from 'prop-types';
+
+//---> Internal Modules
 import ReportItem from './report-item';
+import {useGetMetrics} from 'queries/metric/useGetMetrics';
+import {QueryStatuses} from 'constants/react-query';
+import {getMetricRequestBody} from './utils/metricRequest';
 
-const ReportItemContainer = ({reportItem, children}) => {
-  const {source_uuid, report_source, report_type, api} = reportItem;
-  const {
-    time_range,
-    time_unit,
-    report_by,
-    start_time,
-    end_time,
-    report_by_uuid
-  } = api;
-  const dispatch = useDispatch();
-  const {mutateAsync: generateReportUrl, isLoading} = useGenerateReportUrl();
-  const [metricData, setMetricData] = React.useState(null);
+const propTypes = {
+  report: PropTypes.object
+};
 
-  React.useEffect(() => {
-    async function getMetric() {
-      const requestBody = {
-        source_uuid,
-        report_by_uuid,
-        report_type,
-        time_unit,
-        time_range,
-        report_source,
-        report_by
-      };
-      if (report_type === 'distribution') {
-        requestBody.start_time = start_time;
-        requestBody.end_time = end_time;
-      }
-      try {
-        const {data} = await generateReportUrl(requestBody);
-        setMetricData(data);
-        dispatch(setMetricBodyRedux(requestBody));
-        dispatch(setMetricDataRedux(data));
-      } catch (error) {
-        // TODO: handle error generate report
-      }
-    }
-    getMetric();
-  }, [
-    dispatch,
-    end_time,
-    generateReportUrl,
-    report_by,
-    report_by_uuid,
-    report_source,
-    report_type,
-    source_uuid,
-    start_time,
-    time_range,
-    time_unit
-  ]);
+const ReportItemContainer = ({report}) => {
+  return <ReportItemContent report={report} />;
+};
+
+ReportItemContainer.propTypes = propTypes;
+
+const ReportItemContent = ({report}) => {
+  const {source_uuid, report_source, uuid} = report;
+
+  const requestBody = getMetricRequestBody({report});
+  const {data: metricData, status, error, isFetching} = useGetMetrics({
+    data: requestBody,
+    reportId: uuid,
+    enabled: !!uuid
+  });
+
+  if (status === QueryStatuses.LOADING) {
+    return <div>Loading...</div>;
+  }
+
+  if (status === QueryStatuses.ERROR) {
+    return <div>Error: {error?.msg || 'Something went wrong.'}</div>;
+  }
 
   return (
     <ReportItem
       entityId={source_uuid}
       entityType={report_source}
-      reportItem={reportItem}
+      reportItem={report}
       metrics={metricData}
-      isFetching={isLoading}
+      isFetching={isFetching}
     />
   );
 };

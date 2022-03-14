@@ -98,7 +98,7 @@ export const endpoints = {
     follow: 'follow'
   },
   metric: {
-    metric: `${API_V1}/metrics`
+    metric: `${API_V1}/metrics/report`
   },
   nativeAd: {
     list: `${API_V1}/native_ad`,

@@ -22,7 +22,7 @@ import {useDeleteContainer, useEditContainer} from 'queries/container';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from './dto';
 import PublisherSelect from './PublisherSelect';
-import {validationDescriptionTab} from './validattion';
+import {validationDescriptionTab} from './validation';
 
 const propTypes = {
   container: PropTypes.object,
@@ -137,7 +137,7 @@ function ContainerForm(props) {
               />
               <FormTextInput
                 name="cost"
-                label="Cost"
+                label="Commission Cost"
                 placeholder="0.0"
                 disable={isLoading}
                 isRequired

@@ -1,22 +1,24 @@
-import './styles/styles.scss';
-
-import {DialogConfirm, LoadingIndicator} from 'components/common';
-import {METRIC_SETS} from 'constants/report';
-import PropTypes from 'prop-types';
-import {useDeleteReport} from 'queries/report';
+//---> Build-in Modules
 import React from 'react';
-import {Button} from 'reactstrap';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+//---> External Modules
+import PropTypes from 'prop-types';
+import {Button} from 'reactstrap';
 import {Checkbox} from '@material-ui/core';
 
+//---> Internal Modules
 import ChartItem from './chart-item';
 import {DefaultColor} from './constants.js/index.js';
-import ModalCreateReport from './create-report.modal';
-import {useChartData, useDefaultValues} from './hooks';
+import ModalReportForm from './create-report.modal';
+import {useChartData} from './hooks';
 import MetricInfo from './metric-info';
 import {ReportItemStyled} from './styled';
 import {parseColors} from './utils';
+import {DialogConfirm, LoadingIndicator} from 'components/common';
+import {METRIC_SETS} from 'constants/report';
+import {useDeleteReport} from 'queries/report';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+import './styles/styles.scss';
 
 export default function ReportItem({
   entityId,
@@ -53,8 +55,6 @@ export default function ReportItem({
     metricSet,
     entityId
   });
-
-  const defaultValues = useDefaultValues({reportItem});
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);
@@ -162,8 +162,8 @@ export default function ReportItem({
         )}
       </ReportItemStyled>
 
-      {openModal && defaultValues && (
-        <ModalCreateReport
+      {openModal && (
+        <ModalReportForm
           modal={openModal}
           toggle={toggleModal}
           metricUrl={reportUrl}
@@ -171,7 +171,6 @@ export default function ReportItem({
           chartTypeDefault={chartType}
           reportItem={reportItem}
           isEdit
-          defaultValues={defaultValues}
           unit={unit}
           timeRange={timeRange}
           closeModal={closeModal}
@@ -180,6 +179,7 @@ export default function ReportItem({
           metricType={metricType}
           distributionBy={distributionBy}
           entityId={entityId}
+          reportId={reportId}
         />
       )}
       {showDialogConfirm && (

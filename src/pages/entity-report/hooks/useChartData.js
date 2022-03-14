@@ -43,7 +43,7 @@ const enumerateDaysBetweenDates = ({
 
     now.add(increaseNumber, unit);
   }
-  dates.length = dates.length - 1;
+  dates.length = dates?.length - 1;
 
   return dates;
 };

@@ -7,21 +7,21 @@ import {METRICS} from './constants';
 /**
  * Hook for get Report from API by query
  */
-export function useGetMetrics({url}) {
+export function useGetMetrics({data, reportId, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [METRICS, url],
+    [METRICS, reportId, data],
     () =>
       MetricAPIRequest.getMetric({
-        url,
+        data,
         options: {
           cancelToken
         }
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!url
+      enabled
     }
   );
 }

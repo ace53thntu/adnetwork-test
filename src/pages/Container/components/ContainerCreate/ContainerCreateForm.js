@@ -121,7 +121,7 @@ function ContainerCreateForm(props) {
             <Col sm="12">
               <FormTextInput
                 name="cost"
-                label="Cost"
+                label="Commission Cost"
                 placeholder="0.0"
                 disable={isLoading}
                 isRequired
