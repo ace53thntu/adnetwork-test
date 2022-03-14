@@ -4,8 +4,15 @@ import {useFormContext, useWatch} from 'react-hook-form';
 import {INPUT_NAME, METRIC_TIMERANGES} from 'constants/report';
 import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {ErrorMessageStyled} from './styled';
+import {useDispatch} from 'react-redux';
+import {
+  setMetricBodyRedux,
+  useMetricsBodySelector
+} from 'store/reducers/entity-report';
 
 export default function TimeRange({defaultValue}) {
+  const dispatch = useDispatch();
+  const metricBodyRequest = useMetricsBodySelector();
   const {register, setValue, errors, control} = useFormContext();
   const currentUnit = useWatch({name: INPUT_NAME.UNIT, control});
 
@@ -26,30 +33,29 @@ export default function TimeRange({defaultValue}) {
         unit: currentUnit?.value
       })
     ) {
-      //---> If time range only 1 unit -> using this unit is default,
-      //---> Else get unit from user selection.
-      // const unit = currentUnit?.value || selectedOption?.units?.[0]?.value;
-      // let newUrl = replaceQueryParam({
-      //   url: metricUrl,
-      //   paramName: 'range',
-      //   paramValue: selectedOption?.value
-      // });
-      // newUrl = replaceQueryParam({
-      //   url: newUrl,
-      //   paramName: 'unit',
-      //   paramValue: unit
-      // });
-      // dispatch(setMetricUrlRedux(newUrl));
+      if (metricBodyRequest.time_range !== selectedOption.value) {
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBodyRequest,
+            time_range: selectedOption.value
+          })
+        );
+      }
     }
   };
 
   React.useEffect(() => {
-    setActiveTimeRange(defaultValue);
-    setValue(INPUT_NAME.TIME_RANGE, JSON.stringify(defaultValue), {
-      shouldValidate: false,
-      shouldDirty: false
-    });
+    try {
+      const timeRangeParsed = JSON.parse(defaultValue);
+      setActiveTimeRange(timeRangeParsed);
+      setValue(INPUT_NAME.TIME_RANGE, defaultValue, {
+        shouldValidate: false,
+        shouldDirty: false
+      });
+    } catch (error) {}
   }, [defaultValue, setValue]);
+
+  React.useEffect(() => {}, []);
 
   return (
     <div>

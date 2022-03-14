@@ -1,3 +1,4 @@
+import {Button} from 'reactstrap';
 import styled from 'styled-components';
 
 export const ErrorMessageStyled = styled.div`
@@ -6,4 +7,8 @@ export const ErrorMessageStyled = styled.div`
   font-size: 80%;
   color: #dc3545;
   font-weight: bold;
+`;
+
+export const UnitButton = styled(Button)`
+  cursor: ${props => (props.readOnly ? 'default !important' : 'pointer')};
 `;

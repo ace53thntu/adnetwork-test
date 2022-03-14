@@ -110,7 +110,7 @@ const getDataDrawChart = ({
 
 export const useChartData = ({
   type = 'line',
-  metrics: metricData = {},
+  metrics: metricData,
   unit = 'hour',
   timeRange = 'l1d',
   metricSet = [],

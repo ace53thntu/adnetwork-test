@@ -57,7 +57,11 @@ export const Sources = [
     label: 'Web'
   },
   {
-    value: 'tv',
+    value: 'smarttv',
     label: 'Smart TV'
+  },
+  {
+    value: 'others',
+    label: 'Others'
   }
 ];

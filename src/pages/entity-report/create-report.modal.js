@@ -25,21 +25,21 @@ import ConfigChart from './components/form/ConfigChart';
 import './styles/styles.scss';
 import {mappingFormToApi} from './dto';
 import {schemaValidate} from './components/form/validation';
-import {DEFAULT_TIME_RANGE, DEFAULT_TIME_UNIT} from 'constants/report';
 import {getReportSources} from 'utils/metrics';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport, useGetReport} from 'queries/report';
 import {capitalize} from 'utils/helpers/string.helpers';
-import {useChartData, useDefaultValues} from './hooks';
-import {FormReactSelect} from 'components/forms';
-import {ReportTypes} from './constants.js';
+import {useDefaultValues} from './hooks';
 import {useTranslation} from 'react-i18next';
 import ReportSourceSelect from './components/form/ReportSourceSelect';
 import ChartPreview from './components/ChartPreview';
-import ReportByGroup from './components/form/ReportByGroup';
+import ReportByGroup from './components/form/ReportByGroup/ReportByGroup';
 import {QueryStatuses} from 'constants/react-query';
-import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {getMetricRequestBody} from './utils/metricRequest';
+import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
+import {useDispatch} from 'react-redux';
+import {setMetricBodyRedux} from 'store/reducers/entity-report';
+import ReportTypeSelect from './components/form/ReportTypeSelect';
 
 const initDefaultValue = ({
   initColors = [],
@@ -81,14 +81,6 @@ export default function ModalReportForm({
 }) {
   const {data: report, status, error} = useGetReport(reportId, !!reportId);
 
-  const requestBody = report ? getMetricRequestBody({report}) : null;
-  const {data: metrics, status: metricStatus} = useGetMetrics({
-    data: requestBody,
-    reportId,
-    enabled: !!reportId && !!requestBody && status === QueryStatuses.SUCCESS
-  });
-
-  console.log('🚀 ~ file: create-report.modal.js ~ line 95 ~ metrics', metrics);
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
 
@@ -132,14 +124,11 @@ export default function ModalReportForm({
     }
   };
 
-  if (
-    status === QueryStatuses.LOADING ||
-    metricStatus === QueryStatuses.LOADING
-  ) {
+  if (status === QueryStatuses.LOADING) {
     return <div>Loading...</div>;
   }
 
-  if (status === QueryStatuses.ERROR || metricStatus === QueryStatuses.ERROR) {
+  if (status === QueryStatuses.ERROR) {
     return <span>Error: {error.msg}</span>;
   }
 
@@ -159,7 +148,6 @@ export default function ModalReportForm({
         isEdit={isEdit}
         reportSource={entityType}
         metricSet={metricSet}
-        metrics={metrics}
         timeRange={timeRange}
         entityId={entityId}
         unit={unit}
@@ -178,28 +166,30 @@ const ReportFormConcent = ({
   reportSource,
   metricSet,
   unit,
-  metrics,
   timeRange,
   entityId
 }) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
   const defaultValues = useDefaultValues({report});
 
   const reportSourceOptions = getReportSources();
-  const chartData = useChartData({
-    metrics,
-    unit: !isEdit ? DEFAULT_TIME_UNIT : unit,
-    timeRange: !isEdit ? DEFAULT_TIME_RANGE : timeRange,
-    metricSet,
-    entityId
-  });
+
   const methods = useForm({
     defaultValues: isEdit ? defaultValues : initializeDefaultValue,
     resolver: schemaValidate()
   });
   const {handleSubmit, formState, control, errors} = methods;
   const reportType = useWatch({name: 'report_type', control});
+
   const startDate = useWatch({name: 'api.start_time', control});
+  const requestBody = report ? getMetricRequestBody({report}) : null;
+  const reportId = report?.uuid;
+
+  useDeepCompareEffect(() => {
+    dispatch(setMetricBodyRedux(requestBody));
+  }, [requestBody]);
+
   return (
     <FormProvider {...methods}>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -230,15 +220,14 @@ const ReportFormConcent = ({
                     />
                   </Col>
                   <Col md={3}>
-                    <FormReactSelect
-                      name="report_type"
-                      label={t('reportType')}
-                      placeholder={t('selectReportType')}
-                      options={ReportTypes}
-                      labelBold
+                    <ReportTypeSelect
+                      defaultValue={defaultValues?.report_type}
                     />
                   </Col>
-                  <ReportByGroup reportSource={reportSource} />
+                  <ReportByGroup
+                    reportSource={reportSource}
+                    currentReportBy={defaultValues?.api?.report_by}
+                  />
                 </Row>
                 <Row className="mb-3">
                   {reportType?.value === 'distribution' && (
@@ -315,9 +304,11 @@ const ReportFormConcent = ({
 
             {/* Chart preview */}
             <ChartPreview
-              chartData={chartData}
+              reportId={reportId}
               unit={unit}
               metricSet={metricSet}
+              timeRange={timeRange}
+              entityId={entityId}
             />
           </ModalBody>
           <ModalFooter>

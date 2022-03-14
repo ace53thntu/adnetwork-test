@@ -21,7 +21,12 @@ export function mappingFormToApi({
     report_by_uuid
   } = api;
   time_unit = time_unit?.value;
-  time_range = time_range?.value;
+  try {
+    const timeRangeParsed = JSON.parse(time_range);
+    time_range = timeRangeParsed?.value;
+  } catch (err) {
+    time_range = '';
+  }
   const reportSource = report_source?.value;
 
   let formatStartDate = moment(start_time).isSame(moment(), 'day')

@@ -6,22 +6,21 @@ export const schemaValidate = t => {
     yup.object().shape({
       api: yup.object({
         time_unit: yup.object().when('time_range', (timeRange, schema) => {
-          if (timeRange?.units.length > 1) {
-            return yup
-              .object()
-              .nullable()
-              .required()
-              .typeError('This field is required');
+          try {
+            const timeRangeParsed = JSON.parse(timeRange);
+            if (timeRangeParsed?.units.length > 1) {
+              return yup
+                .object()
+                .nullable()
+                .required()
+                .typeError('This field is required');
+            }
+          } catch (err) {
+            return schema;
           }
-
-          return schema;
         }),
 
-        time_range: yup
-          .object()
-          .nullable()
-          .required()
-          .typeError('This field is required')
+        time_range: yup.string().required().typeError('This field is required')
       })
     })
   );

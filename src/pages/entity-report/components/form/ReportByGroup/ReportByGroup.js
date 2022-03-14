@@ -7,9 +7,6 @@ import {Col} from 'reactstrap';
 import {useFormContext, useWatch} from 'react-hook-form';
 
 //---> Internal Modules
-import {FormReactSelect} from 'components/forms';
-import {ReportBys} from 'pages/entity-report/constants.js';
-import {getReportByOptions} from 'pages/entity-report/utils/getReportByOptions';
 import CampaignSelect from './ReportByUuid/CampaignSelect';
 import StrategySelect from './ReportByUuid/StrategySelect';
 import ConceptSelect from './ReportByUuid/ConceptSelect';
@@ -18,10 +15,11 @@ import VideoSelect from './ReportByUuid/VideoSelect';
 import CreativeSelect from './ReportByUuid/CreativeSelect';
 import SourceSelect from './ReportByUuid/SourceSelect';
 import PositionSelect from 'components/forms/PositionSelect';
+import ReportBySelect from './ReportBySelect';
 
-const ReportByGroup = ({reportSource}) => {
+const ReportByGroup = ({reportSource, currentReportBy}) => {
   const {t} = useTranslation();
-  const {control} = useFormContext();
+  const {control, setValue} = useFormContext();
 
   const getReportByUuid = React.useCallback(() => {
     return {
@@ -81,19 +79,19 @@ const ReportByGroup = ({reportSource}) => {
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});
 
+  React.useEffect(() => {
+    if (currentReportBy?.value !== reportBySelected?.value) {
+      setValue('api.report_by_uuid', null, {
+        shouldDirty: true,
+        shouldValidate: true
+      });
+    }
+  }, [currentReportBy, reportBySelected, setValue]);
+
   return (
     <>
       <Col md={3}>
-        <FormReactSelect
-          name="api.report_by"
-          label={t('reportBy')}
-          labelBold
-          placeholder={t('selectReportBy')}
-          options={getReportByOptions({
-            reportBy: reportSource,
-            options: ReportBys
-          })}
-        />
+        <ReportBySelect reportSource={reportSource} />
       </Col>
       {reportBySelected &&
         reportBySelected.value !== reportSourceSelected?.value && (

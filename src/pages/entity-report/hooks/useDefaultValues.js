@@ -26,12 +26,11 @@ export const useDefaultValues = ({report}) => {
     );
     report_by = ReportBys.find(item => item?.value === report_by);
     report_type = ReportTypes.find(item => item?.value === report_type);
-    if (start_time === '0001-01-01T00:00:00Z') {
+    if (report_type === 'trending') {
       start_time = null;
-    }
-    if (end_time === '0001-01-01T00:00:00Z') {
       end_time = null;
     }
+
     start_time = start_time ? new Date(start_time) : new Date();
     end_time = end_time ? new Date(end_time) : null;
     const reportByUuid = report_by_uuid
@@ -41,7 +40,7 @@ export const useDefaultValues = ({report}) => {
     return {
       properties,
       api: {
-        time_range,
+        time_range: JSON.stringify(time_range),
         time_unit,
         report_by,
         start_time,
