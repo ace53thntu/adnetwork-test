@@ -142,7 +142,7 @@ export const ProtocolOptions = [
   {value: 5, label: 'VAST 2.0 Wrapper'},
   {value: 6, label: 'VAST 3.0 Wrapper'},
   {value: 7, label: 'VAST 4.0'},
-  {value: 8, label: 'VAST 4.0 Wrapper'},
-  {value: 9, label: 'DAAST 1.0'},
-  {value: 10, label: 'DAAST 1.0 Wrapper'}
+  {value: 8, label: 'VAST 4.0 Wrapper'}
+  // {value: 9, label: 'DAAST 1.0'},
+  // {value: 10, label: 'DAAST 1.0 Wrapper'}
 ];

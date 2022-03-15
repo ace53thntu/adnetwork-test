@@ -479,3 +479,26 @@ export const EntityTypes = {
   CREATIVE: 'creative',
   INVENTORY: 'inventory'
 };
+
+export const PUBLISHER_METRIC_SET = {
+  bc: {label: 'Bids', value: 'bc', code: 'bc'},
+  bce: {label: 'Bid Errors', value: 'bce', code: 'bce'},
+  bsp: {label: 'Bid Price', value: 'bsp', code: 'bsp'},
+  ic: {label: 'Impressions', value: 'ic', code: 'ic'},
+  cc: {label: 'Clicks', value: 'cc', code: 'cc'},
+  ap: {label: 'Actual Price', value: 'ap', code: 'ap'},
+  tc: {label: 'Tracking Cost', value: 'tc', code: 'tc'},
+  cp: {label: 'Commission Price', value: 'cp', code: 'cp'},
+  pfr: {label: 'Publisher Final Revenue', value: 'pfr', code: 'pfr'},
+  trp: {label: 'Total Response Time', value: 'trp', code: 'trp'},
+  art: {label: 'Avg Response Time', value: 'art', code: 'art'},
+  cl: {label: 'Post Click Visits', value: 'cl', code: 'cl'},
+  pc: {label: 'Post Click Conv', value: 'pc', code: 'pc'},
+  pv: {label: 'Post View Conv', value: 'pv', code: 'pv'},
+  uvh: {label: 'Unique Visitor Hourly', value: 'uvh', code: 'uvh'},
+  uvd: {label: 'Unique Visitor Daily', value: 'uvd', code: 'uvd'},
+  uvm: {label: 'Unique Visitor Monthly', value: 'uvm', code: 'uvm'},
+  vt: {label: 'Visit Time', value: 'vt', code: 'vt'},
+  adloox: {label: 'Visibility', value: 'adloox', code: 'adloox'},
+  fraud: {label: 'Fraud', value: 'fraud', code: 'fraud'}
+};

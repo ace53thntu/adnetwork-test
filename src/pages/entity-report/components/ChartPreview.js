@@ -15,6 +15,7 @@ import _ from 'lodash';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useChartData} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
+import NoDataAvailable from 'components/list/no-data';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -37,12 +38,12 @@ const ChartPreview = ({reportId, metricSet, unit, timeRange, entityId}) => {
     }
   }, [currentMetricRequest, metricRequestRedux]);
 
-  if (status === QueryStatuses.LOADING || status === QueryStatuses.IDLE) {
+  if (status === QueryStatuses.LOADING) {
     return <div>Loading...</div>;
   }
 
-  if (status === QueryStatuses.ERROR) {
-    return <div>No data available</div>;
+  if (status === QueryStatuses.ERROR || QueryStatuses.IDLE) {
+    return <NoDataAvailable />;
   }
 
   return (

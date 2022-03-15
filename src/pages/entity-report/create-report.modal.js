@@ -22,7 +22,6 @@ import DatePicker from 'react-datepicker';
 import FormControlUnit from './components/form/FormControlUnit';
 import TimeRange from './components/form/TimeRange';
 import ConfigChart from './components/form/ConfigChart';
-import './styles/styles.scss';
 import {mappingFormToApi} from './dto';
 import {schemaValidate} from './components/form/validation';
 import {getReportSources} from 'utils/metrics';
@@ -36,10 +35,16 @@ import ChartPreview from './components/ChartPreview';
 import ReportByGroup from './components/form/ReportByGroup/ReportByGroup';
 import {QueryStatuses} from 'constants/react-query';
 import {getMetricRequestBody} from './utils/metricRequest';
-import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 import {useDispatch} from 'react-redux';
 import {setMetricBodyRedux} from 'store/reducers/entity-report';
 import ReportTypeSelect from './components/form/ReportTypeSelect';
+import {useDeepCompareEffectNoCheck} from 'hooks/useDeepCompareEffect';
+import {
+  DEFAULT_TIME_RANGE,
+  DEFAULT_TIME_UNIT,
+  METRIC_TIMERANGES
+} from 'constants/report';
+import './styles/styles.scss';
 
 const initDefaultValue = ({
   initColors = [],
@@ -47,17 +52,23 @@ const initDefaultValue = ({
   distributionBy,
   entityType
 }) => {
+  const timeRange = METRIC_TIMERANGES.find(
+    item => item.value === DEFAULT_TIME_RANGE
+  );
   return {
     properties: {
       color: JSON.stringify(initColors),
       chart_type: 'line'
     },
     api: {
-      unit: null,
-      time_range: null,
+      time_unit: timeRange?.units.find(
+        item => item.value === DEFAULT_TIME_UNIT
+      ),
+      time_range: JSON.stringify(timeRange),
       report_by: {label: capitalize(entityType), value: entityType}
     },
-    report_source: {label: capitalize(entityType), value: entityType}
+    report_source: {label: capitalize(entityType), value: entityType},
+    report_type: {label: capitalize('trending'), value: 'trending'}
   };
 };
 
@@ -162,7 +173,7 @@ const ReportFormConcent = ({
   onSubmit,
   toggle,
   isViewed,
-  isEdit,
+  isEdit = false,
   reportSource,
   metricSet,
   unit,
@@ -171,12 +182,12 @@ const ReportFormConcent = ({
 }) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const defaultValues = useDefaultValues({report});
-
+  const currentReport = useDefaultValues({report});
+  const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
-
+  console.log('==== initializeDefaultValue', initializeDefaultValue);
   const methods = useForm({
-    defaultValues: isEdit ? defaultValues : initializeDefaultValue,
+    defaultValues,
     resolver: schemaValidate()
   });
   const {handleSubmit, formState, control, errors} = methods;
@@ -184,11 +195,17 @@ const ReportFormConcent = ({
 
   const startDate = useWatch({name: 'api.start_time', control});
   const requestBody = report ? getMetricRequestBody({report}) : null;
+  console.log(
+    '🚀 ~ file: create-report.modal.js ~ line 187 ~ requestBody',
+    requestBody
+  );
   const reportId = report?.uuid;
 
-  useDeepCompareEffect(() => {
-    dispatch(setMetricBodyRedux(requestBody));
-  }, [requestBody]);
+  useDeepCompareEffectNoCheck(() => {
+    if (isEdit && isViewed) {
+      dispatch(setMetricBodyRedux(requestBody));
+    }
+  }, [requestBody, isEdit, isViewed]);
 
   return (
     <FormProvider {...methods}>

@@ -8,8 +8,16 @@ import {ReportBys, ReportTypes} from '../constants.js';
 
 export const useDefaultValues = ({report}) => {
   return React.useMemo(() => {
+    if (!report) {
+      return null;
+    }
+
     const {api = {}, properties = {}} = report;
     let {report_source, report_type} = report;
+    console.log(
+      '🚀 ~ file: useDefaultValues.js ~ line 13 ~ returnReact.useMemo ~ report_type',
+      report_type
+    );
     let {
       time_unit,
       time_range,
@@ -26,7 +34,7 @@ export const useDefaultValues = ({report}) => {
     );
     report_by = ReportBys.find(item => item?.value === report_by);
     report_type = ReportTypes.find(item => item?.value === report_type);
-    if (report_type === 'trending') {
+    if (report_type?.value === 'trending') {
       start_time = null;
       end_time = null;
     }
