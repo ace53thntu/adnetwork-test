@@ -4,6 +4,7 @@ import {
   ContainerLayout,
   ContainersLazy
 } from 'pages/Container';
+import {ContainerReportLazy} from 'pages/Container/components/ContainerDetail';
 import {ContainerSourceLazy} from 'pages/Container/components/ContainerSource';
 import {ContainerSourcePageLazy} from 'pages/Container/components/ContainerSourcePage';
 import {InventoryReportPage} from 'pages/Container/components/inventory-report';
@@ -21,6 +22,10 @@ export const containerPages = {
     {
       path: ':cid',
       element: <ContainerDetailLazy />
+    },
+    {
+      path: ':cid/report',
+      element: <ContainerReportLazy />
     },
     {
       path: ':cid/:source',
