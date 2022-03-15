@@ -11,15 +11,18 @@ import {Button, FormGroup, Label, Spinner} from 'reactstrap';
 import {useGenerateReportUrl} from 'queries/report';
 import {
   setMetricBodyRedux,
-  setMetricDataRedux
+  setMetricDataRedux,
+  useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
 import ModalReportForm from './create-report.modal';
 import {FormReactSelect} from 'components/forms';
 import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
+  PUBLISHER_REPORT_VIEW_TYPES,
   REPORT_VIEW_TYPES
 } from 'constants/report';
+import {ReportGroupTypes} from './constants.js';
 
 // Constants
 const randomHex = () =>
@@ -40,6 +43,7 @@ const ReportForm = ({
   const {mutateAsync: generateReportUrl} = useGenerateReportUrl();
   const [isLoading, setIsLoading] = React.useState(false);
   const [showReportForm, setShowReportForm] = React.useState(false);
+  const reportTypeGroup = useReportGroupTypeSelector();
 
   const methods = useForm({
     defaultValues: {
@@ -98,7 +102,11 @@ const ReportForm = ({
             <div style={{width: '400px', marginRight: '15px'}}>
               <FormReactSelect
                 name="metric_set"
-                options={REPORT_VIEW_TYPES}
+                options={
+                  reportTypeGroup === ReportGroupTypes.ADVERTISER
+                    ? REPORT_VIEW_TYPES
+                    : PUBLISHER_REPORT_VIEW_TYPES
+                }
                 label={<span className="font-weight-bold">Report type</span>}
                 placeholder="Select type..."
                 menuPlacement="top"

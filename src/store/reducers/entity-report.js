@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
+import {ReportGroupTypes} from 'pages/entity-report/constants.js';
 
 //---> Define action types
 const ACTION_PREFIX = '@entity_report';
@@ -12,9 +13,12 @@ const SET_UNIT = `${ACTION_PREFIX}/SET_UNIT`;
 const SET_METRIC_URL = `${ACTION_PREFIX}/SET_METRIC_URL`;
 const SET_METRIC_BODY = `${ACTION_PREFIX}/SET_METRIC_BODY`;
 const SET_METRIC_DATA = `${ACTION_PREFIX}/SET_METRIC_DATA`;
+const SET_ACTIVE_REPORT_GROUP_TYPE = `${ACTION_PREFIX}/SET_ACTIVE_REPORT_GROUP_TYPE`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setReportGroupRedux = reportGroupType =>
+  createAction(SET_ACTIVE_REPORT_GROUP_TYPE, {reportGroupType});
 export const setTimeRangeRedux = timeRange =>
   createAction(SET_TIME_RANGE, {timeRange});
 export const setUnitRedux = unit => createAction(SET_UNIT, {unit});
@@ -33,11 +37,13 @@ const entityReportInitialState = {
   unit: '',
   url: '',
   metricBodyRequest: {},
-  metricsData: null
+  metricsData: null,
+  reportGroupType: ReportGroupTypes.ADVERTISER
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_ACTIVE_REPORT_GROUP_TYPE]: handleSetReportGroupType,
   [SET_TIME_RANGE]: handleSetTimeRange,
   [SET_UNIT]: handleSetUnit,
   [SET_METRIC_URL]: handleSetUrl,
@@ -52,6 +58,11 @@ function handleReset(state, action) {
   state.url = '';
   state.metricBodyRequest = {};
   state.metricsData = null;
+  state.reportGroupType = ReportGroupTypes.ADVERTISER;
+}
+
+function handleSetReportGroupType(state, action) {
+  state.reportGroupType = action.payload.reportGroupType;
 }
 
 function handleSetMetricData(state, action) {
@@ -92,7 +103,18 @@ const makeSelectUrl = () =>
     a => a.url
   );
 
+const makeSelectReportGroupType = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.reportGroupType
+  );
+
 //---> Hook to select state
+export function useReportGroupTypeSelector() {
+  const selectReportGroupType = React.useMemo(makeSelectReportGroupType, []);
+  return useSelector(state => selectReportGroupType(state));
+}
+
 export function useMetricsDataSelector() {
   const selectMetricsData = React.useMemo(makeSelectMetricsData, []);
   return useSelector(state => selectMetricsData(state));

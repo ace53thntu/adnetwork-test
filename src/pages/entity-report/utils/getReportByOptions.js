@@ -1,4 +1,6 @@
-const ExcludeReportBy = {
+import {ReportGroupTypes} from '../constants.js';
+
+const AdvertiserExcludeReportBy = {
   advertiser: [],
   campaign: ['advertiser'],
   strategy: ['advertiser', 'campaign'],
@@ -8,8 +10,27 @@ const ExcludeReportBy = {
   native_ad: ['advertiser', 'campaign', 'strategy', 'concept']
 };
 
-export const getReportByOptions = ({reportBy = 'advertiser', options = []}) => {
+const PublisherExcludeReportBy = {
+  publisher: [],
+  container: ['publisher'],
+  page: ['publisher', 'container'],
+  inventory: ['publisher', 'container', 'page']
+};
+
+export const getReportByOptions = ({
+  groupType = 'advertiser',
+  reportBy = 'advertiser',
+  options = []
+}) => {
+  if (groupType === ReportGroupTypes.ADVERTISER) {
+    return options.filter(
+      optionItem =>
+        !AdvertiserExcludeReportBy[reportBy]?.includes(optionItem.value)
+    );
+  }
+
   return options.filter(
-    optionItem => !ExcludeReportBy[reportBy].includes(optionItem.value)
+    optionItem =>
+      !PublisherExcludeReportBy[reportBy]?.includes(optionItem.value)
   );
 };

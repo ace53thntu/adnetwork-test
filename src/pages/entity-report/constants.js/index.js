@@ -10,7 +10,7 @@ export const ReportBys = [
     label: 'Advertiser'
   },
   {
-    value: 'campaign',
+    value: 'container',
     label: 'Campaign'
   },
   {
@@ -43,6 +43,45 @@ export const ReportBys = [
   }
 ];
 
+export const PublisherReportBys = [
+  {
+    value: 'publisher',
+    label: 'Publisher'
+  },
+  {
+    value: 'container',
+    label: 'Container'
+  },
+  {
+    value: 'page',
+    label: 'Page'
+  },
+  {
+    value: 'inventory',
+    label: 'Inventory'
+  },
+  {
+    value: 'inv_dsp',
+    label: 'Inventory Dsp'
+  },
+  {
+    value: 'inv_dsp_core',
+    label: 'Inventory Dsp Core'
+  },
+  {
+    value: 'inv_dsp_hb',
+    label: 'Inventory Dsp Header Bidding'
+  },
+  {
+    value: 'inv_default',
+    label: 'Inventory Ad Default'
+  },
+  {
+    value: 'inv_adv',
+    label: 'Inventory Advertiser '
+  }
+];
+
 export const Sources = [
   {
     value: 'ios',
@@ -65,3 +104,8 @@ export const Sources = [
     label: 'Others'
   }
 ];
+
+export const ReportGroupTypes = {
+  ADVERTISER: 'advertiser',
+  PUBLISHER: 'publisher'
+};

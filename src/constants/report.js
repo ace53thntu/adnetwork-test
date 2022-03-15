@@ -293,6 +293,29 @@ export const REPORT_VIEW_TYPES = [
   }
 ];
 
+export const PUBLISHER_REPORT_VIEW_TYPES = [
+  {label: 'Bids', value: 'bc', code: 'bc'},
+  {label: 'Bid Errors', value: 'bce', code: 'bce'},
+  {label: 'Bid Price', value: 'bsp', code: 'bsp'},
+  {label: 'Impressions', value: 'ic', code: 'ic'},
+  {label: 'Clicks', value: 'cc', code: 'cc'},
+  {label: 'Actual Price', value: 'ap', code: 'ap'},
+  {label: 'Tracking Cost', value: 'tc', code: 'tc'},
+  {label: 'Commission Price', value: 'cp', code: 'cp'},
+  {label: 'Publisher Final Revenue', value: 'pfr', code: 'pfr'},
+  {label: 'Total Response Time', value: 'trp', code: 'trp'},
+  {label: 'Avg Response Time', value: 'art', code: 'art'},
+  {label: 'Post Click Visits', value: 'cl', code: 'cl'},
+  {label: 'Post Click Conv', value: 'pc', code: 'pc'},
+  {label: 'Post View Conv', value: 'pv', code: 'pv'},
+  {label: 'Unique Visitor Hourly', value: 'uvh', code: 'uvh'},
+  {label: 'Unique Visitor Daily', value: 'uvd', code: 'uvd'},
+  {label: 'Unique Visitor Monthly', value: 'uvm', code: 'uvm'},
+  {label: 'Visit Time', value: 'vt', code: 'vt'},
+  {label: 'Visibility', value: 'adloox', code: 'adloox'},
+  {label: 'Fraud', value: 'fraud', code: 'fraud'}
+];
+
 export const METRIC_SETS = {
   // External
   xic: {label: 'External Impressions', value: 3, code: 'xic'},
@@ -472,11 +495,13 @@ export const EntityTypes = {
   STRATEGY: 'strategy',
   CAMPAIGN: 'campaign',
   ADVERTISER: 'advertiser',
-  PUBLISHER: 'publisher',
   DSP: 'dsp',
   VIDEO: 'video',
   NATIVE_AD: 'native_ad',
   CREATIVE: 'creative',
+  PUBLISHER: 'publisher',
+  CONTAINER: 'container',
+  PAGE: 'page',
   INVENTORY: 'inventory'
 };
 

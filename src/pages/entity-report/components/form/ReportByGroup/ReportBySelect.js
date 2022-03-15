@@ -1,6 +1,10 @@
 //---> Build-in Modules
 import {FormReactSelect} from 'components/forms';
-import {ReportBys} from 'pages/entity-report/constants.js';
+import {
+  PublisherReportBys,
+  ReportBys,
+  ReportGroupTypes
+} from 'pages/entity-report/constants.js';
 import {getReportByOptions} from 'pages/entity-report/utils/getReportByOptions';
 import React from 'react';
 import {useFormContext, useWatch} from 'react-hook-form';
@@ -8,12 +12,14 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {
   setMetricBodyRedux,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
 
 const ReportBySelect = ({reportSource}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const reportGroupType = useReportGroupTypeSelector();
   const metricBody = useMetricsBodySelector();
   const {control} = useFormContext();
   const reportBySelected = useWatch({name: 'api.report_by', control});
@@ -38,7 +44,10 @@ const ReportBySelect = ({reportSource}) => {
       placeholder={t('selectReportBy')}
       options={getReportByOptions({
         reportBy: reportSource,
-        options: ReportBys
+        options:
+          reportGroupType === ReportGroupTypes.ADVERTISER
+            ? ReportBys
+            : PublisherReportBys
       })}
     />
   );

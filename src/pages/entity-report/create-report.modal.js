@@ -185,7 +185,7 @@ const ReportFormConcent = ({
   const currentReport = useDefaultValues({report});
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
-  console.log('==== initializeDefaultValue', initializeDefaultValue);
+
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate()
@@ -195,10 +195,7 @@ const ReportFormConcent = ({
 
   const startDate = useWatch({name: 'api.start_time', control});
   const requestBody = report ? getMetricRequestBody({report}) : null;
-  console.log(
-    '🚀 ~ file: create-report.modal.js ~ line 187 ~ requestBody',
-    requestBody
-  );
+
   const reportId = report?.uuid;
 
   useDeepCompareEffectNoCheck(() => {

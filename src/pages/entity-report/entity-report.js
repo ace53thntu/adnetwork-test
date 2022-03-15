@@ -14,6 +14,9 @@ import {useGetReportsInfinite} from 'queries/report/useGetReports';
 import {Pagination} from 'components/list/pagination';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {IS_RESPONSE_ALL} from 'constants/misc';
+import {useDispatch} from 'react-redux';
+import {setReportGroupRedux} from 'store/reducers/entity-report';
+import {ReportGroupTypes} from './constants.js';
 
 const NUMBER_OF_PAGE = 10;
 
@@ -23,6 +26,7 @@ const EntityReport = ({
   ownerId,
   ownerRole
 }) => {
+  const dispatch = useDispatch();
   const entityType = entity;
   const distributionBy =
     entityType === EntityTypes.ORGANIZATION ? 'manager' : entityType;
@@ -48,6 +52,23 @@ const EntityReport = ({
       return [...acc, ...reportData];
     }, []);
   }, [pages]);
+
+  React.useEffect(
+    function setReportGroupType() {
+      if (
+        [
+          EntityTypes.PUBLISHER,
+          EntityTypes.CONTAINER,
+          EntityTypes.INVENTORY
+        ].includes(entityType)
+      ) {
+        dispatch(setReportGroupRedux(ReportGroupTypes.PUBLISHER));
+        return;
+      }
+      dispatch(setReportGroupRedux(ReportGroupTypes.ADVERTISER));
+    },
+    [dispatch, entityType]
+  );
 
   return (
     <div style={{minHeight: 400, padding: 15}}>

@@ -4,11 +4,14 @@ function NoReportAvailable() {
   return (
     <div
       style={{
-        textAlign: 'center',
         fontWeight: 600,
         width: '100%',
         backgroundColor: 'hsl(0,0%,95%)',
-        padding: '15px 0'
+        padding: '15px 0',
+        minHeight: '200px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
     >
       No report
