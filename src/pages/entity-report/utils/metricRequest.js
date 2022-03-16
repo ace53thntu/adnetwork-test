@@ -10,7 +10,7 @@ export const getMetricRequestBody = ({report}) => {
     report_by,
     start_time,
     end_time,
-    report_by_uuid
+    report_by_uuid = null
   } = api;
   const requestBody = {
     source_uuid,

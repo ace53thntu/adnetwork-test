@@ -1,4 +1,10 @@
 import moment from 'moment';
+import {capitalize} from 'utils/helpers/string.helpers';
+import {
+  DEFAULT_TIME_RANGE,
+  DEFAULT_TIME_UNIT,
+  METRIC_TIMERANGES
+} from 'constants/report';
 
 const DATE_FORMAT_STR = 'DD-MM-YYYY hh:mm:ss';
 
@@ -53,3 +59,29 @@ export function mappingFormToApi({
 
   return data;
 }
+
+export const initDefaultValue = ({
+  initColors = [],
+  metricType,
+  distributionBy,
+  entityType
+}) => {
+  const timeRange = METRIC_TIMERANGES.find(
+    item => item.value === DEFAULT_TIME_RANGE
+  );
+  return {
+    properties: {
+      color: JSON.stringify(initColors),
+      chart_type: 'line'
+    },
+    api: {
+      time_unit: timeRange?.units.find(
+        item => item.value === DEFAULT_TIME_UNIT
+      ),
+      time_range: JSON.stringify(timeRange),
+      report_by: {label: capitalize(entityType), value: entityType}
+    },
+    report_source: {label: capitalize(entityType), value: entityType},
+    report_type: {label: capitalize('trending'), value: 'trending'}
+  };
+};

@@ -11,10 +11,6 @@ import {
 } from 'store/reducers/entity-report';
 
 export default function TimeRange({defaultValue}) {
-  console.log(
-    '🚀 ~ file: TimeRange.js ~ line 14 ~ TimeRange ~ defaultValue',
-    defaultValue
-  );
   const dispatch = useDispatch();
   const metricBodyRequest = useMetricsBodySelector();
   const {register, setValue, errors, control} = useFormContext();

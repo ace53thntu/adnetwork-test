@@ -2,9 +2,17 @@
 import React from 'react';
 
 //---> Internal Modules
-import {METRIC_TIMERANGES} from 'constants/report';
+import {EntityTypes, METRIC_TIMERANGES} from 'constants/report';
 import {getReportSources} from 'utils/metrics';
-import {ReportBys, ReportTypes} from '../constants.js';
+import {PublisherReportBys, ReportBys, ReportTypes} from '../constants.js';
+
+const isPublisherGroup = reportSource => {
+  return [
+    EntityTypes.PUBLISHER,
+    EntityTypes.CONTAINER,
+    EntityTypes.INVENTORY
+  ].includes(reportSource);
+};
 
 export const useDefaultValues = ({report}) => {
   return React.useMemo(() => {
@@ -14,10 +22,9 @@ export const useDefaultValues = ({report}) => {
 
     const {api = {}, properties = {}} = report;
     let {report_source, report_type} = report;
-    console.log(
-      '🚀 ~ file: useDefaultValues.js ~ line 13 ~ returnReact.useMemo ~ report_type',
-      report_type
-    );
+
+    const isPublisher = isPublisherGroup(report_source);
+
     let {
       time_unit,
       time_range,
@@ -32,7 +39,9 @@ export const useDefaultValues = ({report}) => {
     report_source = getReportSources().find(
       item => item?.value === report_source
     );
-    report_by = ReportBys.find(item => item?.value === report_by);
+    report_by = isPublisher
+      ? PublisherReportBys.find(item => item?.value === report_by)
+      : ReportBys.find(item => item?.value === report_by);
     report_type = ReportTypes.find(item => item?.value === report_type);
     if (report_type?.value === 'trending') {
       start_time = null;

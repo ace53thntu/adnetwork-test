@@ -20,16 +20,10 @@ const ReportTypeSelect = ({defaultValue}) => {
   const dispatch = useDispatch();
   const {control, setValue} = useFormContext();
   const reportTypeSelected = useWatch({name: 'report_type', control});
-  console.log(
-    '🚀 ~ file: ReportTypeSelect.js ~ line 23 ~ ReportTypeSelect ~ reportTypeSelected',
-    reportTypeSelected,
-    defaultValue
-  );
   const metricBody = useMetricsBodySelector();
 
   React.useEffect(() => {
     if (reportTypeSelected?.value !== defaultValue?.value) {
-      console.log('RUNNING');
       setValue('api.start_time', new Date(), {
         shouldDirty: true,
         shouldValidate: true

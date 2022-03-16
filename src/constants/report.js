@@ -130,7 +130,10 @@ export const REPORT_SOURCES = [
   'concept',
   'creative',
   'native_ad',
-  'video'
+  'video',
+  'publisher',
+  'container',
+  'inventory'
 ];
 
 export const INPUT_NAME = {
