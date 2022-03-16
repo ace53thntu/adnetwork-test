@@ -104,6 +104,7 @@ const en = {
   dealList: 'Deal list',
   bidList: 'Bid list',
   concepts: 'Concepts',
+  containerReport: 'Container Report',
 
   // Card Header
   advertiserList: 'Advertiser List',

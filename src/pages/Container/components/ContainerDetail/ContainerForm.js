@@ -9,6 +9,7 @@ import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {Button, Col, FormGroup, Row} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 //---> Internal Modules
 import {
@@ -23,6 +24,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from './dto';
 import PublisherSelect from './PublisherSelect';
 import {validationDescriptionTab} from './validation';
+import {RoutePaths} from 'constants/route-paths';
 
 const propTypes = {
   container: PropTypes.object,
@@ -167,8 +169,8 @@ function ContainerForm(props) {
                   />
                 </FormGroup>
               </div>
-
-              <FormGroup className="d-flex justify-content-between align-items-center mt-3">
+              <hr />
+              <FormGroup className="d-flex justify-content-end align-items-center mt-3">
                 <ButtonLoading
                   loading={isLoading}
                   type="submit"
@@ -179,13 +181,20 @@ function ContainerForm(props) {
                 </ButtonLoading>
                 <Button
                   color="danger"
-                  className="btn-icon"
+                  className="btn-icon ml-2"
                   onClick={() => setOpenConfirm(true)}
                   disabled={isDeleting}
                 >
                   <i className="pe-7s-trash btn-icon-wrapper"> </i>
                   {t('remove')}
                 </Button>
+                <Link
+                  to={`/${RoutePaths.CONTAINER}/${container?.uuid}/${RoutePaths.REPORT}`}
+                >
+                  <ButtonLoading type="button" className="btn-success ml-2">
+                    {t('viewReport')}
+                  </ButtonLoading>
+                </Link>
               </FormGroup>
             </Col>
           </Row>
