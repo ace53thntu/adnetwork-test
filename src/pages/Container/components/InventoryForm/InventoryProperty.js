@@ -3,11 +3,11 @@ import React from 'react';
 
 //---> External Modules
 import {useFormContext, useWatch} from 'react-hook-form';
-import {Col, Row} from 'reactstrap';
+import {Col, FormGroup, Label, Row} from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-import {FormReactSelect, FormTextInput} from 'components/forms';
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
 import {ProtocolOptions} from 'constants/misc';
@@ -81,7 +81,7 @@ const InventoryProperty = ({currentInventory = null}) => {
               disable={formState.isSubmitting}
             />
           </Col>
-          <Col sm="12">
+          <Col sm="9">
             <FormReactSelect
               name="metadata.protocols"
               label={t('protocols')}
@@ -89,6 +89,20 @@ const InventoryProperty = ({currentInventory = null}) => {
               options={ProtocolOptions}
               multiple
             />
+          </Col>
+          <Col sm="3">
+            <FormGroup className="d-flex justify-content-end flex-column mb-0">
+              <Label>&nbsp;</Label>
+              <FormToggle
+                name="metadata.loop"
+                defaultCheckedValue="active"
+                label={t('COMMON.LOOP')}
+                values={{
+                  checked: 'active',
+                  unChecked: 'inactive'
+                }}
+              />
+            </FormGroup>
           </Col>
         </Row>
       )}

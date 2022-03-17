@@ -507,7 +507,16 @@ const en = {
 
   creativeTabBanner: 'Banner',
   creativeTabNativeBanner: 'Native Ads',
-  creativeTabVideo: 'Video'
+  creativeTabVideo: 'Video',
+
+  //---> Inventory
+  INVENTORY: {
+    INVENTORY_INFORMATION: 'Inventory Information'
+  },
+  //---> Common text
+  COMMON: {
+    LOOP: 'Loop'
+  }
 };
 
 export default en;

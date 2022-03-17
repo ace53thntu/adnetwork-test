@@ -27,7 +27,10 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
     defaultValues: {
       status: 'active',
       allow_deal: 'inactive',
-      type: null
+      type: null,
+      metadata: {
+        loop: 'active'
+      }
     },
     resolver: validationInventory()
   });

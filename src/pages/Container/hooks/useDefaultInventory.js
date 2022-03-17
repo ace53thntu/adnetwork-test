@@ -55,6 +55,7 @@ export const useDefaultInventory = ({inventory}) => {
             })
           : [];
       metadata.protocols = protocols;
+      metadata.loop = metadata?.loop ? 'active' : 'inactive';
 
       return {
         uuid,

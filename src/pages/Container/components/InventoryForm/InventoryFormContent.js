@@ -15,6 +15,7 @@ import {
   Row,
   Button
 } from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 //---> Internal Modules
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
@@ -24,7 +25,6 @@ import DspSelect from './DspSelect';
 import {MarketTypes, PriceEngines} from 'constants/inventory';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {InputStatus} from 'constants/misc';
-import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
 import InventorySnippet from '../Snippets/InventorySnippet';
@@ -71,7 +71,7 @@ const InventoryFormContent = ({
 
   return (
     <BlockUi tag="div" blocking={isLoading}>
-      <ModalHeader>Inventory Information</ModalHeader>
+      <ModalHeader>{t('INVENTORY.INVENTORY_INFORMATION')}</ModalHeader>
       <ModalBody>
         <div className="d-flex justify-content-end">
           <FormGroup className="d-flex justify-content-end mb-0">

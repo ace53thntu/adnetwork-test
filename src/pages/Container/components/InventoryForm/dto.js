@@ -37,6 +37,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       metadata?.protocols?.length > 0
         ? Array.from(metadata?.protocols, item => item.value)
         : [];
+    formatMetadata.loop = metadata?.loop === 'active' ? true : false;
   }
   const tags = formTags?.map(item => item?.value);
 
