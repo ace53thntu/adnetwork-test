@@ -40,6 +40,10 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onHandleSubmit = async values => {
+    console.log(
+      '🚀 ~ file: CreateInventory.js ~ line 43 ~ CreateInventory ~ values',
+      values
+    );
     const formData = mappingInventoryFormToApi({pageId, formData: values});
     setIsLoading(true);
     try {

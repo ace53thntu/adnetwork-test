@@ -1,3 +1,24 @@
+export const getMetaExtra = metadata => {
+  let tmpMetadata = {...metadata} || {};
+  [
+    'background_color',
+    'duration',
+    'extension',
+    'width',
+    'height',
+    'loop',
+    'max_bitrate',
+    'min_bitrate',
+    'max_duration',
+    'min_duration',
+    'protocols'
+  ].forEach(element => {
+    delete tmpMetadata[element];
+  });
+
+  return tmpMetadata;
+};
+
 export const mappingInventoryFormToApi = ({pageId, formData}) => {
   const {
     name,
@@ -20,7 +41,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
 
   const minimumPriceData = parseFloat(floor_price) || 0;
   const dealFloorPriceData = parseFloat(deal_floor_price) || 0;
-  const formatMetadata = {
+  let formatMetadata = {
     ...metadata,
     duration: parseInt(metadata?.duration, 10) || 0,
     width: parseInt(metadata?.width, 10) || 0,
@@ -39,6 +60,21 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
         : [];
     formatMetadata.loop = metadata?.loop === 'active' ? true : false;
   }
+
+  // Metadata extra
+  if (metadata?.extra) {
+    try {
+      const extra = JSON.parse(metadata.extra);
+      formatMetadata = {...formatMetadata, ...extra};
+      delete formatMetadata.extra;
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: dto.js ~ line 49 ~ mappingInventoryFormToApi ~ err',
+        err
+      );
+    }
+  }
+
   const tags = formTags?.map(item => item?.value);
 
   const marketDsps = market_dsps

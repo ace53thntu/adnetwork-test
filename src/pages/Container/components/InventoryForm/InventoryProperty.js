@@ -11,9 +11,14 @@ import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
 import {ProtocolOptions} from 'constants/misc';
+import FormCodeMirror from 'components/forms/FormCodeMirror';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const InventoryProperty = ({currentInventory = null}) => {
   const {t} = useTranslation();
+  const role = getRole();
+
   const {formState, control} = useFormContext();
   const inventoryTags = getInventoryTags();
   const formatTypeSelected = useWatch({name: 'format', control});
@@ -138,6 +143,17 @@ const InventoryProperty = ({currentInventory = null}) => {
           />
         </Col>
       </Row>
+      {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+        <Row className="mb-3">
+          <Col sm={12} className="mt-2">
+            <FormCodeMirror
+              name="metadata.extra"
+              label={t('FORM.EXTRA_FIELDS')}
+              extension="JSON"
+            />
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

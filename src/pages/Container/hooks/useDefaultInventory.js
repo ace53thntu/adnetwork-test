@@ -1,6 +1,7 @@
 import {ProtocolOptions} from 'constants/misc';
 import {useMemo} from 'react';
 import {capitalize} from 'utils/helpers/string.helpers';
+import {getMetaExtra} from '../components/InventoryForm/dto';
 import {getInventoryFormats, getInventoryTypes} from '../constants';
 
 export const useDefaultInventory = ({inventory}) => {
@@ -56,6 +57,11 @@ export const useDefaultInventory = ({inventory}) => {
           : [];
       metadata.protocols = protocols;
       metadata.loop = metadata?.loop ? 'active' : 'inactive';
+      const extra = getMetaExtra(metadata);
+
+      if (typeof extra === 'object' && Object.keys(extra)) {
+        metadata.extra = JSON.stringify(extra);
+      }
 
       return {
         uuid,

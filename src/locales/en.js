@@ -516,6 +516,9 @@ const en = {
   //---> Common text
   COMMON: {
     LOOP: 'Loop'
+  },
+  FORM: {
+    EXTRA_FIELDS: 'Extra fields'
   }
 };
 
