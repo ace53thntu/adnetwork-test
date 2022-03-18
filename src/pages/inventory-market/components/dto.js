@@ -81,3 +81,40 @@ export const mappingFormToApi = ({
 };
 
 export const mappingApiToForm = () => {};
+
+export const mappingApiToBidForm = (data = null) => {
+  if (!data) {
+    return {
+      uuid: '',
+      status: 'active',
+      budget: {
+        global: '',
+        daily: ''
+      },
+      dsp_uuid: null,
+      audience_list_uuid: [],
+      start_time: new Date(),
+      end_time: null
+    };
+  }
+  const {
+    dsp_uuid,
+    dsp_name,
+    audience_list_uuid,
+    start_time,
+    end_time,
+    uuid = '',
+    status,
+    budget
+  } = data;
+
+  return {
+    uuid,
+    status,
+    budget,
+    dsp_uuid: dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null,
+    audience_list_uuid: audience_list_uuid ? audience_list_uuid : [],
+    start_time: start_time ? new Date(start_time) : new Date(),
+    end_time: end_time ? new Date(end_time) : null
+  };
+};

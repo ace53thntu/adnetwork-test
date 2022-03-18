@@ -12,7 +12,7 @@ export function useGetInventoryBids({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_INVENTORY_BID, params],
+    [GET_INVENTORY_BID, params?.inventory_uuid],
     () =>
       InventoryAPIRequest.getInventoryBid({
         params,

@@ -12,6 +12,8 @@ import React from 'react';
 import {Button, ModalHeader, ModalBody, ModalFooter, Badge} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import {makeStyles} from '@material-ui/core';
+import {useQueryClient} from 'react-query';
+import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
 import {getInventoryMarketTypeColor, getInventoryTypeColor} from '../helpers';
@@ -23,19 +25,17 @@ import {
   useGetInventoryBids,
   useGetInventoryDeals
 } from 'queries/inventory';
-import BlockUi from 'react-block-ui';
 import DealForm from './deal.form';
 import InventoryBidForm from './bid.form';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useExcludePeriod} from '../hooks';
-import {useQueryClient} from 'react-query';
 import {GET_INVENTORIES} from 'queries/inventory/constants';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {IS_RESPONSE_ALL} from 'constants/misc';
 import {schemaValidate} from './validation';
 import {useTranslation} from 'react-i18next';
 import {BidDealTabs} from './bid-deal-tabs';
-import {Collapse} from 'components/common';
+import {CollapseBox} from 'components/common';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -165,140 +165,135 @@ const InventoryDetails = ({
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
-        id="bidInventory"
-      >
-        <BlockUi tag="div" blocking={formState.isSubmitting}>
-          <ModalHeader toggle={toggle}>
-            {title} {inventoryData?.name}
-          </ModalHeader>
-          <ModalBody>
-            <Collapse unMount={false} initialOpen title="Description">
-              <div className={`d-flex flex-wrap ${classes.bgHover}`}>
-                {/* Type */}
-                <InventoryPartial label="Type">
-                  <Badge
-                    color={getInventoryTypeColor({type: inventoryData?.type})}
-                  >
-                    {inventoryData?.type}
-                  </Badge>
-                </InventoryPartial>
-                <InventoryPartial label="Market Type">
-                  <Badge
-                    color={getInventoryMarketTypeColor({
-                      type: inventoryData?.market_type
-                    })}
-                  >
-                    {inventoryData?.market_type}
-                  </Badge>
-                </InventoryPartial>
+    <>
+      <ModalHeader toggle={toggle}>
+        {title} {inventoryData?.name}
+      </ModalHeader>
+      <ModalBody>
+        <CollapseBox unMount={false} open title="Description">
+          <div className={`d-flex flex-wrap ${classes.bgHover}`}>
+            {/* Type */}
+            <InventoryPartial label="Type">
+              <Badge color={getInventoryTypeColor({type: inventoryData?.type})}>
+                {inventoryData?.type}
+              </Badge>
+            </InventoryPartial>
+            <InventoryPartial label="Market Type">
+              <Badge
+                color={getInventoryMarketTypeColor({
+                  type: inventoryData?.market_type
+                })}
+              >
+                {inventoryData?.market_type}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Click rate */}
-                <InventoryPartial label="Click rate">
-                  <Badge color="info" pill>
-                    {inventoryData?.click_rate ?? 0}
-                  </Badge>
-                </InventoryPartial>
+            {/* Click rate */}
+            <InventoryPartial label="Click rate">
+              <Badge color="info" pill>
+                {inventoryData?.click_rate ?? 0}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Minimum Price */}
-                <InventoryPartial label="Floor price">
-                  <Badge color="warning" pill>
-                    {inventoryData?.floor_price ?? 0}
-                  </Badge>
-                </InventoryPartial>
+            {/* Minimum Price */}
+            <InventoryPartial label="Floor price">
+              <Badge color="warning" pill>
+                {inventoryData?.floor_price ?? 0}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Format */}
-                <InventoryPartial label="Format">
-                  {inventoryData?.format}
-                </InventoryPartial>
+            {/* Format */}
+            <InventoryPartial label="Format">
+              {inventoryData?.format}
+            </InventoryPartial>
 
-                {/* Fill rate */}
-                <InventoryPartial label="Fill rate">
-                  <Badge color="info" pill>
-                    {inventoryData?.fill_rate ?? 0}
-                  </Badge>
-                </InventoryPartial>
+            {/* Fill rate */}
+            <InventoryPartial label="Fill rate">
+              <Badge color="info" pill>
+                {inventoryData?.fill_rate ?? 0}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Position */}
-                <InventoryPartial label="Position">
-                  {inventoryData?.position_name}
-                </InventoryPartial>
+            {/* Position */}
+            <InventoryPartial label="Position">
+              {inventoryData?.position_name}
+            </InventoryPartial>
 
-                {/* Width */}
-                <InventoryPartial label="Width">
-                  <Badge color="light" pill>
-                    {inventoryData?.metadata?.width ?? 0}
-                  </Badge>
-                </InventoryPartial>
+            {/* Width */}
+            <InventoryPartial label="Width">
+              <Badge color="light" pill>
+                {inventoryData?.metadata?.width ?? 0}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Height */}
-                <InventoryPartial label="Height">
-                  <Badge color="light" pill>
-                    {inventoryData?.metadata?.height ?? 0}
-                  </Badge>
-                </InventoryPartial>
+            {/* Height */}
+            <InventoryPartial label="Height">
+              <Badge color="light" pill>
+                {inventoryData?.metadata?.height ?? 0}
+              </Badge>
+            </InventoryPartial>
 
-                {/* Background color */}
-                <InventoryPartial label="Background color">
-                  <span
-                    style={{
-                      color: inventoryData?.metadata?.background_color ?? ''
-                    }}
-                  >
-                    {inventoryData?.metadata?.background_color}
-                  </span>
-                </InventoryPartial>
-              </div>
-            </Collapse>
+            {/* Background color */}
+            <InventoryPartial label="Background color">
+              <span
+                style={{
+                  color: inventoryData?.metadata?.background_color ?? ''
+                }}
+              >
+                {inventoryData?.metadata?.background_color}
+              </span>
+            </InventoryPartial>
+          </div>
+        </CollapseBox>
 
-            {!isBid && !isDeal && (
-              <BidDealTabs inventoryId={inventoryData?.uuid} />
-            )}
-            {isBid && <InventoryBidForm excludeDates={excludeDates} />}
-            {/* Render date range picker */}
-            {isDeal && <DealForm excludeDates={excludeDates} />}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="link" onClick={toggle}>
-              Cancel
-            </Button>
-            {isBid && (
+        {!isBid && !isDeal && <BidDealTabs inventoryId={inventoryData?.uuid} />}
+        <FormProvider {...methods}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            autoComplete="off"
+            id="bidInventory"
+          >
+            <BlockUi tag="div" blocking={formState.isSubmitting}>
+              {isBid && (
+                <InventoryBidForm
+                  excludeDates={excludeDates}
+                  inventoryId={inventoryData?.uuid}
+                />
+              )}
+              {/* Render date range picker */}
+              {isDeal && <DealForm excludeDates={excludeDates} />}
+            </BlockUi>
+          </form>
+        </FormProvider>
+      </ModalBody>
+      <ModalFooter>
+        <Button color="link" onClick={toggle}>
+          Cancel
+        </Button>
+        {isBid && (
+          <React.Fragment>
+            {isEdit && (
               <React.Fragment>
-                {isEdit && (
-                  <React.Fragment>
-                    <Button type="button" color="danger">
-                      Delete
-                    </Button>
-                    <Button type="button" color="warning">
-                      Finish
-                    </Button>
-                  </React.Fragment>
-                )}
-                <Button
-                  type="submit"
-                  color="primary"
-                  disabled={!formState.isDirty}
-                >
-                  Bid
+                <Button type="button" color="danger">
+                  Delete
+                </Button>
+                <Button type="button" color="warning">
+                  Finish
                 </Button>
               </React.Fragment>
             )}
-            {isDeal && (
-              <Button
-                type="submit"
-                color="primary"
-                disabled={!formState.isDirty}
-              >
-                Deal
-              </Button>
-            )}
-          </ModalFooter>
-        </BlockUi>
-      </form>
-    </FormProvider>
+            <Button type="submit" color="primary" disabled={!formState.isDirty}>
+              Bid
+            </Button>
+          </React.Fragment>
+        )}
+        {isDeal && (
+          <Button type="submit" color="primary" disabled={!formState.isDirty}>
+            Deal
+          </Button>
+        )}
+      </ModalFooter>
+    </>
   );
 };
 

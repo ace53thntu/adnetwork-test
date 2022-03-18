@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
+import {NoDataStyle} from './styled';
 
 const propTypes = {
   message: PropTypes.string
@@ -8,7 +9,9 @@ const propTypes = {
 
 const NoDataAvailable = ({message = 'No data available'}) => {
   return (
-    <div className="text-muted text-center font-weight-bold">{message}</div>
+    <NoDataStyle className="text-muted text-center font-weight-bold">
+      {message}
+    </NoDataStyle>
   );
 };
 

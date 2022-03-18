@@ -106,7 +106,7 @@ const KeywordList = () => {
         accessor: 'shared',
         cell: row => (
           <Badge color={row?.value ? 'primary' : 'warning'}>
-            {row?.value ? 'shared' : 'un-share'}
+            {row?.value ? 'shared' : 'unshared'}
           </Badge>
         )
       },

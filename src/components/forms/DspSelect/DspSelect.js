@@ -18,14 +18,21 @@ const propTypes = {
   defaultValue: PropTypes.object,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  inventoryId: PropTypes.string
 };
 
-const DspSelect = ({defaultValue = null, name, label, placeholder}) => {
+const DspSelect = ({
+  defaultValue = null,
+  name,
+  label,
+  placeholder,
+  inventoryId = ''
+}) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadDsp} = useDspPagination();
+  const {loadDsp} = useDspPagination(inventoryId);
 
   return (
     <SelectPaginate
@@ -47,41 +54,48 @@ DspSelect.propTypes = propTypes;
 
 export default DspSelect;
 
-const useDspPagination = () => {
-  const loadDsp = React.useCallback(async (search, prevOptions, {page}) => {
-    const res = await DspAPIRequest.getAllDsp({
-      params: {
+const useDspPagination = inventoryId => {
+  const loadDsp = React.useCallback(
+    async (search, prevOptions, {page}) => {
+      const params = {
         page,
         limit: DEFAULT_PAGINATION.perPage,
         name: search,
         status: 'active'
-      },
-      options: {
-        isResponseAll: IS_RESPONSE_ALL
+      };
+      if (inventoryId) {
+        params.inventory_uuid = inventoryId;
       }
-    });
+      const res = await DspAPIRequest.getAllDsp({
+        params,
+        options: {
+          isResponseAll: IS_RESPONSE_ALL
+        }
+      });
 
-    const items = getResponseData(res, IS_RESPONSE_ALL);
-    const total = getResponsePagination(res)?.totalItems;
-    const perPage =
-      getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
+      const items = getResponseData(res, IS_RESPONSE_ALL);
+      const total = getResponsePagination(res)?.totalItems;
+      const perPage =
+        getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
-    const options = [...items].map(item => ({
-      label: item.name,
-      value: item.uuid,
-      header_bidding_available: item?.header_bidding_available || false
-    }));
+      const options = [...items].map(item => ({
+        label: item.name,
+        value: item.uuid,
+        header_bidding_available: item?.header_bidding_available || false
+      }));
 
-    const hasMore = page < Math.ceil(total / perPage);
+      const hasMore = page < Math.ceil(total / perPage);
 
-    return {
-      options,
-      hasMore,
-      additional: {
-        page: page + 1
-      }
-    };
-  }, []);
+      return {
+        options,
+        hasMore,
+        additional: {
+          page: page + 1
+        }
+      };
+    },
+    [inventoryId]
+  );
 
   return {
     loadDsp

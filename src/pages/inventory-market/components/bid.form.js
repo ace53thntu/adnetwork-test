@@ -21,7 +21,7 @@ import DspSelect from 'components/forms/DspSelect';
 import {useTranslation} from 'react-i18next';
 import AudienceSelect from 'components/forms/AudienceSelect';
 
-const InventoryBidForm = ({excludeDates = []}) => {
+const InventoryBidForm = ({excludeDates = [], inventoryId = ''}) => {
   const {t} = useTranslation();
   const {control} = useFormContext();
   const dspSelected = useWatch({name: INPUTS_NAME.DSP_UUID, control});
@@ -35,6 +35,7 @@ const InventoryBidForm = ({excludeDates = []}) => {
             label={t('dsp')}
             placeholder={t('selectDsp')}
             defaultValue={null}
+            inventoryId={inventoryId}
           />
         </Col>
         <Col sm="4">
@@ -95,8 +96,8 @@ const InventoryBidForm = ({excludeDates = []}) => {
 };
 
 InventoryBidForm.propTypes = {
-  dspOptions: PropTypes.array,
-  audienceOptions: PropTypes.array
+  excludeDates: PropTypes.array,
+  inventoryId: PropTypes.string
 };
 
 export default InventoryBidForm;
