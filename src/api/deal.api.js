@@ -10,23 +10,31 @@ class DealAPI extends XHRRequest {
   }
 
   getAllDeal = ({params, options}) => {
-    return this.get(endpoints.deal.deal, params, options);
+    return this.get(endpoints.inventory.dealInventory, params, options);
   };
 
   getDeal = ({id, params = null, options}) => {
-    return this.get(`${endpoints.deal.deal}/${id}`, params, options);
+    return this.get(
+      `${endpoints.inventory.dealInventory}/${id}`,
+      params,
+      options
+    );
   };
 
   createDeal = ({data, options}) => {
-    return this.post(endpoints.deal.deal, data, options);
+    return this.post(endpoints.inventory.dealInventory, data, options);
   };
 
   editDeal = ({id, data, options}) => {
-    return this.put(`${endpoints.deal.deal}/${id}`, data, options);
+    return this.put(
+      `${endpoints.inventory.dealInventory}/${id}`,
+      data,
+      options
+    );
   };
 
   deleteDeal = ({id, params}) => {
-    return this.delete(`${endpoints.deal.deal}/${id}`, params);
+    return this.delete(`${endpoints.inventory.dealInventory}/${id}`, params);
   };
 }
 

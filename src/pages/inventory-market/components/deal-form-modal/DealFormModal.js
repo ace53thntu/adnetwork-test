@@ -10,32 +10,32 @@ import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import FormLoading from 'components/forms/FormLoading';
-import InventoryBidForm from '../bid.form';
-import {useEditBid, useGetBid} from 'queries/bid';
-import {mappingApiToBidForm, mappingFormToApi} from '../dto';
+import {mappingApiToDealForm, mappingFormToApi} from '../dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {GET_INVENTORY_BID} from 'queries/inventory/constants';
+import {GET_INVENTORY_DEAL} from 'queries/inventory/constants';
 import {useQueryClient} from 'react-query';
 import {QueryStatuses} from 'constants/react-query';
 import {schemaValidate} from '../validation';
+import DealForm from '../deal.form';
+import {useEditDeal, useGetDeal} from 'queries/deal';
 
 const propTypes = {
   toggle: PropTypes.func,
   modal: PropTypes.bool,
-  bidId: PropTypes.string.isRequired,
+  dealId: PropTypes.string.isRequired,
   inventoryId: PropTypes.string.isRequired,
   excludeDates: PropTypes.array
 };
 
-export default function BidFormModal({
+export default function DealFormModal({
   toggle = () => null,
   modal = false,
-  bidId = '',
+  dealId = '',
   inventoryId = '',
   excludeDates = []
 }) {
-  const {data, status, isFetching} = useGetBid(bidId, !!bidId);
-  const defaultValues = mappingApiToBidForm(data);
+  const {data, status, isFetching} = useGetDeal({dealId, enabled: !!dealId});
+  const defaultValues = mappingApiToDealForm(data);
 
   if (status === QueryStatuses.LOADING || isFetching) {
     return <FormLoading isLoading={isFetching} />;
@@ -59,8 +59,8 @@ const ModalContent = ({
 }) => {
   const {t} = useTranslation();
   const client = useQueryClient();
-  const {mutateAsync: editBid} = useEditBid();
-  const isBid = true;
+  const {mutateAsync: editDeal} = useEditDeal();
+  const isBid = false;
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t, isBid)
@@ -70,21 +70,21 @@ const ModalContent = ({
   async function onSubmit(formData) {
     const submitData = mappingFormToApi({
       formData,
-      isDeal: false,
+      isDeal: true,
       inventoryId
     });
 
     try {
-      await editBid({
+      await editDeal({
         data: submitData,
-        bidId: defaultValues?.uuid
+        dealId: defaultValues?.uuid
       });
-      await client.invalidateQueries([GET_INVENTORY_BID, inventoryId]);
-      ShowToast.success('Edit bid successfully');
+      await client.invalidateQueries([GET_INVENTORY_DEAL, inventoryId]);
+      ShowToast.success('Edit deal successfully');
       toggle();
     } catch (error) {
       if (error) {
-        ShowToast.error(error?.msg || 'Fail to bid inventory');
+        ShowToast.error(error?.msg || 'Fail to deal inventory');
       } else {
         ShowToast.info('There are no changes');
       }
@@ -93,25 +93,22 @@ const ModalContent = ({
 
   return (
     <Card className="mb-2">
-      <CardHeader className="justify-content-start">Edit bid</CardHeader>
+      <CardHeader className="justify-content-start">Edit deal</CardHeader>
       <CardBody>
         <BlockUi tag="div" blocking={formState.isSubmitting}>
           <FormProvider {...methods}>
             <Form
-              id="bidForm"
+              id="dealForm"
               onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
             >
-              <InventoryBidForm
-                excludeDates={excludeDates}
-                inventoryId={inventoryId}
-              />
+              <DealForm excludeDates={excludeDates} />
               <hr />
               <div className="mt-2 d-flex justify-content-end">
                 <Button color="link" className="mr-2" onClick={toggle}>
                   {t('cancel')}
                 </Button>
-                <Button type="submit" form="bidForm" color="primary">
+                <Button type="submit" form="dealForm" color="primary">
                   {t('save')}
                 </Button>
               </div>
@@ -123,4 +120,4 @@ const ModalContent = ({
   );
 };
 
-BidFormModal.propTypes = propTypes;
+DealFormModal.propTypes = propTypes;

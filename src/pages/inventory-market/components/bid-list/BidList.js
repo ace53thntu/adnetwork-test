@@ -122,14 +122,15 @@ const BidList = ({inventoryId}) => {
       ) : (
         <NoDataAvailable />
       )}
-
-      <DialogConfirm
-        open={openDialog}
-        title="Are you sure delete this Bid"
-        handleClose={onCancelDelete}
-        handleAgree={onSubmitDelete}
-        isLoading={isDeleting}
-      />
+      {openDialog && (
+        <DialogConfirm
+          open={openDialog}
+          title="Are you sure delete this Bid"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isDeleting}
+        />
+      )}
     </>
   );
 };

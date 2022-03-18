@@ -12,6 +12,12 @@ class ShowToast {
       closeOnClick: true
     });
   }
+
+  static info(message) {
+    toast.info(message, {
+      closeOnClick: true
+    });
+  }
 }
 
 export {ShowToast};

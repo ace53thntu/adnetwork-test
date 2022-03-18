@@ -14,13 +14,10 @@ import {Col, Label, Row} from 'reactstrap';
 import {INPUTS_NAME} from '../constants';
 import TimeRange from './form-elements/time-range';
 
-export default function DealForm({
-  dspOptions,
-  audienceOptions,
-  excludeDates = []
-}) {
+export default function DealForm({excludeDates = []}) {
   const {t} = useTranslation();
   const {control} = useFormContext();
+
   return (
     <>
       <Row className="mt-3">

@@ -8,7 +8,7 @@ import {GET_DEAL} from './constants';
  * Hook for get Deal from API by query
  * @param dealId - Deal ID
  */
-export function useGetDeal(dealId) {
+export function useGetDeal({dealId, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -22,7 +22,7 @@ export function useGetDeal(dealId) {
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!dealId
+      enabled
     }
   );
 }

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
 import {Badge} from 'reactstrap';
+import {useQueryClient} from 'react-query';
 
 //---> Internal Modules
 import {List} from 'components/list';
@@ -15,13 +16,26 @@ import {getResponseData} from 'utils/helpers/misc.helpers';
 import {CustomStatus} from 'components/list/status';
 import {capitalize} from 'utils/helpers/string.helpers';
 import NoDataAvailable from 'components/list/no-data';
+import {useDeleteDeal} from 'queries/deal';
+import DealFormModal from '../deal-form-modal';
+import {DialogConfirm} from 'components/common';
+import {GET_INVENTORY_DEAL} from 'queries/inventory/constants';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+
+const ActionIndex = {
+  EDIT: 0,
+  DELETE: 1
+};
 
 const propTypes = {
   inventoryId: PropTypes.string.isRequired
 };
 
 const DealList = ({inventoryId}) => {
+  const client = useQueryClient();
+
   const columns = useColumns();
+  const {mutateAsync: deleteDeal} = useDeleteDeal();
   const {data} = useGetInventoryDeals({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
@@ -35,13 +49,61 @@ const DealList = ({inventoryId}) => {
     return dealResp?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
 
-  function onHandleClickRow() {}
+  // Local states
+  const [activedDeal, setActivedDeal] = React.useState(null);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
-  function onClickAction() {}
+  function toggleModal() {
+    setOpenModal(prevState => !prevState);
+  }
+
+  function onHandleClickRow(currentItem) {
+    setActivedDeal(currentItem);
+    setOpenModal(true);
+  }
+
+  function onClickAction(actionIndex, currentItem) {
+    setActivedDeal(currentItem);
+    if (actionIndex === ActionIndex.EDIT) {
+      setOpenModal(true);
+    }
+
+    if (actionIndex === ActionIndex.DELETE) {
+      setOpenDialog(true);
+    }
+  }
+
+  function onCancelDelete() {
+    setOpenDialog(false);
+  }
+
+  async function onSubmitDelete() {
+    setIsDeleting(true);
+    try {
+      await deleteDeal({dealId: activedDeal?.uuid});
+      await client.invalidateQueries([GET_INVENTORY_DEAL, inventoryId]);
+
+      ShowToast.success('Deleted deal successfully');
+    } catch (error) {
+      ShowToast.error(error?.msg || 'Fail to delete deal');
+    } finally {
+      setIsDeleting(false);
+      setOpenDialog(false);
+    }
+  }
 
   return (
     <>
-      {' '}
+      {openModal && (
+        <DealFormModal
+          modal={openModal}
+          toggle={toggleModal}
+          dealId={activedDeal?.uuid}
+          inventoryId={inventoryId}
+        />
+      )}
       {deals?.length > 0 ? (
         <div className="scroll-area-lg" style={{height: 330}}>
           <PerfectScrollbar>
@@ -55,11 +117,19 @@ const DealList = ({inventoryId}) => {
                 onClickAction(actionIndex, currentItem)
               }
             />
-            )
           </PerfectScrollbar>
         </div>
       ) : (
         <NoDataAvailable />
+      )}
+      {openDialog && (
+        <DialogConfirm
+          open={openDialog}
+          title="Are you sure delete this Bid"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isDeleting}
+        />
       )}
     </>
   );
@@ -74,7 +144,7 @@ const useColumns = () => {
     return [
       {
         header: 'DSP',
-        accessor: 'dsp'
+        accessor: 'dsp_name'
       },
       {
         header: 'Deal price',
@@ -97,8 +167,8 @@ const useColumns = () => {
         cell: row => (row?.value ? moment(row?.value).format('DD/MM/YYYY') : '')
       },
       {
-        header: 'Header bidding',
-        accessor: 'header_bidding',
+        header: 'Header dealding',
+        accessor: 'header_dealding',
         cell: row => (
           <Badge color={row?.value ? 'primary' : 'warning'} pill>
             {row?.value ? 'true' : 'false'}

@@ -118,3 +118,43 @@ export const mappingApiToBidForm = (data = null) => {
     end_time: end_time ? new Date(end_time) : null
   };
 };
+
+export const mappingApiToDealForm = (data = null) => {
+  if (!data) {
+    return {
+      uuid: '',
+      status: 'active',
+      header_bidding: 'inactive',
+      limit_impression: '',
+      deal_price: '',
+      dsp_uuid: null,
+      start_time: new Date(),
+      end_time: null,
+      name: ''
+    };
+  }
+  const {
+    dsp_uuid,
+    dsp_name,
+    start_time,
+    end_time,
+    uuid = '',
+    status,
+    header_bidding = 'inactive',
+    limit_impression = '',
+    deal_price = '',
+    name = ''
+  } = data;
+
+  return {
+    uuid,
+    name,
+    status,
+    limit_impression,
+    header_bidding,
+    deal_price,
+    dsp_uuid: dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null,
+    start_time: start_time ? new Date(start_time) : new Date(),
+    end_time: end_time ? new Date(end_time) : null
+  };
+};

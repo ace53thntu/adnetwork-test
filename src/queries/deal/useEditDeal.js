@@ -12,9 +12,9 @@ export function useEditDeal() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cappingId, data}) =>
+    ({dealId, data}) =>
       DealAPIRequest.editDeal({
-        id: cappingId,
+        id: dealId,
         data,
         options: {cancelToken}
       }),

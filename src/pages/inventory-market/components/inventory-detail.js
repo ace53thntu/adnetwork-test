@@ -246,12 +246,17 @@ const InventoryDetails = ({
           </div>
         </CollapseBox>
 
-        {!isBid && !isDeal && <BidDealTabs inventoryId={inventoryData?.uuid} />}
+        {!isBid && !isDeal && (
+          <BidDealTabs
+            inventoryId={inventoryData?.uuid}
+            excludeDates={excludeDates}
+          />
+        )}
         <FormProvider {...methods}>
           <form
             onSubmit={handleSubmit(onSubmit)}
             autoComplete="off"
-            id="bidInventory"
+            id="bidInventoryFormId"
           >
             <BlockUi tag="div" blocking={formState.isSubmitting}>
               {isBid && (
@@ -282,13 +287,23 @@ const InventoryDetails = ({
                 </Button>
               </React.Fragment>
             )}
-            <Button type="submit" color="primary" disabled={!formState.isDirty}>
+            <Button
+              form="bidInventoryFormId"
+              type="submit"
+              color="primary"
+              disabled={!formState.isDirty}
+            >
               Bid
             </Button>
           </React.Fragment>
         )}
         {isDeal && (
-          <Button type="submit" color="primary" disabled={!formState.isDirty}>
+          <Button
+            form="bidInventoryFormId"
+            type="submit"
+            color="primary"
+            disabled={!formState.isDirty}
+          >
             Deal
           </Button>
         )}

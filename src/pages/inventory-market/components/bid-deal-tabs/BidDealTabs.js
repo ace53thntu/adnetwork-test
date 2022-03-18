@@ -11,11 +11,21 @@ import {DealList} from '../deal-list';
 import {BidList} from '../bid-list';
 import {Collapse} from 'components/common';
 
+const TabIndex = {
+  DEAL: 0,
+  BID: 1
+};
+
+const TabName = {
+  DEAL: 'deal',
+  BID: 'bid'
+};
+
 const propTypes = {
   inventoryId: PropTypes.string
 };
 
-const BidDealTabs = ({inventoryId}) => {
+const BidDealTabs = ({inventoryId, excludeDates}) => {
   const {t} = useTranslation();
   const [currentTab, setCurrentTab] = useState('deal');
 
@@ -24,44 +34,48 @@ const BidDealTabs = ({inventoryId}) => {
       [
         {
           name: t('dealList'),
-          content: <DealList inventoryId={inventoryId} />
+          content: (
+            <DealList inventoryId={inventoryId} excludeDates={excludeDates} />
+          )
         },
         {
           name: t('bidList'),
-          content: <BidList inventoryId={inventoryId} />
+          content: (
+            <BidList inventoryId={inventoryId} excludeDates={excludeDates} />
+          )
         }
       ].map(({name, content}, index) => ({
         key: index,
         title: name,
         getContent: () => content
       })),
-    [t, inventoryId]
+    [t, inventoryId, excludeDates]
   );
 
   const getTab = index => {
     switch (index) {
-      case 0:
-        setCurrentTab('deal');
+      case TabIndex.DEAL:
+        setCurrentTab(TabName.DEAL);
         break;
-      case 1:
-        setCurrentTab('bid');
+      case TabIndex.BID:
+        setCurrentTab(TabName.BID);
         break;
 
       default:
-        setCurrentTab('deal');
+        setCurrentTab(TabName.DEAL);
         break;
     }
   };
 
   const tabPicker = useCallback(() => {
     switch (currentTab) {
-      case 'deal':
-        return 0;
-      case 'bid':
-        return 1;
+      case TabName.DEAL:
+        return TabIndex.DEAL;
+      case TabName.BID:
+        return TabIndex.BID;
 
       default:
-        return 0;
+        return TabIndex.DEAL;
     }
   }, [currentTab]);
   return (

@@ -9,10 +9,6 @@ import DatePicker from 'react-datepicker';
 import {INPUTS_NAME} from 'pages/inventory-market/constants';
 
 export default function EndAt({excludeDates = []}) {
-  console.log(
-    '🚀 ~ file: end-at.js ~ line 12 ~ EndAt ~ excludeDates',
-    excludeDates
-  );
   const {control, watch} = useFormContext();
   const startDate = watch(INPUTS_NAME.START_AT);
 
