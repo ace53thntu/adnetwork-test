@@ -13,9 +13,7 @@ export function mappingFormToApi({
   entityId,
   metricSet,
   metricType,
-  entityType,
-  ownerRole,
-  ownerUuid
+  entityType
 }) {
   const {api, properties, report_type, report_source} = formData;
   let {

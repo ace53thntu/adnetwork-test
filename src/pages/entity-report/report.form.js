@@ -23,6 +23,7 @@ import {
   REPORT_VIEW_TYPES
 } from 'constants/report';
 import {ReportGroupTypes} from './constants.js';
+import {getReportById} from './utils/getReportById';
 
 // Constants
 const randomHex = () =>
@@ -44,6 +45,7 @@ const ReportForm = ({
   const [isLoading, setIsLoading] = React.useState(false);
   const [showReportForm, setShowReportForm] = React.useState(false);
   const reportTypeGroup = useReportGroupTypeSelector();
+  const reportByUuid = getReportById({report: null, entityId});
 
   const methods = useForm({
     defaultValues: {
@@ -73,7 +75,7 @@ const ReportForm = ({
     setIsLoading(true);
     const requestBody = {
       source_uuid: entityId,
-      report_by_uuid: entityId,
+      report_by_uuid: reportByUuid,
       report_type: 'trending',
       time_unit: DEFAULT_TIME_UNIT,
       time_range: DEFAULT_TIME_RANGE,
@@ -82,7 +84,6 @@ const ReportForm = ({
     };
     try {
       const {data} = await generateReportUrl(requestBody);
-
       dispatch(setMetricBodyRedux(requestBody));
       dispatch(setMetricDataRedux(data));
       toggleModalReportForm();
@@ -150,6 +151,7 @@ const ReportForm = ({
           entityId={entityId}
           ownerId={ownerId}
           ownerRole={ownerRole}
+          unit={DEFAULT_TIME_UNIT}
         />
       )}
     </>

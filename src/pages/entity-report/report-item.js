@@ -19,6 +19,10 @@ import {METRIC_SETS} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import './styles/styles.scss';
+import {useDispatch} from 'react-redux';
+import {setMetricBodyRedux} from 'store/reducers/entity-report';
+import {getMetricRequestBody} from './utils/metricRequest';
+import {getReportById} from './utils/getReportById';
 
 export default function ReportItem({
   entityId,
@@ -33,17 +37,20 @@ export default function ReportItem({
   metrics = null,
   isFetching = true
 }) {
+  const dispatch = useDispatch();
   const {
     uuid: reportId,
-    url: reportUrl,
     properties,
     api: {time_unit: unit, time_range: timeRange, report_by} = {},
     report_source
   } = reportItem;
+  const metricRequestBody = getMetricRequestBody({report: reportItem});
+
   const color = properties?.color || [DefaultColor];
   const chartType = properties?.chart_type || 'line';
   const metricSet = properties?.metric_set || [];
   const colors = parseColors(color);
+  const reportByUuid = getReportById({report: reportItem, entityId});
 
   const {mutateAsync: deleteReport} = useDeleteReport();
 
@@ -53,7 +60,7 @@ export default function ReportItem({
     unit,
     timeRange,
     metricSet,
-    entityId
+    entityId: reportByUuid
   });
 
   const [openModal, setOpenModal] = React.useState(false);
@@ -72,6 +79,7 @@ export default function ReportItem({
     if (isSelected) {
       return;
     }
+    dispatch(setMetricBodyRedux(metricRequestBody));
     setOpenModal(true);
   };
 
@@ -158,7 +166,7 @@ export default function ReportItem({
             />
           </div>
         ) : (
-          <div>No report</div>
+          <div className="no-report">No report</div>
         )}
       </ReportItemStyled>
 
@@ -166,7 +174,6 @@ export default function ReportItem({
         <ModalReportForm
           modal={openModal}
           toggle={toggleModal}
-          metricUrl={reportUrl}
           metricSet={metricSet}
           chartTypeDefault={chartType}
           reportItem={reportItem}

@@ -9,7 +9,7 @@ import {Modal} from 'reactstrap';
 import {initDefaultValue, mappingFormToApi} from './dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport, useGetReport} from 'queries/report';
-import ReportFormConcent from './components/form/ReportFormContent';
+import ReportFormContent from './components/form/ReportFormContent';
 import './styles/styles.scss';
 import {QueryStatuses} from 'constants/react-query';
 
@@ -19,7 +19,6 @@ export default function ModalReportForm({
   metricSet = [],
   initColors = [],
   isEdit = false,
-  defaultValues: currentReport = {},
   unit,
   timeRange,
   isViewed = false,
@@ -27,11 +26,9 @@ export default function ModalReportForm({
   distributionBy = '',
   entityType = '',
   entityId,
-  ownerRole,
-  ownerId,
   reportId
 }) {
-  const {data: report, status, error} = useGetReport(reportId, !!reportId);
+  const {data: report, status} = useGetReport(reportId, !!reportId);
 
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
@@ -75,14 +72,9 @@ export default function ModalReportForm({
         entityId,
         metricSet,
         metricType,
-        entityType,
-        ownerRole,
-        ownerUuid: ownerId
+        entityType
       });
-      console.log(
-        '🚀 ~ file: create-report.modal.js ~ line 131 ~ submitData',
-        submitData
-      );
+
       if (!isEdit) {
         await executeReportCreating(submitData);
       } else {
@@ -96,9 +88,7 @@ export default function ModalReportForm({
       entityId,
       metricSet,
       metricType,
-      entityType,
-      ownerId,
-      ownerRole
+      entityType
     ]
   );
 
@@ -106,18 +96,9 @@ export default function ModalReportForm({
     return <div>Loading...</div>;
   }
 
-  if (status === QueryStatuses.ERROR) {
-    return <span>Error: {error.msg}</span>;
-  }
-
   return (
-    <Modal
-      isOpen={modal}
-      toggle={toggle}
-      size="lg"
-      style={{maxWidth: '1350px'}}
-    >
-      <ReportFormConcent
+    <Modal isOpen={modal} size="lg" style={{maxWidth: '1350px'}}>
+      <ReportFormContent
         initializeDefaultValue={initializeDefaultValue}
         report={report}
         onSubmit={onSubmit}

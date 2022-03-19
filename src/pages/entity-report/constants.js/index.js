@@ -10,7 +10,7 @@ export const ReportBys = [
     label: 'Advertiser'
   },
   {
-    value: 'container',
+    value: 'campaign',
     label: 'Campaign'
   },
   {

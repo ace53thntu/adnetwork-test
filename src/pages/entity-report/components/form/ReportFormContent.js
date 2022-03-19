@@ -34,6 +34,7 @@ import TimeRange from './TimeRange';
 import {schemaValidate} from './validation';
 import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
+import {getReportById} from 'pages/entity-report/utils/getReportById';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -48,12 +49,14 @@ export default function ReportFormContent({
   timeRange,
   entityId
 }) {
+  console.log('🚀 ~ file: ReportFormContent.js ~ line 52 ~ report', report);
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
   const metricBody = useMetricsBodySelector();
+  const reportByUuid = getReportById({report, entityId});
 
   const methods = useForm({
     defaultValues,
@@ -138,7 +141,7 @@ export default function ReportFormContent({
               unit={unit}
               metricSet={metricSet}
               timeRange={timeRange}
-              entityId={entityId}
+              entityId={reportByUuid}
             />
           </ModalBody>
           <ModalFooter>

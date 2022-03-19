@@ -59,6 +59,10 @@ export default function FormControlUnit({defaultValue}) {
   }
 
   const onClickTimeRange = (evt, selectedOption) => {
+    console.log(
+      '🚀 ~ file: FormControlUnit.js ~ line 62 ~ onClickTimeRange ~ selectedOption',
+      selectedOption
+    );
     evt.preventDefault();
     setActiveUnit(selectedOption);
     setValue(INPUT_NAME.UNIT, JSON.stringify(selectedOption), {
@@ -80,7 +84,8 @@ export default function FormControlUnit({defaultValue}) {
         dispatch(
           setMetricBodyRedux({
             ...metricBody,
-            time_unit: unit
+            time_unit: unit,
+            time_range: timeRange?.value
           })
         );
       }

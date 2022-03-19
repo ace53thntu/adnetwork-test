@@ -24,7 +24,7 @@ const ReportItemContent = ({report}) => {
   const {source_uuid, report_source, uuid} = report;
 
   const requestBody = getMetricRequestBody({report});
-  const {data: metricData, status, error, isFetching} = useGetMetrics({
+  const {data: metricData, status, isFetching} = useGetMetrics({
     data: requestBody,
     reportId: uuid,
     enabled: !!uuid
@@ -32,10 +32,6 @@ const ReportItemContent = ({report}) => {
 
   if (status === QueryStatuses.LOADING) {
     return <div>Loading...</div>;
-  }
-
-  if (status === QueryStatuses.ERROR) {
-    return <div>Error: {error?.msg || 'Something went wrong.'}</div>;
   }
 
   return (

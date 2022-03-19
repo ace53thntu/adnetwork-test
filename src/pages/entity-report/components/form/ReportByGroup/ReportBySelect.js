@@ -23,6 +23,7 @@ const ReportBySelect = ({reportSource}) => {
   const metricBody = useMetricsBodySelector();
   const {control} = useFormContext();
   const reportBySelected = useWatch({name: 'api.report_by', control});
+  const reportByUuidSelected = useWatch({name: 'api.report_by_uuid', control});
 
   React.useEffect(() => {
     if (metricBody.report_by !== reportBySelected?.value) {
@@ -35,6 +36,28 @@ const ReportBySelect = ({reportSource}) => {
       );
     }
   }, [dispatch, metricBody, reportBySelected?.value, reportSource]);
+
+  React.useEffect(() => {
+    if (
+      reportByUuidSelected &&
+      metricBody.report_by_uuid !== reportByUuidSelected?.value
+    ) {
+      dispatch(
+        setMetricBodyRedux({
+          ...metricBody,
+          report_by: reportBySelected?.value,
+          report_by_uuid: reportByUuidSelected?.value
+        })
+      );
+    }
+  }, [
+    dispatch,
+    metricBody,
+    reportBySelected?.value,
+    reportByUuidSelected,
+    reportByUuidSelected?.value,
+    reportSource
+  ]);
 
   return (
     <FormReactSelect

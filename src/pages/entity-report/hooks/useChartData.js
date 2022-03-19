@@ -3,25 +3,6 @@ import moment from 'moment';
 import {FORMAT_BY_UNIT} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
-// const mockData = {
-//   1646927100: {
-//     'd668df06-074a-4bc3-862f-9bfef6fe5122': {cbc: 2, cbsp: 4, ccc: 4}
-//   },
-//   1646925480: {'d668df06-074a-4bc3-862f-9bfef6fe5122': {vbc: 1, vbsp: 1.5}},
-//   1646986852: {
-//     'd668df06-074a-4bc3-862f-9bfef6fe5122': {cbc: 1, cbsp: 1, ccc: 4}
-//   },
-//   1646924280: {
-//     'd668df06-074a-4bc3-862f-9bfef6fe5122': {cbc: 2, cbsp: 3, ccc: 4}
-//   },
-//   1646928480: {'d668df06-074a-4bc3-862f-9bfef6fe5122': {vbc: 1, vbsp: 1.5}},
-//   1646909820: {'d668df06-074a-4bc3-862f-9bfef6fe5122': {vbc: 1, vbsp: 2}},
-//   1646910480: {
-//     'd668df06-074a-4bc3-862f-9bfef6fe5122': {cbc: 2, cbsp: 4, vbc: 2, vbsp: 3.5}
-//   },
-//   1646927160: {'d668df06-074a-4bc3-862f-9bfef6fe5122': {vbc: 1, vbsp: 1.5}}
-// };
-
 const mappingData = ({data, fieldName}) => {
   const existedData = data?.[fieldName];
 
@@ -37,9 +18,8 @@ const enumerateDaysBetweenDates = ({
 }) => {
   const now = startDate.clone();
   const dates = [];
-
   while (now.isSameOrBefore(endDate)) {
-    dates.push(now.format('YYYY-MM-DD HH:mm:ss'));
+    dates.push(now.format(formatStr));
 
     now.add(increaseNumber, unit);
   }
@@ -89,7 +69,6 @@ const getDataDrawChart = ({
   metricSet
 }) => {
   const data = [...listCheckPoints].reduce((acc, calculatedDate, idx) => {
-    // const calculatedDate = getPreviousMinute(endTime);
     const existedMetricByDate = mappingData({
       data: metrics,
       fieldName: calculatedDate
@@ -116,16 +95,15 @@ export const useChartData = ({
   metricSet = [],
   entityId
 }) => {
+  console.log('🚀 ~ file: useChartData.js ~ line 98 ~ entityId', entityId);
   return useMemo(() => {
     if (metricData) {
       const {report: metrics = {}, start_time, end_time} = metricData;
-      // const metrics = mockData;
 
       const startTime = moment.unix(start_time);
       const endTime = moment.unix(end_time);
       const increaseNumber = unit === 'fiveseconds' ? 5 : 1;
       const unitStr = unit === 'fiveseconds' ? 'second' : unit;
-
       //---> Get list of checkpoints
       const listCheckPoints = enumerateDaysBetweenDates({
         startDate: startTime,
@@ -140,6 +118,14 @@ export const useChartData = ({
         metrics,
         listCheckPoints
       });
+      console.log(
+        '🚀 ~ file: useChartData.js ~ line 114 ~ returnuseMemo ~ listCheckPoints',
+        listCheckPoints
+      );
+      console.log(
+        '🚀 ~ file: useChartData.js ~ line 120 ~ returnuseMemo ~ newMetrics',
+        newMetrics
+      );
 
       if (validArray({list: metricSet})) {
         const data = [];

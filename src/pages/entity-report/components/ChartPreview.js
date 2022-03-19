@@ -23,36 +23,48 @@ const propTypes = {
   unit: PropTypes.string
 };
 
-const ChartPreview = ({reportId, metricSet, unit, timeRange, entityId}) => {
+const ChartPreview = ({
+  reportId = 'create',
+  metricSet,
+  unit,
+  timeRange,
+  entityId
+}) => {
   const metricRequestRedux = useMetricsBodySelector();
   const [currentMetricRequest, setCurrentMetricRequest] = React.useState({});
-  const {data: metrics, status} = useGetMetrics({
+  const {data: metrics, status, isFetching} = useGetMetrics({
     data: currentMetricRequest,
     reportId,
     enabled: !!reportId && Object.keys(currentMetricRequest).length > 0
   });
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 35 ~ currentMetricRequest',
+    currentMetricRequest
+  );
 
   React.useEffect(() => {
     if (!_.isEqual(metricRequestRedux, currentMetricRequest)) {
+      console.log('ChartPreview === 1', metricRequestRedux);
+      console.log('ChartPreview === 2', currentMetricRequest);
       setCurrentMetricRequest(metricRequestRedux);
     }
   }, [currentMetricRequest, metricRequestRedux]);
 
-  if (status === QueryStatuses.LOADING) {
+  if (isFetching) {
     return <div>Loading...</div>;
   }
 
-  if (status === QueryStatuses.ERROR || QueryStatuses.IDLE) {
+  if (status === QueryStatuses.ERROR) {
     return <NoDataAvailable />;
   }
 
   return (
     <ChartPreviewContent
       metrics={metrics}
-      unit={unit}
-      timeRange={timeRange}
+      unit={currentMetricRequest?.time_unit}
+      timeRange={currentMetricRequest?.time_range}
       metricSet={metricSet}
-      entityId={entityId}
+      entityId={currentMetricRequest?.report_by_uuid}
     />
   );
 };

@@ -26,6 +26,7 @@
 
 .chart-item {
   border-radius: 10px;
+  height: 100%;
 
   .delete-report {
     display: flex;
@@ -44,6 +45,12 @@
       opacity: 1;
     }
   }
+}
+
+.no-report {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dropdown-chart-type {

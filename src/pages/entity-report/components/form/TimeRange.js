@@ -20,6 +20,10 @@ export default function TimeRange({defaultValue}) {
   const error = errors?.api?.time_range || undefined;
 
   const onClickTimeRange = (evt, selectedOption) => {
+    console.log(
+      '🚀 ~ file: TimeRange.js ~ line 23 ~ onClickTimeRange ~ selectedOption',
+      selectedOption
+    );
     evt.preventDefault();
 
     setActiveTimeRange(selectedOption);
@@ -27,6 +31,7 @@ export default function TimeRange({defaultValue}) {
       shouldValidate: true,
       shouldDirty: true
     });
+
     if (
       validTimeRange({
         timeRange: selectedOption,
@@ -34,10 +39,15 @@ export default function TimeRange({defaultValue}) {
       })
     ) {
       if (metricBodyRequest.time_range !== selectedOption.value) {
+        const timeUnit =
+          selectedOption?.units?.length === 1
+            ? selectedOption?.units[0]?.value
+            : metricBodyRequest.time_unit;
         dispatch(
           setMetricBodyRedux({
             ...metricBodyRequest,
-            time_range: selectedOption.value
+            time_range: selectedOption.value,
+            time_unit: timeUnit
           })
         );
       }
