@@ -4,7 +4,11 @@ import React from 'react';
 //---> Internal Modules
 import {EntityTypes, METRIC_TIMERANGES} from 'constants/report';
 import {getReportSources} from 'utils/metrics';
-import {PublisherReportBys, ReportBys, ReportTypes} from '../constants.js';
+import {
+  PublisherReportBys,
+  ReportBys,
+  ReportTypeOptions
+} from '../constants.js';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -42,7 +46,7 @@ export const useDefaultValues = ({report}) => {
     report_by = isPublisher
       ? PublisherReportBys.find(item => item?.value === report_by)
       : ReportBys.find(item => item?.value === report_by);
-    report_type = ReportTypes.find(item => item?.value === report_type);
+    report_type = ReportTypeOptions.find(item => item?.value === report_type);
     if (report_type?.value === 'trending') {
       start_time = null;
       end_time = null;

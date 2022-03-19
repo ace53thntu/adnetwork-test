@@ -1,3 +1,8 @@
+export const ReportTypes = {
+  TRENDING: 'trending',
+  DISTRIBUTION: 'distribution'
+};
+
 export const METRIC_UNITS = [
   'second',
   'minute',

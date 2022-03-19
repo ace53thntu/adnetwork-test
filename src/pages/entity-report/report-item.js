@@ -79,6 +79,7 @@ export default function ReportItem({
     if (isSelected) {
       return;
     }
+    console.log('metricRequestBody ====', metricRequestBody);
     dispatch(setMetricBodyRedux(metricRequestBody));
     setOpenModal(true);
   };

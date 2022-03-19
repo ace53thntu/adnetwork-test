@@ -24,7 +24,7 @@ import {
 import {getReportSources} from 'utils/metrics';
 import ChartPreview from '../ChartPreview';
 import ConfigChart from './ConfigChart';
-import FormControlUnit from './FormControlUnit';
+import TimeUnit from './TimeUnit';
 import ReportByGroup from './ReportByGroup/ReportByGroup';
 import ReportSourceSelect from './ReportSourceSelect';
 import ReportTypeSelect from './ReportTypeSelect';
@@ -35,6 +35,7 @@ import {schemaValidate} from './validation';
 import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
 import {getReportById} from 'pages/entity-report/utils/getReportById';
+import {ReportTypes} from 'constants/report';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -60,7 +61,7 @@ export default function ReportFormContent({
 
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidate()
+    resolver: schemaValidate(t)
   });
   const {handleSubmit, formState, control} = methods;
   const reportType = useWatch({name: 'report_type', control});
@@ -89,10 +90,12 @@ export default function ReportFormContent({
               <>
                 <Row>
                   <Col md={12} className="d-flex">
-                    <TimeRange defaultValue={defaultValues?.api?.time_range} />
-                    <FormControlUnit
-                      defaultValue={defaultValues?.api?.time_unit}
-                    />
+                    {reportType?.value === ReportTypes.TRENDING && (
+                      <TimeRange
+                        defaultValue={defaultValues?.api?.time_range}
+                      />
+                    )}
+                    <TimeUnit defaultValue={defaultValues?.api?.time_unit} />
                   </Col>
                 </Row>
                 <Row className="mt-2">
@@ -113,7 +116,7 @@ export default function ReportFormContent({
                   />
                 </Row>
                 <Row className="mb-3">
-                  {reportType?.value === 'distribution' && (
+                  {reportType?.value === ReportTypes.DISTRIBUTION && (
                     <>
                       <Col xs="4">
                         <StartTime />

@@ -13,7 +13,7 @@ import {
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {FormReactSelect} from 'components/forms';
-import {ReportTypes} from 'pages/entity-report/constants.js';
+import {ReportTypeOptions} from 'pages/entity-report/constants.js';
 
 const ReportTypeSelect = ({defaultValue}) => {
   const {t} = useTranslation();
@@ -64,7 +64,7 @@ const ReportTypeSelect = ({defaultValue}) => {
       name="report_type"
       label={t('reportType')}
       placeholder={t('selectReportType')}
-      options={ReportTypes}
+      options={ReportTypeOptions}
       labelBold
     />
   );

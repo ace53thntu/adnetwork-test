@@ -13,7 +13,7 @@ export function EndTime() {
     <FormGroup>
       <Label for="endDate" className="font-weight-bold">
         <span className="text-danger">*</span>
-        {t('endTime')}
+        {t('endDate')}
       </Label>
       <Controller
         control={control}

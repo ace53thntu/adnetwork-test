@@ -11,7 +11,7 @@ import {
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import {ErrorMessageStyled, UnitButton} from './styled';
 
-export default function FormControlUnit({defaultValue}) {
+export default function TimeUnit({defaultValue}) {
   const dispatch = useDispatch();
   const metricBody = useMetricsBodySelector();
   const [activeUnit, setActiveUnit] = React.useState(null);
