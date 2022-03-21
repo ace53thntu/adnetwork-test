@@ -1,4 +1,5 @@
 import {yupResolver} from '@hookform/resolvers/yup';
+import {ReportTypes} from 'constants/report';
 import * as yup from 'yup';
 
 export const schemaValidate = t => {
@@ -13,8 +14,12 @@ export const schemaValidate = t => {
         return schema;
       }
     }),
-    time_range: yup.string().required().typeError(t('required')),
-    report_by: yup.object().nullable().required().typeError(t('required')),
+    time_range: yup.string().required(t('required')).typeError(t('required')),
+    report_by: yup
+      .object()
+      .nullable()
+      .required(t('required'))
+      .typeError(t('required')),
     start_time: yup.date(),
     end_time: yup.date()
   };
@@ -23,7 +28,7 @@ export const schemaValidate = t => {
     yup.object().shape({
       report_type: yup.object().nullable().required().typeError(t('required')),
       api: yup.object().when('report_type', reportType => {
-        if (reportType?.value === 'distribution') {
+        if (reportType?.value === ReportTypes.DISTRIBUTION) {
           return yup.object({
             ...apiSchema,
             start_time: yup
@@ -34,7 +39,11 @@ export const schemaValidate = t => {
               .date()
               .required(t('required'))
               .typeError(t('required'))
-              .min(yup.ref(`start_time`), "End date can't be before start date")
+              .min(
+                yup.ref(`start_time`),
+                "End date can't be before start date"
+              ),
+            time_range: yup.string().notRequired()
           });
         }
 

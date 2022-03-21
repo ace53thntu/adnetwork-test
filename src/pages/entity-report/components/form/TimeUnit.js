@@ -2,6 +2,7 @@
 import React from 'react';
 
 //---> External Modules
+import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {ButtonGroup, Row, Col} from 'reactstrap';
@@ -20,8 +21,13 @@ import {ErrorMessageStyled, UnitButton} from './styled';
 
 const unitName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`;
 
+const propTypes = {
+  defaultValue: PropTypes.object
+};
+
 export default function TimeUnit({defaultValue}) {
   const dispatch = useDispatch();
+
   const metricBody = useMetricsBodySelector();
   const [activeUnit, setActiveUnit] = React.useState(null);
 
@@ -149,3 +155,5 @@ export default function TimeUnit({defaultValue}) {
     </Row>
   ) : null;
 }
+
+TimeUnit.propTypes = propTypes;

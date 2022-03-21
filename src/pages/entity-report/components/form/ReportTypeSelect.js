@@ -18,22 +18,22 @@ import {ReportTypeOptions} from 'pages/entity-report/constants.js';
 const ReportTypeSelect = ({defaultValue}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const {control, setValue} = useFormContext();
+  const {control} = useFormContext();
   const reportTypeSelected = useWatch({name: 'report_type', control});
   const metricBody = useMetricsBodySelector();
 
-  React.useEffect(() => {
-    if (reportTypeSelected?.value !== defaultValue?.value) {
-      setValue('api.start_time', new Date(), {
-        shouldDirty: true,
-        shouldValidate: true
-      });
-      setValue('api.end_time', null, {
-        shouldDirty: true,
-        shouldValidate: true
-      });
-    }
-  }, [defaultValue, reportTypeSelected?.value, setValue]);
+  // React.useEffect(() => {
+  //   if (reportTypeSelected?.value !== defaultValue?.value) {
+  //     setValue('api.start_time', new Date(), {
+  //       shouldDirty: true,
+  //       shouldValidate: true
+  //     });
+  //     setValue('api.end_time', null, {
+  //       shouldDirty: true,
+  //       shouldValidate: true
+  //     });
+  //   }
+  // }, [defaultValue, reportTypeSelected?.value, setValue]);
 
   React.useEffect(() => {
     if (reportTypeSelected?.value === 'distribution') {

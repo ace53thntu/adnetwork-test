@@ -1,3 +1,4 @@
+import {REPORT_INPUT_NAME} from 'constants/report';
 import React from 'react';
 import ReactDatePicker from 'react-datepicker';
 import {Controller, useFormContext, useWatch} from 'react-hook-form';
@@ -7,7 +8,11 @@ import {FormGroup, Label} from 'reactstrap';
 export function EndTime() {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
-  const startDate = useWatch({name: 'api.start_time', control});
+  console.log('🚀 ~ file: EndTime.js ~ line 11 ~ EndTime ~ errors', errors);
+  const startDate = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.START_TIME}`,
+    control
+  });
 
   return (
     <FormGroup>
@@ -17,17 +22,23 @@ export function EndTime() {
       </Label>
       <Controller
         control={control}
-        name="api.end_time"
+        name={`${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.END_TIME}`}
         render={({onChange, onBlur, value, name}) => (
           <ReactDatePicker
             selected={value}
+            onBlur={onBlur}
             onChange={date => onChange(date)}
             className="form-control"
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/yyyy"
+            placeholderText="dd/MM/yyyy HH:mm"
+            name={name}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={1}
+            timeCaption="Time"
+            dateFormat="dd/MM/yyyy HH:mm"
+            timeFormat="HH:mm"
             minDate={startDate}
-            startDate={startDate}
-            endDate={value}
+            showTimeInput
             selectsEnd
           />
         )}

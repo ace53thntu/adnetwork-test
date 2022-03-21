@@ -1,3 +1,4 @@
+import {REPORT_INPUT_NAME} from 'constants/report';
 import React from 'react';
 import ReactDatePicker from 'react-datepicker';
 import {Controller, useFormContext} from 'react-hook-form';
@@ -16,14 +17,22 @@ export default function StartTime() {
       </Label>
       <Controller
         control={control}
-        name="api.start_time"
+        name={`${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.START_TIME}`}
         render={({onChange, onBlur, value, name}) => (
           <ReactDatePicker
             selected={value}
+            onBlur={onBlur}
             onChange={date => onChange(date)}
             className="form-control"
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/yyyy"
+            placeholderText="dd/MM/yyyy HH:mm"
+            name={name}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={1}
+            timeCaption="Time"
+            dateFormat="dd/MM/yyyy HH:mm"
+            timeFormat="HH:mm"
+            showTimeInput
           />
         )}
       />

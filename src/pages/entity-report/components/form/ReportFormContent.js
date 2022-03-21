@@ -36,6 +36,7 @@ import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
 import {getReportById} from 'pages/entity-report/utils/getReportById';
 import {ReportTypes} from 'constants/report';
+import DistributionUnit from './DistributionUnit';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -54,6 +55,10 @@ export default function ReportFormContent({
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 57 ~ defaultValues',
+    defaultValues
+  );
   const reportSourceOptions = getReportSources();
   const metricBody = useMetricsBodySelector();
   const reportByUuid = getReportById({report, entityId});
@@ -103,7 +108,15 @@ export default function ReportFormContent({
                         </Col>
                       </>
                     )}
-                    <TimeUnit defaultValue={defaultValues?.api?.time_unit} />
+                    {reportType?.value === ReportTypes.TRENDING ? (
+                      <TimeUnit defaultValue={defaultValues?.api?.time_unit} />
+                    ) : (
+                      <DistributionUnit
+                        defaultValue={defaultValues?.api?.time_unit}
+                        startTime={defaultValues?.api?.start_time}
+                        endTime={defaultValues?.api?.end_time}
+                      />
+                    )}
                   </Col>
                 </Row>
                 <Row className="mt-2">

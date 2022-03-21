@@ -40,7 +40,8 @@ const EntityReport = ({
   } = useGetReportsInfinite({
     params: {
       source_uuid: entityId,
-      per_pge: NUMBER_OF_PAGE
+      per_page: NUMBER_OF_PAGE,
+      sort: 'updated_at DESC'
     },
     enabled: true,
     reportType: entityType
