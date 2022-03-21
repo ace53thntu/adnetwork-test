@@ -1,6 +1,9 @@
-import {INPUT_NAME} from 'constants/report';
+//---> Build-in Modules
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
+
+//---> Internal Modules
+import {REPORT_INPUT_NAME} from 'constants/report';
 
 export const useReport = ({
   chartTypeDefault = [],
@@ -20,12 +23,18 @@ export const useReport = ({
       return item;
     });
     setColors(listColors);
-    setValue(INPUT_NAME.COLOR, JSON.stringify(listColors));
+    setValue(
+      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+      JSON.stringify(listColors)
+    );
   };
 
   const onSelectType = value => {
     setTypeSelected(value);
-    setValue(INPUT_NAME.CHART_TYPE, value);
+    setValue(
+      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+      value
+    );
   };
 
   React.useEffect(() => {

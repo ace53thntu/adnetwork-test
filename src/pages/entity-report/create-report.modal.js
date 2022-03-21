@@ -37,7 +37,8 @@ export default function ModalReportForm({
     initColors,
     metricType,
     distributionBy,
-    entityType
+    entityType,
+    sourceUuid: entityId
   });
 
   const executeReportCreating = useCallback(

@@ -17,7 +17,7 @@ import SourceSelect from './ReportByUuid/SourceSelect';
 import PositionSelect from 'components/forms/PositionSelect';
 import ReportBySelect from './ReportBySelect';
 
-const ReportByGroup = ({reportSource, currentReportBy}) => {
+const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
   const {t} = useTranslation();
   const {control, setValue} = useFormContext();
 
@@ -28,6 +28,7 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('campaign')}
           placeholder={t('selectCampaign')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
         />
       ),
       strategy: (
@@ -35,6 +36,8 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('strategy')}
           placeholder={t('selectStrategy')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
+          reportSource={reportSource}
         />
       ),
       concept: (
@@ -42,6 +45,7 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('concept')}
           placeholder={t('selectConcept')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
         />
       ),
       creative: (
@@ -49,6 +53,7 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('creative')}
           placeholder={t('selectCreative')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
         />
       ),
       native_ad: (
@@ -56,6 +61,7 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('nativeAds')}
           placeholder={t('selectNativeAds')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
         />
       ),
       video: (
@@ -63,6 +69,7 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
           label={t('video')}
           placeholder={t('selectVideo')}
           name="api.report_by_uuid"
+          sourceId={sourceId}
         />
       ),
       source: <SourceSelect name="api.report_by_uuid" />,
@@ -70,11 +77,11 @@ const ReportByGroup = ({reportSource, currentReportBy}) => {
         <PositionSelect
           name="api.report_by_uuid"
           label={t('position')}
-          placeholder={t('selectPosition')}
+          placeholder={t('FORM.SELECT_POSITION')}
         />
       )
     };
-  }, [t]);
+  }, [reportSource, sourceId, t]);
 
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});

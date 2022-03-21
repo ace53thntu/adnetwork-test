@@ -1,15 +1,24 @@
-import {INPUT_NAME} from 'constants/report';
-import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
+//---> Build-in Modules
 import React from 'react';
+
+//---> External Modules
 import {useFormContext} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {ButtonGroup, Row, Col} from 'reactstrap';
+
+//---> Internal Modules
+import {REPORT_INPUT_NAME} from 'constants/report';
+import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {
   setMetricBodyRedux,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
+
+//---> Styles
 import {ErrorMessageStyled, UnitButton} from './styled';
+
+const unitName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`;
 
 export default function TimeUnit({defaultValue}) {
   const dispatch = useDispatch();
@@ -31,7 +40,7 @@ export default function TimeUnit({defaultValue}) {
         if (!existedUnit) {
           //---> Only reset if new time range select not include current unit
           setActiveUnit(null);
-          setValue(INPUT_NAME.UNIT, '', {
+          setValue(unitName, '', {
             shouldValidate: true,
             shouldDirty: true
           });
@@ -59,13 +68,9 @@ export default function TimeUnit({defaultValue}) {
   }
 
   const onClickTimeRange = (evt, selectedOption) => {
-    console.log(
-      '🚀 ~ file: FormControlUnit.js ~ line 62 ~ onClickTimeRange ~ selectedOption',
-      selectedOption
-    );
     evt.preventDefault();
     setActiveUnit(selectedOption);
-    setValue(INPUT_NAME.UNIT, JSON.stringify(selectedOption), {
+    setValue(unitName, JSON.stringify(selectedOption), {
       shouldValidate: true,
       shouldDirty: true
     });
@@ -94,7 +99,7 @@ export default function TimeUnit({defaultValue}) {
 
   React.useEffect(() => {
     if (validArray({list: units}) && units.length === 1) {
-      setValue(INPUT_NAME.UNIT, JSON.stringify(units[0]), {
+      setValue(unitName, JSON.stringify(units[0]), {
         shouldValidate: true,
         shouldDirty: true
       });
@@ -103,7 +108,7 @@ export default function TimeUnit({defaultValue}) {
   }, [setValue, units]);
 
   React.useEffect(() => {
-    setValue(INPUT_NAME.UNIT, JSON.stringify(defaultValue), {
+    setValue(unitName, JSON.stringify(defaultValue), {
       shouldValidate: true,
       shouldDirty: true
     });
@@ -135,7 +140,7 @@ export default function TimeUnit({defaultValue}) {
         </div>
 
         <input
-          name={INPUT_NAME.UNIT}
+          name={unitName}
           value={JSON.stringify(activeUnit) || ''}
           ref={register()}
           type="hidden"

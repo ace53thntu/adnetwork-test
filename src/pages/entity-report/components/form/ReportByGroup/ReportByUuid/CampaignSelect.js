@@ -19,7 +19,8 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  sourceId: PropTypes.string
 };
 
 const CampaignSelect = ({
@@ -27,12 +28,13 @@ const CampaignSelect = ({
   name = '',
   label = '',
   placeholder = '',
-  disabled = false
+  disabled = false,
+  sourceId = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadCampaign} = useCampaignPagination();
+  const {loadCampaign} = useCampaignPagination({sourceId});
 
   return (
     <SelectPaginate
@@ -54,11 +56,16 @@ CampaignSelect.propTypes = propTypes;
 
 export default CampaignSelect;
 
-const useCampaignPagination = () => {
+const useCampaignPagination = ({sourceId}) => {
   const loadCampaign = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await CampaignAPIRequest.getAllCampaign({
-        params: {page, per_page: DEFAULT_PAGINATION.perPage, name: search},
+        params: {
+          page,
+          per_page: DEFAULT_PAGINATION.perPage,
+          advertiser_uuid: sourceId,
+          name: search
+        },
         options: {isResponseAll: IS_RESPONSE_ALL}
       });
 
@@ -82,7 +89,7 @@ const useCampaignPagination = () => {
         }
       };
     },
-    []
+    [sourceId]
   );
 
   return {

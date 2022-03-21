@@ -50,7 +50,6 @@ export default function ReportFormContent({
   timeRange,
   entityId
 }) {
-  console.log('🚀 ~ file: ReportFormContent.js ~ line 52 ~ report', report);
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
@@ -90,10 +89,19 @@ export default function ReportFormContent({
               <>
                 <Row>
                   <Col md={12} className="d-flex">
-                    {reportType?.value === ReportTypes.TRENDING && (
+                    {reportType?.value === ReportTypes.TRENDING ? (
                       <TimeRange
                         defaultValue={defaultValues?.api?.time_range}
                       />
+                    ) : (
+                      <>
+                        <Col xs="4">
+                          <StartTime />
+                        </Col>
+                        <Col xs="4">
+                          <EndTime />
+                        </Col>
+                      </>
                     )}
                     <TimeUnit defaultValue={defaultValues?.api?.time_unit} />
                   </Col>
@@ -113,19 +121,10 @@ export default function ReportFormContent({
                   <ReportByGroup
                     reportSource={reportSource}
                     currentReportBy={defaultValues?.api?.report_by}
+                    sourceId={entityId}
                   />
                 </Row>
                 <Row className="mb-3">
-                  {reportType?.value === ReportTypes.DISTRIBUTION && (
-                    <>
-                      <Col xs="4">
-                        <StartTime />
-                      </Col>
-                      <Col xs="4">
-                        <EndTime />
-                      </Col>
-                    </>
-                  )}
                   <Col md={3}>
                     <Label className="font-weight-bold">Properties</Label>
                     <ConfigChart

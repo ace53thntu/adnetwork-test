@@ -62,7 +62,8 @@ export const initDefaultValue = ({
   initColors = [],
   metricType,
   distributionBy,
-  entityType
+  entityType,
+  source_uuid
 }) => {
   const timeRange = METRIC_TIMERANGES.find(
     item => item.value === DEFAULT_TIME_RANGE
@@ -80,6 +81,7 @@ export const initDefaultValue = ({
       report_by: {label: capitalize(entityType), value: entityType}
     },
     report_source: {label: capitalize(entityType), value: entityType},
-    report_type: {label: capitalize('trending'), value: 'trending'}
+    report_type: {label: capitalize('trending'), value: 'trending'},
+    source_uuid
   };
 };

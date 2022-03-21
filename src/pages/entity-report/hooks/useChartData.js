@@ -79,7 +79,9 @@ const getDataDrawChart = ({
       valueOfObject = existedMetricByDate?.[entityId]?.[metricSet?.code];
     }
     if (!valueOfObject || valueOfObject === 0) {
-      valueOfObject = idx > 0 ? acc?.[idx - 1]?.y : valueOfObject;
+      //---> will use when implement cumsum feature (only apply for trending type)
+      // valueOfObject = idx > 0 ? acc?.[idx - 1]?.y : valueOfObject;
+      valueOfObject = 0; //idx > 0 ? acc?.[idx - 1]?.y : valueOfObject;
     }
     acc.push({x: calculatedDate, y: valueOfObject || 0});
     return acc;

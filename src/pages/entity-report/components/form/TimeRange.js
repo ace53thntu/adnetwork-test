@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ButtonGroup, Button} from 'reactstrap';
 import {useFormContext, useWatch} from 'react-hook-form';
-import {INPUT_NAME, METRIC_TIMERANGES} from 'constants/report';
+import {REPORT_INPUT_NAME, METRIC_TIMERANGES} from 'constants/report';
 import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {ErrorMessageStyled} from './styled';
 import {useDispatch} from 'react-redux';
@@ -10,28 +10,34 @@ import {
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 
+const timeRangeName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIME_RANGE}`;
+const unitName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`;
+
 export default function TimeRange({defaultValue}) {
   const dispatch = useDispatch();
   const metricBodyRequest = useMetricsBodySelector();
   const {register, setValue, errors, control} = useFormContext();
-  const currentUnit = useWatch({name: INPUT_NAME.UNIT, control});
+  const currentUnit = useWatch({name: unitName, control});
 
   const [activeTimeRange, setActiveTimeRange] = React.useState(null);
   const error = errors?.api?.time_range || undefined;
 
   const onClickTimeRange = (evt, selectedOption) => {
-    console.log(
-      '🚀 ~ file: TimeRange.js ~ line 23 ~ onClickTimeRange ~ selectedOption',
-      selectedOption
-    );
     evt.preventDefault();
 
     setActiveTimeRange(selectedOption);
-    setValue(INPUT_NAME.TIME_RANGE, JSON.stringify(selectedOption), {
+    setValue(timeRangeName, JSON.stringify(selectedOption), {
       shouldValidate: true,
       shouldDirty: true
     });
-
+    console.log(
+      '===== validate time range',
+      selectedOption,
+      validTimeRange({
+        timeRange: selectedOption,
+        unit: currentUnit?.value
+      })
+    );
     if (
       validTimeRange({
         timeRange: selectedOption,
@@ -58,7 +64,7 @@ export default function TimeRange({defaultValue}) {
     try {
       const timeRangeParsed = JSON.parse(defaultValue);
       setActiveTimeRange(timeRangeParsed);
-      setValue(INPUT_NAME.TIME_RANGE, defaultValue, {
+      setValue(timeRangeName, defaultValue, {
         shouldValidate: false,
         shouldDirty: false
       });
@@ -85,7 +91,7 @@ export default function TimeRange({defaultValue}) {
           ))}
         </ButtonGroup>
         <input
-          name={INPUT_NAME.TIME_RANGE}
+          name={timeRangeName}
           value={JSON.stringify(activeTimeRange) || ''}
           ref={register()}
           type="hidden"

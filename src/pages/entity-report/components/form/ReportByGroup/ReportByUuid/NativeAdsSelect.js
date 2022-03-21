@@ -19,6 +19,7 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  sourceId: PropTypes.string,
   multiple: PropTypes.bool,
   required: PropTypes.bool
 };
@@ -29,12 +30,13 @@ const NativeAdSelect = ({
   label,
   placeholder,
   multiple = false,
-  required = false
+  required = false,
+  sourceId = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadNativeAd} = useNativeAdPagination();
+  const {loadNativeAd} = useNativeAdPagination({sourceId});
 
   return (
     <SelectPaginate
@@ -57,13 +59,14 @@ NativeAdSelect.propTypes = propTypes;
 
 export default NativeAdSelect;
 
-const useNativeAdPagination = () => {
+const useNativeAdPagination = ({sourceId}) => {
   const loadNativeAd = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await NativeAdAPI.getNativeAds({
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
+          advertiser_uuid: sourceId,
           name: search,
           status: 'active'
         },
@@ -92,7 +95,7 @@ const useNativeAdPagination = () => {
         }
       };
     },
-    []
+    [sourceId]
   );
 
   return {

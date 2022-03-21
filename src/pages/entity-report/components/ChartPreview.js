@@ -5,13 +5,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useFormContext, useWatch} from 'react-hook-form';
 import {Card, CardBody, Col, Row} from 'reactstrap';
+import _ from 'lodash';
 
 //---> Internal Modules
-import {DEFAULT_TIME_UNIT, INPUT_NAME, METRIC_SETS} from 'constants/report';
+import {
+  DEFAULT_TIME_UNIT,
+  REPORT_INPUT_NAME,
+  METRIC_SETS
+} from 'constants/report';
 import CustomLineChart from './form/CustomLineChart';
 import CustomPieChart from './form/CustomPieChart';
 import {useMetricsBodySelector} from 'store/reducers/entity-report';
-import _ from 'lodash';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useChartData} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
@@ -37,10 +41,6 @@ const ChartPreview = ({
     reportId,
     enabled: !!reportId && Object.keys(currentMetricRequest).length > 0
   });
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 35 ~ currentMetricRequest',
-    currentMetricRequest
-  );
 
   React.useEffect(() => {
     if (!_.isEqual(metricRequestRedux, currentMetricRequest)) {
@@ -82,7 +82,10 @@ const ChartPreviewContent = React.memo(
     });
 
     const {control} = useFormContext();
-    const selectedType = useWatch({name: INPUT_NAME.CHART_TYPE, control});
+    const selectedType = useWatch({
+      name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+      control
+    });
 
     return (
       <Row className="chart-preview">

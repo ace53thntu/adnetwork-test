@@ -5,7 +5,7 @@ import React from 'react';
 import {useFormContext, useWatch} from 'react-hook-form';
 
 //---> Internal Modules
-import {FORMAT_BY_UNIT, INPUT_NAME} from 'constants/report';
+import {FORMAT_BY_UNIT, REPORT_INPUT_NAME, ChartTypes} from 'constants/report';
 import {R2ChartLine, R2ChartBar} from '../charts';
 import {parseColors} from 'pages/entity-report/utils';
 import {useConfigChart} from 'pages/entity-report/hooks';
@@ -18,9 +18,14 @@ export default function CustomLineChart({
   metricSet = []
 }) {
   const {watch, control} = useFormContext();
-  const color = useWatch({control, name: INPUT_NAME.COLOR});
-  const chartType = watch(INPUT_NAME.CHART_TYPE) || 'line';
-  const convertUnit = unit === 'fiveseconds' ? 'second' : unit;
+  const color = useWatch({
+    control,
+    name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
+  });
+  const chartType =
+    watch(`${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`) ||
+    ChartTypes.LINE;
+  const convertUnit = unit; //unit === 'fiveseconds' ? 'second' : unit;
   const formatDateStr = FORMAT_BY_UNIT[convertUnit];
   const colorParsed = parseColors(color);
   const {data: chartData, options} = useConfigChart({

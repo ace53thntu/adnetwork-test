@@ -19,6 +19,7 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  sourceId: PropTypes.string,
   multiple: PropTypes.bool,
   required: PropTypes.bool
 };
@@ -29,12 +30,13 @@ const ConceptSelect = ({
   label,
   placeholder,
   multiple = false,
-  required = false
+  required = false,
+  sourceId = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadConcept} = useConceptPagination();
+  const {loadConcept} = useConceptPagination({sourceId});
 
   return (
     <SelectPaginate
@@ -57,40 +59,44 @@ ConceptSelect.propTypes = propTypes;
 
 export default ConceptSelect;
 
-const useConceptPagination = () => {
-  const loadConcept = React.useCallback(async (search, prevOptions, {page}) => {
-    const res = await ConceptAPI.getConcepts({
-      params: {
-        page,
-        per_page: DEFAULT_PAGINATION.perPage,
-        name: search,
-        status: 'active'
-      },
-      options: {
-        isResponseAll: IS_RESPONSE_ALL
-      }
-    });
+const useConceptPagination = ({sourceId}) => {
+  const loadConcept = React.useCallback(
+    async (search, prevOptions, {page}) => {
+      const res = await ConceptAPI.getConcepts({
+        params: {
+          page,
+          per_page: DEFAULT_PAGINATION.perPage,
+          advertiser_uuid: sourceId,
+          name: search,
+          status: 'active'
+        },
+        options: {
+          isResponseAll: IS_RESPONSE_ALL
+        }
+      });
 
-    const items = getResponseData(res, IS_RESPONSE_ALL);
-    const total = getResponsePagination(res)?.totalItems;
-    const perPage =
-      getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
+      const items = getResponseData(res, IS_RESPONSE_ALL);
+      const total = getResponsePagination(res)?.totalItems;
+      const perPage =
+        getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
-    const options = [...items].map(item => ({
-      label: item.name,
-      value: item.uuid
-    }));
+      const options = [...items].map(item => ({
+        label: item.name,
+        value: item.uuid
+      }));
 
-    const hasMore = page < Math.ceil(total / perPage);
+      const hasMore = page < Math.ceil(total / perPage);
 
-    return {
-      options,
-      hasMore,
-      additional: {
-        page: page + 1
-      }
-    };
-  }, []);
+      return {
+        options,
+        hasMore,
+        additional: {
+          page: page + 1
+        }
+      };
+    },
+    [sourceId]
+  );
 
   return {
     loadConcept

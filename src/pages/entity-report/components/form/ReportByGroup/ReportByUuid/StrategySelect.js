@@ -13,6 +13,7 @@ import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
+import {faAssistiveListeningSystems} from '@fortawesome/free-solid-svg-icons';
 
 const propTypes = {
   defaultValue: PropTypes.object,
@@ -20,7 +21,9 @@ const propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  sourceId: PropTypes.string,
+  reportSource: PropTypes.string
 };
 
 const StrategySelect = ({
@@ -29,12 +32,14 @@ const StrategySelect = ({
   label,
   placeholder,
   disabled = false,
-  required = false
+  required = faAssistiveListeningSystems,
+  sourceId = '',
+  reportSource = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadStrategy} = useStrategyPagination();
+  const {loadStrategy} = useStrategyPagination({sourceId, reportSource});
 
   return (
     <SelectPaginate
@@ -56,11 +61,16 @@ StrategySelect.propTypes = propTypes;
 
 export default StrategySelect;
 
-const useStrategyPagination = () => {
+const useStrategyPagination = ({sourceId, reportSource}) => {
   const loadStrategy = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await StrategyAPIRequest.getAllStrategy({
-        params: {page, per_page: DEFAULT_PAGINATION.perPage, name: search},
+        params: {
+          page,
+          per_page: DEFAULT_PAGINATION.perPage,
+          [`${reportSource}_uuid`]: sourceId,
+          name: search
+        },
         options: {isResponseAll: IS_RESPONSE_ALL}
       });
 
@@ -84,7 +94,7 @@ const useStrategyPagination = () => {
         }
       };
     },
-    []
+    [reportSource, sourceId]
   );
 
   return {

@@ -22,14 +22,6 @@ export const ReportBys = [
     label: 'Concept'
   },
   {
-    value: 'source',
-    label: 'Source'
-  },
-  {
-    value: 'position',
-    label: 'Position'
-  },
-  {
     value: 'creative',
     label: 'Creative'
   },
@@ -40,6 +32,15 @@ export const ReportBys = [
   {
     value: 'video',
     label: 'Video'
+  },
+
+  {
+    value: 'position',
+    label: 'Position'
+  },
+  {
+    value: 'source',
+    label: 'Source'
   }
 ];
 

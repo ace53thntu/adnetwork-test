@@ -518,6 +518,7 @@ const en = {
     LOOP: 'Loop'
   },
   FORM: {
+    SELECT_POSITION: 'Select position',
     EXTRA_FIELDS: 'Extra fields'
   }
 };

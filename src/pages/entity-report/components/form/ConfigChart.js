@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import {INPUT_NAME} from 'constants/report';
+import {REPORT_INPUT_NAME} from 'constants/report';
 import {useReport} from 'pages/entity-report/hooks';
 import React from 'react';
 
@@ -18,11 +18,17 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
   });
 
   React.useEffect(() => {
-    setValue(INPUT_NAME.CHART_TYPE, chartTypeDefault);
+    setValue(
+      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+      chartTypeDefault
+    );
   }, [chartTypeDefault, setValue]);
 
   React.useEffect(() => {
-    setValue(INPUT_NAME.COLOR, colorDefault);
+    setValue(
+      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+      colorDefault
+    );
   }, [chartTypeDefault, colorDefault, setValue]);
 
   return (
@@ -39,13 +45,13 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
       {/* Register hidden inputs to submit to API */}
       <input
         type="hidden"
-        name={INPUT_NAME.COLOR}
+        name={`${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`}
         value={JSON.stringify(colors) || ''}
         ref={register()}
       />
       <input
         type="hidden"
-        name={INPUT_NAME.CHART_TYPE}
+        name={`${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`}
         value={typeSelected || ''}
         ref={register()}
       />

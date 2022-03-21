@@ -1,3 +1,16 @@
+/**
+ * Types of chart.
+ * @enum {string}
+ */
+export const ChartTypes = {
+  /** This type is line chart. */
+  LINE: 'line',
+  /** This type is bar chart. */
+  BAR: 'bar',
+  /** This type is pie chart. */
+  PIE: 'pie'
+};
+
 export const ReportTypes = {
   TRENDING: 'trending',
   DISTRIBUTION: 'distribution'
@@ -73,16 +86,11 @@ export const METRIC_TIMERANGES = [
     ]
   },
   {
-    value: 'l1h',
-    label: '1 hour',
-    units: [{value: 'minute', label: 'Minute'}]
-  },
-  {
     value: 'l30m',
     label: '30 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: 'fiveseconds', label: '5 seconds'}
+      {value: '5seconds', label: '5 seconds'}
       // {value: 'second', label: 'Second'}
     ]
   },
@@ -91,7 +99,7 @@ export const METRIC_TIMERANGES = [
     label: '15 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: 'fiveseconds', label: '5 seconds'}
+      {value: '5seconds', label: '5 seconds'}
       // {value: 'second', label: 'Second'}
     ]
   },
@@ -100,7 +108,7 @@ export const METRIC_TIMERANGES = [
     label: '5 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: 'fiveseconds', label: '5 seconds'},
+      {value: '5seconds', label: '5 seconds'},
       {value: 'second', label: 'Second'}
     ]
   }
@@ -141,11 +149,21 @@ export const REPORT_SOURCES = [
   'inventory'
 ];
 
-export const INPUT_NAME = {
-  COLOR: 'properties.color',
-  CHART_TYPE: 'properties.chart_type',
-  TIME_RANGE: 'api.time_range',
-  UNIT: 'api.time_unit'
+export const REPORT_INPUT_NAME = {
+  NAME: 'name',
+  STATUS: 'status',
+  REPORT_TYPE: 'report_type',
+  REPORT_SOURCE: 'report_source',
+  API: 'api',
+  PROPERTIES: 'properties',
+  COLOR: 'color',
+  CHART_TYPE: 'chart_type',
+  TIME_RANGE: 'time_range',
+  UNIT: 'time_unit',
+  START_TIME: 'start_time',
+  END_TIME: 'end_time',
+  REPORT_BY: 'report_by',
+  REPORT_BY_UUID: 'report_by_uuid'
 };
 
 export const DEFAULT_TIME_RANGE = 'l1m';
