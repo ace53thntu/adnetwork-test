@@ -104,8 +104,8 @@ export const useChartData = ({
 
       const startTime = moment.unix(start_time);
       const endTime = moment.unix(end_time);
-      const increaseNumber = unit === 'fiveseconds' ? 5 : 1;
-      const unitStr = unit === 'fiveseconds' ? 'second' : unit;
+      const increaseNumber = 1; // unit === 'fiveseconds' ? 5 : 1;
+      const unitStr = unit; // unit === 'fiveseconds' ? 'second' : unit;
       //---> Get list of checkpoints
       const listCheckPoints = enumerateDaysBetweenDates({
         startDate: startTime,

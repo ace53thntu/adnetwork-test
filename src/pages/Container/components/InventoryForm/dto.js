@@ -26,7 +26,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     metadata,
     floor_price = 0,
     deal_floor_price = 0,
-    position_uuid = 0,
+    position_uuid = '',
     status,
     type,
     allow_deal,

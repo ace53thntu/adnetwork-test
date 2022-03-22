@@ -17,7 +17,7 @@ const ChartItem = ({
   isDetails = false,
   metricSet = []
 }) => {
-  const convertUnit = unit === 'fiveseconds' ? 'second' : unit;
+  const convertUnit = unit; //unit === 'fiveseconds' ? 'second' : unit;
   const formatDateStr = FORMAT_BY_UNIT[convertUnit];
 
   const {data: chartData, options} = useConfigChart({

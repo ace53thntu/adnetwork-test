@@ -30,7 +30,9 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       type: null,
       metadata: {
         loop: 'active'
-      }
+      },
+      tracker_uuid: null,
+      position_uuid: null
     },
     resolver: validationInventory()
   });

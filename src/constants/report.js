@@ -90,8 +90,7 @@ export const METRIC_TIMERANGES = [
     label: '30 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: '5seconds', label: '5 seconds'}
-      // {value: 'second', label: 'Second'}
+      {value: 'second', label: 'Second'}
     ]
   },
   {
@@ -99,8 +98,7 @@ export const METRIC_TIMERANGES = [
     label: '15 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: '5seconds', label: '5 seconds'}
-      // {value: 'second', label: 'Second'}
+      {value: 'second', label: 'Second'}
     ]
   },
   {
@@ -108,7 +106,6 @@ export const METRIC_TIMERANGES = [
     label: '5 minutes',
     units: [
       {value: 'minute', label: 'Minute'},
-      {value: '5seconds', label: '5 seconds'},
       {value: 'second', label: 'Second'}
     ]
   }

@@ -22,21 +22,21 @@ import {
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {getReportSources} from 'utils/metrics';
-import ChartPreview from '../ChartPreview';
-import ConfigChart from './ConfigChart';
-import TimeUnit from './TimeUnit';
-import ReportByGroup from './ReportByGroup/ReportByGroup';
-import ReportSourceSelect from './ReportSourceSelect';
-import ReportTypeSelect from './ReportTypeSelect';
-import {EndTime} from './TimePeriod/EndTime';
-import StartTime from './TimePeriod/StartTime';
-import TimeRange from './TimeRange';
-import {schemaValidate} from './validation';
+import ChartPreview from './ChartPreview';
+import ConfigChart from './form/ConfigChart';
+import TimeUnit from './form/TimeUnit';
+import ReportByGroup from './form/ReportByGroup/ReportByGroup';
+import ReportSourceSelect from './form/ReportSourceSelect';
+import ReportTypeSelect from './form/ReportTypeSelect';
+import {EndTime} from './form/TimePeriod/EndTime';
+import StartTime from './form/TimePeriod/StartTime';
+import TimeRange from './form/TimeRange';
+import {schemaValidate} from './form/validation';
 import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
 import {getReportById} from 'pages/entity-report/utils/getReportById';
 import {ReportTypes} from 'constants/report';
-import DistributionUnit from './DistributionUnit';
+import DistributionUnit from './form/DistributionUnit';
 
 export default function ReportFormContent({
   initializeDefaultValue,

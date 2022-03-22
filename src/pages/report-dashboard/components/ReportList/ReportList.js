@@ -2,7 +2,7 @@ import {LoadingIndicator} from 'components/common';
 import {Pagination} from 'components/list/pagination';
 import {IS_RESPONSE_ALL} from 'constants/misc';
 import {EntityTypes, METRIC_TYPES} from 'constants/report';
-import ReportItem from 'pages/entity-report/report-item';
+import ReportItem from 'pages/entity-report/components/report-item/report-item';
 import {checkIsFollowed} from 'pages/report-dashboard/helpers';
 import {useDestructureReports} from 'pages/report-dashboard/hooks';
 import {useGetReportsInfinite} from 'queries/report';

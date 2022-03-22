@@ -5,24 +5,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from 'reactstrap';
 import {Checkbox} from '@material-ui/core';
+import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
-import ChartItem from './chart-item';
-import {DefaultColor} from './constants.js/index.js';
-import ModalReportForm from './create-report.modal';
-import {useChartData} from './hooks';
-import MetricInfo from './metric-info';
-import {ReportItemStyled} from './styled';
-import {parseColors} from './utils';
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {METRIC_SETS} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import './styles/styles.scss';
-import {useDispatch} from 'react-redux';
 import {setMetricBodyRedux} from 'store/reducers/entity-report';
-import {getMetricRequestBody} from './utils/metricRequest';
-import {getReportById} from './utils/getReportById';
+import ChartItem from '../../chart-item';
+import {DefaultColor} from '../../constants.js/index.js';
+import ModalReportForm from '../../create-report.modal';
+import {useChartData} from '../../hooks';
+import MetricInfo from './metric-info';
+import {ReportItemStyled} from '../../styled';
+import {parseColors} from '../../utils';
+import {getMetricRequestBody} from '../../utils/metricRequest';
+import {getReportById} from '../../utils/getReportById';
+
+//---> Styles
+import '../../styles/styles.scss';
 
 export default function ReportItem({
   entityId,

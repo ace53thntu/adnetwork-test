@@ -9,7 +9,7 @@ import {Modal} from 'reactstrap';
 import {initDefaultValue, mappingFormToApi} from './dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport, useGetReport} from 'queries/report';
-import ReportFormContent from './components/form/ReportFormContent';
+import ReportFormContent from './components/ReportFormContent';
 import './styles/styles.scss';
 import {QueryStatuses} from 'constants/react-query';
 
@@ -97,21 +97,23 @@ export default function ModalReportForm({
     return <div>Loading...</div>;
   }
 
+  const defaultProps = {
+    initializeDefaultValue,
+    report,
+    onSubmit,
+    toggle,
+    isViewed,
+    isEdit,
+    reportSource: entityType,
+    metricSet,
+    timeRange,
+    entityId,
+    unit
+  };
+
   return (
     <Modal isOpen={modal} size="lg" style={{maxWidth: '1350px'}}>
-      <ReportFormContent
-        initializeDefaultValue={initializeDefaultValue}
-        report={report}
-        onSubmit={onSubmit}
-        toggle={toggle}
-        isViewed={isViewed}
-        isEdit={isEdit}
-        reportSource={entityType}
-        metricSet={metricSet}
-        timeRange={timeRange}
-        entityId={entityId}
-        unit={unit}
-      />
+      <ReportFormContent {...defaultProps} />
     </Modal>
   );
 }

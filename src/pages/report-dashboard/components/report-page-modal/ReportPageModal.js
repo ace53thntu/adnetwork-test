@@ -1,4 +1,7 @@
+//---> Build-in Modules
 import React from 'react';
+
+//---> External Modules
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -19,12 +22,14 @@ import {
 } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
 import {FormProvider, useForm, Controller} from 'react-hook-form';
+
+//---> Internal Modules
 import {useCreateReportPage, useGetReportPages} from 'queries/report-page';
 import {useDestructurePageOptions} from 'pages/report-dashboard/hooks';
 import {USER_INFO_KEY} from 'utils/constants/auth.constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import ChartItem from 'pages/entity-report/chart-item';
-import MetricInfo from 'pages/entity-report/metric-info';
+import MetricInfo from 'pages/entity-report/components/report-item/metric-info';
 import {METRIC_SETS} from 'constants/report';
 
 const useStyles = makeStyles(theme => ({
