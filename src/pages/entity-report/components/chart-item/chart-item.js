@@ -1,8 +1,8 @@
 import React from 'react';
 // import CustomPieChart from './CustomPieChart';
-import {useConfigChart} from './hooks/useConfigChart';
-import {R2ChartBar, R2ChartLine} from './components';
-import R2ChartPie from './components/charts/R2ChartPie';
+import {useConfigChart} from '../../hooks/useConfigChart';
+import {R2ChartBar, R2ChartLine} from '..';
+import R2ChartPie from '../charts/R2ChartPie';
 import {FORMAT_BY_UNIT} from 'constants/report';
 
 const ChartItem = ({

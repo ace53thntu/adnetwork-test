@@ -4,7 +4,7 @@ import {useReport} from 'pages/entity-report/hooks';
 import React from 'react';
 
 //---> External Modules
-import {useFormContext} from 'react-hook-form';
+import {useFormContext, useWatch} from 'react-hook-form';
 
 //---> Internal Modules
 import DropdownChartType from './DropdownChartType';
@@ -16,6 +16,22 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
     colorDefault,
     metricSet
   });
+  const reportByUuid = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY_UUID}`
+  });
+  const reportSource = useWatch({
+    name: `${REPORT_INPUT_NAME.REPORT_SOURCE}`
+  });
+  const reportBy = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY}`
+  });
+
+  const isChartCompare =
+    !reportByUuid && reportSource?.value !== reportBy?.value;
+  console.log(
+    '🚀 ~ file: ConfigChart.js ~ line 33 ~ ConfigChart ~ isChartCompare',
+    isChartCompare
+  );
 
   React.useEffect(() => {
     setValue(
@@ -40,6 +56,7 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
         onSelectType={onSelectType}
         colors={colors}
         chartType={typeSelected}
+        isChartCompare={isChartCompare}
       />
 
       {/* Register hidden inputs to submit to API */}

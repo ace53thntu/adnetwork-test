@@ -93,7 +93,7 @@ export default function ReportFormContent({
             {!isViewed && (
               <>
                 <Row>
-                  <Col md={12} className="d-flex">
+                  <Col md="12" className="d-flex">
                     {reportType?.value === ReportTypes.TRENDING ? (
                       <TimeRange
                         defaultValue={defaultValues?.api?.time_range}
@@ -126,7 +126,7 @@ export default function ReportFormContent({
                       reportSourceOptions={reportSourceOptions}
                     />
                   </Col>
-                  <Col md={3}>
+                  <Col md="3">
                     <ReportTypeSelect
                       defaultValue={defaultValues?.report_type}
                     />
@@ -138,7 +138,7 @@ export default function ReportFormContent({
                   />
                 </Row>
                 <Row className="mb-3">
-                  <Col md={3}>
+                  <Col md="3">
                     <Label className="font-weight-bold">Properties</Label>
                     <ConfigChart
                       chartTypeDefault={defaultValues?.properties?.chart_type}

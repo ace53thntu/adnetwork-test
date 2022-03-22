@@ -28,7 +28,6 @@ import {InputStatus} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
 import InventorySnippet from '../Snippets/InventorySnippet';
-import TrackerSelect from 'components/forms/TrackerSelect';
 
 const formName = {
   properties: 'properties',

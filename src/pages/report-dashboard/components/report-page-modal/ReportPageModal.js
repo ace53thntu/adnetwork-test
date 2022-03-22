@@ -28,9 +28,9 @@ import {useCreateReportPage, useGetReportPages} from 'queries/report-page';
 import {useDestructurePageOptions} from 'pages/report-dashboard/hooks';
 import {USER_INFO_KEY} from 'utils/constants/auth.constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import ChartItem from 'pages/entity-report/chart-item';
 import MetricInfo from 'pages/entity-report/components/report-item/metric-info';
 import {METRIC_SETS} from 'constants/report';
+import {ChartItem} from 'pages/entity-report/components/chart-item';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -173,7 +173,8 @@ export default function ModalReportPage({
                 unit,
                 report_source,
                 report_by,
-                time_range
+                time_range,
+                report_type
               } = item;
               return (
                 <Col sm="6" key={`pr-${id}`} className="mb-3">
@@ -194,6 +195,7 @@ export default function ModalReportPage({
                         unit={unit}
                         reportSource={report_source}
                         reportBy={report_by}
+                        reportType={report_type}
                       />
                     </CardBody>
                   </Card>

@@ -38,7 +38,6 @@ const CampaignSelect = ({
 
   return (
     <SelectPaginate
-      required
       name={name}
       label={label}
       placeholder={placeholder}

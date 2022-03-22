@@ -1,25 +1,25 @@
+//---> Build-in modules
+import React, {useCallback, useState} from 'react';
+
+//---> External Modules
+import {Card, CardBody, Col, Row} from 'reactstrap';
+import {useParams} from 'react-router-dom';
+
+//---> Internal Modules
+import ModalReportPage from '../report-page-modal';
+import {ReportContainerStyled} from './styled';
 import {LoadingIndicator} from 'components/common';
 import {Pagination} from 'components/list/pagination';
 import {IS_RESPONSE_ALL} from 'constants/misc';
-import {EntityTypes, METRIC_TYPES} from 'constants/report';
-import ReportItem from 'pages/entity-report/components/report-item/report-item';
+import ReportItemContainer from 'pages/entity-report/ReportItemContainer';
 import {checkIsFollowed} from 'pages/report-dashboard/helpers';
 import {useDestructureReports} from 'pages/report-dashboard/hooks';
 import {useGetReportsInfinite} from 'queries/report';
 import {useFollowReportPage} from 'queries/report-page';
-//---> Build-in modules
-import React, {useCallback, useState} from 'react';
-import {useParams} from 'react-router-dom';
-//---> External Modules
-import {Card, CardBody, Col, Row} from 'reactstrap';
-import {getUser} from 'utils/helpers/auth.helpers';
+import {ActionFooter, ActionHeader} from '../actions';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import {getResponseData} from 'utils/helpers/misc.helpers';
-
-import {ActionFooter, ActionHeader} from '../actions';
-//---> Internal Modules
-import ModalReportPage from '../report-page-modal';
-import {ReportContainerStyled} from './styled';
+import {getUser} from 'utils/helpers/auth.helpers';
 
 const PER_PAGE = 10;
 const PAGE = 0;
@@ -27,7 +27,12 @@ const PAGE = 0;
 const ReportList = ({pageDetails = {}}) => {
   const currentUser = getUser();
   const {pageId} = useParams();
-  let params = {per_page: PER_PAGE, status: 'active', page: PAGE};
+  let params = {
+    per_page: PER_PAGE,
+    status: 'active',
+    page: PAGE,
+    sort: 'updated_at DESC'
+  };
   if (pageId) {
     params = {...params, report_page_id: pageId};
   }
@@ -144,50 +149,15 @@ const ReportList = ({pageDetails = {}}) => {
         <Row>
           {validArray({list: destructureReports}) ? (
             [...destructureReports]?.map((reportItem = {}) => {
-              const {
-                uuid: id,
-                url,
-                properties = {},
-                api: {unit, time_range} = {},
-                status,
-                entity_id,
-                entity_type
-              } = reportItem;
-              const {chart_type = 'line'} = properties === null ? {} : {};
-              const color = properties?.color || [];
-              const colors =
-                color && !validArray({list: color}) ? [color] : color;
-              const metricSet = properties?.metric_set || [];
-
-              const metricSets =
-                color && !validArray({list: metricSet})
-                  ? [metricSet]
-                  : metricSet;
-              const entityType = EntityTypes[entity_type?.toUpperCase()];
-              const distributionBy =
-                entityType === 'organisation' ? 'manager' : entityType;
-              const metricType = METRIC_TYPES[entity_type];
+              const {uuid: id, status} = reportItem;
 
               return status === 'active' ? (
                 <Col key={`pr-${id}`} sm={6} className="mb-3">
                   <Card className="chart-item">
                     <CardBody style={{padding: 0}}>
-                      <ReportItem
-                        reportUrl={url}
-                        reportId={id}
-                        color={colors}
-                        chartType={chart_type || 'line'}
-                        metricSet={metricSets}
-                        unit={unit}
-                        timeRange={time_range}
-                        stragegyId={entity_id}
-                        reportItem={reportItem}
+                      <ReportItemContainer
+                        report={reportItem}
                         handleSelectedReport={handleSelectedReport}
-                        modeSelectReport={modeSelectReport}
-                        isViewed
-                        isSelected={modeSelectReport}
-                        distributionBy={distributionBy}
-                        metricType={metricType}
                       />
                     </CardBody>
                   </Card>

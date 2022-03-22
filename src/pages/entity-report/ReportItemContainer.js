@@ -1,4 +1,4 @@
-//---> Buid-in Modules
+//---> Build-in Modules
 import React from 'react';
 
 //---> External Modules
@@ -14,13 +14,18 @@ const propTypes = {
   report: PropTypes.object
 };
 
-const ReportItemContainer = ({report}) => {
-  return <ReportItemContent report={report} />;
+const ReportItemContainer = ({report, handleSelectedReport = () => null}) => {
+  return (
+    <ReportItemContent
+      report={report}
+      handleSelectedReport={handleSelectedReport}
+    />
+  );
 };
 
 ReportItemContainer.propTypes = propTypes;
 
-const ReportItemContent = ({report}) => {
+const ReportItemContent = ({report, handleSelectedReport = () => null}) => {
   const {source_uuid, report_source, uuid} = report;
 
   const requestBody = getMetricRequestBody({report});
@@ -41,6 +46,7 @@ const ReportItemContent = ({report}) => {
       reportItem={report}
       metrics={metricData}
       isFetching={isFetching}
+      handleSelectedReport={handleSelectedReport}
     />
   );
 };

@@ -21,12 +21,16 @@ const DropdownChartType = ({
   onChangeColor = () => null,
   onSelectType = () => null,
   colors = [],
-  chartType = 'line'
+  chartType = 'line',
+  isChartCompare = false
 }) => {
-  const initChartTypes = React.useMemo(
-    () => (metricSet?.length >= 2 ? ['line', 'pie'] : ['line', 'bar']),
-    [metricSet?.length]
-  );
+  const initChartTypes = React.useMemo(() => {
+    if (isChartCompare) {
+      return ['pie', 'line'];
+    }
+    return ['line', 'bar'];
+  }, [isChartCompare]);
+
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
   //---> Call hook passing in the ref and a function to call on outside click
@@ -84,7 +88,7 @@ const DropdownChartType = ({
                         key={`pr-${idx}`}
                         id={`tooltip-${typeItem}-chart`}
                         className={`c-chart-item ${
-                          chartType === typeItem ? 'border-actived' : ''
+                          chartType === typeItem ? 'border-activated' : ''
                         }`}
                         onClick={evt => onClickChartType(evt, typeItem)}
                       >

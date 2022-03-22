@@ -13,7 +13,7 @@ import {METRIC_SETS} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {setMetricBodyRedux} from 'store/reducers/entity-report';
-import ChartItem from '../../chart-item';
+import ChartItem from '../chart-item/chart-item';
 import {DefaultColor} from '../../constants.js/index.js';
 import ModalReportForm from '../../create-report.modal';
 import {useChartData} from '../../hooks';
@@ -44,7 +44,8 @@ export default function ReportItem({
     uuid: reportId,
     properties,
     api: {time_unit: unit, time_range: timeRange, report_by} = {},
-    report_source
+    report_source,
+    report_type
   } = reportItem;
   const metricRequestBody = getMetricRequestBody({report: reportItem});
 
@@ -166,6 +167,7 @@ export default function ReportItem({
               unit={unit}
               reportSource={report_source}
               reportBy={report_by}
+              reportType={report_type}
             />
           </div>
         ) : (
