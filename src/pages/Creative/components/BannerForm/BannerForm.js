@@ -138,13 +138,16 @@ function BannerForm(props) {
               );
             });
 
-            await Promise.all(promises);
+            try {
+              await Promise.all(promises);
+            } catch (error) {
+              ShowToast.error(error?.msg);
+            }
           }
         }
 
         setIsLoading(false);
-        // dispatch(toggleCreateCreativeDialog());
-        ShowToast.success('Create Creative successfully!');
+        ShowToast.success('Create Banner successfully!');
         client.invalidateQueries([GET_CREATIVES]);
         handleCloseDialog();
       } catch (error) {
@@ -203,7 +206,7 @@ function BannerForm(props) {
         });
 
         setIsLoading(false);
-        ShowToast.success('Update Creative successfully!');
+        ShowToast.success('Update Banner successfully!');
         client.invalidateQueries([GET_CREATIVES, params]);
         handleCloseDialog();
       } catch (error) {

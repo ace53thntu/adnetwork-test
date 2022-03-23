@@ -87,6 +87,17 @@ export function creativeRepoToModel(raw) {
   };
 }
 
+function getTypeOfAlt(file) {
+  const fileType = file?.mime_type;
+  const htmlType = ['application/xhtml+xml', 'text/html'];
+  const imgType = ['image/png', 'image/jpeg', 'image/gif'];
+
+  const isHtml = htmlType.includes(fileType);
+  const isImg = imgType.includes(fileType);
+
+  return isHtml ? 'html' : isImg ? 'image' : 'common';
+}
+
 export function alternativeFormValuesToRepo(raw, creativeId) {
   const {
     priority,
@@ -107,12 +118,13 @@ export function alternativeFormValuesToRepo(raw, creativeId) {
 
   return {
     name,
+    sound,
     description,
+    status: 'active',
     creative_uuid: creativeId,
     file_uuid: file?.uuid,
     priority: parseInt(priority),
-    sound,
-    type: 'common',
+    type: getTypeOfAlt(file)
     // catalog_id: parseInt(catalog_id),
     // only_catalog_products,
     // min_products: parseInt(min_products),
@@ -122,7 +134,6 @@ export function alternativeFormValuesToRepo(raw, creativeId) {
     // product_height: parseInt(product_height),
     // products,
     // extra_config,
-    status: 'active'
   };
 }
 
