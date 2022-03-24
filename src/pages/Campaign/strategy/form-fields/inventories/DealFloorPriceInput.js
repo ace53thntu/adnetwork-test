@@ -1,7 +1,8 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import {Input} from 'reactstrap';
+import CurrencyInput from 'react-currency-input-field';
+import {convertApiToGui} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   defaultValue: PropTypes.number,
@@ -9,22 +10,34 @@ const propTypes = {
 };
 
 const DealFloorPriceInput = ({
-  defaultValue = 0,
+  defaultValue = '',
   onChangeInputGlobal = () => null
 }) => {
   const [inputVal, setInputVal] = React.useState('');
 
   React.useEffect(() => {
-    setInputVal(defaultValue);
+    setInputVal(convertApiToGui({value: defaultValue}));
   }, [defaultValue]);
 
-  function onChangeInput(evt) {
-    const {value} = evt.target;
+  function onChangeInput(value) {
     setInputVal(value);
     onChangeInputGlobal(value);
   }
 
-  return <Input value={inputVal} onChange={onChangeInput} />;
+  return (
+    <CurrencyInput
+      className="form-control"
+      value={inputVal}
+      onValueChange={onChangeInput}
+      step={1}
+      placeholder="0.00"
+      decimalSeparator="."
+      groupSeparator=","
+      disableGroupSeparators={false}
+      decimalsLimit={3}
+      prefix="$"
+    />
+  );
 };
 
 DealFloorPriceInput.propTypes = propTypes;

@@ -12,6 +12,8 @@ import {List} from 'components/list';
 import {useDispatch} from 'react-redux';
 import {DialogConfirm} from 'components/common';
 import ErrorMessage from 'components/forms/ErrorMessage';
+import {formatValue} from 'react-currency-input-field';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {
   strategyInventories: PropTypes.array
@@ -58,8 +60,17 @@ const StrategyInventory = ({strategyInventories = []}) => {
         header: 'Deal Price',
         accessor: 'deal_floor_price',
         cell: row => (
-          <Badge color="light" pill>
-            {row?.value}
+          <Badge color="info">
+            {row?.value
+              ? formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
           </Badge>
         )
       }
