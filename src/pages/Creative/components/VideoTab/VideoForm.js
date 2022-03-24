@@ -24,6 +24,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import Report from '../Report';
 import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
+import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
 
@@ -34,7 +35,9 @@ const defaultValues = {
   name: '',
   click_url: '',
   width: '1',
-  height: '1'
+  height: '1',
+  serve_type: VideoServeTypes[0],
+  video_type: VideoTypes[0]
   // files: []
 };
 

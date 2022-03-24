@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 import {VideoServeTypes, VideoTypes} from './constants';
 
 export function videoRepoToFormValues(raw) {
@@ -46,10 +47,15 @@ export function videoFormValuesToRepo(
     dtype: 'video',
     concept_uuid: conceptId,
     status: 'active',
-    files_uuid: [],
-    video_type: video_type?.value || '',
-    serve_type: serve_type?.value || ''
+    files_uuid: []
   };
+
+  if (video_type?.value) {
+    obj.video_type = video_type.value;
+  }
+  if (serve_type?.value) {
+    obj.serve_type = serve_type.value;
+  }
 
   if (width && _.isNumber(parseInt(width, 10))) {
     obj.width = parseInt(width, 10);
