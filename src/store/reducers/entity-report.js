@@ -14,9 +14,12 @@ const SET_METRIC_URL = `${ACTION_PREFIX}/SET_METRIC_URL`;
 const SET_METRIC_BODY = `${ACTION_PREFIX}/SET_METRIC_BODY`;
 const SET_METRIC_DATA = `${ACTION_PREFIX}/SET_METRIC_DATA`;
 const SET_ACTIVE_REPORT_GROUP_TYPE = `${ACTION_PREFIX}/SET_ACTIVE_REPORT_GROUP_TYPE`;
+const SET_CHART_TYPE_SELECTED = `${ACTION_PREFIX}/SET_CHART_TYPE_SELECTED`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setChartTypeSelectedRedux = chartType =>
+  createAction(SET_CHART_TYPE_SELECTED, {chartType});
 export const setReportGroupRedux = reportGroupType =>
   createAction(SET_ACTIVE_REPORT_GROUP_TYPE, {reportGroupType});
 export const setTimeRangeRedux = timeRange =>
@@ -38,11 +41,13 @@ const entityReportInitialState = {
   url: '',
   metricBodyRequest: {},
   metricsData: null,
-  reportGroupType: ReportGroupTypes.ADVERTISER
+  reportGroupType: ReportGroupTypes.ADVERTISER,
+  chartTypeSelected: ''
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_CHART_TYPE_SELECTED]: handleSetChartTypeSelected,
   [SET_ACTIVE_REPORT_GROUP_TYPE]: handleSetReportGroupType,
   [SET_TIME_RANGE]: handleSetTimeRange,
   [SET_UNIT]: handleSetUnit,
@@ -53,12 +58,11 @@ const handleActions = {
 };
 
 function handleReset(state, action) {
-  state.timeRange = '';
-  state.unit = '';
-  state.url = '';
-  state.metricBodyRequest = {};
-  state.metricsData = null;
-  state.reportGroupType = ReportGroupTypes.ADVERTISER;
+  state = entityReportInitialState;
+}
+
+function handleSetChartTypeSelected(state, action) {
+  state.chartTypeSelected = action.payload.chartType;
 }
 
 function handleSetReportGroupType(state, action) {
@@ -109,7 +113,21 @@ const makeSelectReportGroupType = () =>
     a => a.reportGroupType
   );
 
+const makeSelectChartTypeSelected = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.chartTypeSelected
+  );
+
 //---> Hook to select state
+export function useChartTypeSelectedSelector() {
+  const selectChartTypeSelected = React.useMemo(
+    makeSelectChartTypeSelected,
+    []
+  );
+  return useSelector(state => selectChartTypeSelected(state));
+}
+
 export function useReportGroupTypeSelector() {
   const selectReportGroupType = React.useMemo(makeSelectReportGroupType, []);
   return useSelector(state => selectReportGroupType(state));

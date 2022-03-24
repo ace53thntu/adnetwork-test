@@ -10,9 +10,11 @@ export const useReport = ({
   colorDefault = [],
   metricSet = []
 }) => {
+  console.log('🚀 ~ file: useReport.js ~ line 13 ~ colorDefault', colorDefault);
   const {setValue} = useFormContext();
   const [colors, setColors] = React.useState([]);
   const [typeSelected, setTypeSelected] = React.useState(['line']);
+  console.log('🚀 ~ file: useReport.js ~ line 16 ~ typeSelected', typeSelected);
 
   const onChangeColor = (index, selectedColor) => {
     const listColors = [...colors].map((item, idx) => {
@@ -30,10 +32,12 @@ export const useReport = ({
   };
 
   const onSelectType = value => {
+    console.log('🚀 ~ file: useReport.js ~ line 34 ~ value', value);
     setTypeSelected(value);
     setValue(
       `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
-      value
+      value,
+      {shouldDirty: true, shouldValidate: true}
     );
   };
 

@@ -24,12 +24,7 @@ import {
 } from 'constants/report';
 import {ReportGroupTypes} from './constants.js';
 import {getReportById} from './utils/getReportById';
-
-// Constants
-const randomHex = () =>
-  `#${Math.floor(Math.random() * 0xffffff)
-    .toString(16)
-    .padEnd(6, '0')}`;
+import {randomHex} from './utils/parseColors';
 
 // Component
 const ReportForm = ({

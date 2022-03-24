@@ -30,3 +30,18 @@ export const hexToRgbA = (hex = '#e09f3e') => {
   }
   return 'rgba(75,192,192,0.4)'; //throw new Error('Bad Hex');
 };
+
+export const randomHex = () =>
+  `#${Math.floor(Math.random() * 0xffffff)
+    .toString(16)
+    .padEnd(6, '0')}`;
+
+export const initializingColors = ({sizeOfData = 0}) => {
+  if (sizeOfData === 0) return [];
+  const tmpArr = [];
+
+  for (let index = 0; index < sizeOfData; index++) {
+    tmpArr.push(randomHex());
+  }
+  return tmpArr;
+};

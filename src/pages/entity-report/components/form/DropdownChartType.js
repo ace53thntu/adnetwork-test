@@ -15,6 +15,12 @@ import ColorSlider from './ColorSlider';
 import BarSparkline from './BarSparkline';
 import {Tooltip} from '@material-ui/core';
 import {useOnClickOutside} from 'hooks/useOnClickOutside';
+import {useDispatch} from 'react-redux';
+import {
+  setChartTypeSelectedRedux,
+  setMetricBodyRedux,
+  useMetricsBodySelector
+} from 'store/reducers/entity-report';
 
 const DropdownChartType = ({
   metricSet = [],
@@ -24,6 +30,10 @@ const DropdownChartType = ({
   chartType = 'line',
   isChartCompare = false
 }) => {
+  const dispatch = useDispatch();
+
+  const metricBody = useMetricsBodySelector();
+
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
       return ['pie', 'line'];
@@ -44,6 +54,15 @@ const DropdownChartType = ({
   function onClickChartType(evt, type) {
     evt.preventDefault();
     onSelectType(type);
+    dispatch(setChartTypeSelectedRedux(type));
+    if (metricBody.time_unit !== 'global') {
+      dispatch(
+        setMetricBodyRedux({
+          ...metricBody,
+          time_unit: 'global'
+        })
+      );
+    }
   }
 
   return (

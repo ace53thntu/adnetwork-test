@@ -28,10 +28,6 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
 
   const isChartCompare =
     !reportByUuid && reportSource?.value !== reportBy?.value;
-  console.log(
-    '🚀 ~ file: ConfigChart.js ~ line 33 ~ ConfigChart ~ isChartCompare',
-    isChartCompare
-  );
 
   React.useEffect(() => {
     setValue(

@@ -9,10 +9,13 @@ import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
 import {DialogConfirm, LoadingIndicator} from 'components/common';
-import {METRIC_SETS} from 'constants/report';
+import {ChartTypes} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {setMetricBodyRedux} from 'store/reducers/entity-report';
+import {
+  setChartTypeSelectedRedux,
+  setMetricBodyRedux
+} from 'store/reducers/entity-report';
 import ChartItem from '../chart-item/chart-item';
 import {DefaultColor} from '../../constants.js/index.js';
 import ModalReportForm from '../../create-report.modal';
@@ -50,21 +53,23 @@ export default function ReportItem({
   const metricRequestBody = getMetricRequestBody({report: reportItem});
 
   const color = properties?.color || [DefaultColor];
-  const chartType = properties?.chart_type || 'line';
+  const chartType = properties?.chart_type || ChartTypes.LINE;
   const metricSet = properties?.metric_set || [];
   const colors = parseColors(color);
   const reportByUuid = getReportById({report: reportItem, entityId});
 
   const {mutateAsync: deleteReport} = useDeleteReport();
-
   const metricData = useChartData({
     type: chartType,
     metrics,
     unit,
     timeRange,
     metricSet,
-    entityId: reportByUuid
+    entityId: reportByUuid,
+    chartType
   });
+  console.log('🚀 ~ file: report-item.js ~ line 71 ~ chartType', chartType);
+  console.log('🚀 ~ file: report-item.js ~ line 68 ~ metricData', metricData);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);
@@ -82,8 +87,8 @@ export default function ReportItem({
     if (isSelected) {
       return;
     }
-    console.log('metricRequestBody ====', metricRequestBody);
     dispatch(setMetricBodyRedux(metricRequestBody));
+    dispatch(setChartTypeSelectedRedux(chartType));
     setOpenModal(true);
   };
 
@@ -153,14 +158,12 @@ export default function ReportItem({
           <div>
             <ChartItem
               series={metricData?.series}
-              categories={metricData?.categories}
-              nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
               chartType={chartType}
               color={colors}
-              reportId={reportId}
               unit={unit}
               metricSet={metricSet}
-              data={metricData?.series?.[0]?.data || []}
+              pieData={metricData}
+              pieColor={color}
             />
             <MetricInfo
               timeRange={timeRange}

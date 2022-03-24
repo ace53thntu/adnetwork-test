@@ -2,22 +2,26 @@
 import React from 'react';
 
 //---> External Modules
-import {useFormContext, useWatch} from 'react-hook-form';
 
 //---> Build-in Modules
 import {R2ChartPie} from '../charts';
-import {REPORT_INPUT_NAME} from 'constants/report';
-import {parseColors} from 'pages/entity-report/utils';
 
-const CustomPieChart = ({series}) => {
-  const {control} = useFormContext();
-  const color = useWatch({
-    control,
-    name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
-  });
+const CustomPieChart = ({pieData, colors = []}) => {
+  const dataDestructured = React.useMemo(() => {
+    if (pieData) {
+      return pieData?.datasets?.map(item => {
+        return {...item, backgroundColor: colors};
+      });
+    }
+    return [];
+  }, [colors, pieData]);
 
-  const colorParsed = parseColors(color);
-  return <R2ChartPie series={series} color={colorParsed} />;
+  return (
+    <R2ChartPie
+      pieData={{...pieData, datasets: dataDestructured}}
+      colors={colors}
+    />
+  );
 };
 
 export default CustomPieChart;

@@ -2,22 +2,19 @@ import React from 'react';
 // import CustomPieChart from './CustomPieChart';
 import {useConfigChart} from '../../hooks/useConfigChart';
 import {R2ChartBar, R2ChartLine} from '..';
-import R2ChartPie from '../charts/R2ChartPie';
 import {FORMAT_BY_UNIT} from 'constants/report';
+import CustomPieChart from '../form/CustomPieChart';
 
 const ChartItem = ({
-  nameOfSeries = '',
   chartType = 'line',
   color,
-  reportId,
   unit = 'day',
-  height = '250',
   series,
-  categories,
-  isDetails = false,
-  metricSet = []
+  metricSet = [],
+  pieData = {},
+  pieColor = ''
 }) => {
-  const convertUnit = unit; //unit === 'fiveseconds' ? 'second' : unit;
+  const convertUnit = unit;
   const formatDateStr = FORMAT_BY_UNIT[convertUnit];
 
   const {data: chartData, options} = useConfigChart({
@@ -29,6 +26,8 @@ const ChartItem = ({
     metricSet
   });
 
+  const convertPieColors = JSON.parse(pieColor) || [];
+
   return (
     <div>
       {(() => {
@@ -37,7 +36,7 @@ const ChartItem = ({
         } else if (chartType === 'bar') {
           return <R2ChartBar data={chartData} options={options} />;
         } else if (chartType === 'pie') {
-          return <R2ChartPie series={series} color={color} />;
+          return <CustomPieChart pieData={pieData} colors={convertPieColors} />;
         } else {
           return <div>Up coming</div>;
         }

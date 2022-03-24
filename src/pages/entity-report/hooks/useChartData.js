@@ -1,7 +1,128 @@
 import {useMemo} from 'react';
 import moment from 'moment';
-import {FORMAT_BY_UNIT} from 'constants/report';
+import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
+
+/**
+ * Hook handle data to render to Chart
+ *
+ */
+export const useChartData = ({
+  type = ChartTypes.LINE,
+  metrics: metricData,
+  unit = 'hour',
+  timeRange = 'l1d',
+  metricSet = [],
+  entityId,
+  chartType = '',
+  colors = []
+}) => {
+  console.log('🚀 ~ file: useChartData.js ~ line 20 ~ chartType', chartType);
+  return useMemo(() => {
+    if (metricData) {
+      const {
+        report: metrics = {},
+        start_time,
+        end_time,
+        info = {}
+      } = metricData;
+      // return null;
+      if (chartType === ChartTypes.PIE) {
+        return getDataPieChart({metrics, metricSet, info, colors});
+      }
+
+      return getDataLineChart({
+        start_time,
+        end_time,
+        metricSet,
+        unit,
+        metrics,
+        entityId
+      });
+    }
+    return null;
+  }, [chartType, colors, entityId, metricData, metricSet, unit]);
+};
+
+const getDataPieChart = ({metrics, metricSet, info, colors}) => {
+  if (
+    metrics &&
+    typeof metrics === 'object' &&
+    Object.keys(metrics).length > 0
+  ) {
+    const metricData = metrics?.['0'];
+    if (metricData && Object.keys(metricData).length > 0) {
+      const data = Object.entries(metricData).reduce(
+        (acc, [objectUuid, metricObj], idx) => {
+          const metricValue = metricObj?.[metricSet?.[0]?.code] || 0;
+          const metricLabel = info?.[objectUuid]?.name;
+          acc.datasets[0].data.push(metricValue);
+          acc.labels.push(metricLabel);
+          return acc;
+        },
+        {datasets: [{data: [], backgroundColor: colors}], labels: []}
+      );
+      return data;
+    }
+  }
+  return {
+    datasets: [],
+    labels: []
+  };
+};
+
+const getDataLineChart = ({
+  start_time,
+  end_time,
+  metricSet,
+  unit,
+  metrics,
+  entityId
+}) => {
+  const startTime = moment.unix(start_time);
+  const endTime = moment.unix(end_time);
+  const increaseNumber = 1; // unit === 'fiveseconds' ? 5 : 1;
+  const unitStr = unit; // unit === 'fiveseconds' ? 'second' : unit;
+  //---> Get list of checkpoints
+  const listCheckPoints = enumerateDaysBetweenDates({
+    startDate: startTime,
+    endDate: endTime,
+    formatStr: FORMAT_BY_UNIT[unitStr],
+    unit: `${unitStr}s`,
+    increaseNumber
+  });
+
+  const newMetrics = convertApiToRender({
+    unit: unitStr,
+    metrics,
+    listCheckPoints
+  });
+
+  if (validArray({list: metricSet})) {
+    const data = [];
+    metricSet.forEach(item => {
+      const dataItem = getDataDrawChart({
+        listCheckPoints,
+        metrics: newMetrics,
+        entityId,
+        metricSet: item
+      });
+      data.push({data: dataItem, name: item?.label});
+    });
+    return {series: data, categories: listCheckPoints};
+  } else {
+    const data = getDataDrawChart({
+      listCheckPoints,
+      metrics: newMetrics,
+      entityId,
+      metricSet
+    });
+    return {
+      categories: listCheckPoints,
+      series: [{data, name: metricSet?.label}]
+    };
+  }
+};
 
 const mappingData = ({data, fieldName}) => {
   const existedData = data?.[fieldName];
@@ -87,73 +208,4 @@ const getDataDrawChart = ({
     return acc;
   }, []);
   return data;
-};
-
-export const useChartData = ({
-  type = 'line',
-  metrics: metricData,
-  unit = 'hour',
-  timeRange = 'l1d',
-  metricSet = [],
-  entityId
-}) => {
-  console.log('🚀 ~ file: useChartData.js ~ line 98 ~ entityId', entityId);
-  return useMemo(() => {
-    if (metricData) {
-      const {report: metrics = {}, start_time, end_time} = metricData;
-
-      const startTime = moment.unix(start_time);
-      const endTime = moment.unix(end_time);
-      const increaseNumber = 1; // unit === 'fiveseconds' ? 5 : 1;
-      const unitStr = unit; // unit === 'fiveseconds' ? 'second' : unit;
-      //---> Get list of checkpoints
-      const listCheckPoints = enumerateDaysBetweenDates({
-        startDate: startTime,
-        endDate: endTime,
-        formatStr: FORMAT_BY_UNIT[unitStr],
-        unit: `${unitStr}s`,
-        increaseNumber
-      });
-
-      const newMetrics = convertApiToRender({
-        unit: unitStr,
-        metrics,
-        listCheckPoints
-      });
-      console.log(
-        '🚀 ~ file: useChartData.js ~ line 114 ~ returnuseMemo ~ listCheckPoints',
-        listCheckPoints
-      );
-      console.log(
-        '🚀 ~ file: useChartData.js ~ line 120 ~ returnuseMemo ~ newMetrics',
-        newMetrics
-      );
-
-      if (validArray({list: metricSet})) {
-        const data = [];
-        metricSet.forEach(item => {
-          const dataItem = getDataDrawChart({
-            listCheckPoints,
-            metrics: newMetrics,
-            entityId,
-            metricSet: item
-          });
-          data.push({data: dataItem, name: item?.label});
-        });
-        return {series: data, categories: listCheckPoints};
-      } else {
-        const data = getDataDrawChart({
-          listCheckPoints,
-          metrics: newMetrics,
-          entityId,
-          metricSet
-        });
-        return {
-          categories: listCheckPoints,
-          series: [{data, name: metricSet?.label}]
-        };
-      }
-    }
-    return null;
-  }, [entityId, metricData, metricSet, unit]);
 };

@@ -8,10 +8,11 @@ import {useDispatch} from 'react-redux';
 import {ButtonGroup, Row, Col} from 'reactstrap';
 
 //---> Internal Modules
-import {REPORT_INPUT_NAME} from 'constants/report';
+import {ChartTypes, REPORT_INPUT_NAME} from 'constants/report';
 import {validTimeRange} from 'pages/entity-report/utils/validateReportTime';
 import {
   setMetricBodyRedux,
+  useChartTypeSelectedSelector,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
@@ -29,6 +30,7 @@ export default function TimeUnit({defaultValue}) {
   const dispatch = useDispatch();
 
   const metricBody = useMetricsBodySelector();
+  const chartTypeRedux = useChartTypeSelectedSelector();
   const [activeUnit, setActiveUnit] = React.useState(null);
 
   const {watch, register, setValue, errors} = useFormContext();
@@ -121,8 +123,21 @@ export default function TimeUnit({defaultValue}) {
     setActiveUnit(defaultValue);
   }, [setValue, defaultValue]);
 
+  React.useEffect(() => {
+    if (chartTypeRedux === ChartTypes.PIE) {
+      setValue(unitName, JSON.stringify({value: 'global', label: 'Global'}), {
+        shouldValidate: true,
+        shouldDirty: true
+      });
+      setActiveUnit({value: 'global', label: 'Global'});
+    }
+  }, [setValue, chartTypeRedux]);
+
   return timeRangeSelected && timeRangeSelected !== 'null' ? (
-    <Row className="ml-2">
+    <Row
+      className="ml-2"
+      style={{display: chartTypeRedux === ChartTypes.PIE ? 'none' : 'flex'}}
+    >
       <Col md={12} className="d-flex align-items-start">
         <div className="mr-2 font-weight-bold">Unit</div>
         <div>

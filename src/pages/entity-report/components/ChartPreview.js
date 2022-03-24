@@ -3,7 +3,7 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {useFormContext, useWatch} from 'react-hook-form';
+import {useFormContext} from 'react-hook-form';
 import {Card, CardBody, Col, Row} from 'reactstrap';
 import _ from 'lodash';
 
@@ -11,15 +11,20 @@ import _ from 'lodash';
 import {
   DEFAULT_TIME_UNIT,
   REPORT_INPUT_NAME,
-  METRIC_SETS
+  METRIC_SETS,
+  ChartTypes
 } from 'constants/report';
 import CustomLineChart from './form/CustomLineChart';
 import CustomPieChart from './form/CustomPieChart';
-import {useMetricsBodySelector} from 'store/reducers/entity-report';
+import {
+  useChartTypeSelectedSelector,
+  useMetricsBodySelector
+} from 'store/reducers/entity-report';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useChartData} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
+import {initializingColors} from '../utils/parseColors';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -44,8 +49,6 @@ const ChartPreview = ({
 
   React.useEffect(() => {
     if (!_.isEqual(metricRequestRedux, currentMetricRequest)) {
-      console.log('ChartPreview === 1', metricRequestRedux);
-      console.log('ChartPreview === 2', currentMetricRequest);
       setCurrentMetricRequest(metricRequestRedux);
     }
   }, [currentMetricRequest, metricRequestRedux]);
@@ -57,6 +60,10 @@ const ChartPreview = ({
   if (status === QueryStatuses.ERROR) {
     return <NoDataAvailable />;
   }
+
+  // if (true) {
+  //   return <></>;
+  // }
 
   return (
     <ChartPreviewContent
@@ -73,19 +80,44 @@ ChartPreview.propTypes = propTypes;
 
 const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId}) => {
+    const chartTypeRedux = useChartTypeSelectedSelector();
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 84 ~ chartTypeRedux',
+      chartTypeRedux
+    );
     const chartData = useChartData({
       metrics,
       unit,
       timeRange,
       metricSet,
-      entityId
+      entityId,
+      chartType: chartTypeRedux
     });
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 96 ~ chartTypeRedux',
+      chartTypeRedux
+    );
+    console.log('🚀 ~ file: ChartPreview.js ~ line 88 ~ chartData', chartData);
 
-    const {control} = useFormContext();
-    const selectedType = useWatch({
-      name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
-      control
-    });
+    const colors = initializingColors({sizeOfData: chartData?.labels?.length});
+
+    const {watch, setValue} = useFormContext();
+
+    const selectedType = watch(
+      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
+    );
+
+    React.useEffect(
+      function setColorValue() {
+        if (chartTypeRedux === ChartTypes.PIE) {
+          setValue(
+            `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+            JSON.stringify(colors)
+          );
+        }
+      },
+      [chartTypeRedux, colors, setValue]
+    );
 
     return (
       <Row className="chart-preview">
@@ -113,13 +145,13 @@ const ChartPreviewContent = React.memo(
               )}
               {selectedType === 'pie' && (
                 <CustomPieChart
-                  series={chartData?.series}
-                  categories={chartData?.categories}
+                  pieData={chartData}
                   nameOfSeries={
                     METRIC_SETS?.[metricSet?.code]?.label || 'No label'
                   }
                   unit={unit || DEFAULT_TIME_UNIT}
                   metricSet={metricSet}
+                  colors={colors}
                 />
               )}
             </CardBody>

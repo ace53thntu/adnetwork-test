@@ -4,7 +4,6 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {Pie} from 'react-chartjs-2';
-import {usePieChart} from 'pages/entity-report/hooks';
 
 //---> Internal Modules
 
@@ -13,9 +12,8 @@ const propTypes = {
   color: PropTypes.array
 };
 
-const R2ChartPie = ({series = [], color = []}) => {
-  const data = usePieChart({series, color});
-  return <Pie data={data} />;
+const R2ChartPie = ({pieData}) => {
+  return <Pie data={pieData} />;
 };
 
 R2ChartPie.propTypes = propTypes;
