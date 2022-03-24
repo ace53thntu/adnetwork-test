@@ -42,6 +42,8 @@ import {
   useGetTrackerTemplates
 } from 'queries/tracker-template';
 import {TrackerTemplateTypes} from './constant';
+import {formatValue} from 'react-currency-input-field';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {};
 
@@ -119,7 +121,23 @@ const TrackerTemplateList = () => {
       },
       {
         header: 'Price',
-        accessor: 'price'
+        accessor: 'price',
+        cell: row => {
+          return (
+            <Badge color="info">
+              {row?.value
+                ? formatValue({
+                    value: HandleCurrencyFields.convertApiToGui({
+                      value: row?.value
+                    })?.toString(),
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    prefix: '$'
+                  })
+                : ''}
+            </Badge>
+          );
+        }
       },
       {
         accessor: 'status',

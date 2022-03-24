@@ -19,7 +19,7 @@ export const InputNames = {
 
 export const TrackerTemplateTypes = {
   DEFAULT: 'default',
-  VAST_WRAPPER: 'vast-wrapper'
+  VAST_WRAPPER: 'vastWrapper'
 };
 
 export const TrackerTemplateTypeOptions = [

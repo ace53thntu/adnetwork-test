@@ -3,6 +3,7 @@ import {
   TrackerTemplateTypeOptions,
   TrackerTemplateTypes
 } from 'pages/setting/tracker-template/constant';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 export const TRACKER_TEMPLATE_ENTITY = {
   id: '',
@@ -54,6 +55,8 @@ export const apiToForm = ({trackerTemplate = null}) => {
       ? TrackerTemplateTypeOptions.find(typeItem => typeItem?.value === type)
       : null;
 
+    const priceConverted = HandleCurrencyFields.convertApiToGui({value: price});
+
     return {
       uuid: id,
       id,
@@ -72,7 +75,7 @@ export const apiToForm = ({trackerTemplate = null}) => {
       third_quartile,
       complete,
       click_url_append_params,
-      price
+      price: priceConverted
     };
   }
 
@@ -100,6 +103,8 @@ export const formToApi = ({formData = {}}) => {
       price
     } = formData;
 
+    const priceConverted = HandleCurrencyFields.convertGuiToApi({value: price});
+
     return {
       name,
       status,
@@ -116,7 +121,7 @@ export const formToApi = ({formData = {}}) => {
       third_quartile,
       complete,
       click_url_append_params,
-      price: parseFloat(price) || 0
+      price: priceConverted
     };
   }
 

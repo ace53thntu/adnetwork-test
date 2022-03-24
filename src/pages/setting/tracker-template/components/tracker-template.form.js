@@ -146,6 +146,11 @@ const TrackerTemplateForm = ({
                   name={InputNames.PRICE}
                   label={t('price')}
                   placeholder="0.00"
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={3}
+                  prefix="$"
                   required
                 />
               </Col>
