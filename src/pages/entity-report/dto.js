@@ -1,6 +1,7 @@
 import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {
+  ChartTypes,
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
   EntityTypes,
@@ -84,13 +85,20 @@ export function mappingApiToForm({report}) {
     report_by_name,
     report_by_uuid
   } = api;
+  // Handle time range
   time_range = METRIC_TIMERANGES.find(item => item.value === time_range);
+
+  // Handle report source
   report_source = getReportSources().find(
     item => item?.value === report_source
   );
+
+  // Handle report by
   report_by = isPublisher
     ? PublisherReportBys.find(item => item?.value === report_by)
     : ReportBys.find(item => item?.value === report_by);
+
+  // Handle report type
   report_type = ReportTypeOptions.find(item => item?.value === report_type);
   if (report_type?.value === ReportTypes.TRENDING) {
     start_time = null;
@@ -102,23 +110,26 @@ export function mappingApiToForm({report}) {
       startTime: start_time,
       endTime: end_time
     });
-    console.log(
-      '🚀 ~ file: dto.js ~ line 105 ~ mappingApiToForm ~ distributionUnits',
-      distributionUnits
-    );
     time_unit = distributionUnits.find(item => item.value === time_unit);
   } else {
     time_unit = time_range?.units?.find(item => item?.value === time_unit);
   }
-  console.log('new Date(start_time) ===', new Date(start_time));
+
+  // Handle start time, end time
   start_time = start_time ? new Date(start_time) : new Date();
   end_time = end_time ? new Date(end_time) : null;
   const reportByUuid = report_by_uuid
     ? {value: report_by_uuid, label: report_by_name}
     : null;
 
+  // Handle color
+  const colorConverted =
+    properties?.chart_type === ChartTypes.PIE
+      ? getColorForPieChart({color: properties?.color})
+      : properties.color;
+
   return {
-    properties,
+    properties: {...properties, color: colorConverted},
     api: {
       time_range: JSON.stringify(time_range),
       time_unit,
@@ -135,7 +146,6 @@ export function mappingApiToForm({report}) {
 export const initDefaultValue = ({
   initColors = [],
   metricType,
-  distributionBy,
   entityType,
   sourceUuid
 }) => {
@@ -160,4 +170,13 @@ export const initDefaultValue = ({
     report_type: {label: capitalize('trending'), value: 'trending'},
     source_uuid: sourceUuid
   };
+};
+
+export const getColorForPieChart = ({color}) => {
+  try {
+    const colors = JSON.parse(color);
+    return colors;
+  } catch (errr) {
+    return [];
+  }
 };

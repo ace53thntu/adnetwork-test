@@ -11,6 +11,10 @@ export const ChartTypes = {
   PIE: 'pie'
 };
 
+/**
+ * Types of report.
+ * @enum {string}
+ */
 export const ReportTypes = {
   TRENDING: 'trending',
   DISTRIBUTION: 'distribution'
@@ -34,24 +38,24 @@ export const METRIC_TIMERANGES = [
     units: [{value: 'month', label: 'Month'}]
   },
   {
-    value: 'l9m',
+    value: 'l9mt',
     label: '9 months',
     units: [{value: 'month', label: 'Month'}]
   },
   {
-    value: 'l6m',
+    value: 'l6mt',
     label: '6 months',
     units: [{value: 'month', label: 'Month'}]
   },
   {
-    value: 'l3m',
+    value: 'l3mt',
     label: '3 months',
     units: [
       {value: 'month', label: 'Month'},
       {value: 'day', label: 'Day'}
     ]
   },
-  {value: 'l1m', label: '1 month', units: [{value: 'day', label: 'Day'}]},
+  {value: 'l1mt', label: '1 month', units: [{value: 'day', label: 'Day'}]},
   {value: 'l2w', label: '2 weeks', units: [{value: 'day', label: 'Day'}]},
   {
     value: 'l1w',
@@ -163,7 +167,7 @@ export const REPORT_INPUT_NAME = {
   REPORT_BY_UUID: 'report_by_uuid'
 };
 
-export const DEFAULT_TIME_RANGE = 'l1m';
+export const DEFAULT_TIME_RANGE = 'l1mt';
 export const DEFAULT_TIME_UNIT = 'day';
 
 export const FORMAT_BY_UNIT = {

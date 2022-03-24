@@ -60,27 +60,27 @@ export const PublisherReportBys = [
   {
     value: 'inventory',
     label: 'Inventory'
-  },
-  {
-    value: 'inv_dsp',
-    label: 'Inventory Dsp'
-  },
-  {
-    value: 'inv_dsp_core',
-    label: 'Inventory Dsp Core'
-  },
-  {
-    value: 'inv_dsp_hb',
-    label: 'Inventory Dsp Header Bidding'
-  },
-  {
-    value: 'inv_default',
-    label: 'Inventory Ad Default'
-  },
-  {
-    value: 'inv_adv',
-    label: 'Inventory Advertiser '
   }
+  // {
+  //   value: 'inv_dsp',
+  //   label: 'Inventory Dsp'
+  // },
+  // {
+  //   value: 'inv_dsp_core',
+  //   label: 'Inventory Dsp Core'
+  // },
+  // {
+  //   value: 'inv_dsp_hb',
+  //   label: 'Inventory Dsp Header Bidding'
+  // },
+  // {
+  //   value: 'inv_default',
+  //   label: 'Inventory Ad Default'
+  // },
+  // {
+  //   value: 'inv_adv',
+  //   label: 'Inventory Advertiser '
+  // }
 ];
 
 export const Sources = [

@@ -16,11 +16,11 @@ import {
   setChartTypeSelectedRedux,
   setMetricBodyRedux
 } from 'store/reducers/entity-report';
-import ChartItem from '../chart-item/chart-item';
+import ChartItem from '../chart-item/ChartItem';
 import {DefaultColor} from '../../constants.js/index.js';
-import ModalReportForm from '../../create-report.modal';
+import ModalReportForm from '../../ReportCreateModal';
 import {useChartData} from '../../hooks';
-import MetricInfo from './metric-info';
+import MetricInfo from './MetricInfo';
 import {ReportItemStyled} from '../../styled';
 import {parseColors} from '../../utils';
 import {getMetricRequestBody} from '../../utils/metricRequest';

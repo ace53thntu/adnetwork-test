@@ -1,2 +1,2 @@
-export {default as MetricInfo} from './metric-info';
-export {default as ReportItem} from './report-item';
+export {default as MetricInfo} from './MetricInfo';
+export {default as ReportItem} from './ReportItem';

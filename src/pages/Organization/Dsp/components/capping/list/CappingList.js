@@ -28,10 +28,6 @@ const propTypes = {
 };
 
 const CappingList = ({referenceUuid = '', referenceType = ''}) => {
-  console.log(
-    '🚀 ~ file: CappingList.js ~ line 34 ~ CappingList ~ referenceType',
-    referenceType
-  );
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -44,7 +40,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: DEFAULT_PAGINATION.page,
-      sort: 'created_at DESC',
+      sort: 'updated_at DESC',
       reference_uuid: referenceUuid
     },
     enabled: !!referenceUuid
@@ -88,10 +84,6 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   }
 
   async function onEditCapping(formData) {
-    console.log(
-      '🚀 ~ file: CappingList.js ~ line 122 ~ onEditCapping ~ formData',
-      formData
-    );
     const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {

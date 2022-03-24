@@ -1,1 +1,1 @@
-export {default as ChartItem} from './chart-item';
+export {default as ChartItem} from './ChartItem';

@@ -1,3 +1,5 @@
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
+
 /**
  * Mapping API response to form data format
  * @param {*} apiResp - API response data
@@ -69,8 +71,8 @@ export const mappingFormToApi = ({formData, isEdit}) => {
   };
 
   if (!isEdit) {
-    const daily = parseFloat(formData?.budget?.daily) || 0;
-    const global = parseFloat(formData?.budget?.global) || 0;
+    const daily = convertGuiToApi({value: formData?.budget?.daily});
+    const global = convertGuiToApi({value: formData?.budget?.global});
     const budget = {
       daily,
       global

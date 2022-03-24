@@ -10,6 +10,7 @@ import {Col, Label, Row} from 'reactstrap';
 // Internal Modules
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import {INPUT_NAME} from '../../constants';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const propTypes = {
   defaultValues: PropTypes.object,
@@ -69,17 +70,39 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
       {!isEdit && !isView && (
         <>
           <Col sm="4">
-            <FormTextInput
+            {/* <FormTextInput
               name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.GLOBAL}`}
               label="Budget global"
               placeholder="0"
+            /> */}
+            <CurrencyInputField
+              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.GLOBAL}`}
+              placeholder="0.0"
+              label={t('COMMON.BUDGET_GLOBAL')}
+              decimalSeparator="."
+              groupSeparator=","
+              disableGroupSeparators={false}
+              decimalsLimit={3}
+              prefix="$"
+              required
             />
           </Col>
           <Col sm="4">
-            <FormTextInput
+            {/* <FormTextInput
               name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.DAILY}`}
               label="Budget daily"
               placeholder="0"
+            /> */}
+            <CurrencyInputField
+              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.DAILY}`}
+              placeholder="0.0"
+              label={t('COMMON.BUDGET_DAILY')}
+              decimalSeparator="."
+              groupSeparator=","
+              disableGroupSeparators={false}
+              decimalsLimit={3}
+              prefix="$"
+              required
             />
           </Col>
         </>

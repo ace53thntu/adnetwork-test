@@ -9,11 +9,6 @@ const DistributionUnits = {
 };
 
 const checkUnitToCompare = (startTime, endTime, granularity) => {
-  console.log(
-    'moment(startTime).isSame(endTime, granularity)',
-    moment(startTime).isSame(endTime, granularity),
-    granularity
-  );
   return {isSame: moment(startTime).isSame(endTime, granularity), granularity};
 };
 
@@ -42,7 +37,6 @@ export function getDistributionUnits({startTime, endTime}) {
         }
       }
     }
-    console.log('granularityGlobal ====', granularityGlobal);
   } catch (err) {
     throw Error(`Get distribution unit has error: ${err}`);
   }

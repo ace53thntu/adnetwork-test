@@ -6,17 +6,17 @@ import PropTypes from 'prop-types';
 import {Col, Row} from 'reactstrap';
 
 //---> Internal Modules
-import ReportList from './report-list';
-import ReportForm from './report.form';
+import ReportList from './ReportList';
+import ReportForm from './ReportForm';
 import {EntityTypes, METRIC_TYPES} from 'constants/report';
 import {LoadingIndicator} from 'components/common';
 import {useGetReportsInfinite} from 'queries/report/useGetReports';
 import {Pagination} from 'components/list/pagination';
 import {getResponseData} from 'utils/helpers/misc.helpers';
-import {IS_RESPONSE_ALL} from 'constants/misc';
+import {IS_RESPONSE_ALL, Statuses} from 'constants/misc';
 import {useDispatch} from 'react-redux';
 import {setReportGroupRedux} from 'store/reducers/entity-report';
-import {ReportGroupTypes} from './constants.js';
+import {ReportGroupTypes} from './constants.js/index.js';
 
 const NUMBER_OF_PAGE = 10;
 
@@ -41,7 +41,8 @@ const EntityReport = ({
     params: {
       source_uuid: entityId,
       per_page: NUMBER_OF_PAGE,
-      sort: 'updated_at DESC'
+      sort: 'updated_at DESC',
+      status: Statuses.ACTIVE
     },
     enabled: true,
     reportType: entityType
@@ -79,9 +80,7 @@ const EntityReport = ({
           <ReportList
             reports={reports}
             entityId={entityId}
-            entityType={entityType}
             metricType={metricType}
-            distributionBy={distributionBy}
           />
           {hasNextPage && (
             <Pagination

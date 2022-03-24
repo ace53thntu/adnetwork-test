@@ -5,6 +5,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
+import {formatValue} from 'react-currency-input-field';
 
 // Internal Modules
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -15,6 +16,7 @@ import {CustomStatus} from 'components/list/status';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {
   list: PropTypes.array,
@@ -50,7 +52,20 @@ const BudgetList = ({
       {
         header: 'Target',
         accessor: 'target',
-        cell: row => row?.value?.toString() || ''
+        cell: row => (
+          <Badge color="warning" pill>
+            {row?.value
+              ? formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
+          </Badge>
+        )
       },
 
       {

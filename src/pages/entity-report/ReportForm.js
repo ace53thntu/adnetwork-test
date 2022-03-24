@@ -14,7 +14,7 @@ import {
   setMetricDataRedux,
   useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
-import ModalReportForm from './create-report.modal';
+import ModalReportForm from './ReportCreateModal';
 import {FormReactSelect} from 'components/forms';
 import {
   DEFAULT_TIME_RANGE,
@@ -22,7 +22,7 @@ import {
   PUBLISHER_REPORT_VIEW_TYPES,
   REPORT_VIEW_TYPES
 } from 'constants/report';
-import {ReportGroupTypes} from './constants.js';
+import {ReportGroupTypes} from './constants.js/index.js';
 import {getReportById} from './utils/getReportById';
 import {randomHex} from './utils/parseColors';
 
@@ -30,7 +30,6 @@ import {randomHex} from './utils/parseColors';
 const ReportForm = ({
   entityId = null,
   entityType = '',
-  distributionBy = '',
   metricType = '',
   ownerId,
   ownerRole
@@ -141,7 +140,6 @@ const ReportForm = ({
           metricSet={selectedMetricSet}
           initColors={colors}
           metricType={metricType}
-          distributionBy={distributionBy}
           entityType={entityType}
           entityId={entityId}
           ownerId={ownerId}
@@ -156,7 +154,6 @@ const ReportForm = ({
 ReportForm.propTypes = {
   entityId: PropTypes.string,
   entityType: PropTypes.string,
-  distributionBy: PropTypes.string,
   metricType: PropTypes.string
 };
 

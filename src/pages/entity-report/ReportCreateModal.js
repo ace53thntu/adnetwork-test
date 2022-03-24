@@ -10,8 +10,10 @@ import {initDefaultValue, mappingFormToApi} from './dto';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateReport, useEditReport, useGetReport} from 'queries/report';
 import ReportFormContent from './components/ReportFormContent';
-import './styles/styles.scss';
 import {QueryStatuses} from 'constants/react-query';
+
+//---> Styles
+import './styles/styles.scss';
 
 export default function ModalReportForm({
   modal = false,
@@ -23,7 +25,6 @@ export default function ModalReportForm({
   timeRange,
   isViewed = false,
   metricType = '',
-  distributionBy = '',
   entityType = '',
   entityId,
   reportId
@@ -36,7 +37,6 @@ export default function ModalReportForm({
   const initializeDefaultValue = initDefaultValue({
     initColors,
     metricType,
-    distributionBy,
     entityType,
     sourceUuid: entityId
   });

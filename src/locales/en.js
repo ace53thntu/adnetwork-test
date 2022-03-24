@@ -515,7 +515,9 @@ const en = {
   },
   //---> Common text
   COMMON: {
-    LOOP: 'Loop'
+    LOOP: 'Loop',
+    BUDGET_GLOBAL: 'Budget Global',
+    BUDGET_DAILY: 'Budget Daily'
   },
   FORM: {
     SELECT_POSITION: 'Select position',

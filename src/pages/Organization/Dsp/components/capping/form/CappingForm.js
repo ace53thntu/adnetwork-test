@@ -7,10 +7,11 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {Badge, Col, Form, Label, Row} from 'reactstrap';
 
 // Internal Modules
-import {FormTextInput} from 'components/forms';
 import {useTranslation} from 'react-i18next';
 import {schemaValidate} from '../validation';
 import {CappingTypes} from 'constants/misc';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -28,7 +29,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       cappingType === CappingTypes.IMPRESSION.value
     ) {
       return {
-        target: capping?.target,
+        target: HandleCurrencyFields.convertApiToGui({value: capping?.target}),
         status: capping?.status
       };
     }
@@ -53,11 +54,16 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               cappingType === CappingTypes.BUDGET_MANAGER.value ||
               cappingType === CappingTypes.IMPRESSION.value) && (
               <Col sm={6}>
-                <FormTextInput
+                <CurrencyInputField
                   name="target"
                   label="Target"
                   placeholder="0.0"
-                  isRequired
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={3}
+                  prefix="$"
+                  required
                 />
               </Col>
             )}

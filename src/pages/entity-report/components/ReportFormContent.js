@@ -55,10 +55,6 @@ export default function ReportFormContent({
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
-  console.log(
-    '🚀 ~ file: ReportFormContent.js ~ line 57 ~ defaultValues',
-    defaultValues
-  );
   const reportSourceOptions = getReportSources();
   const metricBody = useMetricsBodySelector();
   const reportByUuid = getReportById({report, entityId});

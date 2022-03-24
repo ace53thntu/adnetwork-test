@@ -2,7 +2,7 @@ import {ErrorBoundary} from 'components/common';
 import React from 'react';
 
 const EntityReportLz = React.lazy(() =>
-  import('./entity-report' /* webpackChunkName: "entity-report" */)
+  import('./EntityReport' /* webpackChunkName: "entity-report" */)
 );
 
 function EntityReport(props) {

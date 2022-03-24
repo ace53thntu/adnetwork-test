@@ -28,7 +28,7 @@ import {useCreateReportPage, useGetReportPages} from 'queries/report-page';
 import {useDestructurePageOptions} from 'pages/report-dashboard/hooks';
 import {USER_INFO_KEY} from 'utils/constants/auth.constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import MetricInfo from 'pages/entity-report/components/report-item/metric-info';
+import MetricInfo from 'pages/entity-report/components/report-item/MetricInfo';
 import {METRIC_SETS} from 'constants/report';
 import {ChartItem} from 'pages/entity-report/components/chart-item';
 

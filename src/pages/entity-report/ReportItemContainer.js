@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import ReportItem from './components/report-item/report-item';
+import ReportItem from './components/report-item/ReportItem';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {QueryStatuses} from 'constants/react-query';
 import {getMetricRequestBody} from './utils/metricRequest';
