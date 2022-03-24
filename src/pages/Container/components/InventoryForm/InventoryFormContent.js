@@ -178,8 +178,9 @@ const InventoryFormContent = ({
               disabled={isSubmitting}
               decimalSeparator="."
               groupSeparator=","
-              disableGroupSeparators={true}
-              decimalsLimit={10}
+              disableGroupSeparators={false}
+              decimalsLimit={3}
+              prefix="$"
             />
           </Col>
           {watchEnableDeal === InputStatus.ACTIVE && (
@@ -191,8 +192,9 @@ const InventoryFormContent = ({
                 disabled={isSubmitting}
                 decimalSeparator="."
                 groupSeparator=","
-                disableGroupSeparators={true}
-                decimalsLimit={10}
+                disableGroupSeparators={false}
+                decimalsLimit={3}
+                prefix="$"
                 required
               />
             </Col>

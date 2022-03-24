@@ -12,6 +12,8 @@ import {
   Badge
 } from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import {formatValue} from 'react-currency-input-field';
+import {useParams} from 'react-router';
 
 //---> Internal Modules
 import DialogConfirm from 'components/common/DialogConfirm';
@@ -19,7 +21,6 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useDeleteInventory, useGetInventoriesInfinity} from 'queries/inventory';
 import CreateInventory from './CreateInventory';
 import UpdateInventory from './UpdateInventory';
-import {useParams} from 'react-router';
 import {List} from 'components/list';
 import {
   getInventoryMarketTypeColor,
@@ -30,6 +31,7 @@ import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
 import {getResponseData} from 'utils/helpers/misc.helpers';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const ActionIndexes = {
   EDIT: 0,
@@ -105,7 +107,16 @@ function InventoryList() {
         accessor: 'floor_price',
         cell: row => (
           <Badge color="warning" pill>
-            {row?.value}
+            {row?.value
+              ? formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
           </Badge>
         )
       }
