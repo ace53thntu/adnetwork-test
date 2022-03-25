@@ -106,7 +106,7 @@ function InventoryList() {
         header: 'Floor price',
         accessor: 'floor_price',
         cell: row => (
-          <Badge color="warning" pill>
+          <Badge color="info" pill>
             {row?.value
               ? formatValue({
                   value: HandleCurrencyFields.convertApiToGui({

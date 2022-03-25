@@ -6,10 +6,9 @@ import PropTypes from 'prop-types';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Badge, Col, Form, Label, Row} from 'reactstrap';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 // Internal Modules
-import {FormTextInput} from 'components/forms';
-import {useTranslation} from 'react-i18next';
 import {schemaValidate} from '../validation';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
@@ -17,6 +16,8 @@ import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 import {CappingTypes} from 'constants/misc';
 import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {convertApiToGui} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -34,7 +35,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       cappingType === CappingTypes.IMPRESSION.value
     ) {
       return {
-        target: capping?.target,
+        target: convertApiToGui({value: capping?.target}),
         status: capping?.status
       };
     }
@@ -108,11 +109,16 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               cappingType === CappingTypes.BUDGET_MANAGER.value ||
               cappingType === CappingTypes.IMPRESSION.value) && (
               <Col sm={6}>
-                <FormTextInput
+                <CurrencyInputField
+                  required
                   name="target"
-                  label="Target"
                   placeholder="0.0"
-                  isRequired
+                  label={t('target')}
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={3}
+                  prefix="$"
                 />
               </Col>
             )}

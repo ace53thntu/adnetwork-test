@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
 
 const CAMPAIGN_ENTITY = {
   id: '',
@@ -82,12 +83,12 @@ export const formToApi = formData => {
     [CAMPAIGN_KEYS.START_TIME]: formatStartDate,
     [CAMPAIGN_KEYS.END_TIME]: formaEndDate,
     [CAMPAIGN_KEYS.BUDGET]: {
-      global: parseFloat(budget?.global) || 0,
-      daily: parseFloat(budget?.daily)
+      global: convertGuiToApi({value: budget?.global}), //parseFloat(budget?.global) || 0,
+      daily: convertGuiToApi({value: budget?.daily}) //parseFloat(budget?.daily)
     },
     [CAMPAIGN_KEYS.IMPRESSION]: {
-      global: parseFloat(impression?.global) || 0,
-      daily: parseFloat(impression?.daily)
+      global: convertGuiToApi({value: impression?.global}), //parseFloat(impression?.global) || 0,
+      daily: convertGuiToApi({value: impression?.daily}) //parseFloat(impression?.daily)
     }
   };
 

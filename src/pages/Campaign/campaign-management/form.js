@@ -8,15 +8,16 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router';
 import {useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import {useDispatch} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {useQueryClient} from 'react-query';
 
 //---> Internal Modules
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
 import {validationCampaign} from './validation';
-import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
-import {useQueryClient} from 'react-query';
 import {GET_CAMPAIGN} from 'queries/campaign/constants';
 import InformationGroup from './form-fields/InformationGroup';
 import BudgetGroup from './form-fields/BudgetGroup';
@@ -24,7 +25,6 @@ import ImpressionGroup from './form-fields/ImpressionGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
 import DomainGroup from './form-fields/DomainGroup';
 import {updateCampaignRedux} from 'store/reducers/campaign';
-import {useDispatch} from 'react-redux';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -42,7 +42,6 @@ const CampaignForm = ({
   currentCampaign = null
 }) => {
   const client = useQueryClient();
-
   const {t} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();

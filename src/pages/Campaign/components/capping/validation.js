@@ -15,15 +15,15 @@ export const schemaValidate = (t, cappingType) => {
         target: yup
           .string()
           .required(t('required'))
-          .test('is-float', 'Invalid number. Only allow integer > 0', value => {
-            const reg = /^\d+$/;
-            const parsed = parseInt(value, 10);
-            const isNumber = reg.test(value);
-            if (isNumber && parsed > 0) {
-              return true;
-            }
-            return false;
-          })
+          // .test('is-float', 'Invalid number. Only allow integer > 0', value => {
+          //   const reg = /^\d+$/;
+          //   const parsed = parseInt(value, 10);
+          //   const isNumber = reg.test(value);
+          //   if (isNumber && parsed > 0) {
+          //     return true;
+          //   }
+          //   return false;
+          // })
           .typeError('Invalid number. Only allow integer > 0')
       })
     );

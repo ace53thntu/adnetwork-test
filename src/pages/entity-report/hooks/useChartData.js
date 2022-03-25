@@ -144,7 +144,9 @@ const enumerateDaysBetweenDates = ({
 
     now.add(increaseNumber, unit);
   }
-  dates.length = dates?.length - 1;
+  if (validArray({list: dates})) {
+    dates.length = dates?.length - 1;
+  }
 
   return dates;
 };
