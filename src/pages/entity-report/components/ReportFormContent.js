@@ -159,6 +159,7 @@ export default function ReportFormContent({
               metricSet={metricSet}
               timeRange={timeRange}
               entityId={reportByUuid}
+              color={defaultValues?.properties?.color}
             />
           </ModalBody>
           <ModalFooter>

@@ -38,7 +38,8 @@ const ChartPreview = ({
   metricSet,
   unit,
   timeRange,
-  entityId
+  entityId,
+  color
 }) => {
   const metricRequestRedux = useMetricsBodySelector();
   const [currentMetricRequest, setCurrentMetricRequest] = React.useState({});
@@ -73,6 +74,7 @@ const ChartPreview = ({
       timeRange={currentMetricRequest?.time_range}
       metricSet={metricSet}
       entityId={currentMetricRequest?.report_by_uuid}
+      color={color}
     />
   );
 };
@@ -80,7 +82,7 @@ const ChartPreview = ({
 ChartPreview.propTypes = propTypes;
 
 const ChartPreviewContent = React.memo(
-  ({metrics, unit, timeRange, metricSet, entityId}) => {
+  ({metrics, unit, timeRange, metricSet, entityId, color}) => {
     const {t} = useTranslation();
     const chartTypeRedux = useChartTypeSelectedSelector();
     console.log(
@@ -98,7 +100,9 @@ const ChartPreviewContent = React.memo(
 
     console.log('🚀 ~ file: ChartPreview.js ~ line 88 ~ chartData', chartData);
 
-    const colors = initializingColors({sizeOfData: chartData?.labels?.length});
+    const colors = color
+      ? color
+      : initializingColors({sizeOfData: chartData?.labels?.length});
 
     const {watch, setValue} = useFormContext();
 
