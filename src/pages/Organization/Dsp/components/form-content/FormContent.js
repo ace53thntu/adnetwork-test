@@ -70,11 +70,6 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
       {!isEdit && !isView && (
         <>
           <Col sm="4">
-            {/* <FormTextInput
-              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.GLOBAL}`}
-              label="Budget global"
-              placeholder="0"
-            /> */}
             <CurrencyInputField
               name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.GLOBAL}`}
               placeholder="0.0"
@@ -88,11 +83,6 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
             />
           </Col>
           <Col sm="4">
-            {/* <FormTextInput
-              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.DAILY}`}
-              label="Budget daily"
-              placeholder="0"
-            /> */}
             <CurrencyInputField
               name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.DAILY}`}
               placeholder="0.0"

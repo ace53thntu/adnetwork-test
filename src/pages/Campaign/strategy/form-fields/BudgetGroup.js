@@ -1,5 +1,5 @@
 import {CollapseBox} from 'components/common';
-import {FormTextInput} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
@@ -13,19 +13,29 @@ const BudgetGroup = () => {
     <CollapseBox open title={t('budget')} unMount={false}>
       <Row>
         <Col md="4">
-          <FormTextInput
-            placeholder={t('global')}
+          <CurrencyInputField
             name="budget.global"
             label={t('global')}
-            isRequired
+            placeholder="0.0"
+            decimalSeparator="."
+            groupSeparator=","
+            disableGroupSeparators={false}
+            decimalsLimit={3}
+            prefix="$"
+            required
           />
         </Col>
         <Col md="4">
-          <FormTextInput
-            placeholder={t('daily')}
+          <CurrencyInputField
             name="budget.daily"
             label={t('daily')}
-            isRequired
+            placeholder="0.0"
+            decimalSeparator="."
+            groupSeparator=","
+            disableGroupSeparators={false}
+            decimalsLimit={3}
+            prefix="$"
+            required
           />
         </Col>
       </Row>

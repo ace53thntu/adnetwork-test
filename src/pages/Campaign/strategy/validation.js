@@ -56,51 +56,48 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
     Yup.object().shape({
       ...basicSchema,
       budget: Yup.object().shape({
-        global: Yup.string()
-          .when('daily', (value, schema) => {
-            if (!value) {
-              return schema.required(
-                'Budget global or budget daily is required'
-              );
-            }
+        global: Yup.string().when('daily', (value, schema) => {
+          if (!value) {
+            return schema.required('Budget global or budget daily is required');
+          }
 
-            return schema;
-          })
-          .test(
-            'is-number',
-            'The budget global must be a integer number and greater than 0.',
-            val => {
-              if (!val) {
-                return true;
-              }
+          return schema;
+        }),
+        // .test(
+        //   'is-number',
+        //   'The budget global must be a integer number and greater than 0.',
+        //   val => {
+        //     if (!val) {
+        //       return true;
+        //     }
 
-              const reg = /^\d+$/;
-              const parsed = parseInt(val, 10);
-              const isNumber = reg.test(val);
-              if (isNumber && parsed > 0) {
-                return true;
-              }
-              return false;
-            }
-          ),
+        //     const reg = /^\d+$/;
+        //     const parsed = parseInt(val, 10);
+        //     const isNumber = reg.test(val);
+        //     if (isNumber && parsed > 0) {
+        //       return true;
+        //     }
+        //     return false;
+        //   }
+        // ),
         daily: Yup.string()
 
-          .test(
-            'is-number',
-            'The budget daily must be a integer number and greater than 0.',
-            val => {
-              if (!val) {
-                return true;
-              }
-              const reg = /^\d+$/;
-              const parsed = parseInt(val, 10);
-              const isNumber = reg.test(val);
-              if (isNumber && parsed > 0) {
-                return true;
-              }
-              return false;
-            }
-          )
+          // .test(
+          //   'is-number',
+          //   'The budget daily must be a integer number and greater than 0.',
+          //   val => {
+          //     if (!val) {
+          //       return true;
+          //     }
+          //     const reg = /^\d+$/;
+          //     const parsed = parseInt(val, 10);
+          //     const isNumber = reg.test(val);
+          //     if (isNumber && parsed > 0) {
+          //       return true;
+          //     }
+          //     return false;
+          //   }
+          // )
           .test({
             name: 'global',
             exclusive: false,
@@ -113,55 +110,54 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
               }
 
               // You can access the budget global field with `this.parent`.
-              return value && parseInt(value) < parseInt(this.parent?.global);
+              return (
+                value && parseFloat(value) < parseFloat(this.parent?.global)
+              );
             }
           })
       }),
       impression: Yup.object().shape({
-        global: Yup.string()
-          .when('daily', (value, schema) => {
-            if (!value) {
-              return schema.required(
-                'Budget global or budget daily is required'
-              );
-            }
+        global: Yup.string().when('daily', (value, schema) => {
+          if (!value) {
+            return schema.required('Budget global or budget daily is required');
+          }
 
-            return schema;
-          })
-          .test(
-            'is-number',
-            'The impression global must be a integer number and greater than 0.',
-            val => {
-              if (!val) {
-                return true;
-              }
-              const reg = /^\d+$/;
-              const parsed = parseInt(val, 10);
-              const isNumber = reg.test(val);
-              if (isNumber && parsed > 0) {
-                return true;
-              }
-              return false;
-            }
-          ),
+          return schema;
+        }),
+        // .test(
+        //   'is-number',
+        //   'The impression global must be a integer number and greater than 0.',
+        //   val => {
+        //     if (!val) {
+        //       return true;
+        //     }
+        //     const reg = /^\d+$/;
+        //     const parsed = parseInt(val, 10);
+        //     const isNumber = reg.test(val);
+        //     if (isNumber && parsed > 0) {
+        //       return true;
+        //     }
+        //     return false;
+        //   }
+        // ),
         daily: Yup.string()
-          .test(
-            'is-number',
-            'The impression daily must be a integer number and greater than 0.',
+          // .test(
+          //   'is-number',
+          //   'The impression daily must be a integer number and greater than 0.',
 
-            val => {
-              if (!val) {
-                return true;
-              }
-              const reg = /^\d+$/;
-              const parsed = parseInt(val, 10);
-              const isNumber = reg.test(val);
-              if (isNumber && parsed > 0) {
-                return true;
-              }
-              return false;
-            }
-          )
+          //   val => {
+          //     if (!val) {
+          //       return true;
+          //     }
+          //     const reg = /^\d+$/;
+          //     const parsed = parseInt(val, 10);
+          //     const isNumber = reg.test(val);
+          //     if (isNumber && parsed > 0) {
+          //       return true;
+          //     }
+          //     return false;
+          //   }
+          // )
           .test({
             name: 'is-global-max',
             exclusive: false,
@@ -174,7 +170,7 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
               }
 
               // You can access the budget global field with `this.parent`.
-              return parseInt(value) < parseInt(this.parent?.global);
+              return parseFloat(value) < parseFloat(this.parent?.global);
             }
           })
       })

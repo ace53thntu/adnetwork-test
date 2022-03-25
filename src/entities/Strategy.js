@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
 
@@ -114,12 +115,12 @@ export const formToApi = ({
     click_commission: parseFloat(click_commission) || 0,
     sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     budget: {
-      daily: parseInt(budget?.daily) || 0,
-      global: parseInt(budget?.global) || 0
+      daily: convertGuiToApi({value: budget?.daily}), //parseInt(budget?.daily) || 0,
+      global: convertGuiToApi({value: budget?.global}) //parseInt(budget?.global) || 0
     },
     impression: {
-      daily: parseInt(impression?.daily) || 0,
-      global: parseInt(impression?.global) || 0
+      daily: convertGuiToApi({value: impression?.daily}), //parseInt(impression?.daily) || 0,
+      global: convertGuiToApi({value: impression?.global}) //parseInt(impression?.global) || 0
     }
   };
 
