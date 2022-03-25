@@ -25,6 +25,7 @@ import {useChartData} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
+import {useTranslation} from 'react-i18next';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -80,6 +81,7 @@ ChartPreview.propTypes = propTypes;
 
 const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId}) => {
+    const {t} = useTranslation();
     const chartTypeRedux = useChartTypeSelectedSelector();
     console.log(
       '🚀 ~ file: ChartPreview.js ~ line 84 ~ chartTypeRedux',
@@ -93,10 +95,7 @@ const ChartPreviewContent = React.memo(
       entityId,
       chartType: chartTypeRedux
     });
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 96 ~ chartTypeRedux',
-      chartTypeRedux
-    );
+
     console.log('🚀 ~ file: ChartPreview.js ~ line 88 ~ chartData', chartData);
 
     const colors = initializingColors({sizeOfData: chartData?.labels?.length});
@@ -126,18 +125,18 @@ const ChartPreviewContent = React.memo(
             <CardBody
               style={{
                 padding: 10,
-                width: selectedType === 'pie' ? '450px' : '100%',
+                width: selectedType === ChartTypes.PIE ? '450px' : '100%',
                 margin: '0 auto'
               }}
             >
-              {(selectedType === 'line' ||
-                selectedType === 'multiline' ||
-                selectedType === 'bar') && (
+              {[ChartTypes.LINE, ChartTypes.MULTILINE, ChartTypes.BAR].includes(
+                selectedType
+              ) && (
                 <CustomLineChart
                   series={chartData?.series}
                   categories={chartData?.categories}
                   nameOfSeries={
-                    METRIC_SETS?.[metricSet?.code]?.label || 'No label'
+                    METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
                   }
                   unit={unit || DEFAULT_TIME_UNIT}
                   metricSet={metricSet}
@@ -147,7 +146,7 @@ const ChartPreviewContent = React.memo(
                 <CustomPieChart
                   pieData={chartData}
                   nameOfSeries={
-                    METRIC_SETS?.[metricSet?.code]?.label || 'No label'
+                    METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
                   }
                   unit={unit || DEFAULT_TIME_UNIT}
                   metricSet={metricSet}

@@ -5,6 +5,8 @@
 export const ChartTypes = {
   /** This type is line chart. */
   LINE: 'line',
+  /** This type is line chart. */
+  MULTILINE: 'multiline',
   /** This type is bar chart. */
   BAR: 'bar',
   /** This type is pie chart. */

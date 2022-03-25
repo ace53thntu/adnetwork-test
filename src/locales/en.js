@@ -76,6 +76,8 @@ const en = {
   selectReportBy: 'Select report by',
   selectStrategy: 'Select strategy',
   selectConcept: 'Select concept',
+  properties: 'Properties',
+  noLabel: 'No label',
 
   // Main Menu
   userManagement: 'User Management',

@@ -21,6 +21,7 @@ import {
   setMetricBodyRedux,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
+import {ChartTypes} from 'constants/report';
 
 const DropdownChartType = ({
   metricSet = [],
@@ -55,7 +56,7 @@ const DropdownChartType = ({
     evt.preventDefault();
     onSelectType(type);
     dispatch(setChartTypeSelectedRedux(type));
-    if (metricBody.time_unit !== 'global') {
+    if (type === ChartTypes.PIE && metricBody.time_unit !== 'global') {
       dispatch(
         setMetricBodyRedux({
           ...metricBody,

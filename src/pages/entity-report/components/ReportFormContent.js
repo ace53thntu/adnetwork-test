@@ -76,7 +76,11 @@ export default function ReportFormContent({
 
   return (
     <FormProvider {...methods}>
-      <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        id="formCreateReport"
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <BlockUi tag="div" blocking={formState.isSubmitting}>
           <ModalHeader toggle={toggle}>
             {isViewed
@@ -135,7 +139,9 @@ export default function ReportFormContent({
                 </Row>
                 <Row className="mb-3">
                   <Col md="3">
-                    <Label className="font-weight-bold">Properties</Label>
+                    <Label className="font-weight-bold">
+                      {t('properties')}
+                    </Label>
                     <ConfigChart
                       chartTypeDefault={defaultValues?.properties?.chart_type}
                       colorDefault={defaultValues?.properties?.color}

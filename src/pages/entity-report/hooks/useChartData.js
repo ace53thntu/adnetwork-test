@@ -17,15 +17,11 @@ export const useChartData = ({
   chartType = '',
   colors = []
 }) => {
+  console.log('🚀 ~ file: useChartData.js ~ line 20 ~ metricData', metricData);
   console.log('🚀 ~ file: useChartData.js ~ line 20 ~ chartType', chartType);
   return useMemo(() => {
     if (metricData) {
-      const {
-        report: metrics = {},
-        start_time,
-        end_time,
-        info = {}
-      } = metricData;
+      const {report: metrics, start_time, end_time, info = {}} = metricData;
       // return null;
       if (chartType === ChartTypes.PIE) {
         return getDataPieChart({metrics, metricSet, info, colors});
@@ -79,6 +75,14 @@ const getDataLineChart = ({
   metrics,
   entityId
 }) => {
+  if (
+    !metrics ||
+    (typeof metrics === 'object' && Object.keys(metrics).length === 0)
+  ) {
+    return {series: [], categories: []};
+  }
+  console.log('metrics ==== 11', metrics);
+
   const startTime = moment.unix(start_time);
   const endTime = moment.unix(end_time);
   const increaseNumber = 1; // unit === 'fiveseconds' ? 5 : 1;
