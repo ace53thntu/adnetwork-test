@@ -5,11 +5,14 @@ import React from 'react';
 
 //---> External Modules
 import {useFormContext, useWatch} from 'react-hook-form';
+import {useDispatch} from 'react-redux';
+import {setIsCompareChartRedux} from 'store/reducers/entity-report';
 
 //---> Internal Modules
 import DropdownChartType from './DropdownChartType';
 
 const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
+  const dispatch = useDispatch();
   const {register, setValue} = useFormContext();
   const {colors, onChangeColor, typeSelected, onSelectType} = useReport({
     chartTypeDefault,
@@ -42,6 +45,10 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
       colorDefault
     );
   }, [chartTypeDefault, colorDefault, setValue]);
+
+  React.useEffect(() => {
+    dispatch(setIsCompareChartRedux(isChartCompare));
+  }, [dispatch, isChartCompare]);
 
   return (
     <div className="d-flex">

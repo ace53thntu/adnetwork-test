@@ -15,9 +15,12 @@ const SET_METRIC_BODY = `${ACTION_PREFIX}/SET_METRIC_BODY`;
 const SET_METRIC_DATA = `${ACTION_PREFIX}/SET_METRIC_DATA`;
 const SET_ACTIVE_REPORT_GROUP_TYPE = `${ACTION_PREFIX}/SET_ACTIVE_REPORT_GROUP_TYPE`;
 const SET_CHART_TYPE_SELECTED = `${ACTION_PREFIX}/SET_CHART_TYPE_SELECTED`;
+const SET_IS_CHART_COMPARE = `${ACTION_PREFIX}/SET_IS_CHART_COMPARE`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setIsCompareChartRedux = isCompare =>
+  createAction(SET_IS_CHART_COMPARE, {isCompare});
 export const setChartTypeSelectedRedux = chartType =>
   createAction(SET_CHART_TYPE_SELECTED, {chartType});
 export const setReportGroupRedux = reportGroupType =>
@@ -42,11 +45,13 @@ const entityReportInitialState = {
   metricBodyRequest: {},
   metricsData: null,
   reportGroupType: ReportGroupTypes.ADVERTISER,
-  chartTypeSelected: ''
+  chartTypeSelected: '',
+  isChartCompare: false
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_IS_CHART_COMPARE]: handleSetIsChartCompare,
   [SET_CHART_TYPE_SELECTED]: handleSetChartTypeSelected,
   [SET_ACTIVE_REPORT_GROUP_TYPE]: handleSetReportGroupType,
   [SET_TIME_RANGE]: handleSetTimeRange,
@@ -59,6 +64,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetIsChartCompare(state, action) {
+  state.isChartCompare = action.payload.isCompare;
 }
 
 function handleSetChartTypeSelected(state, action) {
@@ -119,7 +128,18 @@ const makeSelectChartTypeSelected = () =>
     a => a.chartTypeSelected
   );
 
+const makeSelectIsChartCompare = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.isChartCompare
+  );
+
 //---> Hook to select state
+export function useIsChartCompareSelector() {
+  const selectIsChartCompare = React.useMemo(makeSelectIsChartCompare, []);
+  return useSelector(state => selectIsChartCompare(state));
+}
+
 export function useChartTypeSelectedSelector() {
   const selectChartTypeSelected = React.useMemo(
     makeSelectChartTypeSelected,

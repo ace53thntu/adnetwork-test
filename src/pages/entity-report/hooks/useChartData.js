@@ -2,6 +2,7 @@ import {useMemo} from 'react';
 import moment from 'moment';
 import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
+import _ from 'lodash';
 
 /**
  * Hook handle data to render to Chart
@@ -17,13 +18,11 @@ export const useChartData = ({
   chartType = '',
   colors = []
 }) => {
-  console.log('🚀 ~ file: useChartData.js ~ line 20 ~ metricData', metricData);
-  console.log('🚀 ~ file: useChartData.js ~ line 20 ~ chartType', chartType);
+  console.log('🚀 ~ file: useChartData.js ~ line 21 ~ chartType', chartType);
   return useMemo(() => {
     if (metricData) {
       const {report: metrics, start_time, end_time, info = {}} = metricData;
-      // return null;
-      if (chartType === ChartTypes.PIE) {
+      if (chartType === ChartTypes.PIE || chartType === ChartTypes.BAR) {
         return getDataPieChart({metrics, metricSet, info, colors});
       }
 
@@ -47,16 +46,32 @@ const getDataPieChart = ({metrics, metricSet, info, colors}) => {
     Object.keys(metrics).length > 0
   ) {
     const metricData = metrics?.['0'];
+
     if (metricData && Object.keys(metricData).length > 0) {
-      const data = Object.entries(metricData).reduce(
-        (acc, [objectUuid, metricObj], idx) => {
-          const metricValue = metricObj?.[metricSet?.[0]?.code] || 0;
-          const metricLabel = info?.[objectUuid]?.name;
+      const metricList = Object.entries(metricData);
+      const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
+        return {
+          uuid: objectUuid,
+          value: metricObj?.[metricSet?.[0]?.code] || 0,
+          label: info?.[objectUuid]?.name
+        };
+      });
+      const metricsSorted = _.orderBy(metricsBySet, ['value'], ['desc']);
+
+      const data = metricsSorted.reduce(
+        (acc, item, idx) => {
+          const metricValue = item?.value;
+          const metricLabel = item?.label;
           acc.datasets[0].data.push(metricValue);
           acc.labels.push(metricLabel);
           return acc;
         },
-        {datasets: [{data: [], backgroundColor: colors}], labels: []}
+        {
+          datasets: [
+            {data: [], backgroundColor: colors, label: metricSet?.[0]?.label}
+          ],
+          labels: []
+        }
       );
       return data;
     }
@@ -81,7 +96,6 @@ const getDataLineChart = ({
   ) {
     return {series: [], categories: []};
   }
-  console.log('metrics ==== 11', metrics);
 
   const startTime = moment.unix(start_time);
   const endTime = moment.unix(end_time);

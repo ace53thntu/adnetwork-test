@@ -18,6 +18,7 @@ import CustomLineChart from './form/CustomLineChart';
 import CustomPieChart from './form/CustomPieChart';
 import {
   useChartTypeSelectedSelector,
+  useIsChartCompareSelector,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
@@ -26,6 +27,7 @@ import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
 import {useTranslation} from 'react-i18next';
+import CustomBarChart from './form/CustomBarChart';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -63,10 +65,6 @@ const ChartPreview = ({
     return <NoDataAvailable />;
   }
 
-  // if (true) {
-  //   return <></>;
-  // }
-
   return (
     <ChartPreviewContent
       metrics={metrics}
@@ -85,6 +83,11 @@ const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId, color}) => {
     const {t} = useTranslation();
     const chartTypeRedux = useChartTypeSelectedSelector();
+    const isChartCompare = useIsChartCompareSelector();
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 87 ~ isChartCompare',
+      isChartCompare
+    );
     console.log(
       '🚀 ~ file: ChartPreview.js ~ line 84 ~ chartTypeRedux',
       chartTypeRedux
@@ -133,30 +136,26 @@ const ChartPreviewContent = React.memo(
                 margin: '0 auto'
               }}
             >
-              {[ChartTypes.LINE, ChartTypes.MULTILINE, ChartTypes.BAR].includes(
-                selectedType
-              ) && (
-                <CustomLineChart
-                  series={chartData?.series}
-                  categories={chartData?.categories}
-                  nameOfSeries={
-                    METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
-                  }
-                  unit={unit || DEFAULT_TIME_UNIT}
-                  metricSet={metricSet}
-                />
+              {selectedType === ChartTypes.BAR && isChartCompare && (
+                <CustomBarChart barData={chartData} colors={colors} />
               )}
               {selectedType === 'pie' && (
-                <CustomPieChart
-                  pieData={chartData}
-                  nameOfSeries={
-                    METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
-                  }
-                  unit={unit || DEFAULT_TIME_UNIT}
-                  metricSet={metricSet}
-                  colors={colors}
-                />
+                <CustomPieChart pieData={chartData} colors={colors} />
               )}
+              {[ChartTypes.LINE, ChartTypes.MULTILINE, ChartTypes.BAR].includes(
+                selectedType
+              ) &&
+                !isChartCompare && (
+                  <CustomLineChart
+                    series={chartData?.series}
+                    categories={chartData?.categories}
+                    nameOfSeries={
+                      METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
+                    }
+                    unit={unit || DEFAULT_TIME_UNIT}
+                    metricSet={metricSet}
+                  />
+                )}
             </CardBody>
           </Card>
         </Col>

@@ -37,9 +37,9 @@ const DropdownChartType = ({
 
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
-      return ['pie', 'line'];
+      return [ChartTypes.PIE, ChartTypes.BAR];
     }
-    return ['line', 'bar'];
+    return [ChartTypes.LINE, ChartTypes.BAR];
   }, [isChartCompare]);
 
   const [showDropdown, setShowDropdown] = React.useState(false);
