@@ -6,6 +6,7 @@
  */
 
 import {ActiveToggle, FormTextInput} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import DspSelect from 'components/forms/DspSelect';
 import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
@@ -62,11 +63,16 @@ export default function DealForm({excludeDates = []}) {
           />
         </Col>
         <Col sm="6">
-          <FormTextInput
+          <CurrencyInputField
             name={INPUTS_NAME.DEAL_PRICE}
-            label="Deal price"
             placeholder="0.0"
-            isRequired
+            label={t('dealPrice')}
+            decimalSeparator="."
+            groupSeparator=","
+            disableGroupSeparators={false}
+            decimalsLimit={3}
+            prefix="$"
+            required
           />
         </Col>
         <Col sm="6">

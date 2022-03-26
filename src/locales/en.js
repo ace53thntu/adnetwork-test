@@ -78,6 +78,7 @@ const en = {
   selectConcept: 'Select concept',
   properties: 'Properties',
   noLabel: 'No label',
+  dealPrice: 'Deal price',
 
   // Main Menu
   userManagement: 'User Management',

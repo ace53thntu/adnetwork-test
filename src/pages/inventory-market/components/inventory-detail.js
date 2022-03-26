@@ -36,6 +36,8 @@ import {schemaValidate} from './validation';
 import {useTranslation} from 'react-i18next';
 import {BidDealTabs} from './bid-deal-tabs';
 import {CollapseBox} from 'components/common';
+import {formatValue} from 'react-currency-input-field';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const useStyles = makeStyles({
   bgHover: {
@@ -197,8 +199,17 @@ const InventoryDetails = ({
 
             {/* Minimum Price */}
             <InventoryPartial label="Floor price">
-              <Badge color="warning" pill>
-                {inventoryData?.floor_price ?? 0}
+              <Badge color="info" pill>
+                {inventoryData?.floor_price
+                  ? formatValue({
+                      value: HandleCurrencyFields.convertApiToGui({
+                        value: inventoryData?.floor_price
+                      })?.toString(),
+                      groupSeparator: ',',
+                      decimalSeparator: '.',
+                      prefix: '$'
+                    })
+                  : ''}
               </Badge>
             </InventoryPartial>
 

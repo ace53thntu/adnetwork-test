@@ -12,7 +12,7 @@ export function useGetInventoryDeals({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [GET_INVENTORY_DEAL, params],
+    [GET_INVENTORY_DEAL, params?.inventory_uuid],
     () =>
       InventoryAPIRequest.getInventoryDeal({
         params,

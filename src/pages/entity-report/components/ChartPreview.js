@@ -90,8 +90,6 @@ const ChartPreviewContent = React.memo(
       entityId,
       chartType: chartTypeRedux
     });
-    console.log('🚀 ~ file: ChartPreview.js ~ line 95 ~ chartData', chartData);
-    console.log('🚀 ~ file: ChartPreview.js ~ line 98 ~ color', color);
 
     const colors = initializingColors({
       sizeOfData: chartData?.labels?.length,

@@ -28,7 +28,7 @@ const DropdownChartType = ({
   onChangeColor = () => null,
   onSelectType = () => null,
   colors = [],
-  chartType = 'line',
+  chartType = '',
   isChartCompare = false
 }) => {
   const dispatch = useDispatch();
@@ -41,6 +41,15 @@ const DropdownChartType = ({
     }
     return [ChartTypes.LINE, ChartTypes.BAR];
   }, [isChartCompare]);
+  const chartTypeSelected = !chartType
+    ? isChartCompare
+      ? ChartTypes.PIE
+      : ChartTypes.LINE
+    : chartType;
+  console.log(
+    '🚀 ~ file: DropdownChartType.js ~ line 45 ~ chartTypeSelected',
+    chartTypeSelected
+  );
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
@@ -111,7 +120,9 @@ const DropdownChartType = ({
                         key={`pr-${idx}`}
                         id={`tooltip-${typeItem}-chart`}
                         className={`c-chart-item ${
-                          chartType === typeItem ? 'border-activated' : ''
+                          chartTypeSelected === typeItem
+                            ? 'border-activated'
+                            : ''
                         }`}
                         onClick={evt => onClickChartType(evt, typeItem)}
                       >

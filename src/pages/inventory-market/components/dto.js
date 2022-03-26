@@ -6,6 +6,7 @@
  */
 
 import moment from 'moment';
+import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
 import {INPUTS_NAME} from '../constants';
 
 const convertDate = ({date, isStart = true}) => {
@@ -59,7 +60,7 @@ export const mappingFormToApi = ({
       [INPUTS_NAME.LIMIT_IMPRESSION]: limit_impression
         ? parseInt(limit_impression, 10)
         : 0,
-      [INPUTS_NAME.DEAL_PRICE]: deal_price ? parseFloat(deal_price) : 0
+      [INPUTS_NAME.DEAL_PRICE]: convertGuiToApi({value: deal_price}) //deal_price ? parseFloat(deal_price) : 0
     };
   }
 
@@ -71,16 +72,14 @@ export const mappingFormToApi = ({
     [INPUTS_NAME.AUDIENCE_UUID]: audience_list_uuid?.value,
     [INPUTS_NAME.DEAL_UUID]: deal_uuid?.value,
     [INPUTS_NAME.BUDGET]: {
-      [INPUTS_NAME.GLOBAL]: parseInt(global, 10),
-      [INPUTS_NAME.DAILY]: parseInt(daily, 10)
+      [INPUTS_NAME.GLOBAL]: convertGuiToApi({value: global}), //parseInt(global, 10),
+      [INPUTS_NAME.DAILY]: convertGuiToApi({value: daily}) //parseInt(daily, 10)
     },
     [INPUTS_NAME.STATUS]: status,
     [INPUTS_NAME.HEADER_BIDDING]: header_bidding === 'active' ? true : false,
     [INPUTS_NAME.INVENTORY_UUID]: inventoryId
   };
 };
-
-export const mappingApiToForm = () => {};
 
 export const mappingApiToBidForm = (data = null) => {
   if (!data) {
@@ -111,7 +110,10 @@ export const mappingApiToBidForm = (data = null) => {
   return {
     uuid,
     status,
-    budget,
+    budget: {
+      global: convertApiToGui({value: budget?.global}),
+      daily: convertApiToGui({value: budget?.daily})
+    },
     dsp_uuid: dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null,
     audience_list_uuid: audience_list_uuid ? audience_list_uuid : [],
     start_time: start_time ? new Date(start_time) : new Date(),
@@ -152,7 +154,7 @@ export const mappingApiToDealForm = (data = null) => {
     status,
     limit_impression,
     header_bidding,
-    deal_price,
+    deal_price: convertApiToGui({value: deal_price}),
     dsp_uuid: dsp_uuid ? {value: dsp_uuid, label: dsp_name} : null,
     start_time: start_time ? new Date(start_time) : new Date(),
     end_time: end_time ? new Date(end_time) : null

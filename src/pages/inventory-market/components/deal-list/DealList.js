@@ -7,6 +7,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
 import {Badge} from 'reactstrap';
 import {useQueryClient} from 'react-query';
+import {formatValue} from 'react-currency-input-field';
 
 //---> Internal Modules
 import {List} from 'components/list';
@@ -21,6 +22,7 @@ import DealFormModal from '../deal-form-modal';
 import {DialogConfirm} from 'components/common';
 import {GET_INVENTORY_DEAL} from 'queries/inventory/constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const ActionIndex = {
   EDIT: 0,
@@ -39,7 +41,8 @@ const DealList = ({inventoryId}) => {
   const {data} = useGetInventoryDeals({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
-      inventory_uuid: inventoryId
+      inventory_uuid: inventoryId,
+      sort: 'updated_at DESC'
     },
     enabled: !!inventoryId
   });
@@ -149,7 +152,20 @@ const useColumns = () => {
       {
         header: 'Deal price',
         accessor: 'deal_price',
-        cell: row => row?.value?.toString() || ''
+        cell: row => (
+          <Badge color="info" pill>
+            {row?.value
+              ? formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
+          </Badge>
+        )
       },
       {
         header: 'Limit impression',

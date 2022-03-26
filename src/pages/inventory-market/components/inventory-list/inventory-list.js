@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 
 //---> External Modules
 import {Badge, Modal} from 'reactstrap';
+import {formatValue} from 'react-currency-input-field';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -25,7 +26,6 @@ import {useGetInventoriesInfinity} from 'queries/inventory';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {Pagination} from 'components/list/pagination';
 import {InventoryDetails} from '..';
-import './styles.scss';
 import {isFalsy} from 'utils/validateObject';
 import {mappingFormToApi} from '../filter-bar/dto';
 import {
@@ -35,6 +35,9 @@ import {
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
+
+import './styles.scss';
 
 const ActionIndexes = {
   VIEW: 0,
@@ -84,7 +87,18 @@ const useColumns = role => {
         accessor: 'deal_floor_price',
         cell: row => {
           if (row?.original?.allow_deal) {
-            return row.value;
+            <Badge color="info" pill>
+              {row?.value
+                ? formatValue({
+                    value: HandleCurrencyFields.convertApiToGui({
+                      value: row?.value
+                    })?.toString(),
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    prefix: '$'
+                  })
+                : ''}
+            </Badge>;
           }
 
           return 'N/A';
@@ -94,8 +108,17 @@ const useColumns = role => {
         header: 'Floor price',
         accessor: 'floor_price',
         cell: row => (
-          <Badge color="warning" pill>
-            {row?.value}
+          <Badge color="info" pill>
+            {row?.value
+              ? formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
           </Badge>
         )
       }

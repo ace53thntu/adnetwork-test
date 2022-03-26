@@ -155,7 +155,7 @@ export const initDefaultValue = ({
   return {
     properties: {
       color: JSON.stringify(initColors),
-      chart_type: 'line'
+      chart_type: ChartTypes.LINE
     },
     api: {
       time_unit: timeRange?.units.find(
@@ -167,7 +167,7 @@ export const initDefaultValue = ({
       end_time: null
     },
     report_source: {label: capitalize(entityType), value: entityType},
-    report_type: {label: capitalize('trending'), value: 'trending'},
+    report_type: {label: capitalize('trending'), value: ReportTypes.TRENDING},
     source_uuid: sourceUuid
   };
 };

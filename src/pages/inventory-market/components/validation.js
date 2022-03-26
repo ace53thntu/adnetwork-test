@@ -23,47 +23,18 @@ export const schemaValidate = (t, isBid = false) => {
           )
           .typeError(t('required')),
         [INPUTS_NAME.BUDGET]: yup.object().shape({
-          [INPUTS_NAME.GLOBAL]: yup
-            .string()
-            .test(
-              'is-number',
-              'The budget global must be a integer number and greater than 0.',
-              val => {
-                const reg = /^\d+$/;
-                const parsed = parseInt(val, 10);
-                const isNumber = reg.test(val);
-                if (isNumber && parsed > 0) {
-                  return true;
-                }
-                return false;
-              }
-            ),
-          [INPUTS_NAME.DAILY]: yup
-            .string()
-            .test(
-              'is-number',
-              'The budget daily must be a integer number and greater than 0.',
-              val => {
-                const reg = /^\d+$/;
-                const parsed = parseInt(val, 10);
-                const isNumber = reg.test(val);
-                if (isNumber && parsed > 0) {
-                  return true;
-                }
-                return false;
-              }
-            )
-            .test({
-              name: INPUTS_NAME.GLOBAL,
-              exclusive: false,
-              params: {},
-              // eslint-disable-next-line no-template-curly-in-string
-              message: 'The budget daily must be less than the global',
-              test: function (value) {
-                // You can access the budget global field with `this.parent`.
-                return value < parseInt(this.parent?.[INPUTS_NAME.GLOBAL]);
-              }
-            })
+          [INPUTS_NAME.GLOBAL]: yup.string(),
+          [INPUTS_NAME.DAILY]: yup.string().test({
+            name: INPUTS_NAME.GLOBAL,
+            exclusive: false,
+            params: {},
+            // eslint-disable-next-line no-template-curly-in-string
+            message: 'The budget daily must be less than the global',
+            test: function (value) {
+              // You can access the budget global field with `this.parent`.
+              return value < parseFloat(this.parent?.[INPUTS_NAME.GLOBAL]);
+            }
+          })
         })
       })
     );

@@ -14,12 +14,13 @@ import {Col, Label, Row} from 'reactstrap';
 
 //---> Internal Modules
 import TimeRange from './form-elements/time-range';
-import {ActiveToggle, FormTextInput} from 'components/forms';
+import {ActiveToggle} from 'components/forms';
 import {INPUTS_NAME} from '../constants';
 import {Controller, useFormContext, useWatch} from 'react-hook-form';
 import DspSelect from 'components/forms/DspSelect';
 import {useTranslation} from 'react-i18next';
 import AudienceSelect from 'components/forms/AudienceSelect';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const InventoryBidForm = ({excludeDates = [], inventoryId = ''}) => {
   const {t} = useTranslation();
@@ -63,19 +64,29 @@ const InventoryBidForm = ({excludeDates = [], inventoryId = ''}) => {
       </Row>
       <Row className="mt-3">
         <Col sm="4">
-          <FormTextInput
+          <CurrencyInputField
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.GLOBAL}`}
-            label="Budget global"
-            placeholder="0"
-            isRequired
+            placeholder="0.0"
+            label={t('COMMON.BUDGET_GLOBAL')}
+            decimalSeparator="."
+            groupSeparator=","
+            disableGroupSeparators={false}
+            decimalsLimit={3}
+            prefix="$"
+            required
           />
         </Col>
         <Col sm="4">
-          <FormTextInput
+          <CurrencyInputField
             name={`${INPUTS_NAME.BUDGET}.${INPUTS_NAME.DAILY}`}
-            label="Budget daily"
-            placeholder="0"
-            isRequired
+            placeholder="0.0"
+            label={t('COMMON.BUDGET_DAILY')}
+            decimalSeparator="."
+            groupSeparator=","
+            disableGroupSeparators={false}
+            decimalsLimit={3}
+            prefix="$"
+            required
           />
         </Col>
         <Col sm="4">
