@@ -18,11 +18,13 @@ export const useChartData = ({
   chartType = '',
   colors = []
 }) => {
-  console.log('🚀 ~ file: useChartData.js ~ line 21 ~ chartType', chartType);
   return useMemo(() => {
     if (metricData) {
       const {report: metrics, start_time, end_time, info = {}} = metricData;
-      if (chartType === ChartTypes.PIE || chartType === ChartTypes.BAR) {
+      if (
+        [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
+        unit === 'global'
+      ) {
         return getDataPieChart({metrics, metricSet, info, colors});
       }
 

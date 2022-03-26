@@ -14,8 +14,8 @@ import {
   METRIC_SETS,
   ChartTypes
 } from 'constants/report';
-import CustomLineChart from './form/CustomLineChart';
-import CustomPieChart from './form/CustomPieChart';
+import CustomLineChart from './report-chart/CustomLineChart';
+import CustomPieChart from './report-chart/CustomPieChart';
 import {
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
@@ -27,7 +27,7 @@ import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
 import {useTranslation} from 'react-i18next';
-import CustomBarChart from './form/CustomBarChart';
+import CustomBarChart from './report-chart/CustomBarChart';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -84,14 +84,6 @@ const ChartPreviewContent = React.memo(
     const {t} = useTranslation();
     const chartTypeRedux = useChartTypeSelectedSelector();
     const isChartCompare = useIsChartCompareSelector();
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 87 ~ isChartCompare',
-      isChartCompare
-    );
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 84 ~ chartTypeRedux',
-      chartTypeRedux
-    );
     const chartData = useChartData({
       metrics,
       unit,
@@ -100,8 +92,7 @@ const ChartPreviewContent = React.memo(
       entityId,
       chartType: chartTypeRedux
     });
-
-    console.log('🚀 ~ file: ChartPreview.js ~ line 88 ~ chartData', chartData);
+    console.log('🚀 ~ file: ChartPreview.js ~ line 95 ~ chartData', chartData);
 
     const colors = color
       ? color
@@ -139,7 +130,7 @@ const ChartPreviewContent = React.memo(
               {selectedType === ChartTypes.BAR && isChartCompare && (
                 <CustomBarChart barData={chartData} colors={colors} />
               )}
-              {selectedType === 'pie' && (
+              {selectedType === ChartTypes.PIE && (
                 <CustomPieChart pieData={chartData} colors={colors} />
               )}
               {[ChartTypes.LINE, ChartTypes.MULTILINE, ChartTypes.BAR].includes(

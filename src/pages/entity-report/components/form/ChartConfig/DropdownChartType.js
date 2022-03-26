@@ -10,7 +10,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 //---> Internal Modules
 import LineSparkline from './LineSparkline';
 import PieSparkline from './PieSparkline';
-import '../../styles/styles.scss';
+import '../../../styles/styles.scss';
 import ColorSlider from './ColorSlider';
 import BarSparkline from './BarSparkline';
 import {Tooltip} from '@material-ui/core';

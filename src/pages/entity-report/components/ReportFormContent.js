@@ -23,7 +23,7 @@ import {
 } from 'store/reducers/entity-report';
 import {getReportSources} from 'utils/metrics';
 import ChartPreview from './ChartPreview';
-import ConfigChart from './form/ConfigChart';
+import ConfigChart from './form/ChartConfig/ConfigChart';
 import TimeUnit from './form/TimeUnit';
 import ReportByGroup from './form/ReportByGroup/ReportByGroup';
 import ReportSourceSelect from './form/ReportSourceSelect';

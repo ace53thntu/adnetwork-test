@@ -3,7 +3,7 @@ import React from 'react';
 import {useConfigChart} from '../../hooks/useConfigChart';
 import {R2ChartBar, R2ChartLine} from '..';
 import {FORMAT_BY_UNIT} from 'constants/report';
-import CustomPieChart from '../form/CustomPieChart';
+import CustomPieChart from '../report-chart/CustomPieChart';
 
 const ChartItem = ({
   chartType = 'line',

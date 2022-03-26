@@ -25,7 +25,7 @@ export default function CustomLineChart({
   const chartType =
     watch(`${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`) ||
     ChartTypes.LINE;
-  const convertUnit = unit; //unit === 'fiveseconds' ? 'second' : unit;
+  const convertUnit = unit;
   const formatDateStr = FORMAT_BY_UNIT[convertUnit];
   const colorParsed = parseColors(color);
   const {data: chartData, options} = useConfigChart({
