@@ -13,7 +13,23 @@ const propTypes = {
 };
 
 const R2ChartPie = ({pieData}) => {
-  return <Pie data={pieData} />;
+  const options = React.useMemo(
+    () => ({
+      legend: {
+        display: true
+      },
+      title: {
+        display: true,
+        text: pieData?.datasets?.[0]?.label || '',
+        font: {
+          weight: 'normal'
+        }
+      }
+    }),
+    [pieData?.datasets]
+  );
+
+  return <Pie data={pieData} options={options} />;
 };
 
 R2ChartPie.propTypes = propTypes;

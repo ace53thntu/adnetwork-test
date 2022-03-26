@@ -15,11 +15,17 @@ import VideoSelect from './ReportByUuid/VideoSelect';
 import CreativeSelect from './ReportByUuid/CreativeSelect';
 import SourceSelect from './ReportByUuid/SourceSelect';
 import PositionSelect from 'components/forms/PositionSelect';
+import ContainerSelect from './ReportByUuid/ContainerSelect';
+import PageSelect from './ReportByUuid/PageSelect';
+import InventorySelect from './ReportByUuid/InventorySelect';
 import ReportBySelect from './ReportBySelect';
+import {useReportGroupTypeSelector} from 'store/reducers/entity-report';
+import {ReportGroupTypes} from 'pages/entity-report/constants.js';
 
 const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
   const {t} = useTranslation();
   const {control, setValue} = useFormContext();
+  const reportGroupType = useReportGroupTypeSelector();
 
   const getReportByUuid = React.useCallback(() => {
     return {
@@ -83,6 +89,37 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
     };
   }, [reportSource, sourceId, t]);
 
+  const getPublisherReportByUuid = React.useCallback(() => {
+    return {
+      container: (
+        <ContainerSelect
+          label={t('container')}
+          placeholder={t('selectContainer')}
+          name="api.report_by_uuid"
+          sourceId={sourceId}
+        />
+      ),
+      page: (
+        <PageSelect
+          label={t('page')}
+          placeholder={t('selectPage')}
+          name="api.report_by_uuid"
+          sourceId={sourceId}
+          reportSource={reportSource}
+        />
+      ),
+      inventory: (
+        <InventorySelect
+          label={t('inventory')}
+          placeholder={t('selectInventory')}
+          name="api.report_by_uuid"
+          sourceId={sourceId}
+          reportSource={reportSource}
+        />
+      )
+    };
+  }, [reportSource, sourceId, t]);
+
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});
 
@@ -102,7 +139,11 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
       </Col>
       {reportBySelected &&
         reportBySelected.value !== reportSourceSelected?.value && (
-          <Col md="3">{getReportByUuid()[reportBySelected.value]}</Col>
+          <Col md="3">
+            {reportGroupType === ReportGroupTypes.ADVERTISER
+              ? getReportByUuid()[reportBySelected.value]
+              : getPublisherReportByUuid()[reportBySelected.value]}
+          </Col>
         )}
     </>
   );

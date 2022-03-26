@@ -78,7 +78,10 @@ const DropdownChartType = ({
           ref={ref}
           className={`c-dropdown-menu ${showDropdown ? 'show' : ''}`}
         >
-          <div className="c-menu-item mb-2">
+          <div
+            className="c-menu-item mb-2"
+            style={{display: isChartCompare ? 'none' : 'd-flex'}}
+          >
             <div className="color-wrap">
               {colors?.map((colorItem, idx) => {
                 return (
