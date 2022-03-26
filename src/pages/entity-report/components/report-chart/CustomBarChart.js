@@ -6,11 +6,7 @@ import React from 'react';
 //---> Build-in Modules
 import {R2ChartBar} from '../charts';
 
-const CustomBarChart = ({barData, colors = []}) => {
-  console.log(
-    '🚀 ~ file: CustomBarChart.js ~ line 10 ~ CustomBarChart ~ colors',
-    colors
-  );
+const CustomBarChart = ({barData, colors = [], showXLabel = true}) => {
   const dataDestructured = React.useMemo(() => {
     if (barData) {
       return barData?.datasets?.map(item => {
@@ -19,12 +15,28 @@ const CustomBarChart = ({barData, colors = []}) => {
     }
     return [];
   }, [colors, barData]);
-  console.log(
-    '🚀 ~ file: CustomBarChart.js ~ line 18 ~ CustomBarChart ~ dataDestructured',
-    dataDestructured
+
+  const options = React.useMemo(
+    () => ({
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              display: showXLabel //this will remove only the label
+            }
+          }
+        ]
+      }
+    }),
+    [showXLabel]
   );
 
-  return <R2ChartBar data={{...barData, datasets: dataDestructured}} />;
+  return (
+    <R2ChartBar
+      data={{...barData, datasets: dataDestructured}}
+      options={options}
+    />
+  );
 };
 
 export default CustomBarChart;

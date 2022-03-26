@@ -3,8 +3,7 @@ import React from 'react';
 import {useConfigChart} from '../../hooks/useConfigChart';
 import {R2ChartBar, R2ChartLine} from '..';
 import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
-import CustomPieChart from '../report-chart/CustomPieChart';
-import CustomBarChart from '../report-chart/CustomBarChart';
+import {CustomBarChart, CustomPieChart} from '../report-chart';
 
 const ChartItem = ({
   chartType = 'line',
@@ -33,10 +32,22 @@ const ChartItem = ({
     <div>
       {(() => {
         if (chartType === ChartTypes.PIE) {
-          return <CustomPieChart pieData={pieData} colors={convertPieColors} />;
+          return (
+            <CustomPieChart
+              pieData={pieData}
+              colors={convertPieColors}
+              showLegend={false}
+            />
+          );
         }
         if (chartType === ChartTypes.BAR && unit === 'global') {
-          return <CustomBarChart barData={pieData} colors={convertPieColors} />;
+          return (
+            <CustomBarChart
+              barData={pieData}
+              colors={convertPieColors}
+              showXLabel={false}
+            />
+          );
         }
         if ([ChartTypes.LINE, ChartTypes.MULTILINE].includes(chartType)) {
           return <R2ChartLine data={chartData} options={options} />;

@@ -14,8 +14,6 @@ import {
   METRIC_SETS,
   ChartTypes
 } from 'constants/report';
-import CustomLineChart from './report-chart/CustomLineChart';
-import CustomPieChart from './report-chart/CustomPieChart';
 import {
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
@@ -27,7 +25,7 @@ import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
 import {useTranslation} from 'react-i18next';
-import CustomBarChart from './report-chart/CustomBarChart';
+import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
 
 const propTypes = {
   chartData: PropTypes.object,
