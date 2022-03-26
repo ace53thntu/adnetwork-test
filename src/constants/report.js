@@ -21,16 +21,30 @@ export const ReportTypes = {
   TRENDING: 'trending',
   DISTRIBUTION: 'distribution'
 };
+/**
+ * Time units.
+ * @enum {string}
+ */
+export const TimeUnits = {
+  GLOBAL: 'global',
+  YEAR: 'year',
+  MONTH: 'month',
+  WEEK: 'week',
+  DAY: 'day',
+  HOUR: 'hour',
+  MINUTE: 'minute',
+  SECOND: 'second'
+};
 
 export const METRIC_UNITS = [
-  'second',
-  'minute',
-  'hour',
-  'day',
-  'week',
-  'month',
-  'year',
-  'global'
+  TimeUnits.SECOND,
+  TimeUnits.MINUTE,
+  TimeUnits.HOUR,
+  TimeUnits.DAY,
+  TimeUnits.WEEK,
+  TimeUnits.MONTH,
+  TimeUnits.YEAR,
+  TimeUnits.GLOBAL
 ];
 
 export const METRIC_TIMERANGES = [
@@ -172,6 +186,10 @@ export const REPORT_INPUT_NAME = {
 export const DEFAULT_TIME_RANGE = 'l1mt';
 export const DEFAULT_TIME_UNIT = 'day';
 
+/**
+ * Format by time unit
+ * @enum {string}
+ */
 export const FORMAT_BY_UNIT = {
   month: 'YYYY-MM',
   day: 'YYYY-MM-DD',

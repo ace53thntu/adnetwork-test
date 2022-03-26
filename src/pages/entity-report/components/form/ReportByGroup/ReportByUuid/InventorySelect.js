@@ -63,7 +63,7 @@ const useInventoryPagination = ({sourceId, reportSource}) => {
       const res = await InventoryAPIRequest.getAllInventory({
         params: {
           page,
-          per_page: DEFAULT_PAGINATION.perInventory,
+          per_page: DEFAULT_PAGINATION.perPage,
           [`${reportSource}_uuid`]: sourceId,
           name: search
         },
@@ -72,16 +72,15 @@ const useInventoryPagination = ({sourceId, reportSource}) => {
 
       const data = getResponseData(res, IS_RESPONSE_ALL);
       const total = getResponsePagination(res)?.total || 0;
-      const perInventory =
-        getResponsePagination(res)?.perInventory ||
-        DEFAULT_PAGINATION.perInventory;
+      const perPage =
+        getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
       const options = [...data].map(item => ({
         label: item.name,
         value: item.uuid
       }));
 
-      const hasMore = page < Math.ceil(total / perInventory);
+      const hasMore = page < Math.ceil(total / perPage);
 
       return {
         options,

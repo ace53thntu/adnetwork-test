@@ -8,15 +8,16 @@ import {Pie} from 'react-chartjs-2';
 //---> Internal Modules
 
 const propTypes = {
-  series: PropTypes.array,
-  color: PropTypes.array
+  pieData: PropTypes.any,
+  position: PropTypes.string
 };
 
-const R2ChartPie = ({pieData}) => {
+const R2ChartPie = ({pieData, position = 'top'}) => {
   const options = React.useMemo(
     () => ({
       legend: {
-        display: true
+        display: true,
+        position: position
       },
       title: {
         display: true,
@@ -26,7 +27,7 @@ const R2ChartPie = ({pieData}) => {
         }
       }
     }),
-    [pieData?.datasets]
+    [pieData?.datasets, position]
   );
 
   return <Pie data={pieData} options={options} />;

@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import moment from 'moment';
-import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
+import {ChartTypes, FORMAT_BY_UNIT, TimeUnits} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import _ from 'lodash';
 
@@ -23,7 +23,7 @@ export const useChartData = ({
       const {report: metrics, start_time, end_time, info = {}} = metricData;
       if (
         [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
-        unit === 'global'
+        unit === TimeUnits.GLOBAL
       ) {
         return getDataPieChart({metrics, metricSet, info, colors});
       }

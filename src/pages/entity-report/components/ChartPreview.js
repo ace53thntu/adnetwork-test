@@ -93,10 +93,15 @@ const ChartPreviewContent = React.memo(
       chartType: chartTypeRedux
     });
     console.log('🚀 ~ file: ChartPreview.js ~ line 95 ~ chartData', chartData);
+    console.log('🚀 ~ file: ChartPreview.js ~ line 98 ~ color', color);
 
-    const colors = color
-      ? color
-      : initializingColors({sizeOfData: chartData?.labels?.length});
+    const colors = initializingColors({
+      sizeOfData: chartData?.labels?.length,
+      existedColors: color,
+      charType: chartTypeRedux
+    });
+
+    console.log('🚀 ~ file: ChartPreview.js ~ line 99 ~ colors', colors);
 
     const {watch, setValue} = useFormContext();
 
@@ -123,7 +128,7 @@ const ChartPreviewContent = React.memo(
             <CardBody
               style={{
                 padding: 10,
-                width: selectedType === ChartTypes.PIE ? '450px' : '100%',
+                width: selectedType === ChartTypes.PIE ? '80%' : '100%',
                 margin: '0 auto'
               }}
             >

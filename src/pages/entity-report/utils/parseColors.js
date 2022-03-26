@@ -1,3 +1,4 @@
+import {ChartTypes} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
 export const parseColors = color => {
@@ -36,12 +37,28 @@ export const randomHex = () =>
     .toString(16)
     .padEnd(6, '0')}`;
 
-export const initializingColors = ({sizeOfData = 0}) => {
+export const initializingColors = ({
+  sizeOfData = 0,
+  existedColors,
+  charType
+}) => {
   if (sizeOfData === 0) return [];
-  const tmpArr = [];
+  if (charType === ChartTypes.PIE && sizeOfData !== existedColors) {
+    const tmpArr = [];
 
-  for (let index = 0; index < sizeOfData; index++) {
-    tmpArr.push(randomHex());
+    for (let index = 0; index < sizeOfData; index++) {
+      tmpArr.push(randomHex());
+    }
+    return tmpArr;
   }
-  return tmpArr;
+
+  if (typeof existedColors === 'string') {
+    try {
+      return JSON.parse(existedColors);
+    } catch (err) {
+      return [];
+    }
+  }
+
+  return existedColors;
 };

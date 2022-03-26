@@ -2,8 +2,9 @@ import React from 'react';
 // import CustomPieChart from './CustomPieChart';
 import {useConfigChart} from '../../hooks/useConfigChart';
 import {R2ChartBar, R2ChartLine} from '..';
-import {FORMAT_BY_UNIT} from 'constants/report';
+import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
 import CustomPieChart from '../report-chart/CustomPieChart';
+import CustomBarChart from '../report-chart/CustomBarChart';
 
 const ChartItem = ({
   chartType = 'line',
@@ -31,15 +32,19 @@ const ChartItem = ({
   return (
     <div>
       {(() => {
-        if (chartType === 'line' || chartType === 'multiline') {
-          return <R2ChartLine data={chartData} options={options} />;
-        } else if (chartType === 'bar') {
-          return <R2ChartBar data={chartData} options={options} />;
-        } else if (chartType === 'pie') {
+        if (chartType === ChartTypes.PIE) {
           return <CustomPieChart pieData={pieData} colors={convertPieColors} />;
-        } else {
-          return <div>Up coming</div>;
         }
+        if (chartType === ChartTypes.BAR && unit === 'global') {
+          return <CustomBarChart barData={pieData} colors={convertPieColors} />;
+        }
+        if ([ChartTypes.LINE, ChartTypes.MULTILINE].includes(chartType)) {
+          return <R2ChartLine data={chartData} options={options} />;
+        }
+        if (chartType === ChartTypes.BAR) {
+          return <R2ChartBar data={chartData} options={options} />;
+        }
+        return <div>Up coming</div>;
       })()}
     </div>
   );
