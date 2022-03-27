@@ -21,7 +21,7 @@ import {
   setMetricBodyRedux,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
-import {ChartTypes} from 'constants/report';
+import {ChartTypes, TimeUnits} from 'constants/report';
 
 const DropdownChartType = ({
   metricSet = [],
@@ -32,7 +32,6 @@ const DropdownChartType = ({
   isChartCompare = false
 }) => {
   const dispatch = useDispatch();
-
   const metricBody = useMetricsBodySelector();
 
   const initChartTypes = React.useMemo(() => {
@@ -46,10 +45,6 @@ const DropdownChartType = ({
       ? ChartTypes.PIE
       : ChartTypes.LINE
     : chartType;
-  console.log(
-    '🚀 ~ file: DropdownChartType.js ~ line 45 ~ chartTypeSelected',
-    chartTypeSelected
-  );
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
@@ -65,11 +60,11 @@ const DropdownChartType = ({
     evt.preventDefault();
     onSelectType(type);
     dispatch(setChartTypeSelectedRedux(type));
-    if (type === ChartTypes.PIE && metricBody.time_unit !== 'global') {
+    if (type === ChartTypes.PIE && metricBody.time_unit !== TimeUnits.GLOBAL) {
       dispatch(
         setMetricBodyRedux({
           ...metricBody,
-          time_unit: 'global'
+          time_unit: TimeUnits.GLOBAL
         })
       );
     }
@@ -126,9 +121,9 @@ const DropdownChartType = ({
                         }`}
                         onClick={evt => onClickChartType(evt, typeItem)}
                       >
-                        {typeItem === 'pie' && <PieSparkline />}
-                        {typeItem === 'bar' && <BarSparkline />}
-                        {typeItem === 'line' && (
+                        {typeItem === ChartTypes.PIE && <PieSparkline />}
+                        {typeItem === ChartTypes.BAR && <BarSparkline />}
+                        {typeItem === ChartTypes.LINE && (
                           <LineSparkline metricSet={metricSet} />
                         )}
                       </div>

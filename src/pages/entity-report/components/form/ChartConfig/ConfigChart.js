@@ -1,12 +1,17 @@
 //---> Build-in Modules
-import {REPORT_INPUT_NAME} from 'constants/report';
+import {ChartTypes, REPORT_INPUT_NAME, TimeUnits} from 'constants/report';
 import {useReport} from 'pages/entity-report/hooks';
 import React from 'react';
 
 //---> External Modules
 import {useFormContext, useWatch} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {setIsCompareChartRedux} from 'store/reducers/entity-report';
+import {
+  setChartTypeSelectedRedux,
+  setIsCompareChartRedux,
+  setMetricBodyRedux,
+  useMetricsBodySelector
+} from 'store/reducers/entity-report';
 
 //---> Internal Modules
 import DropdownChartType from './DropdownChartType';
@@ -14,6 +19,7 @@ import DropdownChartType from './DropdownChartType';
 const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
   const dispatch = useDispatch();
   const {register, setValue} = useFormContext();
+  const metricBody = useMetricsBodySelector();
   const {colors, onChangeColor, typeSelected, onSelectType} = useReport({
     chartTypeDefault,
     colorDefault,
@@ -49,6 +55,38 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
   React.useEffect(() => {
     dispatch(setIsCompareChartRedux(isChartCompare));
   }, [dispatch, isChartCompare]);
+
+  React.useEffect(
+    function initChartTypeWithGlobalTimeRange() {
+      if (
+        isChartCompare &&
+        ![ChartTypes.BAR, ChartTypes.PIE].includes(typeSelected) &&
+        metricBody.time_unit !== TimeUnits.GLOBAL
+      ) {
+        setValue(
+          `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+          ChartTypes.PIE
+        );
+        onSelectType(ChartTypes.PIE);
+        dispatch(setChartTypeSelectedRedux(ChartTypes.PIE));
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            time_unit: TimeUnits.GLOBAL
+          })
+        );
+      }
+    },
+    [
+      chartTypeDefault,
+      dispatch,
+      isChartCompare,
+      metricBody,
+      onSelectType,
+      setValue,
+      typeSelected
+    ]
+  );
 
   return (
     <div className="d-flex">
