@@ -35,8 +35,9 @@ import {schemaValidate} from './form/validation';
 import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
 import {getReportById} from 'pages/entity-report/utils/getReportById';
-import {ReportTypes} from 'constants/report';
+import {ChartModes, ReportTypes} from 'constants/report';
 import DistributionUnit from './form/DistributionUnit';
+import ChartMode from './form/ChartConfig/ChartMode';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -138,7 +139,7 @@ export default function ReportFormContent({
                   />
                 </Row>
                 <Row className="mb-3">
-                  <Col md="3">
+                  <Col md="1">
                     <Label className="font-weight-bold">
                       {t('properties')}
                     </Label>
@@ -148,6 +149,16 @@ export default function ReportFormContent({
                       metricSet={metricSet}
                     />
                   </Col>
+                  {reportType?.value === ReportTypes.TRENDING && (
+                    <Col md="2">
+                      <Label className="font-weight-bold">{t('mode')}</Label>
+                      <ChartMode
+                        defaultValue={
+                          defaultValues?.properties?.mode || ChartModes.BY
+                        }
+                      />
+                    </Col>
+                  )}
                 </Row>
               </>
             )}

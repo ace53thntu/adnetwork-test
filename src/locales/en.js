@@ -79,6 +79,7 @@ const en = {
   properties: 'Properties',
   noLabel: 'No label',
   dealPrice: 'Deal price',
+  mode: 'Mode',
 
   // Main Menu
   userManagement: 'User Management',

@@ -33,10 +33,6 @@ export default function TimeUnit({defaultValue}) {
   const metricBody = useMetricsBodySelector();
   const chartTypeRedux = useChartTypeSelectedSelector();
   const isChartCompare = useIsChartCompareSelector();
-  console.log(
-    '🚀 ~ file: TimeUnit.js ~ line 34 ~ TimeUnit ~ chartTypeRedux',
-    chartTypeRedux
-  );
   const [activeUnit, setActiveUnit] = React.useState(null);
 
   const {watch, register, setValue, errors} = useFormContext();

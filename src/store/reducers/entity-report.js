@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
 import {ReportGroupTypes} from 'pages/entity-report/constants.js';
+import {ChartModes} from 'constants/report';
 
 //---> Define action types
 const ACTION_PREFIX = '@entity_report';
@@ -16,9 +17,12 @@ const SET_METRIC_DATA = `${ACTION_PREFIX}/SET_METRIC_DATA`;
 const SET_ACTIVE_REPORT_GROUP_TYPE = `${ACTION_PREFIX}/SET_ACTIVE_REPORT_GROUP_TYPE`;
 const SET_CHART_TYPE_SELECTED = `${ACTION_PREFIX}/SET_CHART_TYPE_SELECTED`;
 const SET_IS_CHART_COMPARE = `${ACTION_PREFIX}/SET_IS_CHART_COMPARE`;
+const SET_CHART_MODE = `${ACTION_PREFIX}/SET_CHART_MODE`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setChartModeRedux = chartMode =>
+  createAction(SET_CHART_MODE, {chartMode});
 export const setIsCompareChartRedux = isCompare =>
   createAction(SET_IS_CHART_COMPARE, {isCompare});
 export const setChartTypeSelectedRedux = chartType =>
@@ -46,11 +50,13 @@ const entityReportInitialState = {
   metricsData: null,
   reportGroupType: ReportGroupTypes.ADVERTISER,
   chartTypeSelected: '',
-  isChartCompare: false
+  isChartCompare: false,
+  chartMode: ChartModes.BY
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_CHART_MODE]: handleSetChartMode,
   [SET_IS_CHART_COMPARE]: handleSetIsChartCompare,
   [SET_CHART_TYPE_SELECTED]: handleSetChartTypeSelected,
   [SET_ACTIVE_REPORT_GROUP_TYPE]: handleSetReportGroupType,
@@ -64,6 +70,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetChartMode(state, action) {
+  state.chartMode = action.payload.chartMode;
 }
 
 function handleSetIsChartCompare(state, action) {
@@ -134,7 +144,18 @@ const makeSelectIsChartCompare = () =>
     a => a.isChartCompare
   );
 
+const makeSelectChartMode = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.chartMode
+  );
+
 //---> Hook to select state
+export function useChartModeSelector() {
+  const selectChartMode = React.useMemo(makeSelectChartMode, []);
+  return useSelector(state => selectChartMode(state));
+}
+
 export function useIsChartCompareSelector() {
   const selectIsChartCompare = React.useMemo(makeSelectIsChartCompare, []);
   return useSelector(state => selectIsChartCompare(state));

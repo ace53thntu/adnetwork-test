@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
 import {DialogConfirm, LoadingIndicator} from 'components/common';
-import {ChartTypes} from 'constants/report';
+import {ChartModes, ChartTypes} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {
@@ -54,6 +54,7 @@ export default function ReportItem({
 
   const color = properties?.color || [DefaultColor];
   const chartType = properties?.chart_type || ChartTypes.LINE;
+  const chartMode = properties?.mode || ChartModes.BY;
   const metricSet = properties?.metric_set || [];
   const colors = parseColors(color);
   const reportByUuid = getReportById({report: reportItem, entityId});
@@ -66,7 +67,8 @@ export default function ReportItem({
     timeRange,
     metricSet,
     entityId: reportByUuid,
-    chartType
+    chartType,
+    chartMode
   });
   console.log('🚀 ~ file: report-item.js ~ line 71 ~ chartType', chartType);
   console.log('🚀 ~ file: report-item.js ~ line 68 ~ metricData', metricData);

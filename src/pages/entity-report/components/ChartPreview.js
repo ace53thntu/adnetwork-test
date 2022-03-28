@@ -15,6 +15,7 @@ import {
   ChartTypes
 } from 'constants/report';
 import {
+  useChartModeSelector,
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
   useMetricsBodySelector
@@ -82,13 +83,15 @@ const ChartPreviewContent = React.memo(
     const {t} = useTranslation();
     const chartTypeRedux = useChartTypeSelectedSelector();
     const isChartCompare = useIsChartCompareSelector();
+    const chartMode = useChartModeSelector();
     const chartData = useChartData({
       metrics,
       unit,
       timeRange,
       metricSet,
       entityId,
-      chartType: chartTypeRedux
+      chartType: chartTypeRedux,
+      chartMode
     });
 
     const colors = initializingColors({
@@ -97,10 +100,7 @@ const ChartPreviewContent = React.memo(
       charType: chartTypeRedux
     });
 
-    console.log('🚀 ~ file: ChartPreview.js ~ line 99 ~ colors', colors);
-
     const {watch, setValue} = useFormContext();
-
     const selectedType = watch(
       `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
     );

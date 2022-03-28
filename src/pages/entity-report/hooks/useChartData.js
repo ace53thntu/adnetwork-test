@@ -1,6 +1,11 @@
 import {useMemo} from 'react';
 import moment from 'moment';
-import {ChartTypes, FORMAT_BY_UNIT, TimeUnits} from 'constants/report';
+import {
+  ChartModes,
+  ChartTypes,
+  FORMAT_BY_UNIT,
+  TimeUnits
+} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import _ from 'lodash';
 
@@ -16,7 +21,7 @@ export const useChartData = ({
   metricSet = [],
   entityId,
   chartType = '',
-  colors = []
+  chartMode = ChartModes.BY
 }) => {
   return useMemo(() => {
     if (metricData) {
@@ -25,7 +30,7 @@ export const useChartData = ({
         [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
         unit === TimeUnits.GLOBAL
       ) {
-        return getDataPieChart({metrics, metricSet, info, colors});
+        return getDataPieChart({metrics, metricSet, info});
       }
 
       return getDataLineChart({
@@ -34,14 +39,15 @@ export const useChartData = ({
         metricSet,
         unit,
         metrics,
-        entityId
+        entityId,
+        chartMode
       });
     }
     return null;
-  }, [chartType, colors, entityId, metricData, metricSet, unit]);
+  }, [chartMode, chartType, entityId, metricData, metricSet, unit]);
 };
 
-const getDataPieChart = ({metrics, metricSet, info, colors}) => {
+const getDataPieChart = ({metrics, metricSet, info}) => {
   if (
     metrics &&
     typeof metrics === 'object' &&
@@ -70,7 +76,7 @@ const getDataPieChart = ({metrics, metricSet, info, colors}) => {
         },
         {
           datasets: [
-            {data: [], backgroundColor: colors, label: metricSet?.[0]?.label}
+            {data: [], backgroundColor: [], label: metricSet?.[0]?.label}
           ],
           labels: []
         }
@@ -90,7 +96,8 @@ const getDataLineChart = ({
   metricSet,
   unit,
   metrics,
-  entityId
+  entityId,
+  chartMode
 }) => {
   if (
     !metrics ||
@@ -125,7 +132,8 @@ const getDataLineChart = ({
         listCheckPoints,
         metrics: newMetrics,
         entityId,
-        metricSet: item
+        metricSet: item,
+        chartMode
       });
       data.push({data: dataItem, name: item?.label});
     });
@@ -209,7 +217,8 @@ const getDataDrawChart = ({
   listCheckPoints = [],
   metrics = {},
   entityId,
-  metricSet
+  metricSet,
+  chartMode
 }) => {
   const data = [...listCheckPoints].reduce((acc, calculatedDate, idx) => {
     const existedMetricByDate = mappingData({
@@ -229,5 +238,17 @@ const getDataDrawChart = ({
     acc.push({x: calculatedDate, y: valueOfObject || 0});
     return acc;
   }, []);
+  if (chartMode === ChartModes.CUMULATIVE) {
+    let sum = 0;
+    const cumData = data?.map((item, idx) => {
+      sum += item?.y;
+      return {
+        ...item,
+        y: sum
+      };
+    });
+
+    return cumData;
+  }
   return data;
 };

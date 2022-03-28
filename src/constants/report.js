@@ -1,4 +1,13 @@
 /**
+ * Mode of chart.
+ * @enum {string}
+ */
+export const ChartModes = {
+  CUMULATIVE: 'cumulative',
+  BY: 'by'
+};
+
+/**
  * Types of chart.
  * @enum {string}
  */
@@ -180,7 +189,8 @@ export const REPORT_INPUT_NAME = {
   START_TIME: 'start_time',
   END_TIME: 'end_time',
   REPORT_BY: 'report_by',
-  REPORT_BY_UUID: 'report_by_uuid'
+  REPORT_BY_UUID: 'report_by_uuid',
+  MODE: 'mode'
 };
 
 export const DEFAULT_TIME_RANGE = 'l1mt';
