@@ -28,6 +28,7 @@ import {InputStatus} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
 import InventorySnippet from '../Snippets/InventorySnippet';
+// import TrackerForm from './TrackerForm';
 
 const formName = {
   properties: 'properties',
@@ -218,6 +219,8 @@ const InventoryFormContent = ({
             {inventoryCodeSnippet(inventory?.id || '')}
           </InventorySnippet>
         )}
+
+        {/* <TrackerForm /> */}
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" onClick={toggle}>

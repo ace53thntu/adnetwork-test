@@ -28,7 +28,8 @@ export const useChartData = ({
       const {report: metrics, start_time, end_time, info = {}} = metricData;
       if (
         [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
-        unit === TimeUnits.GLOBAL
+        unit === TimeUnits.GLOBAL &&
+        metricSet?.length === 1
       ) {
         return getDataPieChart({metrics, metricSet, info});
       }

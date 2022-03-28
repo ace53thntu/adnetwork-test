@@ -13,15 +13,17 @@ import {
 } from 'pages/Container/constants';
 import {useCreateInventory} from 'queries/inventory';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {mappingInventoryFormToApi} from './dto';
+import {mappingInventoryFormToApi, mappingTrackerFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
+import {useCreateTracker} from 'queries/tracker';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
   const {mutateAsync: createInventory} = useCreateInventory();
+  const {mutateAsync: createTracker} = useCreateTracker();
 
   const methods = useForm({
     defaultValues: {
@@ -41,15 +43,22 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   // local states
   const [isLoading, setIsLoading] = useState(false);
 
-  const onHandleSubmit = async values => {
+  const onHandleSubmit = async formData => {
     console.log(
       '🚀 ~ file: CreateInventory.js ~ line 43 ~ CreateInventory ~ values',
-      values
+      formData
     );
-    const formData = mappingInventoryFormToApi({pageId, formData: values});
+    const requestBody = mappingInventoryFormToApi({pageId, formData});
     setIsLoading(true);
     try {
-      await createInventory(formData);
+      const {data} = await createInventory(requestBody);
+      if (formData?.tracker?.template_uuid) {
+        const trackerForm = mappingTrackerFormToApi({
+          tracker: formData?.tracker,
+          inventoryId: data?.uuid
+        });
+        await createTracker(trackerForm);
+      }
       ShowToast.success('Created Inventory successfully!', {
         closeOnClick: true
       });

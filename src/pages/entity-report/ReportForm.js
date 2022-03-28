@@ -12,6 +12,7 @@ import {useGenerateReportUrl} from 'queries/report';
 import {
   setMetricBodyRedux,
   setMetricDataRedux,
+  setMetricSetSelectedRedux,
   useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
 import ModalReportForm from './ReportCreateModal';
@@ -20,6 +21,7 @@ import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
   PUBLISHER_REPORT_VIEW_TYPES,
+  ReportTypes,
   REPORT_VIEW_TYPES
 } from 'constants/report';
 import {ReportGroupTypes} from './constants.js/index.js';
@@ -35,7 +37,7 @@ const ReportForm = ({
   ownerRole
 }) => {
   const dispatch = useDispatch();
-  const {mutateAsync: generateReportUrl} = useGenerateReportUrl();
+  const {mutateAsync: getReportMetric} = useGenerateReportUrl();
   const [isLoading, setIsLoading] = React.useState(false);
   const [showReportForm, setShowReportForm] = React.useState(false);
   const reportTypeGroup = useReportGroupTypeSelector();
@@ -70,16 +72,17 @@ const ReportForm = ({
     const requestBody = {
       source_uuid: entityId,
       report_by_uuid: reportByUuid,
-      report_type: 'trending',
+      report_type: ReportTypes.TRENDING,
       time_unit: DEFAULT_TIME_UNIT,
       time_range: DEFAULT_TIME_RANGE,
       report_source: entityType,
       report_by: entityType
     };
     try {
-      const {data} = await generateReportUrl(requestBody);
+      const {data} = await getReportMetric(requestBody);
       dispatch(setMetricBodyRedux(requestBody));
       dispatch(setMetricDataRedux(data));
+      dispatch(setMetricSetSelectedRedux(selectedMetricSet));
       toggleModalReportForm();
     } catch (error) {
       // TODO: handle error generate report

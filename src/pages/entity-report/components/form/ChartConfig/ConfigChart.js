@@ -10,7 +10,8 @@ import {
   setChartTypeSelectedRedux,
   setIsCompareChartRedux,
   setMetricBodyRedux,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useMetricsetSelectedSelector
 } from 'store/reducers/entity-report';
 
 //---> Internal Modules
@@ -20,6 +21,8 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
   const dispatch = useDispatch();
   const {register, setValue} = useFormContext();
   const metricBody = useMetricsBodySelector();
+  const metricsetSelected = useMetricsetSelectedSelector();
+
   const {colors, onChangeColor, typeSelected, onSelectType} = useReport({
     chartTypeDefault,
     colorDefault,
@@ -61,7 +64,8 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
       if (
         isChartCompare &&
         ![ChartTypes.BAR, ChartTypes.PIE].includes(typeSelected) &&
-        metricBody.time_unit !== TimeUnits.GLOBAL
+        metricBody.time_unit !== TimeUnits.GLOBAL &&
+        metricsetSelected?.length < 2
       ) {
         setValue(
           `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
@@ -82,6 +86,7 @@ const ConfigChart = ({chartTypeDefault, colorDefault, metricSet}) => {
       dispatch,
       isChartCompare,
       metricBody,
+      metricsetSelected?.length,
       onSelectType,
       setValue,
       typeSelected

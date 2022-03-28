@@ -18,9 +18,12 @@ const SET_ACTIVE_REPORT_GROUP_TYPE = `${ACTION_PREFIX}/SET_ACTIVE_REPORT_GROUP_T
 const SET_CHART_TYPE_SELECTED = `${ACTION_PREFIX}/SET_CHART_TYPE_SELECTED`;
 const SET_IS_CHART_COMPARE = `${ACTION_PREFIX}/SET_IS_CHART_COMPARE`;
 const SET_CHART_MODE = `${ACTION_PREFIX}/SET_CHART_MODE`;
+const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setMetricSetSelectedRedux = metricsetsSelected =>
+  createAction(SET_METRICSET_SELECTED, {metricsetsSelected});
 export const setChartModeRedux = chartMode =>
   createAction(SET_CHART_MODE, {chartMode});
 export const setIsCompareChartRedux = isCompare =>
@@ -51,11 +54,13 @@ const entityReportInitialState = {
   reportGroupType: ReportGroupTypes.ADVERTISER,
   chartTypeSelected: '',
   isChartCompare: false,
-  chartMode: ChartModes.BY
+  chartMode: ChartModes.BY,
+  metricsetsSelected: []
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_METRICSET_SELECTED]: handleSetMetricsetSelected,
   [SET_CHART_MODE]: handleSetChartMode,
   [SET_IS_CHART_COMPARE]: handleSetIsChartCompare,
   [SET_CHART_TYPE_SELECTED]: handleSetChartTypeSelected,
@@ -70,6 +75,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetMetricsetSelected(state, action) {
+  state.metricsetsSelected = action.payload.metricsetsSelected;
 }
 
 function handleSetChartMode(state, action) {
@@ -150,7 +159,18 @@ const makeSelectChartMode = () =>
     a => a.chartMode
   );
 
+const makeSelectMetricsetSelected = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.metricsetsSelected
+  );
+
 //---> Hook to select state
+export function useMetricsetSelectedSelector() {
+  const selectMetricSet = React.useMemo(makeSelectMetricsetSelected, []);
+  return useSelector(state => selectMetricSet(state));
+}
+
 export function useChartModeSelector() {
   const selectChartMode = React.useMemo(makeSelectChartMode, []);
   return useSelector(state => selectChartMode(state));

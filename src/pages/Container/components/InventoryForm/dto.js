@@ -1,4 +1,5 @@
 import {ProtocolOptions} from 'constants/misc';
+import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
 
@@ -197,5 +198,16 @@ export const mappingInventoryApiToForm = ({
       : null,
     market_dsps: marketDsps || [],
     tags: tagsParsed
+  };
+};
+
+export const mappingTrackerFormToApi = ({tracker, inventoryId}) => {
+  const {template_uuid, variables, status} = tracker;
+  return {
+    template_uuid: template_uuid?.value,
+    reference_type: TrackerReferenceTypes.INVENTORY,
+    reference_uuid: inventoryId,
+    variables,
+    status
   };
 };
