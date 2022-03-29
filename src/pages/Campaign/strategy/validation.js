@@ -110,9 +110,13 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
               }
 
               // You can access the budget global field with `this.parent`.
-              return (
-                value && parseFloat(value) < parseFloat(this.parent?.global)
-              );
+              if (parseFloat(this.parent?.global) > 0) {
+                return (
+                  value && parseFloat(value) < parseFloat(this.parent?.global)
+                );
+              }
+
+              return true;
             }
           })
       }),
@@ -170,7 +174,11 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
               }
 
               // You can access the budget global field with `this.parent`.
-              return parseFloat(value) < parseFloat(this.parent?.global);
+              if (parseFloat(this.parent?.global) > 0) {
+                return parseFloat(value) < parseFloat(this.parent?.global);
+              }
+
+              return true;
             }
           })
       })

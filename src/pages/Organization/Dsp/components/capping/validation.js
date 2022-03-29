@@ -86,7 +86,11 @@ export const schemaValidateCreateBudget = t => {
             }
 
             // You can access the budget global field with `this.parent`.
-            return value && parseInt(value) < parseInt(this.parent?.global);
+            if (parseInt(this.parent?.global) > 0) {
+              return value && parseInt(value) < parseInt(this.parent?.global);
+            }
+
+            return true;
           }
         })
         .typeError('Invalid number')

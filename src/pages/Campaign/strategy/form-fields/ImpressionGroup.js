@@ -21,7 +21,6 @@ const ImpressionGroup = () => {
             groupSeparator=","
             disableGroupSeparators={false}
             decimalsLimit={3}
-            prefix="$"
             required
           />
         </Col>
@@ -34,7 +33,6 @@ const ImpressionGroup = () => {
             groupSeparator=","
             disableGroupSeparators={false}
             decimalsLimit={3}
-            prefix="$"
             required
           />
         </Col>

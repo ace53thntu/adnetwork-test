@@ -56,7 +56,6 @@ export const validationCampaign = (t, isEdit = false) => {
             ),
           [CAMPAIGN_KEYS.BUDGET_DAILY]: yup
             .string()
-
             .test(
               'is-number',
               'The budget daily must be a integer number and greater than 0.',
@@ -83,13 +82,16 @@ export const validationCampaign = (t, isEdit = false) => {
                 if (!value) {
                   return true;
                 }
-
                 // You can access the budget global field with `this.parent`.
-                return (
-                  value &&
-                  parseInt(value) <
-                    parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
-                );
+                if (parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL]) > 0) {
+                  return (
+                    value &&
+                    parseInt(value) <
+                      parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
+                  );
+                }
+
+                return true;
               }
             })
         }),
@@ -126,7 +128,6 @@ export const validationCampaign = (t, isEdit = false) => {
             .test(
               'is-number',
               'The impression daily must be a integer number and greater than 0.',
-
               val => {
                 if (!val) {
                   return true;
@@ -152,10 +153,14 @@ export const validationCampaign = (t, isEdit = false) => {
                 }
 
                 // You can access the budget global field with `this.parent`.
-                return (
-                  parseInt(value) <
-                  parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
-                );
+                if (parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL]) > 0) {
+                  return (
+                    parseInt(value) <
+                    parseInt(this.parent?.[CAMPAIGN_KEYS.BUDGET_GLOBAL])
+                  );
+                }
+
+                return true;
               }
             })
         })
