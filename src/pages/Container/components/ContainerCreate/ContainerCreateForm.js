@@ -3,6 +3,7 @@ import {ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateContainer} from 'queries/container';
 import * as React from 'react';
@@ -15,6 +16,7 @@ import {
   setContainersRedux,
   toggleCreateContainerModalRedux
 } from 'store/reducers/container';
+import {getRole} from 'utils/helpers/auth.helpers';
 import {getResponseData, isValidResponse} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingFormToApi} from '../ContainerDetail/dto';
@@ -25,6 +27,7 @@ import {containersMapData} from '../Tree/dto';
 
 function ContainerCreateForm(props) {
   const {t} = useTranslation();
+  const role = getRole();
   const {containers, publisher} = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,7 +45,7 @@ function ContainerCreateForm(props) {
         ? {value: publisher?.uuid, label: publisher?.name}
         : null
     },
-    resolver: containerFormResolver(containers)
+    resolver: containerFormResolver(containers, role)
   });
   const {handleSubmit, formState} = methods;
 
@@ -50,7 +53,7 @@ function ContainerCreateForm(props) {
 
   const onHandleSubmit = async values => {
     setIsLoading(true);
-    const formData = mappingFormToApi(values);
+    const formData = mappingFormToApi(values, role);
     try {
       const {data} = await createContainerRequest(formData);
 
@@ -119,21 +122,24 @@ function ContainerCreateForm(props) {
                 isRequired
               />
             </Col>
-            <Col sm="12">
-              <CurrencyInputField
-                name="cost"
-                label="Commission Cost"
-                placeholder="Commission Cost"
-                disabled={isLoading}
-                decimalSeparator="."
-                groupSeparator=","
-                disableGroupSeparators={false}
-                decimalsLimit={2}
-                maxLength="4"
-                description="The Cost should be between 0.01 and 0.09"
-                required
-              />
-            </Col>
+            {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+              <Col sm="12">
+                <CurrencyInputField
+                  name="cost"
+                  label="Commission Cost"
+                  placeholder="Commission Cost"
+                  disabled={isLoading}
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={2}
+                  maxLength="4"
+                  description="The Cost should be between 0.01 and 0.99"
+                  required
+                />
+              </Col>
+            )}
+
             <Col sm="6">
               <FormGroup className="d-flex mb-0 ">
                 <FormToggle

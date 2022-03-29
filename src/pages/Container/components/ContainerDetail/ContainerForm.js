@@ -26,6 +26,8 @@ import PublisherSelect from './PublisherSelect';
 import {validationDescriptionTab} from './validation';
 import {RoutePaths} from 'constants/route-paths';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 const propTypes = {
   container: PropTypes.object,
@@ -34,7 +36,7 @@ const propTypes = {
 
 function ContainerForm(props) {
   const {container, isEdit = false} = props;
-
+  const role = getRole();
   const {t} = useTranslation();
   const navigate = useNavigate();
   const clientCache = useQueryClient();
@@ -60,7 +62,7 @@ function ContainerForm(props) {
 
   const methods = useForm({
     defaultValues: formDefaultValues,
-    resolver: validationDescriptionTab(filteredContainer)
+    resolver: validationDescriptionTab(filteredContainer, role)
   });
 
   const {handleSubmit, formState, reset} = methods;
@@ -84,7 +86,7 @@ function ContainerForm(props) {
     setIsLoading(true);
     try {
       let containerId = container?.uuid ?? containerRedux?.uuid;
-      const formData = mappingFormToApi(values);
+      const formData = mappingFormToApi(values, role);
       const {data} = await updateContainerRequest({
         cid: containerId,
         data: formData
@@ -138,20 +140,22 @@ function ContainerForm(props) {
                 placeholder={t('containerURL')}
                 label={t('containerURL')}
               />
+              {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+                <CurrencyInputField
+                  name="cost"
+                  label="Commission Cost"
+                  placeholder="Commission Cost"
+                  disabled={isLoading}
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={2}
+                  maxLength="4"
+                  description="The Cost should be between 0.01 and 0.99"
+                  required
+                />
+              )}
 
-              <CurrencyInputField
-                name="cost"
-                label="Commission Cost"
-                placeholder="Commission Cost"
-                disabled={isLoading}
-                decimalSeparator="."
-                groupSeparator=","
-                disableGroupSeparators={false}
-                decimalsLimit={2}
-                maxLength="4"
-                description="The Cost should be between 0.01 and 0.09"
-                required
-              />
               <div className="d-flex">
                 <FormGroup className="d-flex  mb-0 ">
                   <FormToggle

@@ -1,3 +1,5 @@
+import {USER_ROLE} from 'pages/user-management/constants';
+
 export const mappingApiToForm = ({container, containerRedux, t}) => {
   if (container) {
     const {
@@ -53,7 +55,7 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
   };
 };
 
-export const mappingFormToApi = formData => {
+export const mappingFormToApi = (formData, role) => {
   const {name, url, publisher_uuid, status, first_party, cost} = formData;
   return {
     name,
@@ -61,6 +63,8 @@ export const mappingFormToApi = formData => {
     publisher_uuid: publisher_uuid?.value,
     status,
     first_party: first_party === 'active' ? true : false,
-    cost: parseFloat(cost) || 0
+    cost: [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+      ? parseFloat(cost)
+      : 0.1
   };
 };

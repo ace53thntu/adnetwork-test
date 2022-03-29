@@ -2,6 +2,7 @@ import {BlockOverlay, ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {SDK_CDN, SDK_NAME} from 'constants/container';
+import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useEditContainer} from 'queries/container';
 import * as React from 'react';
@@ -14,6 +15,7 @@ import {
   updatedContainerRedux,
   useContainerSelector
 } from 'store/reducers/container';
+import {getRole} from 'utils/helpers/auth.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from '../ContainerDetail/dto';
 import PublisherSelect from '../ContainerDetail/PublisherSelect';
@@ -39,6 +41,7 @@ function ContainerInfoForm(props) {
   const {containers, container} = props;
   const dispatch = useDispatch();
   const {source} = useParams();
+  const role = getRole();
 
   const {mutateAsync: updateContainerRequest} = useEditContainer();
 
@@ -55,19 +58,15 @@ function ContainerInfoForm(props) {
 
   const methods = useForm({
     defaultValues: formDefaultValues,
-    resolver: containerFormResolver(containers)
+    resolver: containerFormResolver(containers, role)
   });
-  const {handleSubmit, formState, reset, errors} = methods;
-  console.log(
-    '🚀 ~ file: ContainerInfoForm.js ~ line 60 ~ ContainerInfoForm ~ errors',
-    errors
-  );
+  const {handleSubmit, formState, reset} = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onHandleSubmit = async values => {
     setIsLoading(true);
-    const formData = mappingFormToApi(values);
+    const formData = mappingFormToApi(values, role);
     try {
       await updateContainerRequest({
         cid: container?.uuid,
@@ -111,19 +110,22 @@ function ContainerInfoForm(props) {
                 disable={formState.isSubmitting}
                 isRequired
               />
-              <CurrencyInputField
-                name="cost"
-                label="Commission Cost"
-                placeholder="Commission Cost"
-                disabled={isLoading}
-                decimalSeparator="."
-                groupSeparator=","
-                disableGroupSeparators={false}
-                decimalsLimit={2}
-                maxLength="4"
-                description="The Cost should be between 0.01 and 0.09"
-                required
-              />
+              {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+                <CurrencyInputField
+                  name="cost"
+                  label="Commission Cost"
+                  placeholder="Commission Cost"
+                  disabled={isLoading}
+                  decimalSeparator="."
+                  groupSeparator=","
+                  disableGroupSeparators={false}
+                  decimalsLimit={2}
+                  maxLength="4"
+                  description="The Cost should be between 0.01 and 0.99"
+                  required
+                />
+              )}
+
               <div className="d-flex mb-2">
                 <FormGroup className="d-flex  mb-0 ml-3">
                   <FormToggle
