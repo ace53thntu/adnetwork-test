@@ -45,21 +45,26 @@ const ActionIndexes = {
   DEAL: 2
 };
 
-const useColumns = role => {
+const filterColumns = (item, role) => {
+  if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+    if (
+      ['market_type', 'deal_floor_price', 'floor_price'].includes(item.accessor)
+    ) {
+      return false;
+    }
+    return true;
+  }
+  return true;
+};
+
+const useColumns = (role, fromPage) => {
   return React.useMemo(() => {
-    return [
+    const baseCols = [
       {
         header: 'Name',
         accessor: 'name'
       },
-      {
-        header: 'Container Name',
-        accessor: 'container_name'
-      },
-      {
-        header: 'Page Name',
-        accessor: 'page_name'
-      },
+
       {
         header: 'Type',
         accessor: 'type',
@@ -122,23 +127,29 @@ const useColumns = role => {
           </Badge>
         )
       }
-    ].filter(item => {
-      if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
-        if (
-          ['market_type', 'deal_floor_price', 'floor_price'].includes(
-            item.accessor
-          )
-        ) {
-          return false;
-        }
-        return true;
-      }
-      return true;
-    });
-  }, [role]);
+    ];
+    let cols = [];
+    if (!fromPage) {
+      cols = [
+        {
+          header: 'Container Name',
+          accessor: 'container_name'
+        },
+        {
+          header: 'Page Name',
+          accessor: 'page_name'
+        },
+        ...baseCols
+      ];
+    } else {
+      cols = baseCols;
+    }
+
+    return cols.filter(item => filterColumns(item, role));
+  }, [fromPage, role]);
 };
 
-const InventoryList = ({page, filterParams = null}) => {
+const InventoryList = ({page, filterParams = null, fromPage = false}) => {
   const role = getRole();
 
   const searchType = useSearchTypeSelector();
@@ -180,7 +191,7 @@ const InventoryList = ({page, filterParams = null}) => {
   const inventories = useInventoriesByContainer({
     data: containerInventories
   });
-  const columns = useColumns(role);
+  const columns = useColumns(role, fromPage);
 
   //---> Define local states.
   const [openModal, setOpenModal] = useState(false);

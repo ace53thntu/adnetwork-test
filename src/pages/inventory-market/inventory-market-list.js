@@ -87,8 +87,8 @@ const InventoryMarket = () => {
       {
         header: 'Name',
         accessor: 'name',
-        md: 6,
-        sm: 2
+        md: 4,
+        sm: 4
       },
       {
         header: 'Url',
@@ -100,8 +100,8 @@ const InventoryMarket = () => {
             </a>
           );
         },
-        md: 2,
-        sm: 2
+        md: 4,
+        sm: 4
       },
       {
         header: 'Cost',

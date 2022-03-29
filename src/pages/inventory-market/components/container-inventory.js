@@ -13,8 +13,8 @@ import React from 'react';
 //---> Internal Modules
 import {InventoryList} from './inventory-list';
 
-const InventoryContainer = ({page}) => {
-  return <InventoryList page={page} />;
+const InventoryContainer = ({page, fromPage}) => {
+  return <InventoryList page={page} fromPage={fromPage} />;
 };
 
 export default React.memo(InventoryContainer);

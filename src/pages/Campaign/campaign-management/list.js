@@ -15,12 +15,15 @@ import {
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {CampaignListStyled} from './styled';
+import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 const DeleteTitle = 'Are you sure delete this Campaign';
 
 const propTypes = {};
 
 const CampaignList = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id') || '';
@@ -57,16 +60,21 @@ const CampaignList = () => {
 
   //---> Define columns
   const columns = React.useMemo(() => {
-    return [
-      {
-        header: 'Advertiser',
-        accessor: 'advertiser_name'
-      },
+    const baseCols = [
       {
         header: 'Campaign',
         accessor: 'name'
       },
-
+      {
+        header: t('startDate'),
+        accessor: 'start_time',
+        cell: row => (row?.value ? moment(row?.value).format('DD/MM/YYYY') : '')
+      },
+      {
+        header: t('endDate'),
+        accessor: 'end_time',
+        cell: row => (row?.value ? moment(row?.value).format('DD/MM/YYYY') : '')
+      },
       {
         accessor: 'status',
         cell: row => {
@@ -85,7 +93,19 @@ const CampaignList = () => {
         }
       }
     ];
-  }, []);
+
+    if (!advertiserId) {
+      return [
+        {
+          header: 'Advertiser',
+          accessor: 'advertiser_name'
+        },
+        ...baseCols
+      ];
+    }
+
+    return baseCols;
+  }, [advertiserId, t]);
 
   function onPageChange(evt, page) {
     evt.preventDefault();

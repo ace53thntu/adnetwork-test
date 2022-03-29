@@ -78,7 +78,7 @@ const ContainerPage = ({data}) => {
           data={pages}
           columns={columns}
           detailPanel={rowData => {
-            return <InventoryContainer page={rowData} />;
+            return <InventoryContainer page={rowData} fromPage />;
           }}
           detailCaption={t('inventories')}
         />

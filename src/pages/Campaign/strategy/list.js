@@ -18,15 +18,24 @@ import {Pagination} from 'components/list/pagination';
 import {RoutePaths} from 'constants/route-paths';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import NoDataAvailable from 'components/list/no-data';
+import {useTranslation} from 'react-i18next';
+import moment from 'moment';
 
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
 const propTypes = {
   campaignId: PropTypes.any,
-  status: PropTypes.string
+  status: PropTypes.string,
+  fromCampaignPage: PropTypes.bool
 };
 
-const StrategyList = ({campaignId = undefined, status = ''}) => {
+const StrategyList = ({
+  campaignId = undefined,
+  status = '',
+  fromCampaignPage = false
+}) => {
+  const {t} = useTranslation();
+
   //---> Local states
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
@@ -81,39 +90,70 @@ const StrategyList = ({campaignId = undefined, status = ''}) => {
 
   //---> Define columns
   const columns = React.useMemo(() => {
-    return [
-      {
-        header: 'Advertiser',
-        accessor: 'advertiser_name'
-      },
-      {
-        header: 'Campaign',
-        accessor: 'campaign_name'
-      },
+    const statusCol = {
+      accessor: 'status',
+      xs: 2,
+      md: 2,
+      sm: 2,
+      cell: row => {
+        let statusProps = {
+          label: capitalize(row?.value)
+        };
+        switch (row.value) {
+          case 'active':
+            statusProps.color = 'success';
+            break;
+          default:
+            statusProps.color = 'error';
+            break;
+        }
+        return <CustomStatus {...statusProps} />;
+      }
+    };
+    const baseColumns = [
       {
         header: 'Strategy',
-        accessor: 'name'
-      },
-
-      {
-        accessor: 'status',
-        cell: row => {
-          let statusProps = {
-            label: capitalize(row?.value)
-          };
-          switch (row.value) {
-            case 'active':
-              statusProps.color = 'success';
-              break;
-            default:
-              statusProps.color = 'error';
-              break;
-          }
-          return <CustomStatus {...statusProps} />;
-        }
+        accessor: 'name',
+        xs: 3,
+        md: 3,
+        sm: 3
       }
     ];
-  }, []);
+
+    if (!fromCampaignPage) {
+      return [
+        {
+          header: 'Advertiser',
+          accessor: 'advertiser_name'
+        },
+        {
+          header: 'Campaign',
+          accessor: 'campaign_name'
+        },
+        ...baseColumns,
+        ...[statusCol]
+      ];
+    }
+
+    return [
+      ...baseColumns,
+      {
+        header: t('startDate'),
+        accessor: 'start_time',
+        cell: row => (row?.value ? moment(row?.value).format('DD/MM/YYYY') : '')
+      },
+      {
+        header: t('endDate'),
+        accessor: 'end_time',
+        cell: row => (row?.value ? moment(row?.value).format('DD/MM/YYYY') : '')
+      },
+      {
+        header: 'Type',
+        accessor: 'strategy_type'
+      },
+      ...[statusCol]
+    ];
+  }, [fromCampaignPage, t]);
 
   function onClickItem(item) {
     setCurrentStrategy(item);
