@@ -42,6 +42,11 @@ export const containerFormResolver = containers => {
         .test('is-float', 'Invalid number', value =>
           (value + '').match(VALID_NUMBER)
         )
+        .test(
+          'is-max',
+          'The Commission Cost must be between 0.01 and 0.09',
+          value => parseFloat(value) <= 0.09 && parseFloat(value) >= 0.01
+        )
         .typeError('Invalid number')
     })
   );

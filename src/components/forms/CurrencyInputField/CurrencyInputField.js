@@ -41,7 +41,9 @@ const CurrencyInputField = props => {
     decimalSeparator = ',',
     disabled = false,
     disableGroupSeparators = false,
-    decimalsLimit = 2
+    decimalsLimit = 2,
+    description = '',
+    ...rest
   } = props;
   const {control, errors} = useFormContext();
 
@@ -73,10 +75,14 @@ const CurrencyInputField = props => {
               decimalSeparator={decimalSeparator}
               decimalsLimit={decimalsLimit}
               disabled={disabled}
+              {...rest}
             />
           );
         }}
       />
+      {description && errors && !Object.keys(errors).length && (
+        <div className="form-text text-muted">{description}</div>
+      )}
       <ErrorMessage
         errors={errors}
         name={inputName}

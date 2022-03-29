@@ -1,5 +1,6 @@
 import {BlockOverlay, ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {SDK_CDN, SDK_NAME} from 'constants/container';
 import PropTypes from 'prop-types';
 import {useEditContainer} from 'queries/container';
@@ -110,12 +111,18 @@ function ContainerInfoForm(props) {
                 disable={formState.isSubmitting}
                 isRequired
               />
-              <FormTextInput
+              <CurrencyInputField
                 name="cost"
-                label="Cost"
-                placeholder="0.0"
-                disable={isLoading}
-                isRequired
+                label="Commission Cost"
+                placeholder="Commission Cost"
+                disabled={isLoading}
+                decimalSeparator="."
+                groupSeparator=","
+                disableGroupSeparators={false}
+                decimalsLimit={2}
+                maxLength="4"
+                description="The Cost should be between 0.01 and 0.09"
+                required
               />
               <div className="d-flex mb-2">
                 <FormGroup className="d-flex  mb-0 ml-3">

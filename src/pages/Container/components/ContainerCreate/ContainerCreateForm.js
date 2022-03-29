@@ -1,6 +1,7 @@
 import {ContainerAPIRequest} from 'api/container.api';
 import {ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import PropTypes from 'prop-types';
 import {useCreateContainer} from 'queries/container';
@@ -119,12 +120,18 @@ function ContainerCreateForm(props) {
               />
             </Col>
             <Col sm="12">
-              <FormTextInput
+              <CurrencyInputField
                 name="cost"
                 label="Commission Cost"
-                placeholder="0.0"
-                disable={isLoading}
-                isRequired
+                placeholder="Commission Cost"
+                disabled={isLoading}
+                decimalSeparator="."
+                groupSeparator=","
+                disableGroupSeparators={false}
+                decimalsLimit={2}
+                maxLength="4"
+                description="The Cost should be between 0.01 and 0.09"
+                required
               />
             </Col>
             <Col sm="6">

@@ -25,6 +25,7 @@ import {mappingApiToForm, mappingFormToApi} from './dto';
 import PublisherSelect from './PublisherSelect';
 import {validationDescriptionTab} from './validation';
 import {RoutePaths} from 'constants/route-paths';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const propTypes = {
   container: PropTypes.object,
@@ -137,12 +138,19 @@ function ContainerForm(props) {
                 placeholder={t('containerURL')}
                 label={t('containerURL')}
               />
-              <FormTextInput
+
+              <CurrencyInputField
                 name="cost"
                 label="Commission Cost"
-                placeholder="0.0"
-                disable={isLoading}
-                isRequired
+                placeholder="Commission Cost"
+                disabled={isLoading}
+                decimalSeparator="."
+                groupSeparator=","
+                disableGroupSeparators={false}
+                decimalsLimit={2}
+                maxLength="4"
+                description="The Cost should be between 0.01 and 0.09"
+                required
               />
               <div className="d-flex">
                 <FormGroup className="d-flex  mb-0 ">
