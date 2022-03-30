@@ -28,14 +28,12 @@ import {InputStatus} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
 import InventorySnippet from '../Snippets/InventorySnippet';
-// import TrackerForm from './TrackerForm';
+import TrackerForm from './TrackerForm';
 
 const formName = {
   properties: 'properties',
   status: 'status',
   type: 'type',
-  collect_type: 'collect_type',
-  traits: 'traits',
   name: 'name',
   allow_deal: 'allow_deal',
   market_type: 'market_type',
@@ -220,7 +218,7 @@ const InventoryFormContent = ({
           </InventorySnippet>
         )}
 
-        {/* <TrackerForm /> */}
+        <TrackerForm />
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" onClick={toggle}>

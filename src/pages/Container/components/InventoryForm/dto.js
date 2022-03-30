@@ -1,4 +1,4 @@
-import {ProtocolOptions} from 'constants/misc';
+import {ProtocolOptions, Statuses} from 'constants/misc';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -129,7 +129,8 @@ export const mappingInventoryApiToForm = ({
     market_type,
     price_engine,
     market_dsps = [],
-    tags
+    tags,
+    tracker = []
   } = inventory;
   const destructureType = inventoryTypes.find(item => item.value === type);
   const destructurePosition =
@@ -177,6 +178,15 @@ export const mappingInventoryApiToForm = ({
     });
   }
 
+  const trackerObj = tracker?.[0];
+  let templateUuid, templateName, variables;
+  if (trackerObj) {
+    templateUuid = trackerObj?.template_uuid;
+    templateName = trackerObj?.template_name;
+    variables = JSON.stringify(trackerObj?.variables);
+  }
+  console.log('🚀 ~ file: dto.js ~ line 187 ~ variables', variables);
+
   return {
     uuid,
     name,
@@ -197,17 +207,21 @@ export const mappingInventoryApiToForm = ({
       ? {value: price_engine, label: capitalize(price_engine)}
       : null,
     market_dsps: marketDsps || [],
-    tags: tagsParsed
+    tags: tagsParsed,
+    tracker: {
+      template_uuid: {value: templateUuid, label: templateName},
+      variables
+    }
   };
 };
 
 export const mappingTrackerFormToApi = ({tracker, inventoryId}) => {
-  const {template_uuid, variables, status} = tracker;
+  const {template_uuid, variables} = tracker;
   return {
     template_uuid: template_uuid?.value,
     reference_type: TrackerReferenceTypes.INVENTORY,
     reference_uuid: inventoryId,
     variables,
-    status
+    status: Statuses.ACTIVE
   };
 };

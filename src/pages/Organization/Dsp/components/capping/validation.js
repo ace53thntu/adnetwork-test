@@ -78,7 +78,6 @@ export const schemaValidateCreateBudget = t => {
           name: 'global',
           exclusive: false,
           params: {},
-          // eslint-disable-next-line no-template-curly-in-string
           message: 'The budget daily must be less than the global',
           test: function (value) {
             if (!value) {
