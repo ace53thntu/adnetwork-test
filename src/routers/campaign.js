@@ -21,31 +21,38 @@ export const campaignPages = {
   children: [
     {
       path: '',
-      element: <ListCampaignLayoutLazy />
+      element: <ListCampaignLayoutLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: '/create',
-      element: <CampaignCreateLazy />
+      element: <CampaignCreateLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: '/:campaignId',
-      element: <CampaignDetailLazy />
+      element: <CampaignDetailLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: `/:campaignId/${RoutePaths.EDIT}`,
-      element: <CampaignEditLazy />
+      element: <CampaignEditLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/${RoutePaths.CREATE}`,
-      element: <StrategyCreateLazy />
+      element: <StrategyCreateLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId`,
-      element: <StrategyDetailLazy />
+      element: <StrategyDetailLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId/${RoutePaths.EDIT}`,
-      element: <StrategyEditLazy />
+      element: <StrategyEditLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     }
   ]
 };

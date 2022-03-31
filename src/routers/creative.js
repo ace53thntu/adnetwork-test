@@ -15,19 +15,23 @@ export const creativePages = {
   children: [
     {
       path: '',
-      element: <CreativePage />
+      element: <CreativePage />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: ':advertiserId',
-      element: <ConceptsLazy />
+      element: <ConceptsLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: ':advertiserId/create',
-      element: <ConceptCreateLazy />
+      element: <ConceptCreateLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {
       path: ':advertiserId/:conceptId',
-      element: <ConceptDetailLazy />
+      element: <ConceptDetailLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     }
   ]
 };

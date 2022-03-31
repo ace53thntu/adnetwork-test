@@ -21,6 +21,7 @@ import {getResponseData, isValidResponse} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingFormToApi} from '../ContainerDetail/dto';
 import PublisherSelect from '../ContainerDetail/PublisherSelect';
+import {ContainerDefault} from '../ContainerFormFields';
 
 import {containerFormResolver} from '../ContainerSettings/validations';
 import {containersMapData} from '../Tree/dto';
@@ -134,7 +135,7 @@ function ContainerCreateForm(props) {
                   disableGroupSeparators={false}
                   decimalsLimit={2}
                   maxLength="4"
-                  description="The Cost should be between 0.01 and 0.99"
+                  description="The cost should be between 0.01 and 0.99"
                   required
                 />
               </Col>
@@ -167,6 +168,7 @@ function ContainerCreateForm(props) {
               </FormGroup>
             </Col>
           </Row>
+          <ContainerDefault isLoading={isLoading} />
         </ModalBody>
 
         <ModalFooter>

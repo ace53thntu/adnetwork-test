@@ -18,54 +18,66 @@ export const settingPages = {
       children: [
         {
           path: '',
-          element: <DomainListPage />
+          element: <DomainListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: `${RoutePaths.DOMAIN_GROUP}`,
       children: [
         {
           path: '',
-          element: <DomainGroupListPage />
+          element: <DomainGroupListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: `${RoutePaths.KEYWORD_LIST}`,
       children: [
         {
           path: '',
-          element: <KeywordListPage />
+          element: <KeywordListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: `${RoutePaths.POSITION}`,
       children: [
         {
           path: '',
-          element: <PositionListPage />
+          element: <PositionListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: `${RoutePaths.TRACKER_TEMPLATE}`,
       children: [
         {
           path: '',
-          element: <TrackerTemplateListPage />
+          element: <TrackerTemplateListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: `${RoutePaths.TRACKER}`,
       children: [
         {
           path: '',
-          element: <TrackerListPage />
+          element: <TrackerListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
-      ]
+      ],
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     }
   ]
 };

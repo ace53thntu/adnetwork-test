@@ -19,6 +19,7 @@ import {getRole} from 'utils/helpers/auth.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {mappingApiToForm, mappingFormToApi} from '../ContainerDetail/dto';
 import PublisherSelect from '../ContainerDetail/PublisherSelect';
+import {ContainerDefault} from '../ContainerFormFields';
 
 import {
   AndroidInitSnippet,
@@ -94,7 +95,7 @@ function ContainerInfoForm(props) {
         {isLoading && <BlockOverlay />}
         <CardBody>
           <Row>
-            <Col sm={12} md={6}>
+            <Col sm={12} md={8}>
               <PublisherSelect currentContainer={formDefaultValues} isEdit />
               <FormTextInput
                 isRequired
@@ -121,7 +122,7 @@ function ContainerInfoForm(props) {
                   disableGroupSeparators={false}
                   decimalsLimit={2}
                   maxLength="4"
-                  description="The Cost should be between 0.01 and 0.99"
+                  description="The cost should be between 0.01 and 0.99"
                   required
                 />
               )}
@@ -152,6 +153,8 @@ function ContainerInfoForm(props) {
                 </FormGroup>
               </div>
 
+              <ContainerDefault isLoading={isLoading} />
+
               <Row>
                 <Col sm={12} md={6}>
                   <Count
@@ -169,7 +172,7 @@ function ContainerInfoForm(props) {
               </Row>
             </Col>
 
-            <Col sm={12} md={6}>
+            <Col sm={12} md={4}>
               {isAndroid && <AndroidInitSnippet containerId={container.uuid} />}
               {isIOS && <IosInitSnippet containerId={container.uuid} />}
               {!isMobile && (

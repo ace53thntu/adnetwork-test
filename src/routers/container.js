@@ -17,33 +17,40 @@ export const containerPages = {
   children: [
     {
       path: '',
-      element: <ContainersLazy />
+      element: <ContainersLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     },
     {
       path: ':cid',
-      element: <ContainerDetailLazy />
+      element: <ContainerDetailLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     },
     {
       path: ':cid/report',
-      element: <ContainerReportLazy />
+      element: <ContainerReportLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     },
     {
       path: ':cid/:source',
-      element: <ContainerSourceLazy />
+      element: <ContainerSourceLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     },
     {
       path: ':cid/:source/:pageId',
-      element: <ContainerSourcePageLazy />
+      element: <ContainerSourcePageLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     }
   ]
 };
 
 export const inventoryPages = {
   path: RoutePaths.INVENTORY,
+  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER],
   children: [
     {
       path: `:inventoryId/${RoutePaths.REPORT}`,
-      element: <InventoryReportPage />
+      element: <InventoryReportPage />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
     }
   ]
 };

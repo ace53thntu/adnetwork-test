@@ -1,4 +1,4 @@
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -10,7 +10,7 @@ const ImpressionGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <CollapseBox open title={t('impression')} unMount={false}>
+    <Collapse initialOpen title={t('impression')} unMount={false}>
       <Row>
         <Col md="4">
           <CurrencyInputField
@@ -37,7 +37,7 @@ const ImpressionGroup = () => {
           />
         </Col>
       </Row>
-    </CollapseBox>
+    </Collapse>
   );
 };
 

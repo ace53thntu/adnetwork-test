@@ -1,4 +1,4 @@
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import React from 'react';
@@ -13,7 +13,7 @@ const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
   const {control, errors} = useFormContext();
 
   return (
-    <CollapseBox open title="Information" unMount={false}>
+    <Collapse initialOpen title="Information" unMount={false}>
       <Row>
         <Col md="6">
           <AdvertiserSelect
@@ -110,7 +110,7 @@ const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
           />
         </Col>
       </Row>
-    </CollapseBox>
+    </Collapse>
   );
 };
 

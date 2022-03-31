@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import {useTranslation} from 'react-i18next';
@@ -10,7 +10,7 @@ const DomainGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <CollapseBox open title={t('domain')} unMount={false}>
+    <Collapse initialOpen title={t('domain')} unMount={false}>
       <Row>
         <Col md="6">
           <DomainGroupSelect
@@ -31,7 +31,7 @@ const DomainGroup = () => {
           />
         </Col>
       </Row>
-    </CollapseBox>
+    </Collapse>
   );
 };
 

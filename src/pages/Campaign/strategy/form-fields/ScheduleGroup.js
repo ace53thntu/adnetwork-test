@@ -1,4 +1,4 @@
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {FormReactSelect} from 'components/forms';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import React from 'react';
@@ -10,13 +10,13 @@ const ScheduleGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <CollapseBox initialOpen={true} title={t('schedule')} unMount={false}>
+    <Collapse initialOpen={true} title={t('schedule')} unMount={false}>
       <ScheduleFormFields
         weekDayName="schedule.week_days"
         startTimeName="schedule.start_time"
         endTimeName="schedule.end_time"
       />
-    </CollapseBox>
+    </Collapse>
   );
 };
 

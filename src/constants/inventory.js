@@ -1,11 +1,11 @@
 export const MarketTypes = [
   {
-    value: 'private',
-    label: 'Private'
-  },
-  {
     value: 'public',
     label: 'Public'
+  },
+  {
+    value: 'private',
+    label: 'Private'
   }
 ];
 

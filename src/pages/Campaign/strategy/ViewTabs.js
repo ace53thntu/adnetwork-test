@@ -22,7 +22,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import {DescriptionTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {CappingReferenceTypes} from 'constants/misc';
 // import Audience from './form-fields/Audience';
 
@@ -72,13 +72,13 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                 dataStrategy={currentStrategy}
                 isView
               /> */}
-                  <CollapseBox unMount={false} open title={t('concepts')}>
+                  <Collapse unMount={false} initialOpen title={t('concepts')}>
                     <Concept
                       conceptList={currentStrategy?.concepts}
                       isView
                       strategyData={currentStrategy}
                     />
-                  </CollapseBox>
+                  </Collapse>
                   <div style={{textAlign: 'right'}}>
                     <Link to={strategyEditPath}>
                       <Button color="link">{t('goToEdit')}</Button>

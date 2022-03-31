@@ -35,7 +35,7 @@ import {IS_RESPONSE_ALL} from 'constants/misc';
 import {schemaValidate} from './validation';
 import {useTranslation} from 'react-i18next';
 import {BidDealTabs} from './bid-deal-tabs';
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
@@ -172,7 +172,7 @@ const InventoryDetails = ({
         {title} {inventoryData?.name}
       </ModalHeader>
       <ModalBody>
-        <CollapseBox unMount={false} open title="Description">
+        <Collapse unMount={false} initialOpen title="Description">
           <div className={`d-flex flex-wrap ${classes.bgHover}`}>
             {/* Type */}
             <InventoryPartial label="Type">
@@ -255,7 +255,7 @@ const InventoryDetails = ({
               </span>
             </InventoryPartial>
           </div>
-        </CollapseBox>
+        </Collapse>
 
         {!isBid && !isDeal && (
           <BidDealTabs

@@ -26,15 +26,18 @@ export const organizationPages = {
       children: [
         {
           path: '',
-          element: <AdvertiserListPage />
+          element: <AdvertiserListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         },
         {
           path: `:advertiserId`,
-          element: <AdvertiserViewPage />
+          element: <AdvertiserViewPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         },
         {
           path: `:advertiserId/${RoutePaths.REPORT}`,
-          element: <AdvertiserReportPage />
+          element: <AdvertiserReportPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         }
       ],
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
@@ -44,11 +47,13 @@ export const organizationPages = {
       children: [
         {
           path: '',
-          element: <PublisherListPage />
+          element: <PublisherListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
         },
         {
           path: `:publisherId/${RoutePaths.REPORT}`,
-          element: <PublisherReportPage />
+          element: <PublisherReportPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
         }
       ],
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
@@ -58,15 +63,18 @@ export const organizationPages = {
       children: [
         {
           path: '',
-          element: <DspListPage />
+          element: <DspListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         },
         {
           path: `:dspId`,
-          element: <DspViewPage />
+          element: <DspViewPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         },
         {
           path: `:dspId/${RoutePaths.REPORT}`,
-          element: <DspReportPage />
+          element: <DspReportPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         }
       ],
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]

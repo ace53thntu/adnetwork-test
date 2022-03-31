@@ -35,7 +35,7 @@ function ContainerDetail() {
         </Row>
       ) : (
         <Row>
-          <Col sm={6}>
+          <Col sm="8">
             <Card>
               <CardHeader>{t('containerInfo')}</CardHeader>
               <CardBody>
@@ -48,7 +48,7 @@ function ContainerDetail() {
             </Card>
           </Col>
 
-          <Col sm={6}>
+          <Col sm="4">
             <ContainerSources container={container} isFetching={isFetching} />
           </Col>
         </Row>

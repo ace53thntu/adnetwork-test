@@ -6,14 +6,14 @@ import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
 
 //---> Internal Modules
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const BudgetGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <CollapseBox open title={t('budget')} unMount={false}>
+    <Collapse initialOpen title={t('budget')} unMount={false}>
       <Row>
         <Col md="4">
           <CurrencyInputField
@@ -42,7 +42,7 @@ const BudgetGroup = () => {
           />
         </Col>
       </Row>
-    </CollapseBox>
+    </Collapse>
   );
 };
 

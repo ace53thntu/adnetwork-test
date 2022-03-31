@@ -19,7 +19,9 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  inventoryId: PropTypes.string
+  inventoryId: PropTypes.string,
+  required: PropTypes.bool,
+  multiple: PropTypes.bool
 };
 
 const DspSelect = ({
@@ -27,7 +29,9 @@ const DspSelect = ({
   name,
   label,
   placeholder,
-  inventoryId = ''
+  inventoryId = '',
+  required = false,
+  multiple = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -36,7 +40,7 @@ const DspSelect = ({
 
   return (
     <SelectPaginate
-      required
+      required={required}
       name={name}
       label={label}
       placeholder={placeholder}
@@ -46,6 +50,7 @@ const DspSelect = ({
       }}
       defaultValue={defaultValue || null}
       disabled={isSubmitting}
+      multiple={multiple}
     />
   );
 };

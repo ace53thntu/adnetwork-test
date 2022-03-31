@@ -14,11 +14,25 @@ export const dashboardPages = {
   children: [
     {
       path: '',
-      element: <ReportDashboardPage />
+      element: <ReportDashboardPage />,
+      canAccess: [
+        USER_ROLE.MANAGER,
+        USER_ROLE.MANAGER,
+        USER_ROLE.ADVERTISER,
+        USER_ROLE.PUBLISHER,
+        USER_ROLE.DSP
+      ]
     },
     {
       path: `${RoutePaths.PAGE}/:pageId`,
-      element: <ReportDashboardPage />
+      element: <ReportDashboardPage />,
+      canAccess: [
+        USER_ROLE.MANAGER,
+        USER_ROLE.MANAGER,
+        USER_ROLE.ADVERTISER,
+        USER_ROLE.PUBLISHER,
+        USER_ROLE.DSP
+      ]
     }
   ]
 };

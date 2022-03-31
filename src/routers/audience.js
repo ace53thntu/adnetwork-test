@@ -11,11 +11,13 @@ export const audiencePages = {
   children: [
     {
       path: '',
-      element: <AudienceListPageLazy />
+      element: <AudienceListPageLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
       path: ':id',
-      element: <AudienceDetailPageLazy />
+      element: <AudienceDetailPageLazy />,
+      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     }
   ]
 };

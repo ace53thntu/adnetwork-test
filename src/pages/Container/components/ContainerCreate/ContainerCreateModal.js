@@ -9,7 +9,7 @@ function ContainerCreateModal(props) {
   const {toggleCreateContainerModal: isOpen} = useContainerSelector();
 
   return (
-    <Modal unmountOnClose isOpen={isOpen}>
+    <Modal unmountOnClose isOpen={isOpen} size="lg">
       <ContainerCreate />
     </Modal>
   );

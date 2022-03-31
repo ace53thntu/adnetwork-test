@@ -1,4 +1,4 @@
-import {CollapseBox} from 'components/common';
+import {Collapse} from 'components/common';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import React from 'react';
@@ -9,7 +9,7 @@ const KeywordGroup = () => {
   const {t} = useTranslation();
 
   return (
-    <CollapseBox open title={t('keyword')} unMount={false}>
+    <Collapse initialOpen title={t('keyword')} unMount={false}>
       <Row>
         <Col md="6">
           <KeywordListSelect
@@ -30,7 +30,7 @@ const KeywordGroup = () => {
           />
         </Col>
       </Row>
-    </CollapseBox>
+    </Collapse>
   );
 };
 

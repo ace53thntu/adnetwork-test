@@ -28,6 +28,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
+import {ContainerDefault} from '../ContainerFormFields';
 
 const propTypes = {
   container: PropTypes.object,
@@ -151,7 +152,7 @@ function ContainerForm(props) {
                   disableGroupSeparators={false}
                   decimalsLimit={2}
                   maxLength="4"
-                  description="The Cost should be between 0.01 and 0.99"
+                  description="The cost should be between 0.01 and 0.99"
                   required
                 />
               )}
@@ -181,6 +182,8 @@ function ContainerForm(props) {
                   />
                 </FormGroup>
               </div>
+              <ContainerDefault isLoading={isLoading} />
+
               <hr />
               <FormGroup className="d-flex justify-content-end align-items-center mt-3">
                 <ButtonLoading
