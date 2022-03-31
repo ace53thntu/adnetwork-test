@@ -5,4 +5,5 @@ export const ErrorMessageStyled = styled.span`
   margin-top: 0.25rem;
   font-size: 0.875em;
   color: #dc3545;
+  text-transform: capitalize;
 `;

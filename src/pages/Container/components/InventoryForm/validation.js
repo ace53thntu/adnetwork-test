@@ -4,7 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {InputStatus} from 'constants/misc';
 import {validateFloatInput, validateNumberInput} from 'utils/yupValidations';
 
-export const validationInventory = () => {
+export const validationInventory = t => {
   return yupResolver(
     Yup.object().shape({
       name: Yup.string().required('This field is required.'),
@@ -87,6 +87,19 @@ export const validationInventory = () => {
             return validateNumberInput(value);
           }
         )
+      }),
+      tracker: Yup.object({
+        template_uuid: Yup.object()
+          .nullable()
+          .when('variables', variablesVal => {
+            if (variablesVal) {
+              return Yup.object()
+                .required(t('required'))
+                .typeError(t('requried'));
+            }
+            return Yup.object().nullable();
+          }),
+        variables: Yup.string()
       })
     })
   );

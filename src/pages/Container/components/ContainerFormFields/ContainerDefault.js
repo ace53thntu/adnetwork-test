@@ -16,7 +16,7 @@ const ContainerDefault = ({isLoading = false}) => {
   const {t} = useTranslation();
   const {control} = useFormContext();
   const marketTypeSelected = useWatch({
-    name: 'defaults.market',
+    name: 'defaults.market_type',
     control
   });
 
@@ -74,7 +74,7 @@ const ContainerDefault = ({isLoading = false}) => {
           </Col>
           <Col sm="6">
             <FormReactSelect
-              name="defaults.market"
+              name="defaults.market_type"
               placeholder={t('INVENTORY.SELECT_MARKET')}
               options={MarketTypes}
               label={t('INVENTORY.MARKET')}
@@ -84,7 +84,7 @@ const ContainerDefault = ({isLoading = false}) => {
           {marketTypeSelected?.value === 'private' && (
             <Col sm="12">
               <DspSelect
-                name="defaults.dsps"
+                name="defaults.market_dsps"
                 label={t('selectDsp')}
                 placeholder={t('selectDsp')}
                 multiple

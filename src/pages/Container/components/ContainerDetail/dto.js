@@ -12,7 +12,8 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       publisher_name,
       first_party,
       cost,
-      defaults
+      defaults,
+      market_dsps
     } = container;
     return {
       name,
@@ -32,11 +33,14 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
         type: defaults?.type
           ? {value: defaults.type, label: capitalize(defaults.type)}
           : null,
-        market: defaults?.market
-          ? {value: defaults.market, label: capitalize(defaults.market)}
+        market_type: defaults?.market_type
+          ? {
+              value: defaults.market_type,
+              label: capitalize(defaults.market_type)
+            }
           : null,
-        dsps:
-          defaults?.dsps?.map(item => ({
+        market_dsps:
+          market_dsps?.map(item => ({
             value: item?.uuid,
             label: item.name
           })) || []
@@ -52,7 +56,8 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       publisher_name,
       first_party = true,
       cost,
-      defaults
+      defaults,
+      market_dsps
     } = containerRedux;
 
     return {
@@ -73,11 +78,14 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
         type: defaults?.type
           ? {value: defaults.type, label: capitalize(defaults.type)}
           : null,
-        market: defaults?.market
-          ? {value: defaults.market, label: capitalize(defaults.market)}
+        market_type: defaults?.market_type
+          ? {
+              value: defaults.market_type,
+              label: capitalize(defaults.market_type)
+            }
           : null,
-        dsps:
-          defaults?.dsps?.map(item => ({
+        market_dsps:
+          market_dsps?.map(item => ({
             value: item?.uuid,
             label: item.name
           })) || []
@@ -97,8 +105,8 @@ export const mappingApiToForm = ({container, containerRedux, t}) => {
       floor_price: '',
       deal_floor_price: '',
       type: null,
-      market: null,
-      dsps: []
+      market_type: null,
+      market_dsps: []
     }
   };
 };
@@ -127,8 +135,8 @@ export const mappingFormToApi = (formData, role) => {
       floor_price: convertGuiToApi({value: defaults?.floor_price}),
       deal_floor_price: convertGuiToApi({value: defaults?.deal_floor_price}),
       type: defaults?.type?.value || '',
-      market: defaults?.market?.value || '',
-      dsps: defaults?.dsps?.map(item => item?.value || '') || []
+      market_type: defaults?.market_type?.value || '',
+      market_dsps: defaults?.market_dsps?.map(item => item?.value || '') || []
     }
   };
 };

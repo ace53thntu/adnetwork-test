@@ -8,7 +8,7 @@ import {useFormContext} from 'react-hook-form';
 //---> Internal Modules
 import {TrackerTemplateAPIRequest} from 'api/tracker-template.api';
 import {SelectPaginate} from 'components/forms';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL, Statuses} from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
@@ -29,7 +29,6 @@ const TemplateSelect = ({defaultValue = null, name, label, placeholder}) => {
 
   return (
     <SelectPaginate
-      required
       name={name}
       label={label}
       placeholder={placeholder}
@@ -55,7 +54,7 @@ const useTrackerTemplatePagination = () => {
           page,
           limit: DEFAULT_PAGINATION.perPage,
           name: search,
-          status: 'active'
+          status: Statuses.ACTIVE
         },
         options: {
           isResponseAll: IS_RESPONSE_ALL

@@ -182,10 +182,9 @@ export const mappingInventoryApiToForm = ({
   let templateUuid, templateName, variables;
   if (trackerObj) {
     templateUuid = trackerObj?.template_uuid;
-    templateName = trackerObj?.template_name;
+    templateName = trackerObj?.tracker_template?.name;
     variables = JSON.stringify(trackerObj?.variables);
   }
-  console.log('🚀 ~ file: dto.js ~ line 187 ~ variables', variables);
 
   return {
     uuid,
@@ -209,7 +208,9 @@ export const mappingInventoryApiToForm = ({
     market_dsps: marketDsps || [],
     tags: tagsParsed,
     tracker: {
-      template_uuid: {value: templateUuid, label: templateName},
+      template_uuid: templateUuid
+        ? {value: templateUuid, label: templateName}
+        : null,
       variables
     }
   };
@@ -218,7 +219,7 @@ export const mappingInventoryApiToForm = ({
 export const mappingTrackerFormToApi = ({tracker, inventoryId}) => {
   const {template_uuid, variables} = tracker;
   return {
-    template_uuid: template_uuid?.value,
+    template_uuid: template_uuid ? template_uuid?.value : '',
     reference_type: TrackerReferenceTypes.INVENTORY,
     reference_uuid: inventoryId,
     variables,

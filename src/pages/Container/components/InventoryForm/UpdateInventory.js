@@ -10,9 +10,11 @@ import {getInventoryFormats, getInventoryTypes} from '../../constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useEditInventory, useGetInventory} from 'queries/inventory';
 import {useDefaultInventory} from 'pages/Container/hooks/useDefaultInventory';
-import {mappingInventoryFormToApi} from './dto';
+import {mappingInventoryFormToApi, mappingTrackerFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
+import {useEditTracker} from 'queries/tracker';
+import {useTranslation} from 'react-i18next';
 
 export default function UpdateInventory({
   toggle = () => {},
@@ -36,6 +38,7 @@ export default function UpdateInventory({
 }
 
 function FormUpdate({toggle, inventory, pageId}) {
+  const {t} = useTranslation();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
   const defaultValues = useDefaultInventory({
@@ -43,11 +46,12 @@ function FormUpdate({toggle, inventory, pageId}) {
   });
   const methods = useForm({
     defaultValues,
-    resolver: validationInventory([], true)
+    resolver: validationInventory(t)
   });
   const {handleSubmit, reset} = methods;
 
   const {mutateAsync: editInventory} = useEditInventory();
+  const {mutateAsync: editTracker} = useEditTracker();
 
   // local states
   const [isLoading, setIsLoading] = useState(false);
@@ -57,11 +61,24 @@ function FormUpdate({toggle, inventory, pageId}) {
   }, [defaultValues, reset]);
 
   const onHandleSubmit = useCallback(
-    async values => {
-      const formData = mappingInventoryFormToApi({pageId, formData: values});
+    async formData => {
+      const requestBody = mappingInventoryFormToApi({pageId, formData});
       setIsLoading(true);
       try {
-        await editInventory({inventoryId: defaultValues?.uuid, data: formData});
+        await editInventory({
+          inventoryId: defaultValues?.uuid,
+          data: requestBody
+        });
+        if (formData?.tracker?.template_uuid) {
+          const trackerForm = mappingTrackerFormToApi({
+            tracker: formData?.tracker,
+            inventoryId: inventory?.uuid
+          });
+          await editTracker({
+            trackerId: inventory?.tracker?.[0]?.uuid,
+            data: trackerForm
+          });
+        }
         ShowToast.success('Update Inventory successfully!', {
           closeOnClick: true
         });
@@ -75,7 +92,15 @@ function FormUpdate({toggle, inventory, pageId}) {
         });
       }
     },
-    [defaultValues?.uuid, editInventory, pageId, toggle]
+    [
+      defaultValues?.uuid,
+      editInventory,
+      editTracker,
+      inventory?.tracker,
+      inventory?.uuid,
+      pageId,
+      toggle
+    ]
   );
 
   const formProps = React.useMemo(

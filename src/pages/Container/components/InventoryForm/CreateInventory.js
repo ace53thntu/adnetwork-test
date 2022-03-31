@@ -17,8 +17,10 @@ import {mappingInventoryFormToApi, mappingTrackerFormToApi} from './dto';
 import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
 import {useCreateTracker} from 'queries/tracker';
+import {useTranslation} from 'react-i18next';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
+  const {t} = useTranslation();
   const {pageId} = useParams();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
@@ -36,7 +38,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       tracker_uuid: null,
       position_uuid: null
     },
-    resolver: validationInventory()
+    resolver: validationInventory(t)
   });
   const {handleSubmit} = methods;
 
@@ -44,10 +46,6 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onHandleSubmit = async formData => {
-    console.log(
-      '🚀 ~ file: CreateInventory.js ~ line 43 ~ CreateInventory ~ values',
-      formData
-    );
     const requestBody = mappingInventoryFormToApi({pageId, formData});
     setIsLoading(true);
     try {

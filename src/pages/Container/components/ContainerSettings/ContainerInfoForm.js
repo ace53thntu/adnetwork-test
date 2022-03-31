@@ -61,7 +61,7 @@ function ContainerInfoForm(props) {
     defaultValues: formDefaultValues,
     resolver: containerFormResolver(containers, role)
   });
-  const {handleSubmit, formState, reset} = methods;
+  const {handleSubmit, formState} = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -76,7 +76,7 @@ function ContainerInfoForm(props) {
 
       setIsLoading(false);
       ShowToast.success('Updated container successfully!');
-      reset(values);
+      // reset(values);
       dispatch(
         updatedContainerRedux({
           ...container,
