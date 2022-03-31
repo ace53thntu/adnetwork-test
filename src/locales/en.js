@@ -517,7 +517,8 @@ const en = {
   INVENTORY: {
     INVENTORY_INFORMATION: 'Inventory Information',
     MARKET: 'Market type',
-    SELECT_MARKET: 'Select market type'
+    SELECT_MARKET: 'Select market type',
+    IS_AUTO_CREATE: 'Is auto create'
   },
   //---> Common text
   COMMON: {

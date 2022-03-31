@@ -130,7 +130,8 @@ export const mappingInventoryApiToForm = ({
     price_engine,
     market_dsps = [],
     tags,
-    tracker = []
+    tracker = [],
+    is_auto_create = false
   } = inventory;
   const destructureType = inventoryTypes.find(item => item.value === type);
   const destructurePosition =
@@ -212,7 +213,8 @@ export const mappingInventoryApiToForm = ({
         ? {value: templateUuid, label: templateName}
         : null,
       variables
-    }
+    },
+    is_auto_create: is_auto_create ? 'active' : 'inactive'
   };
 };
 

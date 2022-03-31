@@ -37,7 +37,8 @@ const formName = {
   name: 'name',
   allow_deal: 'allow_deal',
   market_type: 'market_type',
-  first_party: 'first_party'
+  first_party: 'first_party',
+  is_auto_create: 'is_auto_create'
 };
 
 const propTypes = {
@@ -104,6 +105,18 @@ const InventoryFormContent = ({
                 checked: 'active',
                 unChecked: 'inactive'
               }}
+            />
+          </FormGroup>
+          <FormGroup className="d-flex justify-content-end mb-0 ml-3">
+            <FormToggle
+              name={formName.is_auto_create}
+              defaultCheckedValue="active"
+              label={t('INVENTORY.IS_AUTO_CREATE')}
+              values={{
+                checked: 'active',
+                unChecked: 'inactive'
+              }}
+              disabled
             />
           </FormGroup>
         </div>

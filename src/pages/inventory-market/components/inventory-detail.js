@@ -254,6 +254,12 @@ const InventoryDetails = ({
                 {inventoryData?.metadata?.background_color}
               </span>
             </InventoryPartial>
+
+            <InventoryPartial label="Auto created">
+              <Badge color="light" pill>
+                {inventoryData?.is_auto_create.toString()}
+              </Badge>
+            </InventoryPartial>
           </div>
         </Collapse>
 
