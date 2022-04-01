@@ -41,6 +41,9 @@ import {RoutePaths} from 'constants/route-paths';
 import {useNavigate} from 'react-router-dom';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
+import SearchInput from './components/SearchInput';
+import {useSearchTermSelector} from 'store/reducers/advertiser';
+import NoDataAvailable from 'components/list/no-data';
 
 /**
  * @function Advertiser List Component
@@ -64,13 +67,15 @@ const ListAdvertiser = () => {
   const [showDialog, setShowDialog] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
+  const searchTerm = useSearchTermSelector();
 
   //---> QUery get list of Advertiser.
   const {data, isFetching, isPreviousData} = useGetAdvertisers({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
-      sort: 'created_at DESC'
+      sort: 'updated_at DESC',
+      name: searchTerm
     },
     enabled: true,
     keepPreviousData: true
@@ -206,7 +211,11 @@ const ListAdvertiser = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('advertiserList')}</div>
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">{t('advertiserList')}</div>
+                    <SearchInput />
+                  </div>
+
                   {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
                     <div className="widget-content-right">
                       <Button
@@ -222,24 +231,30 @@ const ListAdvertiser = () => {
                   )}
                 </CardHeader>
                 <CardBody style={{minHeight: '400px'}}>
-                  <List
-                    data={advertisers || []}
-                    columns={columns}
-                    showAction
-                    actions={
-                      [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
-                        ? ['Edit', 'View', 'Delete']
-                        : ['Edit']
-                    }
-                    handleAction={onClickDelete}
-                    handleClickItem={onClickItem}
-                  />
-                  <CustomPagination
-                    currentPage={currentPage}
-                    totalCount={paginationInfo?.totalItems}
-                    onPageChange={(evt, page) => onPageChange(evt, page)}
-                    disabled={isPreviousData}
-                  />
+                  {advertisers?.length > 0 ? (
+                    <>
+                      <List
+                        data={advertisers || []}
+                        columns={columns}
+                        showAction
+                        actions={
+                          [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+                            ? ['Edit', 'View', 'Delete']
+                            : ['Edit']
+                        }
+                        handleAction={onClickDelete}
+                        handleClickItem={onClickItem}
+                      />
+                      <CustomPagination
+                        currentPage={currentPage}
+                        totalCount={paginationInfo?.totalItems}
+                        onPageChange={(evt, page) => onPageChange(evt, page)}
+                        disabled={isPreviousData}
+                      />
+                    </>
+                  ) : (
+                    <NoDataAvailable />
+                  )}
                 </CardBody>
               </Card>
             </Col>

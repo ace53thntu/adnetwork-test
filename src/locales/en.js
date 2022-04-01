@@ -524,7 +524,8 @@ const en = {
   COMMON: {
     LOOP: 'Loop',
     BUDGET_GLOBAL: 'Budget Global',
-    BUDGET_DAILY: 'Budget Daily'
+    BUDGET_DAILY: 'Budget Daily',
+    SEARCH: 'Search'
   },
   FORM: {
     SELECT_POSITION: 'Select position',

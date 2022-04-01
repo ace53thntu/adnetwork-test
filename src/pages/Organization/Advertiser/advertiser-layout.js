@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import {setSearchTermRedux} from 'store/reducers/advertiser';
 
 const propTypes = {
   pageTitle: PropTypes.string
@@ -22,6 +23,12 @@ const AdvertiserLayout = ({children, pageTitle = ''}) => {
 
   React.useEffect(() => {
     reduxDispatch(setEnableClosedSidebar(false));
+  }, [reduxDispatch]);
+
+  React.useEffect(() => {
+    return function resetSearchTerm(params) {
+      reduxDispatch(setSearchTermRedux(''));
+    };
   }, [reduxDispatch]);
 
   return (
