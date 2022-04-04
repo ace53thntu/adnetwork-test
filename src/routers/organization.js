@@ -13,13 +13,6 @@ import {USER_ROLE} from 'pages/user-management/constants';
 
 export const organizationPages = {
   path: RoutePaths.ORGANIZATION,
-  canAccess: [
-    USER_ROLE.ADMIN,
-    USER_ROLE.MANAGER,
-    USER_ROLE.ADVERTISER,
-    USER_ROLE.DSP,
-    USER_ROLE.PUBLISHER
-  ],
   children: [
     {
       path: `${RoutePaths.ADVERTISER}`,
