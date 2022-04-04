@@ -15,6 +15,7 @@ import {
   ChartTypes
 } from 'constants/report';
 import {
+  setChartColorSelectedRedux,
   useChartModeSelector,
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
@@ -27,6 +28,7 @@ import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
 import {useTranslation} from 'react-i18next';
 import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
+import {useDispatch} from 'react-redux';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -81,7 +83,12 @@ ChartPreview.propTypes = propTypes;
 const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId, color}) => {
     const {t} = useTranslation();
+    const dispatch = useDispatch();
     const chartTypeRedux = useChartTypeSelectedSelector();
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 88 ~ chartTypeRedux',
+      chartTypeRedux
+    );
     const isChartCompare = useIsChartCompareSelector();
     const chartMode = useChartModeSelector();
     const chartData = useChartData({
@@ -100,21 +107,16 @@ const ChartPreviewContent = React.memo(
       charType: chartTypeRedux
     });
 
-    const {watch, setValue} = useFormContext();
+    const {watch} = useFormContext();
     const selectedType = watch(
       `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
     );
 
     React.useEffect(
       function setColorValue() {
-        if (chartTypeRedux === ChartTypes.PIE) {
-          setValue(
-            `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
-            JSON.stringify(colors)
-          );
-        }
+        dispatch(setChartColorSelectedRedux(colors));
       },
-      [chartTypeRedux, colors, setValue]
+      [colors, dispatch]
     );
 
     return (

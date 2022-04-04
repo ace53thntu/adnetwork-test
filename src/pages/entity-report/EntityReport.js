@@ -41,7 +41,7 @@ const EntityReport = ({
     params: {
       source_uuid: entityId,
       per_page: NUMBER_OF_PAGE,
-      sort: 'updated_at DESC',
+      sort: 'created_at DESC',
       status: Statuses.ACTIVE
     },
     enabled: true,

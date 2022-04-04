@@ -9,6 +9,7 @@ import {ChartModes} from 'constants/report';
 
 //---> Define action types
 const ACTION_PREFIX = '@entity_report';
+const SET_COLORS_SELECTED = `${ACTION_PREFIX}/SET_COLORS_SELECTED`;
 const SET_TIME_RANGE = `${ACTION_PREFIX}/SET_TIME_RANGE`;
 const SET_UNIT = `${ACTION_PREFIX}/SET_UNIT`;
 const SET_METRIC_URL = `${ACTION_PREFIX}/SET_METRIC_URL`;
@@ -22,6 +23,8 @@ const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setChartColorSelectedRedux = colorsSelected =>
+  createAction(SET_COLORS_SELECTED, {colorsSelected});
 export const setMetricSetSelectedRedux = metricsetsSelected =>
   createAction(SET_METRICSET_SELECTED, {metricsetsSelected});
 export const setChartModeRedux = chartMode =>
@@ -55,11 +58,13 @@ const entityReportInitialState = {
   chartTypeSelected: '',
   isChartCompare: false,
   chartMode: ChartModes.BY,
-  metricsetsSelected: []
+  metricsetsSelected: [],
+  colorsSelected: []
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_COLORS_SELECTED]: handleSetColorsSelected,
   [SET_METRICSET_SELECTED]: handleSetMetricsetSelected,
   [SET_CHART_MODE]: handleSetChartMode,
   [SET_IS_CHART_COMPARE]: handleSetIsChartCompare,
@@ -75,6 +80,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetColorsSelected(state, action) {
+  state.colorsSelected = action.payload.colorsSelected;
 }
 
 function handleSetMetricsetSelected(state, action) {
@@ -165,7 +174,18 @@ const makeSelectMetricsetSelected = () =>
     a => a.metricsetsSelected
   );
 
+const makeSelectColorsSelected = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.colorsSelected
+  );
+
 //---> Hook to select state
+export function useColorsSelectedSelector() {
+  const selectColorsSelected = React.useMemo(makeSelectColorsSelected, []);
+  return useSelector(state => selectColorsSelected(state));
+}
+
 export function useMetricsetSelectedSelector() {
   const selectMetricSet = React.useMemo(makeSelectMetricsetSelected, []);
   return useSelector(state => selectMetricSet(state));

@@ -26,10 +26,6 @@ const propTypes = {
 const unitName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`;
 
 const DistributionUnit = ({defaultValue, startTime, endTime}) => {
-  console.log(
-    '🚀 ~ file: DistributionUnit.js ~ line 29 ~ DistributionUnit ~ defaultValue',
-    defaultValue
-  );
   const dispatch = useDispatch();
   const metricBody = useMetricsBodySelector();
   const [activeUnit, setActiveUnit] = React.useState(null);
@@ -39,7 +35,6 @@ const DistributionUnit = ({defaultValue, startTime, endTime}) => {
   const units = React.useMemo(() => {
     return getDistributionUnits({startTime, endTime}) || [];
   }, [endTime, startTime]);
-  console.log('🚀 ~ file: TimeUnit.js ~ line 45 ~ distributionUnits', units);
   const allowSelect = units?.length > 1 ? true : false; //---> Only allow select when having larger 2 unit
 
   const onClickTimeRange = (evt, selectedOption) => {

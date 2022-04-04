@@ -31,7 +31,7 @@ const ReportList = ({pageDetails = {}}) => {
     per_page: PER_PAGE,
     status: 'active',
     page: PAGE,
-    sort: 'updated_at DESC'
+    sort: 'created_at DESC'
   };
   if (pageId) {
     params = {...params, report_page_id: pageId};
@@ -148,10 +148,10 @@ const ReportList = ({pageDetails = {}}) => {
         {/* Load list reports */}
         <Row>
           {validArray({list: destructureReports}) ? (
-            [...destructureReports]?.map((reportItem = {}) => {
-              const {uuid: id, status} = reportItem;
+            [...destructureReports]?.map((reportItem = {}, idx) => {
+              const {uuid: id} = reportItem;
 
-              return status === 'active' ? (
+              return (
                 <Col key={`pr-${id}`} sm={6} className="mb-3">
                   <Card className="chart-item">
                     <CardBody style={{padding: 0}}>
@@ -162,7 +162,7 @@ const ReportList = ({pageDetails = {}}) => {
                     </CardBody>
                   </Card>
                 </Col>
-              ) : null;
+              );
             })
           ) : (
             <Col sm={12}>

@@ -51,6 +51,7 @@ const CreativeSelect = ({
       defaultValue={defaultValue || null}
       disabled={isSubmitting}
       multiple={multiple}
+      isClearable
     />
   );
 };

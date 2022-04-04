@@ -24,8 +24,16 @@ export const useChartData = ({
   chartMode = ChartModes.BY
 }) => {
   return useMemo(() => {
-    if (metricData) {
+    if (
+      metricData &&
+      Object.keys(metricData).length > 0 &&
+      Object.keys(metricData?.report).length > 0
+    ) {
       const {report: metrics, start_time, end_time, info = {}} = metricData;
+      if (!metrics || Object.keys(metrics).length === 0) {
+        return null;
+      }
+
       if (
         [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
         unit === TimeUnits.GLOBAL &&
@@ -34,15 +42,18 @@ export const useChartData = ({
         return getDataPieChart({metrics, metricSet, info});
       }
 
-      return getDataLineChart({
-        start_time,
-        end_time,
-        metricSet,
-        unit,
-        metrics,
-        entityId,
-        chartMode
-      });
+      if (unit !== TimeUnits.GLOBAL) {
+        return getDataLineChart({
+          start_time,
+          end_time,
+          metricSet,
+          unit,
+          metrics,
+          entityId,
+          chartMode
+        });
+      }
+      return null;
     }
     return null;
   }, [chartMode, chartType, entityId, metricData, metricSet, unit]);
@@ -57,6 +68,10 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
     const metricData = metrics?.['0'];
 
     if (metricData && Object.keys(metricData).length > 0) {
+      console.log(
+        '🚀 ~ file: useChartData.js ~ line 68 ~ getDataPieChart ~ metricData',
+        metricData
+      );
       const metricList = Object.entries(metricData);
       const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
         return {
@@ -84,11 +99,10 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
       );
       return data;
     }
+
+    return null;
   }
-  return {
-    datasets: [],
-    labels: []
-  };
+  return null;
 };
 
 const getDataLineChart = ({
@@ -104,13 +118,13 @@ const getDataLineChart = ({
     !metrics ||
     (typeof metrics === 'object' && Object.keys(metrics).length === 0)
   ) {
-    return {series: [], categories: []};
+    return null;
   }
 
   const startTime = moment.unix(start_time);
   const endTime = moment.unix(end_time);
-  const increaseNumber = 1; // unit === 'fiveseconds' ? 5 : 1;
-  const unitStr = unit; // unit === 'fiveseconds' ? 'second' : unit;
+  const increaseNumber = 1;
+  const unitStr = unit;
   //---> Get list of checkpoints
   const listCheckPoints = enumerateDaysBetweenDates({
     startDate: startTime,

@@ -80,6 +80,9 @@ const en = {
   noLabel: 'No label',
   dealPrice: 'Deal price',
   mode: 'Mode',
+  page: 'Page',
+  selectPage: 'Select page',
+  selectContainer: 'Select container',
 
   // Main Menu
   userManagement: 'User Management',

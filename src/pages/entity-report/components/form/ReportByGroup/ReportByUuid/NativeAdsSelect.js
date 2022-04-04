@@ -51,6 +51,7 @@ const NativeAdSelect = ({
       defaultValue={defaultValue || null}
       disabled={isSubmitting}
       multiple={multiple}
+      isClearable
     />
   );
 };

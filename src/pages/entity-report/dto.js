@@ -46,7 +46,6 @@ export function mappingFormToApi({
     time_range = '';
   }
   const reportSource = report_source?.value;
-  console.log('start_time ===', start_time);
   let formatStartDate = start_time ? moment(start_time).toISOString() : null;
   const formatEndDate = moment(end_time).toISOString();
 

@@ -8,7 +8,6 @@ import {FormGroup, Label} from 'reactstrap';
 export function EndTime() {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
-  console.log('🚀 ~ file: EndTime.js ~ line 11 ~ EndTime ~ errors', errors);
   const startDate = useWatch({
     name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.START_TIME}`,
     control

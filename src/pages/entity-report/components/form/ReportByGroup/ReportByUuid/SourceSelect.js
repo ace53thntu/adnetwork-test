@@ -45,6 +45,7 @@ const SourceSelect = ({name = ''}) => {
       name={name}
       isRequired={false}
       labelBold
+      isClearable
     />
   );
 };

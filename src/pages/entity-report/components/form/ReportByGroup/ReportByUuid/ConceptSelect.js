@@ -51,6 +51,7 @@ const ConceptSelect = ({
       defaultValue={defaultValue || null}
       disabled={isSubmitting}
       multiple={multiple}
+      isClearable
     />
   );
 };

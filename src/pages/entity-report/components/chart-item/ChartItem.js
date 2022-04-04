@@ -2,7 +2,7 @@ import React from 'react';
 // import CustomPieChart from './CustomPieChart';
 import {useConfigChart} from '../../hooks/useConfigChart';
 import {R2ChartBar, R2ChartLine} from '..';
-import {ChartTypes, FORMAT_BY_UNIT} from 'constants/report';
+import {ChartTypes, FORMAT_BY_UNIT, TimeUnits} from 'constants/report';
 import {CustomBarChart, CustomPieChart} from '../report-chart';
 
 const ChartItem = ({
@@ -40,7 +40,7 @@ const ChartItem = ({
             />
           );
         }
-        if (chartType === ChartTypes.BAR && unit === 'global') {
+        if (chartType === ChartTypes.BAR && unit === TimeUnits.GLOBAL) {
           return (
             <CustomBarChart
               barData={pieData}

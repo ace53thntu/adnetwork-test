@@ -70,8 +70,7 @@ export default function ReportItem({
     chartType,
     chartMode
   });
-  console.log('🚀 ~ file: report-item.js ~ line 71 ~ chartType', chartType);
-  console.log('🚀 ~ file: report-item.js ~ line 68 ~ metricData', metricData);
+  console.log('🚀 ~ file: ReportItem.js ~ line 73 ~ metricData', metricData);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);

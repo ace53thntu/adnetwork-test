@@ -53,6 +53,7 @@ const StrategySelect = ({
       }}
       defaultValue={defaultValue || null}
       disabled={disabled || isSubmitting}
+      isClearable
     />
   );
 };

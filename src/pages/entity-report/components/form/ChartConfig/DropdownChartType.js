@@ -17,22 +17,27 @@ import {Tooltip} from '@material-ui/core';
 import {useOnClickOutside} from 'hooks/useOnClickOutside';
 import {useDispatch} from 'react-redux';
 import {
-  setChartTypeSelectedRedux,
   setMetricBodyRedux,
+  useChartTypeSelectedSelector,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {ChartTypes, TimeUnits} from 'constants/report';
+import {parseColors} from 'pages/entity-report/utils';
 
 const DropdownChartType = ({
   metricSet = [],
   onChangeColor = () => null,
   onSelectType = () => null,
   colors = [],
-  chartType = '',
   isChartCompare = false
 }) => {
+  console.log('🚀 ~ file: DropdownChartType.js ~ line 34 ~ colors', colors);
   const dispatch = useDispatch();
   const metricBody = useMetricsBodySelector();
+  const chartTypeRedux = useChartTypeSelectedSelector();
+  const parsedColor = React.useMemo(() => parseColors({color: colors}), [
+    colors
+  ]);
 
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
@@ -40,11 +45,11 @@ const DropdownChartType = ({
     }
     return [ChartTypes.LINE, ChartTypes.BAR];
   }, [isChartCompare]);
-  const chartTypeSelected = !chartType
+  const chartTypeSelected = !chartTypeRedux
     ? isChartCompare
       ? ChartTypes.PIE
       : ChartTypes.LINE
-    : chartType;
+    : chartTypeRedux;
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
@@ -59,7 +64,6 @@ const DropdownChartType = ({
   function onClickChartType(evt, type) {
     evt.preventDefault();
     onSelectType(type);
-    dispatch(setChartTypeSelectedRedux(type));
     if (type === ChartTypes.PIE && metricBody.time_unit !== TimeUnits.GLOBAL) {
       dispatch(
         setMetricBodyRedux({
@@ -87,7 +91,7 @@ const DropdownChartType = ({
             style={{display: isChartCompare ? 'none' : 'd-flex'}}
           >
             <div className="color-wrap">
-              {colors?.map((colorItem, idx) => {
+              {parsedColor?.map((colorItem, idx) => {
                 return (
                   <div key={`pr-${idx}`} className="c-color-item mb-2">
                     <ColorSlider

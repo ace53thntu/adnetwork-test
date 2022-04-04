@@ -18,8 +18,12 @@ import {
 
 //---> Internal Modules
 import {
+  setChartTypeSelectedRedux,
+  setIsCompareChartRedux,
   setMetricBodyRedux,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useMetricsetSelectedSelector,
+  setChartColorSelectedRedux
 } from 'store/reducers/entity-report';
 import {getReportSources} from 'utils/metrics';
 import ChartPreview from './ChartPreview';
@@ -35,9 +39,17 @@ import {schemaValidate} from './form/validation';
 import {useDefaultValues} from 'pages/entity-report/hooks';
 import {getMetricRequestBody} from 'pages/entity-report/utils/metricRequest';
 import {getReportById} from 'pages/entity-report/utils/getReportById';
-import {ChartModes, ReportTypes} from 'constants/report';
+import {
+  ChartModes,
+  ChartTypes,
+  ReportTypes,
+  REPORT_INPUT_NAME,
+  TimeUnits
+} from 'constants/report';
 import DistributionUnit from './form/DistributionUnit';
 import ChartMode from './form/ChartConfig/ChartMode';
+import {getParsedTimeUnit} from '../utils/getParsedTimeUnit';
+import DropdownChartType from './form/ChartConfig/DropdownChartType';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -57,23 +69,178 @@ export default function ReportFormContent({
   const currentReport = useDefaultValues({report});
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
+
+  // Selectors
   const metricBody = useMetricsBodySelector();
+  const metricateSelected = useMetricsetSelectedSelector();
+  // const chartTypeSelectedRedux = useChartTypeSelectedSelector();
   const reportByUuid = getReportById({report, entityId});
 
   const methods = useForm({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control} = methods;
-  const reportType = useWatch({name: 'report_type', control});
+  const {handleSubmit, formState, control, setValue} = methods;
   const requestBody = report ? getMetricRequestBody({report}) : null;
   const reportId = report?.uuid;
+
+  // Watch form value changed'
+  const reportType = useWatch({name: REPORT_INPUT_NAME.REPORT_TYPE, control});
+  const reportBySelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY}`,
+    control
+  });
+  const reportByUuidSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY_UUID}`,
+    control
+  });
+  const timeUnitSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,
+    control
+  });
+  const chartTypeSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+    control
+  });
+
+  const colorsSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+    control
+  });
+
+  const isChartCompare =
+    !reportByUuidSelected && reportSource !== reportBySelected?.value;
+
+  const handleSelectedChartType = React.useCallback(
+    _chartType => {
+      setValue(
+        `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+        _chartType
+      );
+      dispatch(setChartTypeSelectedRedux(_chartType));
+    },
+    [dispatch, setValue]
+  );
+
+  const handleSelectedColor = React.useCallback(
+    _colors => {
+      dispatch(setChartColorSelectedRedux(_colors));
+    },
+    [dispatch]
+  );
+
+  React.useEffect(() => {
+    dispatch(setIsCompareChartRedux(isChartCompare));
+  }, [dispatch, isChartCompare]);
 
   React.useEffect(() => {
     if ((isEdit || isViewed) && Object.keys(metricBody).length === 0) {
       dispatch(setMetricBodyRedux(requestBody));
     }
   }, [requestBody, isEdit, isViewed, dispatch, metricBody]);
+
+  //---> Handle report by change
+  React.useEffect(
+    function handleReportByChange() {
+      if (metricBody.report_by !== reportBySelected?.value) {
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            report_by: reportBySelected?.value,
+            report_by_uuid: ''
+          })
+        );
+      }
+    },
+    [dispatch, metricBody, reportBySelected?.value]
+  );
+
+  //---> Handle report by uuid change
+  React.useEffect(
+    function handleReportByUuidChange() {
+      if (
+        reportByUuidSelected &&
+        metricBody.report_by_uuid !== reportByUuidSelected?.value
+      ) {
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            report_by: reportBySelected?.value,
+            report_by_uuid: reportByUuidSelected?.value,
+            time_unit: getParsedTimeUnit({timeUnit: timeUnitSelected})
+          })
+        );
+        if (chartTypeSelected !== ChartTypes.LINE) {
+          setValue(
+            `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+            ChartTypes.LINE
+          );
+          dispatch(setChartTypeSelectedRedux(ChartTypes.LINE));
+        }
+      }
+
+      if (!reportByUuidSelected && isChartCompare) {
+        if (chartTypeSelected !== ChartTypes.PIE) {
+          setValue(
+            `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+            ChartTypes.PIE
+          );
+          dispatch(setChartTypeSelectedRedux(ChartTypes.PIE));
+        }
+      }
+    },
+    [
+      chartTypeSelected,
+      dispatch,
+      isChartCompare,
+      metricBody,
+      reportBySelected?.value,
+      reportByUuidSelected,
+      setValue,
+      timeUnitSelected
+    ]
+  );
+
+  //---> Handle chart type change
+  React.useEffect(function handleChartTypeChange() {}, []);
+
+  React.useEffect(
+    function initChartTypeWithGlobalTimeRange() {
+      console.log(
+        '=== initChartTypeWithGlobalTimeRange',
+        chartTypeSelected,
+        metricateSelected.length,
+        metricBody.time_unit
+      );
+      if (
+        isChartCompare &&
+        ![ChartTypes.BAR, ChartTypes.PIE].includes(chartTypeSelected) &&
+        metricBody.time_unit !== TimeUnits.GLOBAL &&
+        metricateSelected?.length < 2
+      ) {
+        console.log('TIME UNIT GLOBAL ===');
+        setValue(
+          `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+          ChartTypes.PIE
+        );
+        dispatch(setChartTypeSelectedRedux(ChartTypes.PIE));
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            time_unit: TimeUnits.GLOBAL
+          })
+        );
+      }
+    },
+    [
+      chartTypeSelected,
+      dispatch,
+      isChartCompare,
+      metricBody,
+      metricateSelected?.length,
+      setValue
+    ]
+  );
 
   return (
     <FormProvider {...methods}>
@@ -147,18 +314,28 @@ export default function ReportFormContent({
                       chartTypeDefault={defaultValues?.properties?.chart_type}
                       colorDefault={defaultValues?.properties?.color}
                       metricSet={metricSet}
-                    />
-                  </Col>
-                  {reportType?.value === ReportTypes.TRENDING && (
-                    <Col md="2">
-                      <Label className="font-weight-bold">{t('mode')}</Label>
-                      <ChartMode
-                        defaultValue={
-                          defaultValues?.properties?.mode || ChartModes.BY
-                        }
+                    >
+                      <DropdownChartType
+                        metricSet={metricSet}
+                        onChangeColor={handleSelectedColor}
+                        onSelectType={handleSelectedChartType}
+                        colors={colorsSelected}
+                        chartType={chartTypeSelected}
+                        isChartCompare={isChartCompare}
                       />
-                    </Col>
-                  )}
+                    </ConfigChart>
+                  </Col>
+                  {reportType?.value === ReportTypes.TRENDING &&
+                    !isChartCompare && (
+                      <Col md="2">
+                        <Label className="font-weight-bold">{t('mode')}</Label>
+                        <ChartMode
+                          defaultValue={
+                            defaultValues?.properties?.mode || ChartModes.BY
+                          }
+                        />
+                      </Col>
+                    )}
                 </Row>
               </>
             )}

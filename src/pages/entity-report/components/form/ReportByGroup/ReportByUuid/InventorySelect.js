@@ -49,6 +49,7 @@ const InventorySelect = ({
       }}
       defaultValue={defaultValue || null}
       disabled={disabled || isSubmitting}
+      isClearable
     />
   );
 };

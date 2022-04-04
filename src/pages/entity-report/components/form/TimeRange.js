@@ -30,14 +30,7 @@ export default function TimeRange({defaultValue}) {
       shouldValidate: true,
       shouldDirty: true
     });
-    console.log(
-      '===== validate time range',
-      selectedOption,
-      validTimeRange({
-        timeRange: selectedOption,
-        unit: currentUnit?.value
-      })
-    );
+
     if (
       validTimeRange({
         timeRange: selectedOption,

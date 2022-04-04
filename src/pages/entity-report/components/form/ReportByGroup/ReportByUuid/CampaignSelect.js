@@ -47,6 +47,7 @@ const CampaignSelect = ({
       }}
       defaultValue={defaultValue || null}
       disabled={disabled || isSubmitting}
+      isClearable
     />
   );
 };
