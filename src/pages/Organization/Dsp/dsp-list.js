@@ -39,6 +39,8 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
+import {useSearchTermSelector} from 'store/reducers/dsp';
+import SearchInput from './components/SearchInput';
 
 /**
  * @function DSP List Component
@@ -61,13 +63,15 @@ const DspList = () => {
   const [currentDsp, setCurrentDsp] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const searchTerm = useSearchTermSelector();
 
   //---> QUery get list of DSP.
   const {data, isFetching, isPreviousData} = useGetDsps({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
-      sort: 'created_at DESC'
+      sort: 'created_at DESC',
+      name: searchTerm
     },
     enabled: true,
     keepPreviousData: true
@@ -196,7 +200,10 @@ const DspList = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('dspList')}</div>
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">{t('dspList')}</div>
+                    <SearchInput />
+                  </div>
                   {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
                     <div className="widget-content-right">
                       <Button
