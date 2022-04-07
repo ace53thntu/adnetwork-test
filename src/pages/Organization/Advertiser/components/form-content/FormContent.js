@@ -12,6 +12,10 @@ import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import {INPUT_NAME} from '../../constants';
 import DomainSelect from '../DomainSelect';
 import SelectTag from '../SelectTag';
+import BudgetGroup from './BudgetGroup';
+import ImpressionGroup from './ImpressionGroup';
+import DomainGroup from './DomainGroup';
+import KeywordGroup from './KeywordGroup';
 
 const propTypes = {
   defaultValues: PropTypes.object,
@@ -62,24 +66,6 @@ const FormContent = ({
       <Col sm={12}>
         <SelectTag defaultValue={defaultValues?.tags || []} disabled={isView} />
       </Col>
-      {!isEdit && !isView && (
-        <>
-          <Col sm="4">
-            <FormTextInput
-              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.GLOBAL}`}
-              label="Budget global"
-              placeholder="0"
-            />
-          </Col>
-          <Col sm="4">
-            <FormTextInput
-              name={`${INPUT_NAME.BUDGET}.${INPUT_NAME.DAILY}`}
-              label="Budget daily"
-              placeholder="0"
-            />
-          </Col>
-        </>
-      )}
       {/* Status */}
       <Col md="12">
         <Label className="mr-5">{t('status')}</Label>
@@ -92,6 +78,22 @@ const FormContent = ({
           disabled={isView}
         />
       </Col>
+      {!isEdit && !isView && (
+        <>
+          <Col sm="12">
+            <BudgetGroup />
+          </Col>
+          <Col sm="12">
+            <ImpressionGroup />
+          </Col>
+          <Col sm="12">
+            <DomainGroup />
+          </Col>
+          <Col sm="12">
+            <KeywordGroup />
+          </Col>
+        </>
+      )}
     </Row>
   );
 };

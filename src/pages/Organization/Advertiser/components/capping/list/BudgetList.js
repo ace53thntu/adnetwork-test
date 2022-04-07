@@ -15,6 +15,8 @@ import {CustomStatus} from 'components/list/status';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
+import {formatValue} from 'react-currency-input-field';
+import {convertApiToGui} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   list: PropTypes.array,
@@ -50,7 +52,20 @@ const BudgetList = ({
       {
         header: 'Target',
         accessor: 'target',
-        cell: row => row?.value?.toString() || ''
+        cell: row => (
+          <Badge color="info" pill>
+            {row?.value
+              ? formatValue({
+                  value: convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })
+              : ''}
+          </Badge>
+        )
       },
 
       {

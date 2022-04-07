@@ -28,7 +28,6 @@ import TimePicker from 'pages/Campaign/strategy/form-fields/TimePicker';
 import moment from 'moment';
 import {getTimeZoneOffset} from 'utils/metrics';
 import {initializingDefaultValues} from '../dto';
-import {ErrorMessage} from '@hookform/error-message';
 
 const propTypes = {
   openForm: PropTypes.bool,
@@ -52,17 +51,12 @@ const ScheduleCreateModal = ({
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
     defaultValues: initializingDefaultValues({cappingType, referenceType}),
-    resolver: schemaValidateCreateSchedule(t)
+    resolver: schemaValidateCreateSchedule(t, true)
   });
 
-  const {handleSubmit, formState, reset, errors} = methods;
-  console.log('🚀 ~ file: ScheduleCreateModal.js ~ line 59 ~ errors', errors);
+  const {handleSubmit, formState, reset} = methods;
 
   async function onSubmit(formData) {
-    console.log(
-      '🚀 ~ file: ScheduleCreateModal.js ~ line 79 ~ onSubmit ~ formData',
-      formData
-    );
     let bodyRequest = {
       reference_type: referenceType,
       reference_uuid: referenceUuid,
@@ -124,16 +118,10 @@ const ScheduleCreateModal = ({
               </Row>
               <Row>
                 <Col md="6">
-                  <TimePicker name="start_time" label="Start time" />
-                  {errors?.start_time && (
-                    <ErrorMessage message={errors?.start_time?.message} />
-                  )}
+                  <TimePicker name="start_time" label="Start time" required />
                 </Col>
                 <Col md="6">
-                  <TimePicker name="end_time" label="End time" />
-                  {errors?.end_time && (
-                    <ErrorMessage message={errors?.end_time?.message} />
-                  )}
+                  <TimePicker name="end_time" label="End time" required />
                 </Col>
               </Row>
             </Form>

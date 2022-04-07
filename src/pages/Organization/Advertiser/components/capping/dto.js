@@ -6,6 +6,7 @@ import {
 } from 'constants/misc';
 import {isArray} from 'lodash';
 import moment from 'moment';
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
 import {getTimeZoneOffset} from 'utils/metrics';
 
 export const formToApi = ({formData, type}) => {
@@ -18,7 +19,7 @@ export const formToApi = ({formData, type}) => {
     ].includes(type)
   ) {
     return {
-      target: parseFloat(formData?.target) || 0,
+      target: convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
       status
     };
   }

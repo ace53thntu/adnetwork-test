@@ -22,16 +22,14 @@ import {
 import AddTypeButton from '../actions/AddTypeButton';
 import CappingFormContainer from '../form/CappingFormContainer';
 import BudgetList from './BudgetList';
+import DomainList from './DomainList';
+import KeywordList from './KeywordList';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired
 };
 
 const CappingList = ({referenceUuid = '', referenceType = ''}) => {
-  console.log(
-    '🚀 ~ file: CappingList.js ~ line 34 ~ CappingList ~ referenceType',
-    referenceType
-  );
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -55,13 +53,29 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
     return cappingData?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
+  console.log(
+    '🚀 ~ file: CappingList.js ~ line 57 ~ cappings ~ cappings',
+    cappings
+  );
 
   const budgetList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.BUDGET.value});
   }, [cappings]);
 
+  const impressionList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
+  }, [cappings]);
+
   const budgetManagerList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.BUDGET_MANAGER.value});
+  }, [cappings]);
+
+  const domainList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.DOMAIN.value});
+  }, [cappings]);
+
+  const keywordList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.KEYWORD.value});
   }, [cappings]);
 
   const existedTypes = getExistedType(cappings);
@@ -145,6 +159,34 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
         />
+      )}
+
+      {impressionList?.length > 0 && (
+        <BudgetList
+          title="Impression"
+          list={impressionList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
+
+      {referenceType !== 'strategy' && (
+        <>
+          {domainList?.length > 0 && (
+            <DomainList
+              list={domainList}
+              onClickMenu={onClickMenu}
+              onClickItem={onClickItem}
+            />
+          )}
+          {keywordList?.length > 0 && (
+            <KeywordList
+              list={keywordList}
+              onClickMenu={onClickMenu}
+              onClickItem={onClickItem}
+            />
+          )}
+        </>
       )}
 
       {budgetManagerList?.length > 0 && (

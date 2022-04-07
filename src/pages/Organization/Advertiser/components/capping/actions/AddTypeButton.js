@@ -16,7 +16,6 @@ import BudgetCreateModal from '../modal/BudgetCreateModal';
 import DomainCreateModal from '../modal/DomainCreateModal';
 import KeywordCreateModal from '../modal/KeywordCreateModal';
 import {disabledExistedType} from '../dto';
-import ScheduleCreateModal from '../modal/ScheduleCreateModal';
 
 const propTypes = {
   existedTypes: PropTypes.array,
@@ -56,7 +55,19 @@ const AddTypeButton = ({
         </DropdownToggle>
         <DropdownMenu>
           {CappingTypeButtons?.map((item, idx) => {
-            if (item?.type !== CappingTypes.BUDGET.value) {
+            if (
+              (referenceType === 'advertiser' &&
+                item?.type === CappingTypes.SCHEDULE.value) ||
+              item?.type === CappingTypes.BUDGET_MANAGER.value
+            ) {
+              return null;
+            }
+
+            if (
+              referenceType === 'strategy' &&
+              (item?.type === CappingTypes.DOMAIN.value ||
+                item?.type === CappingTypes.KEYWORD.value)
+            ) {
               return null;
             }
 
@@ -103,16 +114,6 @@ const AddTypeButton = ({
 
       {openModal && activeType.type === CappingTypes.KEYWORD.value && (
         <KeywordCreateModal
-          openForm={openModal}
-          toggleModal={toggleModal}
-          cappingType={activeType}
-          referenceType={referenceType}
-          referenceUuid={referenceUuid}
-        />
-      )}
-
-      {openModal && activeType.type === CappingTypes.SCHEDULE.value && (
-        <ScheduleCreateModal
           openForm={openModal}
           toggleModal={toggleModal}
           cappingType={activeType}

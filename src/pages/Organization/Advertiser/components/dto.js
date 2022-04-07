@@ -1,3 +1,5 @@
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
+
 /**
  * Mapping API respone to form data format
  * @param {*} apiResp - API response data
@@ -11,17 +13,66 @@ export const mappingApiToForm = ({apiResp}) => {};
  * @returns data with API request body format trustly
  */
 export const mappingFormToApi = ({formData}) => {
-  const {name, status, iabs, domains, tags, budget} = formData;
+  const {
+    name,
+    status,
+    iabs,
+    domains,
+    tags,
+    budget,
+    impression,
+    domain_groups_white,
+    domain_groups_black,
+    keywords_list_white,
+    keywords_list_black
+  } = formData;
   const desIABs = iabs?.map(item => item.value) || null;
   const desDomains = domains?.map(item => item.value) || null;
   const desTags = tags?.map(item => item.value) || null;
 
-  return {
+  let requestBody = {
     name,
     status,
     iabs: desIABs,
     domains: desDomains,
     tags: desTags,
-    budget
+    budget: {
+      global: convertGuiToApi({value: budget?.global}), //parseFloat(budget?.global) || 0,
+      daily: convertGuiToApi({value: budget?.daily}) //parseFloat(budget?.daily)
+    },
+    impression: {
+      global: convertGuiToApi({value: impression?.global}), //parseFloat(impression?.global) || 0,
+      daily: convertGuiToApi({value: impression?.daily}) //parseFloat(impression?.daily)
+    }
   };
+
+  if (domain_groups_white && domain_groups_white?.length > 0) {
+    requestBody.domain_groups_white = Array.from(
+      domain_groups_white,
+      domain => domain?.value
+    );
+  }
+
+  if (domain_groups_black && domain_groups_black?.length > 0) {
+    requestBody.domain_groups_black = Array.from(
+      domain_groups_black,
+      domain => domain?.value
+    );
+  }
+
+  if (keywords_list_white && keywords_list_white?.length > 0) {
+    requestBody.keywords_list_white = Array.from(
+      keywords_list_white,
+      keyword => keyword?.value
+    );
+  }
+
+  if (keywords_list_black && keywords_list_black?.length > 0) {
+    requestBody.keywords_list_black = Array.from(
+      keywords_list_black,
+      keyword => keyword?.value
+    );
+  }
+
+  return requestBody;
 };

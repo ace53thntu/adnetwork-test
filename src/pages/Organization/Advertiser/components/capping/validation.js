@@ -2,8 +2,6 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {CappingTypes} from 'constants/misc';
 import * as yup from 'yup';
 
-const VALID_NUMBER = /^\d*\.?\d*$/;
-
 export const schemaValidate = (t, cappingType) => {
   if (
     [
@@ -17,10 +15,16 @@ export const schemaValidate = (t, cappingType) => {
         target: yup
           .string()
           .required(t('required'))
-          .test('is-float', 'Invalid number', value =>
-            (value + '').match(VALID_NUMBER)
-          )
-          .typeError('Invalid number')
+          // .test('is-float', 'Invalid number. Only allow integer > 0', value => {
+          //   const reg = /^\d+$/;
+          //   const parsed = parseInt(value, 10);
+          //   const isNumber = reg.test(value);
+          //   if (isNumber && parsed > 0) {
+          //     return true;
+          //   }
+          //   return false;
+          // })
+          .typeError('Invalid number. Only allow integer > 0')
       })
     );
   }
@@ -94,11 +98,24 @@ export const schemaValidateCreateBudget = t => {
   );
 };
 
-export const schemaValidateCreateSchedule = t => {
+export const schemaValidateCreateSchedule = (t, isRequired = false) => {
+  if (isRequired) {
+    return yupResolver(
+      yup.object().shape({
+        week_days: yup.array().required(t('required')).typeError(t('required')),
+        start_time: yup.date().required(t('required')).typeError(t('required')),
+        end_time: yup
+          .date()
+          .required(t('required'))
+          .min(yup.ref(`start_time`), "End date can't be before start date")
+          .typeError(t('required'))
+      })
+    );
+  }
   return yupResolver(
     yup.object().shape({
       week_days: yup.array().required(t('required')).typeError(t('required')),
-      start_time: yup.date().notRequired(t('required')),
+      start_time: yup.date().notRequired(),
       end_time: yup
         .date()
         .notRequired()
