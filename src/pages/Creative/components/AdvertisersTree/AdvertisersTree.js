@@ -116,8 +116,12 @@ function AdvertisersTree(props) {
       const {isAdvertiser, id} = node;
 
       if (isAdvertiser) {
-        if (state.expanded) {
-          const res = await getConcepts(id, currentPage + 1);
+        if (node.expanded) {
+          const res = await getConcepts(
+            id,
+            currentPage > node.page ? currentPage : currentPage + 1
+          );
+
           if (res?.data?.length) {
             const items = res.data;
             const newChildren = items?.map(({uuid, name}) => ({
@@ -132,7 +136,7 @@ function AdvertisersTree(props) {
               isConcept: true,
               isAdvertiser: false
             }));
-            dispatch(loadMoreConceptRedux(newChildren));
+            dispatch(loadMoreConceptRedux(newChildren, node.id));
             return newChildren;
           }
           return [];
@@ -153,6 +157,7 @@ function AdvertisersTree(props) {
               isConcept: true,
               isAdvertiser: false
             }));
+            dispatch(loadMoreConceptRedux(children, node.id));
             return children;
           }
           return [];

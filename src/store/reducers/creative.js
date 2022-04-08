@@ -39,8 +39,8 @@ export const selectConceptRedux = (conceptId, advertiserId) =>
   createAction(SELECT_CONCEPT, {conceptId, advertiserId});
 export const loadConceptRedux = concepts =>
   createAction(LOAD_CONCEPT, {concepts});
-export const loadMoreConceptRedux = concepts =>
-  createAction(LOAD_MORE_CONCEPT, {concepts});
+export const loadMoreConceptRedux = (concepts, advertiserId) =>
+  createAction(LOAD_MORE_CONCEPT, {concepts, advertiserId});
 export const updateConceptRedux = (conceptId, concept) =>
   createAction(UPDATE_CONCEPT, {conceptId, concept});
 export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
@@ -222,7 +222,7 @@ function handleSelectConcept(state, action) {
 function handleLoadConcept(state, action) {
   const {concepts} = action.payload;
 
-  const newNodes = [...state.advertisers].map(item => {
+  const newNodes = [...original(state.advertisers)].map(item => {
     const childLen = item.children?.length ?? 0;
     if (
       item.id === state.selectedAdvertiserId &&
@@ -231,6 +231,7 @@ function handleLoadConcept(state, action) {
       return {
         ...item,
         expanded: true,
+        page: item.page + 1,
         children: [...concepts]?.map(({uuid, name}) => ({
           id: uuid,
           name,
@@ -250,16 +251,17 @@ function handleLoadConcept(state, action) {
 }
 
 function handleLoadMoreConcept(state, action) {
-  const {concepts} = action.payload;
+  const {concepts, advertiserId} = action.payload;
 
-  const newNodes = [...state.advertisers].map(item => {
-    if (item.id === state.selectedAdvertiserId) {
+  const newNodes = [...original(state.advertisers)].map(item => {
+    if (item.id === advertiserId) {
       const newConcepts = [...concepts].map(concept => ({
         ...concept,
         selected: state.selectedConceptId === concept.id
       }));
       return {
         ...item,
+        page: item.page + 1,
         children: [...item.children, ...newConcepts]
       };
     }
