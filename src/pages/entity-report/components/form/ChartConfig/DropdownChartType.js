@@ -31,13 +31,10 @@ const DropdownChartType = ({
   colors = [],
   isChartCompare = false
 }) => {
-  console.log('🚀 ~ file: DropdownChartType.js ~ line 34 ~ colors', colors);
   const dispatch = useDispatch();
   const metricBody = useMetricsBodySelector();
   const chartTypeRedux = useChartTypeSelectedSelector();
-  const parsedColor = React.useMemo(() => parseColors({color: colors}), [
-    colors
-  ]);
+  const parsedColor = React.useMemo(() => parseColors(colors), [colors]);
 
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
@@ -50,6 +47,11 @@ const DropdownChartType = ({
       ? ChartTypes.PIE
       : ChartTypes.LINE
     : chartTypeRedux;
+  console.log(
+    '🚀 ~ file: DropdownChartType.js ~ line 48 ~ chartTypeSelected',
+    chartTypeSelected,
+    chartTypeRedux
+  );
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
@@ -64,6 +66,7 @@ const DropdownChartType = ({
   function onClickChartType(evt, type) {
     evt.preventDefault();
     onSelectType(type);
+
     if (type === ChartTypes.PIE && metricBody.time_unit !== TimeUnits.GLOBAL) {
       dispatch(
         setMetricBodyRedux({

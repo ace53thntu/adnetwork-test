@@ -50,6 +50,7 @@ import DistributionUnit from './form/DistributionUnit';
 import ChartMode from './form/ChartConfig/ChartMode';
 import {getParsedTimeUnit} from '../utils/getParsedTimeUnit';
 import DropdownChartType from './form/ChartConfig/DropdownChartType';
+import {getParsedTimeRange} from '../utils/getParsedTimeRange';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -67,6 +68,10 @@ export default function ReportFormContent({
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 71 ~ currentReport',
+    currentReport
+  );
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
 
@@ -86,6 +91,18 @@ export default function ReportFormContent({
 
   // Watch form value changed'
   const reportType = useWatch({name: REPORT_INPUT_NAME.REPORT_TYPE, control});
+  const timeRangeSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIME_RANGE}`,
+    control
+  });
+  const startTimeSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.START_TIME}`,
+    control
+  });
+  const endTimeSelected = useWatch({
+    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.END_TIME}`,
+    control
+  });
   const reportBySelected = useWatch({
     name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY}`,
     control
@@ -113,6 +130,10 @@ export default function ReportFormContent({
 
   const handleSelectedChartType = React.useCallback(
     _chartType => {
+      console.log(
+        '🚀 ~ file: ReportFormContent.js ~ line 129 ~ _chartType',
+        _chartType
+      );
       setValue(
         `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
         _chartType
@@ -152,7 +173,7 @@ export default function ReportFormContent({
         );
       }
     },
-    [dispatch, metricBody, reportBySelected?.value]
+    [dispatch, metricBody, reportBySelected?.value, timeRangeSelected]
   );
 
   //---> Handle report by uuid change
@@ -162,12 +183,27 @@ export default function ReportFormContent({
         reportByUuidSelected &&
         metricBody.report_by_uuid !== reportByUuidSelected?.value
       ) {
+        console.log('==== Time range', timeRangeSelected);
+        const parsedTimeUnit = getParsedTimeUnit({timeUnit: timeUnitSelected});
+        const parsedTimeRange = getParsedTimeRange({
+          timeRange: timeRangeSelected
+        });
+        let timeUnit = parsedTimeUnit;
+
+        if (parsedTimeUnit === TimeUnits.GLOBAL) {
+          setValue(
+            `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,
+            JSON.stringify(parsedTimeRange?.units?.[0])
+          );
+          timeUnit = parsedTimeRange?.units?.[0]?.value;
+        }
+
         dispatch(
           setMetricBodyRedux({
             ...metricBody,
             report_by: reportBySelected?.value,
             report_by_uuid: reportByUuidSelected?.value,
-            time_unit: getParsedTimeUnit({timeUnit: timeUnitSelected})
+            time_unit: timeUnit
           })
         );
         if (chartTypeSelected !== ChartTypes.LINE) {
@@ -180,7 +216,10 @@ export default function ReportFormContent({
       }
 
       if (!reportByUuidSelected && isChartCompare) {
-        if (chartTypeSelected !== ChartTypes.PIE) {
+        if (
+          chartTypeSelected !== ChartTypes.PIE &&
+          chartTypeSelected !== ChartTypes.BAR
+        ) {
           setValue(
             `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
             ChartTypes.PIE
@@ -197,21 +236,22 @@ export default function ReportFormContent({
       reportBySelected?.value,
       reportByUuidSelected,
       setValue,
+      timeRangeSelected,
       timeUnitSelected
     ]
   );
 
   //---> Handle chart type change
-  React.useEffect(function handleChartTypeChange() {}, []);
+  React.useEffect(
+    function handleChartTypeChange() {
+      dispatch(setChartTypeSelectedRedux(chartTypeSelected));
+    },
+    [chartTypeSelected, dispatch]
+  );
 
+  //---> Handle trending - unit global
   React.useEffect(
     function initChartTypeWithGlobalTimeRange() {
-      console.log(
-        '=== initChartTypeWithGlobalTimeRange',
-        chartTypeSelected,
-        metricateSelected.length,
-        metricBody.time_unit
-      );
       if (
         isChartCompare &&
         ![ChartTypes.BAR, ChartTypes.PIE].includes(chartTypeSelected) &&
@@ -219,11 +259,16 @@ export default function ReportFormContent({
         metricateSelected?.length < 2
       ) {
         console.log('TIME UNIT GLOBAL ===');
-        setValue(
-          `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
-          ChartTypes.PIE
-        );
-        dispatch(setChartTypeSelectedRedux(ChartTypes.PIE));
+        if (
+          chartTypeSelected !== ChartTypes.PIE &&
+          chartTypeSelected !== ChartTypes.BAR
+        ) {
+          setValue(
+            `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+            ChartTypes.PIE
+          );
+          dispatch(setChartTypeSelectedRedux(ChartTypes.PIE));
+        }
         dispatch(
           setMetricBodyRedux({
             ...metricBody,
@@ -268,12 +313,14 @@ export default function ReportFormContent({
                       />
                     ) : (
                       <>
-                        <Col xs="4">
-                          <StartTime />
-                        </Col>
-                        <Col xs="4">
-                          <EndTime />
-                        </Col>
+                        <Row>
+                          <Col xs="6">
+                            <StartTime />
+                          </Col>
+                          <Col xs="6">
+                            <EndTime />
+                          </Col>
+                        </Row>
                       </>
                     )}
                     {reportType?.value === ReportTypes.TRENDING ? (
@@ -281,8 +328,8 @@ export default function ReportFormContent({
                     ) : (
                       <DistributionUnit
                         defaultValue={defaultValues?.api?.time_unit}
-                        startTime={defaultValues?.api?.start_time}
-                        endTime={defaultValues?.api?.end_time}
+                        startTime={startTimeSelected}
+                        endTime={endTimeSelected}
                       />
                     )}
                   </Col>

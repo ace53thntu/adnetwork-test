@@ -6,6 +6,10 @@ export const parseColors = color => {
     return [];
   }
 
+  if (typeof color !== 'string') {
+    return color;
+  }
+
   try {
     const colors = JSON.parse(color);
     return colors;

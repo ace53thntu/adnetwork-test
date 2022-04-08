@@ -8,6 +8,7 @@ import {
 } from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import _ from 'lodash';
+import {hexToRgbA} from '../utils';
 
 /**
  * Hook handle data to render to Chart
@@ -21,19 +22,12 @@ export const useChartData = ({
   metricSet = [],
   entityId,
   chartType = '',
-  chartMode = ChartModes.BY
+  chartMode = ChartModes.BY,
+  colors
 }) => {
   return useMemo(() => {
-    if (
-      metricData &&
-      Object.keys(metricData).length > 0 &&
-      Object.keys(metricData?.report).length > 0
-    ) {
+    if (metricData && Object.keys(metricData).length > 0) {
       const {report: metrics, start_time, end_time, info = {}} = metricData;
-      if (!metrics || Object.keys(metrics).length === 0) {
-        return null;
-      }
-
       if (
         [ChartTypes.BAR, ChartTypes.PIE].includes(chartType) &&
         unit === TimeUnits.GLOBAL &&
@@ -50,13 +44,24 @@ export const useChartData = ({
           unit,
           metrics,
           entityId,
-          chartMode
+          chartMode,
+          type,
+          colors
         });
       }
       return null;
     }
     return null;
-  }, [chartMode, chartType, entityId, metricData, metricSet, unit]);
+  }, [
+    chartMode,
+    chartType,
+    colors,
+    entityId,
+    metricData,
+    metricSet,
+    type,
+    unit
+  ]);
 };
 
 const getDataPieChart = ({metrics, metricSet, info}) => {
@@ -68,10 +73,6 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
     const metricData = metrics?.['0'];
 
     if (metricData && Object.keys(metricData).length > 0) {
-      console.log(
-        '🚀 ~ file: useChartData.js ~ line 68 ~ getDataPieChart ~ metricData',
-        metricData
-      );
       const metricList = Object.entries(metricData);
       const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
         return {
@@ -100,9 +101,15 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
       return data;
     }
 
-    return null;
+    return {
+      datasets: [{data: [], backgroundColor: [], label: metricSet?.[0]?.label}],
+      labels: []
+    };
   }
-  return null;
+  return {
+    datasets: [{data: [], backgroundColor: [], label: metricSet?.[0]?.label}],
+    labels: []
+  };
 };
 
 const getDataLineChart = ({
@@ -112,14 +119,11 @@ const getDataLineChart = ({
   unit,
   metrics,
   entityId,
-  chartMode
+  chartMode,
+  type,
+  colors
 }) => {
-  if (
-    !metrics ||
-    (typeof metrics === 'object' && Object.keys(metrics).length === 0)
-  ) {
-    return null;
-  }
+  console.log('🚀 ~ file: useChartData.js ~ line 126 ~ colors', colors);
 
   const startTime = moment.unix(start_time);
   const endTime = moment.unix(end_time);
@@ -139,10 +143,11 @@ const getDataLineChart = ({
     metrics,
     listCheckPoints
   });
+  console.log('🚀 ~ file: useChartData.js ~ line 144 ~ newMetrics', newMetrics);
 
   if (validArray({list: metricSet})) {
     const data = [];
-    metricSet.forEach(item => {
+    metricSet.forEach((item, idx) => {
       const dataItem = getDataDrawChart({
         listCheckPoints,
         metrics: newMetrics,
@@ -150,9 +155,15 @@ const getDataLineChart = ({
         metricSet: item,
         chartMode
       });
-      data.push({data: dataItem, name: item?.label});
+      data.push({
+        data: dataItem,
+        label: item?.label,
+        ...getChartConfig({type, color: colors?.[idx] || ''})
+      });
     });
-    return {series: data, categories: listCheckPoints};
+    console.log('🚀 ~ file: useChartData.js ~ line 156 ~ data', data);
+
+    return {datasets: data, labels: listCheckPoints};
   } else {
     const data = getDataDrawChart({
       listCheckPoints,
@@ -162,7 +173,7 @@ const getDataLineChart = ({
     });
     return {
       categories: listCheckPoints,
-      series: [{data, name: metricSet?.label}]
+      series: [{data, label: metricSet?.label}]
     };
   }
 };
@@ -224,7 +235,7 @@ const convertApiToRender = ({
     });
     result[newKey] = value;
   }
-
+  console.log('result ===', result);
   return result;
 };
 
@@ -266,4 +277,27 @@ const getDataDrawChart = ({
     return cumData;
   }
   return data;
+};
+
+const getChartConfig = ({type, color}) => {
+  return {
+    fill: false,
+    lineTension: 0.1,
+    backgroundColor: hexToRgbA(color),
+    borderColor: color,
+    borderWidth: type === 'line' ? 2 : 1,
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    pointBorderColor: color,
+    pointBackgroundColor: '#fff',
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+    pointHoverBorderColor: 'rgba(220,220,220,1)',
+    pointHoverBorderWidth: 2,
+    pointRadius: 1,
+    pointHitRadius: 10
+  };
 };

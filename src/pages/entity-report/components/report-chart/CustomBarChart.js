@@ -1,4 +1,6 @@
 //---> Build-in Modules
+import {FORMAT_BY_UNIT_LABEL, TimeUnits} from 'constants/report';
+import {useChartOptions} from 'pages/entity-report/hooks/useChartOptions';
 import React from 'react';
 
 //---> External Modules
@@ -6,34 +8,42 @@ import React from 'react';
 //---> Build-in Modules
 import {R2ChartBar} from '../charts';
 
-const CustomBarChart = ({barData, colors = [], showXLabel = true}) => {
+const CustomBarChart = ({
+  data,
+  colors = [],
+  showXLabel = true,
+  unit = TimeUnits.DAY
+}) => {
   const dataDestructured = React.useMemo(() => {
-    if (barData) {
-      return barData?.datasets?.map(item => {
-        return {...item, backgroundColor: colors?.[0]};
+    if (data) {
+      return data?.datasets?.map(item => {
+        if (unit === TimeUnits.GLOBAL) {
+          return {...item, backgroundColor: colors?.[0]};
+        }
+        return item;
       });
     }
     return [];
-  }, [colors, barData]);
+  }, [colors, data, unit]);
 
-  const options = React.useMemo(
-    () => ({
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              display: showXLabel //this will remove only the label
-            }
-          }
-        ]
-      }
-    }),
-    [showXLabel]
-  );
+  // const options = React.useMemo(
+  //   () => ({
+  //     scales: {
+  //       x: {
+  //         ticks: {
+  //           display: showXLabel //this will remove only the label
+  //         }
+  //       }
+  //     }
+  //   }),
+  //   [showXLabel]
+  // );
+  const formatDateStr = FORMAT_BY_UNIT_LABEL[unit];
+  const options = useChartOptions({format: formatDateStr});
 
   return (
     <R2ChartBar
-      data={{...barData, datasets: dataDestructured}}
+      data={{...data, datasets: dataDestructured}}
       options={options}
     />
   );

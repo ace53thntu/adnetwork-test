@@ -31,7 +31,8 @@ const CustomPieChart = ({
         font: {
           weight: 'normal'
         }
-      }
+      },
+      maintainAspectRatio: false
     }),
     [pieData?.datasets, position, showLegend]
   );

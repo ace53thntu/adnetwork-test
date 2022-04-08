@@ -9,21 +9,21 @@ import {useFormContext} from 'react-hook-form';
 import {REPORT_INPUT_NAME} from 'constants/report';
 
 const ConfigChart = ({chartTypeDefault, colorDefault, children}) => {
-  const {register, setValue} = useFormContext();
+  const {register} = useFormContext();
 
-  React.useEffect(() => {
-    setValue(
-      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
-      chartTypeDefault
-    );
-  }, [chartTypeDefault, setValue]);
+  // React.useEffect(() => {
+  //   setValue(
+  //     `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
+  //     chartTypeDefault
+  //   );
+  // }, [chartTypeDefault, setValue]);
 
-  React.useEffect(() => {
-    setValue(
-      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
-      colorDefault
-    );
-  }, [chartTypeDefault, colorDefault, setValue]);
+  // React.useEffect(() => {
+  //   setValue(
+  //     `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+  //     colorDefault
+  //   );
+  // }, [chartTypeDefault, colorDefault, setValue]);
 
   return (
     <div className="d-flex">

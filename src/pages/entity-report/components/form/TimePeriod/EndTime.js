@@ -28,10 +28,9 @@ export function EndTime() {
             onBlur={onBlur}
             onChange={date => onChange(date)}
             className="form-control"
-            placeholderText="dd/MM/yyyy HH:mm"
+            placeholderText="dd/mm/yyyy HH:mm"
             name={name}
             showTimeSelect
-            showTimeSelectOnly
             timeIntervals={1}
             timeCaption="Time"
             dateFormat="dd/MM/yyyy HH:mm"

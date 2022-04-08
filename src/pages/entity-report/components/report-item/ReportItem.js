@@ -68,7 +68,8 @@ export default function ReportItem({
     metricSet,
     entityId: reportByUuid,
     chartType,
-    chartMode
+    chartMode,
+    colors
   });
   console.log('🚀 ~ file: ReportItem.js ~ line 73 ~ metricData', metricData);
 
@@ -158,13 +159,10 @@ export default function ReportItem({
         {metricData ? (
           <div>
             <ChartItem
-              series={metricData?.series}
               chartType={chartType}
-              color={colors}
+              colors={colors}
               unit={unit}
-              metricSet={metricSet}
-              pieData={metricData}
-              pieColor={color}
+              chartData={metricData}
             />
             <MetricInfo
               timeRange={timeRange}

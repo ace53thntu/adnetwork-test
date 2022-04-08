@@ -8,12 +8,7 @@ import {Card, CardBody, Col, Row} from 'reactstrap';
 import _ from 'lodash';
 
 //---> Internal Modules
-import {
-  DEFAULT_TIME_UNIT,
-  REPORT_INPUT_NAME,
-  METRIC_SETS,
-  ChartTypes
-} from 'constants/report';
+import {REPORT_INPUT_NAME, ChartTypes} from 'constants/report';
 import {
   setChartColorSelectedRedux,
   useChartModeSelector,
@@ -26,9 +21,9 @@ import {useChartData} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
 import {initializingColors} from '../utils/parseColors';
-import {useTranslation} from 'react-i18next';
 import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
 import {useDispatch} from 'react-redux';
+import {parseColors} from 'pages/entity-report/utils';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -82,15 +77,11 @@ ChartPreview.propTypes = propTypes;
 
 const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId, color}) => {
-    const {t} = useTranslation();
     const dispatch = useDispatch();
     const chartTypeRedux = useChartTypeSelectedSelector();
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 88 ~ chartTypeRedux',
-      chartTypeRedux
-    );
     const isChartCompare = useIsChartCompareSelector();
     const chartMode = useChartModeSelector();
+    const existedColors = parseColors(color);
     const chartData = useChartData({
       metrics,
       unit,
@@ -98,18 +89,29 @@ const ChartPreviewContent = React.memo(
       metricSet,
       entityId,
       chartType: chartTypeRedux,
-      chartMode
+      chartMode,
+      colors: existedColors
     });
+    console.log('🚀 ~ file: ChartPreview.js ~ line 101 ~ chartData', chartData);
 
     const colors = initializingColors({
       sizeOfData: chartData?.labels?.length,
       existedColors: color,
       charType: chartTypeRedux
     });
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 102 ~ colors',
+      colors,
+      existedColors
+    );
 
     const {watch} = useFormContext();
     const selectedType = watch(
       `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
+    );
+    console.log(
+      '🚀 ~ file: ChartPreview.js ~ line 107 ~ selectedType',
+      selectedType
     );
 
     React.useEffect(
@@ -118,6 +120,10 @@ const ChartPreviewContent = React.memo(
       },
       [colors, dispatch]
     );
+
+    if (!chartData) {
+      return <div>No data</div>;
+    }
 
     return (
       <Row className="chart-preview">
@@ -131,25 +137,23 @@ const ChartPreviewContent = React.memo(
               }}
             >
               {selectedType === ChartTypes.BAR && isChartCompare && (
-                <CustomBarChart barData={chartData} colors={colors} />
+                <CustomBarChart data={chartData} colors={colors} />
               )}
               {selectedType === ChartTypes.PIE && (
                 <CustomPieChart pieData={chartData} colors={colors} />
               )}
-              {[ChartTypes.LINE, ChartTypes.MULTILINE, ChartTypes.BAR].includes(
-                selectedType
-              ) &&
+              {[ChartTypes.LINE, ChartTypes.MULTILINE].includes(selectedType) &&
                 !isChartCompare && (
-                  <CustomLineChart
-                    series={chartData?.series}
-                    categories={chartData?.categories}
-                    nameOfSeries={
-                      METRIC_SETS?.[metricSet?.code]?.label || t('noLabel')
-                    }
-                    unit={unit || DEFAULT_TIME_UNIT}
-                    metricSet={metricSet}
-                  />
+                  <CustomLineChart data={chartData} unit={unit} />
                 )}
+              {[ChartTypes.BAR].includes(selectedType) && !isChartCompare && (
+                <CustomBarChart
+                  data={chartData}
+                  showXLabel={false}
+                  colors={colors}
+                  unit={unit}
+                />
+              )}
             </CardBody>
           </Card>
         </Col>

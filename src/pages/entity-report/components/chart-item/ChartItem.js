@@ -1,32 +1,16 @@
 import React from 'react';
-// import CustomPieChart from './CustomPieChart';
-import {useConfigChart} from '../../hooks/useConfigChart';
-import {R2ChartBar, R2ChartLine} from '..';
-import {ChartTypes, FORMAT_BY_UNIT, TimeUnits} from 'constants/report';
-import {CustomBarChart, CustomPieChart} from '../report-chart';
+import {ChartTypes, TimeUnits} from 'constants/report';
+import {CustomBarChart, CustomLineChart, CustomPieChart} from '../report-chart';
+import {parseColors} from 'pages/entity-report/utils';
 
 const ChartItem = ({
-  chartType = 'line',
-  color,
-  unit = 'day',
-  series,
-  metricSet = [],
-  pieData = {},
-  pieColor = ''
+  chartType = ChartTypes.LINE,
+  unit = TimeUnits.DAY,
+  chartData = {},
+  colors = ''
 }) => {
-  const convertUnit = unit;
-  const formatDateStr = FORMAT_BY_UNIT[convertUnit];
-
-  const {data: chartData, options} = useConfigChart({
-    chartData: series,
-    unit: convertUnit,
-    format: formatDateStr,
-    type: chartType,
-    color,
-    metricSet
-  });
-
-  const convertPieColors = JSON.parse(pieColor) || [];
+  console.log('🚀 ~ file: ChartItem.js ~ line 12 ~ chartData', chartData);
+  const convertPieColors = parseColors(colors);
 
   return (
     <div>
@@ -34,7 +18,7 @@ const ChartItem = ({
         if (chartType === ChartTypes.PIE) {
           return (
             <CustomPieChart
-              pieData={pieData}
+              pieData={chartData}
               colors={convertPieColors}
               showLegend={false}
             />
@@ -43,17 +27,26 @@ const ChartItem = ({
         if (chartType === ChartTypes.BAR && unit === TimeUnits.GLOBAL) {
           return (
             <CustomBarChart
-              barData={pieData}
+              barData={chartData}
               colors={convertPieColors}
               showXLabel={false}
             />
           );
         }
         if ([ChartTypes.LINE, ChartTypes.MULTILINE].includes(chartType)) {
-          return <R2ChartLine data={chartData} options={options} />;
+          return <CustomLineChart data={chartData} unit={unit} />;
+
+          // return <R2ChartLine data={chartData} options={options} />;
         }
         if (chartType === ChartTypes.BAR) {
-          return <R2ChartBar data={chartData} options={options} />;
+          return (
+            <CustomBarChart
+              data={chartData}
+              showXLabel={false}
+              colors={convertPieColors}
+              unit={unit}
+            />
+          );
         }
         return <div>Up coming</div>;
       })()}

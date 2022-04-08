@@ -208,6 +208,18 @@ export const FORMAT_BY_UNIT = {
   second: 'HH:mm:ss'
 };
 
+/**
+ * Format by time unit for label
+ * @enum {string}
+ */
+export const FORMAT_BY_UNIT_LABEL = {
+  month: 'YYYY-MM',
+  day: 'YYYY-MM-DD',
+  hour: 'HH',
+  minute: 'HH:mm',
+  second: 'HH:mm:ss'
+};
+
 export const REPORT_VIEW_TYPES = [
   {
     label: 'External',

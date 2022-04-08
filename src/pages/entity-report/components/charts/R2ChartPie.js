@@ -13,7 +13,7 @@ const propTypes = {
 };
 
 const R2ChartPie = ({pieData, options}) => {
-  return <Pie data={pieData} options={options} />;
+  return <Pie data={pieData} options={options} width="100%" height="250px" />;
 };
 
 R2ChartPie.propTypes = propTypes;

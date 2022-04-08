@@ -29,7 +29,6 @@ import {useDestructurePageOptions} from 'pages/report-dashboard/hooks';
 import {USER_INFO_KEY} from 'utils/constants/auth.constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import MetricInfo from 'pages/entity-report/components/report-item/MetricInfo';
-import {METRIC_SETS} from 'constants/report';
 import {ChartItem} from 'pages/entity-report/components/chart-item';
 
 const useStyles = makeStyles(theme => ({
@@ -167,7 +166,6 @@ export default function ModalReportPage({
               const {
                 id,
                 metricData,
-                metricSet,
                 chartType,
                 color,
                 unit,
@@ -181,14 +179,10 @@ export default function ModalReportPage({
                   <Card>
                     <CardBody>
                       <ChartItem
-                        series={metricData?.series}
-                        categories={metricData?.categories}
-                        nameOfSeries={METRIC_SETS?.[metricSet?.code]?.label}
                         chartType={chartType}
-                        color={color}
-                        reportId={id}
+                        colors={color}
                         unit={unit}
-                        metricSet={metricSet}
+                        chartData={metricData}
                       />
                       <MetricInfo
                         timeRange={time_range}
