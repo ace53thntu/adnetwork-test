@@ -1,3 +1,4 @@
+import {original} from 'immer';
 import {unSelectedChild} from 'pages/Creative/components/AdvertisersTree/utils';
 import {TABS} from 'pages/Creative/components/CreativeCreate/constants';
 import {useSelector} from 'react-redux';
@@ -14,6 +15,7 @@ const EXPAND_ADVERTISER = '@creative/EXPAND_ADVERTISER';
 const DELETE_CONCEPT = '@creative/DELETE_CONCEPT';
 const SELECT_CONCEPT = '@creative/SELECT_CONCEPT';
 const LOAD_CONCEPT = '@creative/LOAD_CONCEPT';
+const LOAD_MORE_CONCEPT = '@creative/LOAD_MORE_CONCEPT';
 const UPDATE_CONCEPT = '@creative/UPDATE_CONCEPT';
 const ADD_CONCEPT = '@creative/ADD_CONCEPT';
 
@@ -37,6 +39,8 @@ export const selectConceptRedux = (conceptId, advertiserId) =>
   createAction(SELECT_CONCEPT, {conceptId, advertiserId});
 export const loadConceptRedux = concepts =>
   createAction(LOAD_CONCEPT, {concepts});
+export const loadMoreConceptRedux = concepts =>
+  createAction(LOAD_MORE_CONCEPT, {concepts});
 export const updateConceptRedux = (conceptId, concept) =>
   createAction(UPDATE_CONCEPT, {conceptId, concept});
 export const addConceptRedux = concept => createAction(ADD_CONCEPT, {concept});
@@ -62,7 +66,8 @@ const creativeInitialState = {
   detailOf: '',
   selectedCreativeId: null,
   dirtyForm: false,
-  isUploading: false
+  isUploading: false,
+  alreadySetAdv: false
 };
 
 const handleActions = {
@@ -73,6 +78,7 @@ const handleActions = {
   [DELETE_CONCEPT]: handleDeleteConcept,
   [SELECT_CONCEPT]: handleSelectConcept,
   [LOAD_CONCEPT]: handleLoadConcept,
+  [LOAD_MORE_CONCEPT]: handleLoadMoreConcept,
   [UPDATE_CONCEPT]: handleUpdateConcept,
   [ADD_CONCEPT]: handleAddConcept,
   [TOGGLE_CREATE_CREATIVE_DIALOG]: handleToggleCreateCreativeDialog,
@@ -188,7 +194,7 @@ function handleSelectConcept(state, action) {
     state.expandedIds = [...state.expandedIds, advertiserId];
   }
 
-  const newNodes = [...state.advertisers].map(item => {
+  const newNodes = [...original(state.advertisers)].map(item => {
     if (item.id === advertiserId) {
       return {
         ...item,
@@ -236,6 +242,25 @@ function handleLoadConcept(state, action) {
           parentId: state.selectedAdvertiserId,
           isConcept: true
         }))
+      };
+    }
+    return item;
+  });
+  state.advertisers = newNodes;
+}
+
+function handleLoadMoreConcept(state, action) {
+  const {concepts} = action.payload;
+
+  const newNodes = [...state.advertisers].map(item => {
+    if (item.id === state.selectedAdvertiserId) {
+      const newConcepts = [...concepts].map(concept => ({
+        ...concept,
+        selected: state.selectedConceptId === concept.id
+      }));
+      return {
+        ...item,
+        children: [...item.children, ...newConcepts]
       };
     }
     return item;

@@ -13,14 +13,13 @@ class TreeNode extends Component {
   // are also reflected in the local state.
 
   static getDerivedStateFromProps({node, useLocalState}, state) {
-    const {selected, expanded, children, isCreative} = state;
+    const {selected, expanded, children} = state;
 
     if (!useLocalState && node.name !== state.name) {
       return {
         name: node.name
       };
     }
-
     if (!useLocalState && node.numChildren !== state.numChildren) {
       return {
         numChildren: node.numChildren,
@@ -28,21 +27,6 @@ class TreeNode extends Component {
         selected: node.selected,
         expanded: node.expanded
       };
-    }
-
-    if (isCreative) {
-      if (
-        !useLocalState &&
-        (selected !== node.selected ||
-          expanded !== node.expanded ||
-          !deepEquals(children, node.children))
-      ) {
-        return {
-          selected: node.selected,
-          expanded,
-          children
-        };
-      }
     }
 
     if (
@@ -54,16 +38,19 @@ class TreeNode extends Component {
       return {
         selected: node.selected,
         expanded: node.expanded,
-        children: node.children
+        children:
+          node.children.length >= children.length ? node.children : children
       };
     }
+
     return null;
   }
 
   constructor(props) {
     super(props);
-    const {node, isCreative} = props;
+    const {node} = props;
     const {expanded, selected, children, page, name, numChildren} = node;
+
     this.state = {
       expanderLoading: false,
       paginatorLoading: false,
@@ -72,8 +59,7 @@ class TreeNode extends Component {
       children,
       page,
       name,
-      numChildren,
-      isCreative
+      numChildren
     };
   }
 

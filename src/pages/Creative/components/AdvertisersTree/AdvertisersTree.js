@@ -12,6 +12,7 @@ import {useNavigate} from 'react-router-dom';
 import {
   expandAdvertiserRedux,
   loadConceptRedux,
+  loadMoreConceptRedux,
   resetCreativeRedux,
   selectAdvertiserRedux,
   selectConceptRedux,
@@ -116,7 +117,7 @@ function AdvertisersTree(props) {
 
       if (isAdvertiser) {
         if (state.expanded) {
-          const res = await getConcepts(id, currentPage);
+          const res = await getConcepts(id, currentPage + 1);
           if (res?.data?.length) {
             const items = res.data;
             const newChildren = items?.map(({uuid, name}) => ({
@@ -131,6 +132,7 @@ function AdvertisersTree(props) {
               isConcept: true,
               isAdvertiser: false
             }));
+            dispatch(loadMoreConceptRedux(newChildren));
             return newChildren;
           }
           return [];
@@ -216,7 +218,6 @@ function AdvertisersTree(props) {
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
-        isCreative
       />
     </TreeContainer>
   );
