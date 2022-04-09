@@ -1,9 +1,14 @@
-import {REPORT_INPUT_NAME} from 'constants/report';
+//---> Build-in Modules
 import React from 'react';
+
+//---> External Modules
 import ReactDatePicker from 'react-datepicker';
 import {Controller, useFormContext, useWatch} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FormGroup, Label} from 'reactstrap';
+
+//---> Internal Modules
+import {REPORT_INPUT_NAME} from 'constants/report';
 
 export function EndTime() {
   const {t} = useTranslation();
@@ -30,13 +35,14 @@ export function EndTime() {
             className="form-control"
             placeholderText="dd/mm/yyyy HH:mm"
             name={name}
-            showTimeSelect
             timeIntervals={1}
             timeCaption="Time"
             dateFormat="dd/MM/yyyy HH:mm"
             timeFormat="HH:mm"
             minDate={startDate}
+            popperPlacement="top-end"
             showTimeInput
+            showTimeSelect
             selectsEnd
           />
         )}

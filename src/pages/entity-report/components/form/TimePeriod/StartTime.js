@@ -26,12 +26,13 @@ export default function StartTime() {
             className="form-control"
             placeholderText="dd/mm/yyyy HH:mm"
             name={name}
-            showTimeSelect
             timeIntervals={1}
             timeCaption="Time"
             dateFormat="dd/MM/yyyy HH:mm"
             timeFormat="HH:mm"
+            popperPlacement="top-end"
             showTimeInput
+            showTimeSelect
           />
         )}
       />

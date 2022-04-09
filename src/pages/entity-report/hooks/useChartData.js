@@ -123,8 +123,6 @@ const getDataLineChart = ({
   type,
   colors
 }) => {
-  console.log('🚀 ~ file: useChartData.js ~ line 126 ~ colors', colors);
-
   const startTime = moment.unix(start_time);
   const endTime = moment.unix(end_time);
   const increaseNumber = 1;

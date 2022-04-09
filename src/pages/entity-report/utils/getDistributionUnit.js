@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const GranuralityList = ['year', 'month', 'day', 'hour', 'minute'];
+const GranularityList = ['year', 'month', 'week', 'day', 'hour', 'minute'];
 
 const DistributionUnits = {
   global: [
@@ -26,14 +26,6 @@ const checkUnitToCompare = (startTime, endTime, granularity) => {
 };
 
 export function getDistributionUnits({startTime, endTime}) {
-  console.log(
-    '🚀 ~ file: getDistributionUnit.js ~ line 16 ~ getDistributionUnits ~ endTime',
-    endTime
-  );
-  console.log(
-    '🚀 ~ file: getDistributionUnit.js ~ line 16 ~ getDistributionUnits ~ startTime',
-    startTime
-  );
   if (!startTime || !endTime) {
     return '';
   }
@@ -41,16 +33,12 @@ export function getDistributionUnits({startTime, endTime}) {
   let granularityGlobal = '';
   try {
     if (moment(startTime).isBefore(moment(endTime))) {
-      for (let index = 0; index < GranuralityList.length; index++) {
-        const _granularity = GranuralityList[index];
+      for (let index = 0; index < GranularityList.length; index++) {
+        const _granularity = GranularityList[index];
         const {isSame, granularity} = checkUnitToCompare(
           startTime,
           endTime,
           _granularity
-        );
-        console.log(
-          '🚀 ~ file: getDistributionUnit.js ~ line 34 ~ getDistributionUnits ~ granularity',
-          granularity
         );
 
         if (!isSame) {

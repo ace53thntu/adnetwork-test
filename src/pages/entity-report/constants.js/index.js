@@ -1,7 +1,7 @@
 export const DefaultColor = '#e09f3e';
 export const ReportTypeOptions = [
-  {value: 'distribution', label: 'Distribution'},
-  {value: 'trending', label: 'Trending'}
+  {value: 'trending', label: 'Trending'},
+  {value: 'distribution', label: 'Distribution'}
 ];
 
 export const ReportBys = [

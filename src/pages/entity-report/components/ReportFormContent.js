@@ -51,6 +51,7 @@ import ChartMode from './form/ChartConfig/ChartMode';
 import {getParsedTimeUnit} from '../utils/getParsedTimeUnit';
 import DropdownChartType from './form/ChartConfig/DropdownChartType';
 import {getParsedTimeRange} from '../utils/getParsedTimeRange';
+import moment from 'moment';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -287,6 +288,47 @@ export default function ReportFormContent({
     ]
   );
 
+  //---> Handle start time, end time with distribution report
+  React.useEffect(
+    function handleStartAndEndTimeChange() {
+      console.log('start time ====', startTimeSelected);
+      console.log('end time ====', endTimeSelected);
+      const startTimeStr = startTimeSelected
+        ? moment(startTimeSelected).toISOString()
+        : null;
+      const endTimeStr = endTimeSelected
+        ? moment(endTimeSelected).toISOString()
+        : null;
+      if (
+        reportType?.value === ReportTypes.DISTRIBUTION &&
+        startTimeSelected &&
+        endTimeSelected &&
+        metricBody?.start_time !== startTimeStr &&
+        metricBody?.end_time !== endTimeStr
+      ) {
+        const parsedTimeUnit = getParsedTimeUnit({timeUnit: timeUnitSelected});
+
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            report_type: ReportTypes.DISTRIBUTION,
+            start_time: startTimeStr,
+            end_time: endTimeStr,
+            time_unit: parsedTimeUnit
+          })
+        );
+      }
+    },
+    [
+      dispatch,
+      endTimeSelected,
+      metricBody,
+      reportType?.value,
+      startTimeSelected,
+      timeUnitSelected
+    ]
+  );
+
   return (
     <FormProvider {...methods}>
       <form
@@ -306,6 +348,24 @@ export default function ReportFormContent({
             {!isViewed && (
               <>
                 <Row>
+                  <Col md={3}>
+                    <ReportSourceSelect
+                      defaultValue={defaultValues?.report_source}
+                      reportSourceOptions={reportSourceOptions}
+                    />
+                  </Col>
+                  <Col md="3">
+                    <ReportTypeSelect
+                      defaultValue={defaultValues?.report_type}
+                    />
+                  </Col>
+                  <ReportByGroup
+                    reportSource={reportSource}
+                    currentReportBy={defaultValues?.api?.report_by}
+                    sourceId={entityId}
+                  />
+                </Row>
+                <Row className="mt-2 mb-2">
                   <Col md="12" className="d-flex">
                     {reportType?.value === ReportTypes.TRENDING ? (
                       <TimeRange
@@ -333,24 +393,6 @@ export default function ReportFormContent({
                       />
                     )}
                   </Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col md={3}>
-                    <ReportSourceSelect
-                      defaultValue={defaultValues?.report_source}
-                      reportSourceOptions={reportSourceOptions}
-                    />
-                  </Col>
-                  <Col md="3">
-                    <ReportTypeSelect
-                      defaultValue={defaultValues?.report_type}
-                    />
-                  </Col>
-                  <ReportByGroup
-                    reportSource={reportSource}
-                    currentReportBy={defaultValues?.api?.report_by}
-                    sourceId={entityId}
-                  />
                 </Row>
                 <Row className="mb-3">
                   <Col md="1">
