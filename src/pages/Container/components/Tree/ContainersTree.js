@@ -62,6 +62,8 @@ function ContainersTree(props) {
       );
       setTotal(getResponsePagination(res)?.totalItems);
       dispatch(setContainersRedux(items, currentPage));
+    } else {
+      dispatch(setContainersRedux([], currentPage));
     }
   }
 
