@@ -60,7 +60,7 @@ function ContainerCreateForm(props) {
       handleCancel();
 
       // Refresh tree after create container
-      refresh();
+      await refresh();
 
       navigate(`/container/${data?.uuid}`);
     } catch (error) {

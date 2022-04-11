@@ -114,7 +114,7 @@ function ContainerForm(props) {
       ShowToast.success(t('removeContainerSuccessfully'));
       await clientCache.invalidateQueries([CONTAINERS]);
 
-      refresh();
+      await refresh();
 
       navigate(`/container`);
     } catch (error) {
