@@ -1,8 +1,7 @@
-import {ContainerAPIRequest} from 'api/container.api';
 import {ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {useRefreshContainerTree} from 'pages/Container/hooks/useRefeshContainerTree';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateContainer} from 'queries/container';
@@ -12,19 +11,16 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {Button, Col, FormGroup, ModalBody, ModalFooter, Row} from 'reactstrap';
-import {
-  setContainersRedux,
-  toggleCreateContainerModalRedux
-} from 'store/reducers/container';
+import {toggleCreateContainerModalRedux} from 'store/reducers/container';
 import {getRole} from 'utils/helpers/auth.helpers';
-import {getResponseData, isValidResponse} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {mappingFormToApi} from '../ContainerDetail/dto';
-import PublisherSelect from '../ContainerDetail/PublisherSelect';
-import {ContainerDefault} from '../ContainerFormFields';
 
+import PublisherSelect from '../ContainerDetail/PublisherSelect';
+import {mappingFormToApi} from '../ContainerDetail/dto';
+import {ContainerDefault} from '../ContainerFormFields';
 import {containerFormResolver} from '../ContainerSettings/validations';
-import {containersMapData} from '../Tree/dto';
+
+const AM_ROLES = [USER_ROLE.ADMIN, USER_ROLE.MANAGER];
 
 function ContainerCreateForm(props) {
   const {t} = useTranslation();
@@ -32,6 +28,7 @@ function ContainerCreateForm(props) {
   const {containers, publisher} = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {refresh} = useRefreshContainerTree();
 
   const {mutateAsync: createContainerRequest} = useCreateContainer();
 
@@ -63,24 +60,7 @@ function ContainerCreateForm(props) {
       handleCancel();
 
       // Refresh tree after create container
-      const res = await ContainerAPIRequest.getAllContainer({
-        params: {
-          page: 1,
-          per_page: DEFAULT_PAGINATION.perPage,
-          sort: 'created_at DESC'
-        },
-        options: {
-          isResponseAll: IS_RESPONSE_ALL
-        }
-      });
-
-      if (isValidResponse(res, IS_RESPONSE_ALL)) {
-        const items = containersMapData(
-          getResponseData(res, IS_RESPONSE_ALL),
-          1
-        );
-        dispatch(setContainersRedux(items, 1));
-      }
+      refresh();
 
       navigate(`/container/${data?.uuid}`);
     } catch (error) {
@@ -123,7 +103,7 @@ function ContainerCreateForm(props) {
                 isRequired
               />
             </Col>
-            {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
+            {AM_ROLES.includes(role) && (
               <Col sm="12">
                 <CurrencyInputField
                   name="cost"

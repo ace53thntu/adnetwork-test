@@ -12,7 +12,7 @@ import {useFormContext, useWatch} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
 
-const ContainerDefault = ({isLoading = false}) => {
+const ContainerDefault = ({isLoading = false, toggleCollapse}) => {
   const {t} = useTranslation();
   const {control} = useFormContext();
   const marketTypeSelected = useWatch({

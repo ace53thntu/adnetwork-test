@@ -30,7 +30,7 @@ function ContainerLayout(props) {
 
   const [keyword, setKeyword] = React.useState('');
 
-  const debouncedKeyword = useDebounce(keyword, 500);
+  const debouncedKeyword = useDebounce(keyword, 1000);
 
   React.useEffect(() => {
     reduxDispatch(searchContainersRedux(debouncedKeyword));

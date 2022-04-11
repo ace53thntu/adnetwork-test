@@ -10,47 +10,49 @@ import {ContainerSourcePageLazy} from 'pages/Container/components/ContainerSourc
 import {InventoryReportPage} from 'pages/Container/components/inventory-report';
 import {USER_ROLE} from 'pages/user-management/constants';
 
+const AMP_ROLES = [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER];
+
 export const containerPages = {
   path: RoutePaths.CONTAINER,
   element: <ContainerLayout />,
-  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER],
+  canAccess: AMP_ROLES,
   children: [
     {
       path: '',
       element: <ContainersLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     },
     {
       path: ':cid',
       element: <ContainerDetailLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     },
     {
       path: ':cid/report',
       element: <ContainerReportLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     },
     {
       path: ':cid/:source',
       element: <ContainerSourceLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     },
     {
       path: ':cid/:source/:pageId',
       element: <ContainerSourcePageLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     }
   ]
 };
 
 export const inventoryPages = {
   path: RoutePaths.INVENTORY,
-  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER],
+  canAccess: AMP_ROLES,
   children: [
     {
       path: `:inventoryId/${RoutePaths.REPORT}`,
       element: <InventoryReportPage />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+      canAccess: AMP_ROLES
     }
   ]
 };

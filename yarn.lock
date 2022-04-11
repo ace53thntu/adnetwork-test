@@ -4253,6 +4253,11 @@ chart.js@^3.6.0:
   resolved "https://nexus.aicactus.io/repository/npm/chart.js/-/chart.js-3.7.1.tgz#0516f690c6a8680c6c707e31a4c1807a6f400ada"
   integrity sha512-8knRegQLFnPQAheZV8MjxIXc5gQEfDFD897BJgv/klO/vtIyFFmgMXrNfgrXpbTr/XbTturxRgxIXx/Y+ASJBA==
 
+chartjs-adapter-moment@^1.0.0:
+  version "1.0.0"
+  resolved "https://nexus.aicactus.io/repository/npm/chartjs-adapter-moment/-/chartjs-adapter-moment-1.0.0.tgz#9174b1093c68bcfe285aff24f7388ad60d44e8f7"
+  integrity sha512-PqlerEvQcc5hZLQ/NQWgBxgVQ4TRdvkW3c/t+SUEQSj78ia3hgLkf2VZ2yGJtltNbEEFyYGm+cA6XXevodYvWA==
+
 check-types@^11.1.1:
   version "11.1.2"
   resolved "https://nexus.aicactus.io/repository/npm/check-types/-/check-types-11.1.2.tgz#86a7c12bf5539f6324eb0e70ca8896c0e38f3e2f"

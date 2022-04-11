@@ -1,14 +1,15 @@
-//---> Build-in Modules
-import * as React from 'react';
-
-//---> External Modules
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router';
-import {useQueryClient} from 'react-query';
-
+import {ContainerAPIRequest} from 'api/container.api';
 //---> Internal Modules
 import {PageAPIRequest} from 'api/page.api';
 import {Tree, minimalTheme} from 'components/common/TreeLazy';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {GET_PAGES} from 'queries/page/constants';
+//---> Build-in Modules
+import * as React from 'react';
+import {useQueryClient} from 'react-query';
+//---> External Modules
+import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router';
 import {
   expandContainerRedux,
   expandSourceRedux,
@@ -18,17 +19,15 @@ import {
   setFlagAlready,
   useContainerSelector
 } from 'store/reducers/container';
-import {CONTAINER_TREE_SOURCES} from './constants';
-import {containersMapData} from './dto';
-import {TreeContainerStyled} from './ContainersTree.styles';
-import {GET_PAGES} from 'queries/page/constants';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination,
   isValidResponse
 } from 'utils/helpers/misc.helpers';
-import {ContainerAPIRequest} from 'api/container.api';
+
+import {TreeContainerStyled} from './ContainersTree.styles';
+import {CONTAINER_TREE_SOURCES} from './constants';
+import {containersMapData} from './dto';
 
 function ContainersTree(props) {
   const navigate = useNavigate();
@@ -38,18 +37,24 @@ function ContainersTree(props) {
   const {
     containers: containersRedux,
     selectedSource,
-    container
+    container,
+    keyword,
+    containerPage,
+    containerTotalPage
   } = useContainerSelector();
-  const [page, setPage] = React.useState(DEFAULT_PAGINATION.page);
-  const [total, setTotal] = React.useState(1);
 
-  async function init(currentPage) {
+  async function init(currentPage, search) {
+    const params = {
+      page: currentPage,
+      per_page: DEFAULT_PAGINATION.perPage,
+      sort: 'created_at DESC',
+      status: 'active'
+    };
+    if (search?.length) {
+      params.name = search;
+    }
     const res = await ContainerAPIRequest.getAllContainer({
-      params: {
-        page: currentPage,
-        per_page: DEFAULT_PAGINATION.perPage,
-        sort: 'created_at DESC'
-      },
+      params,
       options: {
         isResponseAll: IS_RESPONSE_ALL
       }
@@ -60,17 +65,22 @@ function ContainersTree(props) {
         getResponseData(res, IS_RESPONSE_ALL),
         currentPage
       );
-      setTotal(getResponsePagination(res)?.totalItems);
-      dispatch(setContainersRedux(items, currentPage));
+      dispatch(
+        setContainersRedux(
+          items,
+          currentPage,
+          getResponsePagination(res)?.totalItems
+        )
+      );
     } else {
       dispatch(setContainersRedux([], currentPage));
     }
   }
 
   React.useEffect(() => {
-    init(1);
+    init(1, keyword);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [keyword]);
 
   React.useEffect(() => {
     return () => {
@@ -212,15 +222,14 @@ function ContainersTree(props) {
     [navigate, selectedSource?.length, dispatch, container]
   );
 
-  const totalPage = Math.ceil(total / 10);
+  const totalPage = Math.ceil(containerTotalPage / DEFAULT_PAGINATION.perPage);
 
   const handleLoadMoreInRoot = React.useCallback(() => {
-    if (totalPage > page) {
-      setPage(page + 1);
-      init(page + 1);
+    if (totalPage > containerPage) {
+      init(containerPage + 1, keyword);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, totalPage]);
+  }, [containerPage, totalPage, keyword]);
 
   return (
     <TreeContainerStyled>
@@ -234,7 +243,7 @@ function ContainersTree(props) {
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
-        isLast={page === totalPage}
+        isLast={containerPage === totalPage}
       />
     </TreeContainerStyled>
   );

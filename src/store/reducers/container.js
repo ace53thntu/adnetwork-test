@@ -1,12 +1,11 @@
 import {original} from 'immer';
-import {matchSorter} from 'match-sorter';
+// import {matchSorter} from 'match-sorter';
 import {CONTAINER_TREE_SOURCES} from 'pages/Container/components/Tree/constants';
 import {
   unSelectedAndUnExpanded,
   unSelectedChild
 } from 'pages/Container/components/Tree/utils';
 import {useSelector} from 'react-redux';
-
 import {createAction} from 'utils/helpers/createAction.helpers';
 import {createReducer} from 'utils/helpers/createReducer.helpers';
 
@@ -47,8 +46,8 @@ export const resetContainerRedux = () => {
 export const shouldRefetchContainerRedux = flag => {
   return createAction(SHOULD_REFETCH_CONTAINER, {flag});
 };
-export const setContainersRedux = (data, page = 1) => {
-  return createAction(CONTAINERS, {data, page});
+export const setContainersRedux = (data, page = 1, total = 1) => {
+  return createAction(CONTAINERS, {data, page, total});
 };
 export const selectContainerRedux = (containerId, container) => {
   return createAction(SELECT_CONTAINER_ID, {containerId, container});
@@ -123,7 +122,8 @@ const containerInitialState = {
   keyword: '',
   shouldRefetchContainer: false,
   inventoryParams: null,
-  containerPage: 1
+  containerPage: 1,
+  containerTotalPage: 1
 };
 
 const handleActions = {
@@ -175,6 +175,9 @@ function handleReset(state) {
   };
   state.keyword = '';
   state.shouldRefetchContainer = false;
+  state.inventoryParams = null;
+  state.containerPage = 1;
+  state.containerTotalPage = 1;
 }
 
 function handleShouldRefetchContainer(state, action) {
@@ -182,41 +185,19 @@ function handleShouldRefetchContainer(state, action) {
 }
 
 function handleSetContainers(state, action) {
-  const {page, data} = action.payload;
+  const {page, data, total} = action.payload;
 
   if (page > state.containerPage) {
-    state.containerPage = page;
     state.containers = [...state.containers, ...data];
     state.containersTemp = [...state.containersTemp, ...data];
   } else {
     state.containers = data;
     state.containersTemp = data;
   }
-
+  state.containerPage = page;
+  state.containerTotalPage = total;
   state.isLoading = false;
 }
-
-// function handleSelectPage(state, action) {
-//     const {pageId, page} = action.payload;
-
-//     const newNodes = [...state.pages].map(item => {
-//       if (item.id === pageId) {
-//         return {
-//           ...item,
-//           selected: true,
-//           children: [...item.children].map(child => unSelectedChild(child))
-//         };
-//       }
-//       return unSelectedAndUnExpanded(item);
-//     });
-//     state.selectedContainerId = containerId;
-//     state.pages = newNodes;
-//     state.keyword = '';
-//     state.page = page;
-//     state.selectedSource = null;
-//     state.selectedPageId = pageId;
-//   }
-// }
 
 function handleSelectContainer(state, action) {
   const {containerId, container} = action.payload;
@@ -704,20 +685,20 @@ function handleUpdatedContainer(state, action) {
 function handleSearchContainers(state, action) {
   const {keyword} = action.payload;
   state.keyword = keyword;
-  if (keyword?.length) {
-    const newContainers = matchSorter(original(state.containersTemp), keyword, {
-      keys: [
-        {
-          threshold: matchSorter.rankings.CONTAINS,
-          key: ['name']
-        }
-      ]
-    });
-    state.containers = newContainers;
-  } else {
-    //
-    state.containers = state.containersTemp;
-  }
+  // if (keyword?.length) {
+  //   const newContainers = matchSorter(original(state.containersTemp), keyword, {
+  //     keys: [
+  //       {
+  //         threshold: matchSorter.rankings.CONTAINS,
+  //         key: ['name']
+  //       }
+  //     ]
+  //   });
+  //   state.containers = newContainers;
+  // } else {
+  //   //
+  //   state.containers = state.containersTemp;
+  // }
 }
 
 function handleToggleCreateContainerModal(state, action) {

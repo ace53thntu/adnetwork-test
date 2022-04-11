@@ -1,34 +1,34 @@
-//---> Build-in Modules
-import * as React from 'react';
-
+import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
+import {FormTextInput, FormToggle} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {RoutePaths} from 'constants/route-paths';
+import {CONTAINERS} from 'pages/Container/hooks/constants';
+import {useRefreshContainerTree} from 'pages/Container/hooks/useRefeshContainerTree';
+import {USER_ROLE} from 'pages/user-management/constants';
 //---> External Modules
 import PropTypes from 'prop-types';
+import {useDeleteContainer, useEditContainer} from 'queries/container';
+//---> Build-in Modules
+import * as React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {Button, Col, FormGroup, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-
+import {Button, Col, FormGroup, Row} from 'reactstrap';
 //---> Internal Modules
 import {
   updatedContainerRedux,
   useContainerSelector
 } from 'store/reducers/container';
-import {CONTAINERS} from 'pages/Container/hooks/constants';
-import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
-import {FormTextInput, FormToggle} from 'components/forms';
-import {useDeleteContainer, useEditContainer} from 'queries/container';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {mappingApiToForm, mappingFormToApi} from './dto';
-import PublisherSelect from './PublisherSelect';
-import {validationDescriptionTab} from './validation';
-import {RoutePaths} from 'constants/route-paths';
-import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+
 import {ContainerDefault} from '../ContainerFormFields';
+import PublisherSelect from './PublisherSelect';
+import {mappingApiToForm, mappingFormToApi} from './dto';
+import {validationDescriptionTab} from './validation';
 
 const propTypes = {
   container: PropTypes.object,
@@ -42,6 +42,7 @@ function ContainerForm(props) {
   const navigate = useNavigate();
   const clientCache = useQueryClient();
   const dispatch = useDispatch();
+  const {refresh} = useRefreshContainerTree();
 
   const {
     containers: containersRedux,
@@ -112,6 +113,9 @@ function ContainerForm(props) {
       setOpenConfirm(false);
       ShowToast.success(t('removeContainerSuccessfully'));
       await clientCache.invalidateQueries([CONTAINERS]);
+
+      refresh();
+
       navigate(`/container`);
     } catch (error) {
       setIsDeleting(false);
