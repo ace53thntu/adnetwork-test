@@ -4,6 +4,7 @@ import {
   ChartModes,
   ChartTypes,
   FORMAT_BY_UNIT,
+  FORMAT_BY_UNIT_LABEL,
   TimeUnits
 } from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
@@ -135,13 +136,20 @@ const getDataLineChart = ({
     unit: `${unitStr}s`,
     increaseNumber
   });
+  const listCheckPointLabels = listCheckPoints.map(item =>
+    moment(item).format(FORMAT_BY_UNIT_LABEL[unitStr])
+  );
+  console.log(
+    '🚀 ~ file: useChartData.js ~ line 146 ~ listCheckPoints',
+    listCheckPoints
+  );
 
   const newMetrics = convertApiToRender({
     unit: unitStr,
     metrics,
     listCheckPoints
   });
-  console.log('🚀 ~ file: useChartData.js ~ line 144 ~ newMetrics', newMetrics);
+  console.log('🚀 ~ file: useChartData.js ~ line 152 ~ newMetrics', newMetrics);
 
   if (validArray({list: metricSet})) {
     const data = [];
@@ -159,8 +167,7 @@ const getDataLineChart = ({
         ...getChartConfig({type, color: colors?.[idx] || ''})
       });
     });
-    console.log('🚀 ~ file: useChartData.js ~ line 156 ~ data', data);
-
+    console.log('data ===11', data, listCheckPointLabels);
     return {datasets: data, labels: listCheckPoints};
   } else {
     const data = getDataDrawChart({
@@ -192,7 +199,10 @@ const enumerateDaysBetweenDates = ({
   const now = startDate.clone();
   const dates = [];
   while (now.isSameOrBefore(endDate)) {
-    dates.push(now.format(formatStr));
+    const formattedDate = now.format(formatStr);
+    console.log('== now.format(formatStr)', formattedDate, formatStr);
+
+    dates.push(formattedDate);
 
     now.add(increaseNumber, unit);
   }

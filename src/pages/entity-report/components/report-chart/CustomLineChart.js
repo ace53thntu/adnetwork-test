@@ -41,7 +41,7 @@ export default function CustomLineChart({
   //   metricSet
   // });
   const formatDateStr = FORMAT_BY_UNIT_LABEL[unit];
-  const options = useChartOptions({format: formatDateStr});
+  const options = useChartOptions({format: formatDateStr, unit});
   console.log('🚀 ~ file: CustomLineChart.js ~ line 48 ~ options', options);
 
   return <R2ChartLine data={data} options={options} />;

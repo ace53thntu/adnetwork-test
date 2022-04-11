@@ -4,7 +4,7 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {Pie} from 'react-chartjs-2';
-
+import 'chartjs-adapter-moment';
 //---> Internal Modules
 
 const propTypes = {

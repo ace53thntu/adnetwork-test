@@ -39,7 +39,7 @@ const CustomBarChart = ({
   //   [showXLabel]
   // );
   const formatDateStr = FORMAT_BY_UNIT_LABEL[unit];
-  const options = useChartOptions({format: formatDateStr});
+  const options = useChartOptions({format: formatDateStr, unit});
 
   return (
     <R2ChartBar

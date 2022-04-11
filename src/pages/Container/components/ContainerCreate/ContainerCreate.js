@@ -12,6 +12,10 @@ import {USER_ROLE} from 'pages/user-management/constants';
 
 function ContainerCreate(props) {
   const {containers, isLoading} = useContainerSelector();
+  console.log(
+    '🚀 ~ file: ContainerCreate.js ~ line 15 ~ ContainerCreate ~ isLoading',
+    isLoading
+  );
   const role = getRole();
   const user = getUser();
   const {data: publisher} = useGetPublisher(

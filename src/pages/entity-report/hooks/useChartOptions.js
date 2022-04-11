@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const useChartOptions = ({format, title = ''}) => {
+export const useChartOptions = ({format, title = '', unit = ''}) => {
+  console.log(
+    '🚀 ~ file: useChartOptions.js ~ line 4 ~ useChartOptions ~ format',
+    format
+  );
   return React.useMemo(() => {
     const options = {
       responsive: true,
@@ -11,40 +15,58 @@ export const useChartOptions = ({format, title = ''}) => {
         title: {
           display: !!title,
           text: title
-        },
-        scales: {
-          x: {
-            type: 'time',
-            gridLines: {
-              lineWidth: 2
-            },
-            time: {
-              parser: format,
-              tooltipFormat: 'DD/MM/YYYY HH:mm:ss'
-            },
-            ticks: {
-              autoSkip: false,
-              maxRotation: 0,
-              major: {
-                enabled: true
-              },
-              font: function (context) {
-                if (context.tick && context.tick.major) {
-                  return {
-                    weight: 'bold'
-                  };
-                }
-              }
-            }
+        }
+      },
+      scales: {
+        x: {
+          type: 'time',
+          gridLines: {
+            lineWidth: 2
           },
-          y: {
-            ticks: {
-              beginAtZero: true
-            }
+          time: {
+            parser: format,
+            tooltipFormat: format,
+            unit
           }
+          // ticks: {
+          //   source: 'labels',
+          //   callback: function (value, index) {
+          //     console.log(' ==== callback', this.getLabelForValue(value));
+          //   }
+          // }
+        },
+        y: {
+          beginAtZero: true
         }
       }
+      // options: {
+      //   scales: {
+      //     x: {
+      //       type: 'time',
+      //       gridLines: {
+      //         lineWidth: 2
+      //       },
+      //       time: {
+      //         parser: format,
+      //         tooltipFormat: format,
+      //         unit
+      //       },
+      //       ticks: {
+      //         source: 'labels',
+      //         callback: function (value, index) {
+      //           console.log(' ==== callback', this.getLabelForValue(value));
+      //         }
+      //       },
+      //       color: 'red'
+      //     },
+      //     y: {
+      //       ticks: {
+      //         beginAtZero: true
+      //       }
+      //     }
+      //   }
+      // }
     };
     return options;
-  }, [format, title]);
+  }, [format, title, unit]);
 };
