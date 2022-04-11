@@ -1,30 +1,30 @@
-//---> Build-in Modules
-import React, {useCallback} from 'react';
-
-//---> External Modules
-import {useForm, FormProvider, useWatch} from 'react-hook-form';
-import {Container, Form, Button} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router';
-import {useNavigate} from 'react-router-dom';
-import PropTypes from 'prop-types';
-import {useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {useQueryClient} from 'react-query';
-
-//---> Internal Modules
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
-import {validationCampaign} from './validation';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
+import PropTypes from 'prop-types';
+import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
 import {GET_CAMPAIGN} from 'queries/campaign/constants';
-import InformationGroup from './form-fields/InformationGroup';
-import BudgetGroup from './form-fields/BudgetGroup';
-import ImpressionGroup from './form-fields/ImpressionGroup';
-import KeywordGroup from './form-fields/KeywordGroup';
-import DomainGroup from './form-fields/DomainGroup';
+//---> Build-in Modules
+import React, {useCallback} from 'react';
+//---> External Modules
+import {FormProvider, useForm, useWatch} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {useQueryClient} from 'react-query';
+import {useDispatch} from 'react-redux';
+import {useParams} from 'react-router';
+import {useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import {Button, Container, Form} from 'reactstrap';
 import {updateCampaignRedux} from 'store/reducers/campaign';
+//---> Internal Modules
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+
+import {useRefreshAdvertiserTree} from '../hooks/useRefreshAdvertiserTree';
+import BudgetGroup from './form-fields/BudgetGroup';
+import DomainGroup from './form-fields/DomainGroup';
+import ImpressionGroup from './form-fields/ImpressionGroup';
+import InformationGroup from './form-fields/InformationGroup';
+import KeywordGroup from './form-fields/KeywordGroup';
+import {validationCampaign} from './validation';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -45,6 +45,7 @@ const CampaignForm = ({
   const {t} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {refresh} = useRefreshAdvertiserTree();
 
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
@@ -82,9 +83,11 @@ const CampaignForm = ({
       } else {
         try {
           const {data} = await createCampaign(requestBody);
+
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
           );
+          await refresh(data?.advertiser_uuid, data?.uuid);
 
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
@@ -99,7 +102,8 @@ const CampaignForm = ({
       dispatch,
       isEdit,
       navigate,
-      updateCampaign
+      updateCampaign,
+      refresh
     ]
   );
 

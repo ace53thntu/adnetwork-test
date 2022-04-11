@@ -61,8 +61,22 @@ export const resetCampaignRedux = () => {
   return createAction(RESET, {});
 };
 
-export const setAdvertisersRedux = (data, page) => {
-  return createAction(SET_ADVERTISERS, {data, page});
+export const setAdvertisersRedux = (
+  data,
+  page,
+  total,
+  advId,
+  campaignId,
+  campaigns
+) => {
+  return createAction(SET_ADVERTISERS, {
+    data,
+    page,
+    total,
+    advId,
+    campaignId,
+    campaigns
+  });
 };
 export const selectAdvertiserRedux = (advertiserId, advertiser) => {
   return createAction(SELECT_ADVERTISER_ID, {advertiserId, advertiser});
@@ -125,7 +139,8 @@ const campaignInitialState = {
   keyword: '',
   inventoryList: [],
   inventoryTempList: [],
-  advertiserPage: 1
+  advertiserPage: 1,
+  advertiserTotalPage: 1
 };
 
 const handleActions = {
@@ -149,10 +164,6 @@ const handleActions = {
 
 function handleUpdateCampaign(state, action) {
   const {campaign} = action.payload;
-  console.log(
-    '🚀 ~ file: campaign.js ~ line 153 ~ handleUpdateCampaign ~ campaign',
-    campaign
-  );
   const newNodes = [...state.advertisers].map(item => {
     if (item.children.length > 0) {
       const newChildren = item.children.map(campItem => {
@@ -240,20 +251,50 @@ function handleReset(state) {
   state.alreadySetAdvertiser = false;
   state.keyword = '';
   state.advertiserPage = 1;
+  state.advertiserTotalPage = 1;
 }
 
 function handleSetAdvertisers(state, action) {
-  const {page, data} = action.payload;
+  const {page, data, total, advId, campaigns = [], campaignId} = action.payload;
 
   if (page > state.advertiserPage) {
-    state.advertiserPage = page;
     state.advertisers = [...state.advertisers, ...data];
     state.advertisersTemp = [...state.advertisersTemp, ...data];
   } else {
-    state.advertisers = data;
     state.advertisersTemp = data;
-  }
 
+    if (advId) {
+      state.advertisers = data.map(adv => {
+        if (adv.id === advId) {
+          if (campaigns?.length) {
+            return {
+              ...adv,
+              expanded: true,
+              children: campaigns.map(camp => {
+                if (camp.id === campaignId) {
+                  return {
+                    ...camp,
+                    selected: true
+                  };
+                }
+                return camp;
+              }),
+              numChildren: campaigns.length
+            };
+          }
+          return {
+            ...adv,
+            expanded: true
+          };
+        }
+        return adv;
+      });
+    } else {
+      state.advertisers = data;
+    }
+  }
+  state.advertiserTotalPage = total;
+  state.advertiserPage = page;
   state.isLoading = false;
 }
 
@@ -393,7 +434,6 @@ function handleSetCampaign(state, action) {
         }
         return advertiserItem;
       } else {
-        console.log('~ handleSetCampaign item.expanded', item.expanded);
         return {
           ...item,
           expanded: true,

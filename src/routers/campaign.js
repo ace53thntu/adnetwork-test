@@ -14,45 +14,47 @@ import {
 import {USER_ROLE} from 'pages/user-management/constants';
 import React from 'react';
 
+const AMA_ROLES = [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER];
+
 export const campaignPages = {
   path: RoutePaths.CAMPAIGN,
   element: <CampaignPageLayout />,
-  canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER],
+  canAccess: AMA_ROLES,
   children: [
     {
       path: '',
       element: <ListCampaignLayoutLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: '/create',
       element: <CampaignCreateLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: '/:campaignId',
       element: <CampaignDetailLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: `/:campaignId/${RoutePaths.EDIT}`,
       element: <CampaignEditLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/${RoutePaths.CREATE}`,
       element: <StrategyCreateLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId`,
       element: <StrategyDetailLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     },
     {
       path: `/:campaignId/${RoutePaths.STRATEGY}/:strategyId/${RoutePaths.EDIT}`,
       element: <StrategyEditLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: AMA_ROLES
     }
   ]
 };

@@ -41,18 +41,24 @@ function SidebarTree(props) {
   const {
     advertisers: advertisersRedux,
     selectedAdvertiserId,
-    selectedCampaignId
+    selectedCampaignId,
+    advertiserPage,
+    advertiserTotalPage,
+    keyword
   } = useCampaignSelector();
 
-  const [page, setPage] = React.useState(DEFAULT_PAGINATION.page);
-  const [total, setTotal] = React.useState(1);
-
-  async function init(currentPage) {
+  async function init(currentPage, search) {
+    const params = {
+      page: currentPage,
+      per_page: DEFAULT_PAGINATION.perPage,
+      sort: 'created_at DESC',
+      status: 'active'
+    };
+    if (search?.length) {
+      params.name = search;
+    }
     const res = await AdvertiserAPIRequest.getAllAdvertiser({
-      params: {
-        page: currentPage,
-        per_page: DEFAULT_PAGINATION.perPage
-      },
+      params,
       options: {
         isResponseAll: IS_RESPONSE_ALL
       }
@@ -63,15 +69,21 @@ function SidebarTree(props) {
         getResponseData(res, IS_RESPONSE_ALL),
         currentPage
       );
-      setTotal(getResponsePagination(res).totalItems);
-      dispatch(setAdvertisersRedux(items, currentPage));
+      // setTotal(getResponsePagination(res).totalItems);
+      dispatch(
+        setAdvertisersRedux(
+          items,
+          currentPage,
+          getResponsePagination(res).totalItems
+        )
+      );
     }
   }
 
   React.useEffect(() => {
-    init(1);
+    init(1, keyword);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [keyword]);
 
   useDeepCompareEffect(() => {
     if (selectedCampaignId) {
@@ -319,15 +331,15 @@ function SidebarTree(props) {
     [dispatch, navigate]
   );
 
-  const totalPage = Math.ceil(total / 10);
+  const totalPage = Math.ceil(advertiserTotalPage / DEFAULT_PAGINATION.perPage);
 
   const handleLoadMoreInRoot = React.useCallback(() => {
-    if (totalPage > page) {
-      setPage(page + 1);
-      init(page + 1);
+    if (totalPage > advertiserPage) {
+      // setPage(page + 1);
+      init(advertiserPage + 1, keyword);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, totalPage]);
+  }, [advertiserPage, totalPage, keyword]);
 
   return (
     <CampaignTreeStyled>
@@ -341,8 +353,7 @@ function SidebarTree(props) {
         selectCallback={handleSelect}
         toggleCallback={handleToggle}
         handleLoadMoreInRoot={handleLoadMoreInRoot}
-        isLast={page === totalPage}
-        isCreative
+        isLast={advertiserPage === totalPage}
       />
     </CampaignTreeStyled>
   );
