@@ -77,11 +77,24 @@ function TrackerListPage() {
   );
 }
 
+const LocationList = React.lazy(() =>
+  import('./location/LocationList' /* webpackChunkName: "location-list" */)
+);
+
+function LocationListPage() {
+  return (
+    <ErrorBoundary>
+      <LocationList />
+    </ErrorBoundary>
+  );
+}
+
 export {
   DomainListPage,
   DomainGroupListPage,
   KeywordListPage,
   PositionListPage,
   TrackerTemplateListPage,
-  TrackerListPage
+  TrackerListPage,
+  LocationListPage
 };

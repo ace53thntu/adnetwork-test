@@ -128,8 +128,8 @@ export const SettingNav = (t, role) => {
           to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.TRACKER_TEMPLATE}`
         },
         {
-          label: t('tracker'),
-          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.TRACKER}`
+          label: t('location'),
+          to: `${HASH_PATH}/${RoutePaths.SETTING}/${RoutePaths.LOCATION}`
         },
         {
           label: t('position'),

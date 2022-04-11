@@ -112,6 +112,7 @@ const en = {
   bidList: 'Bid list',
   concepts: 'Concepts',
   containerReport: 'Container Report',
+  location: 'Location',
 
   // Card Header
   advertiserList: 'Advertiser List',
@@ -533,6 +534,17 @@ const en = {
   FORM: {
     SELECT_POSITION: 'Select position',
     EXTRA_FIELDS: 'Extra fields'
+  },
+  LOCATION: {
+    MANAGE_LOCATION: 'Manage Location',
+    COUNTRY_LIST: 'Country list',
+    COUNTRY_NAME: 'Country name',
+    CONTINENT_NAME: 'Continent name',
+    CITY_NAME: 'City name',
+    FIRST_DIVISION: 'First division',
+    LATITUDE: 'Latitude',
+    LONGITUDE: 'Longitude',
+    TIME_ZONE: 'Time zone'
   }
 };
 

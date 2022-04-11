@@ -3,8 +3,8 @@ import {
   DomainGroupListPage,
   DomainListPage,
   KeywordListPage,
+  LocationListPage,
   PositionListPage,
-  TrackerListPage,
   TrackerTemplateListPage
 } from 'pages/setting';
 import {USER_ROLE} from 'pages/user-management/constants';
@@ -69,11 +69,11 @@ export const settingPages = {
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
     },
     {
-      path: `${RoutePaths.TRACKER}`,
+      path: `${RoutePaths.LOCATION}`,
       children: [
         {
           path: '',
-          element: <TrackerListPage />,
+          element: <LocationListPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
       ],

@@ -119,5 +119,9 @@ export const endpoints = {
   },
   keywordList: {
     keywordList: `${API_V1}/keywords_list`
+  },
+  location: {
+    geo_country: `${API_V1}/geo_country`,
+    geo_city: `${API_V1}/geo_city`
   }
 };
