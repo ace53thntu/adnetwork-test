@@ -57,7 +57,8 @@ const AddTypeButton = ({
           {CappingTypeButtons?.map((item, idx) => {
             if (
               (referenceType === 'advertiser' &&
-                item?.type === CappingTypes.SCHEDULE.value) ||
+                item?.type === CappingTypes.SCHEDULE.value &&
+                item?.type === CappingTypes.USER.value) ||
               item?.type === CappingTypes.BUDGET_MANAGER.value
             ) {
               return null;

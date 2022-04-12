@@ -25,10 +25,6 @@ const propTypes = {
 };
 
 const CappingForm = ({capping = {}, onSubmit = () => null}) => {
-  console.log(
-    '🚀 ~ file: CappingForm.js ~ line 28 ~ CappingForm ~ capping',
-    capping
-  );
   const {t} = useTranslation();
   const cappingType = capping?.type || '';
 

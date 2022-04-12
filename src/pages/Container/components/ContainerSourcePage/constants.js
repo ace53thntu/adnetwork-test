@@ -4,9 +4,9 @@ export const SOURCE_HEADINGS = {
   ios: 'iOS'
 };
 export const SOURCE_SUB_HEADINGS = {
-  web: 'Online tracking',
-  android: 'Online tracking',
-  ios: 'Online tracking'
+  web: '',
+  android: '',
+  ios: ''
 };
 export const SOURCES = {
   web: 'web',

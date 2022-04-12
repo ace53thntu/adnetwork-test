@@ -20,10 +20,6 @@ const propTypes = {
 };
 
 const StrategyInventory = ({strategyInventories = []}) => {
-  console.log(
-    '🚀 ~ file: StrategyInventory.js ~ line 21 ~ StrategyInventory ~ strategyInventories',
-    strategyInventories
-  );
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);

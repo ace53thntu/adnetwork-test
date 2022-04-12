@@ -18,6 +18,12 @@ import NoDataAvailable from 'components/list/no-data';
 import {formatValue} from 'react-currency-input-field';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
 
+const typeHasTimeFrame = [
+  CappingTypes.BUDGET.value,
+  CappingTypes.IMPRESSION.value,
+  CappingTypes.USER.value
+];
+
 const propTypes = {
   list: PropTypes.array,
   onClickItem: PropTypes.func,
@@ -87,21 +93,13 @@ const BudgetList = ({
         cell: row => {
           return (
             <>
-              {[
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value,
-                CappingTypes.USER.value
-              ].includes(row.original?.type) &&
+              {typeHasTimeFrame.includes(row.original?.type) &&
                 row?.value === BudgetTimeFrames.DAILY && (
                   <Badge color="primary" pill>
                     {row?.value === BudgetTimeFrames.DAILY && 'Daily'}
                   </Badge>
                 )}
-              {([
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value,
-                CappingTypes.USER.value
-              ].includes(row.original?.type) && row?.value) ===
+              {(typeHasTimeFrame.includes(row.original?.type) && row?.value) ===
                 BudgetTimeFrames.GLOBAL && (
                 <Badge color="success" pill>
                   {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}

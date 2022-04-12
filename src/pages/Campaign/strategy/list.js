@@ -209,7 +209,7 @@ const StrategyList = ({
             handleClickItem={onClickItem}
           />
         ) : (
-          <NoDataAvailable />
+          <NoDataAvailable message="No Strategy" />
         )}
 
         {hasNextPage && (

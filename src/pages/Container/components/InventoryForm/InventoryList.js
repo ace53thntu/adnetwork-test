@@ -194,7 +194,7 @@ function InventoryList() {
                 isShowInventoryHighlight
               />
             ) : (
-              <NoDataAvailable />
+              <NoDataAvailable message="No Inventory" />
             )}
             {hasNextPage && (
               <Pagination

@@ -8,8 +8,8 @@ export const convertApiToGui = ({value}) => {
 
 export const convertGuiToApi = ({value}) => {
   if (value) {
-    return parseInt(parseFloat(value) * 1000, 10) || 0;
+    return parseInt(parseFloat(value) * 1000, 10) || null;
   }
 
-  return 0;
+  return null;
 };

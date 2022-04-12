@@ -14,14 +14,18 @@ import {CampaignContentLayout} from '../layout';
 import StrategyEditTabs from './EditTabs';
 import {StrategyContainerStyled} from './styled';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
-import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
+import {
+  initStrategyInventoryListRedux,
+  setStrategyInventoryListRedux,
+  setStrategyInventoryTempListRedux
+} from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 
 const StrategyEdit = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const {strategyId} = useParams();
-  const [isInitalied, setInitialied] = React.useState(false);
+  const [isInitialized, setInitialized] = React.useState(false);
 
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
@@ -39,7 +43,7 @@ const StrategyEdit = () => {
       strategy &&
       Object.keys(strategy).length > 0 &&
       status === 'success' &&
-      !isInitalied
+      !isInitialized
     ) {
       dispatch(
         initStrategyInventoryListRedux({
@@ -47,13 +51,20 @@ const StrategyEdit = () => {
           inventoryTempList: strategy?.inventories
         })
       );
-      setInitialied(true);
+      setInitialized(true);
     }
-  }, [strategy, dispatch, isFetched, isInitalied, status]);
+  }, [strategy, dispatch, isFetched, isInitialized, status]);
 
   React.useEffect(() => {
-    return () => setInitialied(false);
+    return () => setInitialized(false);
   }, []);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(setStrategyInventoryListRedux({inventoryList: []}));
+      dispatch(setStrategyInventoryTempListRedux({inventoryList: []}));
+    };
+  }, [dispatch]);
 
   return (
     <CampaignContentLayout

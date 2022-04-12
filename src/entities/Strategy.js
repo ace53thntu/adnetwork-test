@@ -35,6 +35,14 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     })) || [];
 
   const conceptsConverted = concepts?.map(item => item?.uuid) || [];
+  const inventoryBidsConverted = inventories_bid
+    ? Object.entries(inventories_bid).map(([key, value]) => {
+        return {
+          uuid: key,
+          ...value
+        };
+      })
+    : [];
 
   return {
     campaign_uuid: campaign_uuid
@@ -59,7 +67,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     concept_uuids: conceptsConverted,
     concepts,
     inventories,
-    inventories_bid
+    inventories_bid: inventoryBidsConverted
   };
 };
 
@@ -112,15 +120,15 @@ export const formToApi = ({
     start_time: startDate,
     end_time: endDate,
     strategy_type: strategy_type ? strategy_type?.value : null,
-    click_commission: parseFloat(click_commission) || 0,
+    click_commission: parseFloat(click_commission) || null,
     sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     budget: {
-      daily: convertGuiToApi({value: budget?.daily}), //parseInt(budget?.daily) || 0,
-      global: convertGuiToApi({value: budget?.global}) //parseInt(budget?.global) || 0
+      daily: convertGuiToApi({value: budget?.daily}),
+      global: convertGuiToApi({value: budget?.global})
     },
     impression: {
-      daily: parseInt(impression?.daily) || 0,
-      global: parseInt(impression?.global) || 0
+      daily: parseInt(impression?.daily) || null,
+      global: parseInt(impression?.global) || null
     }
   };
 

@@ -14,9 +14,12 @@ import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {useParams} from 'react-router-dom';
 import {useGetCampaign} from 'queries/campaign';
 import {LoadingIndicator} from 'components/common';
+import {useDispatch} from 'react-redux';
+import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 
 const StrategyCreate = () => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
   const {campaignId} = useParams();
   const {data: campaignDetail, isFetching, isFetched} = useGetCampaign({
     cid: campaignId,
@@ -28,6 +31,15 @@ const StrategyCreate = () => {
     campaignDetail
   });
   useRedirectInCampaign();
+
+  React.useEffect(() => {
+    dispatch(
+      initStrategyInventoryListRedux({
+        inventoryList: [],
+        inventoryTempList: []
+      })
+    );
+  }, [dispatch]);
 
   return (
     <CampaignContentLayout

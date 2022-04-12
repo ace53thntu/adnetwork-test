@@ -16,11 +16,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
 import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
-import {
-  initStrategyInventoryListRedux,
-  setStrategyInventoryListRedux,
-  setStrategyInventoryTempListRedux
-} from 'store/reducers/campaign';
+import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -40,6 +36,10 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
+  console.log(
+    '🚀 ~ file: FormContainer.js ~ line 39 ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();
@@ -88,13 +88,6 @@ const FormContainer = ({
     },
     [navigate]
   );
-
-  React.useEffect(() => {
-    return () => {
-      dispatch(setStrategyInventoryListRedux({inventoryList: []}));
-      dispatch(setStrategyInventoryTempListRedux({inventoryList: []}));
-    };
-  }, [dispatch]);
 
   const onSubmit = useCallback(
     async formData => {

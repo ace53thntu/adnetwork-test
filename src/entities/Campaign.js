@@ -87,10 +87,27 @@ export const formToApi = formData => {
       daily: convertGuiToApi({value: budget?.daily}) //parseFloat(budget?.daily)
     },
     [CAMPAIGN_KEYS.IMPRESSION]: {
-      global: parseInt(impression?.global) || 0,
-      daily: parseInt(impression?.daily)
+      global: parseInt(impression?.global) || null,
+      daily: parseInt(impression?.daily) || null
     }
   };
+
+  //---> Remove [key] before calling API if do not value
+  if (!requestBody?.budget?.global) {
+    delete requestBody?.budget?.global;
+  }
+
+  if (!requestBody?.budget?.daily) {
+    delete requestBody?.budget?.daily;
+  }
+
+  if (!requestBody?.impression?.global) {
+    delete requestBody?.impression?.global;
+  }
+
+  if (!requestBody?.impression?.daily) {
+    delete requestBody?.impression?.daily;
+  }
 
   if (domain_groups_white && domain_groups_white?.length > 0) {
     requestBody.domain_groups_white = Array.from(

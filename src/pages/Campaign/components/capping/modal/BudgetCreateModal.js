@@ -24,7 +24,7 @@ import {BudgetTimeFrames, CappingTypes, Statuses} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {convertGuiToApi} from 'utils/handleCurrencyFields';
+import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   openForm: PropTypes.bool,
@@ -57,8 +57,12 @@ const BudgetCreateModal = ({
   );
 
   const defaultValues = {
-    global: budgetGLobal ? budgetGLobal.target : '',
-    daily: budgetDaily ? budgetDaily.target : ''
+    global: [CappingTypes.BUDGET.value].includes(cappingType.type)
+      ? convertApiToGui({value: budgetGLobal?.target})
+      : budgetGLobal?.target,
+    daily: [CappingTypes.BUDGET.value].includes(cappingType.type)
+      ? convertApiToGui({value: budgetDaily?.target})
+      : budgetDaily?.target
   };
 
   const {mutateAsync: createCapping} = useCreateCapping();
@@ -82,8 +86,8 @@ const BudgetCreateModal = ({
     };
 
     let budget = {
-      global: '',
-      daily: ''
+      global: null,
+      daily: null
     };
 
     if (formData?.global && !budgetGLobal) {
@@ -100,6 +104,12 @@ const BudgetCreateModal = ({
           ? convertGuiToApi({value: formData?.daily})
           : parseInt(formData?.daily);
       bodyRequest.time_frame = BudgetTimeFrames.DAILY;
+    }
+    if (!budget.global) {
+      delete budget.global;
+    }
+    if (!budget.daily) {
+      delete budget.daily;
     }
     bodyRequest[cappingType.api_key] = budget;
 
