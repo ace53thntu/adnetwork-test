@@ -37,12 +37,12 @@ export const mappingFormToApi = ({formData}) => {
     domains: desDomains,
     tags: desTags,
     budget: {
-      global: convertGuiToApi({value: budget?.global}), //parseFloat(budget?.global) || 0,
-      daily: convertGuiToApi({value: budget?.daily}) //parseFloat(budget?.daily)
+      global: convertGuiToApi({value: budget?.global}),
+      daily: convertGuiToApi({value: budget?.daily})
     },
     impression: {
-      global: convertGuiToApi({value: impression?.global}), //parseFloat(impression?.global) || 0,
-      daily: convertGuiToApi({value: impression?.daily}) //parseFloat(impression?.daily)
+      global: parseInt(impression?.global) || 0,
+      daily: parseInt(impression?.daily)
     }
   };
 

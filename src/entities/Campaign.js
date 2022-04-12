@@ -87,8 +87,8 @@ export const formToApi = formData => {
       daily: convertGuiToApi({value: budget?.daily}) //parseFloat(budget?.daily)
     },
     [CAMPAIGN_KEYS.IMPRESSION]: {
-      global: convertGuiToApi({value: impression?.global}), //parseFloat(impression?.global) || 0,
-      daily: convertGuiToApi({value: impression?.daily}) //parseFloat(impression?.daily)
+      global: parseInt(impression?.global) || 0,
+      daily: parseInt(impression?.daily)
     }
   };
 

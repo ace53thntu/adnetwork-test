@@ -12,14 +12,19 @@ import {getTimeZoneOffset} from 'utils/metrics';
 export const formToApi = ({formData, type}) => {
   const status = Statuses.ACTIVE;
   if (
-    [
-      CappingTypes.BUDGET.value,
-      CappingTypes.BUDGET_MANAGER.value,
-      CappingTypes.IMPRESSION.value
-    ].includes(type)
+    [CappingTypes.BUDGET.value, CappingTypes.BUDGET_MANAGER.value].includes(
+      type
+    )
   ) {
     return {
       target: convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
+      status
+    };
+  }
+
+  if (CappingTypes.IMPRESSION.value === type) {
+    return {
+      target: parseInt(formData?.target) || 0,
       status
     };
   }

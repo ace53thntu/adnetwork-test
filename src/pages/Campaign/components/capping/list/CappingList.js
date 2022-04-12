@@ -103,10 +103,6 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   }
 
   async function onEditCapping(formData) {
-    console.log(
-      '🚀 ~ file: CappingList.js ~ line 122 ~ onEditCapping ~ formData',
-      formData
-    );
     const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {

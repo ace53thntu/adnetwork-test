@@ -119,8 +119,8 @@ export const formToApi = ({
       global: convertGuiToApi({value: budget?.global}) //parseInt(budget?.global) || 0
     },
     impression: {
-      daily: convertGuiToApi({value: impression?.daily}), //parseInt(impression?.daily) || 0,
-      global: convertGuiToApi({value: impression?.global}) //parseInt(impression?.global) || 0
+      daily: parseInt(impression?.daily) || 0,
+      global: parseInt(impression?.global) || 0
     }
   };
 

@@ -20,6 +20,7 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import {useGetLocations} from 'queries/location';
 import {CityList} from './components';
+import FilterBar from './components/FilterBar';
 
 const LocationList = () => {
   const {t} = useTranslation();
@@ -79,6 +80,15 @@ const LocationList = () => {
           icon="pe-7s-map-marker icon-gradient bg-tempting-azure"
         />
         <Container fluid>
+          {/* TODO: IN-PROGRESS */}
+          {false && (
+            <Row className="mb-3">
+              <Col>
+                <FilterBar />
+              </Col>
+            </Row>
+          )}
+
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">

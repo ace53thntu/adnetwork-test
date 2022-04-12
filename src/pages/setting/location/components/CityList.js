@@ -73,7 +73,7 @@ const CityList = ({countryId = ''}) => {
       },
       {
         header: t('LOCATION.LONGITUDE'),
-        accessor: 'longtitude',
+        accessor: 'longitude',
         cell: row => <Badge color="info">{row?.value}</Badge>
       },
       {

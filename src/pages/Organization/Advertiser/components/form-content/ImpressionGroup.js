@@ -19,24 +19,20 @@ const ImpressionGroup = () => {
           <CurrencyInputField
             required
             name="impression.global"
-            placeholder="0.0"
             label={t('global')}
-            decimalSeparator="."
-            groupSeparator=","
-            disableGroupSeparators={false}
-            decimalsLimit={3}
+            placeholder={t('global')}
+            disableGroupSeparators
+            allowDecimals={false}
           />
         </Col>
         <Col md="4">
           <CurrencyInputField
             required
             name="impression.daily"
-            placeholder="0.0"
             label={t('daily')}
-            decimalSeparator="."
-            groupSeparator=","
-            disableGroupSeparators={false}
-            decimalsLimit={3}
+            placeholder={t('daily')}
+            disableGroupSeparators
+            allowDecimals={false}
           />
         </Col>
       </Row>

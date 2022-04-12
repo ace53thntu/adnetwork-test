@@ -30,11 +30,17 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
   const defaultValues = React.useMemo(() => {
     if (
       cappingType === CappingTypes.BUDGET.value ||
-      cappingType === CappingTypes.BUDGET_MANAGER.value ||
-      cappingType === CappingTypes.IMPRESSION.value
+      cappingType === CappingTypes.BUDGET_MANAGER.value
     ) {
       return {
         target: convertApiToGui({value: capping?.target}),
+        status: capping?.status
+      };
+    }
+
+    if (cappingType === CappingTypes.IMPRESSION.value) {
+      return {
+        target: capping?.target,
         status: capping?.status
       };
     }
@@ -105,8 +111,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
         >
           <Row>
             {(cappingType === CappingTypes.BUDGET.value ||
-              cappingType === CappingTypes.BUDGET_MANAGER.value ||
-              cappingType === CappingTypes.IMPRESSION.value) && (
+              cappingType === CappingTypes.BUDGET_MANAGER.value) && (
               <Col sm={6}>
                 <CurrencyInputField
                   required
@@ -118,6 +123,19 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
                   disableGroupSeparators={false}
                   decimalsLimit={3}
                   prefix="$"
+                />
+              </Col>
+            )}
+
+            {cappingType === CappingTypes.IMPRESSION.value && (
+              <Col sm={6}>
+                <CurrencyInputField
+                  required
+                  name="target"
+                  placeholder={t('target')}
+                  label={t('target')}
+                  disableGroupSeparators
+                  allowDecimals={false}
                 />
               </Col>
             )}

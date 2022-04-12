@@ -529,7 +529,8 @@ const en = {
     LOOP: 'Loop',
     BUDGET_GLOBAL: 'Budget Global',
     BUDGET_DAILY: 'Budget Daily',
-    SEARCH: 'Search'
+    SEARCH: 'Search',
+    FILTER: 'Filter'
   },
   FORM: {
     SELECT_POSITION: 'Select position',

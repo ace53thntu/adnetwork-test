@@ -52,20 +52,29 @@ const BudgetList = ({
       {
         header: 'Target',
         accessor: 'target',
-        cell: row => (
-          <Badge color="info" pill>
-            {row?.value
-              ? formatValue({
-                  value: convertApiToGui({
-                    value: row?.value
-                  })?.toString(),
-                  groupSeparator: ',',
-                  decimalSeparator: '.',
-                  prefix: '$'
-                })
-              : ''}
-          </Badge>
-        )
+        cell: row => {
+          if (row?.original?.type === CappingTypes.IMPRESSION.value) {
+            return (
+              <Badge color="info" pill>
+                {row?.value}
+              </Badge>
+            );
+          }
+          return (
+            <Badge color="info" pill>
+              {row?.value
+                ? formatValue({
+                    value: convertApiToGui({
+                      value: row?.value
+                    })?.toString(),
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    prefix: '$'
+                  })
+                : ''}
+            </Badge>
+          );
+        }
       },
 
       {
