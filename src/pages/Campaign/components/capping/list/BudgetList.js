@@ -53,7 +53,11 @@ const BudgetList = ({
         header: 'Target',
         accessor: 'target',
         cell: row => {
-          if (row?.original?.type === CappingTypes.IMPRESSION.value) {
+          if (
+            [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
+              row?.original?.type
+            )
+          ) {
             return (
               <Badge color="info" pill>
                 {row?.value}
@@ -85,7 +89,8 @@ const BudgetList = ({
             <>
               {[
                 CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
+                CappingTypes.IMPRESSION.value,
+                CappingTypes.USER.value
               ].includes(row.original?.type) &&
                 row?.value === BudgetTimeFrames.DAILY && (
                   <Badge color="primary" pill>
@@ -94,7 +99,8 @@ const BudgetList = ({
                 )}
               {([
                 CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
+                CappingTypes.IMPRESSION.value,
+                CappingTypes.USER.value
               ].includes(row.original?.type) && row?.value) ===
                 BudgetTimeFrames.GLOBAL && (
                 <Badge color="success" pill>

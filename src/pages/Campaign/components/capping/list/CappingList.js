@@ -63,6 +63,10 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
   }, [cappings]);
 
+  const userList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.USER.value});
+  }, [cappings]);
+
   const budgetManagerList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.BUDGET_MANAGER.value});
   }, [cappings]);
@@ -162,6 +166,15 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
         <BudgetList
           title="Impression"
           list={impressionList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
+
+      {userList?.length > 0 && (
+        <BudgetList
+          title="User"
+          list={userList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
         />

@@ -25,6 +25,10 @@ const propTypes = {
 };
 
 const CappingForm = ({capping = {}, onSubmit = () => null}) => {
+  console.log(
+    '🚀 ~ file: CappingForm.js ~ line 28 ~ CappingForm ~ capping',
+    capping
+  );
   const {t} = useTranslation();
   const cappingType = capping?.type || '';
 
@@ -38,7 +42,11 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
         status: capping?.status
       };
     }
-    if (cappingType === CappingTypes.IMPRESSION.value) {
+    if (
+      [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
+        cappingType
+      )
+    ) {
       return {
         target: capping?.target,
         status: capping?.status
@@ -127,7 +135,9 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               </Col>
             )}
 
-            {cappingType === CappingTypes.IMPRESSION.value && (
+            {[CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
+              cappingType
+            ) && (
               <Col sm={6}>
                 <CurrencyInputField
                   required

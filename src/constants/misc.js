@@ -111,6 +111,7 @@ export const CappingTypes = {
   BUDGET_MANAGER: {value: 'BDG_MNG', label: 'Budget Manager'}, // capping by budget of manager ( admin )
   BUDGET: {value: 'BDG', label: 'Budget', api_key: 'budget'}, // capping by budget of client
   IMPRESSION: {value: 'IMP', label: 'Impression', api_key: 'impression'}, // capping by impression
+  USER: {value: 'USR', label: 'User', api_key: 'user'}, // capping by user
   DOMAIN: {value: 'DM', label: 'Domain'}, // capping by domain
   SCHEDULE: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
   KEYWORD: {value: 'KW', label: 'Keyword'} // capping by keywords
@@ -120,6 +121,7 @@ export const CappingTypeButtons = [
   {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
   {type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
   {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},
+  {type: 'USR', sub_type: '', label: 'User', api_key: 'user'},
   {type: 'DM', sub_type: '', label: 'Domain'},
   {type: 'KW', sub_type: '', label: 'Keyword'},
   {type: 'SCHL', sub_type: '', label: 'Schedule'}

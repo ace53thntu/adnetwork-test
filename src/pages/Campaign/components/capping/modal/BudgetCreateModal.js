@@ -20,10 +20,11 @@ import {
 // Internal Modules
 import {schemaValidateCreateBudget} from '../validation';
 import {ButtonLoading} from 'components/common';
-import {FormTextInput} from 'components/forms';
-import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
+import {BudgetTimeFrames, CappingTypes, Statuses} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   openForm: PropTypes.bool,
@@ -77,22 +78,30 @@ const BudgetCreateModal = ({
       reference_type: referenceType,
       reference_uuid: referenceUuid,
       type: cappingType?.type,
-      status: 'active'
+      status: Statuses.ACTIVE
+    };
+
+    let budget = {
+      global: '',
+      daily: ''
     };
 
     if (formData?.global && !budgetGLobal) {
-      bodyRequest[cappingType.api_key] = {
-        global: parseInt(formData?.global)
-      };
+      budget.global =
+        cappingType?.type === CappingTypes.BUDGET.value
+          ? convertGuiToApi({value: formData?.global})
+          : parseInt(formData?.global);
       bodyRequest.time_frame = BudgetTimeFrames.GLOBAL;
     }
 
     if (formData?.daily && !budgetDaily) {
-      bodyRequest[cappingType.api_key] = {
-        daily: parseInt(formData?.daily)
-      };
+      budget.daily =
+        cappingType?.type === CappingTypes.BUDGET.value
+          ? convertGuiToApi({value: formData?.daily})
+          : parseInt(formData?.daily);
       bodyRequest.time_frame = BudgetTimeFrames.DAILY;
     }
+    bodyRequest[cappingType.api_key] = budget;
 
     try {
       await createCapping(bodyRequest);
@@ -120,27 +129,79 @@ const BudgetCreateModal = ({
             >
               {[
                 CappingTypes.BUDGET_MANAGER.value,
-                CappingTypes.BUDGET.value,
-                CappingTypes.IMPRESSION.value
+                CappingTypes.BUDGET.value
               ].includes(cappingType.type) && (
                 <Row>
                   <Col md="6">
-                    <FormTextInput
+                    {/* <FormTextInput
                       type="number"
                       placeholder={t('global')}
                       name="global"
                       label={t('global')}
                       isRequired
                       readOnly={!!budgetGLobal}
+                    /> */}
+                    <CurrencyInputField
+                      required
+                      name="global"
+                      placeholder="0.0"
+                      label={t('global')}
+                      decimalSeparator="."
+                      groupSeparator=","
+                      disableGroupSeparators={false}
+                      decimalsLimit={3}
+                      prefix="$"
+                      readOnly={!!budgetGLobal}
                     />
                   </Col>
                   <Col md="6">
-                    <FormTextInput
+                    {/* <FormTextInput
                       type="number"
                       placeholder={t('daily')}
                       name="daily"
                       label={t('daily')}
                       isRequired
+                      readOnly={!!budgetDaily}
+                    /> */}
+                    <CurrencyInputField
+                      required
+                      name="daily"
+                      placeholder="0.0"
+                      label={t('daily')}
+                      decimalSeparator="."
+                      groupSeparator=","
+                      disableGroupSeparators={false}
+                      decimalsLimit={3}
+                      prefix="$"
+                      readOnly={!!budgetDaily}
+                    />
+                  </Col>
+                </Row>
+              )}
+              {[
+                CappingTypes.IMPRESSION.value,
+                CappingTypes.USER.value
+              ].includes(cappingType.type) && (
+                <Row>
+                  <Col md="6">
+                    <CurrencyInputField
+                      required
+                      name="global"
+                      placeholder={t('global')}
+                      label={t('global')}
+                      readOnly={!!budgetGLobal}
+                      disableGroupSeparators
+                      allowDecimals={false}
+                    />
+                  </Col>
+                  <Col md="6">
+                    <CurrencyInputField
+                      required
+                      name="daily"
+                      placeholder={t('daily')}
+                      label={t('daily')}
+                      disableGroupSeparators
+                      allowDecimals={false}
                       readOnly={!!budgetDaily}
                     />
                   </Col>

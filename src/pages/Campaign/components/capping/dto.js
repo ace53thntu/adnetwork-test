@@ -22,7 +22,7 @@ export const formToApi = ({formData, type}) => {
     };
   }
 
-  if (type === CappingTypes.IMPRESSION.value) {
+  if ([CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(type)) {
     return {
       target: parseInt(formData?.target) || 0, //parseFloat(formData?.target) || 0,
       status

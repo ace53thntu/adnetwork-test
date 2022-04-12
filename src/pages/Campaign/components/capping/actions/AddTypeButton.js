@@ -89,9 +89,11 @@ const AddTypeButton = ({
       </UncontrolledButtonDropdown>
 
       {openModal &&
-        [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
-          activeType.type
-        ) && (
+        [
+          CappingTypes.BUDGET.value,
+          CappingTypes.IMPRESSION.value,
+          CappingTypes.USER.value
+        ].includes(activeType.type) && (
           <BudgetCreateModal
             openForm={openModal}
             toggleModal={toggleModal}
