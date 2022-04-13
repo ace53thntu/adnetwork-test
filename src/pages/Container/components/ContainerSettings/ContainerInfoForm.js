@@ -111,21 +111,20 @@ function ContainerInfoForm(props) {
                 disable={formState.isSubmitting}
                 isRequired
               />
-              {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
-                <CurrencyInputField
-                  name="cost"
-                  label="Commission Cost"
-                  placeholder="Commission Cost"
-                  disabled={isLoading}
-                  decimalSeparator="."
-                  groupSeparator=","
-                  disableGroupSeparators={false}
-                  decimalsLimit={2}
-                  maxLength="4"
-                  description="The cost should be between 0.01 and 0.99"
-                  required
-                />
-              )}
+              <CurrencyInputField
+                name="cost"
+                label="Commission Cost"
+                placeholder="Commission Cost"
+                disabled={isLoading}
+                decimalSeparator="."
+                groupSeparator=","
+                disableGroupSeparators={false}
+                decimalsLimit={2}
+                maxLength="4"
+                description="The cost should be between 0.01 and 0.99"
+                required
+                readOnly={![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)}
+              />
 
               <div className="d-flex mb-2">
                 <FormGroup className="d-flex  mb-0 ml-3">

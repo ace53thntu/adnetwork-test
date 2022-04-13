@@ -58,7 +58,7 @@ const ContainerPage = ({data}) => {
                 statusProps.color = 'info';
                 break;
               default:
-                statusProps.color = 'error';
+                statusProps.color = 'secondary';
                 break;
             }
             return <Status {...statusProps} noHeader />;

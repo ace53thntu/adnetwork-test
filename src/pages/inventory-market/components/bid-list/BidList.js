@@ -183,7 +183,7 @@ const useColumns = () => {
                 statusProps.color = 'info';
                 break;
               default:
-                statusProps.color = 'error';
+                statusProps.color = 'secondary';
                 break;
             }
             return <CustomStatus {...statusProps} noHeader />;

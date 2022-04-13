@@ -45,7 +45,7 @@ const getStatus = ({row, statusProps}) => {
       statusProps.color = 'info';
       break;
     default:
-      statusProps.color = 'error';
+      statusProps.color = 'secondary';
       break;
   }
 

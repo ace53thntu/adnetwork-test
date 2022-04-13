@@ -106,7 +106,7 @@ const DomainList = () => {
               statusProps.color = 'success';
               break;
             default:
-              statusProps.color = 'error';
+              statusProps.color = 'secondary';
               break;
           }
           return <Status {...statusProps} />;

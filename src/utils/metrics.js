@@ -29,21 +29,14 @@ export const generateTimeZoneList = () => {
 
 export const getTimeZoneOffset = () => {
   let timeZone = moment.tz.guess();
-  console.log(
-    '🚀 ~ file: metrics.js ~ line 32 ~ getTimeZoneOffset ~ timeZone',
-    timeZone
-  );
-  console.log('timezones ===', timezones);
+
   if (timeZone === 'Asia/Saigon') {
     timeZone = 'Asia/Ho_Chi_Minh';
   }
   const timeZoneValue = timezones?.find(
     item => item.tzCode.toLowerCase() === timeZone?.toLowerCase()
   );
-  console.log(
-    '🚀 ~ file: metrics.js ~ line 35 ~ getTimeZoneOffset ~ timeZoneValue',
-    timeZoneValue
-  );
+
   const valueConverted = timeZoneValue?.utc
     ?.replace(/\b0+/g, '')
     ?.replace(/\b:+/g, '');
