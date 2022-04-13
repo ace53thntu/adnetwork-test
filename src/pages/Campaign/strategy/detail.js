@@ -12,7 +12,11 @@ import {Col, Row} from 'reactstrap';
 import {LoadingIndicator} from 'components/common';
 import {apiToForm} from 'entities/Strategy';
 import {useGetStrategy} from 'queries/strategy';
-import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
+import {
+  initStrategyInventoryListRedux,
+  setStrategyInventoryListRedux,
+  setStrategyInventoryTempListRedux
+} from 'store/reducers/campaign';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {CampaignContentLayout} from '../layout';
 import {StrategyContainerStyled} from './styled';
@@ -38,6 +42,7 @@ const StrategyDetail = () => {
       status === 'success' &&
       !isInitialized
     ) {
+      console.log('object ==---', strategy);
       dispatch(
         initStrategyInventoryListRedux({
           inventoryList: strategy?.inventories,
@@ -49,6 +54,14 @@ const StrategyDetail = () => {
   }, [strategy, dispatch, isFetched, isInitialized, status]);
 
   useRedirectInCampaign();
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(setStrategyInventoryListRedux({inventoryList: []}));
+      dispatch(setStrategyInventoryTempListRedux({inventoryList: []}));
+      setInitialized(false);
+    };
+  }, [dispatch]);
 
   return (
     <CampaignContentLayout
