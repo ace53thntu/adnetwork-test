@@ -17,6 +17,7 @@ import {CappingTypes} from 'constants/misc';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
+import {FormToggle} from 'components/forms';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -196,6 +197,26 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
                   placeholder={t('selectKeywordListBlack')}
                   defaultValues={[]}
                   multiple
+                />
+              </Col>
+            </Row>
+          )}
+
+          {[
+            CappingTypes.SCHEDULE.value,
+            CappingTypes.DOMAIN.value,
+            CappingTypes.KEYWORD.value
+          ].includes(cappingType) && (
+            <Row>
+              <Col md="3">
+                <FormToggle
+                  name="status"
+                  defaultCheckedValue=""
+                  label={t('status')}
+                  values={{
+                    checked: 'active',
+                    unChecked: 'inactive'
+                  }}
                 />
               </Col>
             </Row>

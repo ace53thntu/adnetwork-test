@@ -10,7 +10,8 @@ import {convertGuiToApi} from 'utils/handleCurrencyFields';
 import {getTimeZoneOffset} from 'utils/metrics';
 
 export const formToApi = ({formData, type}) => {
-  const status = Statuses.ACTIVE;
+  console.log('🚀 ~ file: dto.js ~ line 13 ~ formToApi ~ formData', formData);
+  const status = formData?.status || Statuses.ACTIVE;
   if (
     [CappingTypes.BUDGET.value, CappingTypes.BUDGET_MANAGER.value].includes(
       type

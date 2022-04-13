@@ -18,6 +18,7 @@ import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
+import {FormToggle} from 'components/forms';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -213,6 +214,26 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               startTimeName="start_time"
               endTimeName="end_time"
             />
+          )}
+
+          {[
+            CappingTypes.SCHEDULE.value,
+            CappingTypes.DOMAIN.value,
+            CappingTypes.KEYWORD.value
+          ].includes(cappingType) && (
+            <Row>
+              <Col md="3">
+                <FormToggle
+                  name="status"
+                  defaultCheckedValue=""
+                  label={t('status')}
+                  values={{
+                    checked: 'active',
+                    unChecked: 'inactive'
+                  }}
+                />
+              </Col>
+            </Row>
           )}
         </Form>
       </FormProvider>
