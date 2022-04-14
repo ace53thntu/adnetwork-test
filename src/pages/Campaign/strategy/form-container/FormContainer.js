@@ -36,10 +36,6 @@ const FormContainer = ({
   children,
   isConcept = false
 }) => {
-  console.log(
-    '🚀 ~ file: FormContainer.js ~ line 39 ~ currentStrategy',
-    currentStrategy
-  );
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();

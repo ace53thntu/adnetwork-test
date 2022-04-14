@@ -103,9 +103,11 @@ export const setCampaignRedux = (advertiserId, campaignId, campaigns = []) => {
 };
 
 // Strategy
-export const selectStrategyRedux = (strategyId, strategy) => {
-  return createAction(SELECT_STRATEGY_ID, {strategyId, strategy});
+
+export const selectedStrategyIdRedux = strategyId => {
+  return createAction(SELECT_STRATEGY_ID, {strategyId});
 };
+
 export const setStrategyRedux = (
   advertiserId,
   campaignId,
@@ -140,10 +142,12 @@ const campaignInitialState = {
   inventoryList: [],
   inventoryTempList: [],
   advertiserPage: 1,
-  advertiserTotalPage: 1
+  advertiserTotalPage: 1,
+  activatedStrategyId: ''
 };
 
 const handleActions = {
+  [SELECT_STRATEGY_ID]: handleSelectStrategyId,
   [UPDATE_CAMPAIGN]: handleUpdateCampaign,
   [LOAD_CAMPAIGN]: handleLoadCampaign,
   [INIT_INVENTORY_STRATEGY]: initInventoryStrategyList,
@@ -161,6 +165,11 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function handleSelectStrategyId(state, action) {
+  const {strategyId} = action.payload;
+  state.activatedStrategyId = strategyId;
+}
 
 function handleUpdateCampaign(state, action) {
   const {campaign} = action.payload;
@@ -240,18 +249,7 @@ function setStrategyInventoryTempList(state, action) {
 }
 
 function handleReset(state) {
-  state.advertisers = [];
-  state.advertisersTemp = [];
-  state.isLoading = true;
-  state.selectedAdvertiserId = null;
-  state.expandedIds = [];
-  state.selectedCampaign = null;
-  state.advertiser = null;
-  state.selectedStrategyId = null;
-  state.alreadySetAdvertiser = false;
-  state.keyword = '';
-  state.advertiserPage = 1;
-  state.advertiserTotalPage = 1;
+  state = campaignInitialState;
 }
 
 function handleSetAdvertisers(state, action) {
@@ -581,7 +579,17 @@ const makeSelectStrategyInventoryTemp = () =>
     a => a.inventoryTempList
   );
 
-// hook to use container reducer
+const makeSelectedStrategyId = () =>
+  createSelector(
+    state => state.campaignReducer,
+    a => a.activatedStrategyId
+  );
+
+// hook to use campaign reducer
+export function useSelectedStrategyIdSelector() {
+  const selectedStrategyId = React.useMemo(makeSelectedStrategyId, []);
+  return useSelector(state => selectedStrategyId(state));
+}
 export function useCampaignSelector() {
   const state = useSelector(state => state.campaignReducer);
   return state;

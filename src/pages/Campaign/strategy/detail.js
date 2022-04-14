@@ -14,23 +14,24 @@ import {apiToForm} from 'entities/Strategy';
 import {useGetStrategy} from 'queries/strategy';
 import {
   initStrategyInventoryListRedux,
+  selectedStrategyIdRedux,
   setStrategyInventoryListRedux,
-  setStrategyInventoryTempListRedux
+  setStrategyInventoryTempListRedux,
+  useSelectedStrategyIdSelector
 } from 'store/reducers/campaign';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {CampaignContentLayout} from '../layout';
 import {StrategyContainerStyled} from './styled';
 import StrategyViewTabs from './ViewTabs';
+import {QueryStatuses} from 'constants/react-query';
 
 const StrategyDetail = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const [isInitialized, setInitialized] = React.useState(false);
   const {strategyId, campaignId} = useParams();
+  const strategyIdRedux = useSelectedStrategyIdSelector();
 
-  const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
-    strategyId
-  );
+  const {data: strategyData, isFetching, status} = useGetStrategy(strategyId);
 
   const strategy = apiToForm({strategyData});
 
@@ -39,19 +40,18 @@ const StrategyDetail = () => {
     if (
       strategy &&
       Object.keys(strategy).length > 0 &&
-      status === 'success' &&
-      !isInitialized
+      status === QueryStatuses.SUCCESS &&
+      strategyIdRedux !== strategyId
     ) {
-      console.log('object ==---', strategy);
       dispatch(
         initStrategyInventoryListRedux({
           inventoryList: strategy?.inventories,
           inventoryTempList: strategy?.inventories
         })
       );
-      setInitialized(true);
+      dispatch(selectedStrategyIdRedux(strategyId));
     }
-  }, [strategy, dispatch, isFetched, isInitialized, status]);
+  }, [dispatch, status, strategy, strategyId, strategyIdRedux]);
 
   useRedirectInCampaign();
 
@@ -59,7 +59,6 @@ const StrategyDetail = () => {
     return () => {
       dispatch(setStrategyInventoryListRedux({inventoryList: []}));
       dispatch(setStrategyInventoryTempListRedux({inventoryList: []}));
-      setInitialized(false);
     };
   }, [dispatch]);
 
@@ -70,7 +69,7 @@ const StrategyDetail = () => {
     >
       <StrategyContainerStyled fluid>
         {isFetching && <LoadingIndicator />}
-        {isFetched && status === 'success' && (
+        {!isFetching && (
           <Row>
             <Col md="12">
               <StrategyViewTabs
