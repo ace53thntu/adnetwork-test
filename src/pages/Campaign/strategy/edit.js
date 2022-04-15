@@ -5,6 +5,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
+import _ from 'lodash';
 
 // Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -17,7 +18,8 @@ import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {
   initStrategyInventoryListRedux,
   setStrategyInventoryListRedux,
-  setStrategyInventoryTempListRedux
+  setStrategyInventoryTempListRedux,
+  useStrategyInventorySelector
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 
@@ -25,35 +27,25 @@ const StrategyEdit = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const {strategyId} = useParams();
-  const [isInitialized, setInitialized] = React.useState(false);
 
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );
-
+  const strategyInventoryRedux = useStrategyInventorySelector();
   const strategy = apiToForm({strategyData});
+
   useRedirectInCampaign();
 
   React.useEffect(() => {
-    if (
-      strategy &&
-      Object.keys(strategy).length > 0 &&
-      status === 'success' &&
-      !isInitialized
-    ) {
+    if (!_.isEqual(strategyInventoryRedux, strategy?.inventories)) {
       dispatch(
         initStrategyInventoryListRedux({
           inventoryList: strategy?.inventories,
           inventoryTempList: strategy?.inventories
         })
       );
-      setInitialized(true);
     }
-  }, [strategy, dispatch, isFetched, isInitialized, status]);
-
-  React.useEffect(() => {
-    return () => setInitialized(false);
-  }, []);
+  }, [dispatch, strategy?.inventories, strategyInventoryRedux]);
 
   React.useEffect(() => {
     return () => {

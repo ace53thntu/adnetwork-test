@@ -20,7 +20,7 @@ import {countries} from 'countries-list';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
-import Status from 'components/list/status';
+import {CustomStatus} from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -133,7 +133,7 @@ const UserList = () => {
               statusProps.color = 'secondary';
               break;
           }
-          return <Status {...statusProps} />;
+          return <CustomStatus {...statusProps} />;
         }
       },
       {

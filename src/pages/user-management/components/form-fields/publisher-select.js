@@ -21,7 +21,13 @@ const propTypes = {
   placeholder: PropTypes.string
 };
 
-const PublisherSelect = ({defaultValue = null, name, label, placeholder}) => {
+const PublisherSelect = ({
+  defaultValue = null,
+  name,
+  label,
+  placeholder,
+  ...rest
+}) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
@@ -39,6 +45,7 @@ const PublisherSelect = ({defaultValue = null, name, label, placeholder}) => {
       }}
       defaultValue={defaultValue || null}
       disabled={isSubmitting}
+      {...rest}
     />
   );
 };

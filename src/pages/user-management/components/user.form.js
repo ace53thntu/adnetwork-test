@@ -181,7 +181,7 @@ const UserForm = ({
                     options={userRoles}
                     defaultValue={null}
                     required
-                    disabled={isEdit}
+                    readOnly={isEdit}
                   />
                 </Col>
 
@@ -193,6 +193,7 @@ const UserForm = ({
                       label={t('advertiser')}
                       placeholder={t('selectAdvertiser')}
                       defaultValue={defaultValues?.advertiser_uuid || null}
+                      readOnly={isEdit}
                     />
                   </Col>
                 )}
@@ -205,6 +206,7 @@ const UserForm = ({
                       label={t('dsp')}
                       placeholder={t('selectDsp')}
                       defaultValue={defaultValues?.dsp_uuid || null}
+                      readOnly={isEdit}
                     />
                   </Col>
                 )}
@@ -217,6 +219,7 @@ const UserForm = ({
                       label={t('publisher')}
                       placeholder={t('selectPublisher')}
                       defaultValue={defaultValues?.publisher_uuid || null}
+                      readOnly={isEdit}
                     />
                   </Col>
                 )}

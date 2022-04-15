@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {Col, Row} from 'reactstrap';
+import _ from 'lodash';
 
 // Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -14,44 +15,36 @@ import {apiToForm} from 'entities/Strategy';
 import {useGetStrategy} from 'queries/strategy';
 import {
   initStrategyInventoryListRedux,
-  selectedStrategyIdRedux,
   setStrategyInventoryListRedux,
   setStrategyInventoryTempListRedux,
-  useSelectedStrategyIdSelector
+  useStrategyInventorySelector
 } from 'store/reducers/campaign';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {CampaignContentLayout} from '../layout';
 import {StrategyContainerStyled} from './styled';
 import StrategyViewTabs from './ViewTabs';
-import {QueryStatuses} from 'constants/react-query';
 
 const StrategyDetail = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId, campaignId} = useParams();
-  const strategyIdRedux = useSelectedStrategyIdSelector();
 
-  const {data: strategyData, isFetching, status} = useGetStrategy(strategyId);
+  const {data: strategyData, isFetching} = useGetStrategy(strategyId);
+  const strategyInventoryRedux = useStrategyInventorySelector();
 
   const strategy = apiToForm({strategyData});
 
   // Initializing inventory in strategy
   React.useEffect(() => {
-    if (
-      strategy &&
-      Object.keys(strategy).length > 0 &&
-      status === QueryStatuses.SUCCESS &&
-      strategyIdRedux !== strategyId
-    ) {
+    if (!_.isEqual(strategyInventoryRedux, strategy?.inventories)) {
       dispatch(
         initStrategyInventoryListRedux({
           inventoryList: strategy?.inventories,
           inventoryTempList: strategy?.inventories
         })
       );
-      dispatch(selectedStrategyIdRedux(strategyId));
     }
-  }, [dispatch, status, strategy, strategyId, strategyIdRedux]);
+  }, [dispatch, strategy?.inventories, strategyInventoryRedux]);
 
   useRedirectInCampaign();
 
