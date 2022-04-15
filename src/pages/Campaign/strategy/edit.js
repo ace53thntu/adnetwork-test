@@ -30,10 +30,6 @@ const StrategyEdit = () => {
   const {data: strategyData, isFetching, isFetched, status} = useGetStrategy(
     strategyId
   );
-  console.log(
-    '🚀 ~ file: edit.js ~ line 27 ~ StrategyEdit ~ strategyData',
-    strategyData
-  );
 
   const strategy = apiToForm({strategyData});
   useRedirectInCampaign();

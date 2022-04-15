@@ -9,17 +9,20 @@ import PropTypes from 'prop-types';
 import {DialogConfirm, LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
-import {useDeleteStrategy, useGetStrategiesInfinity} from 'queries/strategy';
+import {useDeleteStrategy, useGetStrategies} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {StrategyListStyled} from './styled';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
 import {RoutePaths} from 'constants/route-paths';
-import {getResponseData} from 'utils/helpers/misc.helpers';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
 import NoDataAvailable from 'components/list/no-data';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment';
+import CustomPagination from 'components/common/CustomPagination';
 
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
@@ -40,6 +43,7 @@ const StrategyList = ({
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentStrategy, setCurrentStrategy] = React.useState(null);
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(DEFAULT_PAGINATION.page);
 
   //--->
   const navigate = useNavigate();
@@ -47,6 +51,7 @@ const StrategyList = ({
 
   const params = {
     per_page: DEFAULT_PAGINATION.perPage,
+    page: currentPage,
     sort: 'created_at DESC'
   };
 
@@ -57,26 +62,15 @@ const StrategyList = ({
   if (campaignId && campaignId !== 'create') {
     params.campaign_uuid = campaignId;
   }
-  const {
-    data: {pages = []} = {},
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useGetStrategiesInfinity({
+  const {data, isLoading, isPreviousData} = useGetStrategies({
     params,
-    enabled: true
+    enabled: true,
+    keepPreviousData: true
   });
 
-  const strategiesDestructure = React.useMemo(() => {
-    return pages?.reduce((acc, page) => {
-      const items = getResponseData(page, IS_RESPONSE_ALL);
-      return [...acc, ...items];
-    }, []);
-  }, [pages]);
-
   const strategies = React.useMemo(() => {
-    return strategiesDestructure?.map(item => {
+    const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
+    return dataDestructured?.map(item => {
       const campaignName = item?.campaign_name;
       const advertiserName = item?.advertiser_name;
       return {
@@ -86,7 +80,10 @@ const StrategyList = ({
         advertiser_name: advertiserName
       };
     });
-  }, [strategiesDestructure]);
+  }, [data]);
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -155,6 +152,11 @@ const StrategyList = ({
     ];
   }, [fromCampaignPage, t]);
 
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
+
   function onClickItem(item) {
     setCurrentStrategy(item);
     navigate(
@@ -198,7 +200,7 @@ const StrategyList = ({
   return (
     <>
       <StrategyListStyled>
-        {isFetching && <LoadingIndicator />}
+        {isLoading && <LoadingIndicator />}
         {strategies?.length > 0 ? (
           <List
             data={strategies || []}
@@ -212,13 +214,12 @@ const StrategyList = ({
           <NoDataAvailable message="No Strategy" />
         )}
 
-        {hasNextPage && (
-          <Pagination
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
-        )}
+        <CustomPagination
+          currentPage={currentPage}
+          totalCount={paginationInfo?.totalItems}
+          onPageChange={(evt, page) => onPageChange(evt, page)}
+          disabled={isPreviousData}
+        />
       </StrategyListStyled>
       {openDialog && (
         <DialogConfirm

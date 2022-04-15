@@ -9,7 +9,7 @@ import {GET_STRATEGIES} from './constants';
 /**
  * Hook for get all strategies from API
  */
-export function useGetStrategies({params, enabled = false}) {
+export function useGetStrategies({params, enabled = false, keepPreviousData= false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,8 @@ export function useGetStrategies({params, enabled = false}) {
       }).then(res => res),
     {
       suspense: false,
-      enabled
+      enabled,
+      keepPreviousData
     }
   );
 }
