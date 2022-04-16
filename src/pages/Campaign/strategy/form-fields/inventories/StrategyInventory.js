@@ -16,10 +16,11 @@ import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {
-  strategyInventories: PropTypes.array
+  strategyInventories: PropTypes.array,
+  isView: PropTypes.bool
 };
 
-const StrategyInventory = ({strategyInventories = []}) => {
+const StrategyInventory = ({strategyInventories = [], isView = false}) => {
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);
@@ -28,8 +29,8 @@ const StrategyInventory = ({strategyInventories = []}) => {
 
   React.useEffect(() => {
     const inventoriesConverted = strategyInventories?.map(item => ({
-      uuid: item.uuid,
-      price: item.deal_floor_price
+      uuid: item?.uuid,
+      price: item?.deal_floor_price
     }));
 
     setValue('inventories_bid', inventoriesConverted, {
@@ -55,20 +56,33 @@ const StrategyInventory = ({strategyInventories = []}) => {
       {
         header: 'Deal Price',
         accessor: 'deal_floor_price',
-        cell: row => (
-          <Badge color="info">
-            {row?.value
-              ? formatValue({
-                  value: HandleCurrencyFields.convertApiToGui({
-                    value: row?.value
-                  })?.toString(),
-                  groupSeparator: ',',
-                  decimalSeparator: '.',
-                  prefix: '$'
-                })
-              : ''}
-          </Badge>
-        )
+        cell: row => {
+          console.log(
+            '🚀 ~ file: StrategyInventory.js ~ line 60 ~ columns ~ row',
+            row
+          );
+          const noStore = row?.original?.noStore;
+          let dealFloorPrice = '';
+          if (noStore) {
+            dealFloorPrice = formatValue({
+              value: row?.value?.toString(),
+              groupSeparator: ',',
+              decimalSeparator: '.',
+              prefix: '$'
+            });
+          } else {
+            dealFloorPrice = formatValue({
+              value: HandleCurrencyFields.convertApiToGui({
+                value: row?.value
+              })?.toString(),
+              groupSeparator: ',',
+              decimalSeparator: '.',
+              prefix: '$'
+            });
+          }
+
+          return <Badge color="info">{dealFloorPrice}</Badge>;
+        }
       }
     ];
   }, []);
@@ -93,7 +107,7 @@ const StrategyInventory = ({strategyInventories = []}) => {
         <ErrorMessage message={errors?.inventories_bid?.message} />
       )}
       <List
-        showAction
+        showAction={!isView}
         data={strategyInventories}
         columns={columns}
         actions={['Delete']}

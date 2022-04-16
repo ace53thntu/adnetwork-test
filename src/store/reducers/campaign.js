@@ -31,8 +31,11 @@ const REMOVE_INVENTORY_STRATEGY = `${PREFIX}/REMOVE_INVENTORY_STRATEGY`;
 const INIT_INVENTORY_STRATEGY = `${PREFIX}/INIT_INVENTORY_STRATEGY`;
 const LOAD_CAMPAIGN = `${PREFIX}/LOAD_CAMPAIGN`;
 const UPDATE_CAMPAIGN = `${PREFIX}/UPDATE_CAMPAIGN`;
+const INITIALIZED_INVENTORY_STRATEGY = `${PREFIX}/INITIALIZED_INVENTORY_STRATEGY`;
 
 // dispatch actions
+export const initializedStrategyRedux = isInitializedInventory =>
+  createAction(INITIALIZED_INVENTORY_STRATEGY, {isInitializedInventory});
 export const updateCampaignRedux = campaign =>
   createAction(UPDATE_CAMPAIGN, {campaign});
 
@@ -143,10 +146,12 @@ const campaignInitialState = {
   inventoryTempList: [],
   advertiserPage: 1,
   advertiserTotalPage: 1,
-  activatedStrategyId: ''
+  activatedStrategyId: '',
+  isInitializedInventory: false
 };
 
 const handleActions = {
+  [INITIALIZED_INVENTORY_STRATEGY]: handleInitializeInventory,
   [SELECT_STRATEGY_ID]: handleSelectStrategyId,
   [UPDATE_CAMPAIGN]: handleUpdateCampaign,
   [LOAD_CAMPAIGN]: handleLoadCampaign,
@@ -165,6 +170,11 @@ const handleActions = {
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy
 };
+
+function handleInitializeInventory(state, action) {
+  const {isInitializedInventory} = action.payload;
+  state.isInitializedInventory = isInitializedInventory;
+}
 
 function handleSelectStrategyId(state, action) {
   const {strategyId} = action.payload;
@@ -585,7 +595,21 @@ const makeSelectedStrategyId = () =>
     a => a.activatedStrategyId
   );
 
+const makeSelectInitializedInventory = () =>
+  createSelector(
+    state => state.campaignReducer,
+    a => a.isInitializedInventory
+  );
+
 // hook to use campaign reducer
+export function useSelectedIsInitializedInventorySelector() {
+  const selectIsInitializedInventory = React.useMemo(
+    makeSelectInitializedInventory,
+    []
+  );
+  return useSelector(state => selectIsInitializedInventory(state));
+}
+
 export function useSelectedStrategyIdSelector() {
   const selectedStrategyId = React.useMemo(makeSelectedStrategyId, []);
   return useSelector(state => selectedStrategyId(state));

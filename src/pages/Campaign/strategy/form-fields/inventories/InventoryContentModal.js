@@ -101,7 +101,7 @@ const InventoryContentModal = ({containerId}) => {
       let tmpArr = [...strategyInventoriesTemp];
       tmpArr = tmpArr.map(item => {
         if (item?.uuid === _inventoryId) {
-          return {...item, deal_floor_price: value};
+          return {...item, deal_floor_price: value, noStore: true};
         }
         return item;
       });

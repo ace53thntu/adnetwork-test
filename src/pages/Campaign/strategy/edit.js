@@ -16,12 +16,15 @@ import StrategyEditTabs from './EditTabs';
 import {StrategyContainerStyled} from './styled';
 import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {
+  initializedStrategyRedux,
   initStrategyInventoryListRedux,
   setStrategyInventoryListRedux,
   setStrategyInventoryTempListRedux,
+  useSelectedIsInitializedInventorySelector,
   useStrategyInventorySelector
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
+import {QueryStatuses} from 'constants/react-query';
 
 const StrategyEdit = () => {
   const dispatch = useDispatch();
@@ -32,25 +35,44 @@ const StrategyEdit = () => {
     strategyId
   );
   const strategyInventoryRedux = useStrategyInventorySelector();
+  const isInitializedInventory = useSelectedIsInitializedInventorySelector();
   const strategy = apiToForm({strategyData});
 
   useRedirectInCampaign();
 
   React.useEffect(() => {
-    if (!_.isEqual(strategyInventoryRedux, strategy?.inventories)) {
+    if (
+      strategy &&
+      status === QueryStatuses.SUCCESS &&
+      !_.isEqual(strategyInventoryRedux, strategy?.inventories) &&
+      !isInitializedInventory
+    ) {
+      const inventories =
+        strategy?.inventories && strategy?.inventories.length > 0
+          ? strategy?.inventories?.map(item => ({...item, noStore: false}))
+          : [];
       dispatch(
         initStrategyInventoryListRedux({
-          inventoryList: strategy?.inventories,
-          inventoryTempList: strategy?.inventories
+          inventoryList: inventories,
+          inventoryTempList: inventories
         })
       );
+      dispatch(initializedStrategyRedux(true));
     }
-  }, [dispatch, strategy?.inventories, strategyInventoryRedux]);
+  }, [
+    dispatch,
+    isInitializedInventory,
+    status,
+    strategy,
+    strategy?.inventories,
+    strategyInventoryRedux
+  ]);
 
   React.useEffect(() => {
     return () => {
       dispatch(setStrategyInventoryListRedux({inventoryList: []}));
       dispatch(setStrategyInventoryTempListRedux({inventoryList: []}));
+      dispatch(initializedStrategyRedux(false));
     };
   }, [dispatch]);
 
