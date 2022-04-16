@@ -58,8 +58,8 @@ const defaultFormValues = {
   sound: false,
   multiproduct: false,
   name: '',
-  width: '1',
-  height: '1',
+  width: '',
+  height: '',
 
   file_type: CREATIVE_FILE_TYPES[0]
 
@@ -300,6 +300,7 @@ function BannerForm(props) {
                         name="width"
                         label="Width"
                         defaultValue={defaultValues.width}
+                        isRequired
                       />
                     </Col>
                     <Col md="4">
@@ -308,6 +309,7 @@ function BannerForm(props) {
                         name="height"
                         label="Height"
                         defaultValue={defaultValues.height}
+                        isRequired
                       />
                     </Col>
                     <Col md={4}>

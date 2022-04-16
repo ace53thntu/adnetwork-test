@@ -33,6 +33,7 @@ function VideoInformationForm(props) {
           name="width"
           label="Width"
           defaultValue={defaultValues.width}
+          isRequired
         />
       </Col>
       <Col md={3}>
@@ -41,6 +42,7 @@ function VideoInformationForm(props) {
           name="height"
           label="Height"
           defaultValue={defaultValues.height}
+          isRequired
         />
       </Col>
       <Col md={3}>

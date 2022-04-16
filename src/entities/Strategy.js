@@ -18,7 +18,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     end_time = null,
     uuid,
     strategy_type,
-    click_commission,
+    click_commission = 0.3,
     sources,
     advertiser_uuid,
     concepts = [],
@@ -77,6 +77,10 @@ export const formToApi = ({
   isConcept = false,
   isSummary = false
 }) => {
+  console.log(
+    '🚀 ~ file: Strategy.js ~ line 84 ~ currentStrategy',
+    currentStrategy
+  );
   if (isConcept) {
     return {
       concept_uuids: formData?.concept_uuids?.filter(item => item) || []
@@ -121,18 +125,21 @@ export const formToApi = ({
     end_time: endDate,
     strategy_type: strategy_type ? strategy_type?.value : null,
     click_commission: parseFloat(click_commission) || null,
-    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
-    budget: {
-      daily: convertGuiToApi({value: budget?.daily}),
-      global: convertGuiToApi({value: budget?.global})
-    },
-    impression: {
-      daily: parseInt(impression?.daily) || null,
-      global: parseInt(impression?.global) || null
-    }
+    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : []
   };
 
-  if (schedule?.week_days?.length > 0) {
+  if (!currentStrategy?.id) {
+    strategyReturn.budget = {
+      daily: convertGuiToApi({value: budget?.daily}),
+      global: convertGuiToApi({value: budget?.global})
+    };
+    strategyReturn.impression = {
+      daily: parseInt(impression?.daily) || null,
+      global: parseInt(impression?.global) || null
+    };
+  }
+
+  if (!currentStrategy?.id && schedule?.week_days?.length > 0) {
     const scheduleStartHour = moment(schedule?.start_time).hours();
     const scheduleStartMinute = moment(schedule?.start_time).minutes();
     const scheduleEndHour = moment(schedule?.end_time).hours();

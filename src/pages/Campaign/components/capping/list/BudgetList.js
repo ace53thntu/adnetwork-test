@@ -88,7 +88,7 @@ const BudgetList = ({
       },
 
       {
-        header: 'Budget',
+        header: 'Time frame',
         accessor: 'time_frame',
         cell: row => {
           return (

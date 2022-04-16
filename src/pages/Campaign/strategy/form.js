@@ -11,6 +11,7 @@ import {useWatch} from 'react-hook-form';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -23,6 +24,7 @@ const StrategyForm = ({
   isView = false,
   currentStrategy = null
 }) => {
+  const role = getRole();
   const typeSelected = useWatch({name: 'strategy_type'});
 
   return (
@@ -32,6 +34,7 @@ const StrategyForm = ({
         isView={isView}
         currentStrategy={currentStrategy}
         isEdit={isEdit}
+        role={role}
       />
 
       {!isEdit && !isView && <BudgetGroup />}

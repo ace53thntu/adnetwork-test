@@ -14,14 +14,21 @@ import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
 import {StrategySources, STRATEGY_TYPES} from 'pages/Campaign/constants';
 import PositionSelect from 'components/forms/PositionSelect';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
   isEdit: PropTypes.bool,
-  isView: PropTypes.bool
+  isView: PropTypes.bool,
+  role: PropTypes.string
 };
 
-const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
+const InformationGroup = ({
+  currentStrategy = {},
+  isEdit = false,
+  isView = false,
+  role = ''
+}) => {
   const {t} = useTranslation();
   const {errors, control} = useFormContext();
   const startDate = useWatch({name: 'start_time', control});
@@ -144,12 +151,15 @@ const InformationGroup = ({currentStrategy = {}, isEdit = false, isView}) => {
                 multiple
               />
             </Col>
+
             <Col md="6">
               <FormTextInput
                 name="click_commission"
                 label={t('clickCommission')}
                 placeholder="0.0"
-                disabled={isView}
+                disabled={
+                  isView || ![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+                }
               />
             </Col>
             <Col md="3">

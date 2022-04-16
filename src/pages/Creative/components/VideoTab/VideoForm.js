@@ -34,8 +34,8 @@ const defaultValues = {
   // file_ids: [],
   name: '',
   click_url: '',
-  width: '1',
-  height: '1',
+  width: '',
+  height: '',
   serve_type: VideoServeTypes[0],
   video_type: VideoTypes[0]
   // files: []
