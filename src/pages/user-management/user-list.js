@@ -38,6 +38,8 @@ import {
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
+import SearchInput from './components/SearchInput';
+import {useSearchTermSelector} from 'store/reducers/user';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -53,13 +55,15 @@ const UserList = () => {
   const [openForm, setOpenForm] = React.useState(false);
   const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const searchTerm = useSearchTermSelector();
 
   //---> Query get list of Users.
   const {data, isLoading, isPreviousData} = useGetUsers({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
-      sort: 'created_at DESC'
+      sort: 'created_at DESC',
+      username: searchTerm
     },
     enabled: true,
     keepPreviousData: true
@@ -202,7 +206,10 @@ const UserList = () => {
                 <CardHeader
                   style={{display: 'flex', justifyContent: 'space-between'}}
                 >
-                  <div>{t('userList')}</div>
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">{t('userList')}</div>
+                    <SearchInput />
+                  </div>
                   <div className="widget-content-right">
                     <Button
                       onClick={onClickAdd}

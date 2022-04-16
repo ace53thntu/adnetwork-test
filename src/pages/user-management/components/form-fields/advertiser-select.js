@@ -18,7 +18,8 @@ const propTypes = {
   defaultValue: PropTypes.object,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 const AdvertiserSelect = ({
@@ -26,7 +27,7 @@ const AdvertiserSelect = ({
   name,
   label,
   placeholder,
-  ...rest
+  disabled = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -44,8 +45,7 @@ const AdvertiserSelect = ({
         page: 1
       }}
       defaultValue={defaultValue || null}
-      disabled={isSubmitting}
-      {...rest}
+      disabled={isSubmitting || disabled}
     />
   );
 };

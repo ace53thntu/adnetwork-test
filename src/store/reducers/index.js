@@ -8,6 +8,7 @@ import {inventoryMarketReducer} from './inventory-market';
 import {advertiserReducer} from './advertiser';
 import {publisherReducer} from './publisher';
 import {dspReducer} from './dsp';
+import {userReducer} from './user';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -20,5 +21,6 @@ export default {
   advertiserReducer,
   publisherReducer,
   dspReducer,
+  userReducer,
   commonReducer
 };
