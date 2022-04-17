@@ -1,1 +1,1 @@
-export {default as CityList} from './CityList';
+export {default as SearchInput} from './SearchInput';

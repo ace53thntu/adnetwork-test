@@ -9,6 +9,10 @@ class LocationAPI extends XHRRequest {
     super({apiURL: url});
   }
 
+  getAllGeo = ({params = null, options}) => {
+    return this.get(`${endpoints.location.geo_location}`, params, options);
+  };
+
   getAllCountry = ({params = null, options}) => {
     return this.get(`${endpoints.location.geo_country}`, params, options);
   };

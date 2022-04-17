@@ -9,6 +9,7 @@ import {advertiserReducer} from './advertiser';
 import {publisherReducer} from './publisher';
 import {dspReducer} from './dsp';
 import {userReducer} from './user';
+import {locationReducer} from './location';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -22,5 +23,6 @@ export default {
   publisherReducer,
   dspReducer,
   userReducer,
+  locationReducer,
   commonReducer
 };

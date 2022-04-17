@@ -64,24 +64,23 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
           const noStore = row?.original?.noStore;
           let dealFloorPrice = '';
           if (noStore) {
-            dealFloorPrice = formatValue({
-              value: row?.value?.toString(),
-              groupSeparator: ',',
-              decimalSeparator: '.',
-              prefix: '$'
-            });
+            dealFloorPrice = row?.value?.toString();
           } else {
-            dealFloorPrice = formatValue({
-              value: HandleCurrencyFields.convertApiToGui({
-                value: row?.value
-              })?.toString(),
-              groupSeparator: ',',
-              decimalSeparator: '.',
-              prefix: '$'
-            });
+            dealFloorPrice = HandleCurrencyFields.convertApiToGui({
+              value: row?.value
+            })?.toString();
           }
 
-          return <Badge color="info">{dealFloorPrice}</Badge>;
+          return (
+            <Badge color="info">
+              {formatValue({
+                value: dealFloorPrice,
+                groupSeparator: ',',
+                decimalSeparator: '.',
+                prefix: '$'
+              })}
+            </Badge>
+          );
         }
       }
     ];

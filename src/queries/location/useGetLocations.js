@@ -17,7 +17,7 @@ export function useGetLocations({params, enabled, keepPreviousData}) {
   return useQuery(
     [GET_LOCATIONS, params],
     () =>
-      LocationAPIRequest.getAllCountry({
+      LocationAPIRequest.getAllGeo({
         params,
         options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),

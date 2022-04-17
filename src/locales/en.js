@@ -538,6 +538,9 @@ const en = {
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',
+    LOCATION_LIST: 'Location List',
+    LOCATION_NAME: 'Location name',
+    LOCATION_FULL_NAME: 'Location full name',
     COUNTRY_LIST: 'Country list',
     COUNTRY_NAME: 'Country name',
     CONTINENT_NAME: 'Continent name',
