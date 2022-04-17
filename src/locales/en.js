@@ -113,6 +113,7 @@ const en = {
   concepts: 'Concepts',
   containerReport: 'Container Report',
   location: 'Location',
+  selectLocation: 'Select location',
 
   // Card Header
   advertiserList: 'Advertiser List',
