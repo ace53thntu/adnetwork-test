@@ -49,7 +49,11 @@ const StrategyEdit = () => {
     ) {
       const inventories =
         strategy?.inventories && strategy?.inventories.length > 0
-          ? strategy?.inventories?.map(item => ({...item, noStore: false}))
+          ? strategy?.inventories?.map((item, idx) => ({
+              ...item,
+              deal_floor_price: strategy?.inventories_bid[idx]?.price,
+              noStore: false
+            }))
           : [];
       dispatch(
         initStrategyInventoryListRedux({

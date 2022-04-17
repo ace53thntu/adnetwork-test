@@ -4,16 +4,10 @@ import * as Yup from 'yup';
 const VALID_NUMBER = /^\d*\.?\d*$/;
 
 export const strategySchema = (isUpdate = false, t, isConcept = false) => {
-  console.log(
-    '🚀 ~ file: validation.js ~ line 7 ~ strategySchema ~ isUpdate',
-    isUpdate
-  );
   if (isConcept) {
     return yupResolver(
       Yup.object().shape({
         concept_uuids: Yup.array().nullable().notRequired()
-        // .required(t('required'))
-        // .typeError(t('required'))
       })
     );
   }

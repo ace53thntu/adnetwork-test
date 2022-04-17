@@ -23,7 +23,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     advertiser_uuid,
     concepts = [],
     inventories = [],
-    inventories_bid = []
+    inventories_bid = [],
+    location = []
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -43,6 +44,14 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
         };
       })
     : [];
+
+  let convertedLocations = [];
+  if (_.isArray(location)) {
+    convertedLocations = location.map(item => ({
+      value: item.uuid,
+      label: item.full_location_name
+    }));
+  }
 
   return {
     campaign_uuid: campaign_uuid
@@ -67,7 +76,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     concept_uuids: conceptsConverted,
     concepts,
     inventories,
-    inventories_bid: inventoryBidsConverted
+    inventories_bid: inventoryBidsConverted,
+    location_uuids: convertedLocations
   };
 };
 
@@ -77,10 +87,6 @@ export const formToApi = ({
   isConcept = false,
   isSummary = false
 }) => {
-  console.log(
-    '🚀 ~ file: Strategy.js ~ line 84 ~ currentStrategy',
-    currentStrategy
-  );
   if (isConcept) {
     return {
       concept_uuids: formData?.concept_uuids?.filter(item => item) || []
@@ -98,7 +104,8 @@ export const formToApi = ({
     sources,
     budget,
     impression,
-    schedule
+    schedule,
+    location_uuids
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value);
@@ -165,6 +172,10 @@ export const formToApi = ({
   if (isSummary) {
     strategyReturn.concept_uuids =
       formData?.concept_uuids?.filter(item => item) || [];
+  }
+
+  if (location_uuids?.length) {
+    strategyReturn.location_uuids = location_uuids?.map(item => item.value);
   }
 
   return strategyReturn;

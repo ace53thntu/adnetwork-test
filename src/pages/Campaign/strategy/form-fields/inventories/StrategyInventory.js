@@ -57,10 +57,6 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
         header: 'Deal Price',
         accessor: 'deal_floor_price',
         cell: row => {
-          console.log(
-            '🚀 ~ file: StrategyInventory.js ~ line 60 ~ columns ~ row',
-            row
-          );
           const noStore = row?.original?.noStore;
           let dealFloorPrice = '';
           if (noStore) {

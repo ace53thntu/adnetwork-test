@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
-import {CampaignAPIRequest} from 'api/campaign.api';
+import {LocationAPIRequest} from 'api/location.api';
 import {SelectPaginate} from 'components/forms';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {
@@ -15,50 +15,60 @@ import {
 } from 'utils/helpers/misc.helpers';
 
 const propTypes = {
-  defaultValue: PropTypes.object,
+  defaultValue: PropTypes.any,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  multiple: PropTypes.bool,
+  required: PropTypes.bool
 };
 
-const CampaignSelect = ({
-  defaultValue = null,
+const LocationSelect = ({
+  defaultValue = [],
   name,
   label,
   placeholder,
-  disabled = false
+  disabled = false,
+  multiple = false,
+  required = false
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadCampaign} = useCampaignPagination();
+  const {loadLocation} = useLocationPagination();
 
   return (
     <SelectPaginate
-      required
+      required={required}
       name={name}
       label={label}
       placeholder={placeholder}
-      loadOptions={loadCampaign}
+      loadOptions={loadLocation}
       additional={{
         page: 1
       }}
-      defaultValue={defaultValue || null}
+      defaultValue={defaultValue || []}
       disabled={disabled || isSubmitting}
+      multiple={multiple}
     />
   );
 };
 
-CampaignSelect.propTypes = propTypes;
+LocationSelect.propTypes = propTypes;
 
-export default CampaignSelect;
+export default LocationSelect;
 
-const useCampaignPagination = () => {
-  const loadCampaign = React.useCallback(
+const useLocationPagination = () => {
+  const loadLocation = React.useCallback(
     async (search, prevOptions, {page}) => {
-      const res = await CampaignAPIRequest.getAllCampaign({
-        params: {page, per_page: DEFAULT_PAGINATION.perPage, name: search},
+      const res = await LocationAPIRequest.getAllGeo({
+        params: {
+          page,
+          per_page: DEFAULT_PAGINATION.perPage,
+          full_location_name: search,
+          sort: 'level ASC'
+        },
         options: {isResponseAll: IS_RESPONSE_ALL}
       });
 
@@ -68,7 +78,7 @@ const useCampaignPagination = () => {
         getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
       const options = [...data].map(item => ({
-        label: item.name,
+        label: item.full_location_name,
         value: item.uuid
       }));
 
@@ -86,6 +96,6 @@ const useCampaignPagination = () => {
   );
 
   return {
-    loadCampaign
+    loadLocation
   };
 };

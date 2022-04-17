@@ -15,6 +15,7 @@ import {Collapse} from 'components/common/Collapse';
 import {StrategySources, STRATEGY_TYPES} from 'pages/Campaign/constants';
 import PositionSelect from 'components/forms/PositionSelect';
 import {USER_ROLE} from 'pages/user-management/constants';
+import LocationSelect from './LocationSelect';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
@@ -160,6 +161,16 @@ const InformationGroup = ({
                 disabled={
                   isView || ![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
                 }
+              />
+            </Col>
+            <Col md="12">
+              <LocationSelect
+                name="location_uuids"
+                defaultValue={currentStrategy?.location_uuids || []}
+                label={t('location')}
+                placeholder={t('selectLocation')}
+                disabled={isView}
+                multiple
               />
             </Col>
             <Col md="3">

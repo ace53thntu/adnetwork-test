@@ -70,7 +70,7 @@ const useContainerPagination = ({sourceId}) => {
       });
 
       const data = getResponseData(res, IS_RESPONSE_ALL);
-      const total = getResponsePagination(res)?.total || 0;
+      const total = getResponsePagination(res)?.totalItems || 0;
       const perPage =
         getResponsePagination(res)?.perPage || DEFAULT_PAGINATION.perPage;
 
