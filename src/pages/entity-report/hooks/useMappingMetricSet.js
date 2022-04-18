@@ -21,7 +21,7 @@ export const useMappingMetricSet = ({metricSet, reportGroup}) => {
 
       result = metricSet.map(item => {
         if (item?.code_name) {
-          return item;
+          return {...item, code: item?.code_name};
         }
 
         const foundMappingMetricSet = metricSetList.find(
