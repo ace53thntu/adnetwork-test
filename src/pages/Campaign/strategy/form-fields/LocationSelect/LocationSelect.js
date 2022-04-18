@@ -66,7 +66,7 @@ const useLocationPagination = () => {
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
-          full_location_name: search,
+          location_name: search,
           sort: 'level ASC'
         },
         options: {isResponseAll: IS_RESPONSE_ALL}

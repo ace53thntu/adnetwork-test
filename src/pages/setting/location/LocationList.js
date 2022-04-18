@@ -48,7 +48,7 @@ const LocationList = () => {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
       sort: 'level ASC',
-      full_location_name: searchTerm
+      location_name: searchTerm
     },
     enabled: true,
     keepPreviousData: true
