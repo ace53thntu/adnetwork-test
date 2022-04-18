@@ -17,7 +17,11 @@ import {
   setMetricBodyRedux
 } from 'store/reducers/entity-report';
 import ChartItem from '../chart-item/ChartItem';
-import {DefaultColor} from '../../constants.js/index.js';
+import {
+  DefaultColor,
+  PublisherReportBys,
+  ReportGroupTypes
+} from '../../constants.js/index.js';
 import ModalReportForm from '../../ReportCreateModal';
 import {useChartData} from '../../hooks';
 import MetricInfo from './MetricInfo';
@@ -28,6 +32,7 @@ import {getReportById} from '../../utils/getReportById';
 
 //---> Styles
 import '../../styles/styles.scss';
+import {useMappingMetricSet} from 'pages/entity-report/hooks/useMappingMetricSet';
 
 export default function ReportItem({
   entityId,
@@ -50,16 +55,23 @@ export default function ReportItem({
     report_source,
     report_type
   } = reportItem;
+
   const metricRequestBody = getMetricRequestBody({report: reportItem});
+  const reportGroup = PublisherReportBys.map(item => item.value).includes(
+    report_source
+  )
+    ? ReportGroupTypes.PUBLISHER
+    : ReportGroupTypes.ADVERTISER;
 
   const color = properties?.color || [DefaultColor];
   const chartType = properties?.chart_type || ChartTypes.LINE;
   const chartMode = properties?.mode || ChartModes.BY;
-  const metricSet = properties?.metric_set || [];
+  const metricSetRes = properties?.metric_set || [];
   const colors = parseColors(color);
   const reportByUuid = getReportById({report: reportItem, entityId});
 
   const {mutateAsync: deleteReport} = useDeleteReport();
+  const metricSet = useMappingMetricSet({metricSet: metricSetRes, reportGroup});
   const metricData = useChartData({
     type: chartType,
     metrics,
@@ -71,7 +83,6 @@ export default function ReportItem({
     chartMode,
     colors
   });
-  console.log('🚀 ~ file: ReportItem.js ~ line 73 ~ metricData', metricData);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);

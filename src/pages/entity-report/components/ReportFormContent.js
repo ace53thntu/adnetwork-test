@@ -69,10 +69,7 @@ export default function ReportFormContent({
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const currentReport = useDefaultValues({report});
-  console.log(
-    '🚀 ~ file: ReportFormContent.js ~ line 71 ~ currentReport',
-    currentReport
-  );
+
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
 
@@ -162,10 +159,7 @@ export default function ReportFormContent({
   //---> Handle report by change
   React.useEffect(
     function handleReportByChange() {
-      if (
-        metricBody.report_by !== reportBySelected?.value &&
-        reportBySelected?.value !== 'source'
-      ) {
+      if (metricBody.report_by !== reportBySelected?.value) {
         dispatch(
           setMetricBodyRedux({
             ...metricBody,
@@ -185,7 +179,6 @@ export default function ReportFormContent({
         reportByUuidSelected &&
         metricBody.report_by_uuid !== reportByUuidSelected?.value
       ) {
-        console.log('==== Time range', timeRangeSelected);
         const parsedTimeUnit = getParsedTimeUnit({timeUnit: timeUnitSelected});
         const parsedTimeRange = getParsedTimeRange({
           timeRange: timeRangeSelected
@@ -260,7 +253,6 @@ export default function ReportFormContent({
         metricBody.time_unit !== TimeUnits.GLOBAL &&
         metricateSelected?.length < 2
       ) {
-        console.log('TIME UNIT GLOBAL ===');
         if (
           chartTypeSelected !== ChartTypes.PIE &&
           chartTypeSelected !== ChartTypes.BAR
@@ -292,8 +284,6 @@ export default function ReportFormContent({
   //---> Handle start time, end time with distribution report
   React.useEffect(
     function handleStartAndEndTimeChange() {
-      console.log('start time ====', startTimeSelected);
-      console.log('end time ====', endTimeSelected);
       const startTimeStr = startTimeSelected
         ? moment(startTimeSelected).toISOString()
         : null;

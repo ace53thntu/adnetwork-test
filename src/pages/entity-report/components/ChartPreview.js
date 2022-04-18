@@ -14,7 +14,8 @@ import {
   useChartModeSelector,
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useChartData} from '../hooks';
@@ -24,6 +25,7 @@ import {initializingColors} from '../utils/parseColors';
 import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
 import {useDispatch} from 'react-redux';
 import {parseColors} from 'pages/entity-report/utils';
+import {useMappingMetricSet} from '../hooks/useMappingMetricSet';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -82,17 +84,19 @@ const ChartPreviewContent = React.memo(
     const isChartCompare = useIsChartCompareSelector();
     const chartMode = useChartModeSelector();
     const existedColors = parseColors(color);
+    const reportGroup = useReportGroupTypeSelector();
+    const mappingMetricSets = useMappingMetricSet({metricSet, reportGroup});
+
     const chartData = useChartData({
       metrics,
       unit,
       timeRange,
-      metricSet,
+      metricSet: mappingMetricSets,
       entityId,
       chartType: chartTypeRedux,
       chartMode,
       colors: existedColors
     });
-    console.log('🚀 ~ file: ChartPreview.js ~ line 101 ~ chartData', chartData);
 
     const colors = initializingColors({
       sizeOfData: chartData?.labels?.length,

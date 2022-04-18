@@ -35,10 +35,7 @@ const DistributionUnit = ({defaultValue, startTime, endTime}) => {
   const units = React.useMemo(() => {
     return getDistributionUnits({startTime, endTime}) || [];
   }, [endTime, startTime]);
-  console.log(
-    '🚀 ~ file: DistributionUnit.js ~ line 38 ~ units ~ units',
-    units
-  );
+
   const allowSelect = units?.length > 1 ? true : false; //---> Only allow select when having larger 2 unit
 
   const onClickTimeRange = (evt, selectedOption) => {

@@ -47,11 +47,6 @@ const DropdownChartType = ({
       ? ChartTypes.PIE
       : ChartTypes.LINE
     : chartTypeRedux;
-  console.log(
-    '🚀 ~ file: DropdownChartType.js ~ line 48 ~ chartTypeSelected',
-    chartTypeSelected,
-    chartTypeRedux
-  );
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();

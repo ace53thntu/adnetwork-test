@@ -1,10 +1,6 @@
 import React from 'react';
 
 export const useChartOptions = ({format, title = '', unit = ''}) => {
-  console.log(
-    '🚀 ~ file: useChartOptions.js ~ line 4 ~ useChartOptions ~ format',
-    format
-  );
   return React.useMemo(() => {
     const options = {
       responsive: true,

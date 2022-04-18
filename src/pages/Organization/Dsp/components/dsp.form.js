@@ -52,8 +52,7 @@ const DspForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, reset, errors} = methods;
-  console.log('🚀 ~ file: dsp.form.js ~ line 56 ~ errors', errors);
+  const {handleSubmit, formState, reset} = methods;
 
   useEffect(() => {
     //---> Reset default value when API response
@@ -138,7 +137,8 @@ const DspForm = ({
         >
           {t('save')}
         </Button>
-        {isEdit && (
+        {/* TODO: Will implement after API is ready */}
+        {false && isEdit && (
           <Link
             to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}/${RoutePaths.REPORT}`}
           >

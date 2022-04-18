@@ -4,7 +4,6 @@ import {
   ChartModes,
   ChartTypes,
   FORMAT_BY_UNIT,
-  FORMAT_BY_UNIT_LABEL,
   TimeUnits
 } from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
@@ -75,10 +74,14 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
 
     if (metricData && Object.keys(metricData).length > 0) {
       const metricList = Object.entries(metricData);
+      const _metricSet = metricSet?.[0];
+
       const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
         return {
           uuid: objectUuid,
-          value: metricObj?.[metricSet?.[0]?.code] || 0,
+          value: _metricSet?.is_price
+            ? getPriceValue(metricObj?.[_metricSet?.code])
+            : metricObj?.[_metricSet?.code],
           label: info?.[objectUuid]?.name
         };
       });
@@ -136,20 +139,12 @@ const getDataLineChart = ({
     unit: `${unitStr}s`,
     increaseNumber
   });
-  const listCheckPointLabels = listCheckPoints.map(item =>
-    moment(item).format(FORMAT_BY_UNIT_LABEL[unitStr])
-  );
-  console.log(
-    '🚀 ~ file: useChartData.js ~ line 146 ~ listCheckPoints',
-    listCheckPoints
-  );
 
   const newMetrics = convertApiToRender({
     unit: unitStr,
     metrics,
     listCheckPoints
   });
-  console.log('🚀 ~ file: useChartData.js ~ line 152 ~ newMetrics', newMetrics);
 
   if (validArray({list: metricSet})) {
     const data = [];
@@ -167,7 +162,6 @@ const getDataLineChart = ({
         ...getChartConfig({type, color: colors?.[idx] || ''})
       });
     });
-    console.log('data ===11', data, listCheckPointLabels);
     return {datasets: data, labels: listCheckPoints};
   } else {
     const data = getDataDrawChart({
@@ -200,7 +194,6 @@ const enumerateDaysBetweenDates = ({
   const dates = [];
   while (now.isSameOrBefore(endDate)) {
     const formattedDate = now.format(formatStr);
-    console.log('== now.format(formatStr)', formattedDate, formatStr);
 
     dates.push(formattedDate);
 
@@ -243,7 +236,6 @@ const convertApiToRender = ({
     });
     result[newKey] = value;
   }
-  console.log('result ===', result);
   return result;
 };
 
@@ -263,6 +255,9 @@ const getDataDrawChart = ({
     let valueOfObject = 0;
     if (existedMetricByDate) {
       valueOfObject = existedMetricByDate?.[entityId]?.[metricSet?.code];
+      if (metricSet?.is_price) {
+        valueOfObject = getPriceValue(valueOfObject);
+      }
     }
     if (!valueOfObject || valueOfObject === 0) {
       //---> will use when implement cumsum feature (only apply for trending type)
@@ -308,4 +303,12 @@ const getChartConfig = ({type, color}) => {
     pointRadius: 1,
     pointHitRadius: 10
   };
+};
+
+const getPriceValue = value => {
+  if (typeof value === 'number') {
+    return parseInt(value / 1000) || 0;
+  }
+
+  return value;
 };
