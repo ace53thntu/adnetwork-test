@@ -75,13 +75,14 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
     if (metricData && Object.keys(metricData).length > 0) {
       const metricList = Object.entries(metricData);
       const _metricSet = metricSet?.[0];
+      const metricCode = _metricSet?.code || '';
+      const isPrice = _metricSet?.is_price;
 
       const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
+        const metricValue = metricObj?.[metricCode] || 0;
         return {
           uuid: objectUuid,
-          value: _metricSet?.is_price
-            ? getPriceValue(metricObj?.[_metricSet?.code])
-            : metricObj?.[_metricSet?.code],
+          value: isPrice ? getPriceValue(metricValue) : metricValue,
           label: info?.[objectUuid]?.name
         };
       });

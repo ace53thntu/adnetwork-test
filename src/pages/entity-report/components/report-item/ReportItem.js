@@ -50,12 +50,11 @@ export default function ReportItem({
   const dispatch = useDispatch();
   const {
     uuid: reportId,
-    properties,
     api: {time_unit: unit, time_range: timeRange, report_by} = {},
     report_source,
     report_type
   } = reportItem;
-
+  const properties = reportItem?.properties;
   const metricRequestBody = getMetricRequestBody({report: reportItem});
   const reportGroup = PublisherReportBys.map(item => item.value).includes(
     report_source
