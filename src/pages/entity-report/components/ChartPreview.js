@@ -14,8 +14,7 @@ import {
   useChartModeSelector,
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
-  useMetricsBodySelector,
-  useReportGroupTypeSelector
+  useMetricsBodySelector
 } from 'store/reducers/entity-report';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
 import {useChartData} from '../hooks';
@@ -26,6 +25,7 @@ import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
 import {useDispatch} from 'react-redux';
 import {parseColors} from 'pages/entity-report/utils';
 import {useMappingMetricSet} from '../hooks/useMappingMetricSet';
+import {PublisherReportBys, ReportGroupTypes} from '../constants.js';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -39,7 +39,8 @@ const ChartPreview = ({
   unit,
   timeRange,
   entityId,
-  color
+  color,
+  reportSource
 }) => {
   const metricRequestRedux = useMetricsBodySelector();
   const [currentMetricRequest, setCurrentMetricRequest] = React.useState({});
@@ -71,6 +72,7 @@ const ChartPreview = ({
       metricSet={metricSet}
       entityId={currentMetricRequest?.report_by_uuid}
       color={color}
+      reportSource={reportSource}
     />
   );
 };
@@ -78,13 +80,17 @@ const ChartPreview = ({
 ChartPreview.propTypes = propTypes;
 
 const ChartPreviewContent = React.memo(
-  ({metrics, unit, timeRange, metricSet, entityId, color}) => {
+  ({metrics, unit, timeRange, metricSet, entityId, color, reportSource}) => {
     const dispatch = useDispatch();
     const chartTypeRedux = useChartTypeSelectedSelector();
     const isChartCompare = useIsChartCompareSelector();
     const chartMode = useChartModeSelector();
     const existedColors = parseColors(color);
-    const reportGroup = useReportGroupTypeSelector();
+    const reportGroup = PublisherReportBys.map(item => item.value).includes(
+      reportSource
+    )
+      ? ReportGroupTypes.PUBLISHER
+      : ReportGroupTypes.ADVERTISER;
     const mappingMetricSets = useMappingMetricSet({metricSet, reportGroup});
 
     const chartData = useChartData({

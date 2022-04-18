@@ -20,9 +20,14 @@ export const useMappingMetricSet = ({metricSet, reportGroup}) => {
           : PUBLISHER_REPORT_VIEW_TYPES;
 
       result = metricSet.map(item => {
+        if (item?.code_name) {
+          return item;
+        }
+
         const foundMappingMetricSet = metricSetList.find(
           metricSetItem => metricSetItem.code === item.code
         );
+
         if (foundMappingMetricSet) {
           return {
             ...foundMappingMetricSet,
