@@ -99,19 +99,10 @@ const ChartPreviewContent = React.memo(
       existedColors: color,
       charType: chartTypeRedux
     });
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 102 ~ colors',
-      colors,
-      existedColors
-    );
 
     const {watch} = useFormContext();
     const selectedType = watch(
       `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
-    );
-    console.log(
-      '🚀 ~ file: ChartPreview.js ~ line 107 ~ selectedType',
-      selectedType
     );
 
     React.useEffect(

@@ -127,14 +127,12 @@ export default function ReportFormContent({
   });
 
   const isChartCompare =
-    !reportByUuidSelected && reportSource !== reportBySelected?.value;
+    !reportByUuidSelected &&
+    reportBySelected?.value !== 'source' &&
+    reportSource !== reportBySelected?.value;
 
   const handleSelectedChartType = React.useCallback(
     _chartType => {
-      console.log(
-        '🚀 ~ file: ReportFormContent.js ~ line 129 ~ _chartType',
-        _chartType
-      );
       setValue(
         `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
         _chartType
@@ -164,7 +162,10 @@ export default function ReportFormContent({
   //---> Handle report by change
   React.useEffect(
     function handleReportByChange() {
-      if (metricBody.report_by !== reportBySelected?.value) {
+      if (
+        metricBody.report_by !== reportBySelected?.value &&
+        reportBySelected?.value !== 'source'
+      ) {
         dispatch(
           setMetricBodyRedux({
             ...metricBody,
