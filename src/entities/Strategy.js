@@ -176,6 +176,8 @@ export const formToApi = ({
 
   if (location_uuids?.length) {
     strategyReturn.location_uuids = location_uuids?.map(item => item.value);
+  } else {
+    strategyReturn.location_uuids = [];
   }
 
   return strategyReturn;
