@@ -20,7 +20,7 @@ export const useChartOptions = ({format, title = '', unit = ''}) => {
             lineWidth: 2
           },
           time: {
-            parser: format,
+            // parser: format,
             tooltipFormat: format,
             unit
           }

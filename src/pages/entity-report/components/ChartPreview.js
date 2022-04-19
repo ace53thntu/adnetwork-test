@@ -103,6 +103,7 @@ const ChartPreviewContent = React.memo(
       chartMode,
       colors: existedColors
     });
+    console.log('🚀 ~ file: ChartPreview.js ~ line 106 ~ chartData', chartData);
 
     const colors = initializingColors({
       sizeOfData: chartData?.labels?.length,
