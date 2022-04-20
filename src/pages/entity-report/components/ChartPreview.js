@@ -13,6 +13,7 @@ import {
   setChartColorSelectedRedux,
   useChartModeSelector,
   useChartTypeSelectedSelector,
+  useColorsSelectedSelector,
   useIsChartCompareSelector,
   useMetricsBodySelector
 } from 'store/reducers/entity-report';
@@ -43,6 +44,7 @@ const ChartPreview = ({
   reportSource
 }) => {
   const metricRequestRedux = useMetricsBodySelector();
+
   const [currentMetricRequest, setCurrentMetricRequest] = React.useState({});
   const {data: metrics, status, isFetching} = useGetMetrics({
     data: currentMetricRequest,
@@ -82,6 +84,8 @@ ChartPreview.propTypes = propTypes;
 const ChartPreviewContent = React.memo(
   ({metrics, unit, timeRange, metricSet, entityId, color, reportSource}) => {
     const dispatch = useDispatch();
+    const colorsRedux = useColorsSelectedSelector();
+
     const chartTypeRedux = useChartTypeSelectedSelector();
     const isChartCompare = useIsChartCompareSelector();
     const chartMode = useChartModeSelector();
@@ -105,11 +109,15 @@ const ChartPreviewContent = React.memo(
     });
     console.log('🚀 ~ file: ChartPreview.js ~ line 106 ~ chartData', chartData);
 
-    const colors = initializingColors({
-      sizeOfData: chartData?.labels?.length,
-      existedColors: color,
-      charType: chartTypeRedux
-    });
+    const colors = React.useMemo(
+      () =>
+        initializingColors({
+          sizeOfData: chartData?.labels?.length,
+          existedColors: color,
+          charType: chartTypeRedux
+        }),
+      [chartData?.labels?.length, chartTypeRedux, color]
+    );
 
     const {watch} = useFormContext();
     const selectedType = watch(
@@ -118,9 +126,12 @@ const ChartPreviewContent = React.memo(
 
     React.useEffect(
       function setColorValue() {
-        dispatch(setChartColorSelectedRedux(colors));
+        console.log('==== COLOR 111', !_.isEqual(colorsRedux, colors));
+        if (!_.isEqual(colorsRedux, colors)) {
+          dispatch(setChartColorSelectedRedux(colors));
+        }
       },
-      [colors, dispatch]
+      [colors, colorsRedux, dispatch]
     );
 
     if (!chartData) {

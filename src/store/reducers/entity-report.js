@@ -20,9 +20,12 @@ const SET_CHART_TYPE_SELECTED = `${ACTION_PREFIX}/SET_CHART_TYPE_SELECTED`;
 const SET_IS_CHART_COMPARE = `${ACTION_PREFIX}/SET_IS_CHART_COMPARE`;
 const SET_CHART_MODE = `${ACTION_PREFIX}/SET_CHART_MODE`;
 const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
+const SET_ENTITY_NAME = `${ACTION_PREFIX}/SET_ENTITY_NAME`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setEntityNameRedux = entityName =>
+  createAction(SET_ENTITY_NAME, {entityName});
 export const setChartColorSelectedRedux = colorsSelected =>
   createAction(SET_COLORS_SELECTED, {colorsSelected});
 export const setMetricSetSelectedRedux = metricsetsSelected =>
@@ -59,11 +62,13 @@ const entityReportInitialState = {
   isChartCompare: false,
   chartMode: ChartModes.BY,
   metricsetsSelected: [],
-  colorsSelected: []
+  colorsSelected: [],
+  entityName: ''
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_ENTITY_NAME]: handleSetEntityName,
   [SET_COLORS_SELECTED]: handleSetColorsSelected,
   [SET_METRICSET_SELECTED]: handleSetMetricsetSelected,
   [SET_CHART_MODE]: handleSetChartMode,
@@ -80,6 +85,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetEntityName(state, action) {
+  state.entityName = action.payload?.entityName;
 }
 
 function handleSetColorsSelected(state, action) {
@@ -180,7 +189,18 @@ const makeSelectColorsSelected = () =>
     a => a.colorsSelected
   );
 
+const makeSelectEntityName = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.entityName
+  );
+
 //---> Hook to select state
+export function useEntityNameSelector() {
+  const entityName = React.useMemo(makeSelectEntityName, []);
+  return useSelector(state => entityName(state));
+}
+
 export function useColorsSelectedSelector() {
   const selectColorsSelected = React.useMemo(makeSelectColorsSelected, []);
   return useSelector(state => selectColorsSelected(state));

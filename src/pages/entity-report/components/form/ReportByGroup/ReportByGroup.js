@@ -24,7 +24,7 @@ import {ReportGroupTypes} from 'pages/entity-report/constants.js';
 
 const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
   const {t} = useTranslation();
-  const {control, setValue} = useFormContext();
+  const {control} = useFormContext();
   const reportGroupType = useReportGroupTypeSelector();
 
   const getReportByUuid = React.useCallback(() => {
@@ -52,6 +52,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectConcept')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          reportSource={reportSource}
         />
       ),
       creative: (
@@ -60,6 +61,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectCreative')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          reportSource={reportSource}
         />
       ),
       native_ad: (
@@ -76,6 +78,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectVideo')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          reportSource={reportSource}
         />
       ),
       source: <SourceSelect name="api.report_by_uuid" />,
@@ -122,15 +125,6 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
 
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});
-
-  React.useEffect(() => {
-    if (currentReportBy?.value !== reportBySelected?.value) {
-      setValue('api.report_by_uuid', null, {
-        shouldDirty: true,
-        shouldValidate: true
-      });
-    }
-  }, [currentReportBy, reportBySelected, setValue]);
 
   return (
     <>

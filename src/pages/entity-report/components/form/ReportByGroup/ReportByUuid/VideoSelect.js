@@ -21,7 +21,8 @@ const propTypes = {
   placeholder: PropTypes.string,
   sourceId: PropTypes.string,
   multiple: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  reportSource: PropTypes.string
 };
 
 const VideoSelect = ({
@@ -31,12 +32,13 @@ const VideoSelect = ({
   placeholder,
   multiple = false,
   required = false,
-  sourceId = ''
+  sourceId = '',
+  reportSource = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadVideo} = useVideoPagination({sourceId});
+  const {loadVideo} = useVideoPagination({sourceId, reportSource});
 
   return (
     <SelectPaginate
@@ -60,14 +62,14 @@ VideoSelect.propTypes = propTypes;
 
 export default VideoSelect;
 
-const useVideoPagination = ({sourceId}) => {
+const useVideoPagination = ({sourceId, reportSource}) => {
   const loadVideo = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await VideoAPI.getVideos({
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
-          advertiser_uuid: sourceId,
+          [`${reportSource}_uuid`]: sourceId,
           name: search,
           status: 'active'
         },
@@ -96,7 +98,7 @@ const useVideoPagination = ({sourceId}) => {
         }
       };
     },
-    [sourceId]
+    [reportSource, sourceId]
   );
 
   return {

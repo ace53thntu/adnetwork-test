@@ -21,6 +21,7 @@ const ReportBySelect = ({reportSource}) => {
       labelBold
       placeholder={t('selectReportBy')}
       options={getReportByOptions({
+        groupType: reportGroupType,
         reportBy: reportSource,
         options:
           reportGroupType === ReportGroupTypes.ADVERTISER

@@ -13,7 +13,6 @@ import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import {faAssistiveListeningSystems} from '@fortawesome/free-solid-svg-icons';
 
 const propTypes = {
   defaultValue: PropTypes.object,
@@ -32,7 +31,7 @@ const StrategySelect = ({
   label,
   placeholder,
   disabled = false,
-  required = faAssistiveListeningSystems,
+  required = false,
   sourceId = '',
   reportSource = ''
 }) => {

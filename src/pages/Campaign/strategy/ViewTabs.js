@@ -104,6 +104,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
           content: (
             <EntityReport
               entity={EntityTypes.STRATEGY}
+              entityName={currentStrategy?.name}
               entityId={currentStrategy?.uuid}
               ownerId={ownerId}
               ownerRole={USER_ROLE.ADVERTISER}

@@ -83,7 +83,7 @@ export default function ReportFormContent({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control, setValue} = methods;
+  const {handleSubmit, formState, control, setValue, watch} = methods;
   const requestBody = report ? getMetricRequestBody({report}) : null;
   const reportId = report?.uuid;
 
@@ -105,14 +105,22 @@ export default function ReportFormContent({
     name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY}`,
     control
   });
-  const reportByUuidSelected = useWatch({
-    name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY_UUID}`,
-    control
-  });
+  const reportByUuidSelected = watch(
+    `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY_UUID}`
+  );
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 111 ~ reportByUuidSelected',
+    reportByUuidSelected
+  );
+
   const timeUnitSelected = useWatch({
     name: `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,
     control
   });
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 117 ~ timeUnitSelected',
+    timeUnitSelected
+  );
   const chartTypeSelected = useWatch({
     name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`,
     control
@@ -164,12 +172,17 @@ export default function ReportFormContent({
           setMetricBodyRedux({
             ...metricBody,
             report_by: reportBySelected?.value,
-            report_by_uuid: ''
+            report_by_uuid: '',
+            time_unit: TimeUnits.GLOBAL
           })
+        );
+        setValue(
+          `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIME_UNIT}`,
+          JSON.stringify({value: 'global', label: 'Global'})
         );
       }
     },
-    [dispatch, metricBody, reportBySelected?.value, timeRangeSelected]
+    [dispatch, metricBody, reportBySelected?.value, setValue, timeRangeSelected]
   );
 
   //---> Handle report by uuid change
@@ -184,7 +197,6 @@ export default function ReportFormContent({
           timeRange: timeRangeSelected
         });
         let timeUnit = parsedTimeUnit;
-
         if (parsedTimeUnit === TimeUnits.GLOBAL) {
           setValue(
             `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,

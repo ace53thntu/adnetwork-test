@@ -21,7 +21,8 @@ const propTypes = {
   placeholder: PropTypes.string,
   sourceId: PropTypes.string,
   multiple: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  reportSource: PropTypes.string
 };
 
 const NativeAdSelect = ({
@@ -31,12 +32,13 @@ const NativeAdSelect = ({
   placeholder,
   multiple = false,
   required = false,
-  sourceId = ''
+  sourceId = '',
+  reportSource = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadNativeAd} = useNativeAdPagination({sourceId});
+  const {loadNativeAd} = useNativeAdPagination({sourceId, reportSource});
 
   return (
     <SelectPaginate
@@ -60,14 +62,14 @@ NativeAdSelect.propTypes = propTypes;
 
 export default NativeAdSelect;
 
-const useNativeAdPagination = ({sourceId}) => {
+const useNativeAdPagination = ({sourceId, reportSource}) => {
   const loadNativeAd = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await NativeAdAPI.getNativeAds({
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
-          advertiser_uuid: sourceId,
+          [`${reportSource}_uuid`]: sourceId,
           name: search,
           status: 'active'
         },
@@ -96,7 +98,7 @@ const useNativeAdPagination = ({sourceId}) => {
         }
       };
     },
-    [sourceId]
+    [reportSource, sourceId]
   );
 
   return {

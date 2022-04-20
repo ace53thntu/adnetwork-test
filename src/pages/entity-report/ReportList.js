@@ -11,17 +11,19 @@ import ReportItemContainer from './ReportItemContainer';
 const ReportList = ({reports = [], entityId, metricType}) => {
   return (
     <Row>
-      {reports?.map((reportItem = {}) => {
+      {reports?.map((reportItem = {}, idx) => {
         const {uuid: id} = reportItem;
 
         return (
-          <Col key={`pr-${id}`} sm={6} className="mb-3">
-            <Card className="chart-item">
-              <CardBody style={{padding: 0}}>
-                <ReportItemContainer report={reportItem} />
-              </CardBody>
-            </Card>
-          </Col>
+          idx === 0 && (
+            <Col key={`pr-${id}`} sm={6} className="mb-3">
+              <Card className="chart-item">
+                <CardBody style={{padding: 0}}>
+                  <ReportItemContainer report={reportItem} />
+                </CardBody>
+              </Card>
+            </Col>
+          )
         );
       })}
       {(!reports || reports.length === 0) && (

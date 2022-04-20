@@ -28,10 +28,18 @@ const propTypes = {
 };
 
 export default function TimeUnit({defaultValue}) {
+  console.log(
+    '🚀 ~ file: TimeUnit.js ~ line 31 ~ TimeUnit ~ defaultValue',
+    defaultValue
+  );
   const dispatch = useDispatch();
 
   const metricBody = useMetricsBodySelector();
   const chartTypeRedux = useChartTypeSelectedSelector();
+  console.log(
+    '🚀 ~ file: TimeUnit.js ~ line 35 ~ TimeUnit ~ chartTypeRedux',
+    chartTypeRedux
+  );
   const isChartCompare = useIsChartCompareSelector();
   const [activeUnit, setActiveUnit] = React.useState(null);
 

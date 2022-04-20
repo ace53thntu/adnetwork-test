@@ -72,6 +72,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
           content: (
             <EntityReport
               entity={EntityTypes.CAMPAIGN}
+              entityName={currentCampaign?.name}
               entityId={entityId}
               ownerId={ownerId}
               ownerRole={USER_ROLE.ADVERTISER}

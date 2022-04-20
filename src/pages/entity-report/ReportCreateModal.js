@@ -14,6 +14,11 @@ import {QueryStatuses} from 'constants/react-query';
 
 //---> Styles
 import './styles/styles.scss';
+import {
+  useColorsSelectedSelector,
+  useEntityNameSelector,
+  useMetricsBodySelector
+} from 'store/reducers/entity-report';
 
 export default function ModalReportForm({
   modal = false,
@@ -29,10 +34,14 @@ export default function ModalReportForm({
   entityId,
   reportId
 }) {
+  const entityNameRedux = useEntityNameSelector();
+  const colorsRedux = useColorsSelectedSelector();
+
   const {data: report, status} = useGetReport(reportId, !!reportId);
 
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
+  const metricBody = useMetricsBodySelector();
 
   const initializeDefaultValue = initDefaultValue({
     initColors,
@@ -68,12 +77,19 @@ export default function ModalReportForm({
   );
   const onSubmit = useCallback(
     async formData => {
+      console.log(
+        '🚀 ~ file: ReportCreateModal.js ~ line 82 ~ formData',
+        formData
+      );
       const submitData = mappingFormToApi({
         formData,
         entityId,
         metricSet,
         metricType,
-        entityType
+        entityType,
+        entityName: entityNameRedux,
+        metricBody,
+        colorsRedux
       });
 
       if (!isEdit) {
@@ -83,13 +99,16 @@ export default function ModalReportForm({
       }
     },
     [
-      isEdit,
-      executeReportEditing,
-      executeReportCreating,
       entityId,
       metricSet,
       metricType,
-      entityType
+      entityType,
+      entityNameRedux,
+      metricBody,
+      colorsRedux,
+      isEdit,
+      executeReportCreating,
+      executeReportEditing
     ]
   );
 

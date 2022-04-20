@@ -47,7 +47,7 @@ export const initializingColors = ({
   charType
 }) => {
   if (sizeOfData === 0) return [];
-  if (charType === ChartTypes.PIE && sizeOfData !== existedColors) {
+  if (charType === ChartTypes.PIE && sizeOfData !== existedColors?.length) {
     const tmpArr = [];
 
     for (let index = 0; index < sizeOfData; index++) {

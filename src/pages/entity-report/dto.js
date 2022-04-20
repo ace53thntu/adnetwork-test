@@ -12,7 +12,7 @@ import {PublisherReportBys, ReportBys, ReportTypeOptions} from './constants.js';
 import {getReportSources} from 'utils/metrics.js';
 import {getDistributionUnits} from './utils/getDistributionUnit.js';
 
-const DATE_FORMAT_STR = 'DD-MM-YYYY hh:mm:ss';
+// const DATE_FORMAT_STR = 'DD-MM-YYYY hh:mm:ss';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -27,8 +27,13 @@ export function mappingFormToApi({
   entityId,
   metricSet,
   metricType,
-  entityType
+  entityType,
+  entityName = '',
+  metricBody,
+  colorsRedux
 }) {
+  console.log('🚀 ~ file: dto.js ~ line 35 ~ colorsRedux', colorsRedux);
+  console.log('🚀 ~ file: dto.js ~ line 34 ~ metricBody', metricBody);
   const {api, properties, report_type, report_source} = formData;
   let {
     time_unit,
@@ -38,7 +43,7 @@ export function mappingFormToApi({
     end_time,
     report_by_uuid
   } = api;
-  time_unit = time_unit?.value;
+  time_unit = metricBody?.time_unit || time_unit?.value;
   try {
     const timeRangeParsed = JSON.parse(time_range);
     time_range = timeRangeParsed?.value;
@@ -48,19 +53,34 @@ export function mappingFormToApi({
   const reportSource = report_source?.value;
   let formatStartDate = start_time ? moment(start_time).toISOString() : null;
   const formatEndDate = moment(end_time).toISOString();
+  const reportBy = report_by?.value || '';
+  const reportByName = report_by?.label || '';
+  const reportByUuid = report_by_uuid?.value || '';
+  const reportByUuidName = report_by_uuid?.label || '';
+
+  const metricSetList = metricSet?.map(item => {
+    return item?.label;
+  });
+
+  const reportName = `[${capitalize(
+    reportSource
+  )}] ${entityName} / Group by ${reportByName}${
+    reportByUuidName ? ': ' + reportByUuidName : ' All'
+  } / ${metricSetList.join(', ')}`;
+  const color = colorsRedux ? JSON.stringify(colorsRedux) : '';
 
   const data = {
-    name: `${entityType} report - ${moment().format(DATE_FORMAT_STR)}`,
+    name: reportName,
     source_uuid: entityId,
     report_type: report_type?.value,
     report_source: reportSource,
     status: 'active',
-    properties: {...properties, metric_set: metricSet},
+    properties: {...properties, metric_set: metricSet, color},
     api: {
       time_unit,
       time_range,
-      report_by: report_by?.value,
-      report_by_uuid: report_by_uuid?.value || '',
+      report_by: reportBy,
+      report_by_uuid: reportByUuid,
       start_time: formatStartDate,
       end_time: formatEndDate
     }

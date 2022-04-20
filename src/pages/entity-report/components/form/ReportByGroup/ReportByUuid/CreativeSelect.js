@@ -21,7 +21,8 @@ const propTypes = {
   placeholder: PropTypes.string,
   sourceId: PropTypes.string,
   multiple: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  reportSource: PropTypes.string
 };
 
 const CreativeSelect = ({
@@ -31,12 +32,13 @@ const CreativeSelect = ({
   placeholder,
   multiple = false,
   required = false,
-  sourceId = ''
+  sourceId = '',
+  reportSource = ''
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadCreative} = useCreativePagination({sourceId});
+  const {loadCreative} = useCreativePagination({sourceId, reportSource});
 
   return (
     <SelectPaginate
@@ -60,14 +62,14 @@ CreativeSelect.propTypes = propTypes;
 
 export default CreativeSelect;
 
-const useCreativePagination = ({sourceId}) => {
+const useCreativePagination = ({sourceId, reportSource}) => {
   const loadCreative = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await CreativeAPI.getCreatives({
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
-          advertiser_uuid: sourceId,
+          [`${reportSource}_uuid`]: sourceId,
           name: search,
           status: 'active'
         },
@@ -96,7 +98,7 @@ const useCreativePagination = ({sourceId}) => {
         }
       };
     },
-    [sourceId]
+    [reportSource, sourceId]
   );
 
   return {

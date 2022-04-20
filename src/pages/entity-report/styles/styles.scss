@@ -33,6 +33,11 @@
     opacity: 0;
     justify-content: flex-end;
     cursor: pointer;
+    position: absolute;
+    right: 10px;
+    z-index: 999;
+    top: 5px;
+    background: #fff;
 
     i {
       font-size: 18px;

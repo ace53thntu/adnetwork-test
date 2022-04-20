@@ -4,7 +4,7 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {Button} from 'reactstrap';
-import {Checkbox} from '@material-ui/core';
+import {Breadcrumbs, Checkbox, Link, Typography} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
@@ -33,6 +33,15 @@ import {getReportById} from '../../utils/getReportById';
 //---> Styles
 import '../../styles/styles.scss';
 import {useMappingMetricSet} from 'pages/entity-report/hooks/useMappingMetricSet';
+import styled from 'styled-components';
+
+const LinkStyled = styled(Link)`
+  text-decoration: unset;
+  cursor: default;
+  &:hover {
+    text-decoration: unset !important;
+  }
+`;
 
 export default function ReportItem({
   entityId,
@@ -52,7 +61,8 @@ export default function ReportItem({
     uuid: reportId,
     api: {time_unit: unit, time_range: timeRange, report_by} = {},
     report_source,
-    report_type
+    report_type,
+    name
   } = reportItem;
   const properties = reportItem?.properties;
   const metricRequestBody = getMetricRequestBody({report: reportItem});
@@ -82,6 +92,7 @@ export default function ReportItem({
     chartMode,
     colors
   });
+  console.log('🚀 ~ file: ReportItem.js ~ line 85 ~ metricData', metricData);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);
@@ -133,38 +144,45 @@ export default function ReportItem({
   return (
     <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
       <ReportItemStyled isLoading={isFetching} onClick={handleOpenModal}>
-        <div className={`chx-report ${modeSelectReport ? 'd-flex' : 'd-none'}`}>
-          <Checkbox
-            inputProps={{'aria-label': 'primary checkbox'}}
-            onChange={evt =>
-              handleSelectedReport({
-                evt,
-                reportId,
-                metricData,
-                metricSet,
-                chartType,
-                color,
-                unit,
-                distribution_by: distributionBy,
-                metric_type: metricType,
-                time_range: timeRange
-              })
-            }
-            onClick={evt => evt.stopPropagation()}
-          />
-        </div>
-        {!isFetching && !isViewed && (
-          <div className="delete-report">
-            <Button
-              type="button"
-              color="link"
-              onClick={onClickDelete}
-              title="Delete"
-            >
-              <i className="pe-7s-trash"></i>
-            </Button>
+        <div className="d-flex justify-content-center align-items-center">
+          <div>
+            <ReportName name={name} />
           </div>
-        )}
+          <div
+            className={`chx-report ${modeSelectReport ? 'd-flex' : 'd-none'}`}
+          >
+            <Checkbox
+              inputProps={{'aria-label': 'primary checkbox'}}
+              onChange={evt =>
+                handleSelectedReport({
+                  evt,
+                  reportId,
+                  metricData,
+                  metricSet,
+                  chartType,
+                  color,
+                  unit,
+                  distribution_by: distributionBy,
+                  metric_type: metricType,
+                  time_range: timeRange
+                })
+              }
+              onClick={evt => evt.stopPropagation()}
+            />
+          </div>
+          {!isFetching && !isViewed && (
+            <div className="delete-report">
+              <Button
+                type="button"
+                color="link"
+                onClick={onClickDelete}
+                title="Delete"
+              >
+                <i className="pe-7s-trash"></i>
+              </Button>
+            </div>
+          )}
+        </div>
         {isFetching && <LoadingIndicator type="ball-clip-rotate-multiple" />}
         {metricData ? (
           <div>
@@ -218,6 +236,32 @@ export default function ReportItem({
     </div>
   );
 }
+
+const ReportName = ({name = ''}) => {
+  const splitNameArr = name?.split('/') || [];
+
+  return (
+    <Breadcrumbs separator="›" aria-label="breadcrumb">
+      {splitNameArr?.map((item, idx) => {
+        return (
+          <div key={`pr-${idx}`}>
+            {idx !== splitNameArr?.length - 1 ? (
+              <LinkStyled
+                color="inherit"
+                href="#"
+                onClick={evt => evt.preventDefault()}
+              >
+                {item}
+              </LinkStyled>
+            ) : (
+              <Typography color="textPrimary">{item}</Typography>
+            )}
+          </div>
+        );
+      })}
+    </Breadcrumbs>
+  );
+};
 
 ReportItem.propTypes = {
   reportUrl: PropTypes.string,

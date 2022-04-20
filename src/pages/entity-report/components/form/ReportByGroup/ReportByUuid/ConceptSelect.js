@@ -31,12 +31,13 @@ const ConceptSelect = ({
   placeholder,
   multiple = false,
   required = false,
-  sourceId = ''
+  sourceId = '',
+  reportSource
 }) => {
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadConcept} = useConceptPagination({sourceId});
+  const {loadConcept} = useConceptPagination({sourceId, reportSource});
 
   return (
     <SelectPaginate
@@ -60,14 +61,14 @@ ConceptSelect.propTypes = propTypes;
 
 export default ConceptSelect;
 
-const useConceptPagination = ({sourceId}) => {
+const useConceptPagination = ({sourceId, reportSource}) => {
   const loadConcept = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await ConceptAPI.getConcepts({
         params: {
           page,
           per_page: DEFAULT_PAGINATION.perPage,
-          advertiser_uuid: sourceId,
+          [`${reportSource}_uuid`]: sourceId,
           name: search,
           status: 'active'
         },
@@ -96,7 +97,7 @@ const useConceptPagination = ({sourceId}) => {
         }
       };
     },
-    [sourceId]
+    [reportSource, sourceId]
   );
 
   return {

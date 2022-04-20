@@ -10,6 +10,10 @@ const ChartItem = ({
   colors = ''
 }) => {
   const convertPieColors = parseColors(colors);
+  console.log(
+    '🚀 ~ file: ChartItem.js ~ line 13 ~ convertPieColors',
+    convertPieColors
+  );
 
   return (
     <div>

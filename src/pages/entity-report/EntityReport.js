@@ -15,13 +15,26 @@ import {Pagination} from 'components/list/pagination';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {IS_RESPONSE_ALL, Statuses} from 'constants/misc';
 import {useDispatch} from 'react-redux';
-import {setReportGroupRedux} from 'store/reducers/entity-report';
+import {
+  resetReportRedux,
+  setEntityNameRedux,
+  setReportGroupRedux
+} from 'store/reducers/entity-report';
 import {ReportGroupTypes} from './constants.js/index.js';
 
 const NUMBER_OF_PAGE = 10;
 
+const propTypes = {
+  entity: PropTypes.string,
+  entityName: PropTypes.string,
+  entityId: PropTypes.string,
+  ownerId: PropTypes.string,
+  ownerRole: PropTypes.string
+};
+
 const EntityReport = ({
   entity = EntityTypes.STRATEGY,
+  entityName = '',
   entityId = null,
   ownerId,
   ownerRole
@@ -72,6 +85,16 @@ const EntityReport = ({
     [dispatch, entityType]
   );
 
+  React.useEffect(() => {
+    // Set entity name
+    dispatch(setEntityNameRedux(entityName));
+  }, [dispatch, entityName]);
+
+  React.useEffect(() => {
+    // ReSet entity name
+    return () => dispatch(resetReportRedux());
+  }, [dispatch]);
+
   return (
     <div style={{minHeight: 400, padding: 15}}>
       {isFetching && <LoadingIndicator title="Loading..." type="" />}
@@ -104,9 +127,6 @@ const EntityReport = ({
   );
 };
 
-EntityReport.propTypes = {
-  entityId: PropTypes.string,
-  entityType: PropTypes.string
-};
+EntityReport.propTypes = propTypes;
 
 export default EntityReport;

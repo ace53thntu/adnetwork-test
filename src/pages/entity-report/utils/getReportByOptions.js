@@ -22,6 +22,10 @@ export const getReportByOptions = ({
   reportBy = 'advertiser',
   options = []
 }) => {
+  console.log(
+    '🚀 ~ file: getReportByOptions.js ~ line 25 ~ groupType',
+    groupType
+  );
   if (groupType === ReportGroupTypes.ADVERTISER) {
     return options.filter(
       optionItem =>
