@@ -53,10 +53,6 @@ const ReportName = ({
   reportSource = '',
   metricSet
 }) => {
-  console.log(
-    '🚀 ~ file: ReportName.js ~ line 64 ~ reportSource',
-    reportSource
-  );
   const splitNameArr = name?.split('/') || [];
   const destructedSlitNameArr = splitNameArr?.map(item => ({
     text: item,
@@ -74,7 +70,6 @@ const ReportName = ({
   const metricSetStr = metricSetList.join(', ');
 
   const mergedArr = [...destructedPathNameArr, ...destructedSlitNameArr];
-  console.log('🚀 ~ file: ReportName.js ~ line 85 ~ mergedArr', mergedArr);
 
   return (
     <div>
@@ -93,11 +88,13 @@ const ReportName = ({
                     </Badge>
                   )}
                   {<PathItem parent={item?.parent}>{item?.text}</PathItem>}
+                  {((idx === 0 && parentPath) || idx !== 0) && (
+                    <Separator>›</Separator>
+                  )}
                 </>
               ) : (
                 <PathItem color="textPrimary">{`${item?.text}`}</PathItem>
               )}
-              {idx !== mergedArr?.length - 1 && <Separator>›</Separator>}
             </React.Fragment>
           );
         })}

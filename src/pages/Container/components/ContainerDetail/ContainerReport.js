@@ -19,6 +19,7 @@ const ContainerReport = () => {
     containerId,
     enabled: !!containerId
   });
+  const parentPath = `${data?.publisher_name}/${data?.name}`;
 
   return (
     <ContainerBodyLayout heading={t('containerReport')} subHeading="">
@@ -28,6 +29,7 @@ const ContainerReport = () => {
         <EntityReport
           entity={EntityTypes.CONTAINER}
           entityName={data?.name}
+          parentPath={parentPath}
           entityId={containerId}
           ownerId={containerId}
           ownerRole={USER_ROLE.PUBLISHER}
