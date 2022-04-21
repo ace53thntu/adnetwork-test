@@ -32,6 +32,10 @@ const propTypes = {
 };
 
 const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
+  console.log(
+    '🚀 ~ file: ViewTabs.js ~ line 35 ~ StrategyViewTabs ~ currentStrategy',
+    currentStrategy
+  );
   const {t} = useTranslation();
   const query = useQueryString();
   const ownerId = query.get('advertiser_id');
@@ -105,6 +109,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
             <EntityReport
               entity={EntityTypes.STRATEGY}
               entityName={currentStrategy?.name}
+              parentPath={`${currentStrategy?.advertiser_name}/${currentStrategy?.campaign_uuid?.label}`}
               entityId={currentStrategy?.uuid}
               ownerId={ownerId}
               ownerRole={USER_ROLE.ADVERTISER}

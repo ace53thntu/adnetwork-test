@@ -18,6 +18,7 @@ import {useDispatch} from 'react-redux';
 import {
   resetReportRedux,
   setEntityNameRedux,
+  setParentPathRedux,
   setReportGroupRedux
 } from 'store/reducers/entity-report';
 import {ReportGroupTypes} from './constants.js/index.js';
@@ -27,6 +28,7 @@ const NUMBER_OF_PAGE = 10;
 const propTypes = {
   entity: PropTypes.string,
   entityName: PropTypes.string,
+  parentPath: PropTypes.string,
   entityId: PropTypes.string,
   ownerId: PropTypes.string,
   ownerRole: PropTypes.string
@@ -35,6 +37,7 @@ const propTypes = {
 const EntityReport = ({
   entity = EntityTypes.STRATEGY,
   entityName = '',
+  parentPath = '',
   entityId = null,
   ownerId,
   ownerRole
@@ -88,7 +91,8 @@ const EntityReport = ({
   React.useEffect(() => {
     // Set entity name
     dispatch(setEntityNameRedux(entityName));
-  }, [dispatch, entityName]);
+    dispatch(setParentPathRedux(parentPath));
+  }, [dispatch, entityName, parentPath]);
 
   React.useEffect(() => {
     // ReSet entity name

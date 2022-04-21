@@ -17,7 +17,8 @@ import './styles/styles.scss';
 import {
   useColorsSelectedSelector,
   useEntityNameSelector,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useParentPathSelector
 } from 'store/reducers/entity-report';
 
 export default function ModalReportForm({
@@ -35,6 +36,7 @@ export default function ModalReportForm({
   reportId
 }) {
   const entityNameRedux = useEntityNameSelector();
+  const parentPathRedux = useParentPathSelector();
   const colorsRedux = useColorsSelectedSelector();
 
   const {data: report, status} = useGetReport(reportId, !!reportId);
@@ -88,6 +90,7 @@ export default function ModalReportForm({
         metricType,
         entityType,
         entityName: entityNameRedux,
+        parentPath: parentPathRedux,
         metricBody,
         colorsRedux
       });
@@ -104,6 +107,7 @@ export default function ModalReportForm({
       metricType,
       entityType,
       entityNameRedux,
+      parentPathRedux,
       metricBody,
       colorsRedux,
       isEdit,

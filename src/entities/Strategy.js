@@ -24,7 +24,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     concepts = [],
     inventories = [],
     inventories_bid = [],
-    location = []
+    location = [],
+    advertiser_name
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -77,7 +78,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     concepts,
     inventories,
     inventories_bid: inventoryBidsConverted,
-    location_uuids: convertedLocations
+    location_uuids: convertedLocations,
+    advertiser_name
   };
 };
 

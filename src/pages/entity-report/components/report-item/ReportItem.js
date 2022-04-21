@@ -4,7 +4,7 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {Button} from 'reactstrap';
-import {Breadcrumbs, Checkbox, Link, Typography} from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
 import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
@@ -33,15 +33,7 @@ import {getReportById} from '../../utils/getReportById';
 //---> Styles
 import '../../styles/styles.scss';
 import {useMappingMetricSet} from 'pages/entity-report/hooks/useMappingMetricSet';
-import styled from 'styled-components';
-
-const LinkStyled = styled(Link)`
-  text-decoration: unset;
-  cursor: default;
-  &:hover {
-    text-decoration: unset !important;
-  }
-`;
+import ReportName from './ReportName';
 
 export default function ReportItem({
   entityId,
@@ -76,6 +68,7 @@ export default function ReportItem({
   const chartType = properties?.chart_type || ChartTypes.LINE;
   const chartMode = properties?.mode || ChartModes.BY;
   const metricSetRes = properties?.metric_set || [];
+  const parentPath = properties?.parentPath || '';
   const colors = parseColors(color);
   const reportByUuid = getReportById({report: reportItem, entityId});
 
@@ -145,9 +138,12 @@ export default function ReportItem({
     <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
       <ReportItemStyled isLoading={isFetching} onClick={handleOpenModal}>
         <div className="d-flex justify-content-center align-items-center">
-          <div>
-            <ReportName name={name} />
-          </div>
+          <ReportName
+            name={name}
+            parentPath={parentPath}
+            reportSource={report_source}
+            metricSet={metricSetRes}
+          />
           <div
             className={`chx-report ${modeSelectReport ? 'd-flex' : 'd-none'}`}
           >
@@ -236,32 +232,6 @@ export default function ReportItem({
     </div>
   );
 }
-
-const ReportName = ({name = ''}) => {
-  const splitNameArr = name?.split('/') || [];
-
-  return (
-    <Breadcrumbs separator="›" aria-label="breadcrumb">
-      {splitNameArr?.map((item, idx) => {
-        return (
-          <div key={`pr-${idx}`}>
-            {idx !== splitNameArr?.length - 1 ? (
-              <LinkStyled
-                color="inherit"
-                href="#"
-                onClick={evt => evt.preventDefault()}
-              >
-                {item}
-              </LinkStyled>
-            ) : (
-              <Typography color="textPrimary">{item}</Typography>
-            )}
-          </div>
-        );
-      })}
-    </Breadcrumbs>
-  );
-};
 
 ReportItem.propTypes = {
   reportUrl: PropTypes.string,

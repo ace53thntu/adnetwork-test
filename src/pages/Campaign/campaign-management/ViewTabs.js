@@ -27,6 +27,10 @@ const propTypes = {
 };
 
 const CampaignViewTabs = ({currentCampaign = null}) => {
+  console.log(
+    '🚀 ~ file: ViewTabs.js ~ line 30 ~ CampaignViewTabs ~ currentCampaign',
+    currentCampaign
+  );
   const {t} = useTranslation();
   const ownerId = currentCampaign?.advertiser_uuid?.value;
   const entityId = currentCampaign?.uuid;
@@ -73,6 +77,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
             <EntityReport
               entity={EntityTypes.CAMPAIGN}
               entityName={currentCampaign?.name}
+              parentPath={currentCampaign?.advertiser_uuid?.label}
               entityId={entityId}
               ownerId={ownerId}
               ownerRole={USER_ROLE.ADVERTISER}

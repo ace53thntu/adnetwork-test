@@ -21,9 +21,12 @@ const SET_IS_CHART_COMPARE = `${ACTION_PREFIX}/SET_IS_CHART_COMPARE`;
 const SET_CHART_MODE = `${ACTION_PREFIX}/SET_CHART_MODE`;
 const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
 const SET_ENTITY_NAME = `${ACTION_PREFIX}/SET_ENTITY_NAME`;
+const SET_PARENT_PATH = `${ACTION_PREFIX}/SET_PARENT_PATH`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setParentPathRedux = parentPath =>
+  createAction(SET_PARENT_PATH, {parentPath});
 export const setEntityNameRedux = entityName =>
   createAction(SET_ENTITY_NAME, {entityName});
 export const setChartColorSelectedRedux = colorsSelected =>
@@ -63,12 +66,14 @@ const entityReportInitialState = {
   chartMode: ChartModes.BY,
   metricsetsSelected: [],
   colorsSelected: [],
-  entityName: ''
+  entityName: '',
+  parentPath: ''
 };
 
 //---> Action mapping
 const handleActions = {
   [SET_ENTITY_NAME]: handleSetEntityName,
+  [SET_PARENT_PATH]: handleSetParentPath,
   [SET_COLORS_SELECTED]: handleSetColorsSelected,
   [SET_METRICSET_SELECTED]: handleSetMetricsetSelected,
   [SET_CHART_MODE]: handleSetChartMode,
@@ -85,6 +90,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetParentPath(state, action) {
+  state.parentPath = action.payload?.parentPath;
 }
 
 function handleSetEntityName(state, action) {
@@ -195,7 +204,18 @@ const makeSelectEntityName = () =>
     a => a.entityName
   );
 
+const makeSelectParentPath = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.parentPath
+  );
+
 //---> Hook to select state
+export function useParentPathSelector() {
+  const parentPath = React.useMemo(makeSelectParentPath, []);
+  return useSelector(state => parentPath(state));
+}
+
 export function useEntityNameSelector() {
   const entityName = React.useMemo(makeSelectEntityName, []);
   return useSelector(state => entityName(state));

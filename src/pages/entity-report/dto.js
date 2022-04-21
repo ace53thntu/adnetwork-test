@@ -29,6 +29,7 @@ export function mappingFormToApi({
   metricType,
   entityType,
   entityName = '',
+  parentPath = '',
   metricBody,
   colorsRedux
 }) {
@@ -58,15 +59,9 @@ export function mappingFormToApi({
   const reportByUuid = report_by_uuid?.value || '';
   const reportByUuidName = report_by_uuid?.label || '';
 
-  const metricSetList = metricSet?.map(item => {
-    return item?.label;
-  });
-
-  const reportName = `[${capitalize(
-    reportSource
-  )}] ${entityName} / Group by ${reportByName}${
-    reportByUuidName ? ': ' + reportByUuidName : ' All'
-  } / ${metricSetList.join(', ')}`;
+  const reportName = `${entityName} / Group by ${reportByName}${
+    reportByUuidName ? ': ' + reportByUuidName : ''
+  }`;
   const color = colorsRedux ? JSON.stringify(colorsRedux) : '';
 
   const data = {
@@ -75,7 +70,7 @@ export function mappingFormToApi({
     report_type: report_type?.value,
     report_source: reportSource,
     status: 'active',
-    properties: {...properties, metric_set: metricSet, color},
+    properties: {...properties, metric_set: metricSet, color, parentPath},
     api: {
       time_unit,
       time_range,
