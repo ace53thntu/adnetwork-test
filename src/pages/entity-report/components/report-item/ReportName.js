@@ -54,10 +54,14 @@ const ReportName = ({
   metricSet
 }) => {
   const splitNameArr = name?.split('/') || [];
-  const destructedSlitNameArr = splitNameArr?.map(item => ({
+  const destructedSlitNameArr = splitNameArr?.map((item, index) => ({
     text: item,
-    parent: 'false'
+    parent: index === 0 ? 'false' : 'true'
   }));
+  console.log(
+    '🚀 ~ file: ReportName.js ~ line 61 ~ destructedSlitNameArr',
+    destructedSlitNameArr
+  );
   const pathNameArr = parentPath?.split('/') || [];
   const destructedPathNameArr = pathNameArr?.map(item => ({
     text: item,
@@ -93,7 +97,10 @@ const ReportName = ({
                   )}
                 </>
               ) : (
-                <PathItem color="textPrimary">{`${item?.text}`}</PathItem>
+                <PathItem
+                  parent="true"
+                  color="textPrimary"
+                >{`${item?.text}`}</PathItem>
               )}
             </React.Fragment>
           );
@@ -101,7 +108,9 @@ const ReportName = ({
         {metricSetStr && (
           <>
             <Separator>--</Separator>
-            <PathItem color="textPrimary">{metricSetStr}</PathItem>
+            <PathItem parent="true" color="textPrimary">
+              {metricSetStr}
+            </PathItem>
           </>
         )}
       </div>
