@@ -15,15 +15,13 @@ const ReportList = ({reports = [], entityId, metricType}) => {
         const {uuid: id} = reportItem;
 
         return (
-          idx === 0 && (
-            <Col key={`pr-${id}`} sm={6} className="mb-3">
-              <Card className="chart-item">
-                <CardBody style={{padding: 0}}>
-                  <ReportItemContainer report={reportItem} />
-                </CardBody>
-              </Card>
-            </Col>
-          )
+          <Col key={`pr-${id}`} sm={6} className="mb-3">
+            <Card className="chart-item">
+              <CardBody style={{padding: 0}}>
+                <ReportItemContainer report={reportItem} />
+              </CardBody>
+            </Card>
+          </Col>
         );
       })}
       {(!reports || reports.length === 0) && (
