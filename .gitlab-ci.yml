@@ -11,14 +11,15 @@ include:
 stages:
   - label
   - build
-  - push-image
   - deploy
 
 Build:
-  extends: .build
-
-Push images to registry:
-  extends: .push
+  extends: .build-kaniko
+  before_script:
+  - |-
+    export KANIKO_ARG="$KANIKO_ARG --destination asia-docker.pkg.dev/aicactus-prod/container/adnetwork/portal"
+  variables:
+    IMAGE_NAME: asia.gcr.io/aicactus-prod/adnetwork/portal
 
 Deploy to staging:
   extends: .deploy-staging
