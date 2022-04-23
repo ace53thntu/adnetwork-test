@@ -11,7 +11,6 @@ import {ChartModes} from 'constants/report';
 const ACTION_PREFIX = '@entity_report';
 const SET_COLORS_SELECTED = `${ACTION_PREFIX}/SET_COLORS_SELECTED`;
 const SET_TIME_RANGE = `${ACTION_PREFIX}/SET_TIME_RANGE`;
-const SET_UNIT = `${ACTION_PREFIX}/SET_UNIT`;
 const SET_METRIC_URL = `${ACTION_PREFIX}/SET_METRIC_URL`;
 const SET_METRIC_BODY = `${ACTION_PREFIX}/SET_METRIC_BODY`;
 const SET_METRIC_DATA = `${ACTION_PREFIX}/SET_METRIC_DATA`;
@@ -22,9 +21,12 @@ const SET_CHART_MODE = `${ACTION_PREFIX}/SET_CHART_MODE`;
 const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
 const SET_ENTITY_NAME = `${ACTION_PREFIX}/SET_ENTITY_NAME`;
 const SET_PARENT_PATH = `${ACTION_PREFIX}/SET_PARENT_PATH`;
+const SET_TIME_UNIT_SELECTED = `${ACTION_PREFIX}/SET_TIME_UNIT_SELECTED`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setTimeUnitSelectRedux = timeUnit =>
+  createAction(SET_TIME_UNIT_SELECTED, {timeUnit});
 export const setParentPathRedux = parentPath =>
   createAction(SET_PARENT_PATH, {parentPath});
 export const setEntityNameRedux = entityName =>
@@ -43,7 +45,6 @@ export const setReportGroupRedux = reportGroupType =>
   createAction(SET_ACTIVE_REPORT_GROUP_TYPE, {reportGroupType});
 export const setTimeRangeRedux = timeRange =>
   createAction(SET_TIME_RANGE, {timeRange});
-export const setUnitRedux = unit => createAction(SET_UNIT, {unit});
 export const setMetricUrlRedux = url => createAction(SET_METRIC_URL, {url});
 export const setMetricBodyRedux = bodyRequest =>
   createAction(SET_METRIC_BODY, {bodyRequest});
@@ -56,7 +57,7 @@ export const resetReportRedux = () => createAction(RESET);
 //---> Initializing states
 const entityReportInitialState = {
   timeRange: '',
-  unit: '',
+  time_unit: '',
   url: '',
   metricBodyRequest: {},
   metricsData: null,
@@ -81,7 +82,7 @@ const handleActions = {
   [SET_CHART_TYPE_SELECTED]: handleSetChartTypeSelected,
   [SET_ACTIVE_REPORT_GROUP_TYPE]: handleSetReportGroupType,
   [SET_TIME_RANGE]: handleSetTimeRange,
-  [SET_UNIT]: handleSetUnit,
+  [SET_TIME_UNIT_SELECTED]: handleSetTimeUnit,
   [SET_METRIC_URL]: handleSetUrl,
   [SET_METRIC_BODY]: handleSetMetricBody,
   [SET_METRIC_DATA]: handleSetMetricData,
@@ -130,14 +131,15 @@ function handleSetMetricData(state, action) {
 
 function handleSetMetricBody(state, action) {
   state.metricBodyRequest = action.payload.bodyRequest;
+  state.time_unit = action.payload.bodyRequest?.time_unit;
 }
 
 function handleSetTimeRange(state, action) {
   state.timeRange = action.payload.timeRange;
 }
 
-function handleSetUnit(state, action) {
-  state.unit = action.payload.unit;
+function handleSetTimeUnit(state, action) {
+  state.time_unit = action.payload.time_unit;
 }
 
 function handleSetUrl(state, action) {
@@ -210,7 +212,18 @@ const makeSelectParentPath = () =>
     a => a.parentPath
   );
 
+const makeSelectTimeUnit = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.time_unit
+  );
+
 //---> Hook to select state
+export function useTimeUnitSelector() {
+  const selectTimeUnit = React.useMemo(makeSelectTimeUnit, []);
+  return useSelector(state => selectTimeUnit(state));
+}
+
 export function useParentPathSelector() {
   const parentPath = React.useMemo(makeSelectParentPath, []);
   return useSelector(state => parentPath(state));

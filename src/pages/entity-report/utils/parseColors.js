@@ -2,6 +2,7 @@ import {ChartTypes} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
 export const parseColors = color => {
+  console.log('🚀 ~ file: parseColors.js ~ line 5 ~ color', color);
   if (!color) {
     return [];
   }
@@ -12,8 +13,10 @@ export const parseColors = color => {
 
   try {
     const colors = JSON.parse(color);
+    console.log('🚀 ~ file: parseColors.js ~ line 16 ~ colors', colors);
     return colors;
   } catch (error) {
+    console.log('🚀 ~ file: parseColors.js ~ line 18 ~ error', error);
     if (!validArray({list: color})) {
       return [color];
     }
@@ -46,6 +49,12 @@ export const initializingColors = ({
   existedColors,
   charType
 }) => {
+  console.log(
+    '🚀 ~ file: parseColors.js ~ line 52 ~ sizeOfData',
+    sizeOfData,
+    existedColors,
+    charType
+  );
   if (sizeOfData === 0) return [];
   if (charType === ChartTypes.PIE && sizeOfData !== existedColors?.length) {
     const tmpArr = [];
@@ -62,6 +71,10 @@ export const initializingColors = ({
     } catch (err) {
       return [];
     }
+  }
+
+  if (charType !== ChartTypes.PIE && !validArray({list: existedColors})) {
+    return [randomHex()];
   }
 
   return existedColors;

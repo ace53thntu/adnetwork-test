@@ -27,6 +27,7 @@ import {useDispatch} from 'react-redux';
 import {parseColors} from 'pages/entity-report/utils';
 import {useMappingMetricSet} from '../hooks/useMappingMetricSet';
 import {PublisherReportBys, ReportGroupTypes} from '../constants.js';
+import {validArray} from 'utils/helpers/dataStructure.helpers';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -126,8 +127,8 @@ const ChartPreviewContent = React.memo(
 
     React.useEffect(
       function setColorValue() {
-        console.log('==== COLOR 111', !_.isEqual(colorsRedux, colors));
-        if (!_.isEqual(colorsRedux, colors)) {
+        console.log('===== colors', colors, colorsRedux);
+        if (!colorsRedux || !validArray({list: colorsRedux})) {
           dispatch(setChartColorSelectedRedux(colors));
         }
       },

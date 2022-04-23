@@ -23,7 +23,8 @@ import {
   setMetricBodyRedux,
   useMetricsBodySelector,
   useMetricsetSelectedSelector,
-  setChartColorSelectedRedux
+  setChartColorSelectedRedux,
+  useColorsSelectedSelector
 } from 'store/reducers/entity-report';
 import {getReportSources} from 'utils/metrics';
 import ChartPreview from './ChartPreview';
@@ -52,6 +53,7 @@ import {getParsedTimeUnit} from '../utils/getParsedTimeUnit';
 import DropdownChartType from './form/ChartConfig/DropdownChartType';
 import {getParsedTimeRange} from '../utils/getParsedTimeRange';
 import moment from 'moment';
+import ReportName from './report-item/ReportName';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -73,9 +75,18 @@ export default function ReportFormContent({
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
   const reportSourceOptions = getReportSources();
 
+  const parentPath = report?.properties?.parentPath || '';
+  const name = report?.name || '';
+
   // Selectors
   const metricBody = useMetricsBodySelector();
   const metricateSelected = useMetricsetSelectedSelector();
+  const colorsRedux = useColorsSelectedSelector();
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 81 ~ colorsRedux',
+    colorsRedux
+  );
+
   // const chartTypeSelectedRedux = useChartTypeSelectedSelector();
   const reportByUuid = getReportById({report, entityId});
 
@@ -126,11 +137,6 @@ export default function ReportFormContent({
     control
   });
 
-  const colorsSelected = useWatch({
-    name: `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
-    control
-  });
-
   const isChartCompare =
     !reportByUuidSelected &&
     reportBySelected?.value !== 'source' &&
@@ -148,10 +154,17 @@ export default function ReportFormContent({
   );
 
   const handleSelectedColor = React.useCallback(
-    _colors => {
-      dispatch(setChartColorSelectedRedux(_colors));
+    (index, _color) => {
+      const listColors = colorsRedux.map((item, idx) => {
+        if (idx === index) {
+          return _color?.hex;
+        }
+
+        return item;
+      });
+      dispatch(setChartColorSelectedRedux(listColors));
     },
-    [dispatch]
+    [colorsRedux, dispatch]
   );
 
   React.useEffect(() => {
@@ -182,7 +195,7 @@ export default function ReportFormContent({
         );
       }
     },
-    [dispatch, metricBody, reportBySelected?.value, setValue, timeRangeSelected]
+    [dispatch, metricBody, reportBySelected?.value, setValue]
   );
 
   //---> Handle report by uuid change
@@ -200,7 +213,11 @@ export default function ReportFormContent({
         if (parsedTimeUnit === TimeUnits.GLOBAL) {
           setValue(
             `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,
-            JSON.stringify(parsedTimeRange?.units?.[0])
+            JSON.stringify(parsedTimeRange?.units?.[0]),
+            {
+              shouldValidate: true,
+              shouldDirty: true
+            }
           );
           timeUnit = parsedTimeRange?.units?.[0]?.value;
         }
@@ -332,6 +349,63 @@ export default function ReportFormContent({
     ]
   );
 
+  //---> Handle time range change
+  React.useEffect(
+    function handleTimeRangeChange() {
+      const parsedTimeRange = getParsedTimeRange({
+        timeRange: timeRangeSelected
+      });
+      if (
+        parsedTimeRange &&
+        metricBody?.time_range !== parsedTimeRange?.value
+      ) {
+        const parsedTimeUnit = getParsedTimeUnit({timeUnit: timeUnitSelected});
+        let timeUnit = parsedTimeUnit;
+        console.log(
+          '===== unit in time range',
+          parsedTimeRange?.units?.findIndex(
+            item => item?.value === parsedTimeUnit
+          )
+        );
+        if (
+          parsedTimeUnit === TimeUnits.GLOBAL ||
+          parsedTimeRange?.units?.findIndex(
+            item => item?.value === parsedTimeUnit
+          ) === -1
+        ) {
+          console.log(
+            '==== set unit for time range',
+            JSON.stringify(parsedTimeRange?.units?.[0])
+          );
+          setValue(
+            `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`,
+            JSON.stringify(parsedTimeRange?.units?.[0]),
+            {
+              shouldValidate: true,
+              shouldDirty: true
+            }
+          );
+          timeUnit = parsedTimeRange?.units?.[0]?.value;
+        }
+        dispatch(
+          setMetricBodyRedux({
+            ...metricBody,
+            time_range: parsedTimeRange?.value,
+            time_unit: timeUnit
+          })
+        );
+      }
+    },
+    [
+      dispatch,
+      metricBody,
+      setValue,
+      timeRangeSelected,
+      timeRangeSelected?.value,
+      timeUnitSelected
+    ]
+  );
+
   return (
     <FormProvider {...methods}>
       <form
@@ -341,34 +415,48 @@ export default function ReportFormContent({
       >
         <BlockUi tag="div" blocking={formState.isSubmitting}>
           <ModalHeader toggle={toggle}>
-            {isViewed
-              ? t('viewReport')
-              : isEdit
-              ? t('editReport')
-              : t('addReport')}
+            {isViewed ? (
+              t('viewReport')
+            ) : isEdit ? (
+              <ReportName
+                name={name}
+                parentPath={parentPath}
+                reportSource={reportSource}
+                metricSet={metricSet}
+              />
+            ) : (
+              t('addReport')
+            )}
           </ModalHeader>
           <ModalBody>
             {!isViewed && (
               <>
                 <Row>
+                  {/* Report source */}
                   <Col md={3}>
                     <ReportSourceSelect
                       defaultValue={defaultValues?.report_source}
                       reportSourceOptions={reportSourceOptions}
                     />
                   </Col>
+
+                  {/* Report Type */}
                   <Col md="3">
                     <ReportTypeSelect
                       defaultValue={defaultValues?.report_type}
                     />
                   </Col>
+
+                  {/* Report By Group */}
                   <ReportByGroup
                     reportSource={reportSource}
                     currentReportBy={defaultValues?.api?.report_by}
                     sourceId={entityId}
                   />
                 </Row>
+
                 <Row className="mt-2 mb-2">
+                  {/* Time range, Time Unit */}
                   <Col md="12" className="d-flex">
                     {reportType?.value === ReportTypes.TRENDING ? (
                       <TimeRange
@@ -407,11 +495,12 @@ export default function ReportFormContent({
                       colorDefault={defaultValues?.properties?.color}
                       metricSet={metricSet}
                     >
+                      {/* Config chart */}
                       <DropdownChartType
                         metricSet={metricSet}
                         onChangeColor={handleSelectedColor}
                         onSelectType={handleSelectedChartType}
-                        colors={colorsSelected}
+                        colors={colorsRedux}
                         chartType={chartTypeSelected}
                         isChartCompare={isChartCompare}
                       />
@@ -439,7 +528,7 @@ export default function ReportFormContent({
               metricSet={metricSet}
               timeRange={timeRange}
               entityId={reportByUuid}
-              color={defaultValues?.properties?.color}
+              color={colorsRedux}
               reportSource={reportSource}
             />
           </ModalBody>

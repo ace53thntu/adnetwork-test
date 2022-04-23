@@ -14,7 +14,8 @@ import {
   setMetricBodyRedux,
   useChartTypeSelectedSelector,
   useIsChartCompareSelector,
-  useMetricsBodySelector
+  useMetricsBodySelector,
+  useTimeUnitSelector
 } from 'store/reducers/entity-report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
@@ -28,11 +29,12 @@ const propTypes = {
 };
 
 export default function TimeUnit({defaultValue}) {
-  console.log(
-    '🚀 ~ file: TimeUnit.js ~ line 31 ~ TimeUnit ~ defaultValue',
-    defaultValue
-  );
   const dispatch = useDispatch();
+  const timeUnitRedux = useTimeUnitSelector();
+  console.log(
+    '🚀 ~ file: TimeUnit.js ~ line 34 ~ TimeUnit ~ timeUnitRedux',
+    timeUnitRedux
+  );
 
   const metricBody = useMetricsBodySelector();
   const chartTypeRedux = useChartTypeSelectedSelector();
@@ -47,25 +49,25 @@ export default function TimeUnit({defaultValue}) {
   const error = errors?.api?.time_unit || undefined;
   const timeRangeSelected = watch('api.time_range');
 
-  React.useEffect(() => {
-    //---> Reset select unit when time range changed
-    if (typeof timeRangeSelected === 'string') {
-      try {
-        const timeRangeParsed = JSON.parse(timeRangeSelected);
-        const existedUnit = timeRangeParsed?.units?.find(
-          item => item.value === defaultValue?.value
-        );
-        if (!existedUnit) {
-          //---> Only reset if new time range select not include current unit
-          setActiveUnit(null);
-          setValue(unitName, '', {
-            shouldValidate: true,
-            shouldDirty: true
-          });
-        }
-      } catch (err) {}
-    }
-  }, [defaultValue?.value, setValue, timeRangeSelected]);
+  // React.useEffect(() => {
+  //   //---> Reset select unit when time range changed
+  //   if (typeof timeRangeSelected === 'string') {
+  //     try {
+  //       const timeRangeParsed = JSON.parse(timeRangeSelected);
+  //       const existedUnit = timeRangeParsed?.units?.find(
+  //         item => item.value === defaultValue?.value
+  //       );
+  //       if (!existedUnit) {
+  //         //---> Only reset if new time range select not include current unit
+  //         setActiveUnit(null);
+  //         setValue(unitName, '', {
+  //           shouldValidate: true,
+  //           shouldDirty: true
+  //         });
+  //       }
+  //     } catch (err) {}
+  //   }
+  // }, [defaultValue?.value, setValue, timeRangeSelected]);
 
   const units = React.useMemo(() => {
     try {
@@ -156,7 +158,7 @@ export default function TimeUnit({defaultValue}) {
                 onClick={evt => onClickTimeRange(evt, item)}
                 color="warning"
                 outline
-                active={!allowSelect || activeUnit?.value === item?.value}
+                active={!allowSelect || item?.value === timeUnitRedux}
                 readOnly={!allowSelect}
                 size="small"
               >

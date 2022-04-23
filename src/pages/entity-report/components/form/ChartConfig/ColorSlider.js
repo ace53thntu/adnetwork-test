@@ -1,7 +1,11 @@
 import React from 'react';
 import {HuePicker} from 'react-color';
 
-export default function ColorSlider({color = '#6a994e', onChangeColor, index}) {
+export default function ColorSlider({
+  color = '#6a994e',
+  onChangeColor = () => null,
+  index
+}) {
   return (
     <div className="w-100">
       <HuePicker

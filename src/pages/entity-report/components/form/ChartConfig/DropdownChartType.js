@@ -31,10 +31,18 @@ const DropdownChartType = ({
   colors = [],
   isChartCompare = false
 }) => {
+  console.log(
+    '🚀 ~ file: DropdownChartType.js ~ line 34 ~ isChartCompare',
+    isChartCompare
+  );
   const dispatch = useDispatch();
   const metricBody = useMetricsBodySelector();
   const chartTypeRedux = useChartTypeSelectedSelector();
-  const parsedColor = React.useMemo(() => parseColors(colors), [colors]);
+  const parsedColor = parseColors(colors);
+  console.log(
+    '🚀 ~ file: DropdownChartType.js ~ line 38 ~ parsedColor',
+    parsedColor
+  );
 
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
