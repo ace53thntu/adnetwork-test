@@ -9,15 +9,8 @@ const ColorSliderContainer = () => {
   const colors = watch(
     `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
   );
-  console.log(
-    '🚀 ~ file: ColorSliderContainer.js ~ line 12 ~ ColorSliderContainer ~ colors',
-    colors
-  );
+
   const parsedColor = parseColorsFn(colors);
-  console.log(
-    '🚀 ~ file: ColorSliderContainer.js ~ line 17 ~ ColorSliderContainer ~ parsedColor',
-    parsedColor
-  );
 
   function onChangeColor(index, color) {
     const listColors = parsedColor.map((item, idx) => {

@@ -83,13 +83,19 @@ export default function TimeUnit({
         shouldDirty: true
       });
     } else {
-      if (timeRangeSelected === defaultTimeRange) {
+      if (timeRangeSelected === defaultTimeRange || !defaultTimeRange) {
         const unitFromTimeRange = getTimeUnitsFromTimeRange({
           timeRange: timeRangeSelected
         });
+
         if (!unitFromTimeRange.find(item => item.value !== defaultTimeUnit)) {
           //---> Only reset if new time range select not include current unit
           setValue(unitName, unitFromTimeRange?.[0]?.value, {
+            shouldValidate: true,
+            shouldDirty: true
+          });
+        } else {
+          setValue(unitName, defaultTimeUnit, {
             shouldValidate: true,
             shouldDirty: true
           });

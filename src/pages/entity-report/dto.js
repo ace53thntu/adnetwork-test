@@ -91,6 +91,8 @@ export function mappingApiToForm({report}) {
   report_source = getReportSources().find(
     item => item?.value === report_source
   );
+  const reportByUuidName =
+    report_by === 'source' ? capitalize(report_by_uuid) : report_by_name;
 
   // Handle report by
   report_by = isPublisher
@@ -108,7 +110,7 @@ export function mappingApiToForm({report}) {
   start_time = start_time ? new Date(start_time) : new Date();
   end_time = end_time ? new Date(end_time) : null;
   const reportByUuid = report_by_uuid
-    ? {value: report_by_uuid, label: report_by_name}
+    ? {value: report_by_uuid, label: reportByUuidName}
     : null;
 
   // Handle color

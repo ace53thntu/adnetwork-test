@@ -22,7 +22,12 @@ import ReportBySelect from './ReportBySelect';
 import {useReportGroupTypeSelector} from 'store/reducers/entity-report';
 import {ReportGroupTypes} from 'pages/entity-report/constants.js';
 
-const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
+const ReportByGroup = ({
+  reportSource,
+  currentReportBy,
+  sourceId,
+  disabled = false
+}) => {
   const {t} = useTranslation();
   const {control} = useFormContext();
   const reportGroupType = useReportGroupTypeSelector();
@@ -35,6 +40,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectCampaign')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          disabled={disabled}
         />
       ),
       strategy: (
@@ -44,6 +50,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       ),
       concept: (
@@ -53,6 +60,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       ),
       creative: (
@@ -62,6 +70,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       ),
       native_ad: (
@@ -70,6 +79,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectNativeAds')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          disabled={disabled}
         />
       ),
       video: (
@@ -79,18 +89,20 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       ),
-      source: <SourceSelect name="api.report_by_uuid" />,
+      source: <SourceSelect name="api.report_by_uuid" disabled={disabled} />,
       position: (
         <PositionSelect
           name="api.report_by_uuid"
           label={t('position')}
           placeholder={t('FORM.SELECT_POSITION')}
+          disabled={disabled}
         />
       )
     };
-  }, [reportSource, sourceId, t]);
+  }, [disabled, reportSource, sourceId, t]);
 
   const getPublisherReportByUuid = React.useCallback(() => {
     return {
@@ -100,6 +112,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           placeholder={t('selectContainer')}
           name="api.report_by_uuid"
           sourceId={sourceId}
+          disabled={disabled}
         />
       ),
       page: (
@@ -109,6 +122,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       ),
       inventory: (
@@ -118,10 +132,11 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
           name="api.report_by_uuid"
           sourceId={sourceId}
           reportSource={reportSource}
+          disabled={disabled}
         />
       )
     };
-  }, [reportSource, sourceId, t]);
+  }, [disabled, reportSource, sourceId, t]);
 
   const reportBySelected = useWatch({name: 'api.report_by', control});
   const reportSourceSelected = useWatch({name: 'report_source', control});
@@ -129,7 +144,7 @@ const ReportByGroup = ({reportSource, currentReportBy, sourceId}) => {
   return (
     <>
       <Col md={3}>
-        <ReportBySelect reportSource={reportSource} />
+        <ReportBySelect reportSource={reportSource} disabled={disabled} />
       </Col>
       {reportBySelected &&
         reportBySelected.value !== reportSourceSelected?.value && (

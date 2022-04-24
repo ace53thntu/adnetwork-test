@@ -4,38 +4,17 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-import {useFormContext, useWatch} from 'react-hook-form';
 
 //---> Internal Modules
 import {FormReactSelect} from 'components/forms';
 import {Sources} from 'pages/entity-report/constants.js';
-import {
-  setMetricBodyRedux,
-  useMetricsBodySelector
-} from 'store/reducers/entity-report';
 
 const propTypes = {
   name: PropTypes.string.isRequired
 };
 
-const SourceSelect = ({name = ''}) => {
+const SourceSelect = ({name = '', disabled = false}) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
-  const metricBody = useMetricsBodySelector();
-  const {control} = useFormContext();
-  const reportByUuid = useWatch({name, control});
-
-  React.useEffect(() => {
-    if (metricBody.report_by !== reportByUuid?.value) {
-      dispatch(
-        setMetricBodyRedux({
-          ...metricBody,
-          report_by_uuid: reportByUuid?.value
-        })
-      );
-    }
-  }, [dispatch, metricBody, reportByUuid?.value]);
 
   return (
     <FormReactSelect
@@ -46,6 +25,7 @@ const SourceSelect = ({name = ''}) => {
       isRequired={false}
       labelBold
       isClearable
+      disabled={disabled}
     />
   );
 };

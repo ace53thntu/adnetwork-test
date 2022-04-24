@@ -9,7 +9,7 @@ import {FormReactSelect} from 'components/forms';
 import {ReportTypeOptions} from 'pages/entity-report/constants.js';
 import {REPORT_INPUT_NAME} from 'constants/report';
 
-const ReportTypeSelect = () => {
+const ReportTypeSelect = ({disabled = false}) => {
   const {t} = useTranslation();
 
   return (
@@ -19,6 +19,7 @@ const ReportTypeSelect = () => {
       placeholder={t('selectReportType')}
       options={ReportTypeOptions}
       labelBold
+      disabled={disabled}
     />
   );
 };

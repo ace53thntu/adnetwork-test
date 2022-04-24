@@ -126,6 +126,7 @@ export default function ReportFormContent({
                   <Col md="3">
                     <ReportTypeSelect
                       defaultValue={defaultValues?.report_type}
+                      disabled={isEdit}
                     />
                   </Col>
 
@@ -134,6 +135,7 @@ export default function ReportFormContent({
                     reportSource={reportSource}
                     currentReportBy={defaultValues?.api?.report_by}
                     sourceId={entityId}
+                    disabled={isEdit}
                   />
                 </Row>
 
@@ -150,6 +152,7 @@ export default function ReportFormContent({
                     {isTrending ? (
                       <TimeUnit
                         defaultTimeRange={defaultValues?.api?.time_range}
+                        defaultTimeUnit={defaultValues?.api?.time_unit}
                       />
                     ) : (
                       <DistributionUnit
@@ -201,6 +204,7 @@ export default function ReportFormContent({
               entityId={reportByUuid}
               reportSource={reportSource}
               defaultColors={report?.properties?.color}
+              sourceUuid={entityId}
             />
           </ModalBody>
           <ModalFooter>

@@ -10,7 +10,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useReportGroupTypeSelector} from 'store/reducers/entity-report';
 
-const ReportBySelect = ({reportSource}) => {
+const ReportBySelect = ({reportSource, disabled = false}) => {
   const {t} = useTranslation();
   const reportGroupType = useReportGroupTypeSelector();
 
@@ -28,6 +28,7 @@ const ReportBySelect = ({reportSource}) => {
             ? ReportBys
             : PublisherReportBys
       })}
+      disabled={disabled}
     />
   );
 };

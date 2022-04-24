@@ -37,10 +37,11 @@ const ChartPreview = ({
   timeRange,
   entityId,
   reportSource,
-  defaultColors
+  defaultColors,
+  sourceUuid
 }) => {
   const {metricBody: metricRequestBody, enableCallMetric} = useGetMetricBody({
-    sourceUuid: entityId
+    sourceUuid
   });
 
   const {data: metrics, status, isFetching} = useGetMetrics({
@@ -56,7 +57,6 @@ const ChartPreview = ({
   if (status === QueryStatuses.ERROR) {
     return <NoDataAvailable />;
   }
-
   return (
     <ChartPreviewContent
       metrics={metrics}
@@ -97,12 +97,8 @@ const ChartPreviewContent = ({
     ? ReportGroupTypes.PUBLISHER
     : ReportGroupTypes.ADVERTISER;
   const mappingMetricSets = useMappingMetricSet({metricSet, reportGroup});
-
   const colorsConverted = convertColors({colors: defaultColors});
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 100 ~ colorsConverted',
-    colorsConverted
-  );
+
   const chartData = useChartData({
     metrics,
     unit,

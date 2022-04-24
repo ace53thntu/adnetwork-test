@@ -27,10 +27,6 @@ const propTypes = {
 };
 
 const CampaignViewTabs = ({currentCampaign = null}) => {
-  console.log(
-    '🚀 ~ file: ViewTabs.js ~ line 30 ~ CampaignViewTabs ~ currentCampaign',
-    currentCampaign
-  );
   const {t} = useTranslation();
   const ownerId = currentCampaign?.advertiser_uuid?.value;
   const entityId = currentCampaign?.uuid;

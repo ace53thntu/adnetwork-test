@@ -62,8 +62,13 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     }
   }
 
+  if (reportBy === 'source' && reportByUuid) {
+    enableCallMetric = true;
+  }
+
   // Distribution report
   if (reportType === ReportTypes.DISTRIBUTION) {
+    console.log('==== distribution');
     const isValidTime = isValidTimePeriod({startTime, endTime});
 
     if (isValidTime) {
@@ -85,7 +90,7 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
       time_range: timeRange
     };
   }
-
+  console.log('enableCallMetric ===', enableCallMetric);
   return {
     metricBody,
     enableCallMetric
