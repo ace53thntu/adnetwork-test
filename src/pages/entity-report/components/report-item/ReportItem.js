@@ -85,7 +85,6 @@ export default function ReportItem({
     chartMode,
     colors
   });
-  console.log('🚀 ~ file: ReportItem.js ~ line 85 ~ metricData', metricData);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [showDialogConfirm, setShowDialogConfirm] = React.useState(false);

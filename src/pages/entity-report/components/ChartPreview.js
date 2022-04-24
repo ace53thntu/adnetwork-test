@@ -5,29 +5,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 import {Card, CardBody, Col, Row} from 'reactstrap';
-import _ from 'lodash';
 
 //---> Internal Modules
 import {REPORT_INPUT_NAME, ChartTypes} from 'constants/report';
-import {
-  setChartColorSelectedRedux,
-  useChartModeSelector,
-  useChartTypeSelectedSelector,
-  useColorsSelectedSelector,
-  useIsChartCompareSelector,
-  useMetricsBodySelector
-} from 'store/reducers/entity-report';
+import {useChartModeSelector} from 'store/reducers/entity-report';
 import {useGetMetrics} from 'queries/metric/useGetMetrics';
-import {useChartData} from '../hooks';
+import {
+  useChartData,
+  useGetMetricBody,
+  useIsChartCompareInForm
+} from '../hooks';
 import {QueryStatuses} from 'constants/react-query';
 import NoDataAvailable from 'components/list/no-data';
-import {initializingColors} from '../utils/parseColors';
+import {initColors} from '../utils/parseColors';
 import {CustomBarChart, CustomLineChart, CustomPieChart} from './report-chart';
-import {useDispatch} from 'react-redux';
-import {parseColors} from 'pages/entity-report/utils';
 import {useMappingMetricSet} from '../hooks/useMappingMetricSet';
 import {PublisherReportBys, ReportGroupTypes} from '../constants.js';
-import {validArray} from 'utils/helpers/dataStructure.helpers';
+import {convertColors} from '../utils';
+import {parseColors as parseColorsFn} from 'pages/entity-report/utils';
 
 const propTypes = {
   chartData: PropTypes.object,
@@ -41,23 +36,18 @@ const ChartPreview = ({
   unit,
   timeRange,
   entityId,
-  color,
-  reportSource
+  reportSource,
+  defaultColors
 }) => {
-  const metricRequestRedux = useMetricsBodySelector();
-
-  const [currentMetricRequest, setCurrentMetricRequest] = React.useState({});
-  const {data: metrics, status, isFetching} = useGetMetrics({
-    data: currentMetricRequest,
-    reportId,
-    enabled: !!reportId && Object.keys(currentMetricRequest).length > 0
+  const {metricBody: metricRequestBody, enableCallMetric} = useGetMetricBody({
+    sourceUuid: entityId
   });
 
-  React.useEffect(() => {
-    if (!_.isEqual(metricRequestRedux, currentMetricRequest)) {
-      setCurrentMetricRequest(metricRequestRedux);
-    }
-  }, [currentMetricRequest, metricRequestRedux]);
+  const {data: metrics, status, isFetching} = useGetMetrics({
+    data: metricRequestBody,
+    reportId,
+    enabled: !!reportId && enableCallMetric
+  });
 
   if (isFetching) {
     return <div>Loading...</div>;
@@ -70,97 +60,117 @@ const ChartPreview = ({
   return (
     <ChartPreviewContent
       metrics={metrics}
-      unit={currentMetricRequest?.time_unit}
-      timeRange={currentMetricRequest?.time_range}
+      unit={metricRequestBody?.time_unit}
+      timeRange={metricRequestBody?.time_range}
       metricSet={metricSet}
-      entityId={currentMetricRequest?.report_by_uuid}
-      color={color}
+      entityId={metricRequestBody?.report_by_uuid}
       reportSource={reportSource}
+      defaultColors={defaultColors}
     />
   );
 };
 
 ChartPreview.propTypes = propTypes;
 
-const ChartPreviewContent = React.memo(
-  ({metrics, unit, timeRange, metricSet, entityId, color, reportSource}) => {
-    const dispatch = useDispatch();
-    const colorsRedux = useColorsSelectedSelector();
+const ChartPreviewContent = ({
+  metrics,
+  unit,
+  timeRange,
+  metricSet,
+  entityId,
+  reportSource,
+  defaultColors
+}) => {
+  const {watch, setValue} = useFormContext();
+  const isChartCompare = useIsChartCompareInForm();
+  const chartMode = useChartModeSelector();
+  const chartTypeSelected = watch(
+    `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
+  );
+  const colorsSelected = watch(
+    `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
+  );
+  const parseColorsNoCompare = parseColorsFn(colorsSelected);
+  const reportGroup = PublisherReportBys.map(item => item.value).includes(
+    reportSource
+  )
+    ? ReportGroupTypes.PUBLISHER
+    : ReportGroupTypes.ADVERTISER;
+  const mappingMetricSets = useMappingMetricSet({metricSet, reportGroup});
 
-    const chartTypeRedux = useChartTypeSelectedSelector();
-    const isChartCompare = useIsChartCompareSelector();
-    const chartMode = useChartModeSelector();
-    const existedColors = parseColors(color);
-    const reportGroup = PublisherReportBys.map(item => item.value).includes(
-      reportSource
-    )
-      ? ReportGroupTypes.PUBLISHER
-      : ReportGroupTypes.ADVERTISER;
-    const mappingMetricSets = useMappingMetricSet({metricSet, reportGroup});
+  const colorsConverted = convertColors({colors: defaultColors});
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 100 ~ colorsConverted',
+    colorsConverted
+  );
+  const chartData = useChartData({
+    metrics,
+    unit,
+    metricSet: mappingMetricSets,
+    entityId,
+    chartType: chartTypeSelected,
+    chartMode,
+    colors: parseColorsNoCompare
+  });
+  console.log('🚀 ~ file: ChartPreview.js ~ line 118 ~ chartData', chartData);
 
-    const chartData = useChartData({
-      metrics,
-      unit,
-      timeRange,
-      metricSet: mappingMetricSets,
-      entityId,
-      chartType: chartTypeRedux,
-      chartMode,
-      colors: existedColors
-    });
-    console.log('🚀 ~ file: ChartPreview.js ~ line 106 ~ chartData', chartData);
-
-    const colors = React.useMemo(
-      () =>
-        initializingColors({
-          sizeOfData: chartData?.labels?.length,
-          existedColors: color,
-          charType: chartTypeRedux
-        }),
-      [chartData?.labels?.length, chartTypeRedux, color]
-    );
-
-    const {watch} = useFormContext();
-    const selectedType = watch(
-      `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.CHART_TYPE}`
-    );
-
-    React.useEffect(
-      function setColorValue() {
-        console.log('===== colors', colors, colorsRedux);
-        if (!colorsRedux || !validArray({list: colorsRedux})) {
-          dispatch(setChartColorSelectedRedux(colors));
-        }
-      },
-      [colors, colorsRedux, dispatch]
-    );
-
-    if (!chartData) {
-      return <div>No data</div>;
+  // const colors = React.useMemo(
+  //   () =>
+  //     initializingColors({
+  //       sizeOfData: chartData?.labels?.length,
+  //       existedColors: colorsConverted,
+  //       isChartCompare
+  //     }),
+  //   [chartData?.labels?.length, colorsConverted, isChartCompare]
+  // );
+  // TODO: Check if data length > color length
+  const colors = React.useMemo(() => {
+    if (colorsConverted && colorsConverted?.length) {
+      return colorsConverted;
     }
+    return initColors({
+      sizeOfData: chartData?.labels?.length
+    });
+  }, [chartData?.labels?.length, colorsConverted]);
 
-    return (
-      <Row className="chart-preview">
-        <Col sm="12">
-          <Card>
-            <CardBody
-              style={{
-                padding: 10,
-                width: selectedType === ChartTypes.PIE ? '80%' : '100%',
-                margin: '0 auto'
-              }}
-            >
-              {selectedType === ChartTypes.BAR && isChartCompare && (
-                <CustomBarChart data={chartData} colors={colors} />
+  React.useEffect(() => {
+    if (isChartCompare && JSON.stringify(colors) !== colorsSelected) {
+      setValue(
+        `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`,
+        JSON.stringify(colors)
+      );
+    }
+  }, [colors, colorsSelected, isChartCompare, setValue]);
+
+  if (!chartData) {
+    return <div>No data</div>;
+  }
+
+  return (
+    <Row className="chart-preview">
+      <Col sm="12">
+        <Card>
+          <CardBody
+            style={{
+              padding: 10,
+              width: chartTypeSelected === ChartTypes.PIE ? '80%' : '100%',
+              margin: '0 auto'
+            }}
+          >
+            {chartTypeSelected === ChartTypes.BAR && isChartCompare && (
+              <CustomBarChart data={chartData} colors={colors} unit={unit} />
+            )}
+            {chartTypeSelected === ChartTypes.PIE && (
+              <CustomPieChart pieData={chartData} colors={colors} />
+            )}
+            {[ChartTypes.LINE, ChartTypes.MULTILINE].includes(
+              chartTypeSelected
+            ) &&
+              !isChartCompare && (
+                <CustomLineChart data={chartData} unit={unit} />
               )}
-              {selectedType === ChartTypes.PIE && (
-                <CustomPieChart pieData={chartData} colors={colors} />
-              )}
-              {[ChartTypes.LINE, ChartTypes.MULTILINE].includes(selectedType) &&
-                !isChartCompare && (
-                  <CustomLineChart data={chartData} unit={unit} />
-                )}
-              {[ChartTypes.BAR].includes(selectedType) && !isChartCompare && (
+            {[ChartTypes.BAR].includes(chartTypeSelected) &&
+              !isChartCompare && (
                 <CustomBarChart
                   data={chartData}
                   showXLabel={false}
@@ -168,12 +178,11 @@ const ChartPreviewContent = React.memo(
                   unit={unit}
                 />
               )}
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    );
-  }
-);
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
+  );
+};
 
 export default ChartPreview;

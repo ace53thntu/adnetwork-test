@@ -1,1 +1,1 @@
-export {parseColors, hexToRgbA} from './parseColors';
+export {parseColors, hexToRgbA, convertColors} from './parseColors';

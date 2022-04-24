@@ -58,10 +58,7 @@ const ReportName = ({
     text: item,
     parent: index === 0 ? 'false' : 'true'
   }));
-  console.log(
-    '🚀 ~ file: ReportName.js ~ line 61 ~ destructedSlitNameArr',
-    destructedSlitNameArr
-  );
+
   const pathNameArr = parentPath?.split('/') || [];
   const destructedPathNameArr = pathNameArr?.map(item => ({
     text: item,
@@ -87,6 +84,7 @@ const ReportName = ({
                     <Badge
                       className="mr-2"
                       color={getColorByReportSource(reportSource)}
+                      style={{fontSize: 10}}
                     >
                       {reportSource}
                     </Badge>

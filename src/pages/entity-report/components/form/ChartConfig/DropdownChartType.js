@@ -8,41 +8,15 @@ import {faCogs} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 //---> Internal Modules
-import LineSparkline from './LineSparkline';
-import PieSparkline from './PieSparkline';
-import '../../../styles/styles.scss';
-import ColorSlider from './ColorSlider';
-import BarSparkline from './BarSparkline';
-import {Tooltip} from '@material-ui/core';
 import {useOnClickOutside} from 'hooks/useOnClickOutside';
-import {useDispatch} from 'react-redux';
-import {
-  setMetricBodyRedux,
-  useChartTypeSelectedSelector,
-  useMetricsBodySelector
-} from 'store/reducers/entity-report';
-import {ChartTypes, TimeUnits} from 'constants/report';
-import {parseColors} from 'pages/entity-report/utils';
+import {ChartTypes} from 'constants/report';
+import ColorSliderContainer from './ColorSlider';
+import ChartTypeSelect from './ChartTypeSelect';
+import '../../../styles/styles.scss';
+import {useIsChartCompareInForm} from 'pages/entity-report/hooks';
 
-const DropdownChartType = ({
-  metricSet = [],
-  onChangeColor = () => null,
-  onSelectType = () => null,
-  colors = [],
-  isChartCompare = false
-}) => {
-  console.log(
-    '🚀 ~ file: DropdownChartType.js ~ line 34 ~ isChartCompare',
-    isChartCompare
-  );
-  const dispatch = useDispatch();
-  const metricBody = useMetricsBodySelector();
-  const chartTypeRedux = useChartTypeSelectedSelector();
-  const parsedColor = parseColors(colors);
-  console.log(
-    '🚀 ~ file: DropdownChartType.js ~ line 38 ~ parsedColor',
-    parsedColor
-  );
+const DropdownChartType = ({metricSet = [], defaultChartType = ''}) => {
+  const isChartCompare = useIsChartCompareInForm();
 
   const initChartTypes = React.useMemo(() => {
     if (isChartCompare) {
@@ -50,11 +24,6 @@ const DropdownChartType = ({
     }
     return [ChartTypes.LINE, ChartTypes.BAR];
   }, [isChartCompare]);
-  const chartTypeSelected = !chartTypeRedux
-    ? isChartCompare
-      ? ChartTypes.PIE
-      : ChartTypes.LINE
-    : chartTypeRedux;
 
   const [showDropdown, setShowDropdown] = React.useState(false);
   const ref = React.useRef();
@@ -64,20 +33,6 @@ const DropdownChartType = ({
   function onClickDropdown(evt) {
     evt.preventDefault();
     setShowDropdown(true);
-  }
-
-  function onClickChartType(evt, type) {
-    evt.preventDefault();
-    onSelectType(type);
-
-    if (type === ChartTypes.PIE && metricBody.time_unit !== TimeUnits.GLOBAL) {
-      dispatch(
-        setMetricBodyRedux({
-          ...metricBody,
-          time_unit: TimeUnits.GLOBAL
-        })
-      );
-    }
   }
 
   return (
@@ -92,56 +47,19 @@ const DropdownChartType = ({
           ref={ref}
           className={`c-dropdown-menu ${showDropdown ? 'show' : ''}`}
         >
-          <div
-            className="c-menu-item mb-2"
-            style={{display: isChartCompare ? 'none' : 'd-flex'}}
-          >
-            <div className="color-wrap">
-              {parsedColor?.map((colorItem, idx) => {
-                return (
-                  <div key={`pr-${idx}`} className="c-color-item mb-2">
-                    <ColorSlider
-                      color={colorItem}
-                      onChangeColor={onChangeColor}
-                      index={idx}
-                    />
-                  </div>
-                );
-              })}
+          {!isChartCompare && (
+            <div className="c-menu-item mb-2" style={{display: isChartCompare}}>
+              <ColorSliderContainer />
             </div>
-          </div>
+          )}
+
           <div className="c-menu-item">
             <div className="font-weight-bold mb-1">Chart</div>
-            <div className="chart-wrap">
-              {initChartTypes.map((typeItem, idx) => {
-                return (
-                  <React.Fragment key={`pr-${idx}`}>
-                    <Tooltip
-                      title={
-                        <span className="text-capitalize">{`${typeItem} chart`}</span>
-                      }
-                    >
-                      <div
-                        key={`pr-${idx}`}
-                        id={`tooltip-${typeItem}-chart`}
-                        className={`c-chart-item ${
-                          chartTypeSelected === typeItem
-                            ? 'border-activated'
-                            : ''
-                        }`}
-                        onClick={evt => onClickChartType(evt, typeItem)}
-                      >
-                        {typeItem === ChartTypes.PIE && <PieSparkline />}
-                        {typeItem === ChartTypes.BAR && <BarSparkline />}
-                        {typeItem === ChartTypes.LINE && (
-                          <LineSparkline metricSet={metricSet} />
-                        )}
-                      </div>
-                    </Tooltip>
-                  </React.Fragment>
-                );
-              })}
-            </div>
+            <ChartTypeSelect
+              chartTypeList={initChartTypes}
+              metricSet={metricSet}
+              defaultChartType={defaultChartType}
+            />
           </div>
         </div>
       </div>
@@ -151,10 +69,8 @@ const DropdownChartType = ({
 
 DropdownChartType.propTypes = {
   metricSet: PropTypes.array,
-  onChangeColor: PropTypes.func,
-  onSelectType: PropTypes.func,
-  colors: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  chartType: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+  isChartCompare: PropTypes.bool,
+  defaultChartType: PropTypes.string
 };
 
 export default DropdownChartType;

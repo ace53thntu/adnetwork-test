@@ -4,11 +4,11 @@ import * as yup from 'yup';
 
 export const schemaValidate = t => {
   const apiSchema = {
-    time_unit: yup.object().when('time_range', (timeRange, schema) => {
+    time_unit: yup.string().when('time_range', (timeRange, schema) => {
       try {
         const timeRangeParsed = JSON.parse(timeRange);
         if (timeRangeParsed?.units.length > 1) {
-          return yup.object().nullable().required().typeError(t('required'));
+          return yup.string().required().typeError(t('required'));
         }
       } catch (err) {
         return schema;

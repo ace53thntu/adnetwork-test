@@ -4,7 +4,8 @@ export const getReportById = ({report, entityId}) => {
     const reportByUuid = api?.report_by_uuid;
     const reportSource = report?.report_source;
     const reportBy = report?.api?.report_by;
-    if (reportSource !== reportBy) {
+
+    if (reportSource !== reportBy && reportByUuid) {
       return reportByUuid;
     }
     return entityId;

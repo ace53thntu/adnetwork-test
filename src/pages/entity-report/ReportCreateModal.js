@@ -15,7 +15,6 @@ import {QueryStatuses} from 'constants/react-query';
 //---> Styles
 import './styles/styles.scss';
 import {
-  useColorsSelectedSelector,
   useEntityNameSelector,
   useMetricsBodySelector,
   useParentPathSelector
@@ -37,7 +36,6 @@ export default function ModalReportForm({
 }) {
   const entityNameRedux = useEntityNameSelector();
   const parentPathRedux = useParentPathSelector();
-  const colorsRedux = useColorsSelectedSelector();
 
   const {data: report, status} = useGetReport(reportId, !!reportId);
 
@@ -91,8 +89,8 @@ export default function ModalReportForm({
         entityType,
         entityName: entityNameRedux,
         parentPath: parentPathRedux,
-        metricBody,
-        colorsRedux
+        metricBody
+        // colorsRedux
       });
 
       if (!isEdit) {
@@ -109,7 +107,6 @@ export default function ModalReportForm({
       entityNameRedux,
       parentPathRedux,
       metricBody,
-      colorsRedux,
       isEdit,
       executeReportCreating,
       executeReportEditing

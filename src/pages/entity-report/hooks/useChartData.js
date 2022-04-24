@@ -18,7 +18,6 @@ export const useChartData = ({
   type = ChartTypes.LINE,
   metrics: metricData,
   unit = 'hour',
-  timeRange = 'l1d',
   metricSet = [],
   entityId,
   chartType = '',
@@ -200,9 +199,9 @@ const enumerateDaysBetweenDates = ({
 
     now.add(increaseNumber, unit);
   }
-  if (validArray({list: dates})) {
-    dates.length = dates?.length - 1;
-  }
+  // if (validArray({list: dates})) {
+  //   dates.length = dates?.length - 1;
+  // }
 
   return dates;
 };
@@ -262,8 +261,7 @@ const getDataDrawChart = ({
     }
     if (!valueOfObject || valueOfObject === 0) {
       //---> will use when implement cumsum feature (only apply for trending type)
-      // valueOfObject = idx > 0 ? acc?.[idx - 1]?.y : valueOfObject;
-      valueOfObject = 0; //idx > 0 ? acc?.[idx - 1]?.y : valueOfObject;
+      valueOfObject = 0;
     }
     acc.push({x: calculatedDate, y: valueOfObject || 0});
     return acc;

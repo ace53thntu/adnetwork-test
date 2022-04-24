@@ -5,14 +5,10 @@ import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
   EntityTypes,
-  METRIC_TIMERANGES,
   ReportTypes
 } from 'constants/report';
 import {PublisherReportBys, ReportBys, ReportTypeOptions} from './constants.js';
 import {getReportSources} from 'utils/metrics.js';
-import {getDistributionUnits} from './utils/getDistributionUnit.js';
-
-// const DATE_FORMAT_STR = 'DD-MM-YYYY hh:mm:ss';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -33,8 +29,6 @@ export function mappingFormToApi({
   metricBody,
   colorsRedux
 }) {
-  console.log('🚀 ~ file: dto.js ~ line 35 ~ colorsRedux', colorsRedux);
-  console.log('🚀 ~ file: dto.js ~ line 34 ~ metricBody', metricBody);
   const {api, properties, report_type, report_source} = formData;
   let {
     time_unit,
@@ -44,13 +38,7 @@ export function mappingFormToApi({
     end_time,
     report_by_uuid
   } = api;
-  time_unit = metricBody?.time_unit || time_unit?.value;
-  try {
-    const timeRangeParsed = JSON.parse(time_range);
-    time_range = timeRangeParsed?.value;
-  } catch (err) {
-    time_range = '';
-  }
+
   const reportSource = report_source?.value;
   let formatStartDate = start_time ? moment(start_time).toISOString() : null;
   const formatEndDate = moment(end_time).toISOString();
@@ -62,7 +50,6 @@ export function mappingFormToApi({
   const reportName = `${entityName} / Group by ${reportByName}${
     reportByUuidName ? ': ' + reportByUuidName : ''
   }`;
-  const color = colorsRedux ? JSON.stringify(colorsRedux) : '';
 
   const data = {
     name: reportName,
@@ -70,7 +57,7 @@ export function mappingFormToApi({
     report_type: report_type?.value,
     report_source: reportSource,
     status: 'active',
-    properties: {...properties, metric_set: metricSet, color, parentPath},
+    properties: {...properties, metric_set: metricSet, parentPath},
     api: {
       time_unit,
       time_range,
@@ -99,8 +86,6 @@ export function mappingApiToForm({report}) {
     report_by_name,
     report_by_uuid
   } = api;
-  // Handle time range
-  time_range = METRIC_TIMERANGES.find(item => item.value === time_range);
 
   // Handle report source
   report_source = getReportSources().find(
@@ -119,16 +104,6 @@ export function mappingApiToForm({report}) {
     end_time = null;
   }
 
-  if (report_type?.value === ReportTypes.DISTRIBUTION) {
-    const distributionUnits = getDistributionUnits({
-      startTime: start_time,
-      endTime: end_time
-    });
-    time_unit = distributionUnits.find(item => item.value === time_unit);
-  } else {
-    time_unit = time_range?.units?.find(item => item?.value === time_unit);
-  }
-
   // Handle start time, end time
   start_time = start_time ? new Date(start_time) : new Date();
   end_time = end_time ? new Date(end_time) : null;
@@ -137,15 +112,11 @@ export function mappingApiToForm({report}) {
     : null;
 
   // Handle color
-  const colorConverted =
-    properties?.chart_type === ChartTypes.PIE
-      ? getColorForPieChart({color: properties?.color})
-      : properties.color;
 
   return {
-    properties: {...properties, color: colorConverted},
+    properties,
     api: {
-      time_range: JSON.stringify(time_range),
+      time_range,
       time_unit,
       report_by,
       start_time,
@@ -163,25 +134,23 @@ export const initDefaultValue = ({
   entityType,
   sourceUuid
 }) => {
-  const timeRange = METRIC_TIMERANGES.find(
-    item => item.value === DEFAULT_TIME_RANGE
-  );
   return {
     properties: {
-      color: JSON.stringify(initColors),
+      color: initColors,
       chart_type: ChartTypes.LINE
     },
     api: {
-      time_unit: timeRange?.units.find(
-        item => item.value === DEFAULT_TIME_UNIT
-      ),
-      time_range: JSON.stringify(timeRange),
+      time_unit: DEFAULT_TIME_UNIT,
+      time_range: DEFAULT_TIME_RANGE,
       report_by: {label: capitalize(entityType), value: entityType},
       start_time: null,
       end_time: null
     },
     report_source: {label: capitalize(entityType), value: entityType},
-    report_type: {label: capitalize('trending'), value: ReportTypes.TRENDING},
+    report_type: {
+      label: capitalize(ReportTypes.TRENDING),
+      value: ReportTypes.TRENDING
+    },
     source_uuid: sourceUuid
   };
 };
@@ -190,7 +159,7 @@ export const getColorForPieChart = ({color}) => {
   try {
     const colors = JSON.parse(color);
     return colors;
-  } catch (errr) {
+  } catch (err) {
     return [];
   }
 };

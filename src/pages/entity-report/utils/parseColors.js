@@ -1,8 +1,6 @@
-import {ChartTypes} from 'constants/report';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
 export const parseColors = color => {
-  console.log('🚀 ~ file: parseColors.js ~ line 5 ~ color', color);
   if (!color) {
     return [];
   }
@@ -13,15 +11,30 @@ export const parseColors = color => {
 
   try {
     const colors = JSON.parse(color);
-    console.log('🚀 ~ file: parseColors.js ~ line 16 ~ colors', colors);
     return colors;
   } catch (error) {
-    console.log('🚀 ~ file: parseColors.js ~ line 18 ~ error', error);
     if (!validArray({list: color})) {
       return [color];
     }
     return [];
   }
+};
+
+export const convertColors = ({colors}) => {
+  if (colors && typeof colors === 'string') {
+    if (colors.includes('[')) {
+      try {
+        return JSON.parse(colors);
+      } catch (err) {
+        return [];
+      }
+    }
+    if (colors.includes(',')) {
+      return colors.split(',');
+    }
+    return [colors];
+  }
+  return [];
 };
 
 export const hexToRgbA = (hex = '#e09f3e') => {
@@ -44,24 +57,41 @@ export const randomHex = () =>
     .toString(16)
     .padEnd(6, '0')}`;
 
+const INITIALIZING_COLORS = [
+  '#9b5de5',
+  '#f15bb5',
+  '#fee440',
+  '#00bbf9',
+  '#00f5d4',
+  '#005f73',
+  '#0a9396',
+  '#94d2bd',
+  '#e9d8a6',
+  '#ee9b00',
+  '#ca6702',
+  '#bb3e03',
+  '#b4418e',
+  '#ae2012',
+  '#15a2a2',
+  '#9b2226',
+  '#f5cac3',
+  '#f28482',
+  '#f6bd60'
+];
+
 export const initializingColors = ({
   sizeOfData = 0,
   existedColors,
-  charType
+  isChartCompare
 }) => {
-  console.log(
-    '🚀 ~ file: parseColors.js ~ line 52 ~ sizeOfData',
-    sizeOfData,
-    existedColors,
-    charType
-  );
   if (sizeOfData === 0) return [];
-  if (charType === ChartTypes.PIE && sizeOfData !== existedColors?.length) {
+  if (isChartCompare && sizeOfData !== existedColors?.length) {
     const tmpArr = [];
 
     for (let index = 0; index < sizeOfData; index++) {
-      tmpArr.push(randomHex());
+      tmpArr.push(INITIALIZING_COLORS[index]);
     }
+
     return tmpArr;
   }
 
@@ -73,9 +103,19 @@ export const initializingColors = ({
     }
   }
 
-  if (charType !== ChartTypes.PIE && !validArray({list: existedColors})) {
-    return [randomHex()];
+  if (!existedColors || existedColors?.length === 0) {
+    return [INITIALIZING_COLORS[0]];
   }
 
   return existedColors;
+};
+
+export const initColors = ({sizeOfData}) => {
+  const tmpArr = [];
+
+  for (let index = 0; index < sizeOfData; index++) {
+    tmpArr.push(INITIALIZING_COLORS[index]);
+  }
+
+  return tmpArr;
 };

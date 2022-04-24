@@ -10,7 +10,6 @@ const CustomPieChart = ({
   showLegend = true,
   position = 'top'
 }) => {
-  console.log('🚀 ~ file: CustomPieChart.js ~ line 13 ~ colors', colors);
   const dataDestructured = React.useMemo(() => {
     if (pieData) {
       return pieData?.datasets?.map(item => {
