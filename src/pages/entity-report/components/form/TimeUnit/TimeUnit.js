@@ -31,6 +31,10 @@ export default function TimeUnit({
   const error = errors?.api?.time_unit || undefined;
   const timeRangeSelected = watch('api.time_range');
   const timeUnitSelect = watch(unitName);
+  console.log(
+    '🚀 ~ file: TimeUnit.js ~ line 34 ~ timeUnitSelect',
+    timeUnitSelect
+  );
 
   //---> Get units by time range
   const units = React.useMemo(
@@ -46,6 +50,13 @@ export default function TimeUnit({
   React.useEffect(() => {
     //---> Reset select unit when time range changed
     if (timeRangeSelected !== defaultTimeRange) {
+      if (isChartCompare) {
+        setValue(unitName, TimeUnits.GLOBAL, {
+          shouldValidate: true,
+          shouldDirty: true
+        });
+        return;
+      }
       try {
         const unitFromTimeRange = getTimeUnitsFromTimeRange({
           timeRange: timeRangeSelected

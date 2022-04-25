@@ -48,22 +48,24 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   };
 
   const firstPointEnable =
-    reportSource && reportType && reportBy && timeRange && timeUnit;
-
+    reportSource && reportType && reportBy && timeRange && timeUnit
+      ? true
+      : false;
+  console.log('===== Global', firstPointEnable, isCompareChart, timeUnit);
   if (firstPointEnable) {
     if (isCompareChart) {
       if (timeUnit === TimeUnits.GLOBAL) {
+        console.log('===== ');
         enableCallMetric = true;
       }
     } else {
       if (timeUnit !== TimeUnits.GLOBAL) {
         enableCallMetric = true;
       }
+      if (reportBy === 'source' && reportByUuid) {
+        enableCallMetric = true;
+      }
     }
-  }
-
-  if (reportBy === 'source' && reportByUuid) {
-    enableCallMetric = true;
   }
 
   // Distribution report

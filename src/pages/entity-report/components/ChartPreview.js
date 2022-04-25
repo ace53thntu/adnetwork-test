@@ -49,6 +49,7 @@ const ChartPreview = ({
     reportId,
     enabled: !!reportId && enableCallMetric
   });
+  console.log('🚀 ~ file: ChartPreview.js ~ line 48 ~ metrics', metrics);
 
   if (isFetching) {
     return <div>Loading...</div>;
@@ -81,6 +82,7 @@ const ChartPreviewContent = ({
   reportSource,
   defaultColors
 }) => {
+  console.log('🚀 ~ file: ChartPreview.js ~ line 84 ~ metrics', metrics);
   const {watch, setValue} = useFormContext();
   const isChartCompare = useIsChartCompareInForm();
   const chartMode = useChartModeSelector();
