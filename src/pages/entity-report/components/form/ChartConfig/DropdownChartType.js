@@ -47,7 +47,7 @@ const DropdownChartType = ({metricSet = [], defaultChartType = ''}) => {
           ref={ref}
           className={`c-dropdown-menu ${showDropdown ? 'show' : ''}`}
         >
-          {!isChartCompare && (
+          {!isChartCompare && false && (
             <div className="c-menu-item mb-2" style={{display: isChartCompare}}>
               <ColorSliderContainer />
             </div>

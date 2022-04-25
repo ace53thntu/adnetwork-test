@@ -49,7 +49,6 @@ const ChartPreview = ({
     reportId,
     enabled: !!reportId && enableCallMetric
   });
-  console.log('🚀 ~ file: ChartPreview.js ~ line 48 ~ metrics', metrics);
 
   if (isFetching) {
     return <div>Loading...</div>;
@@ -82,7 +81,6 @@ const ChartPreviewContent = ({
   reportSource,
   defaultColors
 }) => {
-  console.log('🚀 ~ file: ChartPreview.js ~ line 84 ~ metrics', metrics);
   const {watch, setValue} = useFormContext();
   const isChartCompare = useIsChartCompareInForm();
   const chartMode = useChartModeSelector();
@@ -91,6 +89,10 @@ const ChartPreviewContent = ({
   );
   const colorsSelected = watch(
     `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
+  );
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 93 ~ colorsSelected',
+    colorsSelected
   );
   const parseColorsNoCompare = parseColorsFn(colorsSelected);
   const reportGroup = PublisherReportBys.map(item => item.value).includes(

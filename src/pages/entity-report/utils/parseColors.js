@@ -85,6 +85,7 @@ export const initializingColors = ({
   isChartCompare
 }) => {
   if (sizeOfData === 0) return [];
+  //---> For compare chart (unit is Global)
   if (isChartCompare && sizeOfData !== existedColors?.length) {
     const tmpArr = [];
 
@@ -99,6 +100,7 @@ export const initializingColors = ({
     try {
       return JSON.parse(existedColors);
     } catch (err) {
+      console.log('🚀 ~ file: parseColors.js ~ line 103 ~ err', err);
       return [];
     }
   }
