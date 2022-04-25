@@ -11,6 +11,5 @@ window.ADN_META_DATA = {
   DOMAIN_NAME: 'aicactus',
   SDK_IOS_CONFIG: 'AiCactusConfig',
   DOMAIN_NAME_1: 'AiCactus',
-  SDK_CDN: 'https://cdn.aicactus.io/aicactus-sdk.min.js',
-  LOGO: 'https://via.placeholder.com/140x32.png?text=Your+Logo'
+  SDK_CDN: 'https://cdn.aicactus.io/aicactus-sdk.min.js'
 };
