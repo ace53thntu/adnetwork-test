@@ -1,3 +1,4 @@
+import {LOGO_URL} from 'constants/index';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
@@ -24,8 +25,9 @@ const HeaderLogo = () => {
           className="cursor-pointer"
         >
           <img
-            src="/images/logos/logo.png"
-            alt="aicactus-logo"
+            // src="/images/logos/logo.png"
+            src={LOGO_URL}
+            alt={`${window?.ADN_META_DATA?.NAME}-logo`}
             className="img-fluid"
           />
         </div>

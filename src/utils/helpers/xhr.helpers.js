@@ -12,7 +12,7 @@ import {
 } from './auth.helpers';
 
 // eslint-disable-next-line no-undef
-const authEndpoint = DMP_API_ENDPOINTS.AUTH_GATEWAY;
+const authEndpoint = ADN_API_ENDPOINTS.AUTH_GATEWAY;
 let isRefreshing = false;
 let failedQueue = [];
 

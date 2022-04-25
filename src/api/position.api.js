@@ -1,8 +1,9 @@
 import {XHRRequest} from 'utils/helpers/xhr.helpers';
+
 import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
-const apiURL = DMP_API_ENDPOINTS.API_GATEWAY;
+const apiURL = ADN_API_ENDPOINTS.API_GATEWAY;
 
 class PositionAPI extends XHRRequest {
   constructor(url) {

@@ -1,13 +1,14 @@
-import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import {Breadcrumb, BreadcrumbItem} from 'reactstrap';
-import {faHome} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {useLocation} from 'react-router-dom';
+import React from 'react';
 import {Helmet} from 'react-helmet-async';
 import {useTranslation} from 'react-i18next';
+import {useLocation} from 'react-router-dom';
+import {Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import {NAVIGATION_NAME_MAP} from 'routers/navigators';
+
+import {faHome} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 export default function PageTitle({icon, heading, subheading}) {
   const {t} = useTranslation();
@@ -20,7 +21,9 @@ export default function PageTitle({icon, heading, subheading}) {
   return (
     <div className="app-page-title">
       <Helmet>
-        <title>{heading} | Aicactus DMP</title>
+        <title>
+          {heading} | {window?.ADN_META_DATA?.TITLE}
+        </title>
       </Helmet>
       <div className="page-title-wrapper">
         <div className="page-title-heading">

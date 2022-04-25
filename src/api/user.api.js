@@ -3,7 +3,7 @@ import {XHRRequest} from 'utils/helpers/xhr.helpers';
 import {endpoints} from './constants';
 
 // eslint-disable-next-line no-undef
-const apiURL = DMP_API_ENDPOINTS.AUTH_GATEWAY;
+const apiURL = ADN_API_ENDPOINTS.AUTH_GATEWAY;
 
 class UserAPI extends XHRRequest {
   constructor(url) {

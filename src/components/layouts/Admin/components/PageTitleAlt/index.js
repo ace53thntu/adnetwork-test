@@ -24,7 +24,9 @@ const PageTitleAlt = props => {
   return (
     <div className="app-page-title">
       <Helmet>
-        <title>{heading} | Aicactus DMP</title>
+        <title>
+          {heading} | {window?.ADN_META_DATA?.TITLE}
+        </title>
       </Helmet>
       <div className="page-title-wrapper">
         <div className="page-title-heading">

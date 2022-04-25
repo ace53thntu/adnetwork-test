@@ -1,10 +1,10 @@
+import {SDK_NAME} from 'constants/container';
 import React from 'react';
 
 import ReactPrismjs from '@uiw/react-prismjs';
-import {SDK_NAME} from 'constants/container';
 
-const sourceScript = containerId => `// ContainerID AiCactus
-let configuration = AiCactusConfig(writeKey: "${containerId}@ios")
+const sourceScript = containerId => `// ContainerID ${window.ADN_META_DATA.DOMAIN_NAME_1}
+let configuration = ${window.ADN_META_DATA.SDK_IOS_CONFIG}(writeKey: "${containerId}@ios")
 // Enable this to record certain application events automatically!
 configuration.trackApplicationLifecycleEvents = true
 // Enable this to record screen views automatically!

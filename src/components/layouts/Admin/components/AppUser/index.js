@@ -43,7 +43,7 @@ function PartnerInfo({partner}) {
       </div>
       <div className={enableClosedSidebar ? 'enableClosedSidebar' : ''}>
         <h5 className="menu-header-title text-light">
-          {partner?.partner_name ?? 'Aicactus'}
+          {partner?.partner_name ?? window?.ADN_META_DATA?.NAME ?? ''}
         </h5>
       </div>
     </>
