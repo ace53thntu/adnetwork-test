@@ -1,18 +1,18 @@
-import './_main.scss';
+//---> Build-in Modules
+import React from 'react';
 
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-// Internl Modules
+//---> External Modules
+import {useParams} from 'react-router';
+import {useDispatch} from 'react-redux';
+
+//---> Internal Modules
+import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
-// import {useGetReportPage} from 'queries/report-page';
-// Build-in Modules
-import React from 'react';
-import {useDispatch} from 'react-redux';
-// External Modules
-import {useParams} from 'react-router';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-
+import {useGetReportPage} from 'queries/report-page';
 import ReportSidebar from './components/ReportSidebar';
+import {PageTitleAlt} from 'components/layouts/Admin/components';
+import './_main.scss';
 
 const ReportLayout = ({children}) => {
   const reduxDispatch = useDispatch();
@@ -21,7 +21,7 @@ const ReportLayout = ({children}) => {
   }, [reduxDispatch]);
   const {pageId} = useParams();
 
-  // const {data: pageDetails} = useGetReportPage(pageId);
+  const {data: pageDetails} = useGetReportPage(pageId);
 
   return (
     <>
@@ -33,8 +33,7 @@ const ReportLayout = ({children}) => {
 
       <AppContent>
         <PageTitleAlt
-          // heading={pageDetails?.name || 'Dashboard'}
-          heading="Ahehehe"
+          heading={pageDetails?.name || 'Dashboard'}
           subheading=""
           icon="pe-7s-graph2 icon-gradient bg-mean-fruit"
           hideBreadcrumb
