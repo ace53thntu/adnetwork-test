@@ -127,8 +127,8 @@ const getDataLineChart = ({
   type,
   colors
 }) => {
-  const startTime = moment.unix(start_time);
-  const endTime = moment.unix(end_time);
+  const startTime = getDateFromTimestamp(start_time); //moment.unix(start_time);
+  const endTime = getDateFromTimestamp(end_time); //moment.unix(end_time);
   const increaseNumber = 1;
   const unitStr = unit;
   //---> Get list of checkpoints
@@ -199,9 +199,9 @@ const enumerateDaysBetweenDates = ({
 
     now.add(increaseNumber, unit);
   }
-  // if (validArray({list: dates})) {
-  //   dates.length = dates?.length - 1;
-  // }
+  if (validArray({list: dates})) {
+    dates.length = dates?.length - 1;
+  }
 
   return dates;
 };
@@ -310,4 +310,13 @@ const getPriceValue = value => {
   }
 
   return value;
+};
+
+const getDateFromTimestamp = timestamp => {
+  if (!timestamp) {
+    return null;
+  }
+
+  const dateTmp = new Date(timestamp * 1000);
+  return moment(dateTmp);
 };
