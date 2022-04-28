@@ -34,6 +34,20 @@ import {getReportById} from '../../utils/getReportById';
 import '../../styles/styles.scss';
 import {useMappingMetricSet} from 'pages/entity-report/hooks/useMappingMetricSet';
 import ReportName from './ReportName';
+import {exportFile} from 'pages/entity-report/utils/exportExcelFile';
+import styled from 'styled-components';
+
+const IconStyled = styled(Button)`
+  padding: 5px;
+  color: ${props => (props?.isDeleted ? 'red' : 'blue')};
+  &hover {
+    color: ${props => (props?.isDeleted ? 'red' : 'blue')};
+    opacity: 0.7;
+  }
+  & i {
+    font-size: 18px;
+  }
+`;
 
 export default function ReportItem({
   entityId,
@@ -48,6 +62,7 @@ export default function ReportItem({
   metrics = null,
   isFetching = true
 }) {
+  console.log('🚀 ~ file: ReportItem.js ~ line 65 ~ reportItem', reportItem);
   const dispatch = useDispatch();
   const {
     uuid: reportId,
@@ -167,14 +182,36 @@ export default function ReportItem({
           </div>
           {!isFetching && !isViewed && (
             <div className="delete-report">
-              <Button
+              <IconStyled
+                type="button"
+                color="link"
+                onClick={evt =>
+                  exportFile({
+                    evt,
+                    metricData,
+                    metricSet,
+                    timeUnit: unit,
+                    reportBy: report_by,
+                    reportName: name,
+                    timeRange,
+                    reportSource: report_source,
+                    reportType: report_type,
+                    parentPath
+                  })
+                }
+                title="Export"
+              >
+                <i className="pe-7s-download"></i>
+              </IconStyled>
+              <IconStyled
                 type="button"
                 color="link"
                 onClick={onClickDelete}
                 title="Delete"
+                isDeleted
               >
                 <i className="pe-7s-trash"></i>
-              </Button>
+              </IconStyled>
             </div>
           )}
         </div>
