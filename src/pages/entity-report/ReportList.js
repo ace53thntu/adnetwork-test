@@ -9,6 +9,7 @@ import NoReportAvailable from './components/NoReportAvailable';
 import ReportItemContainer from './ReportItemContainer';
 
 const ReportList = ({reports = [], entityId, metricType}) => {
+  console.log('test build-----');
   return (
     <Row>
       {reports?.map((reportItem = {}, idx) => {
