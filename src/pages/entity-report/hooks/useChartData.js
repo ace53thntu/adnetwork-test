@@ -156,6 +156,7 @@ const getDataLineChart = ({
         metricSet: item,
         chartMode
       });
+      console.log('==== colors?.[idx]', colors?.[idx]);
       data.push({
         data: dataItem,
         label: item?.label,

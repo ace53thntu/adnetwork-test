@@ -2,6 +2,8 @@ import {TimeUnits} from 'constants/report';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {utils, writeFile} from 'xlsx';
 
+const LENGTH_OF_FILE_NAME = 200;
+
 export const exportFile = ({
   evt,
   metricData,
@@ -44,7 +46,6 @@ export const exportFile = ({
     parentPath,
     metricSet
   });
-  console.log('🚀 ~ file: exportExcelFile.js ~ line 46 ~ fileName', fileName);
   writeFile(wb, `${fileName}.xlsx`);
 };
 
@@ -184,6 +185,10 @@ const generateReportName = ({
   reportName = reportName.replace(/:/g, '-');
   reportName = reportName.replace(/---/g, '-');
   reportName = reportName.replace(/--/g, '-');
+
+  if (reportName?.length > LENGTH_OF_FILE_NAME) {
+    reportName = reportName.substring(0, LENGTH_OF_FILE_NAME);
+  }
 
   return reportName;
 };

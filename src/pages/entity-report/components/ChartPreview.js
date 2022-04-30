@@ -40,6 +40,10 @@ const ChartPreview = ({
   defaultColors,
   sourceUuid
 }) => {
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 43 ~ defaultColors',
+    defaultColors
+  );
   const {metricBody: metricRequestBody, enableCallMetric} = useGetMetricBody({
     sourceUuid
   });
@@ -95,6 +99,10 @@ const ChartPreviewContent = ({
     colorsSelected
   );
   const parseColorsNoCompare = parseColorsFn(colorsSelected);
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 98 ~ parseColorsNoCompare',
+    parseColorsNoCompare
+  );
   const reportGroup = PublisherReportBys.map(item => item.value).includes(
     reportSource
   )

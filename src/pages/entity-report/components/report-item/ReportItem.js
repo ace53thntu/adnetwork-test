@@ -62,7 +62,6 @@ export default function ReportItem({
   metrics = null,
   isFetching = true
 }) {
-  console.log('🚀 ~ file: ReportItem.js ~ line 65 ~ reportItem', reportItem);
   const dispatch = useDispatch();
   const {
     uuid: reportId,
@@ -84,7 +83,7 @@ export default function ReportItem({
   const chartMode = properties?.mode || ChartModes.BY;
   const metricSetRes = properties?.metric_set || [];
   const parentPath = properties?.parentPath || '';
-  const colors = parseColors(color);
+  const colors = parseColors(color, metricSetRes);
   const reportByUuid = getReportById({report: reportItem, entityId});
 
   const {mutateAsync: deleteReport} = useDeleteReport();

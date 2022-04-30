@@ -1,11 +1,43 @@
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 
-export const parseColors = color => {
-  if (!color) {
-    return [];
+export const parseColors = (color = [], metricSet = []) => {
+  console.log(
+    '🚀 ~ file: parseColors.js ~ line 4 ~ parseColors ~ color',
+    color,
+    typeof color,
+    metricSet
+  );
+  if (!color || color === '[]' || color.length === 0) {
+    if (!metricSet || metricSet?.length === 0) {
+      return [];
+    }
+    const colorSize = metricSet?.length;
+    const newColors = INITIALIZING_COLORS;
+    newColors.length = colorSize;
+    console.log(
+      '🚀 ~ file: parseColors.js ~ line 16 ~ parseColors ~ newColors',
+      newColors
+    );
+    return newColors;
+  }
+
+  if (color && typeof color === 'string' && !color.includes('[')) {
+    console.log(
+      '🚀 ~ file: parseColors.js ~ line 25 ~ parseColors ~ color',
+      color,
+      color?.split(',')
+    );
+    if (color.includes(',')) {
+      return color?.split(',');
+    }
+    return [color];
   }
 
   if (typeof color !== 'string') {
+    console.log(
+      '🚀 ~ file: parseColors.js ~ line 25 ~ parseColors ~ color',
+      color
+    );
     return color;
   }
 

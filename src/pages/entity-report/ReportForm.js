@@ -56,6 +56,7 @@ const ReportForm = ({
     });
     return colors;
   }, [selectedMetricSet]);
+  console.log('🚀 ~ file: ReportForm.js ~ line 59 ~ colors ~ colors', colors);
 
   const toggleModalReportForm = () => {
     setShowReportForm(prevState => !prevState);
