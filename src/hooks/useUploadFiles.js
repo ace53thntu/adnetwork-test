@@ -21,7 +21,8 @@ export function useUploadFile({
   removeFile,
   fileType = 'BANNER',
   filePath = fileTypePaths?.['BANNER'],
-  isInArray = false
+  isInArray = false,
+  context = null
 }) {
   const dispatch = useDispatch();
   const [files, setFiles] = React.useState([]);
@@ -43,8 +44,12 @@ export function useUploadFile({
 
         const formData = new FormData();
         formData.append('file_name', acceptedFiles[0].name);
-        formData.append('path', filePath);
-        formData.append('file_type', fileType);
+        // formData.append('path', filePath);
+        // formData.append('context', fileType);
+
+        if (context) {
+          formData.append('context', context);
+        }
         formData.append('file', acceptedFiles[0]);
 
         try {
@@ -78,14 +83,13 @@ export function useUploadFile({
     },
     [
       clearErrors,
-      filePath,
-      fileType,
+      context,
+      dispatch,
       isInArray,
       name,
       onChange,
       setError,
-      uploadFileRequest,
-      dispatch
+      uploadFileRequest
     ]
   );
 

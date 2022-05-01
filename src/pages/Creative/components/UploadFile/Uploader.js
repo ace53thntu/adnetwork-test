@@ -23,7 +23,8 @@ function Uploader(props) {
     fileType,
     filePath,
     isInArray,
-    onlyPreview
+    onlyPreview,
+    context
   } = props;
 
   const {t} = useTranslation();
@@ -49,7 +50,8 @@ function Uploader(props) {
     fileIndex,
     fileType,
     filePath,
-    isInArray
+    isInArray,
+    context
   });
 
   const file = value?.uuid ? value : files?.[0] ? files[0] : null;

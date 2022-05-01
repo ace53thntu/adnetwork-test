@@ -111,6 +111,7 @@ function AssetForm(props) {
                   accept={getAssetAcceptFile(watchTypeValue.id)}
                   defaultValue={data?.file}
                   onlyPreview={data?.file ? true : false}
+                  context="asset"
                 />
               </Col>
             )}

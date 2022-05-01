@@ -19,7 +19,8 @@ function UploadFile(props) {
     fileType,
     filePath,
     isInArray,
-    onlyPreview
+    onlyPreview,
+    context
   } = props;
 
   const {errors, control, setError, clearErrors} = useFormContext();
@@ -49,6 +50,7 @@ function UploadFile(props) {
               filePath={filePath}
               isInArray={isInArray}
               onlyPreview={onlyPreview}
+              context={context}
             />
           </FormGroup>
         );
@@ -95,7 +97,8 @@ UploadFile.propTypes = {
     'catalog'
   ]),
   isInArray: PropTypes.bool,
-  onlyPreview: PropTypes.bool
+  onlyPreview: PropTypes.bool,
+  context: PropTypes.oneOf(['alternative', 'video', 'asset'])
 };
 UploadFile.defaultProps = {
   isInArray: false,

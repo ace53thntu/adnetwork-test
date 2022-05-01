@@ -343,6 +343,7 @@ function AlternativeForm(props) {
             accept={ACCEPT_FILES}
             defaultValue={defaultValues?.file}
             onlyPreview={defaultValues?.file ? true : false}
+            context="alternative"
           />
         </Col>
       </Row>

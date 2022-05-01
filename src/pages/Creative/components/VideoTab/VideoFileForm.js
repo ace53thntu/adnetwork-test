@@ -39,6 +39,7 @@ function VideoFileForm(props) {
               fileIndex={fileIndex}
               fileType={'VIDEO'}
               filePath={fileTypePaths?.['VIDEO']}
+              context="video"
             />
           </div>
         </Col>
