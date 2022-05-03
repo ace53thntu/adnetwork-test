@@ -11,5 +11,6 @@ window.ADN_META_DATA = {
   DOMAIN_NAME: 'aicactus',
   SDK_IOS_CONFIG: 'AiCactusConfig',
   DOMAIN_NAME_1: 'AiCactus',
-  SDK_CDN: 'https://cdn.aicactus.io/aicactus-sdk.min.js'
+  SDK_CDN: 'https://cdn.aicactus.io/aicactus-sdk.min.js',
+  DIRECT_URL: 'https://staging-adnetwork-core-lb7.aicactus.io/direct-ads'
 };

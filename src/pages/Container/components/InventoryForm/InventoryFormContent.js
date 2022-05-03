@@ -1,33 +1,33 @@
-//---> Build-in Modules
-import React from 'react';
-
+import {ButtonLoading} from 'components/common';
+//---> Internal Modules
+import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import PositionSelect from 'components/forms/PositionSelect';
+import {MarketTypes, PriceEngines} from 'constants/inventory';
+import {InputStatus} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
 //---> External Modules
 import PropTypes from 'prop-types';
+//---> Build-in Modules
+import React from 'react';
 import BlockUi from 'react-block-ui';
-import {useTranslation} from 'react-i18next';
 import {useFormContext, useWatch} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Link} from 'react-router-dom';
 import {
+  Button,
   Col,
   FormGroup,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row,
-  Button
+  Row
 } from 'reactstrap';
-import {Link} from 'react-router-dom';
 
-//---> Internal Modules
-import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
-import {ButtonLoading} from 'components/common';
-import InventoryProperty from './InventoryProperty';
-import DspSelect from './DspSelect';
-import {MarketTypes, PriceEngines} from 'constants/inventory';
-import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {InputStatus} from 'constants/misc';
-import {RoutePaths} from 'constants/route-paths';
-import PositionSelect from 'components/forms/PositionSelect';
+import DirectSnippet from '../Snippets/DirectUrlSnippet';
 import InventorySnippet from '../Snippets/InventorySnippet';
+import DspSelect from './DspSelect';
+import InventoryProperty from './InventoryProperty';
 import TrackerForm from './TrackerForm';
 import {SDK_NAME} from 'constants/container';
 
@@ -55,6 +55,10 @@ const inventoryCodeSnippet = inventoryId => {
     inventoryId: ${inventoryId},
     placementId: "//your placement ID in DOM"
   }]);`;
+};
+
+const directURLCodeSnippet = inventoryId => {
+  return `${window.ADN_META_DATA.DIRECT_URL}/${inventoryId}`;
 };
 
 const InventoryFormContent = ({
@@ -227,9 +231,14 @@ const InventoryFormContent = ({
         </Row>
         <InventoryProperty currentInventory={inventory} />
         {inventory?.uuid && (
-          <InventorySnippet>
-            {inventoryCodeSnippet(inventory?.id || '')}
-          </InventorySnippet>
+          <>
+            <InventorySnippet>
+              {inventoryCodeSnippet(inventory?.id || '')}
+            </InventorySnippet>
+            <DirectSnippet>
+              {directURLCodeSnippet(inventory?.uuid || '')}
+            </DirectSnippet>
+          </>
         )}
 
         <TrackerForm />

@@ -1,11 +1,17 @@
-// import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
 
 import {WEB_TAG_STEPS} from '../../constants';
-import InventoryList from '../InventoryForm/InventoryList';
-import OverviewTab from './OverviewTab';
 import PagesAndEventsTab from './PagesAndEventsTab';
+
+const InventoryList = React.lazy(() =>
+  import(
+    '../InventoryForm/InventoryList' /* webpackChunkName: "container-inventory-list" */
+  )
+);
+const OverviewTab = React.lazy(() =>
+  import('./OverviewTab' /* webpackChunkName: "container-overview-tab" */)
+);
 
 function WebsiteTag(props) {
   const [activeStep, setActiveStep] = React.useState(0);
