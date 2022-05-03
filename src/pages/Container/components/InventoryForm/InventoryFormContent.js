@@ -29,6 +29,7 @@ import {RoutePaths} from 'constants/route-paths';
 import PositionSelect from 'components/forms/PositionSelect';
 import InventorySnippet from '../Snippets/InventorySnippet';
 import TrackerForm from './TrackerForm';
+import {SDK_NAME} from 'constants/container';
 
 const formName = {
   properties: 'properties',
@@ -50,7 +51,7 @@ const propTypes = {
 };
 
 const inventoryCodeSnippet = inventoryId => {
-  return `window.AicactusSDK.requestAds([{
+  return `window.${SDK_NAME}.requestAds([{
     inventoryId: ${inventoryId},
     placementId: "//your placement ID in DOM"
   }]);`;
