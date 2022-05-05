@@ -11,6 +11,7 @@ import React from 'react';
 //---> External Modules
 import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
+import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -36,6 +37,7 @@ import {getResponseData} from 'utils/helpers/misc.helpers';
 import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
+import {StrategyTypes} from 'pages/Campaign/constants';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -43,7 +45,13 @@ const propTypes = {
 
 const InventoryContentModal = ({containerId}) => {
   const role = getRole();
-
+  const {watch} = useFormContext();
+  const strategyTypeSelected = watch('strategy_type');
+  const strategyType = strategyTypeSelected?.value;
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 49 ~ InventoryContentModal ~ strategyType',
+    strategyType
+  );
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
 
@@ -83,6 +91,10 @@ const InventoryContentModal = ({containerId}) => {
     inventories,
     strategyInventories
   });
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 96 ~ InventoryContentModal ~ inventoriesMapping',
+    inventoriesMapping
+  );
 
   const initChecked = React.useCallback(list => {
     setInventoryIdsChecked(list);
@@ -111,7 +123,7 @@ const InventoryContentModal = ({containerId}) => {
   );
 
   const columns = React.useMemo(() => {
-    return [
+    let baseCols = [
       {
         header: 'Name',
         accessor: 'name'
@@ -140,32 +152,56 @@ const InventoryContentModal = ({containerId}) => {
         )
       },
       {
-        header: 'Floor price',
-        accessor: 'floor_price',
-        cell: row => (
-          <Badge color="warning" pill>
-            {row?.value}
-          </Badge>
-        )
-      },
-      {
         header: 'Position',
         accessor: 'position_name',
         cell: row => <div>{row?.value}</div>
-      },
-      {
-        header: 'Deal Floor Price',
-        accessor: 'deal_floor_price',
-        cell: row => (
-          <DealFloorPriceInput
-            defaultValue={row?.value || 0}
-            onChangeInputGlobal={value =>
-              onChangeDealFloorPrice(value, row?.original?.uuid)
-            }
-          />
-        )
       }
-    ].filter(item => {
+    ];
+    let cols = [];
+    if (strategyType === StrategyTypes.PREMIUM) {
+      cols = [
+        ...baseCols,
+        {
+          header: 'Floor price',
+          accessor: 'floor_price',
+          cell: row => (
+            <Badge color="warning" pill>
+              {row?.value}
+            </Badge>
+          )
+        },
+        {
+          header: 'Deal Floor Price',
+          accessor: 'deal_floor_price',
+          cell: row => (
+            <DealFloorPriceInput
+              defaultValue={row?.value || 0}
+              onChangeInputGlobal={value =>
+                onChangeDealFloorPrice(value, row?.original?.uuid)
+              }
+              strategyType={strategyType}
+            />
+          )
+        }
+      ];
+    } else {
+      cols = [
+        ...baseCols,
+        {
+          header: 'Floor Price',
+          accessor: 'floor_price',
+          cell: row => (
+            <DealFloorPriceInput
+              defaultValue={row?.value || 0}
+              onChangeInputGlobal={value =>
+                onChangeDealFloorPrice(value, row?.original?.uuid)
+              }
+            />
+          )
+        }
+      ];
+    }
+    return cols.filter(item => {
       if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
         if (
           ['market_type', 'deal_floor_price', 'floor_price'].includes(
@@ -178,7 +214,7 @@ const InventoryContentModal = ({containerId}) => {
       }
       return true;
     });
-  }, [onChangeDealFloorPrice, role]);
+  }, [onChangeDealFloorPrice, role, strategyType]);
 
   const onClickItem = item => {};
 

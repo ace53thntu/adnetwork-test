@@ -1,3 +1,11 @@
+/**
+ * @enum
+ */
+export const StrategyTypes = {
+  NORMAL: 'normal',
+  PREMIUM: 'premium'
+};
+
 export const StrategyViewTabs = {
   DESCRIPTION: {
     value: 0,
