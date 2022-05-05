@@ -196,6 +196,7 @@ const InventoryContentModal = ({containerId}) => {
               onChangeInputGlobal={value =>
                 onChangeDealFloorPrice(value, row?.original?.uuid)
               }
+              strategyType={strategyType}
             />
           )
         }
