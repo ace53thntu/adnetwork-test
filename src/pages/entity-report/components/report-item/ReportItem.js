@@ -60,7 +60,8 @@ export default function ReportItem({
   modeSelectReport = false,
   handleSelectedReport = () => null,
   metrics = null,
-  isFetching = true
+  isFetching = true,
+  noEdit = false
 }) {
   const dispatch = useDispatch();
   const {
@@ -253,6 +254,7 @@ export default function ReportItem({
           distributionBy={distributionBy}
           entityId={entityId}
           reportId={reportId}
+          noEdit={noEdit}
         />
       )}
       {showDialogConfirm && (

@@ -1,6 +1,7 @@
 import {ReportTypes, REPORT_INPUT_NAME, TimeUnits} from 'constants/report';
 import moment from 'moment';
 import {useFormContext} from 'react-hook-form';
+import {isValidTimePeriod} from '../utils';
 import {useIsChartCompareInForm} from './useIsChartCompare';
 
 // Input names
@@ -97,10 +98,4 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     metricBody,
     enableCallMetric
   };
-};
-
-const isValidTimePeriod = ({startTime, endTime}) => {
-  return startTime && endTime && moment(startTime).isBefore(moment(endTime))
-    ? true
-    : false;
 };

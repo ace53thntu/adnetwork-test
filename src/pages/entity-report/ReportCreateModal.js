@@ -19,6 +19,8 @@ import {
   useMetricsBodySelector,
   useParentPathSelector
 } from 'store/reducers/entity-report';
+import {useQueryClient} from 'react-query';
+import {GET_REPORT} from 'queries/report/constants';
 
 export default function ModalReportForm({
   modal = false,
@@ -32,8 +34,11 @@ export default function ModalReportForm({
   metricType = '',
   entityType = '',
   entityId,
-  reportId
+  reportId,
+  noEdit = false
 }) {
+  const client = useQueryClient();
+
   const entityNameRedux = useEntityNameSelector();
   const parentPathRedux = useParentPathSelector();
 
@@ -67,13 +72,14 @@ export default function ModalReportForm({
     async submitData => {
       try {
         await updateReport({reportId: report?.uuid, data: submitData});
+        await client.invalidateQueries([GET_REPORT, reportId]);
         ShowToast.success('Updated report successfully');
         toggle();
       } catch (error) {
         ShowToast.error(error?.msg || 'Fail to update report');
       }
     },
-    [report?.uuid, toggle, updateReport]
+    [client, report?.uuid, reportId, toggle, updateReport]
   );
   const onSubmit = useCallback(
     async formData => {
@@ -128,7 +134,8 @@ export default function ModalReportForm({
     metricSet,
     timeRange,
     entityId,
-    unit
+    unit,
+    noEdit
   };
 
   return (

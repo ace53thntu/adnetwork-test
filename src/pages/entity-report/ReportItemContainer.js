@@ -11,21 +11,31 @@ import {QueryStatuses} from 'constants/react-query';
 import {getMetricRequestBody} from './utils/metricRequest';
 
 const propTypes = {
-  report: PropTypes.object
+  report: PropTypes.object,
+  noEdit: PropTypes.bool
 };
 
-const ReportItemContainer = ({report, handleSelectedReport = () => null}) => {
+const ReportItemContainer = ({
+  report,
+  handleSelectedReport = () => null,
+  noEdit = false
+}) => {
   return (
     <ReportItemContent
       report={report}
       handleSelectedReport={handleSelectedReport}
+      noEdit={noEdit}
     />
   );
 };
 
 ReportItemContainer.propTypes = propTypes;
 
-const ReportItemContent = ({report, handleSelectedReport = () => null}) => {
+const ReportItemContent = ({
+  report,
+  handleSelectedReport = () => null,
+  noEdit = false
+}) => {
   const {source_uuid, report_source, uuid} = report;
 
   const requestBody = getMetricRequestBody({report});
@@ -47,6 +57,7 @@ const ReportItemContent = ({report, handleSelectedReport = () => null}) => {
       metrics={metricData}
       isFetching={isFetching}
       handleSelectedReport={handleSelectedReport}
+      noEdit={noEdit}
     />
   );
 };

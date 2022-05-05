@@ -45,7 +45,8 @@ export default function ReportFormContent({
   metricSet,
   unit,
   timeRange,
-  entityId
+  entityId,
+  noEdit
 }) {
   const {t} = useTranslation();
   const currentReport = useDefaultValues({report});
@@ -208,7 +209,7 @@ export default function ReportFormContent({
             />
           </ModalBody>
           <ModalFooter>
-            <ActionFooter {...{isViewed, formState, toggle}} />
+            <ActionFooter {...{isViewed, formState, toggle, noEdit}} />
           </ModalFooter>
         </BlockUi>
       </form>
@@ -243,13 +244,13 @@ const TitleHeader = ({
   );
 };
 
-const ActionFooter = ({isViewed, formState, toggle}) => {
+const ActionFooter = ({isViewed, formState, toggle, noEdit}) => {
   return (
     <>
       <Button type="button" color="link" onClick={toggle}>
         {isViewed ? 'Close' : 'Cancel'}
       </Button>
-      {!isViewed && (
+      {!isViewed && !noEdit && (
         <Button type="submit" color="primary" disabled={!formState.isDirty}>
           Save
         </Button>

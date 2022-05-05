@@ -166,10 +166,10 @@ export const formToApi = ({
     };
   }
 
-  if (strategy_type?.value === 'premium') {
-    const inventoriesBid = formData?.inventories_bid || [];
-    strategyReturn.inventories_bid = inventoriesBid;
-  }
+  // if (strategy_type?.value === 'premium') {
+  const inventoriesBid = formData?.inventories_bid || [];
+  strategyReturn.inventories_bid = inventoriesBid;
+  // }
 
   if (isSummary) {
     strategyReturn.concept_uuids =

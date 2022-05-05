@@ -158,6 +158,7 @@ const ReportList = ({pageDetails = {}}) => {
                       <ReportItemContainer
                         report={reportItem}
                         handleSelectedReport={handleSelectedReport}
+                        noEdit
                       />
                     </CardBody>
                   </Card>

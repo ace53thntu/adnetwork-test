@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 //---> Internal Modules
 import InformationGroup from './form-fields/InformationGroup';
 import InventoryGroup from './form-fields/InventoryGroup';
-import {useWatch} from 'react-hook-form';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
@@ -25,7 +24,7 @@ const StrategyForm = ({
   currentStrategy = null
 }) => {
   const role = getRole();
-  const typeSelected = useWatch({name: 'strategy_type'});
+  const isCreate = React.useMemo(() => !isEdit && !isView, [isEdit, isView]);
 
   return (
     <>
@@ -37,12 +36,12 @@ const StrategyForm = ({
         role={role}
       />
 
-      {!isEdit && !isView && <BudgetGroup />}
-      {!isEdit && !isView && <ImpressionGroup />}
-      {!isEdit && !isView && <ScheduleGroup />}
+      {isCreate && <BudgetGroup />}
+      {isCreate && <ImpressionGroup />}
+      {isCreate && <ScheduleGroup />}
 
       {/* Inventory Group */}
-      {typeSelected?.value === 'premium' && <InventoryGroup isView={isView} />}
+      {<InventoryGroup isView={isView} />}
     </>
   );
 };
