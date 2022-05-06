@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const Concepts = React.lazy(() =>
+const Concepts = lazyWithRetry(() =>
   import('./Concepts' /* webpackChunkName: "concepts" */)
 );
 

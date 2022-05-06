@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const InventoryMarket = React.lazy(() =>
+const InventoryMarket = lazyWithRetry(() =>
   import(
     './inventory-market-list' /* webpackChunkName: "inventory-market-list" */
   )

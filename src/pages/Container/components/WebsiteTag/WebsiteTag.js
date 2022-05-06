@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {Button, Container, Nav, NavItem, TabContent, TabPane} from 'reactstrap';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
 import {WEB_TAG_STEPS} from '../../constants';
 import PagesAndEventsTab from './PagesAndEventsTab';
 
-const InventoryList = React.lazy(() =>
+const InventoryList = lazyWithRetry(() =>
   import(
     '../InventoryForm/InventoryList' /* webpackChunkName: "container-inventory-list" */
   )
 );
-const OverviewTab = React.lazy(() =>
+const OverviewTab = lazyWithRetry(() =>
   import('./OverviewTab' /* webpackChunkName: "container-overview-tab" */)
 );
 

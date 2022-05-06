@@ -1,14 +1,15 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const DspList = React.lazy(() =>
+const DspList = lazyWithRetry(() =>
   import('./dsp-list' /* webpackChunkName: "dsp-list" */)
 );
 
-const DspView = React.lazy(() =>
+const DspView = lazyWithRetry(() =>
   import('./dsp-view' /* webpackChunkName: "dsp-view" */)
 );
-const DspReport = React.lazy(() =>
+const DspReport = lazyWithRetry(() =>
   import('./dsp-report' /* webpackChunkName: "dsp-report" */)
 );
 

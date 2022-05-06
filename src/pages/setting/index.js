@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const DomainList = React.lazy(() =>
+const DomainList = lazyWithRetry(() =>
   import('./domain/DomainList' /* webpackChunkName: "domain-list" */)
 );
 
@@ -13,7 +14,7 @@ function DomainListPage() {
   );
 }
 
-const DomainGroupList = React.lazy(() =>
+const DomainGroupList = lazyWithRetry(() =>
   import(
     './domain-group/DomainGroupList' /* webpackChunkName: "domain-group-list" */
   )
@@ -27,7 +28,7 @@ function DomainGroupListPage() {
   );
 }
 
-const KeywordList = React.lazy(() =>
+const KeywordList = lazyWithRetry(() =>
   import('./keyword-list/KeywordList' /* webpackChunkName: "keyword-lists" */)
 );
 
@@ -39,7 +40,7 @@ function KeywordListPage() {
   );
 }
 
-const PositionList = React.lazy(() =>
+const PositionList = lazyWithRetry(() =>
   import('./position/PositionList' /* webpackChunkName: "position-list" */)
 );
 
@@ -51,7 +52,7 @@ function PositionListPage() {
   );
 }
 
-const TrackerTemplateList = React.lazy(() =>
+const TrackerTemplateList = lazyWithRetry(() =>
   import(
     './tracker-template/TrackerTemplateList' /* webpackChunkName: "tracker-template-list" */
   )
@@ -65,7 +66,7 @@ function TrackerTemplateListPage() {
   );
 }
 
-const TrackerList = React.lazy(() =>
+const TrackerList = lazyWithRetry(() =>
   import('./tracker/TrackerList' /* webpackChunkName: "tracker-list" */)
 );
 
@@ -77,7 +78,7 @@ function TrackerListPage() {
   );
 }
 
-const LocationList = React.lazy(() =>
+const LocationList = lazyWithRetry(() =>
   import('./location/LocationList' /* webpackChunkName: "location-list" */)
 );
 

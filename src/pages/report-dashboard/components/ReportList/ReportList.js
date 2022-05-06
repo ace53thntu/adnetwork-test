@@ -1,13 +1,3 @@
-//---> Build-in modules
-import React, {useCallback, useState} from 'react';
-
-//---> External Modules
-import {Card, CardBody, Col, Row} from 'reactstrap';
-import {useParams} from 'react-router-dom';
-
-//---> Internal Modules
-import ModalReportPage from '../report-page-modal';
-import {ReportContainerStyled} from './styled';
 import {LoadingIndicator} from 'components/common';
 import {Pagination} from 'components/list/pagination';
 import {IS_RESPONSE_ALL} from 'constants/misc';
@@ -16,10 +6,19 @@ import {checkIsFollowed} from 'pages/report-dashboard/helpers';
 import {useDestructureReports} from 'pages/report-dashboard/hooks';
 import {useGetReportsInfinite} from 'queries/report';
 import {useFollowReportPage} from 'queries/report-page';
-import {ActionFooter, ActionHeader} from '../actions';
+//---> Build-in modules
+import React, {useCallback, useState} from 'react';
+import {useParams} from 'react-router-dom';
+//---> External Modules
+import {Card, CardBody, Col, Row} from 'reactstrap';
+import {getUser} from 'utils/helpers/auth.helpers';
 import {validArray} from 'utils/helpers/dataStructure.helpers';
 import {getResponseData} from 'utils/helpers/misc.helpers';
-import {getUser} from 'utils/helpers/auth.helpers';
+
+import {ActionFooter, ActionHeader} from '../actions';
+//---> Internal Modules
+import ModalReportPage from '../report-page-modal';
+import {ReportContainerStyled} from './styled';
 
 const PER_PAGE = 10;
 const PAGE = 0;
@@ -117,10 +116,7 @@ const ReportList = ({pageDetails = {}}) => {
       await followPage(data);
       setIsFollowed(prevState => !prevState);
     } catch (err) {
-      console.log(
-        '🚀 ~ file: ReportList.js ~ line 86 ~ onFollowPage ~ err',
-        err
-      );
+      //
     }
   }
 

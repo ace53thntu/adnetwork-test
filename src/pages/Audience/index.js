@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const AudiencePage = React.lazy(() =>
+const AudiencePage = lazyWithRetry(() =>
   import('./Audience' /* webpackChunkName: "audience" */)
 );
 

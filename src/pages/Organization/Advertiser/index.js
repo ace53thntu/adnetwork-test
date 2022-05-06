@@ -1,10 +1,12 @@
-import React from 'react';
-import Loading from 'components/common/loading';
 import {ErrorBoundary} from 'components/common';
+import Loading from 'components/common/loading';
+import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
+
 import AdvertiserView from './advertiser-view';
 
-const AdvertiserList = React.lazy(() => import('./advertiser-list'));
-const AdvertiserReport = React.lazy(() => import('./advertiser-report'));
+const AdvertiserList = lazyWithRetry(() => import('./advertiser-list'));
+const AdvertiserReport = lazyWithRetry(() => import('./advertiser-report'));
 
 function AdvertiserListPage() {
   return (

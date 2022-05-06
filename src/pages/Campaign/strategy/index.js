@@ -1,16 +1,17 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
 export {default as StrategyList} from './list';
 export {default as StrategyEdit} from './edit';
 
-const StrategyCreate = React.lazy(() =>
+const StrategyCreate = lazyWithRetry(() =>
   import('./create' /* webpackChunkName: "strategy-create" */)
 );
-const StrategyDetail = React.lazy(() =>
+const StrategyDetail = lazyWithRetry(() =>
   import('./detail' /* webpackChunkName: "strategy-detail" */)
 );
-const StrategyEdit = React.lazy(() =>
+const StrategyEdit = lazyWithRetry(() =>
   import('./edit' /* webpackChunkName: "strategy-edit" */)
 );
 

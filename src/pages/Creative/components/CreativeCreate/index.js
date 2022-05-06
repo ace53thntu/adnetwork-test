@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const CreativeCreate = React.lazy(() =>
+const CreativeCreate = lazyWithRetry(() =>
   import('./CreativeCreate' /* webpackChunkName: "creative-create-dialog" */)
 );
 

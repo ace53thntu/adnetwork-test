@@ -1,7 +1,8 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const UserProfile = React.lazy(() =>
+const UserProfile = lazyWithRetry(() =>
   import('./UserProfile' /* webpackChunkName: "user-profile" */)
 );
 
