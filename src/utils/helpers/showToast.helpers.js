@@ -1,4 +1,5 @@
 import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ShowToast {
   static success(message) {
@@ -9,7 +10,8 @@ class ShowToast {
 
   static error(message) {
     toast.error(message ?? 'Something went wrong.', {
-      closeOnClick: true
+      closeOnClick: true,
+      autoClose: false
     });
   }
 

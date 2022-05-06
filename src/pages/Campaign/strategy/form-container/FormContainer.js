@@ -168,7 +168,7 @@ const FormContainer = ({
             `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
-          ShowToast.error(error?.msg);
+          ShowToast.error(error?.debug);
         }
       }
     },
