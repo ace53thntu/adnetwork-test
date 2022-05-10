@@ -53,8 +53,22 @@ const FormContainer = ({
   const {
     handleSubmit,
     reset,
-    formState: {isDirty}
+    formState: {isDirty},
+    watch
   } = methods;
+  const strategyType = watch('strategy_type');
+  const refStrategyType = React.useRef(null);
+
+  //---> Reset inventory in strategy when strategy type changed
+  React.useEffect(() => {
+    if(strategyType?.value !== refStrategyType && !isEdit && !isView){
+      refStrategyType.current = strategyType?.value;
+      dispatch( initStrategyInventoryListRedux({
+        inventoryList: [],
+        inventoryTempList: []
+      }))
+    }
+  } , [dispatch, isEdit, isView, strategyType?.value])
 
   const redirectPageAfterSave = useCallback(
     ({

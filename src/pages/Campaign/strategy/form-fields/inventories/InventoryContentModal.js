@@ -12,6 +12,7 @@ import React from 'react';
 import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
+import {formatValue} from 'react-currency-input-field';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -38,6 +39,7 @@ import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {StrategyTypes} from 'pages/Campaign/constants';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -64,9 +66,12 @@ const InventoryContentModal = ({containerId}) => {
   }
 
   let params = {
-    per_page: DEFAULT_PAGINATION.perPage,
-    allow_deal: true
+    per_page: DEFAULT_PAGINATION.perPage
   };
+
+  if (strategyType === StrategyTypes.PREMIUM) {
+    params.allow_deal = true;
+  }
 
   if (containerId) {
     params.container_uuid = containerId;
@@ -83,7 +88,6 @@ const InventoryContentModal = ({containerId}) => {
     return pages?.reduce((acc, page) => {
       const items = getResponseData(page, IS_RESPONSE_ALL);
       const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
-
       return [...acc, ...itemsDestructure];
     }, []);
   }, [pages]);
@@ -164,11 +168,19 @@ const InventoryContentModal = ({containerId}) => {
         {
           header: 'Floor price',
           accessor: 'floor_price',
-          cell: row => (
-            <Badge color="warning" pill>
-              {row?.value}
-            </Badge>
-          )
+          cell: row =>
+            row?.value ? (
+              <Badge color="warning" pill>
+                {formatValue({
+                  value: HandleCurrencyFields.convertApiToGui({
+                    value: row?.value
+                  })?.toString(),
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })}
+              </Badge>
+            ) : null
         },
         {
           header: 'Deal Floor Price',

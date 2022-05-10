@@ -26,6 +26,7 @@ const StrategyForm = ({
   const role = getRole();
   const isCreate = React.useMemo(() => !isEdit && !isView, [isEdit, isView]);
 
+
   return (
     <>
       {/* Information Group */}

@@ -70,7 +70,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     id: uuid,
     strategy_type: strategy_type
       ? {value: strategy_type, label: capitalize(strategy_type)}
-      : null,
+      : {value: 'normal', label: 'Normal'},
     click_commission,
     sources: sourceConverted,
     advertiser_uuid,

@@ -14,6 +14,7 @@ import {DialogConfirm} from 'components/common';
 import ErrorMessage from 'components/forms/ErrorMessage';
 import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
+import {StrategyTypes} from 'pages/Campaign/constants';
 
 const propTypes = {
   strategyInventories: PropTypes.array,
@@ -25,7 +26,8 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);
 
-  const {errors, setValue, control} = useFormContext();
+  const {errors, setValue, control, watch} = useFormContext();
+  const strategyType = watch('strategy_type');
 
   React.useEffect(() => {
     const inventoriesConverted = strategyInventories?.map(item => ({
@@ -40,7 +42,7 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
   }, [setValue, strategyInventories]);
 
   const columns = React.useMemo(() => {
-    return [
+    const baseCols = [
       {
         header: 'Name',
         accessor: 'name'
@@ -52,10 +54,44 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
       {
         header: 'Position',
         accessor: 'position_name'
-      },
+      }
+    ];
+    if (strategyType?.value === StrategyTypes.PREMIUM) {
+      return [
+        ...baseCols,
+        {
+          header: 'Deal Floor Price',
+          accessor: 'deal_floor_price',
+          cell: row => {
+            const noStore = row?.original?.noStore;
+            let dealFloorPrice = '';
+            if (noStore) {
+              dealFloorPrice = row?.value?.toString();
+            } else {
+              dealFloorPrice = HandleCurrencyFields.convertApiToGui({
+                value: row?.value
+              })?.toString();
+            }
+
+            return (
+              <Badge color="info">
+                {formatValue({
+                  value: dealFloorPrice,
+                  groupSeparator: ',',
+                  decimalSeparator: '.',
+                  prefix: '$'
+                })}
+              </Badge>
+            );
+          }
+        }
+      ];
+    }
+    return [
+      ...baseCols,
       {
-        header: 'Deal Price',
-        accessor: 'deal_floor_price',
+        header: 'Floor Price',
+        accessor: 'floor_price',
         cell: row => {
           const noStore = row?.original?.noStore;
           let dealFloorPrice = '';
@@ -80,7 +116,7 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
         }
       }
     ];
-  }, []);
+  }, [strategyType?.value]);
 
   function onClickAction(actionIndex, currentItem) {
     setOpenDialog(true);
