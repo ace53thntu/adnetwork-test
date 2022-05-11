@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import {useDispatchSelectAdvertiser} from 'pages/Creative/hooks/useDispatchSelectAdvertiser';
 import * as React from 'react';
 
@@ -9,7 +8,7 @@ function Concepts(props) {
   useDispatchSelectAdvertiser();
 
   return (
-    <CreativeBodyLayout heading="Concepts Management">
+    <CreativeBodyLayout heading={`Concepts Management`}>
       <ConceptList />
     </CreativeBodyLayout>
   );

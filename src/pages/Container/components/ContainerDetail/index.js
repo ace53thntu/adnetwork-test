@@ -1,12 +1,11 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const ContainerDetail = lazyWithRetry(() =>
+const ContainerDetail = React.lazy(() =>
   import('./ContainerDetail' /* webpackChunkName: "container-detail" */)
 );
 
-const ContainerReport = lazyWithRetry(() =>
+const ContainerReport = React.lazy(() =>
   import('./ContainerReport' /* webpackChunkName: "container-detail" */)
 );
 

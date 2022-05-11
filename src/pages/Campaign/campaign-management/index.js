@@ -1,17 +1,16 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
 export {default as CampaignList} from './list';
 export {default as CampaignEditTabs} from './EditTabs';
 
-const CampaignCreate = lazyWithRetry(() =>
+const CampaignCreate = React.lazy(() =>
   import('./create' /* webpackChunkName: "campaign-create" */)
 );
-const CampaignDetail = lazyWithRetry(() =>
+const CampaignDetail = React.lazy(() =>
   import('./detail' /* webpackChunkName: "campaign-detail" */)
 );
-const CampaignEdit = lazyWithRetry(() =>
+const CampaignEdit = React.lazy(() =>
   import('./edit' /* webpackChunkName: "campaign-edit" */)
 );
 

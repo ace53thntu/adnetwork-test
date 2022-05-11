@@ -19,14 +19,12 @@ export function FullPageErrorFallback({error, resetErrorBoundary}) {
 
   return (
     <div className={classes.root}>
-      <p>Uh oh... There's a problem. Try refreshing the app.</p>
-      <Button
-        // onClick={() => resetErrorBoundary()}
-        onClick={() => window.location.reload()}
-        color="primary"
-        className="mb-2"
-      >
-        Try again
+      <p>
+        Uh oh... There's a problem or we have a new update. Try refreshing the
+        app.
+      </p>
+      <Button onClick={resetErrorBoundary} color="primary" className="mb-2">
+        Click to refresh
       </Button>
       {/* <pre>{error?.message ?? error ?? null}</pre> */}
     </div>

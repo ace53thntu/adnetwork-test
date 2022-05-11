@@ -1,11 +1,10 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
 export {default as CampaignPageLayout} from './page-layout';
 export {default as CampaignContentLayout} from './page-content-layout';
 
-const ListCampaignLayout = lazyWithRetry(() =>
+const ListCampaignLayout = React.lazy(() =>
   import('./list-layout' /* webpackChunkName: "campaign-list-layout" */)
 );
 

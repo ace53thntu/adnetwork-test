@@ -1,8 +1,7 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const UserList = lazyWithRetry(() =>
+const UserList = React.lazy(() =>
   import('./user-list' /* webpackChunkName: "user-list" */)
 );
 

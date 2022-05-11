@@ -1,8 +1,7 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const ContainerSourcePage = lazyWithRetry(() =>
+const ContainerSourcePage = React.lazy(() =>
   import(
     './ContainerSourcePage' /* webpackChunkName: "container-source-page" */
   )

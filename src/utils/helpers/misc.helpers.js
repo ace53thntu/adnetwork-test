@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {DEFAULT_PAGINATION_RESPONSE} from 'utils/constants/pagination.constants';
 
 export function isValidResponse(res, isResponseAll = false) {
@@ -45,3 +46,12 @@ export function getResponsePagination(res) {
   }
   return DEFAULT_PAGINATION_RESPONSE;
 }
+
+/**
+ * Function returning the build date(as per provided epoch)
+ * @param epoch Time in milliseconds
+ */
+export const getBuildDate = epoch => {
+  const buildDate = moment(epoch).format('DD-MM-YYYY HH:MM');
+  return buildDate;
+};

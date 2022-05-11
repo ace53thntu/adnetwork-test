@@ -1,8 +1,7 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const EntityReportLz = lazyWithRetry(() =>
+const EntityReportLz = React.lazy(() =>
   import('./EntityReport' /* webpackChunkName: "entity-report" */)
 );
 

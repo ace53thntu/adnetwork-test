@@ -1,11 +1,10 @@
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
-import {lazyWithRetry} from 'utils/lazyWithRetry';
 
-const PublisherList = lazyWithRetry(() =>
+const PublisherList = React.lazy(() =>
   import('./publisher-list' /* webpackChunkName: "publisher-list" */)
 );
-const PublisherReport = lazyWithRetry(() =>
+const PublisherReport = React.lazy(() =>
   import('./publisher-report' /* webpackChunkName: "publisher-report" */)
 );
 

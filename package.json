@@ -1,6 +1,6 @@
 {
   "name": "adnetwork-portal",
-  "version": "0.1.0",
+  "version": "0.0.6",
   "private": true,
   "dependencies": {
     "@codemirror/lang-html": "^0.19.4",
@@ -111,7 +111,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "ci": "git-cz",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "update-build": "node update-build",
+    "prebuild": "yarn update-build"
   },
   "eslintConfig": {
     "extends": [
@@ -130,5 +132,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "buildDate": 1652285074289
 }

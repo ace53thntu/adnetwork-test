@@ -1,5 +1,6 @@
 import './bootstrap';
 
+import withClearCache from 'CacheBuster';
 import {RootProvider} from 'context';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -18,12 +19,14 @@ if (process.env.NODE_ENV !== 'development') {
   console.error = noop;
 }
 
+const ClearCacheComponent = withClearCache(App);
+
 const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
     <RootProvider>
-      <App />
+      <ClearCacheComponent />
     </RootProvider>
   </Provider>,
   document.getElementById('root')
