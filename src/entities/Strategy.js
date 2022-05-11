@@ -1,6 +1,8 @@
+import { ProtocolOptions } from 'constants/misc';
 import _ from 'lodash';
 import moment from 'moment';
-import {convertGuiToApi} from 'utils/handleCurrencyFields';
+import {  BandwidthOptions, BrowsersOptions, LinearityOptions, MobileCarrierOptions, OperatingSystemOptions, PlacementTypeOptions, PriorityOptions } from 'pages/Campaign/constants';
+import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
 
@@ -25,7 +27,12 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     inventories = [],
     inventories_bid = [],
     location = [],
-    advertiser_name
+    advertiser_name,
+    category,
+    priority,
+    cpm_max,
+    video_filter,
+    context_filter
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -54,6 +61,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     }));
   }
 
+  const selectedPriority = PriorityOptions?.find(item => item?.value === priority)
+
   return {
     campaign_uuid: campaign_uuid
       ? {value: campaign_uuid, label: campaign_name}
@@ -79,7 +88,27 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     inventories,
     inventories_bid: inventoryBidsConverted,
     location_uuids: convertedLocations,
-    advertiser_name
+    advertiser_name,
+    category,
+    priority: selectedPriority,
+    cpm_max: convertApiToGui({value: cpm_max}),
+    video_filter: {
+      skip_delay: video_filter?.skip_delay,
+      start_delay: video_filter?.start_delay,
+      ptype: PlacementTypeOptions?.find(item => item?.value === video_filter?.ptype) || null,
+      linearity: LinearityOptions?.find(item => item?.value === video_filter?.linearity) || null,
+      protocols: ProtocolOptions?.find(item => item?.value === video_filter?.protocols) || null,
+      only_skipable: video_filter?.only_skipable ? 'active':'inactive',
+      only_unskipable: video_filter?.only_unskipable ? 'active':'inactive',
+    },
+    context_filter: {
+      browser: BrowsersOptions?.find(item => item.value === context_filter?.browser) || null,
+      operating_system: OperatingSystemOptions?.find(item => item.value === context_filter?.operating_system) || null,
+      bandwidth: BandwidthOptions?.find(item => item.value === context_filter?.bandwidth) || null,
+      mobile_carrier: MobileCarrierOptions?.find(item => item.value === context_filter?.mobile_carrier) || null,
+      browser_language:  context_filter?.browser_language || '',
+      device_manufacturer:  context_filter?.device_manufacturer || '',
+    }
   };
 };
 
@@ -107,7 +136,12 @@ export const formToApi = ({
     budget,
     impression,
     schedule,
-    location_uuids
+    location_uuids,
+    category,
+    priority,
+    cpm_max,
+    video_filter,
+    context_filter
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value);
@@ -134,7 +168,32 @@ export const formToApi = ({
     end_time: endDate,
     strategy_type: strategy_type ? strategy_type?.value : null,
     click_commission: parseFloat(click_commission) || null,
-    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : []
+    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
+    category,
+    priority: priority?.value,
+    cpm_max:  convertGuiToApi({value: cpm_max}),
+    video_filter: {
+      only_skipable: video_filter?.only_skipable === 'active' ? true : false,
+      only_unskipable:
+        video_filter?.only_unskipable === 'active' ? true : false,
+      skip_delay: video_filter?.skip_delay
+        ? parseInt(video_filter?.skip_delay)
+        : '',
+      start_delay: video_filter?.start_delay
+        ? parseInt(video_filter?.start_delay)
+        : '',
+      ptype: video_filter?.ptype?.value,
+      linearity: video_filter?.linearity?.value,
+      protocols: video_filter?.protocols?.value
+    },
+    context_filter: {
+      browser: context_filter?.browser?.value,
+      operating_system: context_filter?.operating_system?.value,
+      browser_language: context_filter?.browser_language,
+      device_manufacturer: context_filter?.device_manufacturer,
+      bandwidth: context_filter?.bandwidth?.value,
+      mobile_carrier: context_filter?.mobile_carrier?.value
+    }
   };
 
   if (!currentStrategy?.id) {

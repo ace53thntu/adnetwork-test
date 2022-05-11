@@ -531,11 +531,26 @@ const en = {
     BUDGET_GLOBAL: 'Budget Global',
     BUDGET_DAILY: 'Budget Daily',
     SEARCH: 'Search',
-    FILTER: 'Filter'
+    FILTER: 'Filter',
+    CONTEXT_FILTER: 'Context filter'
   },
   FORM: {
     SELECT_POSITION: 'Select position',
-    EXTRA_FIELDS: 'Extra fields'
+    EXTRA_FIELDS: 'Extra fields',
+    VIDEO_FILTER: 'Video filter',
+    ONLY_SKIPABLE: 'Only skipable',
+    ONLY_UNSKIPABLE: 'Only unskipable',
+    SKIP_DELAY: 'Skip delay',
+    START_DELAY: 'Start delay',
+    PLACEMENT_TYPE: 'Placement type',
+    PROTOCOLS: 'Protocols',
+    BROWSER: 'Browser',
+    OPERATING_SYSTEM: 'Operating system',
+    BROWSER_LANGUAGE: 'Browser language',
+    DEVICE_MANUFACTURER: 'Device manufacturer',
+    BANDWIDTH: 'Bandwidth',
+    MOBILE_CARRIER: 'Mobile carrier',
+    LINEARITY: 'Linearity'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

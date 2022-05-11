@@ -11,6 +11,8 @@ import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
 import {getRole} from 'utils/helpers/auth.helpers';
+import VideoFilterGroup from './form-fields/VideoFilterGroup';
+import ContextFilterGroup from './form-fields/ContextFilterGroup';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -26,7 +28,6 @@ const StrategyForm = ({
   const role = getRole();
   const isCreate = React.useMemo(() => !isEdit && !isView, [isEdit, isView]);
 
-
   return (
     <>
       {/* Information Group */}
@@ -41,8 +42,14 @@ const StrategyForm = ({
       {isCreate && <ImpressionGroup />}
       {isCreate && <ScheduleGroup />}
 
+      {/* Video filter */}
+      <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
+
+      {/* Context filter */}
+      <ContextFilterGroup isView={isView} currentStrategy={currentStrategy} />
+
       {/* Inventory Group */}
-      {<InventoryGroup isView={isView} />}
+      <InventoryGroup isView={isView} />
     </>
   );
 };

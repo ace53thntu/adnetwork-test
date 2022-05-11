@@ -1,6 +1,123 @@
 /**
  * @enum
  */
+export const Linearity = {
+  LINEAR: 1,
+  NONLINEAR: 2
+};
+
+export const LinearityOptions = [
+  {value: Linearity.LINEAR, label: 'Linear / In-Stream'},
+  {value: Linearity.NONLINEAR, label: 'Non-Linear / Overlay'}
+];
+
+/**
+ * @enum
+ */
+export const MobileCarrier = {
+  OTHER: 1,
+  VIETTEL: 2,
+  MOBIPHONE: 3,
+  VINAPHONE: 4,
+  VIETNAMMOBILE: 5
+};
+
+export const MobileCarrierOptions = [
+  {value: MobileCarrier.VIETTEL, label: 'Viettel'},
+  {value: MobileCarrier.MOBIPHONE, label: 'Mobiphone'},
+  {value: MobileCarrier.VINAPHONE, label: 'Vinaphone'},
+  {value: MobileCarrier.VIETNAMMOBILE, label: 'Vietnammobile'},
+  {value: MobileCarrier.OTHER, label: 'Other'}
+];
+
+/**
+ * @enum
+ */
+export const Bandwidth = {
+  OTHER: 1,
+  CABLE: 2,
+  WIFI: 3,
+  MOBILE: 4
+};
+
+export const BandwidthOptions = [
+  {value: Bandwidth.CABLE, label: 'Cable'},
+  {value: Bandwidth.WIFI, label: 'Wifi'},
+  {value: Bandwidth.MOBILE, label: 'Mobile'},
+  {value: Bandwidth.OTHER, label: 'Other'}
+];
+
+/**
+ * @enum
+ */
+export const OperatingSystem = {
+  OTHER: 1,
+  ANDROID: 2,
+  IOS: 3,
+  MICROSOFT: 4
+};
+
+export const OperatingSystemOptions = [
+  {value: OperatingSystem.ANDROID, label: 'Android'},
+  {value: OperatingSystem.IOS, label: 'IOS'},
+  {value: OperatingSystem.MICROSOFT, label: 'Microsoft'},
+  {value: OperatingSystem.OTHER, label: 'Other'}
+];
+
+/**
+ * @enum
+ */
+export const Browsers = {
+  OTHER: 1,
+  FIREFOX: 2,
+  CHROME: 3,
+  SAFARI: 4
+};
+
+export const BrowsersOptions = [
+  {value: Browsers.FIREFOX, label: 'Firefox'},
+  {value: Browsers.CHROME, label: 'Chrome'},
+  {value: Browsers.SAFARI, label: 'Safari'},
+  {value: Browsers.OTHER, label: 'Other'}
+];
+
+/**
+ * @enum
+ */
+export const PlacementTypes = {
+  IN_STREAM: 1,
+  IN_BANNER: 2,
+  IN_ARTICLE: 3,
+  IN_FEED: 4,
+  INTERSTITIAL: 5
+};
+
+export const PlacementTypeOptions = [
+  {value: PlacementTypes.IN_STREAM, label: 'In-stream'},
+  {value: PlacementTypes.IN_BANNER, label: 'In-banner'},
+  {value: PlacementTypes.IN_ARTICLE, label: 'In-article'},
+  {value: PlacementTypes.IN_FEED, label: 'In-feed'},
+  {value: PlacementTypes.INTERSTITIAL, label: 'Interstitial/Slider/Floating'}
+];
+
+/**
+ * @enum
+ */
+export const Priority = {
+  NORMAL: 1,
+  IMPORTANT: 2,
+  CRITICAL: 3
+};
+
+export const PriorityOptions = [
+  {value: Priority.NORMAL, label: 'Normal'},
+  {value: Priority.IMPORTANT, label: 'Important'},
+  {value: Priority.CRITICAL, label: 'Critical'}
+];
+
+/**
+ * @enum
+ */
 export const StrategyTypes = {
   NORMAL: 'normal',
   PREMIUM: 'premium'
