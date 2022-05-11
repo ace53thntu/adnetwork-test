@@ -25,7 +25,7 @@ const ReportLayout = ({children}) => {
 
   return (
     <>
-      <ExtendSidebar heading="Report Page" isLink path={'/dashboard'}>
+      <ExtendSidebar heading="Report Page 1" isLink path={'/dashboard'}>
         <div className="mb-2">
           <ReportSidebar pageId={pageId} />
         </div>
