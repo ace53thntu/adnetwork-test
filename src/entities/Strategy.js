@@ -1,7 +1,17 @@
-import { ProtocolOptions } from 'constants/misc';
+import {ProtocolOptions} from 'constants/misc';
 import _ from 'lodash';
 import moment from 'moment';
-import {  BandwidthOptions, BrowsersOptions, LinearityOptions, MobileCarrierOptions, OperatingSystemOptions, PlacementTypeOptions, PriorityOptions } from 'pages/Campaign/constants';
+import {
+  BandwidthOptions,
+  BrowsersOptions,
+  LinearityOptions,
+  MobileCarrierOptions,
+  OperatingSystemOptions,
+  PlacementTypeOptions,
+  Priority,
+  PriorityOptions,
+  StrategyTypes
+} from 'pages/Campaign/constants';
 import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
@@ -61,7 +71,9 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     }));
   }
 
-  const selectedPriority = PriorityOptions?.find(item => item?.value === priority)
+  const selectedPriority = PriorityOptions?.find(
+    item => item?.value === priority
+  );
 
   return {
     campaign_uuid: campaign_uuid
@@ -90,24 +102,44 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     location_uuids: convertedLocations,
     advertiser_name,
     category,
-    priority: selectedPriority,
+    priority: selectedPriority || {value: Priority.NORMAL, label: 'Normal'},
     cpm_max: convertApiToGui({value: cpm_max}),
     video_filter: {
       skip_delay: video_filter?.skip_delay,
       start_delay: video_filter?.start_delay,
-      ptype: PlacementTypeOptions?.find(item => item?.value === video_filter?.ptype) || null,
-      linearity: LinearityOptions?.find(item => item?.value === video_filter?.linearity) || null,
-      protocols: ProtocolOptions?.find(item => item?.value === video_filter?.protocols) || null,
-      only_skipable: video_filter?.only_skipable ? 'active':'inactive',
-      only_unskipable: video_filter?.only_unskipable ? 'active':'inactive',
+      ptype:
+        PlacementTypeOptions?.find(
+          item => item?.value === video_filter?.ptype
+        ) || null,
+      linearity:
+        LinearityOptions?.find(
+          item => item?.value === video_filter?.linearity
+        ) || null,
+      protocols:
+        ProtocolOptions?.find(
+          item => item?.value === video_filter?.protocols
+        ) || null,
+      only_skipable: video_filter?.only_skipable ? 'active' : 'inactive',
+      only_unskipable: video_filter?.only_unskipable ? 'active' : 'inactive'
     },
     context_filter: {
-      browser: BrowsersOptions?.find(item => item.value === context_filter?.browser) || null,
-      operating_system: OperatingSystemOptions?.find(item => item.value === context_filter?.operating_system) || null,
-      bandwidth: BandwidthOptions?.find(item => item.value === context_filter?.bandwidth) || null,
-      mobile_carrier: MobileCarrierOptions?.find(item => item.value === context_filter?.mobile_carrier) || null,
-      browser_language:  context_filter?.browser_language || '',
-      device_manufacturer:  context_filter?.device_manufacturer || '',
+      browser:
+        BrowsersOptions?.find(item => item.value === context_filter?.browser) ||
+        null,
+      operating_system:
+        OperatingSystemOptions?.find(
+          item => item.value === context_filter?.operating_system
+        ) || null,
+      bandwidth:
+        BandwidthOptions?.find(
+          item => item.value === context_filter?.bandwidth
+        ) || null,
+      mobile_carrier:
+        MobileCarrierOptions?.find(
+          item => item.value === context_filter?.mobile_carrier
+        ) || null,
+      browser_language: context_filter?.browser_language || '',
+      device_manufacturer: context_filter?.device_manufacturer || ''
     }
   };
 };
@@ -116,7 +148,8 @@ export const formToApi = ({
   formData,
   currentStrategy,
   isConcept = false,
-  isSummary = false
+  isSummary = false,
+  isEdit = false
 }) => {
   if (isConcept) {
     return {
@@ -159,6 +192,49 @@ export const formToApi = ({
     startDate = null;
   }
 
+  //---> VIDEO FILTER
+  let videoFilter = {};
+  let contextFilter = {};
+  if (video_filter?.skip_delay) {
+    videoFilter.skip_delay = video_filter?.skip_delay
+      ? parseInt(video_filter?.skip_delay)
+      : null;
+  }
+  if (video_filter?.start_delay) {
+    videoFilter.start_delay = video_filter?.start_delay
+      ? parseInt(video_filter?.start_delay)
+      : null;
+  }
+  if (video_filter?.ptype) {
+    videoFilter.ptype = video_filter?.ptype?.value;
+  }
+  if (video_filter?.linearity) {
+    videoFilter.linearity = video_filter?.linearity?.value;
+  }
+  if (video_filter?.protocols) {
+    videoFilter.protocols = video_filter?.protocols?.value;
+  }
+
+  //---> CONTEXT FILTER
+  if (context_filter?.browser) {
+    contextFilter.browser = context_filter?.browser?.value;
+  }
+  if (context_filter?.operating_system) {
+    contextFilter.operating_system = context_filter?.operating_system?.value;
+  }
+  if (context_filter?.browser_language) {
+    contextFilter.browser_language = context_filter?.browser_language;
+  }
+  if (context_filter?.device_manufacturer) {
+    contextFilter.device_manufacturer = context_filter?.device_manufacturer;
+  }
+  if (context_filter?.bandwidth) {
+    contextFilter.bandwidth = context_filter?.bandwidth?.value;
+  }
+  if (context_filter?.mobile_carrier) {
+    contextFilter.mobile_carrier = context_filter?.mobile_carrier?.value;
+  }
+
   let strategyReturn = {
     campaign_uuid: campaign?.value,
     name: name?.trim(),
@@ -170,31 +246,48 @@ export const formToApi = ({
     click_commission: parseFloat(click_commission) || null,
     sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     category,
-    priority: priority?.value,
-    cpm_max:  convertGuiToApi({value: cpm_max}),
-    video_filter: {
-      only_skipable: video_filter?.only_skipable === 'active' ? true : false,
-      only_unskipable:
-        video_filter?.only_unskipable === 'active' ? true : false,
-      skip_delay: video_filter?.skip_delay
-        ? parseInt(video_filter?.skip_delay)
-        : '',
-      start_delay: video_filter?.start_delay
-        ? parseInt(video_filter?.start_delay)
-        : '',
-      ptype: video_filter?.ptype?.value,
-      linearity: video_filter?.linearity?.value,
-      protocols: video_filter?.protocols?.value
-    },
-    context_filter: {
-      browser: context_filter?.browser?.value,
-      operating_system: context_filter?.operating_system?.value,
-      browser_language: context_filter?.browser_language,
-      device_manufacturer: context_filter?.device_manufacturer,
-      bandwidth: context_filter?.bandwidth?.value,
-      mobile_carrier: context_filter?.mobile_carrier?.value
-    }
+    priority: priority?.value || '',
+    video_filter: !isEdit
+      ? {
+          ...videoFilter,
+          only_skipable:
+            video_filter?.only_skipable === 'active' ? true : false,
+          only_unskipable:
+            video_filter?.only_unskipable === 'active' ? true : false
+        }
+      : {
+          only_skipable:
+            video_filter?.only_skipable === 'active' ? true : false,
+          only_unskipable:
+            video_filter?.only_unskipable === 'active' ? true : false,
+          skip_delay: video_filter?.skip_delay
+            ? parseInt(video_filter?.skip_delay)
+            : null,
+          start_delay: video_filter?.start_delay
+            ? parseInt(video_filter?.start_delay)
+            : null,
+          ptype: video_filter?.ptype?.value || null,
+          linearity: video_filter?.linearity?.value || null,
+          protocols: video_filter?.protocols?.value || null
+        },
+    context_filter: !isEdit
+      ? contextFilter
+      : {
+          browser: context_filter?.browser?.value || null,
+          operating_system: context_filter?.operating_system?.value || null,
+          browser_language: context_filter?.browser_language || null,
+          device_manufacturer: context_filter?.device_manufacturer || null,
+          bandwidth: context_filter?.bandwidth?.value || null,
+          mobile_carrier: context_filter?.mobile_carrier?.value || null
+        }
   };
+
+  if (
+    !strategyReturn?.context_filter ||
+    Object.keys(strategyReturn?.context_filter).length === 0
+  ) {
+    delete strategyReturn?.context_filter;
+  }
 
   if (!currentStrategy?.id) {
     strategyReturn.budget = {
@@ -229,6 +322,10 @@ export const formToApi = ({
   const inventoriesBid = formData?.inventories_bid || [];
   strategyReturn.inventories_bid = inventoriesBid;
   // }
+
+  if (strategy_type?.value === StrategyTypes.NORMAL) {
+    strategyReturn.cpm_max = convertGuiToApi({value: cpm_max}) || 0;
+  }
 
   if (isSummary) {
     strategyReturn.concept_uuids =

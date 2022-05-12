@@ -102,7 +102,7 @@ const FormContainer = ({
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
-      const req = formToApi({formData, isConcept, isSummary, currentStrategy});
+      const req = formToApi({formData, isConcept, isSummary, currentStrategy, isEdit});
       console.log('======== FORM DATA', req);
 
       if (isEdit) {
