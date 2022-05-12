@@ -17,7 +17,7 @@ const VideoGroup = ({isCreate = false}) => {
   const {formState} = useFormContext();
 
   return (
-    <Collapse initialOpen title={t('FORM.VIDEO_FILTER')} unMount={false}>
+    <Collapse initialOpen title={t('FORM.VIDEO_CONFIGURATION')} unMount={false}>
       <Row>
         <Col sm={3}>
           <FormTextInput

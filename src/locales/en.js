@@ -554,7 +554,8 @@ const en = {
     SELECT_LINEARITY: 'Select linearity',
     SKIP: 'Skip',
     SKIP_MIN: 'Skip min',
-    SKIP_AFTER: 'Skip after'
+    SKIP_AFTER: 'Skip after',
+    VIDEO_CONFIGURATION: 'Video configuration'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',
