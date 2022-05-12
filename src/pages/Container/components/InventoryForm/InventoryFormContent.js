@@ -66,7 +66,8 @@ const InventoryFormContent = ({
   typeOptions = [],
   inventoryFormatOptions = [],
   inventory = {},
-  toggle = () => null
+  toggle = () => null,
+  isCreate = false
 }) => {
   const {t} = useTranslation();
   const {formState} = useFormContext();
@@ -229,7 +230,7 @@ const InventoryFormContent = ({
             />
           </Col>
         </Row>
-        <InventoryProperty currentInventory={inventory} />
+        <InventoryProperty currentInventory={inventory} isCreate={isCreate} />
         {inventory?.uuid && (
           <>
             <InventorySnippet>

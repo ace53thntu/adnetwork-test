@@ -95,7 +95,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
           key="create-event"
           autoComplete="off"
         >
-          <InventoryFormContent {...formProps} />
+          <InventoryFormContent {...formProps} isCreate />
         </form>
       </FormProvider>
     </Modal>

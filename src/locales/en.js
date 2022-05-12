@@ -550,7 +550,11 @@ const en = {
     DEVICE_MANUFACTURER: 'Device manufacturer',
     BANDWIDTH: 'Bandwidth',
     MOBILE_CARRIER: 'Mobile carrier',
-    LINEARITY: 'Linearity'
+    LINEARITY: 'Linearity',
+    SELECT_LINEARITY: 'Select linearity',
+    SKIP: 'Skip',
+    SKIP_MIN: 'Skip min',
+    SKIP_AFTER: 'Skip after'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

@@ -1,10 +1,9 @@
-import {ProtocolOptions} from 'constants/misc';
+import {LinearityOptions, ProtocolOptions} from 'constants/misc';
 import _ from 'lodash';
 import moment from 'moment';
 import {
   BandwidthOptions,
   BrowsersOptions,
-  LinearityOptions,
   MobileCarrierOptions,
   OperatingSystemOptions,
   PlacementTypeOptions,

@@ -1,19 +1,6 @@
 /**
  * @enum
  */
-export const Linearity = {
-  LINEAR: 1,
-  NONLINEAR: 2
-};
-
-export const LinearityOptions = [
-  {value: Linearity.LINEAR, label: 'Linear / In-Stream'},
-  {value: Linearity.NONLINEAR, label: 'Non-Linear / Overlay'}
-];
-
-/**
- * @enum
- */
 export const MobileCarrier = {
   OTHER: 1,
   VIETTEL: 2,

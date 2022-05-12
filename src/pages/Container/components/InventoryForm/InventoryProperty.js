@@ -3,19 +3,19 @@ import React from 'react';
 
 //---> External Modules
 import {useFormContext, useWatch} from 'react-hook-form';
-import {Col, FormGroup, Label, Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+import {FormReactSelect, FormTextInput} from 'components/forms';
 import {getInventoryTags} from 'pages/Container/constants';
 import ColorPicker from 'components/forms/ColorPicker';
-import {ProtocolOptions} from 'constants/misc';
 import FormCodeMirror from 'components/forms/FormCodeMirror';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
+import VideoGroup from './VideoGroup';
 
-const InventoryProperty = ({currentInventory = null}) => {
+const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
   const {t} = useTranslation();
   const role = getRole();
 
@@ -53,63 +53,7 @@ const InventoryProperty = ({currentInventory = null}) => {
         </Col>
       </Row>
       {formatTypeSelected?.value === 'video' && (
-        <Row>
-          <Col sm={3}>
-            <FormTextInput
-              name="metadata.min_bitrate"
-              placeholder="0"
-              label={t('minBitrate')}
-              disable={formState.isSubmitting}
-            />
-          </Col>
-          <Col sm={3}>
-            <FormTextInput
-              name="metadata.max_bitrate"
-              placeholder="0"
-              label={t('maxBitrate')}
-              disable={formState.isSubmitting}
-            />
-          </Col>
-          <Col sm={3}>
-            <FormTextInput
-              name="metadata.min_duration"
-              placeholder="0"
-              label={t('minDuration')}
-              disable={formState.isSubmitting}
-            />
-          </Col>
-          <Col sm={3}>
-            <FormTextInput
-              name="metadata.max_duration"
-              placeholder="0"
-              label={t('maxDuration')}
-              disable={formState.isSubmitting}
-            />
-          </Col>
-          <Col sm="9">
-            <FormReactSelect
-              name="metadata.protocols"
-              label={t('protocols')}
-              placeholder={t('selectProtocol')}
-              options={ProtocolOptions}
-              multiple
-            />
-          </Col>
-          <Col sm="3">
-            <FormGroup className="d-flex justify-content-end flex-column mb-0">
-              <Label>&nbsp;</Label>
-              <FormToggle
-                name="metadata.loop"
-                defaultCheckedValue="active"
-                label={t('COMMON.LOOP')}
-                values={{
-                  checked: 'active',
-                  unChecked: 'inactive'
-                }}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
+        <VideoGroup isCreate={isCreate} />
       )}
 
       <Row>

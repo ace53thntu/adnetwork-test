@@ -4,13 +4,13 @@ import React from 'react';
 //---> External Modules
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
-import {Col,  Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
-import {LinearityOptions, PlacementTypeOptions} from 'pages/Campaign/constants';
-import {ProtocolOptions} from 'constants/misc';
+import {PlacementTypeOptions} from 'pages/Campaign/constants';
+import {LinearityOptions, ProtocolOptions} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const propTypes = {

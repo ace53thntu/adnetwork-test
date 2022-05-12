@@ -1,3 +1,16 @@
+/**
+ * @enum
+ */
+export const Linearity = {
+  LINEAR: 1,
+  NONLINEAR: 2
+};
+
+export const LinearityOptions = [
+  {value: Linearity.LINEAR, label: 'Linear / In-Stream'},
+  {value: Linearity.NONLINEAR, label: 'Non-Linear / Overlay'}
+];
+
 export const InputStatus = {
   ACTIVE: 'active',
   INACTIVE: 'inactive'

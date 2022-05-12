@@ -1,4 +1,4 @@
-import {ProtocolOptions, Statuses} from 'constants/misc';
+import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -16,7 +16,11 @@ export const getMetaExtra = metadata => {
     'min_bitrate',
     'max_duration',
     'min_duration',
-    'protocols'
+    'protocols',
+    'skip_min',
+    'skip_after',
+    'start_delay',
+    'linearity'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -61,11 +65,15 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || 0;
     formatMetadata.min_duration = parseInt(metadata?.min_duration, 10) || 0;
     formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || 0;
+    formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || 0;
+    formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || 0;
+    formatMetadata.start_delay = parseInt(metadata?.start_delay, 10) || 0;
+    formatMetadata.linearity = metadata?.linearity?.value || 0;
     formatMetadata.protocols =
       metadata?.protocols?.length > 0
         ? Array.from(metadata?.protocols, item => item.value)
         : [];
-    formatMetadata.loop = metadata?.loop === 'active' ? true : false;
+    formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
   }
 
   // Metadata extra
@@ -160,7 +168,10 @@ export const mappingInventoryApiToForm = ({
         })
       : [];
   metadata.protocols = protocols;
-  metadata.loop = metadata?.loop ? 'active' : 'inactive';
+  metadata.loop =
+    metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
+  metadata.linearity =
+    LinearityOptions.find(item => item.value === metadata.linearity) || null;
   const extra = getMetaExtra(metadata);
 
   if (typeof extra === 'object' && Object.keys(extra)) {
