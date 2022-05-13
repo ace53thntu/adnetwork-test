@@ -92,12 +92,14 @@ export const PlacementTypeOptions = [
  */
 export const Priority = {
   NORMAL: 1,
-  IMPORTANT: 2,
-  CRITICAL: 3
+  HIGHT: 2,
+  IMPORTANT: 3,
+  CRITICAL: 4
 };
 
 export const PriorityOptions = [
   {value: Priority.NORMAL, label: 'Normal'},
+  {value: Priority.HIGHT, label: 'Hight'},
   {value: Priority.IMPORTANT, label: 'Important'},
   {value: Priority.CRITICAL, label: 'Critical'}
 ];
