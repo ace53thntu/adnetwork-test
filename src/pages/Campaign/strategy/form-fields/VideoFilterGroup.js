@@ -10,8 +10,10 @@ import {Col, Row} from 'reactstrap';
 import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
 import {PlacementTypeOptions} from 'pages/Campaign/constants';
-import {LinearityOptions, ProtocolOptions} from 'constants/misc';
+import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import {useFormContext} from 'react-hook-form';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
 const propTypes = {
   isView: PropTypes.bool,
@@ -20,6 +22,7 @@ const propTypes = {
 
 const VideoFilterGroup = ({isView = false, currentStrategy}) => {
   const {t} = useTranslation();
+  const {errors} = useFormContext();
 
   return (
     <Collapse initialOpen title={t('FORM.VIDEO_FILTER')} unMount={false}>
@@ -81,23 +84,30 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
               defaultCheckedValue=""
               label={t('FORM.ONLY_SKIPABLE')}
               values={{
-                checked: 'active',
-                unChecked: 'inactive'
+                checked: Statuses.ACTIVE,
+                unChecked: Statuses.INACTIVE
               }}
+              disabled={isView}
             />
           </div>
         </Col>
-        <Col md="3">
+        <Col md="6">
           <div style={{marginTop: 35}}>
             <FormToggle
               name="video_filter.only_unskipable"
               defaultCheckedValue=""
               label={t('FORM.ONLY_UNSKIPABLE')}
               values={{
-                checked: 'active',
-                unChecked: 'inactive'
+                checked: Statuses.ACTIVE,
+                unChecked: Statuses.INACTIVE
               }}
+              disabled={isView}
             />
+            {errors?.video_filter?.only_unskipable && (
+              <ErrorMessage
+                message={errors?.video_filter?.only_unskipable?.message}
+              />
+            )}
           </div>
         </Col>
       </Row>

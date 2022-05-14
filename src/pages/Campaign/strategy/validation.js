@@ -3,7 +3,12 @@ import * as Yup from 'yup';
 
 const VALID_NUMBER = /^\d*\.?\d*$/;
 
-export const strategySchema = (isUpdate = false, t, isConcept = false) => {
+export const strategySchema = (
+  isUpdate = false,
+  t,
+  isConcept = false,
+  videoFilter
+) => {
   if (isConcept) {
     return yupResolver(
       Yup.object().shape({
@@ -11,6 +16,25 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
       })
     );
   }
+
+  const skippableValidate = {
+    only_skipable: Yup.string(),
+    only_unskipable: Yup.string().test({
+      name: 'not_allow_true_together',
+      exclusive: false,
+      params: {},
+      message:
+        'Only skippable and Only unskippable are not allowed to set active together',
+      test: function (value) {
+        // You can access the budget global field with `this.parent`.
+        if (this.parent?.only_skipable === 'active' && value === 'active') {
+          return false;
+        }
+
+        return true;
+      }
+    })
+  };
 
   const basicSchema = {
     campaign_uuid: Yup.object().nullable().required(t('required')),
@@ -40,13 +64,25 @@ export const strategySchema = (isUpdate = false, t, isConcept = false) => {
       }),
 
     sources: Yup.array().notRequired(),
-    position_uuids: Yup.array().nullable().notRequired()
+    position_uuids: Yup.array().nullable().notRequired(),
+    video_filter: Yup.object().shape({
+      ...skippableValidate
+    })
   };
 
   if (isUpdate) {
     return yupResolver(
       Yup.object().shape({
-        ...basicSchema
+        ...basicSchema,
+        video_filter: Yup.object().shape({
+          skip_delay: videoFilter?.skip_delay
+            ? Yup.string().required(t('required'))
+            : Yup.string().notRequired(),
+          start_delay: videoFilter?.start_delay
+            ? Yup.string().required(t('required'))
+            : Yup.string().notRequired(),
+          ...skippableValidate
+        })
       })
     );
   }

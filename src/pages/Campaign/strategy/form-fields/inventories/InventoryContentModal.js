@@ -50,10 +50,6 @@ const InventoryContentModal = ({containerId}) => {
   const {watch} = useFormContext();
   const strategyTypeSelected = watch('strategy_type');
   const strategyType = strategyTypeSelected?.value;
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 49 ~ InventoryContentModal ~ strategyType',
-    strategyType
-  );
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
 
@@ -95,10 +91,6 @@ const InventoryContentModal = ({containerId}) => {
     inventories,
     strategyInventories
   });
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 96 ~ InventoryContentModal ~ inventoriesMapping',
-    inventoriesMapping
-  );
 
   const initChecked = React.useCallback(list => {
     setInventoryIdsChecked(list);
@@ -257,10 +249,6 @@ const InventoryContentModal = ({containerId}) => {
       );
     }
     setInventoryIdsChecked([...tmpIdsArr]);
-    console.log(
-      '🚀 ~ file: InventoryContentModal.js ~ line 193 ~ onChangeCheckBox ~ tmpArr',
-      tmpArr
-    );
 
     dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
   }

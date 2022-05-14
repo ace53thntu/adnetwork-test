@@ -213,6 +213,7 @@ const InformationGroup = ({
                 disableGroupSeparators={false}
                 decimalsLimit={3}
                 prefix="$"
+                disabled={isView}
               />
             </Col>
           )}

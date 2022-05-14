@@ -222,16 +222,18 @@ export const formToApi = ({
     contextFilter.operating_system = context_filter?.operating_system?.value;
   }
   if (context_filter?.browser_language) {
-    contextFilter.browser_language = context_filter?.browser_language;
+    contextFilter.browser_language = context_filter?.browser_language || '';
   }
   if (context_filter?.device_manufacturer) {
-    contextFilter.device_manufacturer = context_filter?.device_manufacturer;
+    contextFilter.device_manufacturer =
+      context_filter?.device_manufacturer || '';
   }
   if (context_filter?.bandwidth) {
-    contextFilter.bandwidth = context_filter?.bandwidth?.value;
+    contextFilter.bandwidth = context_filter?.bandwidth?.value || null;
   }
   if (context_filter?.mobile_carrier) {
-    contextFilter.mobile_carrier = context_filter?.mobile_carrier?.value;
+    contextFilter.mobile_carrier =
+      context_filter?.mobile_carrier?.value || null;
   }
 
   let strategyReturn = {
@@ -274,8 +276,8 @@ export const formToApi = ({
       : {
           browser: context_filter?.browser?.value || null,
           operating_system: context_filter?.operating_system?.value || null,
-          browser_language: context_filter?.browser_language || null,
-          device_manufacturer: context_filter?.device_manufacturer || null,
+          browser_language: context_filter?.browser_language || '',
+          device_manufacturer: context_filter?.device_manufacturer || '',
           bandwidth: context_filter?.bandwidth?.value || null,
           mobile_carrier: context_filter?.mobile_carrier?.value || null
         }

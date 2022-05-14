@@ -47,7 +47,12 @@ const FormContainer = ({
     defaultValues: {
       ...currentStrategy
     },
-    resolver: strategySchema(isEdit, t, isConcept)
+    resolver: strategySchema(
+      isEdit,
+      t,
+      isConcept,
+      currentStrategy?.video_filter
+    )
   });
 
   const {
@@ -61,14 +66,16 @@ const FormContainer = ({
 
   //---> Reset inventory in strategy when strategy type changed
   React.useEffect(() => {
-    if(strategyType?.value !== refStrategyType && !isEdit && !isView){
+    if (strategyType?.value !== refStrategyType && !isEdit && !isView) {
       refStrategyType.current = strategyType?.value;
-      dispatch( initStrategyInventoryListRedux({
-        inventoryList: [],
-        inventoryTempList: []
-      }))
+      dispatch(
+        initStrategyInventoryListRedux({
+          inventoryList: [],
+          inventoryTempList: []
+        })
+      );
     }
-  } , [dispatch, isEdit, isView, strategyType?.value])
+  }, [dispatch, isEdit, isView, strategyType?.value]);
 
   const redirectPageAfterSave = useCallback(
     ({
@@ -102,7 +109,13 @@ const FormContainer = ({
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
-      const req = formToApi({formData, isConcept, isSummary, currentStrategy, isEdit});
+      const req = formToApi({
+        formData,
+        isConcept,
+        isSummary,
+        currentStrategy,
+        isEdit
+      });
       console.log('======== FORM DATA', req);
 
       if (isEdit) {
