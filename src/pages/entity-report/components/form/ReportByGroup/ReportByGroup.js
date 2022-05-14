@@ -80,6 +80,7 @@ const ReportByGroup = ({
           name="api.report_by_uuid"
           sourceId={sourceId}
           disabled={disabled}
+          reportSource={reportSource}
         />
       ),
       video: (

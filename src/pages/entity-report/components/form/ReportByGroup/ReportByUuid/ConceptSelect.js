@@ -21,7 +21,8 @@ const propTypes = {
   placeholder: PropTypes.string,
   sourceId: PropTypes.string,
   multiple: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 const ConceptSelect = ({
@@ -32,7 +33,8 @@ const ConceptSelect = ({
   multiple = false,
   required = false,
   sourceId = '',
-  reportSource
+  reportSource,
+  disabled = false
 }) => {
   const {
     formState: {isSubmitting}
@@ -50,7 +52,7 @@ const ConceptSelect = ({
         page: 1
       }}
       defaultValue={defaultValue || null}
-      disabled={isSubmitting}
+      disabled={isSubmitting || disabled}
       multiple={multiple}
       isClearable
     />
