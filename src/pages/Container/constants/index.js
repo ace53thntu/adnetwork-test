@@ -123,8 +123,18 @@ export const getInventoryTypes = () => {
   });
 };
 
+export const InventoryFormats = {
+  BANNER: 'banner',
+  VIDEO: 'video',
+  NATIVE_ADS: 'native-ads'
+};
+
 export const getInventoryFormats = () => {
-  return ['banner', 'video', 'native-ads'].map(item => {
+  return [
+    InventoryFormats.BANNER,
+    InventoryFormats.VIDEO,
+    InventoryFormats.NATIVE_ADS
+  ].map(item => {
     return {
       label: capitalizeFirstLetter(item),
       value: item

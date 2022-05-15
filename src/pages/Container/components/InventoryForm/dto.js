@@ -1,4 +1,5 @@
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
+import {InventoryFormats} from 'pages/Container/constants';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
@@ -7,7 +8,6 @@ export const getMetaExtra = metadata => {
   let tmpMetadata = {...metadata} || {};
   [
     'background_color',
-    'duration',
     'extension',
     'width',
     'height',
@@ -20,7 +20,8 @@ export const getMetaExtra = metadata => {
     'skip_min',
     'skip_after',
     'start_delay',
-    'linearity'
+    'linearity',
+    'skip'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -53,27 +54,28 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     value: deal_floor_price
   });
   let formatMetadata = {
-    ...metadata,
-    duration: parseInt(metadata?.duration, 10) || 0,
+    extension: metadata?.extension || '',
+    background_color: metadata?.background_color || '',
     width: parseInt(metadata?.width, 10) || 0,
     height: parseInt(metadata?.height, 10) || 0
   };
 
   // Metadata video format
-  if (formatData === 'video') {
-    formatMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || 0;
-    formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || 0;
-    formatMetadata.min_duration = parseInt(metadata?.min_duration, 10) || 0;
-    formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || 0;
-    formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || 0;
-    formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || 0;
-    formatMetadata.start_delay = parseInt(metadata?.start_delay, 10) || 0;
-    formatMetadata.linearity = metadata?.linearity?.value || 0;
+  if (formatData === InventoryFormats.VIDEO) {
+    formatMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || null;
+    formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || null;
+    formatMetadata.min_duration = parseInt(metadata?.min_duration, 10) || null;
+    formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || null;
+    formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
+    formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
+    formatMetadata.start_delay = parseInt(metadata?.start_delay, 10) || null;
+    formatMetadata.linearity = metadata?.linearity?.value || null;
     formatMetadata.protocols =
       metadata?.protocols?.length > 0
         ? Array.from(metadata?.protocols, item => item.value)
         : [];
     formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
+    formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
   }
 
   // Metadata extra
@@ -155,6 +157,12 @@ export const mappingInventoryApiToForm = ({
       }))
     : [];
   let tagsParsed = tags?.map(tag => ({value: tag, label: capitalize(tag)}));
+  let destructedMetadata = {
+    width: metadata?.width,
+    height: metadata?.height,
+    extension: metadata?.extension,
+    background_color: metadata?.background_color
+  };
   const protocols =
     metadata?.protocols?.length > 0
       ? metadata?.protocols?.map(item => {
@@ -167,15 +175,27 @@ export const mappingInventoryApiToForm = ({
           return null;
         })
       : [];
-  metadata.protocols = protocols;
-  metadata.loop =
+  destructedMetadata.protocols = protocols;
+  destructedMetadata.loop =
     metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
-  metadata.linearity =
+  destructedMetadata.skip =
+    destructedMetadata?.skip === true || metadata?.skip === 1
+      ? 'active'
+      : 'inactive';
+  destructedMetadata.linearity =
     LinearityOptions.find(item => item.value === metadata.linearity) || null;
+  destructedMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || '';
+  destructedMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || '';
+  destructedMetadata.min_duration = parseInt(metadata?.min_duration, 10) || '';
+  destructedMetadata.max_duration = parseInt(metadata?.max_duration, 10) || '';
+  destructedMetadata.skip_min = parseInt(metadata?.skip_min, 10) || '';
+  destructedMetadata.skip_after = parseInt(metadata?.skip_after, 10) || '';
+  destructedMetadata.start_delay = parseInt(metadata?.start_delay, 10) || '';
+
   const extra = getMetaExtra(metadata);
 
   if (typeof extra === 'object' && Object.keys(extra)) {
-    metadata.extra = JSON.stringify(extra);
+    destructedMetadata.extra = JSON.stringify(extra);
   }
 
   let floorPrice = '',
@@ -206,7 +226,7 @@ export const mappingInventoryApiToForm = ({
     format: destructureFormat,
     floor_price: floorPrice,
     deal_floor_price: dealFloorPrice,
-    metadata,
+    metadata: destructedMetadata,
     fill_rate,
     click_rate,
     position_uuid: destructurePosition,

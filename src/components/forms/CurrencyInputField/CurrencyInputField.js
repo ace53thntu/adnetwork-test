@@ -12,6 +12,7 @@ import {Label} from 'reactstrap';
 // Internal Modules
 import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
 import {ErrorMessageStyled} from './styled';
+import './_main.scss';
 
 const propTypes = {
   className: PropTypes.string,
@@ -23,7 +24,8 @@ const propTypes = {
   prefix: PropTypes.string,
   groupSeparator: PropTypes.string,
   decimalSeparator: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
 const CurrencyInputField = props => {
@@ -43,6 +45,7 @@ const CurrencyInputField = props => {
     disableGroupSeparators = false,
     decimalsLimit = 2,
     description = '',
+    invalid = false,
     ...rest
   } = props;
   const {control, errors} = useFormContext();
@@ -64,7 +67,9 @@ const CurrencyInputField = props => {
             <CurrencyInput
               id={`${inputId}-${name}`}
               name={name}
-              className={`form-control ${className}`}
+              className={`form-control ${className} ${
+                invalid ? 'c-invalid' : ''
+              }`}
               value={value}
               onValueChange={onChange}
               placeholder={placeholder}

@@ -70,7 +70,7 @@ const InventoryFormContent = ({
   isCreate = false
 }) => {
   const {t} = useTranslation();
-  const {formState} = useFormContext();
+  const {formState, errors} = useFormContext();
   const isSubmitting = formState?.isSubmitting;
   const watchMarkType = useWatch({name: formName.market_type});
   const watchEnableDeal = useWatch({name: formName.allow_deal});
@@ -199,6 +199,7 @@ const InventoryFormContent = ({
               disableGroupSeparators={false}
               decimalsLimit={3}
               prefix="$"
+              invalid={errors?.floor_price}
             />
           </Col>
           {watchEnableDeal === InputStatus.ACTIVE && (
@@ -213,6 +214,7 @@ const InventoryFormContent = ({
                 disableGroupSeparators={false}
                 decimalsLimit={3}
                 prefix="$"
+                invalid={errors?.deal_floor_price}
                 required
               />
             </Col>
@@ -227,18 +229,28 @@ const InventoryFormContent = ({
               placeholder="Select position"
               disabled={isSubmitting}
               defaultValue={null}
+              required
             />
           </Col>
         </Row>
         <InventoryProperty currentInventory={inventory} isCreate={isCreate} />
         {inventory?.uuid && (
           <>
-            <InventorySnippet>
-              {inventoryCodeSnippet(inventory?.id || '')}
-            </InventorySnippet>
-            <DirectSnippet>
-              {directURLCodeSnippet(inventory?.uuid || '')}
-            </DirectSnippet>
+            <Row className="mb-3">
+              <Col>
+                <InventorySnippet>
+                  {inventoryCodeSnippet(inventory?.id || '')}
+                </InventorySnippet>
+              </Col>
+            </Row>
+
+            <Row className="mb-3">
+              <Col>
+                <DirectSnippet>
+                  {directURLCodeSnippet(inventory?.uuid || '')}
+                </DirectSnippet>
+              </Col>
+            </Row>
           </>
         )}
 

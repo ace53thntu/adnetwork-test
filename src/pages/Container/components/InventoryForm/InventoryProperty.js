@@ -14,12 +14,13 @@ import FormCodeMirror from 'components/forms/FormCodeMirror';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import VideoGroup from './VideoGroup';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
   const {t} = useTranslation();
   const role = getRole();
 
-  const {formState, control} = useFormContext();
+  const {formState, control, errors} = useFormContext();
   const inventoryTags = getInventoryTags();
   const formatTypeSelected = useWatch({name: 'format', control});
 
@@ -27,21 +28,27 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
     <>
       <Row>
         <Col sm={4}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.width"
-            placeholder="0"
+            placeholder={t('width')}
             label={t('width')}
-            disable={formState.isSubmitting}
-            isRequired
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
+            invalid={errors?.metadata?.width}
+            required
           />
         </Col>
         <Col sm={4}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.height"
-            placeholder="0"
+            placeholder={t('height')}
             label={t('height')}
-            disable={formState.isSubmitting}
-            isRequired
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
+            invalid={errors?.metadata?.height}
+            required
           />
         </Col>
         <Col sm={4}>
@@ -57,19 +64,11 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
       )}
 
       <Row>
-        <Col sm={4}>
+        <Col sm={12}>
           <FormTextInput
             name="metadata.extension"
             placeholder={t('extension')}
             label={t('extension')}
-            disable={formState.isSubmitting}
-          />
-        </Col>
-        <Col sm={4}>
-          <FormTextInput
-            name="metadata.duration"
-            placeholder="0"
-            label={t('duration')}
             disable={formState.isSubmitting}
           />
         </Col>

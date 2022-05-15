@@ -8,7 +8,7 @@ import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
-import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
+import {FormReactSelect, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {LinearityOptions, ProtocolOptions} from 'constants/misc';
 
@@ -20,35 +20,43 @@ const VideoGroup = ({isCreate = false}) => {
     <Collapse initialOpen title={t('FORM.VIDEO_CONFIGURATION')} unMount={false}>
       <Row>
         <Col sm={3}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.min_bitrate"
-            placeholder="0"
+            placeholder={t('minBitrate')}
             label={t('minBitrate')}
-            disable={formState.isSubmitting}
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
           />
         </Col>
         <Col sm={3}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.max_bitrate"
-            placeholder="0"
+            placeholder={t('maxBitrate')}
             label={t('maxBitrate')}
-            disable={formState.isSubmitting}
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
           />
         </Col>
         <Col sm={3}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.min_duration"
-            placeholder="0"
+            placeholder={t('minDuration')}
             label={t('minDuration')}
-            disable={formState.isSubmitting}
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
           />
         </Col>
         <Col sm={3}>
-          <FormTextInput
+          <CurrencyInputField
             name="metadata.max_duration"
-            placeholder="0"
+            placeholder={t('maxDuration')}
             label={t('maxDuration')}
-            disable={formState.isSubmitting}
+            disableGroupSeparators
+            allowDecimals={false}
+            disabled={formState.isSubmitting}
           />
         </Col>
         <Col md="3">
