@@ -11,6 +11,7 @@ import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {LinearityOptions, ProtocolOptions} from 'constants/misc';
+import { VideoMineOptions } from 'constants/inventory';
 
 const VideoGroup = ({isCreate = false}) => {
   const {t} = useTranslation();
@@ -105,6 +106,16 @@ const VideoGroup = ({isCreate = false}) => {
             label={t('protocols')}
             placeholder={t('selectProtocol')}
             options={ProtocolOptions}
+            disabled={formState.isSubmitting}
+            multiple
+          />
+        </Col>
+        <Col sm={12}>
+          <FormReactSelect
+            name="metadata.mines"
+            label={t('FORM.SUPPORT_MINES_TYPE')}
+            placeholder={`Select ${t('FORM.SUPPORT_MINES_TYPE')}`}
+            options={VideoMineOptions}
             disabled={formState.isSubmitting}
             multiple
           />

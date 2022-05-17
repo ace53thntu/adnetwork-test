@@ -1,3 +1,4 @@
+import {VideoMineOptions} from 'constants/inventory';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {InventoryFormats} from 'pages/Container/constants';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
@@ -21,7 +22,7 @@ export const getMetaExtra = metadata => {
     'skip_after',
     'start_delay',
     'linearity',
-    'skip'
+    'mines'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -73,6 +74,10 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     formatMetadata.protocols =
       metadata?.protocols?.length > 0
         ? Array.from(metadata?.protocols, item => item.value)
+        : [];
+    formatMetadata.mines =
+      metadata?.mines?.length > 0
+        ? Array.from(metadata?.mines, item => item.value)
         : [];
     formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
     formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
@@ -175,8 +180,21 @@ export const mappingInventoryApiToForm = ({
           return null;
         })
       : [];
-  destructedMetadata.protocols = protocols;
-  destructedMetadata.loop =
+  metadata.protocols = protocols;
+  const mines =
+    metadata?.mines?.length > 0
+      ? metadata?.mines?.map(item => {
+          const videoMineFound = VideoMineOptions?.find(
+            option => option.value === item
+          );
+          if (videoMineFound) {
+            return videoMineFound;
+          }
+          return null;
+        })
+      : [];
+  metadata.mines = mines;
+  metadata.loop =
     metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
   destructedMetadata.skip =
     destructedMetadata?.skip === true || metadata?.skip === 1
