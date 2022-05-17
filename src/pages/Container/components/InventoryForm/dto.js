@@ -22,7 +22,8 @@ export const getMetaExtra = metadata => {
     'skip_after',
     'start_delay',
     'linearity',
-    'mines'
+    'mines',
+    'skip'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -111,7 +112,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     floor_price: floorPrice,
     deal_floor_price: dealFloorPrice,
     type: type?.value || '',
-    metadata: formatMetadata,
+    metadata: {...formatMetadata},
     position_uuid: position_uuid?.value,
     allow_deal: allow_deal === 'active' ? true : false,
     price_engine: price_engine?.value || null,
@@ -180,7 +181,7 @@ export const mappingInventoryApiToForm = ({
           return null;
         })
       : [];
-  metadata.protocols = protocols;
+  destructedMetadata.protocols = protocols;
   const mines =
     metadata?.mines?.length > 0
       ? metadata?.mines?.map(item => {
@@ -193,11 +194,11 @@ export const mappingInventoryApiToForm = ({
           return null;
         })
       : [];
-  metadata.mines = mines;
-  metadata.loop =
+  destructedMetadata.mines = mines;
+  destructedMetadata.loop =
     metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
   destructedMetadata.skip =
-    destructedMetadata?.skip === true || metadata?.skip === 1
+  metadata?.skip === true || metadata?.skip === 1
       ? 'active'
       : 'inactive';
   destructedMetadata.linearity =
