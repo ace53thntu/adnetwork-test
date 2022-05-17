@@ -112,9 +112,9 @@ const VideoGroup = ({isCreate = false}) => {
         </Col>
         <Col sm={12}>
           <FormReactSelect
-            name="metadata.mines"
-            label={t('FORM.SUPPORT_MINES_TYPE')}
-            placeholder={`Select ${t('FORM.SUPPORT_MINES_TYPE')}`}
+            name="metadata.mimes"
+            label={t('FORM.SUPPORT_MIMES_TYPE')}
+            placeholder={`Select ${t('FORM.SUPPORT_MIMES_TYPE')}`}
             options={VideoMineOptions}
             disabled={formState.isSubmitting}
             multiple

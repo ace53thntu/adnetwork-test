@@ -556,7 +556,7 @@ const en = {
     SKIP_MIN: 'Skip min',
     SKIP_AFTER: 'Skip after',
     VIDEO_CONFIGURATION: 'Video configuration',
-    SUPPORT_MINES_TYPE: 'Support Mines Type'
+    SUPPORT_MIMES_TYPE: 'Support Mimes Type'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

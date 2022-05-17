@@ -22,6 +22,7 @@ export const getMetaExtra = metadata => {
     'skip_after',
     'start_delay',
     'linearity',
+    'mimes',
     'mines',
     'skip'
   ].forEach(element => {
@@ -76,9 +77,9 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       metadata?.protocols?.length > 0
         ? Array.from(metadata?.protocols, item => item.value)
         : [];
-    formatMetadata.mines =
-      metadata?.mines?.length > 0
-        ? Array.from(metadata?.mines, item => item.value)
+    formatMetadata.mimes =
+      metadata?.mimes?.length > 0
+        ? Array.from(metadata?.mimes, item => item.value)
         : [];
     formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
     formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
@@ -182,9 +183,9 @@ export const mappingInventoryApiToForm = ({
         })
       : [];
   destructedMetadata.protocols = protocols;
-  const mines =
-    metadata?.mines?.length > 0
-      ? metadata?.mines?.map(item => {
+  const mimes =
+    metadata?.mimes?.length > 0
+      ? metadata?.mimes?.map(item => {
           const videoMineFound = VideoMineOptions?.find(
             option => option.value === item
           );
@@ -194,7 +195,7 @@ export const mappingInventoryApiToForm = ({
           return null;
         })
       : [];
-  destructedMetadata.mines = mines;
+  destructedMetadata.mimes = mimes;
   destructedMetadata.loop =
     metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
   destructedMetadata.skip =
