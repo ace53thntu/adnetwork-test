@@ -2,6 +2,7 @@
  * @enum
  */
 export const MobileCarrier = {
+  UNKNOWN: 0,
   OTHER: 1,
   VIETTEL: 2,
   MOBIPHONE: 3,
@@ -14,13 +15,15 @@ export const MobileCarrierOptions = [
   {value: MobileCarrier.MOBIPHONE, label: 'Mobiphone'},
   {value: MobileCarrier.VINAPHONE, label: 'Vinaphone'},
   {value: MobileCarrier.VIETNAMMOBILE, label: 'Vietnammobile'},
-  {value: MobileCarrier.OTHER, label: 'Other'}
+  {value: MobileCarrier.OTHER, label: 'Other'},
+  {value: MobileCarrier.UNKNOWN, label: 'Unknown'}
 ];
 
 /**
  * @enum
  */
 export const Bandwidth = {
+  UNKNOWN: 0,
   OTHER: 1,
   CABLE: 2,
   WIFI: 3,
@@ -31,7 +34,8 @@ export const BandwidthOptions = [
   {value: Bandwidth.CABLE, label: 'Cable'},
   {value: Bandwidth.WIFI, label: 'Wifi'},
   {value: Bandwidth.MOBILE, label: 'Mobile'},
-  {value: Bandwidth.OTHER, label: 'Other'}
+  {value: Bandwidth.OTHER, label: 'Other'},
+  {value: Bandwidth.UNKNOWN, label: 'Unknown'}
 ];
 
 /**
@@ -55,17 +59,77 @@ export const OperatingSystemOptions = [
  * @enum
  */
 export const Browsers = {
-  OTHER: 1,
-  FIREFOX: 2,
-  CHROME: 3,
-  SAFARI: 4
+  UNKNOWN: 0,
+  CHROME: 1,
+  IE: 2,
+  SAFARI: 3,
+  FIREFOX: 4,
+  ANDROID: 5,
+  OPERA: 6,
+  BLACKBERRY: 7,
+  UC_BROWSER: 8,
+  SILK: 9,
+  NOKIA: 10,
+  NET_FRONT: 11,
+  QQ: 12,
+  MAXTHON: 13,
+  SOGOU_EXPLORER: 14,
+  SPOTIFY: 5,
+  NINTENDO: 16,
+  SAMSUNG: 17,
+  YANDEX: 18,
+  COC_COC: 19,
+  BOT: 20,
+  APPLE_BOT: 21,
+  BAIDU_BOT: 22,
+  BING_BOT: 23,
+  DUCK_DUCK_GO_BOT: 24,
+  FACEBOOK_BOT: 25,
+  GOOGLE_BOT: 26,
+  LINKEDIN_BOT: 27,
+  MSN_BOT: 28,
+  PINGDOM_BOT: 29,
+  TWITTER_BOT: 30,
+  YANDEX_BOT: 31,
+  COC_COC_BOT: 32,
+  YAHOO_BOT: 33
 };
 
 export const BrowsersOptions = [
-  {value: Browsers.FIREFOX, label: 'Firefox'},
+  {value: Browsers.UNKNOWN, label: 'Unknown'},
   {value: Browsers.CHROME, label: 'Chrome'},
+  {value: Browsers.IE, label: 'Internet Explorer'},
   {value: Browsers.SAFARI, label: 'Safari'},
-  {value: Browsers.OTHER, label: 'Other'}
+  {value: Browsers.FIREFOX, label: 'Firefox'},
+  {value: Browsers.ANDROID, label: 'Android'},
+  {value: Browsers.OPERA, label: 'Opera'},
+  {value: Browsers.BLACKBERRY, label: 'Blackberry'},
+  {value: Browsers.UC_BROWSER, label: 'Uc browser'},
+  {value: Browsers.SILK, label: 'Silk browser'},
+  {value: Browsers.NOKIA, label: 'Nokia browser'},
+  {value: Browsers.NET_FRONT, label: 'NetFront browser'},
+  {value: Browsers.QQ, label: 'QQ browser'},
+  {value: Browsers.MAXTHON, label: 'Maxthon browser'},
+  {value: Browsers.SOGOU_EXPLORER, label: 'Sogou Explorer'},
+  {value: Browsers.SPOTIFY, label: 'Spotify'},
+  {value: Browsers.NINTENDO, label: 'Nintendo'},
+  {value: Browsers.SAMSUNG, label: 'Samsung'},
+  {value: Browsers.YANDEX, label: 'Yandex'},
+  {value: Browsers.COC_COC, label: 'CocCoc'},
+  {value: Browsers.BOT, label: 'Bot'},
+  {value: Browsers.APPLE_BOT, label: 'Apple Bot'},
+  {value: Browsers.BAIDU_BOT, label: 'Baidu Bot'},
+  {value: Browsers.BING_BOT, label: 'BingBot'},
+  {value: Browsers.DUCK_DUCK_GO_BOT, label: 'Duck Duck Go Bot'},
+  {value: Browsers.FACEBOOK_BOT, label: 'Facebook Bot'},
+  {value: Browsers.GOOGLE_BOT, label: 'Google Bot'},
+  {value: Browsers.LINKEDIN_BOT, label: 'Linked In Bot'},
+  {value: Browsers.MSN_BOT, label: 'Msn Bot'},
+  {value: Browsers.PINGDOM_BOT, label: 'Pingdom Bot'},
+  {value: Browsers.TWITTER_BOT, label: 'Twitter Bot'},
+  {value: Browsers.YANDEX_BOT, label: 'Yandex Bot'},
+  {value: Browsers.COC_COC_BOT, label: 'Coc Coc Bot'},
+  {value: Browsers.YAHOO_BOT, label: 'Yahoo Bot'}
 ];
 
 /**
