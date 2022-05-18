@@ -19,7 +19,10 @@ class TrackerAPI extends XHRRequest {
   };
 
   createTracker = ({data, options}) => {
-    return this.post(endpoints.tracker.tracker, data, options);
+    console.log('==== createTracker', data);
+    return this.post(endpoints.tracker.tracker, data, options).then(res => {
+      console.log('==== createTracker res', res);
+    });
   };
 
   editTracker = ({id, data, options}) => {

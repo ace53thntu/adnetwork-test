@@ -1,6 +1,23 @@
 /**
  * @enum
  */
+export const StartDelay = {
+  PRE_ROLL: 0,
+  GENERIC_MID_ROLL: -1,
+  GENERIC_POST_ROLL: -2,
+  ANY: -3
+};
+
+export const StartDelayOptions = [
+  {value: StartDelay.PRE_ROLL, label: 'Pre-Roll'},
+  {value: StartDelay.GENERIC_MID_ROLL, label: 'Generic Mid-Roll'},
+  {value: StartDelay.GENERIC_POST_ROLL, label: 'Generic Post-Roll'},
+  {value: StartDelay.ANY, label: 'Any'}
+];
+
+/**
+ * @enum
+ */
 export const MobileCarrier = {
   UNKNOWN: 0,
   OTHER: 1,

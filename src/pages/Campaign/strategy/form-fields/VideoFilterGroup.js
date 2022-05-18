@@ -9,7 +9,7 @@ import {Col, Row} from 'reactstrap';
 //---> Internal Modules
 import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
-import {PlacementTypeOptions} from 'pages/Campaign/constants';
+import {PlacementTypeOptions, StartDelayOptions} from 'pages/Campaign/constants';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {useFormContext} from 'react-hook-form';
@@ -38,13 +38,13 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
           />
         </Col>
         <Col md="3">
-          <CurrencyInputField
+          <FormReactSelect
+            disabled={isView}
+            defaultValue={currentStrategy?.video_filter?.start_delay}
+            options={StartDelayOptions}
             name="video_filter.start_delay"
             placeholder={t('FORM.START_DELAY')}
             label={t('FORM.START_DELAY')}
-            disableGroupSeparators
-            allowDecimals={false}
-            disabled={isView}
           />
         </Col>
         <Col md="3">

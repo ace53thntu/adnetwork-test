@@ -9,6 +9,7 @@ import {
   PlacementTypeOptions,
   Priority,
   PriorityOptions,
+  StartDelayOptions,
   StrategyTypes
 } from 'pages/Campaign/constants';
 import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
@@ -105,7 +106,10 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     cpm_max: convertApiToGui({value: cpm_max}),
     video_filter: {
       skip_delay: video_filter?.skip_delay,
-      start_delay: video_filter?.start_delay,
+      start_delay:
+        StartDelayOptions?.find(
+          item => item?.value === video_filter?.start_delay
+        ) || null,
       ptype:
         PlacementTypeOptions?.find(
           item => item?.value === video_filter?.ptype
@@ -200,9 +204,7 @@ export const formToApi = ({
       : null;
   }
   if (video_filter?.start_delay) {
-    videoFilter.start_delay = video_filter?.start_delay
-      ? parseInt(video_filter?.start_delay)
-      : null;
+    videoFilter.start_delay = video_filter?.start_delay?.value;
   }
   if (video_filter?.ptype) {
     videoFilter.ptype = video_filter?.ptype?.value;
@@ -264,9 +266,7 @@ export const formToApi = ({
           skip_delay: video_filter?.skip_delay
             ? parseInt(video_filter?.skip_delay)
             : null,
-          start_delay: video_filter?.start_delay
-            ? parseInt(video_filter?.start_delay)
-            : null,
+          start_delay: video_filter?.start_delay?.value || null,
           ptype: video_filter?.ptype?.value || null,
           linearity: video_filter?.linearity?.value || null,
           protocols: video_filter?.protocols?.value || null

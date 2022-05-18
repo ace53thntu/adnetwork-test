@@ -78,9 +78,6 @@ export const strategySchema = (
           skip_delay: videoFilter?.skip_delay
             ? Yup.string().required(t('required'))
             : Yup.string().notRequired(),
-          start_delay: videoFilter?.start_delay
-            ? Yup.string().required(t('required'))
-            : Yup.string().notRequired(),
           ...skippableValidate
         })
       })

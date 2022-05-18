@@ -1,16 +1,8 @@
-//---> Byild0in Modules
+//---> Build-in Modules
 import React, {useCallback, useState} from 'react';
 
 //---> External Modules
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  CardHeader,
-  Modal,
-  Badge
-} from 'reactstrap';
+import {Button, Card, CardBody, CardTitle, CardHeader, Badge} from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {formatValue} from 'react-currency-input-field';
 import {useParams} from 'react-router';
@@ -210,20 +202,16 @@ function InventoryList() {
         <CreateInventory isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
       )}
 
-      <Modal
-        unmountOnClose
-        size="lg"
-        className="modal-dialog shadow-none"
-        isOpen={isOpenUpdate}
-      >
+      {isOpenUpdate && (
         <UpdateInventory
           toggle={() => {
             setIsOpenUpdate(!isOpenUpdate);
           }}
           inventoryId={inventoryId}
           pageId={pageId}
+          isOpen={isOpenUpdate}
         />
-      </Modal>
+      )}
 
       {openConfirm && (
         <DialogConfirm
