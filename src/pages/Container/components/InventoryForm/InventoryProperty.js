@@ -86,6 +86,18 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
           />
         </Col>
       </Row>
+      <Row>
+        <Col sm={12}>
+          <FormTextInput
+            name="metadata.pass_back"
+            placeholder="Pass back"
+            label="Pass back"
+            type="textarea"
+            disable={formState.isSubmitting}
+            rows="5"
+          />
+        </Col>
+      </Row>
       {[USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role) && (
         <Row className="mb-3">
           <Col sm={12} className="mt-2">

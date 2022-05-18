@@ -24,7 +24,8 @@ export const getMetaExtra = metadata => {
     'linearity',
     'mimes',
     'mines',
-    'skip'
+    'skip',
+    'pass_back'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -60,7 +61,8 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     extension: metadata?.extension || '',
     background_color: metadata?.background_color || '',
     width: parseInt(metadata?.width, 10) || 0,
-    height: parseInt(metadata?.height, 10) || 0
+    height: parseInt(metadata?.height, 10) || 0,
+    pass_back: metadata?.pass_back || ''
   };
 
   // Metadata video format
@@ -168,7 +170,8 @@ export const mappingInventoryApiToForm = ({
     width: metadata?.width,
     height: metadata?.height,
     extension: metadata?.extension,
-    background_color: metadata?.background_color
+    background_color: metadata?.background_color,
+    pass_back: metadata?.pass_back
   };
   const protocols =
     metadata?.protocols?.length > 0
@@ -199,9 +202,7 @@ export const mappingInventoryApiToForm = ({
   destructedMetadata.loop =
     metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
   destructedMetadata.skip =
-  metadata?.skip === true || metadata?.skip === 1
-      ? 'active'
-      : 'inactive';
+    metadata?.skip === true || metadata?.skip === 1 ? 'active' : 'inactive';
   destructedMetadata.linearity =
     LinearityOptions.find(item => item.value === metadata.linearity) || null;
   destructedMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || '';
