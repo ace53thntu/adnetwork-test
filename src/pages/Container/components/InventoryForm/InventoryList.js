@@ -2,7 +2,15 @@
 import React, {useCallback, useState} from 'react';
 
 //---> External Modules
-import {Button, Card, CardBody, CardTitle, CardHeader, Badge} from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardHeader,
+  Badge,
+  Modal
+} from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {formatValue} from 'react-currency-input-field';
 import {useParams} from 'react-router';
@@ -203,14 +211,20 @@ function InventoryList() {
       )}
 
       {isOpenUpdate && (
-        <UpdateInventory
-          toggle={() => {
-            setIsOpenUpdate(!isOpenUpdate);
-          }}
-          inventoryId={inventoryId}
-          pageId={pageId}
+        <Modal
+          unmountOnClose
+          size="lg"
+          className="modal-dialog shadow-none"
           isOpen={isOpenUpdate}
-        />
+        >
+          <UpdateInventory
+            toggle={() => {
+              setIsOpenUpdate(!isOpenUpdate);
+            }}
+            inventoryId={inventoryId}
+            pageId={pageId}
+          />
+        </Modal>
       )}
 
       {openConfirm && (

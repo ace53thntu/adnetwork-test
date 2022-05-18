@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 
 //---> External Modules
 import {useForm, FormProvider} from 'react-hook-form';
-import {ModalHeader, ModalBody, Modal} from 'reactstrap';
+import {ModalHeader, ModalBody} from 'reactstrap';
 
 //---> Internal Modules
 import {getInventoryFormats, getInventoryTypes} from '../../constants';
@@ -26,17 +26,12 @@ export default function UpdateInventory({
 
   if (isFetching) {
     return (
-      <Modal
-        unmountOnClose
-        size="lg"
-        className="modal-dialog shadow-none"
-        isOpen={isOpen}
-      >
+      <>
         <ModalHeader>Inventory Information</ModalHeader>
         <ModalBody>
           <div>Loading...</div>
         </ModalBody>
-      </Modal>
+      </>
     );
   }
 
