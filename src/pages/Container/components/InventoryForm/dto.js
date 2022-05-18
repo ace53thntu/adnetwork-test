@@ -1,4 +1,4 @@
-import {VideoMineOptions} from 'constants/inventory';
+import {BannerTypeOptions, VideoMineOptions} from 'constants/inventory';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {InventoryFormats} from 'pages/Container/constants';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
@@ -25,7 +25,9 @@ export const getMetaExtra = metadata => {
     'mimes',
     'mines',
     'skip',
-    'pass_back'
+    'pass_back',
+    'banner_type',
+    'banner_play_types'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -85,6 +87,12 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
         : [];
     formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
     formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
+  }
+
+  // Metadata banner format
+  if (formatData === InventoryFormats.BANNER) {
+    formatMetadata.banner_type = metadata?.banner_type?.value || null;
+    formatMetadata.banner_play_type = metadata?.banner_play_type?.value || null;
   }
 
   // Metadata extra
@@ -212,7 +220,14 @@ export const mappingInventoryApiToForm = ({
   destructedMetadata.skip_min = parseInt(metadata?.skip_min, 10) || '';
   destructedMetadata.skip_after = parseInt(metadata?.skip_after, 10) || '';
   destructedMetadata.start_delay = parseInt(metadata?.start_delay, 10) || '';
-
+  const bannerTypeSelected = BannerTypeOptions.find(
+    item => item.value === metadata?.banner_type
+  );
+  const bannerPlayTypeSelected = BannerTypeOptions.find(
+    item => item.value === metadata?.banner_play_type
+  );
+  destructedMetadata.banner_type = bannerTypeSelected;
+  destructedMetadata.banner_play_type = bannerPlayTypeSelected;
   const extra = getMetaExtra(metadata);
 
   if (typeof extra === 'object' && Object.keys(extra)) {

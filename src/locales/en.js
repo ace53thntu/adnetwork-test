@@ -556,7 +556,9 @@ const en = {
     SKIP_MIN: 'Skip min',
     SKIP_AFTER: 'Skip after',
     VIDEO_CONFIGURATION: 'Video configuration',
-    SUPPORT_MIMES_TYPE: 'Support Mimes Type'
+    SUPPORT_MIMES_TYPE: 'Support Mimes Type',
+    BANNER_PLAY_TYPE:"Banner play type",
+    BANNER_TYPE:"Banner type"
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

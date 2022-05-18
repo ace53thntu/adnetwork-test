@@ -1,6 +1,28 @@
 /**
  *@enum
  */
+export const BannerType = {
+  STANDARD: 'standard'
+};
+
+export const BannerTypeOptions = [
+  {value: BannerType.STANDARD, label: 'Standard'}
+];
+
+/**
+ *@enum
+ */
+export const BannerPlayTypes = {
+  STANDARD: 'standard'
+};
+
+export const BannerPlayTypeOptions = [
+  {value: BannerPlayTypes.STANDARD, label: 'Standard'}
+];
+
+/**
+ *@enum
+ */
 export const VideoMineTypes = {
   FLASH: 'video/x-flv',
   MPEG4: 'video/mp4',

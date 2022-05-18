@@ -15,6 +15,7 @@ import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import VideoGroup from './VideoGroup';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import { BannerPlayTypeOptions, BannerTypeOptions } from 'constants/inventory';
 
 const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
   const {t} = useTranslation();
@@ -61,6 +62,28 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
       </Row>
       {formatTypeSelected?.value === 'video' && (
         <VideoGroup isCreate={isCreate} />
+      )}
+      {formatTypeSelected?.value === 'banner' && (
+         <Row>
+         <Col sm={6}>
+           <FormReactSelect
+             name="metadata.banner_type"
+             label={t('FORM.BANNER_TYPE')}
+             placeholder={t('FORM.BANNER_TYPE')}
+             options={BannerTypeOptions}
+             disabled={formState.isSubmitting}
+           />
+         </Col>
+         <Col sm={6}>
+           <FormReactSelect
+             name="metadata.banner_play_type"
+             label={t('FORM.BANNER_PLAY_TYPE')}
+             placeholder={t('FORM.BANNER_PLAY_TYPE')}
+             options={BannerPlayTypeOptions}
+             disabled={formState.isSubmitting}
+           />
+         </Col>
+       </Row>
       )}
 
       <Row>
