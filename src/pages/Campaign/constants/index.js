@@ -590,7 +590,20 @@ export const StrategySources = [
   {
     value: 'smarttv',
     label: 'Smart TV'
-  }
+  },
+  {
+    value: 'webtv',
+    label: 'Web TV'
+  },
+  {
+    value: 'androidtv',
+    label: 'Android TV'
+  },
+  {
+    value: 'appletv',
+    label: 'Apple TV'
+  },
+
   // {
   //   value: 'others',
   //   label: 'Others'

@@ -64,13 +64,6 @@ const AddTypeButton = ({
               return null;
             }
 
-            if (
-              item?.type === CappingTypes.DOMAIN.value ||
-              item?.type === CappingTypes.KEYWORD.value
-            ) {
-              return null;
-            }
-
             return (
               <DropdownItem
                 key={`pr-${item.type}-${item.sub_type}`}

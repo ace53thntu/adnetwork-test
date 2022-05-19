@@ -14,3 +14,7 @@ window.ADN_META_DATA = {
   SDK_CDN: 'https://cdn.aicactus.io/aicactus-sdk.min.js',
   DIRECT_URL: 'https://staging-adnetwork-core-lb7.aicactus.io/direct-ads'
 };
+
+
+ENVIRONMENT_NAME = 'staging';
+// ENVIRONMENT_NAME = 'prod';

@@ -49,11 +49,19 @@ const StrategyForm = ({
       {isCreate && <KeywordGroup />}
       {isCreate && <ScheduleGroup />}
 
-      {/* Video filter */}
-      <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
+      {/* eslint-disable-next-line no-undef */}
+      {ENVIRONMENT_NAME !== 'prod' && (
+        <>
+          {/* Video filter */}
+          <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
 
-      {/* Context filter */}
-      <ContextFilterGroup isView={isView} currentStrategy={currentStrategy} />
+          {/* Context filter */}
+          <ContextFilterGroup
+            isView={isView}
+            currentStrategy={currentStrategy}
+          />
+        </>
+      )}
 
       {/* Inventory Group */}
       <InventoryGroup isView={isView} />
