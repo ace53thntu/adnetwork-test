@@ -64,7 +64,6 @@ function AlternativeForm(props) {
         setIsLoading(false);
         handleRemoveAlternative(itemIndex);
         ShowToast.success('Delete Alternative successfully!');
-        // client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
       } catch (error) {
         setIsLoading(false);
         ShowToast.error(error?.msg);
