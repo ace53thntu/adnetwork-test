@@ -13,6 +13,8 @@ import ScheduleGroup from './form-fields/ScheduleGroup';
 import {getRole} from 'utils/helpers/auth.helpers';
 import VideoFilterGroup from './form-fields/VideoFilterGroup';
 import ContextFilterGroup from './form-fields/ContextFilterGroup';
+import DomainGroup from '../campaign-management/form-fields/DomainGroup';
+import KeywordGroup from '../campaign-management/form-fields/KeywordGroup';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -40,6 +42,11 @@ const StrategyForm = ({
 
       {isCreate && <BudgetGroup />}
       {isCreate && <ImpressionGroup />}
+      {/* Domain */}
+      {isCreate && <DomainGroup />}
+
+      {/* Keyword */}
+      {isCreate && <KeywordGroup />}
       {isCreate && <ScheduleGroup />}
 
       {/* Video filter */}

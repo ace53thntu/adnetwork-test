@@ -180,23 +180,19 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
         />
       )}
 
-      {referenceType !== 'strategy' && (
-        <>
-          {domainList?.length > 0 && (
-            <DomainList
-              list={domainList}
-              onClickMenu={onClickMenu}
-              onClickItem={onClickItem}
-            />
-          )}
-          {keywordList?.length > 0 && (
-            <KeywordList
-              list={keywordList}
-              onClickMenu={onClickMenu}
-              onClickItem={onClickItem}
-            />
-          )}
-        </>
+      {domainList?.length > 0 && (
+        <DomainList
+          list={domainList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
+      )}
+      {keywordList?.length > 0 && (
+        <KeywordList
+          list={keywordList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+        />
       )}
 
       {scheduleList?.length > 0 && (

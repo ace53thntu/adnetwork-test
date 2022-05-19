@@ -15,6 +15,7 @@ import {CustomStatus} from 'components/list/status';
 import {CappingTypes} from 'constants/misc';
 import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
+import {Chip} from '@material-ui/core';
 
 const propTypes = {
   list: PropTypes.array,
@@ -51,7 +52,17 @@ const DomainList = ({
         cell: row => {
           const dataList = row?.value;
           if (isArray(dataList)) {
-            return dataList.map(item => item.name || '');
+            return dataList.map(
+              (item, idx) =>
+                (
+                  <Chip
+                    key={`pr-${idx}`}
+                    variant="outlined"
+                    size="small"
+                    label={item.name}
+                  />
+                ) || ''
+            );
           }
           return null;
         }
@@ -63,7 +74,17 @@ const DomainList = ({
         cell: row => {
           const dataList = row?.value;
           if (isArray(dataList)) {
-            return dataList.map(item => item.name || '');
+            return dataList.map(
+              (item, idx) =>
+                (
+                  <Chip
+                    key={`pr-${idx}`}
+                    variant="outlined"
+                    size="small"
+                    label={item.name}
+                  />
+                ) || ''
+            );
           }
           return null;
         }

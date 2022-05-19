@@ -65,9 +65,8 @@ const AddTypeButton = ({
             }
 
             if (
-              referenceType === 'strategy' &&
-              (item?.type === CappingTypes.DOMAIN.value ||
-                item?.type === CappingTypes.KEYWORD.value)
+              item?.type === CappingTypes.DOMAIN.value ||
+              item?.type === CappingTypes.KEYWORD.value
             ) {
               return null;
             }

@@ -105,7 +105,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     priority: selectedPriority || {value: Priority.NORMAL, label: 'Normal'},
     cpm_max: convertApiToGui({value: cpm_max}),
     video_filter: {
-      skip_delay: video_filter?.skip_delay,
+      skip_delay: video_filter?.skip_delay || '',
       start_delay:
         StartDelayOptions?.find(
           item => item?.value === video_filter?.start_delay
@@ -177,7 +177,11 @@ export const formToApi = ({
     priority,
     cpm_max,
     video_filter,
-    context_filter
+    context_filter,
+    domain_groups_white,
+    domain_groups_black,
+    keywords_list_white,
+    keywords_list_black
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value);
@@ -299,6 +303,34 @@ export const formToApi = ({
       daily: parseInt(impression?.daily) || null,
       global: parseInt(impression?.global) || null
     };
+
+    if (domain_groups_white && domain_groups_white?.length > 0) {
+      strategyReturn.domain_groups_white = Array.from(
+        domain_groups_white,
+        domain => domain?.value
+      );
+    }
+
+    if (domain_groups_black && domain_groups_black?.length > 0) {
+      strategyReturn.domain_groups_black = Array.from(
+        domain_groups_black,
+        domain => domain?.value
+      );
+    }
+
+    if (keywords_list_white && keywords_list_white?.length > 0) {
+      strategyReturn.keywords_list_white = Array.from(
+        keywords_list_white,
+        domain => domain?.value
+      );
+    }
+
+    if (keywords_list_black && keywords_list_black?.length > 0) {
+      strategyReturn.keywords_list_black = Array.from(
+        keywords_list_black,
+        domain => domain?.value
+      );
+    }
   }
 
   if (!currentStrategy?.id && schedule?.week_days?.length > 0) {
