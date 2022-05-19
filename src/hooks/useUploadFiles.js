@@ -69,7 +69,7 @@ export function useUploadFile({
           dispatch(commonFileUploadingRedux(false));
           setError(name, {
             type: 'manual',
-            message: error?.message ?? 'Something went wrong'
+            message: error?.debug ?? 'Something went wrong'
           });
         }
       } else {
