@@ -34,13 +34,15 @@ function PageInformationForm(props) {
   );
 
   const filteredPages = pages.filter(p => p.id !== rawData?.id);
-  const isWeb = source === 'web';
+  const isWeb = source === 'web' || source === 'webtv';
   const formLabelsName = {
-    pageName: !isWeb ? 'Screen name' : 'Page name',
+    pageName: !isWeb  ? 'Screen name' : 'Page name',
     pageURL: 'Page URL',
-    pageTypePlaceholder: !isWeb ? 'Select a screen type' : 'Select a page type',
-    pageTag: !isWeb ? 'Screen tags' : 'Page tags',
-    pageTagPlaceholder: !isWeb ? 'Select screen tags' : 'Select page tags'
+    pageTypePlaceholder:
+      !isWeb  ? 'Select a screen type' : 'Select a page type',
+    pageTag: !isWeb  ? 'Screen tags' : 'Page tags',
+    pageTagPlaceholder:
+      !isWeb  ? 'Select screen tags' : 'Select page tags'
   };
 
   const methods = useForm({

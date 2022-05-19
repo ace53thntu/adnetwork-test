@@ -35,6 +35,12 @@ window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=d
 </script>
 `;
 
+const getWebTvScript = containerId => `
+<script type="text/javascript">
+window.${SDK_NAME}||(window.${SDK_NAME}={}),${SDK_NAME}.load=function(t){var e=document.createElement("script");e.async=!0,e.type="text/javascript",e.src="${SDK_CDN}?t="+Date.now(),e.addEventListener?e.addEventListener("load",function(e){"function"==typeof t&&t(e)},!1):e.onreadystatechange=function(){("complete"==this.readyState||"loaded"==this.readyState)&&t(window.event)};let a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(e,a)},${SDK_NAME}.load(function(){${SDK_NAME}.initialize({containerId:"${containerId}@webtv", type: ["adnetwork"]}),${SDK_NAME}.callMethodsFromContainer()});
+</script>
+`;
+
 function ContainerInfoForm(props) {
   const {t} = useTranslation();
   const {pagesCount, inventoriesCounts} = props;
@@ -49,6 +55,10 @@ function ContainerInfoForm(props) {
   const isIOS = source === 'ios';
   const isAndroid = source === 'android';
   const isMobile = isIOS || isAndroid;
+  const isWebTv = source === 'webtv';
+  const isAndroidTv = source === 'androidtv';
+  const isIOSTv = source === 'iostv';
+
 
   const formDefaultValues = mappingApiToForm({
     container,
@@ -173,13 +183,22 @@ function ContainerInfoForm(props) {
 
             <Col sm={12} md={4}>
               {isAndroid && <AndroidInitSnippet containerId={container.uuid} />}
+              {isAndroidTv && <AndroidInitSnippet containerId={container.uuid} isTv/>}
               {isIOS && <IosInitSnippet containerId={container.uuid} />}
+              {isIOSTv && <IosInitSnippet containerId={container.uuid} isTv/>}
               {!isMobile && (
                 <div className="aicactus-snippet">
                   <WebIdentifySnippet>
                     {defaultValue(container.uuid)}
                   </WebIdentifySnippet>
                 </div>
+              )}
+              {isWebTv && (
+                <div className="aicactus-snippet">
+                <WebIdentifySnippet>
+                  {getWebTvScript(container.uuid)}
+                </WebIdentifySnippet>
+              </div>
               )}
             </Col>
           </Row>

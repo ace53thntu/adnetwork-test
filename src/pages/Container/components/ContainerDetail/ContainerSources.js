@@ -69,7 +69,15 @@ function ContainerSources(props) {
   const onHandleAddScreenAndroid = () => {
     dispatch(toggleCreatePageModalRedux('android'));
   };
-
+  const onHandleAddWebTv = () => {
+    dispatch(toggleCreatePageModalRedux('webtv'));
+  };
+  const onHandleAddAppleTv = () => {
+    dispatch(toggleCreatePageModalRedux('appletv'));
+  };
+  const onHandleAddScreenAndroidTv = () => {
+    dispatch(toggleCreatePageModalRedux('androidtv'));
+  };
   return (
     <>
       <Card>
@@ -92,6 +100,15 @@ function ContainerSources(props) {
                   </DropdownItem>
                   <DropdownItem onClick={onHandleAddScreenAndroid}>
                     {t('androidTracking')}
+                  </DropdownItem>
+                  <DropdownItem onClick={onHandleAddWebTv}>
+                    {t('COMMON.WEB_TV')}
+                  </DropdownItem>
+                  <DropdownItem onClick={onHandleAddAppleTv}>
+                    {t('COMMON.APPLE_TV')}
+                  </DropdownItem>
+                  <DropdownItem onClick={onHandleAddScreenAndroidTv}>
+                    {t('COMMON.ANDROID_TV')}
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledButtonDropdown>

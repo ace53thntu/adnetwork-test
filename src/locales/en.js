@@ -340,9 +340,9 @@ const en = {
   agree: 'Agree',
   containerResources: 'Container resources',
   addResource: 'Add resource',
-  websiteTracking: 'Website tracking',
-  iOSTracking: 'iOS tracking',
-  androidTracking: 'Android tracking',
+  websiteTracking: 'Website',
+  iOSTracking: 'iOS',
+  androidTracking: 'Android',
   manualImportation: 'Manual importation',
   scheduleTransfer: 'Schedule transfer',
   websiteTag: 'Website',
@@ -532,7 +532,10 @@ const en = {
     BUDGET_DAILY: 'Budget Daily',
     SEARCH: 'Search',
     FILTER: 'Filter',
-    CONTEXT_FILTER: 'Context filter'
+    CONTEXT_FILTER: 'Context filter',
+    WEB_TV: 'Web TV',
+    ANDROID_TV: 'Android TV',
+    APPLE_TV: 'Apple TV'
   },
   FORM: {
     SELECT_POSITION: 'Select position',

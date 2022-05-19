@@ -3,7 +3,7 @@ import React from 'react';
 import ReactPrismjs from '@uiw/react-prismjs';
 import {DOMAIN_NAME, SDK_NAME, SDK_NAME_1} from 'constants/container';
 
-function AndroidInitSnippet({containerId}) {
+function AndroidInitSnippet({containerId, isTv = false}) {
   return (
     <div className="aicactus-snippet-container">
       Modify build.gradle at the root project in this way:
@@ -32,7 +32,7 @@ function AndroidInitSnippet({containerId}) {
           super.onCreate()
 
           // Create an client with the given context and  write key.
-          val config = ${SDK_NAME}.Builder(this, '${containerId}@android')
+          val config = ${SDK_NAME}.Builder(this, '${containerId}@${!isTv ? 'android' : 'androidtv'}')
               // Enable this to record certain application events automatically!
               .trackApplicationLifecycleEvents()
               // Enable this to record screen views automatically!

@@ -5,9 +5,12 @@ import {useParams} from 'react-router';
 import {Col, Container, Row} from 'reactstrap';
 
 import {AndroidTag} from '../AndroidTag';
+import { AndroidTvTag } from '../AndroidTvTag';
 import {IosTag} from '../IosTag';
+import IosTvTag from '../IosTvTag/IosTvTag';
 import {ContainerBodyLayout} from '../Layouts';
 import {WebsiteTag} from '../WebsiteTag';
+import { WebTvTag } from '../WebTvTag';
 import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
 
 function ContainerSourcePage(props) {
@@ -33,6 +36,15 @@ function ContainerSourcePage(props) {
     }
     if (source === SOURCES.ios) {
       return <IosTag />;
+    }
+    if(source === SOURCES.webtv){
+      return <WebTvTag />
+    }
+    if(source === SOURCES.androidtv){
+      return <AndroidTvTag />
+    }
+    if(source === SOURCES.appletv){
+      return <IosTvTag />
     }
   };
 

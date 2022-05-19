@@ -3,15 +3,15 @@ import React from 'react';
 
 import ReactPrismjs from '@uiw/react-prismjs';
 
-const sourceScript = containerId => `// ContainerID ${window.ADN_META_DATA.DOMAIN_NAME_1}
-let configuration = ${window.ADN_META_DATA.SDK_IOS_CONFIG}(writeKey: "${containerId}@ios")
+const sourceScript = (containerId, isTv =false) => `// ContainerID ${window.ADN_META_DATA.DOMAIN_NAME_1}
+let configuration = ${window.ADN_META_DATA.SDK_IOS_CONFIG}(writeKey: "${containerId}@${!isTv ? 'ios' : 'appletv'}")
 // Enable this to record certain application events automatically!
 configuration.trackApplicationLifecycleEvents = true
 // Enable this to record screen views automatically!
 configuration.recordScreenViews = true
 ${SDK_NAME}.setup(with: configuration)`;
 
-function IosInitSnippet({containerId}) {
+function IosInitSnippet({containerId, isTv = false}) {
   return (
     <div className="aicactus-snippet-container">
       {SDK_NAME} is available through <strong>CocoaPods</strong>.
@@ -27,7 +27,7 @@ function IosInitSnippet({containerId}) {
       method, set up the SDK like so:
       <ReactPrismjs
         language="javascript"
-        source={sourceScript(containerId)}
+        source={sourceScript(containerId, isTv)}
         className=""
       />
       And of course, import the SDK in the files that you use it by adding the

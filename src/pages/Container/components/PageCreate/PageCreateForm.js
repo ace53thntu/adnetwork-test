@@ -37,8 +37,14 @@ function PageCreateForm({pageTags = []}) {
   const pageSource = source || selectedSource;
 
   const isMobile = source
-    ? source === 'ios' || source === 'android'
-    : selectedSource === 'ios' || selectedSource === 'android';
+    ? source === 'ios' ||
+      source === 'android' ||
+      source === 'androidtv' ||
+      source === 'appletv'
+    : selectedSource === 'ios' ||
+      selectedSource === 'android' ||
+      selectedSource === 'androidtv' ||
+      selectedSource === 'appletv';
 
   const formLabelsName = {
     pageName: isMobile ? 'Screen name' : 'Page name',
