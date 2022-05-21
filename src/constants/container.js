@@ -41,15 +41,24 @@ export const CONTAINER_TREE_TAGS = [
 const webKey = 'web';
 const iosKey = 'ios';
 const androidKey = 'android';
+const webTvKey = 'webtv';
+const appletvKey = 'appletv';
+const androidtvKey = 'androidtv';
 
 export const SOURCE_FROM_TAG = {
   [webKey]: 'web',
   [iosKey]: 'ios',
-  [androidKey]: 'android'
+  [androidKey]: 'android',
+  [webTvKey]: 'webtv',
+  [appletvKey]: 'appletv',
+  [androidtvKey]: 'androidtv'
 };
 
 export const TAG_FROM_SOURCE = {
   web: webKey,
   ios: iosKey,
-  android: androidKey
+  android: androidKey,
+  webtv: webTvKey,
+  appletv: appletvKey,
+  androidtv: androidtvKey
 };

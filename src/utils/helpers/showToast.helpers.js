@@ -11,7 +11,7 @@ class ShowToast {
   static error(message) {
     toast.error(message ?? 'Something went wrong.', {
       closeOnClick: true,
-      autoClose: false
+      autoClose: 5000
     });
   }
 
