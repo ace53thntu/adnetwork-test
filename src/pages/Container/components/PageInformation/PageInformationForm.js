@@ -36,18 +36,16 @@ function PageInformationForm(props) {
   const filteredPages = pages.filter(p => p.id !== rawData?.id);
   const isWeb = source === 'web' || source === 'webtv';
   const formLabelsName = {
-    pageName: !isWeb  ? 'Screen name' : 'Page name',
+    pageName: !isWeb ? 'Screen name' : 'Page name',
     pageURL: 'Page URL',
-    pageTypePlaceholder:
-      !isWeb  ? 'Select a screen type' : 'Select a page type',
-    pageTag: !isWeb  ? 'Screen tags' : 'Page tags',
-    pageTagPlaceholder:
-      !isWeb  ? 'Select screen tags' : 'Select page tags'
+    pageTypePlaceholder: !isWeb ? 'Select a screen type' : 'Select a page type',
+    pageTag: !isWeb ? 'Screen tags' : 'Page tags',
+    pageTagPlaceholder: !isWeb ? 'Select screen tags' : 'Select page tags'
   };
 
   const methods = useForm({
     defaultValues: formDefaultValues,
-    resolver: validationPage(filteredPages, !isWeb)
+    resolver: validationPage(filteredPages, !isWeb, source)
   });
   const {
     handleSubmit,
@@ -118,7 +116,7 @@ function PageInformationForm(props) {
               disabled={isSubmitting}
             />
 
-            {isWeb && (
+            {source === 'website' && (
               <FormTextInput
                 isRequired
                 name="url"

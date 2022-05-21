@@ -3,8 +3,8 @@ import * as Yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidURL} from 'utils/helpers/validations.helpers';
 
-export const validationPage = (pages = [], isMobile = false) => {
-  if (isMobile) {
+export const validationPage = (pages = [], isMobile = false, source) => {
+  if (isMobile || source === 'webtv') {
     return yupResolver(
       Yup.object().shape({
         name: Yup.string()

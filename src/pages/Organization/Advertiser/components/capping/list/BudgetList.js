@@ -53,13 +53,18 @@ const BudgetList = ({
         header: 'Target',
         accessor: 'target',
         cell: row => {
-          if (row?.original?.type === CappingTypes.IMPRESSION.value) {
+          if (
+            [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
+              row?.original?.type
+            )
+          ) {
             return (
               <Badge color="info" pill>
                 {row?.value}
               </Badge>
             );
           }
+          console.log('row?.value ===', row?.value);
           return (
             <Badge color="info" pill>
               {row?.value

@@ -19,7 +19,8 @@ const SelectCreatable = ({
   placeholder,
   label,
   required,
-  errors
+  errors,
+  disabled = false
 }) => {
   const defaultOptions = Array.from(data).map(item =>
     createOption(item.id, item[labelKey])
@@ -70,7 +71,7 @@ const SelectCreatable = ({
         <CreatableSelect
           isClearable
           isMulti
-          isDisabled={isLoading}
+          isDisabled={isLoading || disabled}
           isLoading={isLoading}
           onChange={handleChange}
           options={options}

@@ -55,6 +55,7 @@ const FormContent = ({
           disabled={isView}
         />
       </Col>
+
       {/* Domains */}
       <Col sm={12}>
         <DomainSelect
@@ -73,9 +74,8 @@ const FormContent = ({
           control={control}
           name={INPUT_NAME.STATUS}
           render={({onChange, onBlur, value, name}) => (
-            <ActiveToggle value={value} onChange={onChange} />
+            <ActiveToggle value={value} onChange={onChange} disabled={isView} />
           )}
-          disabled={isView}
         />
       </Col>
       {!isEdit && !isView && (
@@ -100,4 +100,4 @@ const FormContent = ({
 
 FormContent.propTypes = propTypes;
 
-export default React.memo(FormContent);
+export default FormContent;

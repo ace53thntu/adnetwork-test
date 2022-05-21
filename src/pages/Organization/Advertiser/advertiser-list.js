@@ -156,23 +156,19 @@ const ListAdvertiser = () => {
   };
 
   const onClickItem = data => {
-    setCurrentAdvertiser(data);
-    setOpenFormEdit(true);
+    navigate(
+      `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${data?.uuid}`
+    );
   };
 
   const onClickDelete = (actionIndex, item) => {
     if (actionIndex === 0) {
-      setCurrentAdvertiser(item);
-      setOpenFormEdit(true);
-    }
-    if (actionIndex === 1) {
       navigate(
-        `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${item?.uuid}`
+        `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${item?.uuid}/${RoutePaths.EDIT}`
       );
-      return;
     }
 
-    if (actionIndex === 2) {
+    if (actionIndex === 1) {
       setCurrentAdvertiser(item);
       setShowDialog(true);
       return;
@@ -239,7 +235,7 @@ const ListAdvertiser = () => {
                         showAction
                         actions={
                           [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
-                            ? ['Edit', 'View', 'Delete']
+                            ? ['Edit', 'Delete']
                             : ['Edit']
                         }
                         handleAction={onClickDelete}

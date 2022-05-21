@@ -1,5 +1,5 @@
 import React from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 import Tabs from './components/Tabs';
 import {useTranslation} from 'react-i18next';
@@ -10,6 +10,14 @@ import {useDefaultAdvertiser, useIABsOptions} from '../hooks';
 import {useGetAdvertiser} from 'queries/advertiser';
 import {useGetIABs} from 'queries/iabs';
 import AdvertiserLayout from './advertiser-layout';
+import {EntityReport} from 'pages/entity-report';
+import {EntityTypes} from 'constants/report';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {Col, Row} from 'reactstrap';
+import Credential from 'components/credential';
+import {CappingReferenceTypes} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
 
 const AdvertiserView = ({children}) => {
   const {advertiserId} = useParams();
@@ -35,7 +43,12 @@ const AdvertiserView = ({children}) => {
 };
 
 const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
+  console.log(
+    '🚀 ~ file: advertiser-view.js ~ line 41 ~ AdvertiserContent ~ defaultValues',
+    defaultValues
+  );
   const {t} = useTranslation();
+  const role = getRole();
 
   const methods = useForm({defaultValues});
 
@@ -54,6 +67,34 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
                   isView
                   IABsOptions={IABsOptions}
                 />
+
+                {(role === USER_ROLE.ADVERTISER ||
+                  role === USER_ROLE.ADMIN) && (
+                  <Row className="mt-2">
+                    <Col md={12}>
+                      <Credential
+                        type={USER_ROLE.ADVERTISER}
+                        referenceId={advertiserId}
+                      />
+                    </Col>
+                  </Row>
+                )}
+                <Row className="mt-3">
+                  <Col className="d-flex justify-content-end">
+                    <Link
+                      to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`}
+                    >
+                      {t('backToList')}
+                    </Link>
+                    <span className="ml-2">|</span>
+                    <Link
+                      className="ml-2"
+                      to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${advertiserId}/${RoutePaths.EDIT}`}
+                    >
+                      {t('edit')}
+                    </Link>
+                  </Col>
+                </Row>
               </form>
             </FormProvider>
           )
@@ -61,7 +102,22 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
         {
           name: t('capping'),
           content: (
-            <Capping referenceUuid={advertiserId} referenceType="advertiser" />
+            <Capping
+              referenceUuid={advertiserId}
+              referenceType={CappingReferenceTypes.ADVERTISER}
+            />
+          )
+        },
+        {
+          name: t('report'),
+          content: (
+            <EntityReport
+              entity={EntityTypes.ADVERTISER}
+              entityId={advertiserId}
+              ownerId={advertiserId}
+              ownerRole={USER_ROLE.ADVERTISER}
+              entityName={defaultValues?.name}
+            />
           )
         }
       ].map(({name, content}, index) => ({
@@ -69,7 +125,7 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
         title: name,
         getContent: () => content
       })),
-    [IABsOptions, advertiserId, defaultValues, methods, t]
+    [IABsOptions, advertiserId, defaultValues, methods, role, t]
   );
 
   const getTab = index => {
@@ -79,6 +135,9 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
         break;
       case 1:
         setCurrentTab('capping');
+        break;
+      case 2:
+        setCurrentTab('report');
         break;
       default:
         break;
@@ -91,6 +150,8 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
         return 0;
       case 'capping':
         return 1;
+      case 'report':
+        return 2;
       default:
         return 0;
     }

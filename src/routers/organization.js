@@ -1,7 +1,7 @@
 import {RoutePaths} from 'constants/route-paths';
 import {
+  AdvertiserEditPage,
   AdvertiserListPage,
-  AdvertiserReportPage,
   AdvertiserViewPage
 } from 'pages/Organization/Advertiser';
 import {DspListPage, DspReportPage, DspViewPage} from 'pages/Organization/Dsp';
@@ -28,10 +28,15 @@ export const organizationPages = {
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         },
         {
-          path: `:advertiserId/${RoutePaths.REPORT}`,
-          element: <AdvertiserReportPage />,
+          path: `:advertiserId/${RoutePaths.EDIT}`,
+          element: <AdvertiserEditPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         }
+        // {
+        //   path: `:advertiserId/${RoutePaths.REPORT}`,
+        //   element: <AdvertiserReportPage />,
+        //   canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+        // }
       ],
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },

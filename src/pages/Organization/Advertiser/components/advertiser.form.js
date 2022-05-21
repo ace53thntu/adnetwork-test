@@ -4,18 +4,10 @@ import PropTypes from 'prop-types';
 
 //---> External Modules
 import {useTranslation} from 'react-i18next';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  Row,
-  Col
-} from 'reactstrap';
+import {Button, Form, Row, Col, Card, CardBody, CardFooter} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
+import {Link, useNavigate} from 'react-router-dom';
 
 //---> Internal Modules
 import {mappingFormToApi} from './dto';
@@ -23,12 +15,13 @@ import {useCreateAdvertiser, useEditAdvertiser} from 'queries/advertiser';
 import {useDefaultAdvertiser} from 'pages/Organization/hooks/useDefaultAdvertiser';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {schemaValidate} from './validation';
-import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
 import {FormContent} from './form-content';
+import {useQueryClient} from 'react-query';
+import {GET_ADVERTISER} from 'queries/advertiser/constants';
 
 const AdvertiserForm = ({
   modal = false,
@@ -37,9 +30,12 @@ const AdvertiserForm = ({
   title = 'Create new Advertiser',
   IABsOptions = [],
   isEdit = false,
+  isView = false,
   advertiser = ''
 }) => {
   const {t} = useTranslation();
+  const client = useQueryClient();
+  const navigate = useNavigate();
   const role = getRole();
   const advertiserId = advertiser?.uuid || '';
   const {mutateAsync: createAdvertiser} = useCreateAdvertiser();
@@ -79,8 +75,11 @@ const AdvertiserForm = ({
       // EDIT
       try {
         await editAdvertiser({advId: advertiserId, data: requestBody});
+        await client.invalidateQueries([GET_ADVERTISER, advertiserId]);
         ShowToast.success('Updated advertiser successfully');
-        toggle();
+        navigate(
+          `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${advertiserId}`
+        );
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 100 ~ err', err);
         ShowToast.error(err || 'Fail to update advertiser');
@@ -89,20 +88,19 @@ const AdvertiserForm = ({
   };
 
   return (
-    <Modal isOpen={modal} className={className} size="lg">
+    <Card className="main-card mb-3">
       <FormProvider {...methods}>
         <Form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
           <BlockUi tag="div" blocking={formState.isSubmitting}>
-            <ModalHeader>{title}</ModalHeader>
-            <ModalBody>
+            <CardBody>
               <FormContent
                 defaultValues={defaultValues}
                 isEdit={isEdit}
                 IABsOptions={IABsOptions}
               />
-              {isEdit &&
+              {(isEdit || isView) &&
                 (role === USER_ROLE.ADVERTISER || role === USER_ROLE.ADMIN) && (
-                  <Row>
+                  <Row className="mt-2">
                     <Col md={12}>
                       <Credential
                         type={USER_ROLE.ADVERTISER}
@@ -111,11 +109,20 @@ const AdvertiserForm = ({
                     </Col>
                   </Row>
                 )}
-            </ModalBody>
-            <ModalFooter>
+            </CardBody>
+
+            <CardFooter className="d-flex justify-content-end">
               <Button color="link" onClick={toggle} type="button">
                 {t('cancel')}
               </Button>
+              {isEdit && (
+                <Link
+                  className="mr-2"
+                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${advertiserId}`}
+                >
+                  {t('COMMON.VIEW')}
+                </Link>
+              )}
               <Button
                 color="primary"
                 type="submit"
@@ -123,20 +130,11 @@ const AdvertiserForm = ({
               >
                 {t('save')}
               </Button>
-              {isEdit && (
-                <Link
-                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${advertiserId}/${RoutePaths.REPORT}`}
-                >
-                  <Button color="success" type="button">
-                    {t('viewReport')}
-                  </Button>
-                </Link>
-              )}
-            </ModalFooter>
+            </CardFooter>
           </BlockUi>
         </Form>
       </FormProvider>
-    </Modal>
+    </Card>
   );
 };
 

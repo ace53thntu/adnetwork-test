@@ -3,6 +3,7 @@ import Loading from 'components/common/loading';
 import React from 'react';
 
 import AdvertiserView from './advertiser-view';
+import AdvertiserEdit from './advertiser-edit';
 
 const AdvertiserList = React.lazy(() => import('./advertiser-list'));
 const AdvertiserReport = React.lazy(() => import('./advertiser-report'));
@@ -31,4 +32,17 @@ function AdvertiserViewPage() {
   );
 }
 
-export {AdvertiserListPage, AdvertiserReportPage, AdvertiserViewPage};
+function AdvertiserEditPage() {
+  return (
+    <ErrorBoundary>
+      <AdvertiserEdit />
+    </ErrorBoundary>
+  );
+}
+
+export {
+  AdvertiserListPage,
+  AdvertiserReportPage,
+  AdvertiserViewPage,
+  AdvertiserEditPage
+};

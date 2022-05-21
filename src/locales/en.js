@@ -535,7 +535,8 @@ const en = {
     CONTEXT_FILTER: 'Context filter',
     WEB_TV: 'Web TV',
     ANDROID_TV: 'Android TV',
-    APPLE_TV: 'Apple TV'
+    APPLE_TV: 'Apple TV',
+    VIEW: 'View'
   },
   FORM: {
     SELECT_POSITION: 'Select position',
@@ -560,8 +561,8 @@ const en = {
     SKIP_AFTER: 'Skip after',
     VIDEO_CONFIGURATION: 'Video configuration',
     SUPPORT_MIMES_TYPE: 'Support Mimes Type',
-    BANNER_PLAY_TYPE:"Banner play type",
-    BANNER_TYPE:"Banner type"
+    BANNER_PLAY_TYPE: 'Banner play type',
+    BANNER_TYPE: 'Banner type'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

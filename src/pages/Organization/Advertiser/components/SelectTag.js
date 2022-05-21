@@ -4,7 +4,7 @@ import {useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {INPUT_NAME} from '../constants';
 
-const SelectTag = ({defaultValue = []}) => {
+const SelectTag = ({defaultValue = [], disabled = false}) => {
   const {t} = useTranslation();
   const {setValue, errors, watch, register} = useFormContext();
   const selectedTags = watch(INPUT_NAME.TAGS);
@@ -45,6 +45,7 @@ const SelectTag = ({defaultValue = []}) => {
       placeholder={t('typeAndEnter')}
       label={t('tags')}
       errors={errors}
+      disabled={disabled}
     />
   );
 };

@@ -45,6 +45,7 @@ function PageCreateForm({pageTags = []}) {
       selectedSource === 'android' ||
       selectedSource === 'androidtv' ||
       selectedSource === 'appletv';
+  const webTvSource = source || selectedSource;
 
   const formLabelsName = {
     pageName: isMobile ? 'Screen name' : 'Page name',
@@ -73,7 +74,7 @@ function PageCreateForm({pageTags = []}) {
 
   const methods = useForm({
     defaultValues,
-    resolver: validationPage(pages, isMobile)
+    resolver: validationPage(pages, isMobile, webTvSource)
   });
   const {handleSubmit, reset, formState, register} = methods;
   const {mutateAsync: createPage} = useCreatePage(cid);
@@ -195,7 +196,9 @@ function PageCreateForm({pageTags = []}) {
               disable={formState.isSubmitting}
             />
 
-            {isMobile ? null : (
+            {isMobile ||
+            source === 'webtv' ||
+            selectedSource === 'webtv' ? null : (
               <FormTextInput
                 isRequired
                 name="url"
