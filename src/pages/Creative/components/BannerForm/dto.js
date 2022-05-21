@@ -1,17 +1,21 @@
 import __isNumber from 'lodash/isNumber';
 
 import {
+  AD_SIZE_FORMAT_OPTIONS,
+  ALTERNATIVE_PLAY_OPTIONS,
   CREATIVE_FILE_TYPES,
   CREATIVE_TYPES,
-  INVOCATION_TAG_TYPES
+  PLATFORM_OPTIONS,
+  THIRD_PARTY_TAG_TYPES
 } from './constants';
+import {checkValidJson} from './utils';
 
 export function creativeModelToRepo(raw, conceptId) {
   const {
-    invocation_tag = '',
-    invocation_tag_type = INVOCATION_TAG_TYPES[0],
+    third_party_tag = '',
+    third_party_tag_type = THIRD_PARTY_TAG_TYPES[0],
     extra_trackers = '',
-    creative_type = CREATIVE_TYPES[0],
+    type = CREATIVE_TYPES[0],
     tags = [],
     click_url = '',
     https = false,
@@ -20,7 +24,11 @@ export function creativeModelToRepo(raw, conceptId) {
     name = '',
     width = '0',
     height = '0',
-    file_type = CREATIVE_FILE_TYPES[0]
+    file_type = CREATIVE_FILE_TYPES[0],
+    ad_size_format,
+    alternative_play,
+    platform,
+    creative_metadata
   } = raw;
 
   return {
@@ -32,22 +40,28 @@ export function creativeModelToRepo(raw, conceptId) {
     sound,
     multi_product: multiproduct,
     extra_trackers,
-    creative_type: creative_type?.value,
+    type: type?.value,
     click_url,
-    invocation_tag,
-    invocation_tag_type: invocation_tag_type?.value,
+    third_party_tag,
+    third_party_tag_type: third_party_tag_type?.value,
     file_type: file_type?.value,
     https,
-    status: 'active'
+    status: 'active',
+    ad_size_format: ad_size_format ? 'dropdown' : 'custom',
+    alternative_play: alternative_play?.value,
+    platform: platform?.value,
+    creative_metadata: checkValidJson(creative_metadata)
+      ? JSON.parse(creative_metadata)
+      : {}
   };
 }
 
 export function creativeRepoToModel(raw) {
   const {
-    invocation_tag,
-    invocation_tag_type,
+    third_party_tag,
+    third_party_tag_type,
     extra_trackers,
-    creative_type,
+    type,
     tags = [],
     click_url = '',
     https,
@@ -57,17 +71,21 @@ export function creativeRepoToModel(raw) {
     file_type,
     width = '0',
     height = '0',
-    alternatives = []
+    alternatives = [],
+    ad_size_format,
+    alternative_play,
+    platform,
+    creative_metadata
   } = raw;
 
   return {
     name,
-    invocation_tag,
-    invocation_tag_type: INVOCATION_TAG_TYPES.find(
-      type => type.value === invocation_tag_type
+    third_party_tag,
+    third_party_tag_type: THIRD_PARTY_TAG_TYPES.find(
+      type => type.value === third_party_tag_type
     ),
     extra_trackers,
-    creative_type: CREATIVE_TYPES.find(type => type.value === creative_type),
+    type: CREATIVE_TYPES.find(cType => cType.value === type),
     tags: tags?.length ? tags : [],
     click_url,
     https,
@@ -83,8 +101,31 @@ export function creativeRepoToModel(raw) {
         ...alternativeRepoToModel(item),
         rawId: item?.uuid ?? null
       };
-    })
+    }),
+    ad_size_format:
+      ad_size_format === 'dropdown'
+        ? makeValueForAdSizeFormat(ad_size_format, width, height)
+        : null,
+    platform: PLATFORM_OPTIONS.find(pfOpt => pfOpt.value === platform),
+    alternative_play: ALTERNATIVE_PLAY_OPTIONS.find(
+      altPlayOpt => altPlayOpt.value === alternative_play
+    ),
+    creative_metadata: checkValidJson(creative_metadata)
+      ? JSON.stringify(creative_metadata)
+      : ''
   };
+}
+
+function makeValueForAdSizeFormat(adSize, width, height) {
+  const widthStr = width?.toString() ?? '0';
+  const heightStr = height?.toString() ?? '0';
+  const value = `${widthStr}x${heightStr}`;
+
+  const options = AD_SIZE_FORMAT_OPTIONS.reduce((prev, current) => {
+    return [...prev, ...current.options];
+  }, []);
+  const found = options.find(opt => opt.value === value);
+  return found || null;
 }
 
 function getTypeOfAlt(file) {

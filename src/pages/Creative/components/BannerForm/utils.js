@@ -1,6 +1,17 @@
+import __isObject from 'lodash/isObject';
 import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
+
+export const checkValidJson = value => {
+  try {
+    const parsed = JSON.parse(value);
+    const valid = __isObject(parsed) && !Array.isArray(parsed);
+    return valid;
+  } catch (error) {
+    return false;
+  }
+};
 
 export const bannerFormValidationResolver = () => {
   return yupResolver(
@@ -30,6 +41,18 @@ export const bannerFormValidationResolver = () => {
           name: Yup.string().required('Required.'),
           file: Yup.object().nullable().required('Required.')
         })
+      ),
+
+      creative_metadata: Yup.string().test(
+        'isValidJson',
+        'Invalid JSON object',
+        val => {
+          if (val?.length) {
+            return checkValidJson(val);
+          }
+
+          return true;
+        }
       )
     })
   );

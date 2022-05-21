@@ -1,15 +1,17 @@
-//---> Build-in Modules
-import React from 'react';
-
+import __get from 'lodash/get';
 //---> External Modules
 import PropTypes from 'prop-types';
-import CodeMirror from '@uiw/react-codemirror';
-import {json} from '@codemirror/lang-json';
-import {html} from '@codemirror/lang-html';
-import {javascript} from '@codemirror/lang-javascript';
-import {oneDark} from '@codemirror/theme-one-dark';
+//---> Build-in Modules
+import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+
+import {html} from '@codemirror/lang-html';
+import {javascript} from '@codemirror/lang-javascript';
+import {json} from '@codemirror/lang-json';
+import {oneDark} from '@codemirror/theme-one-dark';
+import CodeMirror from '@uiw/react-codemirror';
+
 import ErrorMessage from '../ErrorMessage';
 
 const propTypes = {
@@ -32,10 +34,12 @@ const FormCodeMirror = ({
   label = '',
   required = false,
   placeholder = `{"key": "value"}`,
-  extension = 'JAVASCRIPT'
+  extension = 'JAVASCRIPT',
+  defaultValue = ''
 }) => {
   const {t} = useTranslation();
   const {control, errors} = useFormContext();
+  const errorMessage = __get(errors, `${name}.message`);
 
   return (
     <div>
@@ -58,11 +62,14 @@ const FormCodeMirror = ({
               }}
               placeholder={placeholder}
               theme={oneDark}
+              defaultValue={defaultValue}
             />
           );
         }}
       />
-      {errors?.[name] && <ErrorMessage message={t('required')} />}
+      {errors?.[name] && (
+        <ErrorMessage message={errorMessage || t('required')} />
+      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   FormTagsInput,
   FormTextInput
 } from 'components/forms';
+import FormCodeMirror from 'components/forms/FormCodeMirror';
 import {EntityTypes} from 'constants/report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
@@ -17,7 +18,7 @@ import {useTranslation} from 'react-i18next';
 import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {Button, Col, Row} from 'reactstrap';
+import {Button, Col, FormGroup, Row} from 'reactstrap';
 import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
@@ -33,9 +34,12 @@ import Box from '@material-ui/core/Box';
 import {Alternatives} from '../Alternatives';
 import Report from '../Report';
 import {
+  AD_SIZE_FORMAT_OPTIONS,
+  ALTERNATIVE_PLAY_OPTIONS,
   CREATIVE_FILE_TYPES,
   CREATIVE_TYPES,
-  INVOCATION_TAG_TYPES
+  PLATFORM_OPTIONS,
+  THIRD_PARTY_TAG_TYPES
 } from './constants';
 import {
   alternativeFormValuesToRepo,
@@ -43,14 +47,15 @@ import {
   creativeModelToRepo,
   creativeRepoToModel
 } from './dto';
+import {useCalculateAdSize} from './hooks';
 import {bannerFormValidationResolver} from './utils';
 
 const defaultFormValues = {
-  invocation_tag: '',
-  invocation_tag_type: INVOCATION_TAG_TYPES[0],
+  third_party_tag: '',
+  third_party_tag_type: THIRD_PARTY_TAG_TYPES[0],
   extra_trackers: '',
 
-  creative_type: CREATIVE_TYPES[1], // third_party, first_party
+  type: CREATIVE_TYPES[1], // third_party, first_party
   tags: [],
 
   click_url: '',
@@ -60,6 +65,10 @@ const defaultFormValues = {
   name: '',
   width: '',
   height: '',
+  platform: PLATFORM_OPTIONS[0],
+  alternative_play: ALTERNATIVE_PLAY_OPTIONS[0],
+  creative_metadata: '',
+  ad_size_format: null,
 
   file_type: CREATIVE_FILE_TYPES[0]
 
@@ -103,7 +112,9 @@ function BannerForm(props) {
   });
   const {
     handleSubmit,
-    formState: {isDirty}
+    formState: {isDirty},
+    watch,
+    setValue
   } = methods;
 
   React.useEffect(() => {
@@ -113,8 +124,14 @@ function BannerForm(props) {
 
   const [isLoading, setIsLoading] = React.useState(false);
 
+  useCalculateAdSize({
+    watch,
+    setValue
+  });
+
   const onSubmit = async values => {
     const bodyRequest = creativeModelToRepo(values, conceptId);
+
     setIsLoading(true);
 
     if (isCreate) {
@@ -257,9 +274,9 @@ function BannerForm(props) {
                   <FormReactSelect
                     options={CREATIVE_TYPES}
                     placeholder=""
-                    name="creative_type"
+                    name="type"
                     label="Creative type"
-                    defaultValue={defaultValues.creative_type}
+                    defaultValue={defaultValues.type}
                   />
                 </Col>
               </Row>
@@ -295,24 +312,25 @@ function BannerForm(props) {
                     </Col>
 
                     <Col md="4">
-                      <FormTextInput
+                      <FormReactSelect
+                        options={PLATFORM_OPTIONS}
                         placeholder=""
-                        name="width"
-                        label="Width"
-                        defaultValue={defaultValues.width}
-                        isRequired
+                        name="platform"
+                        label="Platform"
+                        defaultValue={defaultValues.platform}
+                      />
+                    </Col>
+
+                    <Col md="4">
+                      <FormReactSelect
+                        options={ALTERNATIVE_PLAY_OPTIONS}
+                        placeholder=""
+                        name="alternative_play"
+                        label="Alternative play"
+                        defaultValue={defaultValues.alternative_play}
                       />
                     </Col>
                     <Col md="4">
-                      <FormTextInput
-                        placeholder=""
-                        name="height"
-                        label="Height"
-                        defaultValue={defaultValues.height}
-                        isRequired
-                      />
-                    </Col>
-                    <Col md={4}>
                       <Row>
                         <Col md="4">
                           <FormCheckbox
@@ -340,30 +358,67 @@ function BannerForm(props) {
                         </Col>
                       </Row>
                     </Col>
+
+                    <Col md="4">
+                      <FormReactSelect
+                        isClearable
+                        options={AD_SIZE_FORMAT_OPTIONS}
+                        placeholder=""
+                        name="ad_size_format"
+                        label="Ad size format"
+                        defaultValue={defaultValues.ad_size_format}
+                      />
+                    </Col>
+
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="width"
+                        label="Width"
+                        defaultValue={defaultValues.width}
+                        isRequired
+                      />
+                    </Col>
+                    <Col md="4">
+                      <FormTextInput
+                        placeholder=""
+                        name="height"
+                        label="Height"
+                        defaultValue={defaultValues.height}
+                        isRequired
+                      />
+                    </Col>
+                    <Col md="8">
+                      <FormGroup>
+                        <FormCodeMirror
+                          name="creative_metadata"
+                          label="Creative metadata"
+                          extension="JSON"
+                          defaultValue={defaultValues.creative_metadata}
+                        />
+                      </FormGroup>
+                    </Col>
                   </Row>
                 </Col>
               </Row>
               <Row>
                 <Col md="12">
                   <FormReactSelect
-                    options={INVOCATION_TAG_TYPES}
+                    options={THIRD_PARTY_TAG_TYPES}
                     placeholder=""
-                    name="invocation_tag_type"
-                    label="Invocation tag type"
-                    defaultValue={defaultValues.invocation_tag_type}
+                    name="third_party_tag_type"
+                    label="Third party tag type"
+                    defaultValue={defaultValues.third_party_tag_type}
                   />
                 </Col>
                 <Col md="12">
                   <FormTextInput
                     type="textarea"
                     placeholder=""
-                    name="invocation_tag"
-                    label="Invocation tag"
+                    name="third_party_tag"
+                    label="Third party tag"
                     rows={4}
-                    // style={{
-                    //   resize: 'none'
-                    // }}
-                    defaultValue={defaultValues.invocation_tag}
+                    defaultValue={defaultValues.third_party_tag}
                   />
                 </Col>
               </Row>
