@@ -1,10 +1,16 @@
 import {RoutePaths} from 'constants/route-paths';
 import {
+  AdvertiserCreatePage,
   AdvertiserEditPage,
   AdvertiserListPage,
   AdvertiserViewPage
 } from 'pages/Organization/Advertiser';
-import {DspListPage, DspReportPage, DspViewPage} from 'pages/Organization/Dsp';
+import {
+  DspEditPage,
+  DspListPage,
+  DspCreatePage,
+  DspViewPage
+} from 'pages/Organization/Dsp';
 import {
   PublisherListPage,
   PublisherReportPage
@@ -23,6 +29,11 @@ export const organizationPages = {
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         },
         {
+          path: `create`,
+          element: <AdvertiserCreatePage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+        },
+        {
           path: `:advertiserId`,
           element: <AdvertiserViewPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
@@ -32,11 +43,6 @@ export const organizationPages = {
           element: <AdvertiserEditPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
         }
-        // {
-        //   path: `:advertiserId/${RoutePaths.REPORT}`,
-        //   element: <AdvertiserReportPage />,
-        //   canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
-        // }
       ],
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
@@ -65,13 +71,18 @@ export const organizationPages = {
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         },
         {
+          path: `create`,
+          element: <DspCreatePage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
+        },
+        {
           path: `:dspId`,
           element: <DspViewPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         },
         {
-          path: `:dspId/${RoutePaths.REPORT}`,
-          element: <DspReportPage />,
+          path: `:dspId/${RoutePaths.EDIT}`,
+          element: <DspEditPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.DSP]
         }
       ],

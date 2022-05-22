@@ -2,9 +2,15 @@ import {ErrorBoundary} from 'components/common';
 import Loading from 'components/common/loading';
 import React from 'react';
 
-import AdvertiserView from './advertiser-view';
-import AdvertiserEdit from './advertiser-edit';
-
+const AdvertiserCreate = React.lazy(() =>
+  import('./advertiser-create' /* webpackChunkName: "advertiser-create" */)
+);
+const AdvertiserView = React.lazy(() =>
+  import('./advertiser-view' /* webpackChunkName: "advertiser-view" */)
+);
+const AdvertiserEdit = React.lazy(() =>
+  import('./advertiser-edit' /* webpackChunkName: "advertiser-edit" */)
+);
 const AdvertiserList = React.lazy(() => import('./advertiser-list'));
 const AdvertiserReport = React.lazy(() => import('./advertiser-report'));
 
@@ -21,6 +27,14 @@ function AdvertiserReportPage() {
     <React.Suspense fallback={<Loading />}>
       <AdvertiserReport />
     </React.Suspense>
+  );
+}
+
+function AdvertiserCreatePage() {
+  return (
+    <ErrorBoundary>
+      <AdvertiserCreate />
+    </ErrorBoundary>
   );
 }
 
@@ -44,5 +58,6 @@ export {
   AdvertiserListPage,
   AdvertiserReportPage,
   AdvertiserViewPage,
-  AdvertiserEditPage
+  AdvertiserEditPage,
+  AdvertiserCreatePage
 };

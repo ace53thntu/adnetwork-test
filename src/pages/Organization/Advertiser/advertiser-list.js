@@ -22,11 +22,6 @@ import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import AdvertiserCreate from './advertiser-create';
-import AdvertiserEdit from './advertiser-edit';
-import {AdvertiserForm} from './components';
-import {useGetIABs} from 'queries/iabs';
-import {useIABsOptions} from '../hooks';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -61,8 +56,6 @@ const ListAdvertiser = () => {
   }, [reduxDispatch]);
 
   //---> Define local states.
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -89,10 +82,6 @@ const ListAdvertiser = () => {
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
   }, [data]);
-
-  //---> Get list of IABs.
-  const {data: IABs} = useGetIABs();
-  const IABsOptions = useIABsOptions({IABs});
 
   //---> Mutation delete a advertiser
   const {
@@ -142,17 +131,11 @@ const ListAdvertiser = () => {
     setCurrentPage(page);
   }
 
-  const onToggleModal = () => {
-    setOpenForm(prevState => !prevState);
-  };
-
-  const onToggleModalEdit = () => {
-    setOpenFormEdit(prevState => !prevState);
-  };
-
   const onClickAdd = evt => {
     evt.preventDefault();
-    setOpenForm(true);
+    navigate(
+      `/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}/${RoutePaths.CREATE}`
+    );
   };
 
   const onClickItem = data => {
@@ -257,27 +240,6 @@ const ListAdvertiser = () => {
           </Row>
         </Container>
       </AppContent>
-      {/* Advertiser Create */}
-      <AdvertiserCreate>
-        {openForm && (
-          <AdvertiserForm
-            modal={openForm}
-            toggle={onToggleModal}
-            IABsOptions={IABsOptions}
-          />
-        )}
-      </AdvertiserCreate>
-      {/* Advertiser Edit */}
-      {openFormEdit && (
-        <AdvertiserEdit
-          modal={openFormEdit}
-          toggle={onToggleModalEdit}
-          IABsOptions={IABsOptions}
-          title="Edit Advertiser"
-          isEdit
-          advertiserId={currentAdvertiser?.uuid}
-        />
-      )}
 
       {showDialog && (
         <DialogConfirm

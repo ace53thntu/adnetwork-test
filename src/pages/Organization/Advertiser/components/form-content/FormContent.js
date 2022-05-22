@@ -61,6 +61,7 @@ const FormContent = ({
         <DomainSelect
           defaultValue={defaultValues?.tags || []}
           disabled={isView}
+          isRequired
         />
       </Col>
       {/* Tags */}

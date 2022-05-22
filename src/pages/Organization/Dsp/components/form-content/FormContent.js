@@ -48,6 +48,7 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
           name={INPUT_NAME.DOMAIN}
           label={t('domain')}
           placeholder={t('domain')}
+          disabled={isView}
           isRequired
         />
       </Col>
@@ -107,7 +108,7 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
         />
       </Col>
       {/* Status */}
-      <Col md="4">
+      <Col md="3">
         <Label className="mr-5">{t('status')}</Label>
         <Controller
           control={control}
@@ -118,7 +119,7 @@ const FormContent = ({defaultValues = {}, isView = false, isEdit = false}) => {
         />
       </Col>
       {/* Header Bidding Available */}
-      <Col md="4">
+      <Col md="3">
         <Label className="mr-5">{t('headerBiddingAvailable')}</Label>
         <Controller
           control={control}

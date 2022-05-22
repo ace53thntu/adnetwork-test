@@ -66,7 +66,7 @@ const AdvertiserForm = ({
       try {
         await createAdvertiser(requestBody);
         ShowToast.success('Created advertiser successfully');
-        toggle();
+        navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`);
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
         ShowToast.error(err || 'Fail to create advertiser');

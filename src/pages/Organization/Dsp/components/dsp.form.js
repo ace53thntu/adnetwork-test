@@ -1,49 +1,42 @@
 //---> Build-in Modules
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 //---> External Modules
 import {useTranslation} from 'react-i18next';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  Row,
-  Col
-} from 'reactstrap';
+import {Button, Form, Row, Col, Card, CardBody, CardFooter} from 'reactstrap';
 import {FormProvider, useForm} from 'react-hook-form';
 import BlockUi from 'react-block-ui';
 
 //---> Internal Modules
-import LoadingIndicator from 'components/common/LoadingIndicator';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useCreateDsp, useEditDsp, useGetDsp} from 'queries/dsp';
+import {useCreateDsp, useEditDsp} from 'queries/dsp';
 import {mappingFormToApi} from './dto';
 import {useDefaultDsp} from 'pages/Organization/hooks';
 import {schemaValidate} from './validation';
-import {Link} from 'react-router-dom';
-import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
 import {FormContent} from './form-content';
+import {Link, useNavigate} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
+import {useQueryClient} from 'react-query';
+import {GET_DSP} from 'queries/dsp/constants';
 
-const DspForm = ({
-  modal = false,
-  toggle = () => {},
-  className = '',
-  title = 'Create new DSP',
-  isEdit = false,
-  dspId = ''
-}) => {
+const propTypes = {
+  dspData: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
+  isEdit: PropTypes.bool,
+  isCreate: PropTypes.bool
+};
+
+const DspForm = ({dspData, isEdit, isCreate = false}) => {
   const {t} = useTranslation();
+  const client = useQueryClient();
+  const navigate = useNavigate();
   const role = getRole();
-  const {data: dspData, isFetched, isLoading} = useGetDsp(dspId);
   const {mutateAsync: createDsp} = useCreateDsp();
   const {mutateAsync: editDsp} = useEditDsp();
+  const dspId = dspData?.uuid;
   const defaultValues = useDefaultDsp({
     dspData
   });
@@ -53,13 +46,6 @@ const DspForm = ({
     resolver: schemaValidate(t)
   });
   const {handleSubmit, formState, reset} = methods;
-
-  useEffect(() => {
-    //---> Reset default value when API response
-    if (isFetched && defaultValues?.name) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, reset, isFetched]);
 
   /**
    * Submit form
@@ -76,7 +62,7 @@ const DspForm = ({
       try {
         await createDsp(requestBody);
         ShowToast.success('Created DSP successfully');
-        toggle();
+        navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`);
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
         ShowToast.error(err?.msg || 'Fail to create DSP');
@@ -85,8 +71,9 @@ const DspForm = ({
       // EDIT
       try {
         await editDsp({dspId, data: requestBody});
+        await client.invalidateQueries([GET_DSP, dspId]);
         ShowToast.success('Updated DSP successfully');
-        toggle();
+        navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}`);
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
         ShowToast.error(err?.msg || 'Fail to update DSP');
@@ -95,9 +82,8 @@ const DspForm = ({
   };
 
   return (
-    <Modal unmountOnClose isOpen={modal} className={className} size="lg">
-      <ModalHeader>{title}</ModalHeader>
-      <ModalBody>
+    <Card className="main-card mb-3">
+      <CardBody>
         <FormProvider {...methods}>
           <Form
             autoComplete="off"
@@ -105,7 +91,6 @@ const DspForm = ({
             id="dspForm"
           >
             <BlockUi tag="div" blocking={formState.isSubmitting}>
-              {isLoading && <LoadingIndicator />}
               <FormContent defaultValues={defaultValues} isEdit={isEdit} />
               {isEdit && (role === USER_ROLE.DSP || role === USER_ROLE.ADMIN) && (
                 <Row>
@@ -117,13 +102,24 @@ const DspForm = ({
             </BlockUi>
           </Form>
         </FormProvider>
-      </ModalBody>
-      <ModalFooter>
+      </CardBody>
+      <CardFooter className="d-flex justify-content-end">
+        <Link to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`}>
+          {t('backToList')}
+        </Link>
+        {isEdit && (
+          <>
+            <span className="mr-2 ml-2">|</span>
+            <Link to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}`}>
+              {t('COMMON.VIEW')}
+            </Link>
+          </>
+        )}
+        <span className="ml-2">|</span>
         <Button
           color="link"
           onClick={() => {
             reset();
-            toggle();
           }}
           type="button"
         >
@@ -132,34 +128,16 @@ const DspForm = ({
         <Button
           color="primary"
           type="submit"
-          disabled={!formState.isDirty}
+          disabled={!formState.isDirty || formState.isSubmitting}
           form="dspForm"
         >
           {t('save')}
         </Button>
-        {/* TODO: Will implement after API is ready */}
-        {false && isEdit && (
-          <Link
-            to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}/${RoutePaths.REPORT}`}
-          >
-            <Button color="success" type="button">
-              {t('viewReport')}
-            </Button>
-          </Link>
-        )}
-      </ModalFooter>
-    </Modal>
+      </CardFooter>
+    </Card>
   );
 };
 
-DspForm.propTypes = {
-  modal: PropTypes.bool,
-  toggle: PropTypes.func,
-  className: PropTypes.string,
-  title: PropTypes.string,
-  dspId: PropTypes.string,
-  isEdit: PropTypes.bool,
-  IABsOptions: PropTypes.array
-};
+DspForm.propTypes = propTypes;
 
 export default DspForm;

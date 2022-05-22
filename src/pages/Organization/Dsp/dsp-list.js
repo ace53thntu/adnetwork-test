@@ -20,9 +20,6 @@ import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
-import DspForm from './components/dsp.form';
-import DspCreate from './dsp-create';
-import DspEdit from './dsp-edit';
 import {useDeleteDsp, useGetDsps} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
 import DialogConfirm from 'components/common/DialogConfirm';
@@ -58,8 +55,6 @@ const DspList = () => {
   }, [reduxDispatch]);
 
   //---> Define local states.
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentDsp, setCurrentDsp] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -131,36 +126,27 @@ const DspList = () => {
     setCurrentPage(page);
   }
 
-  const onToggleModal = () => {
-    setOpenForm(prevState => !prevState);
-  };
-
-  const onToggleModalEdit = () => {
-    setOpenFormEdit(prevState => !prevState);
-  };
-
   const onClickAdd = evt => {
     evt.preventDefault();
-    setOpenForm(true);
+    navigate(
+      `/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${RoutePaths.CREATE}`
+    );
   };
 
   const onClickItem = data => {
-    setCurrentDsp(data);
-    setOpenFormEdit(true);
+    navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${data?.uuid}`);
   };
 
   //---> BEGIN: Handle delete
   const onClickMenu = (actionIndex, item) => {
     if (actionIndex === 0) {
-      setCurrentDsp(item);
-      setOpenFormEdit(true);
-    }
-    if (actionIndex === 1) {
-      navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${item?.uuid}`);
+      navigate(
+        `/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${item?.uuid}/${RoutePaths.EDIT}`
+      );
       return;
     }
 
-    if (actionIndex === 2) {
+    if (actionIndex === 1) {
       setCurrentDsp(item);
       setShowDialog(true);
       return;
@@ -225,7 +211,7 @@ const DspList = () => {
                     showAction
                     actions={
                       [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
-                        ? ['Edit', 'View', 'Delete']
+                        ? ['Edit', 'Delete']
                         : ['Edit']
                     }
                     handleAction={onClickMenu}
@@ -243,22 +229,6 @@ const DspList = () => {
           </Row>
         </Container>
       </AppContent>
-      {/* DSP Create */}
-      <DspCreate>
-        {openForm && <DspForm modal={openForm} toggle={onToggleModal} />}
-      </DspCreate>
-      {/* DSP Edit */}
-      {openFormEdit && (
-        <DspEdit>
-          <DspForm
-            modal={openFormEdit}
-            toggle={onToggleModalEdit}
-            title="Edit DSP"
-            isEdit
-            dspId={currentDsp?.uuid}
-          />
-        </DspEdit>
-      )}
 
       {showDialog && (
         <DialogConfirm

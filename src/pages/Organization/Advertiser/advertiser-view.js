@@ -79,6 +79,7 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
                     </Col>
                   </Row>
                 )}
+                <hr />
                 <Row className="mt-3">
                   <Col className="d-flex justify-content-end">
                     <Link

@@ -536,7 +536,8 @@ const en = {
     WEB_TV: 'Web TV',
     ANDROID_TV: 'Android TV',
     APPLE_TV: 'Apple TV',
-    VIEW: 'View'
+    VIEW: 'View',
+    EDIT: 'Edit'
   },
   FORM: {
     SELECT_POSITION: 'Select position',

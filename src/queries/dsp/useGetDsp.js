@@ -7,7 +7,7 @@ import {GET_DSP} from './constants';
 /**
  * Hook for get Dsp from API by query
  */
-export function useGetDsp(dspId) {
+export function useGetDsp(dspId, enabled = false) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
@@ -21,7 +21,7 @@ export function useGetDsp(dspId) {
       }).then(res => res?.data ?? {}),
     {
       suspense: false,
-      enabled: !!dspId
+      enabled
     }
   );
 }

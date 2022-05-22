@@ -1,7 +1,13 @@
 import React from 'react';
+import {DspForm} from './components';
+import DspLayout from './dsp-layout';
 
-const DspCreate = ({children}) => {
-  return <div>{children}</div>;
+const DspCreate = () => {
+  return (
+    <DspLayout pageTitle="Dsp Create">
+      <DspForm isCreate />
+    </DspLayout>
+  );
 };
 
 export default React.memo(DspCreate);

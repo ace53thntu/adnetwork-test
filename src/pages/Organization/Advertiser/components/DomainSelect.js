@@ -4,7 +4,11 @@ import {useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {INPUT_NAME} from '../constants';
 
-const DomainSelect = ({defaultValue = [], disabled = false}) => {
+const DomainSelect = ({
+  defaultValue = [],
+  disabled = false,
+  isRequired = false
+}) => {
   const {t} = useTranslation();
   const {setValue, errors, watch, register} = useFormContext();
   const selectedDomain = watch(INPUT_NAME.DOMAINS);
@@ -46,6 +50,7 @@ const DomainSelect = ({defaultValue = [], disabled = false}) => {
       label={t('domains')}
       errors={errors}
       disabled={disabled}
+      required={isRequired}
     />
   );
 };
