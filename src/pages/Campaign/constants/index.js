@@ -1,3 +1,108 @@
+export const Platform = {
+  WINDOWS: 1,
+  MAC: 2,
+  LINUX: 3,
+  IPAD: 4,
+  IPHONE: 5,
+  IPOD: 6,
+  BLACKBERRY: 7,
+  WINDOWS_PHONE: 8,
+  PLAYSTATION: 9,
+  XBOX: 10,
+  NINTENDO: 11,
+  BOT: 12,
+  UNKNOWN: 0
+};
+
+export const PlatformOptions = [
+  {
+    value: Platform.WINDOWS,
+    label: 'Windows'
+  },
+  {
+    value: Platform.LINUX,
+    label: 'Linux'
+  },
+  {
+    value: Platform.IPAD,
+    label: 'iPad'
+  },
+  {
+    value: Platform.IPHONE,
+    label: 'iPhone'
+  },
+  {
+    value: Platform.IPOD,
+    label: 'iPod'
+  },
+  {
+    value: Platform.BLACKBERRY,
+    label: 'Blackberry'
+  },
+  {
+    value: Platform.WINDOWS_PHONE,
+    label: 'Windows Phone'
+  },
+  {
+    value: Platform.PLAYSTATION,
+    label: 'Playstation'
+  },
+  {
+    value: Platform.XBOX,
+    label: 'Xbox'
+  },
+  {
+    value: Platform.NINTENDO,
+    label: 'Nintendo'
+  },
+  {
+    value: Platform.BOT,
+    label: 'Bot'
+  },
+  {
+    value: Platform.UNKNOWN,
+    label: 'Unknown'
+  }
+];
+
+/**
+ * @enum
+ */
+export const DeviceType = {
+  DEVICE_TYPE_MOBILE_TABLET: 1, // Mobile/Tablet (Version 2.0)
+  DEVICE_TYPE_PERSONAL_COMPUTER: 2, // Personal Computer (Version 2.0)
+  DEVICE_TYPE_CONNECTED_TV: 3, // Connected TV (Version 2.0)
+  DEVICE_TYPE_PHONE: 4, // Phone (New for Version 2.2)
+  DEVICE_TYPE_TABLET: 5, // Tablet (New for Version 2.2)
+  DEVICE_TYPE_CONNECTED_DEVICE: 6, // Connected Device (New for Version 2.2)
+  DEVICE_TYPE_SET_TOP_BOX: 7 // Set Top Box (New for Version 2.2)
+};
+
+export const DeviceTypeOptions = [
+  {
+    value: DeviceType.DEVICE_TYPE_MOBILE_TABLET,
+    label: 'Mobile/Tablet (Version 2.0)'
+  },
+  {
+    value: DeviceType.DEVICE_TYPE_PERSONAL_COMPUTER,
+    label: 'Personal Computer (Version 2.0)'
+  },
+  {
+    value: DeviceType.DEVICE_TYPE_CONNECTED_TV,
+    label: 'Connected TV (Version 2.0)'
+  },
+  {value: DeviceType.DEVICE_TYPE_PHONE, label: 'Phone (New for Version 2.2)'},
+  {value: DeviceType.DEVICE_TYPE_TABLET, label: 'Tablet (New for Version 2.2)'},
+  {
+    value: DeviceType.DEVICE_TYPE_CONNECTED_DEVICE,
+    label: 'Connected Device (New for Version 2.2)'
+  },
+  {
+    value: DeviceType.DEVICE_TYPE_SET_TOP_BOX,
+    label: 'Set Top Box (New for Version 2.2)'
+  }
+];
+
 /**
  * @enum
  */
@@ -602,7 +707,7 @@ export const StrategySources = [
   {
     value: 'appletv',
     label: 'Apple TV'
-  },
+  }
 
   // {
   //   value: 'others',

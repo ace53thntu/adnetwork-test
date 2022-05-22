@@ -563,7 +563,9 @@ const en = {
     VIDEO_CONFIGURATION: 'Video configuration',
     SUPPORT_MIMES_TYPE: 'Support Mimes Type',
     BANNER_PLAY_TYPE: 'Banner play type',
-    BANNER_TYPE: 'Banner type'
+    BANNER_TYPE: 'Banner type',
+    DEVICE_TYPE: 'Device type',
+    PLATFORM: 'Platform'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

@@ -5,11 +5,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
+import ISO6391 from 'iso-639-1';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
-import {PlacementTypeOptions, StartDelayOptions} from 'pages/Campaign/constants';
+import {
+  PlacementTypeOptions,
+  StartDelayOptions
+} from 'pages/Campaign/constants';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {useFormContext} from 'react-hook-form';
@@ -21,6 +25,8 @@ const propTypes = {
 };
 
 const VideoFilterGroup = ({isView = false, currentStrategy}) => {
+  console.log('==== getAllNames', ISO6391.getAllNames());
+  console.log('==== getAllCodes', ISO6391.getAllCodes());
   const {t} = useTranslation();
   const {errors} = useFormContext();
 
@@ -67,7 +73,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             placeholder={t('FORM.LINEARITY')}
           />
         </Col>
-        <Col md="3">
+        <Col md="12">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.video_filter?.protocols}
@@ -75,10 +81,11 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.protocols"
             label={t('FORM.PROTOCOLS')}
             placeholder={t('FORM.PROTOCOLS')}
+            multiple
           />
         </Col>
         <Col md="3">
-          <div style={{marginTop: 35}}>
+          <div>
             <FormToggle
               name="video_filter.only_skipable"
               defaultCheckedValue=""
@@ -92,7 +99,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
           </div>
         </Col>
         <Col md="6">
-          <div style={{marginTop: 35}}>
+          <div>
             <FormToggle
               name="video_filter.only_unskipable"
               defaultCheckedValue=""

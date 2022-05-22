@@ -4,17 +4,35 @@ import moment from 'moment';
 import {
   BandwidthOptions,
   BrowsersOptions,
-  MobileCarrierOptions,
+  DeviceTypeOptions,
   OperatingSystemOptions,
   PlacementTypeOptions,
+  PlatformOptions,
   Priority,
   PriorityOptions,
   StartDelayOptions,
   StrategyTypes
 } from 'pages/Campaign/constants';
 import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
+import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
+import {getListCarriers} from 'utils/helpers/getListCarriers';
+import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
+
+const formatListData = (listData = []) => {
+  return listData?.length > 0 ? Array.from(listData, item => item.value) : [];
+};
+
+const convertListToGui = ({baseList = [], selectedList = []}) => {
+  if (selectedList?.length > 0) {
+    return selectedList?.map(item =>
+      baseList?.find(baseItem => baseItem?.value === item)
+    );
+  }
+
+  return [];
+};
 
 export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
   if (!strategyData) {
@@ -126,23 +144,38 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
       only_unskipable: video_filter?.only_unskipable ? 'active' : 'inactive'
     },
     context_filter: {
-      browser:
-        BrowsersOptions?.find(item => item.value === context_filter?.browser) ||
-        null,
-      operating_system:
-        OperatingSystemOptions?.find(
-          item => item.value === context_filter?.operating_system
-        ) || null,
-      bandwidth:
-        BandwidthOptions?.find(
-          item => item.value === context_filter?.bandwidth
-        ) || null,
-      mobile_carrier:
-        MobileCarrierOptions?.find(
-          item => item.value === context_filter?.mobile_carrier
-        ) || null,
-      browser_language: context_filter?.browser_language || '',
-      device_manufacturer: context_filter?.device_manufacturer || ''
+      browser: convertListToGui({
+        baseList: BrowsersOptions,
+        selectedList: context_filter?.browser || []
+      }),
+      operating_system: convertListToGui({
+        baseList: OperatingSystemOptions,
+        selectedList: context_filter?.operating_system || []
+      }),
+      bandwidth: convertListToGui({
+        baseList: BandwidthOptions,
+        selectedList: context_filter?.bandwidth || []
+      }),
+      mobile_carrier: convertListToGui({
+        baseList: getListCarriers(),
+        selectedList: context_filter?.mobile_carrier || []
+      }),
+      browser_language: convertListToGui({
+        baseList: getBrowserLanguages(),
+        selectedList: context_filter?.browser_language || []
+      }),
+      device_manufacturer: convertListToGui({
+        baseList: getListMobilePhoneBrands(),
+        selectedList: context_filter?.device_manufacturer || []
+      }),
+      device_type: convertListToGui({
+        baseList: DeviceTypeOptions,
+        selectedList: context_filter?.device_type || []
+      }),
+      platform: convertListToGui({
+        baseList: PlatformOptions,
+        selectedList: context_filter?.platform || []
+      })
     }
   };
 };
@@ -222,24 +255,36 @@ export const formToApi = ({
 
   //---> CONTEXT FILTER
   if (context_filter?.browser) {
-    contextFilter.browser = context_filter?.browser?.value;
+    contextFilter.browser = formatListData(context_filter.browser);
   }
   if (context_filter?.operating_system) {
-    contextFilter.operating_system = context_filter?.operating_system?.value;
+    contextFilter.operating_system = formatListData(
+      context_filter?.operating_system
+    );
   }
   if (context_filter?.browser_language) {
-    contextFilter.browser_language = context_filter?.browser_language || '';
+    contextFilter.browser_language = formatListData(
+      context_filter?.browser_language
+    );
   }
   if (context_filter?.device_manufacturer) {
-    contextFilter.device_manufacturer =
-      context_filter?.device_manufacturer || '';
+    contextFilter.device_manufacturer = formatListData(
+      context_filter?.device_manufacturer
+    );
   }
   if (context_filter?.bandwidth) {
-    contextFilter.bandwidth = context_filter?.bandwidth?.value || null;
+    contextFilter.bandwidth = formatListData(context_filter?.bandwidth);
   }
   if (context_filter?.mobile_carrier) {
-    contextFilter.mobile_carrier =
-      context_filter?.mobile_carrier?.value || null;
+    contextFilter.mobile_carrier = formatListData(
+      context_filter?.mobile_carrier
+    );
+  }
+  if (context_filter?.device_type) {
+    contextFilter.mobile_carrier = formatListData(context_filter?.device_type);
+  }
+  if (context_filter?.platform) {
+    contextFilter.mobile_carrier = formatListData(context_filter?.platform);
   }
 
   let strategyReturn = {
@@ -278,12 +323,16 @@ export const formToApi = ({
     context_filter: !isEdit
       ? contextFilter
       : {
-          browser: context_filter?.browser?.value || null,
-          operating_system: context_filter?.operating_system?.value || null,
-          browser_language: context_filter?.browser_language || '',
-          device_manufacturer: context_filter?.device_manufacturer || '',
-          bandwidth: context_filter?.bandwidth?.value || null,
-          mobile_carrier: context_filter?.mobile_carrier?.value || null
+          browser: formatListData(context_filter?.browser),
+          operating_system: formatListData(context_filter?.operating_system),
+          browser_language: formatListData(context_filter?.browser_language),
+          device_manufacturer: formatListData(
+            context_filter?.device_manufacturer
+          ),
+          bandwidth: formatListData(context_filter?.bandwidth),
+          mobile_carrier: formatListData(context_filter?.mobile_carrier),
+          platform: formatListData(context_filter?.platform),
+          device_type: formatListData(context_filter?.device_type)
         }
   };
 

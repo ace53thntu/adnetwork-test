@@ -1,24 +1,28 @@
 import {Collapse} from 'components/common';
-import {FormReactSelect, FormTextInput} from 'components/forms';
+import {FormReactSelect} from 'components/forms';
 import {
   BandwidthOptions,
   BrowsersOptions,
-  MobileCarrierOptions,
-  OperatingSystemOptions
+  DeviceTypeOptions,
+  OperatingSystemOptions,
+  PlatformOptions
 } from 'pages/Campaign/constants';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
-
+import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
+import {getListCarriers} from 'utils/helpers/getListCarriers';
+import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
 const propTypes = {};
 
 const ContextFilterGroup = ({isView = false, currentStrategy}) => {
   const {t} = useTranslation();
+  console.log('===== getListCarriers', getListCarriers());
 
   return (
     <Collapse initialOpen title={t('COMMON.CONTEXT_FILTER')} unMount={false}>
       <Row>
-        <Col md="4">
+        <Col md="6">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.browser}
@@ -26,9 +30,10 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             name="context_filter.browser"
             label={t('FORM.BROWSER')}
             placeholder={t('FORM.BROWSER')}
+            multiple
           />
         </Col>
-        <Col md="4">
+        <Col md="6">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.operating_system}
@@ -36,9 +41,10 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             name="context_filter.operating_system"
             label={t('FORM.OPERATING_SYSTEM')}
             placeholder={t('FORM.OPERATING_SYSTEM')}
+            multiple
           />
         </Col>
-        <Col md="4">
+        <Col md="6">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.bandwidth}
@@ -46,36 +52,62 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             name="context_filter.bandwidth"
             label={t('FORM.BANDWIDTH')}
             placeholder={t('FORM.BANDWIDTH')}
+            multiple
           />
         </Col>
-        <Col md="4">
+        <Col md="6">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.mobile_carrier}
-            options={MobileCarrierOptions}
+            options={getListCarriers()}
             name="context_filter.mobile_carrier"
             label={t('FORM.MOBILE_CARRIER')}
             placeholder={t('FORM.MOBILE_CARRIER')}
+            multiple
           />
         </Col>
-        <Col md="4">
-          <FormTextInput
-            type="text"
+        <Col md="6">
+          <FormReactSelect
+            defaultValue={currentStrategy?.context_filter?.browser_language}
+            options={getBrowserLanguages()}
             label={t('FORM.BROWSER_LANGUAGE')}
             placeholder={t('FORM.BROWSER_LANGUAGE')}
-            id="browser_language"
             name="context_filter.browser_language"
             disabled={isView}
+            multiple
           />
         </Col>
-        <Col md="4">
-          <FormTextInput
-            type="text"
+        <Col md="6">
+          <FormReactSelect
+            defaultValue={currentStrategy?.context_filter?.device_manufacturer}
+            options={getListMobilePhoneBrands()}
             label={t('FORM.DEVICE_MANUFACTURER')}
             placeholder={t('FORM.DEVICE_MANUFACTURER')}
-            id="device_manufacturer"
             name="context_filter.device_manufacturer"
             disabled={isView}
+            multiple
+          />
+        </Col>
+        <Col md="6">
+          <FormReactSelect
+            defaultValue={currentStrategy?.context_filter?.device_type}
+            options={DeviceTypeOptions}
+            label={t('FORM.DEVICE_TYPE')}
+            placeholder={t('FORM.DEVICE_TYPE')}
+            name="context_filter.device_type"
+            disabled={isView}
+            multiple
+          />
+        </Col>
+        <Col md="6">
+          <FormReactSelect
+            defaultValue={currentStrategy?.context_filter?.platform}
+            options={PlatformOptions}
+            label={t('FORM.PLATFORM')}
+            placeholder={t('FORM.PLATFORM')}
+            name="context_filter.platform"
+            disabled={isView}
+            multiple
           />
         </Col>
       </Row>

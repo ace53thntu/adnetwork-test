@@ -75,9 +75,9 @@ export const strategySchema = (
       Yup.object().shape({
         ...basicSchema,
         video_filter: Yup.object().shape({
-          skip_delay: videoFilter?.skip_delay
-            ? Yup.string().required(t('required'))
-            : Yup.string().notRequired(),
+          // skip_delay: videoFilter?.skip_delay
+          //   ? Yup.string().required(t('required'))
+          //   : Yup.string().notRequired(),
           ...skippableValidate
         })
       })
