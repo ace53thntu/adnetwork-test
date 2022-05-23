@@ -1,4 +1,3 @@
-import Box from '@material-ui/core/Box';
 import {AlternativeAPI} from 'api/alternative.api';
 import {BlockOverlay, CollapseBox} from 'components/common';
 import {
@@ -29,6 +28,9 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+
+import Box from '@material-ui/core/Box';
+
 import {Alternatives} from '../Alternatives';
 import Report from '../Report';
 import {
@@ -51,7 +53,7 @@ import {bannerFormValidationResolver} from './utils';
 const defaultFormValues = {
   third_party_tag: '',
   third_party_tag_type: THIRD_PARTY_TAG_TYPES[0],
-  extra_trackers: '',
+  // extra_trackers: '',
 
   type: CREATIVE_TYPES[1], // third_party, first_party
   tags: [],
@@ -335,7 +337,6 @@ function BannerForm(props) {
                             defaultValues={defaultValues.sound}
                             name={'sound'}
                             label="Sound"
-                            // disabled={isLoading || disabled}
                           />
                         </Col>
                         <Col md="4">
@@ -343,7 +344,6 @@ function BannerForm(props) {
                             defaultValues={defaultValues.https}
                             name={'https'}
                             label="Https"
-                            // disabled={isLoading || disabled}
                           />
                         </Col>
                         <Col md="4">
@@ -351,7 +351,6 @@ function BannerForm(props) {
                             defaultValues={defaultValues.multiproduct}
                             name={'multiproduct'}
                             label="Multiproduct"
-                            // disabled={isLoading || disabled}
                           />
                         </Col>
                       </Row>

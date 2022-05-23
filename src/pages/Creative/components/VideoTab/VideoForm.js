@@ -20,13 +20,15 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {PLATFORM_OPTIONS} from '../BannerForm/constants';
+
+import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
+import {useCalculateAdSize} from '../BannerForm/hooks';
 import Report from '../Report';
+import VideoFiles from './VideoFiles';
+import VideoInformationForm from './VideoInformationForm';
 import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
-import VideoFiles from './VideoFiles';
-import VideoInformationForm from './VideoInformationForm';
 
 const defaultValues = {
   // concept_id: 1,
@@ -40,7 +42,10 @@ const defaultValues = {
   linearity: VideoTypes[0],
   platform: PLATFORM_OPTIONS[0],
   ad_size_format: null,
-  video_metadata: ''
+  video_metadata: '',
+  tags: [],
+  third_party_tag: '',
+  third_party_tag_type: THIRD_PARTY_TAG_TYPES[0]
   // files: []
 };
 
@@ -69,7 +74,9 @@ function VideoForm(props) {
   });
   const {
     handleSubmit,
-    formState: {isDirty}
+    formState: {isDirty},
+    watch,
+    setValue
   } = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -78,6 +85,11 @@ function VideoForm(props) {
     dispatch(dirtyForm(isDirty));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDirty]);
+
+  useCalculateAdSize({
+    watch,
+    setValue
+  });
 
   const handleCloseDialog = () => {
     if (isCreate) {

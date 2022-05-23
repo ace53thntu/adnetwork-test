@@ -16,7 +16,8 @@ export const useCalculateAdSize = ({watch, setValue}) => {
   const setFormField = React.useCallback(
     (field, value) => {
       setValue(field, value, {
-        shouldValidate: true
+        shouldValidate: true,
+        shouldDirty: false
       });
     },
     [setValue]

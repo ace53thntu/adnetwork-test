@@ -2,6 +2,8 @@ import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 
+import {checkValidJson} from '../BannerForm/utils';
+
 export function createVideoFormResolver() {
   return yupResolver(
     Yup.object().shape({
@@ -31,6 +33,17 @@ export function createVideoFormResolver() {
             return true;
           }
           return false;
+        }
+      ),
+      video_metadata: Yup.string().test(
+        'isValidJson',
+        'Invalid JSON object',
+        val => {
+          if (val?.length) {
+            return checkValidJson(val);
+          }
+
+          return true;
         }
       )
     })

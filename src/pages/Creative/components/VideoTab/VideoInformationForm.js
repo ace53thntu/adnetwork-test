@@ -1,10 +1,14 @@
-import {FormReactSelect, FormTextInput} from 'components/forms';
+import {FormReactSelect, FormTagsInput, FormTextInput} from 'components/forms';
 import FormCodeMirror from 'components/forms/FormCodeMirror';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, FormGroup, Row} from 'reactstrap';
 
-import {PLATFORM_OPTIONS} from '../BannerForm/constants';
+import {
+  AD_SIZE_FORMAT_OPTIONS,
+  PLATFORM_OPTIONS,
+  THIRD_PARTY_TAG_TYPES
+} from '../BannerForm/constants';
 import {VideoServeTypes, VideoTypes} from './constants';
 
 function VideoInformationForm(props) {
@@ -31,24 +35,6 @@ function VideoInformationForm(props) {
         />
       </Col>
       <Col md={3}>
-        <FormTextInput
-          placeholder=""
-          name="width"
-          label="Width"
-          defaultValue={defaultValues.width}
-          isRequired
-        />
-      </Col>
-      <Col md={3}>
-        <FormTextInput
-          placeholder=""
-          name="height"
-          label="Height"
-          defaultValue={defaultValues.height}
-          isRequired
-        />
-      </Col>
-      <Col md={3}>
         <FormReactSelect
           placeholder=""
           name="type"
@@ -68,6 +54,36 @@ function VideoInformationForm(props) {
       </Col>
       <Col md={3}>
         <FormReactSelect
+          isClearable
+          options={AD_SIZE_FORMAT_OPTIONS}
+          placeholder=""
+          name="ad_size_format"
+          label="Ad size format"
+          defaultValue={defaultValues.ad_size_format}
+        />
+      </Col>
+
+      <Col md={3}>
+        <FormTextInput
+          placeholder=""
+          name="width"
+          label="Width"
+          defaultValue={defaultValues.width}
+          isRequired
+        />
+      </Col>
+      <Col md={3}>
+        <FormTextInput
+          placeholder=""
+          name="height"
+          label="Height"
+          defaultValue={defaultValues.height}
+          isRequired
+        />
+      </Col>
+
+      <Col md={3}>
+        <FormReactSelect
           options={PLATFORM_OPTIONS}
           placeholder=""
           name="platform"
@@ -75,7 +91,16 @@ function VideoInformationForm(props) {
           defaultValue={defaultValues.platform}
         />
       </Col>
-      <Col md={9}>
+      <Col md={6}>
+        <FormTagsInput
+          name="tags"
+          label="Tags"
+          placeholder="Enter tags..."
+          defaultValue={defaultValues?.tags}
+        />
+      </Col>
+
+      <Col md={6}>
         <FormGroup>
           <FormCodeMirror
             name="video_metadata"
@@ -84,6 +109,25 @@ function VideoInformationForm(props) {
             defaultValue={defaultValues.video_metadata}
           />
         </FormGroup>
+      </Col>
+      <Col md={12}>
+        <FormReactSelect
+          options={THIRD_PARTY_TAG_TYPES}
+          placeholder=""
+          name="third_party_tag_type"
+          label="Third party tag type"
+          defaultValue={defaultValues.third_party_tag_type}
+        />
+      </Col>
+      <Col md="12">
+        <FormTextInput
+          type="textarea"
+          placeholder=""
+          name="third_party_tag"
+          label="Third party tag"
+          rows={4}
+          defaultValue={defaultValues.third_party_tag}
+        />
       </Col>
     </Row>
   );

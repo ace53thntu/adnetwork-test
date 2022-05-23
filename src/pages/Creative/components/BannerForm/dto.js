@@ -14,7 +14,7 @@ export function creativeModelToRepo(raw, conceptId) {
   const {
     third_party_tag = '',
     third_party_tag_type = THIRD_PARTY_TAG_TYPES[0],
-    extra_trackers = '',
+    // extra_trackers = '',
     type = CREATIVE_TYPES[0],
     tags = [],
     click_url = '',
@@ -39,7 +39,7 @@ export function creativeModelToRepo(raw, conceptId) {
     tags,
     sound,
     multi_product: multiproduct,
-    extra_trackers,
+    // extra_trackers,
     type: type?.value,
     click_url,
     third_party_tag,
@@ -60,7 +60,7 @@ export function creativeRepoToModel(raw) {
   const {
     third_party_tag,
     third_party_tag_type,
-    extra_trackers,
+    // extra_trackers,
     type,
     tags = [],
     click_url = '',
@@ -84,7 +84,7 @@ export function creativeRepoToModel(raw) {
     third_party_tag_type: THIRD_PARTY_TAG_TYPES.find(
       type => type.value === third_party_tag_type
     ),
-    extra_trackers,
+    // extra_trackers,
     type: CREATIVE_TYPES.find(cType => cType.value === type),
     tags: tags?.length ? tags : [],
     click_url,
@@ -116,7 +116,7 @@ export function creativeRepoToModel(raw) {
   };
 }
 
-function makeValueForAdSizeFormat(adSize, width, height) {
+export function makeValueForAdSizeFormat(adSize, width, height) {
   const widthStr = width?.toString() ?? '0';
   const heightStr = height?.toString() ?? '0';
   const value = `${widthStr}x${heightStr}`;

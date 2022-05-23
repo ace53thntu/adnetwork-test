@@ -10,13 +10,13 @@ import configureStore from 'store/configureStore';
 /** Components */
 import App from './App';
 
-function noop() {}
+// function noop() {}
 
 if (process.env.NODE_ENV !== 'development') {
   console.log('is production!');
-  console.log = noop;
-  console.warn = noop;
-  console.error = noop;
+  // console.log = noop;
+  // console.warn = noop;
+  // console.error = noop;
 }
 
 const ClearCacheComponent = withClearCache(App);

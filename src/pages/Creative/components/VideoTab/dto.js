@@ -1,8 +1,26 @@
 import _ from 'lodash';
+
+import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
+import {makeValueForAdSizeFormat} from '../BannerForm/dto';
+import {checkValidJson} from '../BannerForm/utils';
 import {VideoServeTypes, VideoTypes} from './constants';
 
 export function videoRepoToFormValues(raw) {
-  const {name, click_url = '', height, width, files, linearity, type} = raw;
+  const {
+    name,
+    click_url = '',
+    height,
+    width,
+    files,
+    linearity,
+    type,
+    video_metadata,
+    third_party_tag_type,
+    third_party_tag,
+    platform,
+    ad_size_format,
+    tags
+  } = raw;
 
   const result = {
     name,
@@ -10,7 +28,20 @@ export function videoRepoToFormValues(raw) {
     width: width?.toString() ?? '1',
     height: height?.toString() ?? '1',
     linearity: VideoTypes.find(item => item.value === linearity) || null,
-    type: VideoServeTypes.find(item => item.value === type) || null
+    type: VideoServeTypes.find(item => item.value === type) || null,
+    third_party_tag,
+    third_party_tag_type: THIRD_PARTY_TAG_TYPES.find(
+      type => type.value === third_party_tag_type
+    ),
+    tags: tags?.length ? tags : [],
+    ad_size_format:
+      ad_size_format === 'dropdown'
+        ? makeValueForAdSizeFormat(ad_size_format, width, height)
+        : null,
+    platform: PLATFORM_OPTIONS.find(pfOpt => pfOpt.value === platform),
+    video_metadata: checkValidJson(video_metadata)
+      ? JSON.stringify(video_metadata)
+      : ''
   };
 
   if (files?.length) {
@@ -30,7 +61,20 @@ export function videoFormValuesToRepo(
   requestFiles = [],
   isUpdate = false
 ) {
-  const {name, click_url, width, height, linearity, type} = raw;
+  const {
+    name,
+    click_url,
+    width,
+    height,
+    linearity,
+    type,
+    video_metadata,
+    third_party_tag_type,
+    third_party_tag,
+    platform,
+    ad_size_format,
+    tags
+  } = raw;
 
   let obj = {
     name,
@@ -38,7 +82,15 @@ export function videoFormValuesToRepo(
     dtype: 'video',
     concept_uuid: conceptId,
     status: 'active',
-    files_uuid: []
+    files_uuid: [],
+    tags,
+    third_party_tag,
+    third_party_tag_type: third_party_tag_type?.value,
+    ad_size_format: ad_size_format ? 'dropdown' : 'custom',
+    platform: platform?.value,
+    video_metadata: checkValidJson(video_metadata)
+      ? JSON.parse(video_metadata)
+      : {}
   };
 
   if (linearity?.value) {
