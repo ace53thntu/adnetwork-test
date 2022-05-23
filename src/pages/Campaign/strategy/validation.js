@@ -33,7 +33,7 @@ export const strategySchema = (
 
         return true;
       }
-    })
+    }),
   };
 
   const basicSchema = {

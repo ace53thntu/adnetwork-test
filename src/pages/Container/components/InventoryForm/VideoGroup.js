@@ -11,16 +11,18 @@ import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {LinearityOptions, ProtocolOptions} from 'constants/misc';
-import { VideoMineOptions } from 'constants/inventory';
+import {VideoMineOptions} from 'constants/inventory';
+import {StartDelayOptions} from 'pages/Campaign/constants';
 
-const VideoGroup = ({isCreate = false}) => {
+const VideoGroup = ({ currentInventory}) => {
   const {t} = useTranslation();
-  const {formState} = useFormContext();
+  const {formState,  watch} = useFormContext();
+  const skip = watch('metadata.skip');
 
   return (
     <Collapse initialOpen title={t('FORM.VIDEO_CONFIGURATION')} unMount={false}>
       <Row>
-        <Col sm={3}>
+        <Col sm={6}>
           <CurrencyInputField
             name="metadata.min_bitrate"
             placeholder={t('minBitrate')}
@@ -30,7 +32,7 @@ const VideoGroup = ({isCreate = false}) => {
             disabled={formState.isSubmitting}
           />
         </Col>
-        <Col sm={3}>
+        <Col sm={6}>
           <CurrencyInputField
             name="metadata.max_bitrate"
             placeholder={t('maxBitrate')}
@@ -40,7 +42,7 @@ const VideoGroup = ({isCreate = false}) => {
             disabled={formState.isSubmitting}
           />
         </Col>
-        <Col sm={3}>
+        <Col sm={6}>
           <CurrencyInputField
             name="metadata.min_duration"
             placeholder={t('minDuration')}
@@ -50,7 +52,7 @@ const VideoGroup = ({isCreate = false}) => {
             disabled={formState.isSubmitting}
           />
         </Col>
-        <Col sm={3}>
+        <Col sm={6}>
           <CurrencyInputField
             name="metadata.max_duration"
             placeholder={t('maxDuration')}
@@ -60,17 +62,7 @@ const VideoGroup = ({isCreate = false}) => {
             disabled={formState.isSubmitting}
           />
         </Col>
-        <Col md="3">
-          <CurrencyInputField
-            name="metadata.skip_min"
-            placeholder={t('FORM.SKIP_MIN')}
-            label={t('FORM.SKIP_MIN')}
-            disableGroupSeparators
-            allowDecimals={false}
-            disabled={formState.isSubmitting}
-          />
-        </Col>
-        <Col md="3">
+        <Col md="6">
           <CurrencyInputField
             name="metadata.skip_after"
             placeholder={t('FORM.SKIP_AFTER')}
@@ -78,26 +70,39 @@ const VideoGroup = ({isCreate = false}) => {
             disableGroupSeparators
             allowDecimals={false}
             disabled={formState.isSubmitting}
+            readOnly={skip !== 'active'}
           />
         </Col>
-        <Col md="3">
+        <Col md="6">
           <CurrencyInputField
-            name="metadata.start_delay"
-            placeholder={t('FORM.START_DELAY')}
-            label={t('FORM.START_DELAY')}
+            name="metadata.skip_min"
+            placeholder={t('FORM.SKIP_MIN')}
+            label={t('FORM.SKIP_MIN')}
             disableGroupSeparators
             allowDecimals={false}
             disabled={formState.isSubmitting}
+            readOnly={skip !== 'active'}
           />
         </Col>
-        <Col sm={3}>
+
+        <Col md="6">
+          <FormReactSelect
+            defaultValue={currentInventory?.metadata?.start_delay}
+            options={StartDelayOptions}
+            name="metadata.start_delay"
+            placeholder={t('FORM.START_DELAY')}
+            label={t('FORM.START_DELAY')}
+            isClearable
+          />
+        </Col>
+        <Col sm={6}>
           <FormReactSelect
             name="metadata.linearity"
             label={t('FORM.LINEARITY')}
             placeholder={t('FORM.SELECT_LINEARITY')}
             options={LinearityOptions}
             disabled={formState.isSubmitting}
-            isClearable={isCreate}
+            isClearable
           />
         </Col>
         <Col sm="12">

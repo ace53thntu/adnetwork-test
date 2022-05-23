@@ -35,7 +35,8 @@ const FormCodeMirror = ({
   required = false,
   placeholder = `{"key": "value"}`,
   extension = 'JAVASCRIPT',
-  defaultValue = ''
+  defaultValue = '',
+  showError=true
 }) => {
   const {t} = useTranslation();
   const {control, errors} = useFormContext();
@@ -67,7 +68,7 @@ const FormCodeMirror = ({
           );
         }}
       />
-      {errors?.[name] && (
+      {showError && errors?.[name] && (
         <ErrorMessage message={errorMessage || t('required')} />
       )}
     </div>

@@ -16,12 +16,14 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import VideoGroup from './VideoGroup';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import { BannerPlayTypeOptions, BannerTypeOptions } from 'constants/inventory';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
 const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
   const {t} = useTranslation();
   const role = getRole();
 
   const {formState, control, errors} = useFormContext();
+  console.log("🚀 ~ file: InventoryProperty.js ~ line 26 ~ InventoryProperty ~ errors", errors)
   const inventoryTags = getInventoryTags();
   const formatTypeSelected = useWatch({name: 'format', control});
 
@@ -128,7 +130,9 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
               name="metadata.extra"
               label={t('FORM.EXTRA_FIELDS')}
               extension="JSON"
+              showError={false}
             />
+            {errors?.metadata?.extra && <ErrorMessage message={errors?.metadata?.extra?.message || ''}/>}
           </Col>
         </Row>
       )}

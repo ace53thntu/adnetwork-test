@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {InputStatus} from 'constants/misc';
 import {validateFloatInput, validateNumberInput} from 'utils/yupValidations';
+import {checkValidJson} from 'pages/Creative/components/BannerForm/utils';
 
 export const validationInventory = t => {
   return yupResolver(
@@ -64,15 +65,25 @@ export const validationInventory = t => {
           .test('is-number', 'Invalid number', value => {
             return validateFloatInput(value);
           }),
-        duration: Yup.string().test('is-number', 'Invalid number', value => {
-          return validateFloatInput(value);
-        }),
+
         min_bitrate: Yup.string().test('is-number', 'Invalid number', value => {
           return validateNumberInput(value);
         }),
-        max_bitrate: Yup.string().test('is-number', 'Invalid number', value => {
-          return validateNumberInput(value);
-        }),
+        max_bitrate: Yup.string()
+          .test('is-number', 'Invalid number', value => {
+            return validateNumberInput(value);
+          })
+          .test(
+            'max-min-bitrate',
+            'Max bitrate must be greater than Min bitrate',
+            function (value) {
+              if (parseInt(value) < parseInt(this.parent?.min_bitrate)) {
+                return false;
+              }
+
+              return true;
+            }
+          ),
         min_duration: Yup.string().test(
           'is-number',
           'Invalid number',
@@ -80,13 +91,69 @@ export const validationInventory = t => {
             return validateNumberInput(value);
           }
         ),
-        max_duration: Yup.string().test(
-          'is-number',
-          'Invalid number',
-          value => {
+        max_duration: Yup.string()
+          .test('is-number', 'Invalid number', value => {
             return validateNumberInput(value);
+          })
+          .test(
+            'max-min-duration',
+            'Max duration must be greater than Min duration',
+            function (value) {
+              if (parseInt(value) < parseInt(this.parent?.min_duration)) {
+                return false;
+              }
+
+              return true;
+            }
+          )
+          .test(
+            'max-duration-skip-min',
+            'Max duration must be greater than skip min',
+            function (value) {
+              if (parseInt(value) <= parseInt(this.parent?.skip_min)) {
+                return false;
+              }
+
+              return true;
+            }
+          ),
+        skip_after: Yup.string()
+          .test('is-number', 'Invalid number', value => {
+            return validateNumberInput(value);
+          })
+          .test(
+            'skip-after-min-duration',
+            'Skip after must be greater than min duration',
+            function (value) {
+              if (parseInt(value) <= parseInt(this.parent?.min_duration)) {
+                return false;
+              }
+
+              return true;
+            }
+          ),
+        skip_min: Yup.string()
+          .test('is-number', 'Invalid number', value => {
+            return validateNumberInput(value);
+          })
+          .test(
+            'skip-min-skip-later',
+            'Skip min must be greater than skip after',
+            function (value) {
+              if (parseInt(value) <= parseInt(this.parent?.skip_after)) {
+                return false;
+              }
+
+              return true;
+            }
+          ),
+        extra: Yup.string().test('isValidJson', 'Invalid JSON object', val => {
+          if (val?.length) {
+            return checkValidJson(val);
           }
-        )
+
+          return true;
+        })
       }),
       tracker: Yup.object({
         template_uuid: Yup.object()

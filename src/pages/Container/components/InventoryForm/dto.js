@@ -1,5 +1,6 @@
 import {BannerTypeOptions, VideoMineOptions} from 'constants/inventory';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
+import {StartDelayOptions} from 'pages/Campaign/constants';
 import {InventoryFormats} from 'pages/Container/constants';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
@@ -52,6 +53,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     tags: formTags,
     first_party
   } = formData;
+    console.log("🚀 ~ file: dto.js ~ line 56 ~ mappingInventoryFormToApi ~ metadata", metadata)
 
   const formatData = format?.value || '';
 
@@ -75,7 +77,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || null;
     formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
     formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
-    formatMetadata.start_delay = parseInt(metadata?.start_delay, 10) || null;
+    formatMetadata.start_delay = metadata?.start_delay ? metadata.start_delay?.value : null;
     formatMetadata.linearity = metadata?.linearity?.value || null;
     formatMetadata.protocols =
       metadata?.protocols?.length > 0
@@ -219,7 +221,9 @@ export const mappingInventoryApiToForm = ({
   destructedMetadata.max_duration = parseInt(metadata?.max_duration, 10) || '';
   destructedMetadata.skip_min = parseInt(metadata?.skip_min, 10) || '';
   destructedMetadata.skip_after = parseInt(metadata?.skip_after, 10) || '';
-  destructedMetadata.start_delay = parseInt(metadata?.start_delay, 10) || '';
+  destructedMetadata.start_delay = StartDelayOptions.find(
+    item => item.value === metadata?.start_delay
+  ) || null;
   const bannerTypeSelected = BannerTypeOptions.find(
     item => item.value === metadata?.banner_type
   );
