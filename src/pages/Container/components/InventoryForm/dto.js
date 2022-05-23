@@ -53,7 +53,10 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     tags: formTags,
     first_party
   } = formData;
-    console.log("🚀 ~ file: dto.js ~ line 56 ~ mappingInventoryFormToApi ~ metadata", metadata)
+  console.log(
+    '🚀 ~ file: dto.js ~ line 56 ~ mappingInventoryFormToApi ~ metadata',
+    metadata
+  );
 
   const formatData = format?.value || '';
 
@@ -71,22 +74,47 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
 
   // Metadata video format
   if (formatData === InventoryFormats.VIDEO) {
-    formatMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || null;
-    formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || null;
-    formatMetadata.min_duration = parseInt(metadata?.min_duration, 10) || null;
-    formatMetadata.max_duration = parseInt(metadata?.max_duration, 10) || null;
-    formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
-    formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
-    formatMetadata.start_delay = metadata?.start_delay ? metadata.start_delay?.value : null;
-    formatMetadata.linearity = metadata?.linearity?.value || null;
-    formatMetadata.protocols =
-      metadata?.protocols?.length > 0
-        ? Array.from(metadata?.protocols, item => item.value)
-        : [];
-    formatMetadata.mimes =
-      metadata?.mimes?.length > 0
-        ? Array.from(metadata?.mimes, item => item.value)
-        : [];
+    if (metadata?.min_bitrate) {
+      formatMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || null;
+    }
+    if (metadata?.max_bitrate) {
+      formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || null;
+    }
+    if (metadata?.min_duration) {
+      formatMetadata.min_duration =
+        parseInt(metadata?.min_duration, 10) || null;
+    }
+    if (metadata?.max_duration) {
+      formatMetadata.max_duration =
+        parseInt(metadata?.max_duration, 10) || null;
+    }
+    if (metadata?.skip_min) {
+      formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
+    }
+    if (metadata?.skip_after) {
+      formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
+    }
+    if (metadata.start_delay) {
+      formatMetadata.start_delay = metadata?.start_delay
+        ? metadata.start_delay?.value
+        : null;
+    }
+    if (metadata?.linearity) {
+      formatMetadata.linearity = metadata?.linearity?.value || null;
+    }
+    if (metadata?.protocols?.length > 0) {
+      formatMetadata.protocols =
+        metadata?.protocols?.length > 0
+          ? Array.from(metadata?.protocols, item => item.value)
+          : [];
+    }
+    if (metadata?.mimes?.length > 0) {
+      formatMetadata.mimes =
+        metadata?.mimes?.length > 0
+          ? Array.from(metadata?.mimes, item => item.value)
+          : [];
+    }
+
     formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
     formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
   }
@@ -221,9 +249,9 @@ export const mappingInventoryApiToForm = ({
   destructedMetadata.max_duration = parseInt(metadata?.max_duration, 10) || '';
   destructedMetadata.skip_min = parseInt(metadata?.skip_min, 10) || '';
   destructedMetadata.skip_after = parseInt(metadata?.skip_after, 10) || '';
-  destructedMetadata.start_delay = StartDelayOptions.find(
-    item => item.value === metadata?.start_delay
-  ) || null;
+  destructedMetadata.start_delay =
+    StartDelayOptions.find(item => item.value === metadata?.start_delay) ||
+    null;
   const bannerTypeSelected = BannerTypeOptions.find(
     item => item.value === metadata?.banner_type
   );

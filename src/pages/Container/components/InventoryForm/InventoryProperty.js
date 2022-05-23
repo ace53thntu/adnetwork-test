@@ -21,9 +21,7 @@ import ErrorMessage from 'components/forms/ErrorMessage';
 const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
   const {t} = useTranslation();
   const role = getRole();
-
   const {formState, control, errors} = useFormContext();
-  console.log("🚀 ~ file: InventoryProperty.js ~ line 26 ~ InventoryProperty ~ errors", errors)
   const inventoryTags = getInventoryTags();
   const formatTypeSelected = useWatch({name: 'format', control});
 

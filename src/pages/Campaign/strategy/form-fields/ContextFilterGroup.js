@@ -17,7 +17,6 @@ const propTypes = {};
 
 const ContextFilterGroup = ({isView = false, currentStrategy}) => {
   const {t} = useTranslation();
-  console.log('===== getListCarriers', getListCarriers());
 
   return (
     <Collapse initialOpen title={t('COMMON.CONTEXT_FILTER')} unMount={false}>

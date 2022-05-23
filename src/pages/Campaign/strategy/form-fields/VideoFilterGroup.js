@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
 import {Col, Row} from 'reactstrap';
-import ISO6391 from 'iso-639-1';
+import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
@@ -16,7 +16,6 @@ import {
 } from 'pages/Campaign/constants';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {useFormContext} from 'react-hook-form';
 import ErrorMessage from 'components/forms/ErrorMessage';
 
 const propTypes = {
@@ -25,8 +24,6 @@ const propTypes = {
 };
 
 const VideoFilterGroup = ({isView = false, currentStrategy}) => {
-  console.log('==== getAllNames', ISO6391.getAllNames());
-  console.log('==== getAllCodes', ISO6391.getAllCodes());
   const {t} = useTranslation();
   const {errors} = useFormContext();
 
