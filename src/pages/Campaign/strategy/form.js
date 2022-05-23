@@ -50,18 +50,11 @@ const StrategyForm = ({
       {isCreate && <ScheduleGroup />}
 
       {/* eslint-disable-next-line no-undef */}
-      {ENVIRONMENT_NAME !== 'prod' && (
-        <>
-          {/* Video filter */}
-          <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
+      {/* Video filter */}
+      <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
 
-          {/* Context filter */}
-          <ContextFilterGroup
-            isView={isView}
-            currentStrategy={currentStrategy}
-          />
-        </>
-      )}
+      {/* Context filter */}
+      <ContextFilterGroup isView={isView} currentStrategy={currentStrategy} />
 
       {/* Inventory Group */}
       <InventoryGroup isView={isView} />
