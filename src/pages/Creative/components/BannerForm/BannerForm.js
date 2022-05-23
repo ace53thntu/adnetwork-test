@@ -1,3 +1,4 @@
+import Box from '@material-ui/core/Box';
 import {AlternativeAPI} from 'api/alternative.api';
 import {BlockOverlay, CollapseBox} from 'components/common';
 import {
@@ -28,9 +29,6 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-
-import Box from '@material-ui/core/Box';
-
 import {Alternatives} from '../Alternatives';
 import Report from '../Report';
 import {

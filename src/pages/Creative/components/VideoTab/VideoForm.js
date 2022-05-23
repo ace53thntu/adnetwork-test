@@ -20,13 +20,13 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-
+import {PLATFORM_OPTIONS} from '../BannerForm/constants';
 import Report from '../Report';
-import VideoFiles from './VideoFiles';
-import VideoInformationForm from './VideoInformationForm';
 import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
+import VideoFiles from './VideoFiles';
+import VideoInformationForm from './VideoInformationForm';
 
 const defaultValues = {
   // concept_id: 1,
@@ -36,8 +36,11 @@ const defaultValues = {
   click_url: '',
   width: '',
   height: '',
-  serve_type: VideoServeTypes[0],
-  video_type: VideoTypes[0]
+  type: VideoServeTypes[0],
+  linearity: VideoTypes[0],
+  platform: PLATFORM_OPTIONS[0],
+  ad_size_format: null,
+  video_metadata: ''
   // files: []
 };
 

@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Card, CardBody, Col, Row} from 'reactstrap';
 import NoReportAvailable from './components/NoReportAvailable';
-
 //---> Internal Modules
 import ReportItemContainer from './ReportItemContainer';
 
 const ReportList = ({reports = [], entityId, metricType}) => {
-  console.log('test build-----');
   return (
     <Row>
       {reports?.map((reportItem = {}, idx) => {

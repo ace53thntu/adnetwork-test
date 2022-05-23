@@ -1,25 +1,16 @@
 import _ from 'lodash';
-
 import {VideoServeTypes, VideoTypes} from './constants';
 
 export function videoRepoToFormValues(raw) {
-  const {
-    name,
-    click_url = '',
-    height,
-    width,
-    files,
-    video_type,
-    serve_type
-  } = raw;
+  const {name, click_url = '', height, width, files, linearity, type} = raw;
 
   const result = {
     name,
     click_url,
     width: width?.toString() ?? '1',
     height: height?.toString() ?? '1',
-    video_type: VideoTypes.find(item => item.value === video_type) || null,
-    serve_type: VideoServeTypes.find(item => item.value === serve_type) || null
+    linearity: VideoTypes.find(item => item.value === linearity) || null,
+    type: VideoServeTypes.find(item => item.value === type) || null
   };
 
   if (files?.length) {
@@ -39,7 +30,7 @@ export function videoFormValuesToRepo(
   requestFiles = [],
   isUpdate = false
 ) {
-  const {name, click_url, width, height, video_type, serve_type} = raw;
+  const {name, click_url, width, height, linearity, type} = raw;
 
   let obj = {
     name,
@@ -50,11 +41,11 @@ export function videoFormValuesToRepo(
     files_uuid: []
   };
 
-  if (video_type?.value) {
-    obj.video_type = video_type.value;
+  if (linearity?.value) {
+    obj.linearity = linearity.value;
   }
-  if (serve_type?.value) {
-    obj.serve_type = serve_type.value;
+  if (type?.value) {
+    obj.type = type.value;
   }
 
   if (width && _.isNumber(parseInt(width, 10))) {

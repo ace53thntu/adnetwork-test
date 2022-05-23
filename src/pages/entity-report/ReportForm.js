@@ -1,21 +1,4 @@
 //---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import PropTypes from 'prop-types';
-import {FormProvider, useForm, useWatch} from 'react-hook-form';
-import {useDispatch} from 'react-redux';
-import {Button, FormGroup, Label, Spinner} from 'reactstrap';
-
-//---> Internal Modules
-import {useGenerateReportUrl} from 'queries/report';
-import {
-  setMetricBodyRedux,
-  setMetricDataRedux,
-  setMetricSetSelectedRedux,
-  useReportGroupTypeSelector
-} from 'store/reducers/entity-report';
-import ModalReportForm from './ReportCreateModal';
 import {FormReactSelect} from 'components/forms';
 import {
   DEFAULT_TIME_RANGE,
@@ -24,7 +7,22 @@ import {
   ReportTypes,
   REPORT_VIEW_TYPES
 } from 'constants/report';
+//---> External Modules
+import PropTypes from 'prop-types';
+//---> Internal Modules
+import {useGenerateReportUrl} from 'queries/report';
+import React from 'react';
+import {FormProvider, useForm, useWatch} from 'react-hook-form';
+import {useDispatch} from 'react-redux';
+import {Button, FormGroup, Label, Spinner} from 'reactstrap';
+import {
+  setMetricBodyRedux,
+  setMetricDataRedux,
+  setMetricSetSelectedRedux,
+  useReportGroupTypeSelector
+} from 'store/reducers/entity-report';
 import {ReportGroupTypes} from './constants.js/index.js';
+import ModalReportForm from './ReportCreateModal';
 import {getReportById} from './utils/getReportById';
 import {randomHex} from './utils/parseColors';
 
@@ -56,7 +54,6 @@ const ReportForm = ({
     });
     return colors;
   }, [selectedMetricSet]);
-  console.log('🚀 ~ file: ReportForm.js ~ line 59 ~ colors ~ colors', colors);
 
   const toggleModalReportForm = () => {
     setShowReportForm(prevState => !prevState);
