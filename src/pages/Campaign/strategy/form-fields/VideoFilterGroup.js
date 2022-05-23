@@ -51,6 +51,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.start_delay"
             placeholder={t('FORM.START_DELAY')}
             label={t('FORM.START_DELAY')}
+            isClearable
           />
         </Col>
         <Col md="3">
@@ -61,6 +62,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.ptype"
             label={t('FORM.PLACEMENT_TYPE')}
             placeholder={t('FORM.PLACEMENT_TYPE')}
+            isClearable
           />
         </Col>
         <Col md="3">
@@ -71,6 +73,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.linearity"
             label={t('FORM.LINEARITY')}
             placeholder={t('FORM.LINEARITY')}
+            isClearable
           />
         </Col>
         <Col md="12">
