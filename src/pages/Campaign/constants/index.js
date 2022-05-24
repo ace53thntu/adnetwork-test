@@ -84,25 +84,25 @@ export const DeviceType = {
 export const DeviceTypeOptions = [
   {
     value: DeviceType.DEVICE_TYPE_MOBILE_TABLET,
-    label: 'Mobile/Tablet (Version 2.0)'
+    label: 'Mobile/Tablet'
   },
   {
     value: DeviceType.DEVICE_TYPE_PERSONAL_COMPUTER,
-    label: 'Personal Computer (Version 2.0)'
+    label: 'Personal Computer'
   },
   {
     value: DeviceType.DEVICE_TYPE_CONNECTED_TV,
-    label: 'Connected TV (Version 2.0)'
+    label: 'Connected TV'
   },
-  {value: DeviceType.DEVICE_TYPE_PHONE, label: 'Phone (New for Version 2.2)'},
-  {value: DeviceType.DEVICE_TYPE_TABLET, label: 'Tablet (New for Version 2.2)'},
+  {value: DeviceType.DEVICE_TYPE_PHONE, label: 'Phone'},
+  {value: DeviceType.DEVICE_TYPE_TABLET, label: 'Tablet'},
   {
     value: DeviceType.DEVICE_TYPE_CONNECTED_DEVICE,
-    label: 'Connected Device (New for Version 2.2)'
+    label: 'Connected Device'
   },
   {
     value: DeviceType.DEVICE_TYPE_SET_TOP_BOX,
-    label: 'Set Top Box (New for Version 2.2)'
+    label: 'Set Top Box'
   }
 ];
 
