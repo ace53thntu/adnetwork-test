@@ -8,28 +8,28 @@ export const ALTERNATIVE_FILE_TYPES = [
   {
     label: 'Standard',
     value: 'standard'
-  },
-  {
-    label: 'Interactive',
-    value: 'interactive'
-  },
-  {
-    label: 'Shoppable',
-    value: 'shoppable'
   }
+  // {
+  //   label: 'Interactive',
+  //   value: 'interactive'
+  // },
+  // {
+  //   label: 'Shoppable',
+  //   value: 'shoppable'
+  // }
 ];
 
 export const ALTERNATIVE_PLAY_TYPES = [
   {
     label: 'Standard',
     value: 'standard'
-  },
-  {
-    label: 'Interactive scroll',
-    value: 'interactive_scroll'
-  },
-  {
-    label: 'Underlayer',
-    value: 'underlayer'
   }
+  // {
+  //   label: 'Interactive scroll',
+  //   value: 'interactive_scroll'
+  // },
+  // {
+  //   label: 'Underlayer',
+  //   value: 'underlayer'
+  // }
 ];
