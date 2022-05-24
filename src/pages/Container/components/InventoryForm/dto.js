@@ -28,7 +28,8 @@ export const getMetaExtra = metadata => {
     'skip',
     'pass_back',
     'banner_type',
-    'banner_play_types'
+    'banner_play_types',
+    'duration'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
