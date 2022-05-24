@@ -150,7 +150,6 @@ export const CappingReferenceTypes = {
 
 // OpenRTB 2.5 protocols
 export const ProtocolOptions = [
-  {value: 'indifferent', label: 'Indifferent'},
   {value: 1, label: 'VAST 1.0'},
   {value: 2, label: 'VAST 2.0'},
   {value: 3, label: 'VAST 3.0'},

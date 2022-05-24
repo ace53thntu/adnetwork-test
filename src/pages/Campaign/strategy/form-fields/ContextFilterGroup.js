@@ -1,5 +1,17 @@
-import {Collapse} from 'components/common';
+//----> Build-in Modules
+import React from 'react';
+
+//---> External Modules
+import PropTypes from 'prop-types';
+import {useTranslation} from 'react-i18next';
+import {Col, Row} from 'reactstrap';
+
+//---> Internal Modules
 import {FormReactSelect} from 'components/forms';
+import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
+import {getListCarriers} from 'utils/helpers/getListCarriers';
+import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
+import {Collapse} from 'components/common';
 import {
   BandwidthOptions,
   BrowsersOptions,
@@ -7,13 +19,11 @@ import {
   OperatingSystemOptions,
   PlatformOptions
 } from 'pages/Campaign/constants';
-import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {Col, Row} from 'reactstrap';
-import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
-import {getListCarriers} from 'utils/helpers/getListCarriers';
-import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
-const propTypes = {};
+
+const propTypes = {
+  isView: PropTypes.bool,
+  currentStrategy: PropTypes.any
+};
 
 const ContextFilterGroup = ({isView = false, currentStrategy}) => {
   const {t} = useTranslation();
