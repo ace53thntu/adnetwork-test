@@ -114,7 +114,7 @@ export function creativeRepoToModel(raw) {
     alternative_play: ALTERNATIVE_PLAY_OPTIONS.find(
       altPlayOpt => altPlayOpt.value === alternative_play
     ),
-    creative_metadata: checkValidJson(creative_metadata)
+    creative_metadata: checkValidJson(JSON.stringify(creative_metadata))
       ? JSON.stringify(creative_metadata)
       : ''
   };

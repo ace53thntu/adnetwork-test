@@ -39,7 +39,7 @@ export function videoRepoToFormValues(raw) {
         ? makeValueForAdSizeFormat(ad_size_format, width, height)
         : null,
     platform: PLATFORM_OPTIONS.find(pfOpt => pfOpt.value === platform),
-    video_metadata: checkValidJson(video_metadata)
+    video_metadata: checkValidJson(JSON.stringify(video_metadata))
       ? JSON.stringify(video_metadata)
       : ''
   };
@@ -86,12 +86,24 @@ export function videoFormValuesToRepo(
     tags,
     third_party_tag,
     third_party_tag_type: third_party_tag_type?.value,
-    ad_size_format: ad_size_format ? 'dropdown' : 'custom',
-    platform: platform?.value,
-    video_metadata: checkValidJson(video_metadata)
-      ? JSON.parse(video_metadata)
-      : {}
+    platform: platform?.value
   };
+
+  if (ad_size_format !== undefined) {
+    obj = {
+      ...obj,
+      ad_size_format: ad_size_format ? 'dropdown' : 'custom'
+    };
+  }
+
+  if (video_metadata !== undefined) {
+    obj = {
+      ...obj,
+      video_metadata: checkValidJson(video_metadata)
+        ? JSON.parse(video_metadata)
+        : {}
+    };
+  }
 
   if (linearity?.value) {
     obj.linearity = linearity.value;
