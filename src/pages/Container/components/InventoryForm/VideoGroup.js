@@ -10,13 +10,14 @@ import {useFormContext} from 'react-hook-form';
 import {Collapse} from 'components/common';
 import {FormReactSelect, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import {LinearityOptions, ProtocolOptions} from 'constants/misc';
-import {VideoMineOptions} from 'constants/inventory';
+import {LinearityOptions} from 'constants/misc';
 import {StartDelayOptions} from 'pages/Campaign/constants';
+import Protocol from './Protocol';
+import VideoMime from './VideoMime';
 
-const VideoGroup = ({ currentInventory}) => {
+const VideoGroup = ({currentInventory}) => {
   const {t} = useTranslation();
-  const {formState,  watch} = useFormContext();
+  const {formState, watch} = useFormContext();
   const skip = watch('metadata.skip');
 
   return (
@@ -106,24 +107,10 @@ const VideoGroup = ({ currentInventory}) => {
           />
         </Col>
         <Col sm="12">
-          <FormReactSelect
-            name="metadata.protocols"
-            label={t('protocols')}
-            placeholder={t('selectProtocol')}
-            options={ProtocolOptions}
-            disabled={formState.isSubmitting}
-            multiple
-          />
+          <Protocol />
         </Col>
         <Col sm={12}>
-          <FormReactSelect
-            name="metadata.mimes"
-            label={t('FORM.SUPPORT_MIMES_TYPE')}
-            placeholder={`Select ${t('FORM.SUPPORT_MIMES_TYPE')}`}
-            options={VideoMineOptions}
-            disabled={formState.isSubmitting}
-            multiple
-          />
+          <VideoMime />
         </Col>
         <Col sm="3">
           <FormGroup className="d-flex justify-content-end flex-column mb-0">
