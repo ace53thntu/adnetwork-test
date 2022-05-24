@@ -1,5 +1,5 @@
 import {BlockOverlay, StrapConfirmModal} from 'components/common';
-import {FormCheckbox, FormTextInput} from 'components/forms';
+import {FormCheckbox, FormReactSelect, FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -19,7 +19,13 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {alternativeFormValuesToRepo} from '../BannerForm/dto';
 import {UploadFile} from '../UploadFile';
-import {ACCEPT_FILES, LIMIT_FILE_SIZE, formAlternativeName} from './constants';
+import {
+  ACCEPT_FILES,
+  ALTERNATIVE_FILE_TYPES,
+  ALTERNATIVE_PLAY_TYPES,
+  LIMIT_FILE_SIZE,
+  formAlternativeName
+} from './constants';
 
 function AlternativeForm(props) {
   const {
@@ -211,6 +217,27 @@ function AlternativeForm(props) {
             </Col>
           </Row>
 
+          <Row>
+            <Col md={6}>
+              <FormReactSelect
+                options={ALTERNATIVE_FILE_TYPES}
+                placeholder=""
+                name={`${prefixName}.file_type`}
+                label="File type"
+                defaultValue={defaultValues.file_type}
+              />
+            </Col>
+            <Col md={6}>
+              <FormReactSelect
+                options={ALTERNATIVE_PLAY_TYPES}
+                placeholder=""
+                name={`${prefixName}.play_type`}
+                label="Play type"
+                defaultValue={defaultValues.play_type}
+              />
+            </Col>
+          </Row>
+
           {/* <Row>
             <Col>
               <FormTextInput
@@ -263,7 +290,7 @@ function AlternativeForm(props) {
           </Row> */}
 
           <Row>
-            <Col md={2}>
+            <Col md={6}>
               <FormTextInput
                 placeholder=""
                 type="number"
@@ -297,7 +324,7 @@ function AlternativeForm(props) {
               />
             </Col>
             */}
-            <Col md={3}>
+            <Col md={6}>
               <FormCheckbox
                 defaultValue={
                   defaultValues?.sound ? defaultValues.sound : false

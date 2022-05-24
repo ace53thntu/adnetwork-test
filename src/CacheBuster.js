@@ -23,15 +23,7 @@ function withClearCache(Component) {
         .then(response => response.json())
         .then(meta => {
           const latestVersionDate = meta.buildDate;
-          console.log(
-            '🚀 ~ file: CacheBuster.js ~ line 26 ~ useEffect ~ latestVersionDate',
-            latestVersionDate
-          );
           const currentVersionDate = packageJson.buildDate;
-          console.log(
-            '🚀 ~ file: CacheBuster.js ~ line 28 ~ useEffect ~ currentVersionDate',
-            currentVersionDate
-          );
 
           const shouldForceRefresh = buildDateGreaterThan(
             latestVersionDate,

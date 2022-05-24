@@ -11,7 +11,7 @@ function ErrorBoundary(props) {
     <RErrorBoundary
       FallbackComponent={FullPageErrorFallback}
       onReset={() => {
-        window.location.reload(true);
+        window.location.reload();
       }}
     >
       <React.Suspense fallback={<Loading />}>{children}</React.Suspense>

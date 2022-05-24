@@ -5,7 +5,11 @@ import {useFieldArray, useFormContext} from 'react-hook-form';
 import {Button} from 'reactstrap';
 
 import AlternativeForm from './AlternativeForm';
-import {formAlternativeName} from './constants';
+import {
+  ALTERNATIVE_FILE_TYPES,
+  ALTERNATIVE_PLAY_TYPES,
+  formAlternativeName
+} from './constants';
 
 const alternativeDefaultValues = {
   name: '',
@@ -22,7 +26,9 @@ const alternativeDefaultValues = {
   // only_catalog_products: false,
   // catalog_id: '0',
   file: null,
-  rawId: ''
+  rawId: '',
+  file_type: ALTERNATIVE_FILE_TYPES[0],
+  play_type: ALTERNATIVE_PLAY_TYPES[0]
 };
 
 function Alternatives(props) {
