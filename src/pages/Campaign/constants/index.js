@@ -1,3 +1,6 @@
+/**
+ * @enum
+ */
 export const Platform = {
   WINDOWS: 1,
   MAC: 2,
@@ -59,10 +62,10 @@ export const PlatformOptions = [
     value: Platform.BOT,
     label: 'Bot'
   },
-  {
-    value: Platform.UNKNOWN,
-    label: 'Unknown'
-  }
+  // {
+  //   value: Platform.UNKNOWN,
+  //   label: 'Unknown'
+  // }
 ];
 
 /**
@@ -123,58 +126,66 @@ export const StartDelayOptions = [
 /**
  * @enum
  */
-export const MobileCarrier = {
-  UNKNOWN: 0,
-  OTHER: 1,
-  VIETTEL: 2,
-  MOBIPHONE: 3,
-  VINAPHONE: 4,
-  VIETNAMMOBILE: 5
-};
-
-export const MobileCarrierOptions = [
-  {value: MobileCarrier.VIETTEL, label: 'Viettel'},
-  {value: MobileCarrier.MOBIPHONE, label: 'Mobiphone'},
-  {value: MobileCarrier.VINAPHONE, label: 'Vinaphone'},
-  {value: MobileCarrier.VIETNAMMOBILE, label: 'Vietnammobile'},
-  {value: MobileCarrier.OTHER, label: 'Other'},
-  {value: MobileCarrier.UNKNOWN, label: 'Unknown'}
-];
-
-/**
- * @enum
- */
 export const Bandwidth = {
   UNKNOWN: 0,
-  OTHER: 1,
-  CABLE: 2,
-  WIFI: 3,
-  MOBILE: 4
+  ETHERNET: 1,
+  WIFI: 2,
+  CELLULAR_NETWORK_UNKNOWN_GENERATION: 3,
+  CELLULAR_NETWORK_2G: 4,
+  CELLULAR_NETWORK_3G: 5,
+  CELLULAR_NETWORK_4G: 6
 };
 
 export const BandwidthOptions = [
-  {value: Bandwidth.CABLE, label: 'Cable'},
+  {value: Bandwidth.ETHERNET, label: 'Ethernet'},
   {value: Bandwidth.WIFI, label: 'Wifi'},
-  {value: Bandwidth.MOBILE, label: 'Mobile'},
-  {value: Bandwidth.OTHER, label: 'Other'},
-  {value: Bandwidth.UNKNOWN, label: 'Unknown'}
+  {
+    value: Bandwidth.CELLULAR_NETWORK_UNKNOWN_GENERATION,
+    label: 'Cellular Network – Unknown Generation'
+  },
+  {value: Bandwidth.CELLULAR_NETWORK_2G, label: 'Cellular Network – 2g'},
+  {value: Bandwidth.CELLULAR_NETWORK_3G, label: 'Cellular Network – 3g'},
+  {value: Bandwidth.CELLULAR_NETWORK_4G, label: 'Cellular'},
+  // {value: Bandwidth.UNKNOWN, label: 'Unknown'}
 ];
 
 /**
  * @enum
  */
 export const OperatingSystem = {
-  OTHER: 1,
-  ANDROID: 2,
-  IOS: 3,
-  MICROSOFT: 4
+  UNKNOWN: 0,
+  WINDOWS_PHONE: 1,
+  WINDOWS: 2,
+  MAC_OSX: 3,
+  IOS: 4,
+  ANDROID: 5,
+  BLACKBERRY: 6,
+  CHROME_OS: 7,
+  KINDLE: 8,
+  WEB_OS: 9,
+  LINUX: 10,
+  PLAYSTATION: 11,
+  XBOX: 12,
+  NINTENDO: 13,
+  BOT: 14
 };
 
 export const OperatingSystemOptions = [
+  {value: OperatingSystem.WINDOWS_PHONE, label: 'Windows phone'},
+  {value: OperatingSystem.WINDOWS, label: 'Windows'},
+  {value: OperatingSystem.MAC_OSX, label: 'Mac OSX'},
+  {value: OperatingSystem.IOS, label: 'iOS'},
   {value: OperatingSystem.ANDROID, label: 'Android'},
-  {value: OperatingSystem.IOS, label: 'IOS'},
-  {value: OperatingSystem.MICROSOFT, label: 'Microsoft'},
-  {value: OperatingSystem.OTHER, label: 'Other'}
+  {value: OperatingSystem.BLACKBERRY, label: 'Blackberry'},
+  {value: OperatingSystem.CHROME_OS, label: 'Chrome OS'},
+  {value: OperatingSystem.KINDLE, label: 'Kindle'},
+  {value: OperatingSystem.WEB_OS, label: 'Web OS'},
+  {value: OperatingSystem.LINUX, label: 'Linux'},
+  {value: OperatingSystem.PLAYSTATION, label: 'Playstation'},
+  {value: OperatingSystem.XBOX, label: 'Xbox'},
+  {value: OperatingSystem.NINTENDO, label: 'Nintendo'},
+  {value: OperatingSystem.BOT, label: 'Bot'},
+  // {value: OperatingSystem.UNKNOWN, label: 'Unknown'}
 ];
 
 /**
@@ -218,7 +229,7 @@ export const Browsers = {
 };
 
 export const BrowsersOptions = [
-  {value: Browsers.UNKNOWN, label: 'Unknown'},
+  // {value: Browsers.UNKNOWN, label: 'Unknown'},
   {value: Browsers.CHROME, label: 'Chrome'},
   {value: Browsers.IE, label: 'Internet Explorer'},
   {value: Browsers.SAFARI, label: 'Safari'},
