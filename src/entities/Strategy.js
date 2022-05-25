@@ -123,7 +123,10 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     priority: selectedPriority || {value: Priority.NORMAL, label: 'Normal'},
     cpm_max: convertApiToGui({value: cpm_max}),
     video_filter: {
-      skip_delay: video_filter?.skip_delay || '',
+      skip_delay:
+        video_filter?.skip_delay || video_filter?.skip_delay === 0
+          ? video_filter?.skip_delay
+          : '',
       start_delay:
         StartDelayOptions?.find(
           item => item?.value === video_filter?.start_delay
@@ -398,50 +401,22 @@ const getVideoFilter = ({
     return videoFilter;
   } else {
     // Case: edit
-    if (formVideoFilter?.skip_delay) {
-      videoFilter.skip_delay = formVideoFilter?.skip_delay
-        ? parseInt(formVideoFilter?.skip_delay)
-        : null;
-    } else {
-      if (currentVideoFilter?.skip_delay) {
-        videoFilter.skip_delay = currentVideoFilter?.skip_delay;
-      } else {
-        videoFilter.skip_delay = null;
-      }
-    }
-    if (formVideoFilter?.start_delay) {
-      videoFilter.start_delay = formVideoFilter?.start_delay
-        ? formVideoFilter?.start_delay?.value
-        : null;
-    } else {
-      videoFilter.start_delay = null;
-    }
-    if (formVideoFilter?.ptype) {
-      videoFilter.ptype = formVideoFilter?.ptype
-        ? formVideoFilter?.ptype?.value
-        : null;
-    } else {
-      videoFilter.ptype = null;
-    }
-    if (formVideoFilter?.linearity) {
-      videoFilter.linearity = formVideoFilter?.linearity
-        ? formVideoFilter?.linearity?.value
-        : null;
-    } else {
-      videoFilter.linearity = null;
-    }
-    if (formVideoFilter?.protocols) {
-      videoFilter.protocols = formVideoFilter?.protocols
-        ? formVideoFilter?.protocols?.value
-        : null;
-    } else {
-      videoFilter.protocols = null;
-    }
+    // if (formVideoFilter?.skip_delay || formVideoFilter?.skip_delay === 0) {
+    videoFilter.skip_delay = getSkipDelay(formVideoFilter?.skip_delay);
+    videoFilter.start_delay = formVideoFilter?.start_delay
+      ? formVideoFilter?.start_delay?.value
+      : null;
+    videoFilter.ptype = formVideoFilter?.ptype
+      ? formVideoFilter?.ptype?.value
+      : null;
+    videoFilter.linearity = formVideoFilter?.linearity
+      ? formVideoFilter?.linearity?.value
+      : null;
+    videoFilter.protocols = formVideoFilter?.protocols
+      ? formVideoFilter?.protocols?.value
+      : null;
     console.log('videoFilter ====', videoFilter);
-    return {
-      ...currentVideoFilter,
-      ...videoFilter
-    };
+    return videoFilter;
   }
 };
 
@@ -588,9 +563,18 @@ const getContextFilter = ({
       contextFilter.platform = [];
     }
 
-    return {
-      ...currentContextFilter,
-      ...contextFilter
-    };
+    return contextFilter;
   }
+};
+
+const getSkipDelay = skipDelay => {
+  if (skipDelay === 0) {
+    return 0;
+  }
+
+  if (!skipDelay) {
+    return null;
+  }
+
+  return parseInt(skipDelay, 10);
 };
