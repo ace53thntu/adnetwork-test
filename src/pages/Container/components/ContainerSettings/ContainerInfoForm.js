@@ -57,7 +57,7 @@ function ContainerInfoForm(props) {
   const isMobile = isIOS || isAndroid;
   const isWebTv = source === 'webtv';
   const isAndroidTv = source === 'androidtv';
-  const isIOSTv = source === 'iostv';
+  const isIOSTv = source === 'appletv';
 
 
   const formDefaultValues = mappingApiToForm({

@@ -25,11 +25,10 @@ import {
 } from 'reactstrap';
 
 import DirectSnippet from '../Snippets/DirectUrlSnippet';
-import InventorySnippet from '../Snippets/InventorySnippet';
 import DspSelect from './DspSelect';
 import InventoryProperty from './InventoryProperty';
+import InventorySnippet from './InventorySnippet';
 import TrackerForm from './TrackerForm';
-import {SDK_NAME} from 'constants/container';
 
 const formName = {
   properties: 'properties',
@@ -48,13 +47,6 @@ const propTypes = {
   inventoryFormatOptions: PropTypes.array,
   inventory: PropTypes.object,
   toggle: PropTypes.func
-};
-
-const inventoryCodeSnippet = inventoryId => {
-  return `window.${SDK_NAME}.requestAds([{
-    inventoryId: ${inventoryId},
-    placementId: "//your placement ID in DOM"
-  }]);`;
 };
 
 const directURLCodeSnippet = inventoryId => {
@@ -234,16 +226,10 @@ const InventoryFormContent = ({
           </Col>
         </Row>
         <InventoryProperty currentInventory={inventory} isCreate={isCreate} />
+        <TrackerForm />
+
         {inventory?.uuid && (
           <>
-            <Row className="mb-3">
-              <Col>
-                <InventorySnippet>
-                  {inventoryCodeSnippet(inventory?.id || '')}
-                </InventorySnippet>
-              </Col>
-            </Row>
-
             <Row className="mb-3">
               <Col>
                 <DirectSnippet>
@@ -251,10 +237,13 @@ const InventoryFormContent = ({
                 </DirectSnippet>
               </Col>
             </Row>
+            <Row className="mb-3">
+              <Col>
+                <InventorySnippet inventoryId={inventory?.id} />
+              </Col>
+            </Row>
           </>
         )}
-
-        <TrackerForm />
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" onClick={toggle}>
@@ -284,4 +273,4 @@ const InventoryFormContent = ({
 
 InventoryFormContent.propTypes = propTypes;
 
-export default (InventoryFormContent);
+export default InventoryFormContent;

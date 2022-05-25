@@ -14,8 +14,13 @@ export const SDK_CDN =
   window?.ADN_META_DATA?.SDK_CDN ??
   'https://cdn.aicactus.io/aicactus-sdk.min.js';
 export const DOMAIN_NAME = window?.ADN_META_DATA?.DOMAIN_NAME ?? 'aicactus';
+
+// SDK Mobile
 export const SDK_IOS_CONFIG = window?.SDK_IOS_CONFIG ?? 'Aicactus SDK Config';
 export const SDK_IOS_NAME = window?.SDK_IOS_NAME ?? 'AicactusAdsNetwork';
+export const SDK_ANDROID_NAME = window?.SDK_ANDROID_NAME ?? 'AicactusAdsNetwork';
+export const SDK_ANDROID_NAME_SPACE = window?.SDK_ANDROID_NAME_SPACE ?? 'io.aicactus.adsnetwork';
+export const SDK_ANDROID_DEPENDENCY = window?.SDK_ANDROID_DEPENDENCY ?? 'io.aicactus:adsnetwork';
 
 export const CONTAINER_TREE_TAGS = [
   {

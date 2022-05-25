@@ -66,7 +66,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
         </Col>
         <Col md="6">
           <FormReactSelect
-            disabled={isView}
+            disabled={true}
             defaultValue={currentStrategy?.context_filter?.mobile_carrier}
             options={getListCarriers()}
             name="context_filter.mobile_carrier"

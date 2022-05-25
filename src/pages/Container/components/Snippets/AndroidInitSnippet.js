@@ -1,58 +1,104 @@
 import React from 'react';
 
-import ReactPrismjs from '@uiw/react-prismjs';
-import {DOMAIN_NAME, SDK_NAME, SDK_NAME_1} from 'constants/container';
+import {Link} from 'react-router-dom';
+import {CopyBlock, atomOneLight} from 'react-code-blocks';
+import {SDK_ANDROID_NAME_SPACE, SDK_ANDROID_DEPENDENCY, SDK_ANDROID_NAME} from 'constants/container';
 
-function AndroidInitSnippet({containerId, isTv = false}) {
+function IosInitSnippet({containerId, isTv = false}) {
   return (
     <div className="aicactus-snippet-container">
-      Modify build.gradle at the root project in this way:
-      <ReactPrismjs
-        language="javascript"
-        source={`allprojects {
-          repositories {
-              mavenCentral()
-              maven {
-                  url 'https://oss.sonatype.org/content/groups/public'
-              }
-  }`}
-        className=""
+      <h3 className="font-weight-bold">Example</h3>
+      <hr />
+      <div>
+        To run the example project, clone the repo, and open it using Android
+        Studio.
+      </div>
+      <div>
+        Go to Android Manifest and replace YOUR_CONTAINER_ID or can pass as an
+        argument to setup method
+      </div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`<meta-data
+    android:name="${SDK_ANDROID_DEPENDENCY}.CONTAINER_ID"
+    android:value="${containerId}"
+/>`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
       />
-      then in the build.gradle (at the module level) you add the new dependency:
-      <ReactPrismjs
-        language="javascript"
-        source={`implementation 'io.${DOMAIN_NAME}.sdk:${SDK_NAME_1}:1.0.0'`}
-        className=""
+      <h3 className="font-weight-bold mt-3">Installation</h3>
+      <hr />
+      <div className="mb-2">
+        ${SDK_ANDROID_NAME} is available through{' '}
+        <Link to="https://mvnrepository.com/search?q=aicactus">MVN</Link>. To
+        install it, add mavenCentral to your repositories if it's not added yet.
+      </div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`repositories {
+    mavenCentral()
+}`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
       />
-      In your MainApplication or MainActivity, onCreate method , set up the SDK
-      like so:
-      <ReactPrismjs
-        language="javascript"
-        source={`override fun onCreate() {
-          super.onCreate()
-
-          // Create an client with the given context and  write key.
-          val config = ${SDK_NAME}.Builder(this, '${containerId}@${!isTv ? 'android' : 'androidtv'}')
-              // Enable this to record certain application events automatically!
-              .trackApplicationLifecycleEvents()
-              // Enable this to record screen views automatically!
-              .recordScreenViews()
-              .build()
-
-          // Set the initialized instance as a globally accessible instance.
-          ${SDK_NAME}.setup(config)
-  }`}
-        className=""
+      <div className='mt-2 mb-2'>Import Aicactus AdsNetwork SDK dependency</div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`dependencies {
+    implementation 'io.aicactus:adsnetwork:1.X.X'
+}`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
       />
-      And of course, import the SDK in the files that you use it by adding the
-      following line:
-      <ReactPrismjs
-        language="javascript"
-        source={`import io.${DOMAIN_NAME}.sdk.${SDK_NAME}`}
-        className=""
+      <h3 className="font-weight-bold mt-3">Usage</h3>
+      <hr />
+      <h6 className="font-weight-bold mt-3">Init</h6>
+      <strong>From AndroidManifest.xml</strong>
+      <div className="mb-2">
+      Add this code to app manifest, wrapped in <code>{`<application>`}</code> tag and replace YOUR_CONTAINER_ID
+      </div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`<meta-data
+    android:name="${SDK_ANDROID_NAME_SPACE}.CONTAINER_ID"
+    android:value="${containerId}"
+/>`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
+      />
+      <div className="mt-2 mb-2">Then in code</div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`import ${SDK_ANDROID_NAME_SPACE}.internal.${SDK_ANDROID_NAME}
+${SDK_ANDROID_NAME}.setup(context) { _, errorMessage -> }`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
+      />
+      <div className="font-weight-bold mt-2 mb-2">
+        Or setup from code directly
+      </div>
+      <CopyBlock
+        theme={atomOneLight}
+        text={`import ${SDK_ANDROID_NAME_SPACE}.internal.${SDK_ANDROID_NAME}
+${SDK_ANDROID_NAME}.setup(context, "${containerId}") { _, errorMessage -> }
+`}
+        language="kotlin"
+        showLineNumbers={false}
+        wrapLines
+        codeBlock
       />
     </div>
   );
 }
 
-export default AndroidInitSnippet;
+export default IosInitSnippet;
