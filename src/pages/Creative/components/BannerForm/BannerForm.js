@@ -33,6 +33,7 @@ import Box from '@material-ui/core/Box';
 
 import {Alternatives} from '../Alternatives';
 import Report from '../Report';
+import {Trackers} from '../Trackers';
 import {
   AD_SIZE_FORMAT_OPTIONS,
   ALTERNATIVE_PLAY_OPTIONS,
@@ -429,6 +430,15 @@ function BannerForm(props) {
           </Box>
         </form>
       </FormProvider>
+
+      <hr />
+      <Row>
+        <Col>
+          <Trackers referenceId={creative?.uuid} referenceType="creative" />
+        </Col>
+      </Row>
+      <hr />
+
       {/* BEGIN: Report */}
       {creative?.uuid && (
         <Report
