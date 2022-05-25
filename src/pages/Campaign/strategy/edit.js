@@ -94,6 +94,7 @@ const StrategyEdit = () => {
                 currentStrategy={strategy}
                 isCreate={false}
                 campaignId={strategyData?.campaign_uuid}
+                originalStrategy={strategyData}
               />
             </Col>
           </Row>

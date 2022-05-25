@@ -34,7 +34,8 @@ const FormContainer = ({
   currentStrategy = null,
   isSummary = false,
   children,
-  isConcept = false
+  isConcept = false,
+  originalStrategy
 }) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
@@ -114,7 +115,8 @@ const FormContainer = ({
         isConcept,
         isSummary,
         currentStrategy,
-        isEdit
+        isEdit,
+        originalStrategy
       });
       console.log('======== FORM DATA', req);
 
@@ -195,6 +197,7 @@ const FormContainer = ({
       isEdit,
       isSummary,
       navigate,
+      originalStrategy,
       redirectPageAfterSave,
       reset,
       strategyId

@@ -22,7 +22,8 @@ const StrategyEditTabs = ({
   currentStrategy = {},
   campaignId,
   isCreate = false,
-  concepts
+  concepts,
+  originalStrategy
 }) => {
   const navigate = useNavigate();
   const query = useQueryString();
@@ -46,9 +47,10 @@ const StrategyEditTabs = ({
     () => ({
       isEdit: !isCreate,
       currentStrategy,
-      goTo
+      goTo,
+      originalStrategy
     }),
-    [currentStrategy, goTo, isCreate]
+    [currentStrategy, goTo, isCreate, originalStrategy]
   );
 
   const tabDetail = useMemo(

@@ -17,8 +17,15 @@ import VideoMime from './VideoMime';
 
 const VideoGroup = ({currentInventory}) => {
   const {t} = useTranslation();
-  const {formState, watch} = useFormContext();
+  const {formState, watch, setValue} = useFormContext();
   const skip = watch('metadata.skip');
+
+  React.useEffect(() => {
+    if(skip !== 'active'){
+      setValue('metadata.skip_after', '')
+      setValue('metadata.skip_min', '')
+    }
+  }, [setValue, skip])
 
   return (
     <Collapse initialOpen title={t('FORM.VIDEO_CONFIGURATION')} unMount={false}>
@@ -63,6 +70,7 @@ const VideoGroup = ({currentInventory}) => {
             disabled={formState.isSubmitting}
           />
         </Col>
+
         <Col md="6">
           <CurrencyInputField
             name="metadata.skip_after"

@@ -183,6 +183,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
 export const formToApi = ({
   formData,
   currentStrategy,
+  originalStrategy,
   isConcept = false,
   isSummary = false,
   isEdit = false
@@ -236,30 +237,14 @@ export const formToApi = ({
   const videoFilter = getVideoFilter({
     isEdit,
     formVideoFilter: video_filter,
-    currentVideoFilter: currentStrategy?.video_filter
+    currentVideoFilter: originalStrategy?.video_filter
   });
+  console.log('🚀 ~ file: Strategy.js ~ line 241 ~ videoFilter', videoFilter);
   const contextFilter = getContextFilter({
     isEdit,
-    contextFilterForm:context_filter,
-    currentContextFilter: currentStrategy?.context_filter
+    contextFilterForm: context_filter,
+    currentContextFilter: originalStrategy?.context_filter
   });
-  // if (video_filter?.skip_delay) {
-  //   videoFilter.skip_delay = video_filter?.skip_delay
-  //     ? parseInt(video_filter?.skip_delay)
-  //     : null;
-  // }
-  // if (video_filter?.start_delay) {
-  //   videoFilter.start_delay = video_filter?.start_delay?.value;
-  // }
-  // if (video_filter?.ptype) {
-  //   videoFilter.ptype = video_filter?.ptype?.value;
-  // }
-  // if (video_filter?.linearity) {
-  //   videoFilter.linearity = video_filter?.linearity?.value;
-  // }
-  // if (video_filter?.protocols) {
-  //   videoFilter.protocols = video_filter?.protocols?.value;
-  // }
 
   //---> CONTEXT FILTER
 
@@ -278,8 +263,6 @@ export const formToApi = ({
     video_filter: videoFilter,
     context_filter: contextFilter
   };
-
-
 
   if (
     !strategyReturn?.context_filter ||
@@ -419,27 +402,42 @@ const getVideoFilter = ({
       videoFilter.skip_delay = formVideoFilter?.skip_delay
         ? parseInt(formVideoFilter?.skip_delay)
         : null;
+    } else {
+      if (currentVideoFilter?.skip_delay) {
+        videoFilter.skip_delay = currentVideoFilter?.skip_delay;
+      } else {
+        videoFilter.skip_delay = null;
+      }
     }
     if (formVideoFilter?.start_delay) {
       videoFilter.start_delay = formVideoFilter?.start_delay
         ? formVideoFilter?.start_delay?.value
         : null;
+    } else {
+      videoFilter.start_delay = null;
     }
     if (formVideoFilter?.ptype) {
       videoFilter.ptype = formVideoFilter?.ptype
         ? formVideoFilter?.ptype?.value
         : null;
+    } else {
+      videoFilter.ptype = null;
     }
     if (formVideoFilter?.linearity) {
       videoFilter.linearity = formVideoFilter?.linearity
         ? formVideoFilter?.linearity?.value
         : null;
+    } else {
+      videoFilter.linearity = null;
     }
     if (formVideoFilter?.protocols) {
       videoFilter.protocols = formVideoFilter?.protocols
         ? formVideoFilter?.protocols?.value
         : null;
+    } else {
+      videoFilter.protocols = null;
     }
+    console.log('videoFilter ====', videoFilter);
     return {
       ...currentVideoFilter,
       ...videoFilter
@@ -513,7 +511,10 @@ const getContextFilter = ({
   } else {
     if (contextFilterForm?.browser && contextFilterForm?.browser?.length > 0) {
       contextFilter.browser = formatListData(contextFilterForm.browser);
+    } else {
+      contextFilter.browser = [];
     }
+
     if (
       contextFilterForm?.operating_system &&
       contextFilterForm?.operating_system?.length > 0
@@ -521,7 +522,10 @@ const getContextFilter = ({
       contextFilter.operating_system = formatListData(
         contextFilterForm?.operating_system
       );
+    } else {
+      contextFilter.operating_system = [];
     }
+
     if (
       contextFilterForm?.browser_language &&
       contextFilterForm?.browser_language?.length > 0
@@ -529,7 +533,10 @@ const getContextFilter = ({
       contextFilter.browser_language = formatListData(
         contextFilterForm?.browser_language
       );
+    } else {
+      contextFilter.browser_language = [];
     }
+
     if (
       contextFilterForm?.device_manufacturer &&
       contextFilterForm?.device_manufacturer?.length > 0
@@ -537,13 +544,19 @@ const getContextFilter = ({
       contextFilter.device_manufacturer = formatListData(
         contextFilterForm?.device_manufacturer
       );
+    } else {
+      contextFilter.device_manufacture = [];
     }
+
     if (
       contextFilterForm?.bandwidth &&
       contextFilterForm?.bandwidth?.length > 0
     ) {
       contextFilter.bandwidth = formatListData(contextFilterForm?.bandwidth);
+    } else {
+      contextFilter.bandwidth = [];
     }
+
     if (
       contextFilterForm?.mobile_carrier &&
       contextFilterForm?.mobile_carrier?.length > 0
@@ -551,7 +564,10 @@ const getContextFilter = ({
       contextFilter.mobile_carrier = formatListData(
         contextFilterForm?.mobile_carrier
       );
+    } else {
+      contextFilter.mobile_carrier = [];
     }
+
     if (
       contextFilterForm?.device_type &&
       contextFilterForm?.device_type?.length > 0
@@ -559,13 +575,19 @@ const getContextFilter = ({
       contextFilter.device_type = formatListData(
         contextFilterForm?.device_type
       );
+    } else {
+      contextFilter.device_type = [];
     }
+
     if (
       contextFilterForm?.platform &&
       contextFilterForm?.platform?.length > 0
     ) {
       contextFilter.platform = formatListData(contextFilterForm?.platform);
+    } else {
+      contextFilter.platform = [];
     }
+
     return {
       ...currentContextFilter,
       ...contextFilter

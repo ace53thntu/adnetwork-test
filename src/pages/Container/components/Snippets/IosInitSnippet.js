@@ -48,7 +48,7 @@ function IosInitSnippet({containerId, isTv = false}) {
       <strong>From Info.plist</strong>
       <div className="mb-2">
         Add this code to Info.plist and replace your container ID
-      </div>
+      </div>ừa
       <CopyBlock
         theme={atomOneLight}
         text={`<key>${SDK_IOS_CONFIG}</key>

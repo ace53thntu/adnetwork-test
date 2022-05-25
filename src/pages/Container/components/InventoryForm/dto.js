@@ -89,12 +89,15 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       formatMetadata.max_duration =
         parseInt(metadata?.max_duration, 10) || null;
     }
-    if (metadata?.skip_min) {
-      formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
+    if(metadata?.skip === 'active'){
+      if (metadata?.skip_min) {
+        formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
+      }
+      if (metadata?.skip_after) {
+        formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
+      }
     }
-    if (metadata?.skip_after) {
-      formatMetadata.skip_after = parseInt(metadata?.skip_after, 10) || null;
-    }
+
     if (metadata.start_delay) {
       formatMetadata.start_delay = metadata?.start_delay
         ? metadata.start_delay?.value
