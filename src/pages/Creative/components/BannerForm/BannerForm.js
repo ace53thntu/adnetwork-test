@@ -302,14 +302,14 @@ function BannerForm(props) {
                       />
                     </Col>
 
-                    <Col md="4">
+                    {/* <Col md="4">
                       <FormTextInput
                         placeholder=""
                         name="extra_trackers"
                         label="Extra trackers"
                         defaultValue={defaultValues.extra_trackers}
                       />
-                    </Col>
+                    </Col> */}
 
                     <Col md="4">
                       <FormReactSelect

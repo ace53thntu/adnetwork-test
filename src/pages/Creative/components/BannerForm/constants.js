@@ -16,8 +16,15 @@ export const CREATIVE_TYPES = [
 export const THIRD_PARTY_TAG_TYPES = [
   {
     label: 'Mustache',
-    value: 'mustache',
-    id: 'mustache'
+    value: 'mustache'
+  },
+  {
+    label: 'Vast Url',
+    value: 'vast_url'
+  },
+  {
+    label: 'Html Tag',
+    value: 'html_tag'
   }
 ];
 
