@@ -54,11 +54,10 @@ function ContainerInfoForm(props) {
 
   const isIOS = source === 'ios';
   const isAndroid = source === 'android';
-  const isMobile = isIOS || isAndroid;
-  const isWebTv = source === 'webtv';
   const isAndroidTv = source === 'androidtv';
   const isIOSTv = source === 'appletv';
-
+  const isMobile = isIOS || isAndroid || isAndroidTv || isIOSTv;
+  const isWebTv = source === 'webtv';
 
   const formDefaultValues = mappingApiToForm({
     container,
@@ -183,13 +182,17 @@ function ContainerInfoForm(props) {
 
             <Col sm={12} md={6}>
               {isAndroid && <AndroidInitSnippet containerId={container.uuid} />}
-              {isAndroidTv && <AndroidInitSnippet containerId={container.uuid} isTv/>}
+              {isAndroidTv && (
+                <AndroidInitSnippet containerId={container.uuid} isTv />
+              )}
               {isIOS && <IosInitSnippet containerId={container.uuid} />}
-              {isIOSTv && <IosInitSnippet containerId={container.uuid} isTv/>}
+              {isIOSTv && <IosInitSnippet containerId={container.uuid} isTv />}
               {(!isMobile || isWebTv) && (
                 <div className="aicactus-snippet">
                   <WebIdentifySnippet>
-                    {isWebTv ? getWebTvScript(container.uuid) : defaultValue(container.uuid)}
+                    {isWebTv
+                      ? getWebTvScript(container.uuid)
+                      : defaultValue(container.uuid)}
                   </WebIdentifySnippet>
                 </div>
               )}
