@@ -40,7 +40,7 @@ const DspTabName = {
 const DspView = ({children}) => {
   const role = getRole();
   const {dspId} = useParams();
-  const {data: dspData, isFetching} = useGetDsp(dspId);
+  const {data: dspData, isFetching} = useGetDsp(dspId, !!dspId);
 
   return (
     <DspLayout pageTitle="Dsp Details">
