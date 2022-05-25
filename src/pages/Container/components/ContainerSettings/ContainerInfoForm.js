@@ -186,19 +186,12 @@ function ContainerInfoForm(props) {
               {isAndroidTv && <AndroidInitSnippet containerId={container.uuid} isTv/>}
               {isIOS && <IosInitSnippet containerId={container.uuid} />}
               {isIOSTv && <IosInitSnippet containerId={container.uuid} isTv/>}
-              {!isMobile && (
+              {(!isMobile || isWebTv) && (
                 <div className="aicactus-snippet">
                   <WebIdentifySnippet>
-                    {defaultValue(container.uuid)}
+                    {isWebTv ? getWebTvScript(container.uuid) : defaultValue(container.uuid)}
                   </WebIdentifySnippet>
                 </div>
-              )}
-              {isWebTv && (
-                <div className="aicactus-snippet">
-                <WebIdentifySnippet>
-                  {getWebTvScript(container.uuid)}
-                </WebIdentifySnippet>
-              </div>
               )}
             </Col>
           </Row>

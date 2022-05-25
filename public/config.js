@@ -14,7 +14,7 @@ window.ADN_META_DATA = {
   DIRECT_URL: 'https://staging-adnetwork-core-lb7.aicactus.io/direct-ads',
 
   //---> Staging
-  SDK_IOS_CONFIG: 'Aicactus SDK Config',
+  SDK_IOS_CONFIG: 'Aicactus AdNetwork SDK Config',
   SDK_IOS_NAME: 'AicactusAdsNetwork',
   SDK_ANDROID_NAME: 'AicactusAdsNetwork',
   SDK_ANDROID_NAME_SPACE: 'io.aicactus.adsnetwork',
