@@ -38,6 +38,13 @@ const StrategyEdit = () => {
   const isInitializedInventory = useSelectedIsInitializedInventorySelector();
   const strategy = apiToForm({strategyData});
 
+  React.useEffect(() => {
+    if(isFetching){
+      dispatch(initializedStrategyRedux(false));
+
+    }
+  }, [dispatch, isFetching])
+
   useRedirectInCampaign();
 
   React.useEffect(() => {
