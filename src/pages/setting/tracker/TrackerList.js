@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -12,21 +12,19 @@ import {
   Container,
   Badge
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
+import { List } from 'components/list';
 import Status from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
@@ -34,11 +32,11 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import DomainCreate from './TrackerCreate';
 import DomainEdit from './TrackerEdit';
-import {ModalLayout} from 'components/forms';
+import { ModalLayout } from 'components/forms';
 import DomainForm from './components/tracker.form';
-import {useDeleteTracker, useGetTracker, useGetTrackers} from 'queries/tracker';
+import { useDeleteTracker, useGetTracker, useGetTrackers } from 'queries/tracker';
 import TrackerForm from './components/tracker.form';
-import {TrackerReferenceTypes} from './constant';
+import { TrackerReferenceTypes } from './constant';
 import { ApiError } from 'components/common';
 
 const propTypes = {};
@@ -59,12 +57,7 @@ const renderReferenceTypeColor = type => {
 };
 
 const TrackerList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentTracker, setCurrentTracker] = React.useState(null);
@@ -74,7 +67,7 @@ const TrackerList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Trackers.
-  const {data, isLoading, isPreviousData} = useGetTrackers({
+  const { data, isLoading, isPreviousData } = useGetTrackers({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -86,7 +79,7 @@ const TrackerList = () => {
 
   const trackers = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
@@ -98,7 +91,7 @@ const TrackerList = () => {
     isLoading: isLoadingDelete
   } = useDeleteTracker();
 
-  const {data: tracker} = useGetTracker({
+  const { data: tracker } = useGetTracker({
     trackerId: currentTracker?.uuid,
     enabled: !!currentTracker?.uuid
   });
@@ -179,7 +172,7 @@ const TrackerList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteTracker({trackerId: currentTracker?.uuid});
+      await deleteTracker({ trackerId: currentTracker?.uuid });
       ShowToast.success('Deleted tracker successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -201,7 +194,7 @@ const TrackerList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>{t('trackerList')}</div>
                   <div className="widget-content-right">
@@ -216,7 +209,7 @@ const TrackerList = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (

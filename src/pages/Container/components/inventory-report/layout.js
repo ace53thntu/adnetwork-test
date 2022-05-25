@@ -3,26 +3,19 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {Row, Col, Container} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
+import { Row, Col, Container } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 
 //---> Internal Modules
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 
 const propTypes = {
   pageTitle: PropTypes.string
 };
 
-const InventoryLayout = ({children, pageTitle = ''}) => {
-  const reduxDispatch = useDispatch();
-  const {t} = useTranslation();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+const InventoryLayout = ({ children, pageTitle = '' }) => {
+  const { t } = useTranslation();
 
   return (
     <>

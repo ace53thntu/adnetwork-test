@@ -1,0 +1,26 @@
+/*.ant-radio-button-wrapper {
+  &:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+
+  &:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+}*/
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  color: #fff;
+  background: #545cd8;
+  border-color: #545cd8;
+
+  &:hover {
+    color: #fff;
+    background: #545cd8;
+    border-color: #545cd8;
+  }
+}
+
+.ant-radio-button-wrapper:hover {
+  position: relative;
+  color: #545cd8;
+}

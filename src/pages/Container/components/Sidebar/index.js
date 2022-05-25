@@ -1,18 +1,11 @@
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {Input} from 'reactstrap';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {ContainersTree} from '../Tree';
+import React from 'react';
+import { Input } from 'reactstrap';
+import { ContainersTree } from '../Tree';
 
 import './style.scss';
 
 export default function ContainerSidebar() {
-  const reduxDispatch = useDispatch();
-
-  useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
 
   const onHandleChangeSearch = () => {
     console.log('onHandleChangeSearch');

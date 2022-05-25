@@ -104,7 +104,7 @@ export const createdImportRedux = (source, container) => {
 const containerInitialState = {
   containers: [],
   containersTemp: [],
-  isLoading: true,
+  isLoading: false,
   selectedContainerId: null,
   expandedIds: [],
   selectedSource: null,

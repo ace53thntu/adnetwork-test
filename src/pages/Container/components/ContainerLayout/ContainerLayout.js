@@ -2,27 +2,22 @@ import {
   searchContainersRedux,
   toggleCreateContainerModalRedux
 } from 'store/reducers/container';
-import {useDebounce} from 'hooks/useDebounce';
+import { useDebounce } from 'hooks/useDebounce';
 import * as React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-import {Outlet} from 'react-router';
-import {NavLink} from 'react-router-dom';
-import {Button, Input} from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { Outlet } from 'react-router';
+import { NavLink } from 'react-router-dom';
+import { Button, Input } from 'reactstrap';
 
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {ContainersTree} from '../Tree';
+import { ContainersTree } from '../Tree';
 // import ContainerCreateDialog from '../ContainerCreateDialog';
 
 function ContainerLayout(props) {
   const reduxDispatch = useDispatch();
-  const {t} = useTranslation();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   const [keyword, setKeyword] = React.useState('');
 

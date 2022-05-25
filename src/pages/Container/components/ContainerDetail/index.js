@@ -1,5 +1,6 @@
-import {ErrorBoundary} from 'components/common';
 import React from 'react';
+import {ErrorBoundary} from 'components/common';
+import "./index.scss";
 
 const ContainerDetail = React.lazy(() =>
   import('./ContainerDetail' /* webpackChunkName: "container-detail" */)

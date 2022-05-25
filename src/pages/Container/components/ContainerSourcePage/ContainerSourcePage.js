@@ -12,6 +12,7 @@ import {ContainerBodyLayout} from '../Layouts';
 import {WebsiteTag} from '../WebsiteTag';
 import { WebTvTag } from '../WebTvTag';
 import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
+import TreeSelectContainer from "../TreeSelectContainer";
 
 function ContainerSourcePage(props) {
   const {source} = useParams();
@@ -53,6 +54,9 @@ function ContainerSourcePage(props) {
       heading={SOURCE_HEADINGS[source]}
       subHeading={SOURCE_SUB_HEADINGS[source]}
     >
+      <Row style={{ paddingLeft: '15px' }}>
+        <TreeSelectContainer />
+      </Row>
       {isFetching ? 'Loading...' : _renderBySource()}
     </ContainerBodyLayout>
   );

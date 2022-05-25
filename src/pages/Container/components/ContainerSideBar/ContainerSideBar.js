@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {Input, Button} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Input, Button } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 // import BlockUi from 'react-block-ui';
 
 // redux actions
@@ -14,20 +14,14 @@ import ContainerCreateDialog from '../ContainerCreateDialog';
 
 // import {getPartnerId} from 'core/utils/auth';
 // import {useContainers} from 'pages/Container/hooks/useContainers';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 
 function ContainerSideBar() {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
+  const { t } = useTranslation();
   // const partnerId = getPartnerId();
 
   // const {data: containers} = useContainers({partnerId});
   const containers = [];
-
-  useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
 

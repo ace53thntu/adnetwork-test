@@ -2,21 +2,19 @@
 import React from 'react';
 
 //---> External Modules
-import {Card, CardHeader, Row, Col, CardBody, Container} from 'reactstrap';
-import {useDispatch} from 'react-redux';
-import {useTranslation} from 'react-i18next';
+import { Card, CardHeader, Row, Col, CardBody, Container } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {LoadingIndicator} from 'components/common';
-import {useGetContainersInfinity} from 'queries/container';
-import {AccordionList} from 'components/list';
-import {capitalize} from 'utils/helpers/string.helpers';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
+import { LoadingIndicator } from 'components/common';
+import { useGetContainersInfinity } from 'queries/container';
+import { AccordionList } from 'components/list';
+import { capitalize } from 'utils/helpers/string.helpers';
 import Status from 'components/list/status';
-import {ContainerPage} from './components';
+import { ContainerPage } from './components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {FilterBar, FilterBarForm} from './components/filter-bar';
+import { FilterBar, FilterBarForm } from './components/filter-bar';
 import {
   getInventoryFormats,
   getInventoryTypes
@@ -25,15 +23,15 @@ import {
   useFilterParamsSelector,
   useSearchTypeSelector
 } from 'store/reducers/inventory-market';
-import {InventoryListLayout} from './components/inventory-list-layout';
-import {isFalsy} from 'utils/validateObject';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
-import {getResponseData} from 'utils/helpers/misc.helpers';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import { InventoryListLayout } from './components/inventory-list-layout';
+import { isFalsy } from 'utils/validateObject';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
+import { Pagination } from 'components/list/pagination';
+import { getResponseData } from 'utils/helpers/misc.helpers';
+import { getRole } from 'utils/helpers/auth.helpers';
+import { USER_ROLE } from 'pages/user-management/constants';
 
-const getStatus = ({row, statusProps}) => {
+const getStatus = ({ row, statusProps }) => {
   switch (row.value) {
     case 'active':
       statusProps.color = 'success';
@@ -53,11 +51,11 @@ const getStatus = ({row, statusProps}) => {
 };
 
 const InventoryMarket = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const role = getRole();
   //---> Query list of containers
   const {
-    data: {pages = []} = {},
+    data: { pages = [] } = {},
     hasNextPage,
     fetchNextPage,
     isFetching,
@@ -74,7 +72,7 @@ const InventoryMarket = () => {
   const containers = React.useMemo(() => {
     return pages?.reduce((acc, page) => {
       const items = getResponseData(page, IS_RESPONSE_ALL);
-      const itemsDestructure = items?.map(item => ({...item, id: item?.uuid}));
+      const itemsDestructure = items?.map(item => ({ ...item, id: item?.uuid }));
       return [...acc, ...itemsDestructure];
     }, []);
   }, [pages]);
@@ -116,7 +114,7 @@ const InventoryMarket = () => {
           let statusProps = {
             label: capitalize(row.value)
           };
-          statusProps = getStatus({row, statusProps});
+          statusProps = getStatus({ row, statusProps });
           return <Status {...statusProps} noHeader />;
         },
         md: 2,
@@ -133,11 +131,6 @@ const InventoryMarket = () => {
     });
   }, [role]);
 
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   return (
     <AppContent>
@@ -166,11 +159,11 @@ const InventoryMarket = () => {
                 {/* Render loading indicator */}
                 {isFetching && <LoadingIndicator />}
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>{t('inventoryMarketList')}</div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   <AccordionList
                     data={containers}
                     columns={columns}

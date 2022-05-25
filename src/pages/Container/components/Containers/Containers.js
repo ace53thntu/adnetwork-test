@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   Row,
   Col,
@@ -25,6 +25,8 @@ import {ContainerBodyLayout} from '../Layouts';
 import {getRole, getUser} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {DEFAULT_PAGINATION} from 'constants/misc';
+import TreeSelectContainer from "../TreeSelectContainer";
+import {RoutePaths} from "../../../../constants/route-paths";
 
 const STATUS_OPTIONS = [
   {
@@ -132,13 +134,20 @@ const Containers = props => {
     [onRowClick, t]
   );
 
+  const handleRowClick = (item) => {
+    navigate(`/${RoutePaths.CONTAINER}/${item?.uuid}`);
+  }
+
   return (
     <>
       <ContainerBodyLayout
         heading={t('containerManager')}
-        subHeading={t('containerDescription')}
+        // subHeading={t('containerDescription')}
       >
         <Container fluid>
+          <Row>
+            <TreeSelectContainer />
+          </Row>
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
@@ -146,6 +155,17 @@ const Containers = props => {
                   <Table
                     data={containers?.data?.data || []}
                     columns={columns}
+                    getTrProps={(event, row) => {
+                      return {
+                        onClick: (event) => {
+                          if (event?.target.classList.contains("edit") || event?.target.classList.contains("delete")) {
+                            event.preventDefault();
+                          } else {
+                            handleRowClick(row.original);
+                          }
+                        }
+                      };
+                    }}
                   />
                 </CardBody>
               </Card>

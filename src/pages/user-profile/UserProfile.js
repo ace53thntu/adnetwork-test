@@ -2,32 +2,25 @@
 import React from 'react';
 
 //---> External Modules
-import {Row, Col, Container} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
+import { Row, Col, Container } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 
 //---> Internal Modules
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import ProfileForm from './ProfileForm';
-import {useGetMe} from 'queries/users';
-import {mappingProfileApiToForm} from 'entities/User';
-import {LoadingIndicator} from 'components/common';
+import { useGetMe } from 'queries/users';
+import { mappingProfileApiToForm } from 'entities/User';
+import { LoadingIndicator } from 'components/common';
 
 const propTypes = {};
 
 const UserProfile = () => {
-  const reduxDispatch = useDispatch();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
-
-  const {data, isFetching, isFetched} = useGetMe({enable: true});
+  const { data, isFetching, isFetched } = useGetMe({ enable: true });
   const userData = React.useMemo(
-    () => mappingProfileApiToForm({apiRes: data}),
+    () => mappingProfileApiToForm({ apiRes: data }),
     [data]
   );
 

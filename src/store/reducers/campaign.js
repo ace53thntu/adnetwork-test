@@ -177,7 +177,7 @@ const handleActions = {
   [SEARCH_CAMPAIGNS]: handleSearchCampaigns,
   [EXPAND_CAMPAIGN]: handleExpandCampaign,
   [SET_CAMPAIGN]: handleSetCampaign,
-  [SET_STRATEGY]: handleSetStrategy
+  [SET_STRATEGY]: handleSetStrategy,
 };
 
 function handleSetFlagAlready(state, action) {

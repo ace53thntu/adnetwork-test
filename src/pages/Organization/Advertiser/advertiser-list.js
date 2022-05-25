@@ -1,8 +1,7 @@
 // Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 // External Modules
-import {useDispatch} from 'react-redux';
 import {
   Card,
   CardHeader,
@@ -12,32 +11,31 @@ import {
   CardBody,
   Container
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 // Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { useDeleteAdvertiser, useGetAdvertisers } from 'queries/advertiser';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {List} from 'components/list';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
+import { List } from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {RoutePaths} from 'constants/route-paths';
-import {useNavigate} from 'react-router-dom';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import { RoutePaths } from 'constants/route-paths';
+import { useNavigate } from 'react-router-dom';
+import { getRole } from 'utils/helpers/auth.helpers';
+import { USER_ROLE } from 'pages/user-management/constants';
 import SearchInput from './components/SearchInput';
-import {useSearchTermSelector} from 'store/reducers/advertiser';
+import { useSearchTermSelector } from 'store/reducers/advertiser';
 import NoDataAvailable from 'components/list/no-data';
 import { ApiError } from 'components/common';
 
@@ -49,12 +47,7 @@ const ListAdvertiser = () => {
   const role = getRole();
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
@@ -64,7 +57,7 @@ const ListAdvertiser = () => {
   const searchTerm = useSearchTermSelector();
 
   //---> QUery get list of Advertiser.
-  const {data, isFetching, isPreviousData} = useGetAdvertisers({
+  const { data, isFetching, isPreviousData } = useGetAdvertisers({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -77,7 +70,7 @@ const ListAdvertiser = () => {
 
   const advertisers = React.useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
 
   const paginationInfo = React.useMemo(() => {
@@ -165,12 +158,12 @@ const ListAdvertiser = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteAdvertiser({advId: currentAdvertiser?.uuid});
+      await deleteAdvertiser({ advId: currentAdvertiser?.uuid });
       ShowToast.success('Delete advertiser successfully');
       setShowDialog(false);
 
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     }
   };
 
@@ -189,7 +182,7 @@ const ListAdvertiser = () => {
                 {isFetching && <LoadingIndicator />}
 
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div className="d-flex align-items-center">
                     <div className="mr-2">{t('advertiserList')}</div>
@@ -210,7 +203,7 @@ const ListAdvertiser = () => {
                     </div>
                   )}
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {advertisers?.length > 0 ? (
                     <>
                       <List

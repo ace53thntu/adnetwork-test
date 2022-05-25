@@ -1,28 +1,27 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
-import {Card, CardHeader, Row, Col, CardBody, Container} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
+import { Card, CardHeader, Row, Col, CardBody, Container } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
+import { List } from 'components/list';
 import LoadingIndicator from 'components/common/LoadingIndicator';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {useGetLocations} from 'queries/location';
-import {Breadcrumbs, Chip, Link, Typography} from '@material-ui/core';
+import { useGetLocations } from 'queries/location';
+import { Breadcrumbs, Chip, Link, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-import {SearchInput} from './components';
-import {useSearchTermSelector} from 'store/reducers/location';
+import { SearchInput } from './components';
+import { useSearchTermSelector } from 'store/reducers/location';
 
 const LinkStyled = styled(Link)`
   pointer-events: none;
@@ -31,19 +30,14 @@ const LinkStyled = styled(Link)`
 `;
 
 const LocationList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentPage, setCurrentPage] = React.useState(1);
   const searchTerm = useSearchTermSelector();
 
   //---> Query get list of Trackers.
-  const {data, isLoading, isPreviousData} = useGetLocations({
+  const { data, isLoading, isPreviousData } = useGetLocations({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -56,7 +50,7 @@ const LocationList = () => {
 
   const locations = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
@@ -141,7 +135,7 @@ const LocationList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div className="d-flex align-items-center">
                     <div className="mr-2">{t('LOCATION.LOCATION_LIST')}</div>
@@ -160,7 +154,7 @@ const LocationList = () => {
                     </Button> */}
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (

@@ -10,11 +10,13 @@ import InventoryGroup from './form-fields/InventoryGroup';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
-import {getRole} from 'utils/helpers/auth.helpers';
+import { getRole } from 'utils/helpers/auth.helpers';
 import VideoFilterGroup from './form-fields/VideoFilterGroup';
 import ContextFilterGroup from './form-fields/ContextFilterGroup';
 import DomainGroup from '../campaign-management/form-fields/DomainGroup';
 import KeywordGroup from '../campaign-management/form-fields/KeywordGroup';
+import StatisticMetrics from '../components/StatisticMetrics';
+import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -32,6 +34,10 @@ const StrategyForm = ({
 
   return (
     <>
+      {/* Strategy Statistic Metric */}
+      {
+        currentStrategy?.id && <StatisticMetrics id={currentStrategy.id} reportType={EnumTypeStatistics.Strategy} />
+      }
       {/* Information Group */}
       <InformationGroup
         isView={isView}

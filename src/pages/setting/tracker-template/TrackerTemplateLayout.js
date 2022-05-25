@@ -3,24 +3,17 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {Col, Container, Row} from 'reactstrap';
-import {useDispatch} from 'react-redux';
+import { Col, Container, Row } from 'reactstrap';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 
 const propTypes = {
   pageTitle: PropTypes.string,
 };
 
-const TrackerTemplateLayout = ({children, pageTitle = ''}) => {
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+const TrackerTemplateLayout = ({ children, pageTitle = '' }) => {
 
   return (
     <AppContent>
