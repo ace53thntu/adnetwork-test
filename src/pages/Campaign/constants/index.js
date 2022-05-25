@@ -145,7 +145,7 @@ export const BandwidthOptions = [
   },
   {value: Bandwidth.CELLULAR_NETWORK_2G, label: 'Cellular Network – 2g'},
   {value: Bandwidth.CELLULAR_NETWORK_3G, label: 'Cellular Network – 3g'},
-  {value: Bandwidth.CELLULAR_NETWORK_4G, label: 'Cellular'},
+  {value: Bandwidth.CELLULAR_NETWORK_4G, label: 'Cellular Network – 4g'},
   // {value: Bandwidth.UNKNOWN, label: 'Unknown'}
 ];
 
