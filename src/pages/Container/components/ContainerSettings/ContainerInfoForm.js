@@ -105,7 +105,7 @@ function ContainerInfoForm(props) {
         {isLoading && <BlockOverlay />}
         <CardBody>
           <Row>
-            <Col sm={12} md={8}>
+            <Col sm={12} md={6}>
               <PublisherSelect currentContainer={formDefaultValues} isEdit />
               <FormTextInput
                 isRequired
@@ -181,7 +181,7 @@ function ContainerInfoForm(props) {
               </Row>
             </Col>
 
-            <Col sm={12} md={4}>
+            <Col sm={12} md={6}>
               {isAndroid && <AndroidInitSnippet containerId={container.uuid} />}
               {isAndroidTv && <AndroidInitSnippet containerId={container.uuid} isTv/>}
               {isIOS && <IosInitSnippet containerId={container.uuid} />}

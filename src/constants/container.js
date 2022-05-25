@@ -14,6 +14,8 @@ export const SDK_CDN =
   window?.ADN_META_DATA?.SDK_CDN ??
   'https://cdn.aicactus.io/aicactus-sdk.min.js';
 export const DOMAIN_NAME = window?.ADN_META_DATA?.DOMAIN_NAME ?? 'aicactus';
+export const SDK_IOS_CONFIG = window?.SDK_IOS_CONFIG ?? 'Aicactus SDK Config';
+export const SDK_IOS_NAME = window?.SDK_IOS_NAME ?? 'AicactusAdsNetwork';
 
 export const CONTAINER_TREE_TAGS = [
   {

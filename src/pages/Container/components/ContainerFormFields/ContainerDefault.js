@@ -34,7 +34,7 @@ const ContainerDefault = ({isLoading = false, toggleCollapse}) => {
               required
             />
           </Col>
-          <Col sm="3">
+          <Col sm="6">
             <CurrencyInputField
               name="defaults.floor_price"
               label={t('floorPrice')}
@@ -49,7 +49,7 @@ const ContainerDefault = ({isLoading = false, toggleCollapse}) => {
               required
             />
           </Col>
-          <Col sm="3">
+          <Col sm="6">
             <CurrencyInputField
               name="defaults.deal_floor_price"
               label={t('dealFloorPrice')}
