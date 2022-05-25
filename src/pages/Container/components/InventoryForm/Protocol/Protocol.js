@@ -8,26 +8,25 @@ import {useFormContext} from 'react-hook-form';
 //---> Internal Modules
 import {FormReactSelect} from 'components/forms';
 import {ProtocolOptions} from 'constants/misc';
-import {InventoryFormats} from 'pages/Container/constants';
 
 const Protocol = () => {
   const {t} = useTranslation();
-  const {formState, watch, setValue} = useFormContext();
-  const inventoryFormat = watch('format');
-  const currentProtocols = watch('metadata.protocols');
+  const {formState} = useFormContext();
+  // const inventoryFormat = watch('format');
+  // const currentProtocols = watch('metadata.protocols');
 
-  React.useEffect(() => {
-    if (
-      inventoryFormat?.value === InventoryFormats.VIDEO &&
-      (!currentProtocols || currentProtocols?.length === 0)
-    ) {
-      setValue('metadata.protocols', [
-        {value: 2, label: 'VAST 2.0'},
-        {value: 3, label: 'VAST 3.0'},
-        {value: 7, label: 'VAST 4.0'}
-      ]);
-    }
-  });
+  // React.useEffect(() => {
+  //   if (
+  //     inventoryFormat?.value === InventoryFormats.VIDEO &&
+  //     (!currentProtocols || currentProtocols?.length === 0)
+  //   ) {
+  //     setValue('metadata.protocols', [
+  //       {value: 2, label: 'VAST 2.0'},
+  //       {value: 3, label: 'VAST 3.0'},
+  //       {value: 7, label: 'VAST 4.0'}
+  //     ]);
+  //   }
+  // });
 
   return (
     <FormReactSelect

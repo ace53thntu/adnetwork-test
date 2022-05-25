@@ -284,4 +284,4 @@ const InventoryFormContent = ({
 
 InventoryFormContent.propTypes = propTypes;
 
-export default React.memo(InventoryFormContent);
+export default (InventoryFormContent);

@@ -233,59 +233,35 @@ export const formToApi = ({
   }
 
   //---> VIDEO FILTER
-  let videoFilter = {};
-  let contextFilter = {};
-  if (video_filter?.skip_delay) {
-    videoFilter.skip_delay = video_filter?.skip_delay
-      ? parseInt(video_filter?.skip_delay)
-      : null;
-  }
-  if (video_filter?.start_delay) {
-    videoFilter.start_delay = video_filter?.start_delay?.value;
-  }
-  if (video_filter?.ptype) {
-    videoFilter.ptype = video_filter?.ptype?.value;
-  }
-  if (video_filter?.linearity) {
-    videoFilter.linearity = video_filter?.linearity?.value;
-  }
-  if (video_filter?.protocols) {
-    videoFilter.protocols = video_filter?.protocols?.value;
-  }
+  const videoFilter = getVideoFilter({
+    isEdit,
+    formVideoFilter: video_filter,
+    currentVideoFilter: currentStrategy?.video_filter
+  });
+  const contextFilter = getContextFilter({
+    isEdit,
+    contextFilterForm:context_filter,
+    currentContextFilter: currentStrategy?.context_filter
+  });
+  // if (video_filter?.skip_delay) {
+  //   videoFilter.skip_delay = video_filter?.skip_delay
+  //     ? parseInt(video_filter?.skip_delay)
+  //     : null;
+  // }
+  // if (video_filter?.start_delay) {
+  //   videoFilter.start_delay = video_filter?.start_delay?.value;
+  // }
+  // if (video_filter?.ptype) {
+  //   videoFilter.ptype = video_filter?.ptype?.value;
+  // }
+  // if (video_filter?.linearity) {
+  //   videoFilter.linearity = video_filter?.linearity?.value;
+  // }
+  // if (video_filter?.protocols) {
+  //   videoFilter.protocols = video_filter?.protocols?.value;
+  // }
 
   //---> CONTEXT FILTER
-  if (context_filter?.browser) {
-    contextFilter.browser = formatListData(context_filter.browser);
-  }
-  if (context_filter?.operating_system) {
-    contextFilter.operating_system = formatListData(
-      context_filter?.operating_system
-    );
-  }
-  if (context_filter?.browser_language) {
-    contextFilter.browser_language = formatListData(
-      context_filter?.browser_language
-    );
-  }
-  if (context_filter?.device_manufacturer) {
-    contextFilter.device_manufacturer = formatListData(
-      context_filter?.device_manufacturer
-    );
-  }
-  if (context_filter?.bandwidth) {
-    contextFilter.bandwidth = formatListData(context_filter?.bandwidth);
-  }
-  if (context_filter?.mobile_carrier) {
-    contextFilter.mobile_carrier = formatListData(
-      context_filter?.mobile_carrier
-    );
-  }
-  if (context_filter?.device_type) {
-    contextFilter.mobile_carrier = formatListData(context_filter?.device_type);
-  }
-  if (context_filter?.platform) {
-    contextFilter.mobile_carrier = formatListData(context_filter?.platform);
-  }
 
   let strategyReturn = {
     campaign_uuid: campaign?.value,
@@ -299,42 +275,11 @@ export const formToApi = ({
     sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     category,
     priority: priority?.value || '',
-    video_filter: !isEdit
-      ? {
-          ...videoFilter,
-          only_skipable:
-            video_filter?.only_skipable === 'active' ? true : false,
-          only_unskipable:
-            video_filter?.only_unskipable === 'active' ? true : false
-        }
-      : {
-          only_skipable:
-            video_filter?.only_skipable === 'active' ? true : false,
-          only_unskipable:
-            video_filter?.only_unskipable === 'active' ? true : false,
-          skip_delay: video_filter?.skip_delay
-            ? parseInt(video_filter?.skip_delay)
-            : null,
-          start_delay: video_filter?.start_delay?.value || null,
-          ptype: video_filter?.ptype?.value || null,
-          linearity: video_filter?.linearity?.value || null,
-          protocols: video_filter?.protocols?.value || null
-        },
-    context_filter: !isEdit
-      ? contextFilter
-      : {
-          browser: formatListData(context_filter?.browser),
-          operating_system: formatListData(context_filter?.operating_system),
-          browser_language: formatListData(context_filter?.browser_language),
-          device_manufacturer: formatListData(
-            context_filter?.device_manufacturer
-          ),
-          bandwidth: formatListData(context_filter?.bandwidth),
-          mobile_carrier: formatListData(context_filter?.mobile_carrier),
-          platform: formatListData(context_filter?.platform),
-          device_type: formatListData(context_filter?.device_type)
-        }
+    video_filter: videoFilter,
+    context_filter: contextFilter
   };
+
+
 
   if (
     !strategyReturn?.context_filter ||
@@ -429,4 +374,201 @@ export const isConceptsChanged = ({newConcepts, oldConcepts}) => {
   }
 
   return true;
+};
+
+const getVideoFilter = ({
+  isEdit = false,
+  formVideoFilter,
+  currentVideoFilter
+}) => {
+  let videoFilter = {
+    only_skipable: formVideoFilter?.only_skipable === 'active' ? true : false,
+    only_unskipable:
+      formVideoFilter?.only_unskipable === 'active' ? true : false
+  };
+  if (!isEdit) {
+    if (formVideoFilter?.skip_delay) {
+      videoFilter.skip_delay = formVideoFilter?.skip_delay
+        ? parseInt(formVideoFilter?.skip_delay)
+        : null;
+    }
+    if (formVideoFilter?.start_delay) {
+      videoFilter.start_delay = formVideoFilter?.start_delay
+        ? formVideoFilter?.start_delay?.value
+        : null;
+    }
+    if (formVideoFilter?.ptype) {
+      videoFilter.ptype = formVideoFilter?.ptype
+        ? formVideoFilter?.ptype?.value
+        : null;
+    }
+    if (formVideoFilter?.linearity) {
+      videoFilter.linearity = formVideoFilter?.linearity
+        ? formVideoFilter?.linearity?.value
+        : null;
+    }
+    if (formVideoFilter?.protocols) {
+      videoFilter.protocols = formVideoFilter?.protocols
+        ? formVideoFilter?.protocols?.value
+        : null;
+    }
+    return videoFilter;
+  } else {
+    // Case: edit
+    if (formVideoFilter?.skip_delay) {
+      videoFilter.skip_delay = formVideoFilter?.skip_delay
+        ? parseInt(formVideoFilter?.skip_delay)
+        : null;
+    }
+    if (formVideoFilter?.start_delay) {
+      videoFilter.start_delay = formVideoFilter?.start_delay
+        ? formVideoFilter?.start_delay?.value
+        : null;
+    }
+    if (formVideoFilter?.ptype) {
+      videoFilter.ptype = formVideoFilter?.ptype
+        ? formVideoFilter?.ptype?.value
+        : null;
+    }
+    if (formVideoFilter?.linearity) {
+      videoFilter.linearity = formVideoFilter?.linearity
+        ? formVideoFilter?.linearity?.value
+        : null;
+    }
+    if (formVideoFilter?.protocols) {
+      videoFilter.protocols = formVideoFilter?.protocols
+        ? formVideoFilter?.protocols?.value
+        : null;
+    }
+    return {
+      ...currentVideoFilter,
+      ...videoFilter
+    };
+  }
+};
+
+const getContextFilter = ({
+  isEdit,
+  contextFilterForm,
+  currentContextFilter
+}) => {
+  let contextFilter = {};
+  if (!isEdit) {
+    if (contextFilterForm?.browser && contextFilterForm?.browser?.length > 0) {
+      contextFilter.browser = formatListData(contextFilterForm.browser);
+    }
+    if (
+      contextFilterForm?.operating_system &&
+      contextFilterForm?.operating_system?.length > 0
+    ) {
+      contextFilter.operating_system = formatListData(
+        contextFilterForm?.operating_system
+      );
+    }
+    if (
+      contextFilterForm?.browser_language &&
+      contextFilterForm?.browser_language?.length > 0
+    ) {
+      contextFilter.browser_language = formatListData(
+        contextFilterForm?.browser_language
+      );
+    }
+    if (
+      contextFilterForm?.device_manufacturer &&
+      contextFilterForm?.device_manufacturer?.length > 0
+    ) {
+      contextFilter.device_manufacturer = formatListData(
+        contextFilterForm?.device_manufacturer
+      );
+    }
+    if (
+      contextFilterForm?.bandwidth &&
+      contextFilterForm?.bandwidth?.length > 0
+    ) {
+      contextFilter.bandwidth = formatListData(contextFilterForm?.bandwidth);
+    }
+    if (
+      contextFilterForm?.mobile_carrier &&
+      contextFilterForm?.mobile_carrier?.length > 0
+    ) {
+      contextFilter.mobile_carrier = formatListData(
+        contextFilterForm?.mobile_carrier
+      );
+    }
+    if (
+      contextFilterForm?.device_type &&
+      contextFilterForm?.device_type?.length > 0
+    ) {
+      contextFilter.device_type = formatListData(
+        contextFilterForm?.device_type
+      );
+    }
+    if (
+      contextFilterForm?.platform &&
+      contextFilterForm?.platform?.length > 0
+    ) {
+      contextFilter.platform = formatListData(contextFilterForm?.platform);
+    }
+    return Object.keys(contextFilter).length > 0 ? contextFilter : null;
+  } else {
+    if (contextFilterForm?.browser && contextFilterForm?.browser?.length > 0) {
+      contextFilter.browser = formatListData(contextFilterForm.browser);
+    }
+    if (
+      contextFilterForm?.operating_system &&
+      contextFilterForm?.operating_system?.length > 0
+    ) {
+      contextFilter.operating_system = formatListData(
+        contextFilterForm?.operating_system
+      );
+    }
+    if (
+      contextFilterForm?.browser_language &&
+      contextFilterForm?.browser_language?.length > 0
+    ) {
+      contextFilter.browser_language = formatListData(
+        contextFilterForm?.browser_language
+      );
+    }
+    if (
+      contextFilterForm?.device_manufacturer &&
+      contextFilterForm?.device_manufacturer?.length > 0
+    ) {
+      contextFilter.device_manufacturer = formatListData(
+        contextFilterForm?.device_manufacturer
+      );
+    }
+    if (
+      contextFilterForm?.bandwidth &&
+      contextFilterForm?.bandwidth?.length > 0
+    ) {
+      contextFilter.bandwidth = formatListData(contextFilterForm?.bandwidth);
+    }
+    if (
+      contextFilterForm?.mobile_carrier &&
+      contextFilterForm?.mobile_carrier?.length > 0
+    ) {
+      contextFilter.mobile_carrier = formatListData(
+        contextFilterForm?.mobile_carrier
+      );
+    }
+    if (
+      contextFilterForm?.device_type &&
+      contextFilterForm?.device_type?.length > 0
+    ) {
+      contextFilter.device_type = formatListData(
+        contextFilterForm?.device_type
+      );
+    }
+    if (
+      contextFilterForm?.platform &&
+      contextFilterForm?.platform?.length > 0
+    ) {
+      contextFilter.platform = formatListData(contextFilterForm?.platform);
+    }
+    return {
+      ...currentContextFilter,
+      ...contextFilter
+    };
+  }
 };

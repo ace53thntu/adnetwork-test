@@ -81,7 +81,6 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.protocols"
             label={t('FORM.PROTOCOLS')}
             placeholder={t('FORM.PROTOCOLS')}
-            multiple
           />
         </Col>
         <Col md="3">

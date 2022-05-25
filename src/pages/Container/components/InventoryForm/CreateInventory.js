@@ -18,6 +18,7 @@ import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
 import {useCreateTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
+import {VideoMineTypes} from 'constants/inventory';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {t} = useTranslation();
@@ -33,7 +34,13 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       allow_deal: 'inactive',
       type: null,
       metadata: {
-        loop: 'active'
+        loop: 'active',
+        protocols: [
+          {value: 2, label: 'VAST 2.0'},
+          {value: 3, label: 'VAST 3.0'},
+          {value: 7, label: 'VAST 4.0'}
+        ],
+        mimes: [{value: VideoMineTypes.MPEG4, label: 'MPEG-4'}]
       },
       tracker_uuid: null,
       position_uuid: null
