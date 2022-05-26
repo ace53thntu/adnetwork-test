@@ -32,7 +32,7 @@ const alternativeDefaultValues = {
 };
 
 function Alternatives(props) {
-  const {control} = useFormContext();
+  const {control, errors} = useFormContext();
 
   const {
     fields: alternativeFields,
@@ -42,7 +42,6 @@ function Alternatives(props) {
     control,
     name: formAlternativeName
   });
-  const {errors} = useFormContext();
 
   const handleAddAlternative = () => {
     addAlternativeField(alternativeDefaultValues);

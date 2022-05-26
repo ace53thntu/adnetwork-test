@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 import {useQueryClient} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {Button} from 'reactstrap';
+import {Button, Col, Row} from 'reactstrap';
 import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
@@ -24,6 +24,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
 import {useCalculateAdSize} from '../BannerForm/hooks';
 import Report from '../Report';
+import {Trackers} from '../Trackers';
 import VideoFiles from './VideoFiles';
 import VideoInformationForm from './VideoInformationForm';
 import {VideoServeTypes, VideoTypes} from './constants';
@@ -170,6 +171,15 @@ function VideoForm(props) {
           <VideoFiles videoId={rawData?.uuid} />
         </form>
       </FormProvider>
+
+      <hr />
+      <Row>
+        <Col>
+          <Trackers referenceId={rawData?.uuid} referenceType="video" />
+        </Col>
+      </Row>
+      <hr />
+
       {/* BEGIN: Report */}
       {rawData?.uuid && (
         <Report

@@ -8,14 +8,6 @@ import {SDK_IOS_NAME, SDK_IOS_CONFIG} from 'constants/container';
 function IosInitSnippet({containerId, isTv = false}) {
   return (
     <div className="aicactus-snippet-container">
-      <h3 className="font-weight-bold">Example</h3>
-      <hr />
-      <div>
-        To run the example project, clone the repo, and run{' '}
-        <code>pod install</code> from the Example directory first. Go to
-        Info.plist and replace your container ID or can pass as an argument to
-        setup method
-      </div>
       <h3 className="font-weight-bold mt-3">Installation</h3>
       <hr />
       <div className="mb-2">
