@@ -2,32 +2,11 @@ import React from 'react';
 
 import {Link} from 'react-router-dom';
 import {CopyBlock, atomOneLight} from 'react-code-blocks';
-import {SDK_ANDROID_NAME_SPACE, SDK_ANDROID_DEPENDENCY, SDK_ANDROID_NAME} from 'constants/container';
+import {SDK_ANDROID_NAME_SPACE,  SDK_ANDROID_NAME} from 'constants/container';
 
 function IosInitSnippet({containerId, isTv = false}) {
   return (
     <div className="aicactus-snippet-container">
-      <h3 className="font-weight-bold">Example</h3>
-      <hr />
-      <div>
-        To run the example project, clone the repo, and open it using Android
-        Studio.
-      </div>
-      <div>
-        Go to Android Manifest and replace YOUR_CONTAINER_ID or can pass as an
-        argument to setup method
-      </div>
-      <CopyBlock
-        theme={atomOneLight}
-        text={`<meta-data
-    android:name="${SDK_ANDROID_DEPENDENCY}.CONTAINER_ID"
-    android:value="${containerId}"
-/>`}
-        language="kotlin"
-        showLineNumbers={false}
-        wrapLines
-        codeBlock
-      />
       <h3 className="font-weight-bold mt-3">Installation</h3>
       <hr />
       <div className="mb-2">

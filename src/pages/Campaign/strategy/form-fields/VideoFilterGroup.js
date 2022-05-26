@@ -53,7 +53,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
         </Col>
         <Col md="3">
           <FormReactSelect
-            disabled={isView}
+            disabled={true}
             defaultValue={currentStrategy?.video_filter?.ptype}
             options={PlacementTypeOptions}
             name="video_filter.ptype"

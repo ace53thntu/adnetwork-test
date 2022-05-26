@@ -31,7 +31,7 @@ const FormTextInput = ({
           : {}
       }
     >
-      {label ? (
+      {label && type !== 'hidden' ? (
         <Label>
           {isRequired ? <span className="text-danger">*</span> : null}
           {label}

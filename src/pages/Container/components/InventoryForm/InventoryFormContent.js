@@ -28,7 +28,6 @@ import DirectSnippet from '../Snippets/DirectUrlSnippet';
 import DspSelect from './DspSelect';
 import InventoryProperty from './InventoryProperty';
 import InventorySnippet from './InventorySnippet';
-import TrackerForm from './TrackerForm';
 
 const formName = {
   properties: 'properties',
@@ -226,7 +225,7 @@ const InventoryFormContent = ({
           </Col>
         </Row>
         <InventoryProperty currentInventory={inventory} isCreate={isCreate} />
-        <TrackerForm />
+        {/* <TrackerForm /> */}
 
         {inventory?.uuid && (
           <>

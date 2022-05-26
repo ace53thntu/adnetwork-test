@@ -1,3 +1,4 @@
+import __isObject from 'lodash/isObject';
 import moment from 'moment';
 import {DEFAULT_PAGINATION_RESPONSE} from 'utils/constants/pagination.constants';
 
@@ -54,4 +55,8 @@ export function getResponsePagination(res) {
 export const getBuildDate = epoch => {
   const buildDate = moment(epoch).format('DD-MM-YYYY HH:MM');
   return buildDate;
+};
+
+export const isJsonObject = obj => {
+  return __isObject(obj) && !Array.isArray(obj);
 };
