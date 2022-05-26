@@ -1,19 +1,20 @@
-import React, {useLayoutEffect, useState} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { TreeSelect } from 'antd';
 import { getAllCampaignTreeData } from "../../utils";
-import {RoutePaths} from "../../../../constants/route-paths";
+import { RoutePaths } from "../../../../constants/route-paths";
 import {
   setAdvertiserRedux,
   setCampaignRedux, setCampaignTreeDataRedux,
   setSelectedTreeNodeRedux,
   setStrategyRedux, useCampaignSelector
 } from "../../../../store/reducers/campaign";
-import {useNavigate} from "react-router";
-import {useDispatch} from "react-redux";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 import "./index.scss";
 
 const TreeSelectCampaign = React.memo(() => {
   const { selectedTreeNodeCampaign, campaignTreeData } = useCampaignSelector();
+  const [treeData, setTreeData] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -48,6 +49,45 @@ const TreeSelectCampaign = React.memo(() => {
     }
   };
 
+  const loopNode = (searchValue, data) => {
+    return data.map((item) => {
+      const index = item.title?.toLowerCase().indexOf(searchValue.toLowerCase());
+      const beforeStr = item.title?.substr(0, index);
+      const afterStr = item.title?.substr(index + searchValue.length);
+      const matchedItemValue = item.title?.substr(index, searchValue.length);
+      const title =
+        index > -1 ? (
+          <span>
+            {beforeStr}
+            <span style={{ color: "#545cd8", fontWeight: "bold" }}>{matchedItemValue}</span>
+            {afterStr}
+          </span>
+        ) : (
+          <span>{item.title}</span>
+        );
+      if (item.children) {
+        return { ...item, title, tempTitle: item.title, children: loopNode(searchValue, item.children) };
+      }
+      return {
+        ...item,
+        title,
+        tempTitle: item.title
+      };
+    });
+  }
+
+  const onChangeTreeSelect = (e) => {
+    const filteredData = loopNode(e, campaignTreeData);
+    setTreeData(filteredData);
+  }
+
+  useEffect(() => {
+    if (campaignTreeData) {
+      setTreeData(campaignTreeData);
+    }
+  }, [campaignTreeData])
+
+
   return (
     <TreeSelect
       treeLine
@@ -61,12 +101,15 @@ const TreeSelectCampaign = React.memo(() => {
         maxHeight: 400,
         overflow: 'auto',
       }}
-      treeData={campaignTreeData}
+      treeData={treeData}
       placeholder="Please select..."
       onSelect={onTreeNodeSelect}
       filterTreeNode={(inputValue, treeNode) => {
-        return treeNode.title.toLowerCase().includes(inputValue.toLowerCase())
+        const { tempTitle } = treeNode;
+        return tempTitle && tempTitle.toLowerCase().includes(inputValue.toLowerCase())
       }}
+      onSearch={onChangeTreeSelect}
+      onChange={() => setTreeData(campaignTreeData)}
     />
   );
 });
