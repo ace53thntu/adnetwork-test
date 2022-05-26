@@ -36,7 +36,7 @@ const FormCodeMirror = ({
   placeholder = `{"key": "value"}`,
   extension = 'JAVASCRIPT',
   defaultValue = '',
-  showError=true
+  showError = true
 }) => {
   const {t} = useTranslation();
   const {control, errors} = useFormContext();
@@ -77,4 +77,4 @@ const FormCodeMirror = ({
 
 FormCodeMirror.propTypes = propTypes;
 
-export default React.memo(FormCodeMirror);
+export default FormCodeMirror;

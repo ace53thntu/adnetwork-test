@@ -57,10 +57,11 @@ const TrackerTemplateForm = ({
   const defaultValues = useDefaultValues({trackerTemplate});
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidate(t)
+    resolver: schemaValidate(t),
+    reValidateMode: 'onChange',
+    mode: 'onChange'
   });
-  const {handleSubmit, formState, control, errors} = methods;
-  console.log('🚀 ~ file: tracker-template.form.js ~ line 68 ~ errors', errors);
+  const {handleSubmit, formState, control} = methods;
 
   async function onSubmit(formData) {
     const data = formToApi({formData});

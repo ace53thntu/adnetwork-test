@@ -1,4 +1,5 @@
 import {Statuses} from 'constants/misc';
+import {checkValidJson} from 'pages/Creative/components/BannerForm/utils';
 import {
   TrackerTemplateTypeOptions,
   TrackerTemplateTypes
@@ -50,7 +51,12 @@ export const apiToForm = ({trackerTemplate = null}) => {
       price
     } = trackerTemplate;
 
-    const variablesConverted = variables ? JSON.stringify(variables) : '';
+    const variablesConverted =
+      variables &&
+      typeof variables === 'object' &&
+      Object.keys(variables)?.length
+        ? JSON.stringify(variables, null, 2)
+        : '';
     const typeDestructured = type
       ? TrackerTemplateTypeOptions.find(typeItem => typeItem?.value === type)
       : null;
@@ -104,6 +110,7 @@ export const formToApi = ({formData = {}}) => {
     } = formData;
 
     const priceConverted = HandleCurrencyFields.convertGuiToApi({value: price});
+    let parseVariables = checkValidJson(variables) ? JSON.parse(variables) : {};
 
     return {
       name,
@@ -113,7 +120,7 @@ export const formToApi = ({formData = {}}) => {
       click_url,
       click_image,
       click_script,
-      variables,
+      variables: parseVariables,
       https: https === 'active' ? true : false,
       skip,
       first_quartile,
