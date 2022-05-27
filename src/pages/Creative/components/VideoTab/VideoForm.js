@@ -172,13 +172,17 @@ function VideoForm(props) {
         </form>
       </FormProvider>
 
-      <hr />
-      <Row>
-        <Col>
-          <Trackers referenceId={rawData?.uuid} referenceType="video" />
-        </Col>
-      </Row>
-      <hr />
+      {!isCreate && (
+        <>
+          <hr />
+          <Row>
+            <Col>
+              <Trackers referenceId={rawData?.uuid} referenceType="video" />
+            </Col>
+          </Row>
+          <hr />
+        </>
+      )}
 
       {/* BEGIN: Report */}
       {rawData?.uuid && (

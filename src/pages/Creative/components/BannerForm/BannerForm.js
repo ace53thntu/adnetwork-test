@@ -431,13 +431,17 @@ function BannerForm(props) {
         </form>
       </FormProvider>
 
-      <hr />
-      <Row>
-        <Col>
-          <Trackers referenceId={creative?.uuid} referenceType="creative" />
-        </Col>
-      </Row>
-      <hr />
+      {!isCreate && (
+        <>
+          <hr />
+          <Row>
+            <Col>
+              <Trackers referenceId={creative?.uuid} referenceType="creative" />
+            </Col>
+          </Row>
+          <hr />
+        </>
+      )}
 
       {/* BEGIN: Report */}
       {creative?.uuid && (
