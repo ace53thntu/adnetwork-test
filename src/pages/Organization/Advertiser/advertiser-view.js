@@ -43,10 +43,6 @@ const AdvertiserView = ({children}) => {
 };
 
 const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
-  console.log(
-    '🚀 ~ file: advertiser-view.js ~ line 41 ~ AdvertiserContent ~ defaultValues',
-    defaultValues
-  );
   const {t} = useTranslation();
   const role = getRole();
 
@@ -167,4 +163,4 @@ const AdvertiserContent = ({defaultValues, IABsOptions, advertiserId}) => {
   );
 };
 
-export default React.memo(AdvertiserView);
+export default AdvertiserView;

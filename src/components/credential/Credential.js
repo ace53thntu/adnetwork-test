@@ -39,7 +39,10 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
     enabled: enableApi
   });
 
-  const {mutateAsync: regenerateCredential} = useReGenerateCredential();
+  const {
+    mutateAsync: regenerateCredential,
+    isFetching: isFetchingCredential
+  } = useReGenerateCredential();
   const [secretKey, setSecretKey] = React.useState('');
   const [isGenerating, setIsGenerating] = React.useState(false);
   const credentialId = React.useMemo(() => {
@@ -86,10 +89,23 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
   }
 
   React.useEffect(() => {
+    if (isFetchingCredential) {
+      setEnableApi(true);
+    }
+  }, [isFetchingCredential]);
+
+  React.useEffect(() => {
     if (isFetched) {
       setEnableApi(false);
     }
   }, [isFetched]);
+
+  React.useEffect(() => {
+    return () => {
+      setEnableApi(false);
+      setIsGenerating(false);
+    };
+  }, []);
 
   return (
     <>
@@ -126,7 +142,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
           </ButtonLoading>
         )}
       </div>
-      {isFetched && !isGenerating && <SecretKey secretKey={secretKey} />}
+      { isFetched && !isGenerating && <SecretKey secretKey={secretKey} />}
       <DialogConfirm />
     </>
   );

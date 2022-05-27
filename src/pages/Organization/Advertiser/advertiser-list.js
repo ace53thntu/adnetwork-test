@@ -166,10 +166,10 @@ const ListAdvertiser = () => {
     try {
       await deleteAdvertiser({advId: currentAdvertiser?.uuid});
       ShowToast.success('Delete advertiser successfully');
-    } catch (err) {
-      ShowToast.error(err || 'Fail to delete advertiser');
-    } finally {
       setShowDialog(false);
+
+    } catch (err) {
+      ShowToast.error(err?.msg || 'Fail to delete advertiser');
     }
   };
 

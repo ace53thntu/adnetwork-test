@@ -12,9 +12,6 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import PublisherCreate from './publisher-create';
-import PublisherEdit from './publisher-edit';
-import {PublisherForm} from './components';
 import {LoadingIndicator} from 'components/common';
 import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
@@ -31,13 +28,19 @@ import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import SearchInput from './components/SearchInput';
 import {useSearchTermSelector} from 'store/reducers/publisher';
+import {useNavigate} from 'react-router-dom';
+import {RoutePaths} from 'constants/route-paths';
+
+const ActionIndex = {
+  EDIT: 0,
+  DELETE: 1
+};
 
 const PublisherList = () => {
+  const navigate = useNavigate();
   const reduxDispatch = useDispatch();
   const role = getRole();
   const {t} = useTranslation();
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openFormEdit, setOpenFormEdit] = React.useState(false);
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -109,27 +112,30 @@ const PublisherList = () => {
     setCurrentPage(page);
   }
 
-  const onToggleModal = () => {
-    setOpenForm(prevState => !prevState);
-  };
-
-  const onToggleModalEdit = () => {
-    setOpenFormEdit(prevState => !prevState);
-  };
-
   const onClickAdd = evt => {
     evt.preventDefault();
-    setOpenForm(true);
+    navigate(
+      `/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${RoutePaths.CREATE}`
+    );
   };
 
   const onClickItem = data => {
     setCurrentPublisher(data);
-    setOpenFormEdit(true);
+    navigate(
+      `/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${data?.uuid}`
+    );
   };
 
-  const onHandleDelete = (actionIndex, item) => {
-    setCurrentPublisher(item);
-    setShowDialog(true);
+  const handleActions = (actionIndex, item) => {
+    if (actionIndex === ActionIndex.EDIT) {
+      navigate(
+        `/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${item?.uuid}/${RoutePaths.EDIT}`
+      );
+    }
+    if (actionIndex === ActionIndex.DELETE) {
+      setCurrentPublisher(item);
+      setShowDialog(true);
+    }
   };
 
   const onCancelDelete = () => {
@@ -183,10 +189,10 @@ const PublisherList = () => {
             }
             actions={
               [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
-                ? ['Delete']
-                : []
+                ? [t('edit'), t('delete')]
+                : [t('edit')]
             }
-            handleAction={onHandleDelete}
+            handleAction={handleActions}
             handleClickItem={onClickItem}
           />
           <CustomPagination
@@ -197,20 +203,6 @@ const PublisherList = () => {
           />
         </CardBody>
       </Card>
-      {/* Advertiser Create */}
-      <PublisherCreate>
-        {openForm && <PublisherForm modal={openForm} toggle={onToggleModal} />}
-      </PublisherCreate>
-      {/* Advertiser Edit */}
-      {openFormEdit && currentPublisher?.uuid && (
-        <PublisherEdit
-          modal={openFormEdit}
-          toggle={onToggleModalEdit}
-          title="Edit Publisher"
-          isEdit
-          publisherId={currentPublisher?.uuid}
-        />
-      )}
 
       {showDialog && (
         <DialogConfirm

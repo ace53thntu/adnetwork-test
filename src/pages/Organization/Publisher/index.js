@@ -4,8 +4,14 @@ import React from 'react';
 const PublisherList = React.lazy(() =>
   import('./publisher-list' /* webpackChunkName: "publisher-list" */)
 );
-const PublisherReport = React.lazy(() =>
-  import('./publisher-report' /* webpackChunkName: "publisher-report" */)
+const PublisherCreate = React.lazy(() =>
+  import('./publisher-create' /* webpackChunkName: "publisher-create" */)
+);
+const PublisherEdit = React.lazy(() =>
+  import('./publisher-edit' /* webpackChunkName: "publisher-edit" */)
+);
+const PublisherView = React.lazy(() =>
+  import('./publisher-view' /* webpackChunkName: "publisher-view" */)
 );
 
 function PublisherListPage() {
@@ -16,12 +22,33 @@ function PublisherListPage() {
   );
 }
 
-function PublisherReportPage() {
+function PublisherCreatePage() {
   return (
     <ErrorBoundary>
-      <PublisherReport />
+      <PublisherCreate />
     </ErrorBoundary>
   );
 }
 
-export {PublisherListPage, PublisherReportPage};
+function PublisherEditPage() {
+  return (
+    <ErrorBoundary>
+      <PublisherEdit />
+    </ErrorBoundary>
+  );
+}
+
+function PublisherViewPage() {
+  return (
+    <ErrorBoundary>
+      <PublisherView />
+    </ErrorBoundary>
+  );
+}
+
+export {
+  PublisherListPage,
+  PublisherCreatePage,
+  PublisherEditPage,
+  PublisherViewPage
+};

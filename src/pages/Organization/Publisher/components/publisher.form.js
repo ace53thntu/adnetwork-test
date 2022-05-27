@@ -6,18 +6,18 @@ import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Form,
   Row,
   Col,
-  Label
+  Label,
+  Card,
+  CardBody,
+  CardFooter
 } from 'reactstrap';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
-import {ActiveToggle, FormTextInput} from 'components/forms';
 import BlockUi from 'react-block-ui';
+import {useQueryClient} from 'react-query';
+import {Link, useNavigate} from 'react-router-dom';
 
 //---> Internal Modules
 import {INPUT_NAME} from '../constants';
@@ -26,20 +26,17 @@ import {useDefaultPublisher} from 'pages/Organization/hooks/useDefaultPublisher'
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useCreatePublisher, useEditPublisher} from 'queries/publisher';
 import {schemaValidate} from './validation';
-import {Link} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import Credential from 'components/credential';
+import {GET_PUBLISHER} from 'queries/publisher/constants';
+import {ActiveToggle, FormTextInput} from 'components/forms';
+import './_main.scss';
 
-const PublisherForm = ({
-  modal = false,
-  toggle = () => {},
-  className = '',
-  title = 'Create new Publisher',
-  isEdit = false,
-  publisher = null
-}) => {
+const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
+  const navigate = useNavigate();
+  const client = useQueryClient();
   const role = getRole();
   const {t} = useTranslation();
   const publisherId = publisher?.uuid || '';
@@ -53,7 +50,7 @@ const PublisherForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState, control} = methods;
+  const {handleSubmit, formState, control, reset} = methods;
 
   /**
    * Submit form
@@ -70,16 +67,22 @@ const PublisherForm = ({
       try {
         await createPublisher(requestBody);
         ShowToast.success('Created publisher successfully');
-        toggle();
+        navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`);
       } catch (err) {
         ShowToast.error(err?.msg || 'Fail to create publisher');
       }
     } else {
       // EDIT
       try {
-        await editPublisher({pubId: publisherId, data: requestBody});
+        const {data} = await editPublisher({
+          pubId: publisherId,
+          data: requestBody
+        });
+        await client.invalidateQueries([GET_PUBLISHER, data?.uuid]);
         ShowToast.success('Updated publisher successfully');
-        toggle();
+        navigate(
+          `/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${data?.uuid}`
+        );
       } catch (err) {
         ShowToast.error(err?.msg || 'Fail to update publisher');
       }
@@ -87,12 +90,11 @@ const PublisherForm = ({
   };
 
   return (
-    <Modal isOpen={modal} className={className} size="lg">
+    <Card className={`main-card ${isView ? 'no-shadow' : ''}`}>
       <FormProvider {...methods}>
         <Form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
           <BlockUi tag="div" blocking={formState.isSubmitting}>
-            <ModalHeader>{title}</ModalHeader>
-            <ModalBody>
+            <CardBody>
               <Row>
                 <Col sm={12}>
                   <FormTextInput
@@ -100,6 +102,7 @@ const PublisherForm = ({
                     label={t('name')}
                     placeholder={t('enterName')}
                     isRequired
+                    disable={isView}
                   />
                 </Col>
                 {/* Domains */}
@@ -108,6 +111,7 @@ const PublisherForm = ({
                     name={INPUT_NAME.DOMAIN}
                     label={t('domain')}
                     placeholder={t('domain')}
+                    disable={isView}
                   />
                 </Col>
 
@@ -118,12 +122,16 @@ const PublisherForm = ({
                     control={control}
                     name={INPUT_NAME.STATUS}
                     render={({onChange, onBlur, value, name}) => (
-                      <ActiveToggle value={value} onChange={onChange} />
+                      <ActiveToggle
+                        value={value}
+                        onChange={onChange}
+                        disabled={isView}
+                      />
                     )}
                   />
                 </Col>
               </Row>
-              {isEdit &&
+              {(isEdit || isView) &&
                 (role === USER_ROLE.PUBLISHER || role === USER_ROLE.ADMIN) && (
                   <Row>
                     <Col md={12}>
@@ -134,43 +142,54 @@ const PublisherForm = ({
                     </Col>
                   </Row>
                 )}
-            </ModalBody>
-            <ModalFooter>
-              <Button color="link" onClick={toggle} type="button">
-                {t('cancel')}
-              </Button>
-              <Button
-                color="primary"
-                type="submit"
-                disabled={!formState.isDirty}
-              >
-                {t('save')}
-              </Button>
-              {isEdit && (
-                <Link
-                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}/${RoutePaths.REPORT}`}
-                >
-                  <Button color="success" type="button">
-                    {t('viewReport')}
-                  </Button>
-                </Link>
+            </CardBody>
+            <CardFooter className="d-flex justify-content-end">
+              {isView && (
+                <>
+                  <Link
+                    to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`}
+                  >
+                    {t('backToList')}
+                  </Link>
+                  <span className="mr-2 ml-2">|</span>
+                  <Link
+                    to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}/${RoutePaths.EDIT}`}
+                  >
+                    {t('edit')}
+                  </Link>
+                </>
               )}
-            </ModalFooter>
+              {isEdit && (
+                <>
+                  <Link
+                    to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}`}
+                  >
+                    {t('COMMON.VIEW')}
+                  </Link>
+                  <Button color="link" onClick={() => reset()} type="button">
+                    {t('cancel')}
+                  </Button>
+                  <Button
+                    color="primary"
+                    type="submit"
+                    disabled={!formState.isDirty}
+                  >
+                    {t('save')}
+                  </Button>
+                </>
+              )}
+            </CardFooter>
           </BlockUi>
         </Form>
       </FormProvider>
-    </Modal>
+    </Card>
   );
 };
 
 PublisherForm.propTypes = {
-  modal: PropTypes.bool,
-  toggle: PropTypes.func,
-  className: PropTypes.string,
-  title: PropTypes.string,
-  publisherId: PropTypes.string,
+  publisher: PropTypes.any,
   isEdit: PropTypes.bool,
-  IABsOptions: PropTypes.array
+  isView: PropTypes.bool
 };
 
 export default PublisherForm;

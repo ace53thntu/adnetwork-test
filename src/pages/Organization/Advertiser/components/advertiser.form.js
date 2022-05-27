@@ -49,7 +49,7 @@ const AdvertiserForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, reset} = methods;
 
   /**
    * Submit form
@@ -112,7 +112,7 @@ const AdvertiserForm = ({
             </CardBody>
 
             <CardFooter className="d-flex justify-content-end">
-              <Button color="link" onClick={toggle} type="button">
+              <Button color="link" onClick={() => reset()} type="button">
                 {t('cancel')}
               </Button>
               {isEdit && (
