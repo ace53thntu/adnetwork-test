@@ -33,7 +33,6 @@ const StrategyDetail = () => {
   const {strategyId, campaignId} = useParams();
 
   const {data: strategyData, isFetching, status} = useGetStrategy(strategyId);
-  console.log("🚀 ~ file: detail.js ~ line 36 ~ StrategyDetail ~ status", status)
   const strategyInventoryRedux = useStrategyInventorySelector();
   const isInitializedInventory = useSelectedIsInitializedInventorySelector();
 

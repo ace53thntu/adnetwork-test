@@ -26,19 +26,19 @@ export function useRedirectInCampaign() {
       advertiser_uuid: advertiserId,
       per_page: DEFAULT_PAGINATION.perPage
     },
-    enabled: !!advertiserId
+    enabled: !!advertiserId && !alreadySetAdvertiser
   });
   const campaigns = getResponseData(campRes, IS_RESPONSE_ALL);
 
-  const {data: straRes, status: strategyStatus} = useGetStrategies({
+  const {data: strategyRes, status: strategyStatus} = useGetStrategies({
     params: {
       campaign_uuid: campaignId,
       per_page: DEFAULT_PAGINATION.perPage
     },
-    enabled: !!campaignId && isFetched
+    enabled: !!campaignId && isFetched && !alreadySetAdvertiser
   });
 
-  const strategies = getResponseData(straRes, IS_RESPONSE_ALL);
+  const strategies = getResponseData(strategyRes, IS_RESPONSE_ALL);
 
   const destructureCampaigns = React.useMemo(
     () =>
@@ -114,18 +114,5 @@ export function useRedirectInCampaign() {
     destructureStrategies
   ]);
 
-  // React.useEffect(() => {
-  //   if (!!containerRedux) {
-  //     const redirectURL = containerRedux.source?.[source]?.[0]?.id;
-  //     if (redirectURL && !pageId) {
-  //       navigate(redirectURL);
-  //     }
-  //   }
-  // }, [containerRedux, navigate, source, pageId]);
-
-  return {
-    // isFetching,
-    // error,
-    // isError
-  };
+  return;
 }

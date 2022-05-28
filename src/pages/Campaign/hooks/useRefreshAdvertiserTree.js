@@ -1,5 +1,6 @@
 import {AdvertiserAPIRequest} from 'api/advertiser.api';
 import {CampaignAPIRequest} from 'api/campaign.api';
+import {StrategyAPIRequest} from 'api/strategy.api';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import React from 'react';
 import {useDispatch} from 'react-redux';
@@ -16,7 +17,7 @@ export function useRefreshAdvertiserTree() {
   const dispatch = useDispatch();
 
   const refresh = React.useCallback(
-    async (advId, campaignId) => {
+    async (advId, campaignId, strategyId) => {
       const params = {
         page: 1,
         per_page: DEFAULT_PAGINATION.perPage,
@@ -58,6 +59,46 @@ export function useRefreshAdvertiserTree() {
           return campaignNode;
         });
 
+        //---> Strategy
+        if (strategyId) {
+          const strategyRes = await StrategyAPIRequest.getAllStrategy({
+            params: {
+              campaign_uuid: campaignId,
+              per_page: DEFAULT_PAGINATION.perPage
+            },
+            options: {isResponseAll: IS_RESPONSE_ALL}
+          });
+          const strategies = getResponseData(strategyRes, IS_RESPONSE_ALL);
+          const destructuredStrategies = strategies?.map(item => {
+            const campaignNode = {
+              id: item.uuid,
+              name: item.name,
+              children: [],
+              numChildren: 0,
+              page: 0,
+              expanded: false,
+              selected: false,
+              parentId: campaignId,
+              isStrategy: true,
+              advertiserId: advId
+            };
+            return campaignNode;
+          });
+          dispatch(
+            setAdvertisersRedux(
+              items,
+              1,
+              getResponsePagination(res).totalItems,
+              advId,
+              campaignId,
+              destructureCampaigns,
+              strategyId,
+              destructuredStrategies
+            )
+          );
+          return;
+        }
+
         dispatch(
           setAdvertisersRedux(
             items,
@@ -69,7 +110,6 @@ export function useRefreshAdvertiserTree() {
           )
         );
 
-        // dispatch(setCampaignRedux(advId, campaignId, destructureCampaigns));
       }
     },
     [dispatch]

@@ -16,7 +16,10 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
 import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
-import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
+import {
+  initStrategyInventoryListRedux,
+} from 'store/reducers/campaign';
+import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertiserTree';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -43,6 +46,7 @@ const FormContainer = ({
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
   const navigate = useNavigate();
+  const {refresh} = useRefreshAdvertiserTree();
 
   const methods = useForm({
     defaultValues: {
@@ -178,6 +182,8 @@ const FormContainer = ({
           const {data} = await createStrategy(req);
 
           const strategyId = data?.uuid;
+          await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
+
           ShowToast.success('Created strategy successfully');
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
@@ -199,6 +205,7 @@ const FormContainer = ({
       navigate,
       originalStrategy,
       redirectPageAfterSave,
+      refresh,
       reset,
       strategyId
     ]
