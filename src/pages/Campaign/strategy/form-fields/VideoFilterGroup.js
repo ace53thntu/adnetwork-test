@@ -9,12 +9,13 @@ import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
-import {FormReactSelect, FormToggle} from 'components/forms';
+import {FormRadioGroup, FormReactSelect} from 'components/forms';
 import {
+  getSkippableOptions,
   PlacementTypeOptions,
   StartDelayOptions
 } from 'pages/Campaign/constants';
-import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
+import {LinearityOptions, ProtocolOptions} from 'constants/misc';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import ErrorMessage from 'components/forms/ErrorMessage';
 
@@ -84,38 +85,30 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             isClearable
           />
         </Col>
-        <Col md="3">
-          <div>
-            <FormToggle
-              name="video_filter.only_skipable"
-              defaultCheckedValue=""
-              label={t('FORM.ONLY_SKIPABLE')}
-              values={{
-                checked: Statuses.ACTIVE,
-                unChecked: Statuses.INACTIVE
-              }}
-              disabled={isView}
-            />
-          </div>
+        <Col md="6">
+          <FormRadioGroup
+            inline
+            disabled={isView}
+            label={t('FORM.ONLY_SKIPABLE')}
+            items={getSkippableOptions('skipable')}
+            defaultValue={null}
+            name="video_filter.only_skipable"
+          />
         </Col>
         <Col md="6">
-          <div>
-            <FormToggle
-              name="video_filter.only_unskipable"
-              defaultCheckedValue=""
-              label={t('FORM.ONLY_UNSKIPABLE')}
-              values={{
-                checked: Statuses.ACTIVE,
-                unChecked: Statuses.INACTIVE
-              }}
-              disabled={isView}
+          <FormRadioGroup
+            inline
+            disabled={isView}
+            label={t('FORM.ONLY_UNSKIPABLE')}
+            items={getSkippableOptions('unskipable')}
+            defaultValue={null}
+            name="video_filter.only_unskipable"
+          />
+          {errors?.video_filter?.only_unskipable && (
+            <ErrorMessage
+              message={errors?.video_filter?.only_unskipable?.message}
             />
-            {errors?.video_filter?.only_unskipable && (
-              <ErrorMessage
-                message={errors?.video_filter?.only_unskipable?.message}
-              />
-            )}
-          </div>
+          )}
         </Col>
       </Row>
     </Collapse>

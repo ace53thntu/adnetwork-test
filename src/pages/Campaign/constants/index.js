@@ -1,3 +1,9 @@
+export const getSkippableOptions = (key) => ([
+  {value: "", label: 'Any', id: `${key}-unset`},
+  {value: true, label: 'True', id: `${key}-true`},
+  {value: false, label: 'False', id: `${key}-false`}
+]);
+
 /**
  * @enum
  */
@@ -61,7 +67,7 @@ export const PlatformOptions = [
   {
     value: Platform.BOT,
     label: 'Bot'
-  },
+  }
   // {
   //   value: Platform.UNKNOWN,
   //   label: 'Unknown'
@@ -145,7 +151,7 @@ export const BandwidthOptions = [
   },
   {value: Bandwidth.CELLULAR_NETWORK_2G, label: 'Cellular Network – 2g'},
   {value: Bandwidth.CELLULAR_NETWORK_3G, label: 'Cellular Network – 3g'},
-  {value: Bandwidth.CELLULAR_NETWORK_4G, label: 'Cellular Network – 4g'},
+  {value: Bandwidth.CELLULAR_NETWORK_4G, label: 'Cellular Network – 4g'}
   // {value: Bandwidth.UNKNOWN, label: 'Unknown'}
 ];
 
@@ -184,7 +190,7 @@ export const OperatingSystemOptions = [
   {value: OperatingSystem.PLAYSTATION, label: 'Playstation'},
   {value: OperatingSystem.XBOX, label: 'Xbox'},
   {value: OperatingSystem.NINTENDO, label: 'Nintendo'},
-  {value: OperatingSystem.BOT, label: 'Bot'},
+  {value: OperatingSystem.BOT, label: 'Bot'}
   // {value: OperatingSystem.UNKNOWN, label: 'Unknown'}
 ];
 

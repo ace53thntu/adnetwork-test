@@ -27,7 +27,7 @@ export const strategySchema = (
         'Only skippable and Only unskippable are not allowed to set active together',
       test: function (value) {
         // You can access the budget global field with `this.parent`.
-        if (this.parent?.only_skipable === 'active' && value === 'active') {
+        if (this.parent?.only_skipable === 'true' && value === 'true') {
           return false;
         }
 
