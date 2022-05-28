@@ -34,7 +34,8 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       allow_deal: 'inactive',
       type: null,
       metadata: {
-        loop: 'active',
+        loop: 'true',
+        skip: '',
         protocols: [
           {value: 2, label: 'VAST 2.0'},
           {value: 3, label: 'VAST 3.0'},

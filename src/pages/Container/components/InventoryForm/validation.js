@@ -110,6 +110,9 @@ export const validationInventory = t => {
             'max-duration-skip-min',
             'Max duration must be greater than skip min',
             function (value) {
+              if (!value && parseInt(this.parent?.skip_min)) {
+                return false;
+              }
               if (parseInt(value) <= parseInt(this.parent?.skip_min)) {
                 return false;
               }
@@ -125,6 +128,12 @@ export const validationInventory = t => {
             'skip-after-min-duration',
             'Skip after must be greater than min duration',
             function (value) {
+              if (this.parent?.skip !== 'true') {
+                return true;
+              }
+              if (!value && parseInt(this.parent?.min_duration)) {
+                return false;
+              }
               if (parseInt(value) <= parseInt(this.parent?.min_duration)) {
                 return false;
               }
@@ -140,6 +149,12 @@ export const validationInventory = t => {
             'skip-min-skip-later',
             'Skip min must be greater than skip after',
             function (value) {
+              if (this.parent?.skip !== 'true') {
+                return true;
+              }
+              if (!value && parseInt(this.parent?.skip_after)) {
+                return false;
+              }
               if (parseInt(value) <= parseInt(this.parent?.skip_after)) {
                 return false;
               }

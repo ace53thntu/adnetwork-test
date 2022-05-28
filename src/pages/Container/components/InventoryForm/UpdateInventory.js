@@ -47,7 +47,9 @@ function FormUpdate({toggle, inventory, pageId}) {
   });
   const methods = useForm({
     defaultValues,
-    resolver: validationInventory(t)
+    resolver: validationInventory(t),
+    mode: 'onChange',
+    reValidateMode: 'onChange'
   });
   const {handleSubmit, reset} = methods;
   const {mutateAsync: editInventory} = useEditInventory();
