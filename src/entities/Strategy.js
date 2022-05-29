@@ -557,7 +557,7 @@ const getContextFilter = ({
         contextFilterForm?.device_manufacturer
       );
     } else {
-      contextFilter.device_manufacture = [];
+      contextFilter.device_manufacturer = [];
     }
 
     if (
