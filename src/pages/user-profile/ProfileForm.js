@@ -15,7 +15,7 @@ import {mappingProfileFormToApi} from 'entities/User';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {FormReactSelect, FormTextInput} from 'components/forms';
 import Credential from 'components/credential';
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {LANG_OPTIONS} from 'constants/misc';
 
 const propTypes = {
@@ -50,7 +50,7 @@ const ProfileForm = ({userData = {}, rawData = null}) => {
     const dataUpdate = mappingProfileFormToApi({formData, userData: rawData});
     const errorMsg = await updateUserProfile(dataUpdate);
     if (errorMsg) {
-      ShowToast.error(errorMsg);
+      ShowToast.error(<ApiError apiError={errorMsg} />);
     } else {
       ShowToast.success('Updated user profile successfully');
     }

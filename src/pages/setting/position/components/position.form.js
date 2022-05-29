@@ -17,7 +17,7 @@ import {
 } from 'reactstrap';
 
 //---> Internal Modules
-import {LoadingIndicator} from 'components/common';
+import {ApiError, LoadingIndicator} from 'components/common';
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import {InputNames} from '../constant';
 import {useTranslation} from 'react-i18next';
@@ -62,7 +62,7 @@ const PositionForm = ({
         ShowToast.success('Created position successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create position');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       try {
@@ -70,7 +70,7 @@ const PositionForm = ({
         ShowToast.success('Updated position successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update position');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   }

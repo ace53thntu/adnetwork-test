@@ -30,6 +30,7 @@ import {USER_INFO_KEY} from 'utils/constants/auth.constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import MetricInfo from 'pages/entity-report/components/report-item/MetricInfo';
 import {ChartItem} from 'pages/entity-report/components/chart-item';
+import {ApiError} from 'components/common';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -94,7 +95,7 @@ export default function ModalReportPage({
           error
         );
 
-        ShowToast.error(error?.msg || 'Fail to add page to report');
+        ShowToast.error(<ApiError apiError={error} />);
       }
       return;
     }

@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
-import {DialogConfirm, LoadingIndicator} from 'components/common';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
 import {ChartModes, ChartTypes} from 'constants/report';
 import {useDeleteReport} from 'queries/report';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -137,7 +137,7 @@ export default function ReportItem({
       ShowToast.success('Deleted report successfully');
       setShowDialogConfirm(false);
     } catch (err) {
-      ShowToast.error('Fail to delete report');
+      ShowToast.error(<ApiError apiError={err}/>);
     }
     setIsLoadingDelete(false);
   };

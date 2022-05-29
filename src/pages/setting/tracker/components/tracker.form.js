@@ -17,7 +17,7 @@ import {
 } from 'reactstrap';
 
 //---> Internal Modules
-import {LoadingIndicator} from 'components/common';
+import {ApiError, LoadingIndicator} from 'components/common';
 import {ActiveToggle, FormReactSelect} from 'components/forms';
 import {
   InputNames,
@@ -82,7 +82,7 @@ const TrackerForm = ({
         ShowToast.success('Created tracker successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create tracker');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       try {
@@ -90,7 +90,7 @@ const TrackerForm = ({
         ShowToast.success('Updated tracker successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update tracker');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   }

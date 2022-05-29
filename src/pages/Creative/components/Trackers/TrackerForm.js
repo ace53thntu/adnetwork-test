@@ -1,4 +1,4 @@
-import {Collapse, DialogConfirm} from 'components/common';
+import {ApiError, Collapse, DialogConfirm} from 'components/common';
 import {SelectPaginate} from 'components/forms';
 import PropTypes from 'prop-types';
 import {
@@ -100,7 +100,7 @@ function TrackerFormBody(props) {
         handleCancel();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     } else {
       try {
@@ -110,7 +110,7 @@ function TrackerFormBody(props) {
         handleCancel();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     }
   };

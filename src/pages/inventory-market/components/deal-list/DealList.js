@@ -19,7 +19,7 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import NoDataAvailable from 'components/list/no-data';
 import {useDeleteDeal} from 'queries/deal';
 import DealFormModal from '../deal-form-modal';
-import {DialogConfirm} from 'components/common';
+import {ApiError, DialogConfirm} from 'components/common';
 import {GET_INVENTORY_DEAL} from 'queries/inventory/constants';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
@@ -90,7 +90,7 @@ const DealList = ({inventoryId}) => {
 
       ShowToast.success('Deleted deal successfully');
     } catch (error) {
-      ShowToast.error(error?.msg || 'Fail to delete deal');
+      ShowToast.error(<ApiError apiError={error}/>);
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);

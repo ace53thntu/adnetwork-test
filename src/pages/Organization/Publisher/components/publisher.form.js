@@ -33,6 +33,7 @@ import Credential from 'components/credential';
 import {GET_PUBLISHER} from 'queries/publisher/constants';
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import './_main.scss';
+import {ApiError} from 'components/common';
 
 const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
         ShowToast.success('Created publisher successfully');
         navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`);
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create publisher');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       // EDIT
@@ -84,7 +85,7 @@ const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
           `/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${data?.uuid}`
         );
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update publisher');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   };

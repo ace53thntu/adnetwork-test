@@ -38,6 +38,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {useSearchTermSelector} from 'store/reducers/dsp';
 import SearchInput from './components/SearchInput';
+import { ApiError } from 'components/common';
 
 /**
  * @function DSP List Component
@@ -162,7 +163,7 @@ const DspList = () => {
       await deleteDsp({dspId: currentDsp?.uuid});
       ShowToast.success('Deleted DSP successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete DSP');
+      ShowToast.error(<ApiError apiError={err}/>);
     } finally {
       setShowDialog(false);
     }

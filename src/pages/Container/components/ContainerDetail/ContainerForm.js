@@ -1,4 +1,4 @@
-import {BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
+import {ApiError, BlockOverlay, ButtonLoading, DialogConfirm} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {RoutePaths} from 'constants/route-paths';
@@ -100,7 +100,7 @@ function ContainerForm(props) {
       dispatch(updatedContainerRedux({...data, id: data?.uuid}));
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 
@@ -119,7 +119,7 @@ function ContainerForm(props) {
       navigate(`/container`);
     } catch (error) {
       setIsDeleting(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 

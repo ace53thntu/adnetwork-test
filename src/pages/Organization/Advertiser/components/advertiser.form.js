@@ -22,6 +22,7 @@ import Credential from 'components/credential';
 import {FormContent} from './form-content';
 import {useQueryClient} from 'react-query';
 import {GET_ADVERTISER} from 'queries/advertiser/constants';
+import { ApiError } from 'components/common';
 
 const AdvertiserForm = ({
   modal = false,
@@ -69,7 +70,7 @@ const AdvertiserForm = ({
         navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`);
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create advertiser');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     } else {
       // EDIT
@@ -82,7 +83,7 @@ const AdvertiserForm = ({
         );
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 100 ~ err', err);
-        ShowToast.error(err || 'Fail to update advertiser');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     }
   };

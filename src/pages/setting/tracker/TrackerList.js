@@ -39,6 +39,7 @@ import DomainForm from './components/tracker.form';
 import {useDeleteTracker, useGetTracker, useGetTrackers} from 'queries/tracker';
 import TrackerForm from './components/tracker.form';
 import {TrackerReferenceTypes} from './constant';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
@@ -181,7 +182,7 @@ const TrackerList = () => {
       await deleteTracker({trackerId: currentTracker?.uuid});
       ShowToast.success('Deleted tracker successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete tracker');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

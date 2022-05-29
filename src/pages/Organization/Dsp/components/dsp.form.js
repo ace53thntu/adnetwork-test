@@ -22,6 +22,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {useQueryClient} from 'react-query';
 import {GET_DSP} from 'queries/dsp/constants';
+import { ApiError } from 'components/common';
 
 const propTypes = {
   dspData: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
@@ -65,7 +66,7 @@ const DspForm = ({dspData, isEdit, isCreate = false}) => {
         navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}`);
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err?.msg || 'Fail to create DSP');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     } else {
       // EDIT
@@ -76,7 +77,7 @@ const DspForm = ({dspData, isEdit, isCreate = false}) => {
         navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.DSP}/${dspId}`);
       } catch (err) {
         console.log('🚀 ~ file: DSP.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err?.msg || 'Fail to update DSP');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     }
   };

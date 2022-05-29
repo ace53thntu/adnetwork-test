@@ -40,6 +40,7 @@ import {
 } from 'queries/position';
 import PositionCreate from './PositionCreate';
 import PositionEdit from './PositionEdit';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
@@ -157,7 +158,7 @@ const PositionList = () => {
       await deletePosition({positionId: currentPosition?.uuid});
       ShowToast.success('Deleted position successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete position');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

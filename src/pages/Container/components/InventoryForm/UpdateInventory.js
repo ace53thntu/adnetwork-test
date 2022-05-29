@@ -15,6 +15,7 @@ import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
 import {useCreateTracker, useEditTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
+import { ApiError } from 'components/common';
 
 export default function UpdateInventory({
   toggle = () => {},
@@ -98,9 +99,7 @@ function FormUpdate({toggle, inventory, pageId}) {
         toggle();
       } catch (err) {
         setIsLoading(false);
-        ShowToast.error(err?.msg || 'Fail to update inventory', {
-          closeOnClick: true
-        });
+        ShowToast.error(<ApiError apiError={err || 'Fail to update inventory'}/>);
       }
     },
     [

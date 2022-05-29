@@ -39,6 +39,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import SearchInput from './components/SearchInput';
 import {useSearchTermSelector} from 'store/reducers/advertiser';
 import NoDataAvailable from 'components/list/no-data';
+import { ApiError } from 'components/common';
 
 /**
  * @function Advertiser List Component
@@ -169,7 +170,7 @@ const ListAdvertiser = () => {
       setShowDialog(false);
 
     } catch (err) {
-      ShowToast.error(err?.msg || 'Fail to delete advertiser');
+      ShowToast.error(<ApiError apiError={err}/>);
     }
   };
 

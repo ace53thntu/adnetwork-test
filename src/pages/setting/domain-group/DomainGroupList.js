@@ -42,6 +42,7 @@ import {
 } from 'queries/domain-group';
 import DomainGroupForm from './components/domain-group.form';
 import DomainBadge from './components/DomainBadge';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
@@ -164,7 +165,7 @@ const DomainGroupList = () => {
       await deleteDomainGroup({domainGroupId: currentDomain?.uuid});
       ShowToast.success('Deleted domain group successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete domain group');
+      ShowToast.error(<ApiError apiError={err}/>);
     } finally {
       setShowDialog(false);
     }

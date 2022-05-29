@@ -36,6 +36,7 @@ import DomainEdit from './DomainEdit';
 import {ModalLayout} from 'components/forms';
 import DomainForm from './components/domain.form';
 import {useDeleteDomain, useGetDomain, useGetDomains} from 'queries/domain';
+import {ApiError} from 'components/common';
 
 const propTypes = {};
 
@@ -157,7 +158,7 @@ const DomainList = () => {
       await deleteDomain({domainId: currentDomain?.uuid});
       ShowToast.success('Deleted domain successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete domain');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

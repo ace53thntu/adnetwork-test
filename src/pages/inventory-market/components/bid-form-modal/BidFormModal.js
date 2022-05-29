@@ -18,6 +18,7 @@ import {GET_INVENTORY_BID} from 'queries/inventory/constants';
 import {useQueryClient} from 'react-query';
 import {QueryStatuses} from 'constants/react-query';
 import {schemaValidate} from '../validation';
+import { ApiError } from 'components/common';
 
 const propTypes = {
   toggle: PropTypes.func,
@@ -84,7 +85,7 @@ const ModalContent = ({
       toggle();
     } catch (error) {
       if (error) {
-        ShowToast.error(error?.msg || 'Fail to bid inventory');
+        ShowToast.error(<ApiError apiError={error}/>);
       } else {
         ShowToast.info('There are no changes');
       }

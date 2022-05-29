@@ -12,7 +12,7 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import {LoadingIndicator} from 'components/common';
+import {ApiError, LoadingIndicator} from 'components/common';
 import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -147,7 +147,7 @@ const PublisherList = () => {
       await deletePublisher({pubId: currentPublisher?.uuid});
       ShowToast.success('Deleted publisher successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete publisher');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

@@ -17,7 +17,7 @@ import {
 } from 'reactstrap';
 
 //---> Internal Modules
-import {LoadingIndicator} from 'components/common';
+import {ApiError, LoadingIndicator} from 'components/common';
 import {ActiveToggle, FormTextInput} from 'components/forms';
 import {InputNames} from '../constant';
 import {useTranslation} from 'react-i18next';
@@ -67,7 +67,7 @@ const KeywordListForm = ({
         ShowToast.success('Created keyword list successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create keyword list');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       try {
@@ -75,7 +75,7 @@ const KeywordListForm = ({
         ShowToast.success('Updated keyword list successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update keyword list');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   }

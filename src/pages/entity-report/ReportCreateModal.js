@@ -21,6 +21,7 @@ import {
 } from 'store/reducers/entity-report';
 import {useQueryClient} from 'react-query';
 import {GET_REPORT} from 'queries/report/constants';
+import {ApiError} from 'components/common';
 
 export default function ModalReportForm({
   modal = false,
@@ -62,7 +63,7 @@ export default function ModalReportForm({
         ShowToast.success('Created report successfully');
         toggle();
       } catch (error) {
-        ShowToast.error(error?.msg || 'Fail to create report');
+        ShowToast.error(<ApiError apiError={error} />);
       }
     },
     [createReport, toggle]
@@ -76,7 +77,7 @@ export default function ModalReportForm({
         ShowToast.success('Updated report successfully');
         toggle();
       } catch (error) {
-        ShowToast.error(error?.msg || 'Fail to update report');
+        ShowToast.error(<ApiError apiError={error} />);
       }
     },
     [client, report?.uuid, reportId, toggle, updateReport]

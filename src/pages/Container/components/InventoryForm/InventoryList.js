@@ -28,7 +28,7 @@ import {
 } from 'pages/inventory-market/helpers';
 import {Pagination} from 'components/list/pagination';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {LoadingIndicator} from 'components/common';
+import {ApiError, LoadingIndicator} from 'components/common';
 import NoDataAvailable from 'components/list/no-data';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
@@ -154,9 +154,7 @@ function InventoryList() {
       });
       setOpenConfirm(false);
     } catch (error) {
-      ShowToast.error(error || 'Fail to delete Inventory', {
-        closeOnClick: true
-      });
+      ShowToast.error(<ApiError apiError={error || 'Fail to delete Inventory'}/>);
     } finally {
       setIsLoading(false);
     }

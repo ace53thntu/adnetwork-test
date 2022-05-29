@@ -25,6 +25,7 @@ import BasicInfo from './BasicInfo';
 import GeneralTracking from './GeneralTracking';
 import VideoTracking from './VideoTracking';
 import ExtraInformation from './ExtraInformation';
+import {ApiError} from 'components/common';
 
 const propTypes = {
   title: PropTypes.string,
@@ -57,7 +58,7 @@ const TrackerTemplateForm = ({isEdit = false, trackerTemplate = null}) => {
         ShowToast.success('Created tracker template successfully');
         navigate(`/${RoutePaths.SETTING}/${RoutePaths.TRACKER_TEMPLATE}`);
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create tracker template');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       try {
@@ -72,7 +73,7 @@ const TrackerTemplateForm = ({isEdit = false, trackerTemplate = null}) => {
         navigate(`/${RoutePaths.SETTING}/${RoutePaths.TRACKER_TEMPLATE}`);
         ShowToast.success('Updated tracker template successfully');
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update tracker template');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   }

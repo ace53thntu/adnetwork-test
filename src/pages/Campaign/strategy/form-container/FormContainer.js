@@ -16,10 +16,9 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
 import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
-import {
-  initStrategyInventoryListRedux,
-} from 'store/reducers/campaign';
+import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertiserTree';
+import ApiError from 'components/common/ApiError';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -175,7 +174,7 @@ const FormContainer = ({
             _isSummary: isSummary
           });
         } catch (error) {
-          ShowToast.error(error?.msg);
+          ShowToast.error(<ApiError apiError={error}/>);
         }
       } else {
         try {
@@ -189,7 +188,9 @@ const FormContainer = ({
             `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
-          ShowToast.error(error?.debug);
+          ShowToast.error(
+            <ApiError apiError={error}/>
+          );
         }
       }
     },

@@ -1,4 +1,4 @@
-import {DialogConfirm} from 'components/common';
+import {ApiError, DialogConfirm} from 'components/common';
 import PropTypes from 'prop-types';
 import {useDeleteConcept} from 'queries/concept';
 import {GET_CONCEPTS_LOAD_MORE} from 'queries/concept/constants';
@@ -69,7 +69,7 @@ function ConceptListItem(props) {
       ShowToast.success('Delete Concept successfully!');
       dispatch(deleteConceptRedux(conceptId, advertiserId));
     } catch (error) {
-      ShowToast.error(error?.msg);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 

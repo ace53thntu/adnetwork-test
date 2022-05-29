@@ -19,7 +19,7 @@ import {
 
 // Internal Modules
 import {schemaValidateCreateSchedule} from '../validation';
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {FormReactSelect} from 'components/forms';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -92,7 +92,7 @@ const ScheduleCreateModal = ({
       ShowToast.success('Created Capping Successfully');
       toggleModal();
     } catch (err) {
-      ShowToast.error(err?.msg || 'Fail to Created Capping');
+      ShowToast.error(<ApiError apiError={err}/>);
     }
   }
 

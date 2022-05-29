@@ -10,7 +10,7 @@ import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {useGetCredentials, useReGenerateCredential} from 'queries/credential';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {ButtonLoading, DialogConfirm} from 'components/common';
+import {ApiError, ButtonLoading, DialogConfirm} from 'components/common';
 import {DEFAULT_PAGINATION} from 'constants/misc';
 
 //---> Define prop types
@@ -67,7 +67,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
       setSecretKey(newScretKey);
       ShowToast.success('Re-generated new credential successfully');
     } catch (err) {
-      ShowToast.error(err.msg ?? 'Fail to re-generate credential');
+      ShowToast.error(<ApiError apiError={err ?? 'Fail to re-generate credential'}/>);
     } finally {
       setIsGenerating(false);
     }
@@ -82,7 +82,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
       setSecretKey(newScretKey);
       ShowToast.success('Generated new credential successfully');
     } catch (err) {
-      ShowToast.error(err.msg ?? 'Fail to re-generate credential');
+      ShowToast.error(<ApiError apiError={err ?? 'Fail to re-generate credential'}/>);
     } finally {
       setIsGenerating(false);
     }

@@ -35,6 +35,7 @@ import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import TrackerTemplateLayout from './TrackerTemplateLayout';
 import { useNavigate } from 'react-router-dom';
 import { RoutePaths } from 'constants/route-paths';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
@@ -178,7 +179,7 @@ const TrackerTemplateList = () => {
       });
       ShowToast.success('Deleted tracker template successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete tracker template');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

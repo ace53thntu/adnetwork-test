@@ -40,6 +40,7 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import SearchInput from './components/SearchInput';
 import {useSearchTermSelector} from 'store/reducers/user';
+import { ApiError } from 'components/common';
 
 const UserList = () => {
   const {t} = useTranslation();
@@ -185,7 +186,7 @@ const UserList = () => {
       await deleteUser({userId: currentUser?.uuid});
       ShowToast.success('Deleted user successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete user');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

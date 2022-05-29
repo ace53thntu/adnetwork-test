@@ -1,4 +1,4 @@
-import {StrapConfirmModal} from 'components/common';
+import {ApiError, StrapConfirmModal} from 'components/common';
 import {FormReactSelect, FormTextInput} from 'components/forms';
 import PropTypes from 'prop-types';
 import {useDeleteAsset} from 'queries/native-ad';
@@ -48,7 +48,7 @@ function AssetForm(props) {
         ShowToast.success('Remove Asset successfully!');
         remove(assetIndex);
       } catch (error) {
-        ShowToast.error(error?.message);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     } else {
       remove(assetIndex);

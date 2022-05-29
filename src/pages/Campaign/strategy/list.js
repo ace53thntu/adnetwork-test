@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import {DialogConfirm, LoadingIndicator} from 'components/common';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
 import {useDeleteStrategy, useGetStrategies} from 'queries/strategy';
@@ -190,7 +190,7 @@ const StrategyList = ({
       await deleteStrategy({straId: currentStrategy?.uuid});
       ShowToast.success('Deleted strategy successfully');
     } catch (err) {
-      ShowToast.error(err?.msg || 'Fail to delete strategy');
+      ShowToast.error(<ApiError apiError={err || 'Fail to delete strategy'}/>);
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);

@@ -18,7 +18,7 @@ import {
 } from 'reactstrap';
 
 // Internal Modules
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {useCreateCapping} from 'queries/capping';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import {initializingDefaultValues} from '../dto';
@@ -69,7 +69,7 @@ const KeywordCreateModal = ({
       ShowToast.success('Created Capping Successfully');
       toggleModal();
     } catch (err) {
-      ShowToast.error(err?.msg || 'Fail to Created Capping');
+      ShowToast.error(<ApiError apiError={err}/>);
     }
   }
 
