@@ -330,7 +330,7 @@ const TrackerTemplateForm = ({isEdit = false, trackerTemplate = null}) => {
                 </Col>
 
                 {/* Click Url Append Params */}
-                <Col sm={12}>
+                <Col sm={6}>
                   <FormTextInput
                     name={InputNames.CLICK_URL_APPEND_PARAMS}
                     label={t('clickUrlAppendParams')}

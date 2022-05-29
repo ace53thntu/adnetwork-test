@@ -3,7 +3,6 @@ import React from 'react';
 import {CopyBlock, atomOneLight} from 'react-code-blocks';
 
 function IosVideoAdsSnippet({inventoryId}) {
-  console.log("🚀 ~ file: IosVideoAdsSnippet.js ~ line 6 ~ IosVideoAdsSnippet ~ inventoryId", inventoryId)
   return (
     <div className="aicactus-snippet-container">
       <h6 className="font-weight-bold mt-3 mb-2">Video Ad</h6>
