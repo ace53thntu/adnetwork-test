@@ -18,14 +18,15 @@ export const formToApi = ({formData, type}) => {
     )
   ) {
     return {
-      target: convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
+      target:
+        formData?.target === 0 ? 0 : convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
       status
     };
   }
 
   if ([CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(type)) {
     return {
-      target: parseInt(formData?.target) || 0, //parseFloat(formData?.target) || 0,
+      target: formData?.target === 0 ? 0 : parseInt(formData?.target), //parseFloat(formData?.target) || 0,
       status
     };
   }

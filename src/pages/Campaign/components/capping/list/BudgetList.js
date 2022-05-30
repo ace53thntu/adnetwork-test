@@ -39,9 +39,15 @@ const BudgetList = ({
   isManager = false,
   onClickMenu = () => null,
   onClickItem = () => null,
-  type=""
+  type = ''
 }) => {
   const {t} = useTranslation();
+  const destructuredList = list?.map(item=>{
+    if(item?.target === 0 || !item.target){
+      return {...item, actions: [t('edit')]}
+    }
+    return {...item, actions: [t('edit'), t('delete')]}
+  })
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -61,7 +67,7 @@ const BudgetList = ({
         header: 'Target',
         accessor: 'target',
         cell: row => {
-          if(row?.value === 0 || !row?.value){
+          if (row?.value === 0 || !row?.value) {
             return null;
           }
           if (
@@ -123,12 +129,19 @@ const BudgetList = ({
       {
         accessor: 'status',
         cell: row => {
+          let status = row?.value;
+          if (row?.original?.target === 0 || !row?.original?.target) {
+            status = 'deleted';
+          }
           let statusProps = {
-            label: capitalize(row?.value)
+            label: capitalize(status)
           };
-          switch (row.value) {
+          switch (status) {
             case 'active':
               statusProps.color = 'success';
+              break;
+            case 'deleted':
+              statusProps.color = 'danger';
               break;
             default:
               statusProps.color = 'secondary';
@@ -136,23 +149,18 @@ const BudgetList = ({
           }
           return <CustomStatus {...statusProps} />;
         }
-      }
+      },
     ];
   }, [isManager]);
 
-  let actions = [[t('edit')]];
-  if(type ){
-    actions.push(t('delete'))
-  }
 
   return (
     <Collapse title={title} initialOpen unMount={false}>
       {isArray(list) && list.length > 0 ? (
         <List
-          data={list || []}
+          data={destructuredList || []}
           columns={columns}
           showAction
-          actions={actions}
           handleAction={onClickMenu}
           handleClickItem={onClickItem}
         />

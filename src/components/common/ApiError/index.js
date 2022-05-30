@@ -6,7 +6,7 @@ const ApiError = ({apiError}) => {
     return 'Somethings went wrong!';
   }
 
-  if (apiError && !apiError?.msg) {
+  if (apiError && !apiError.msg) {
     return apiError;
   }
 
