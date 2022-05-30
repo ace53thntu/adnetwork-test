@@ -29,7 +29,8 @@ const propTypes = {
   onClickItem: PropTypes.func,
   onClickMenu: PropTypes.func,
   title: PropTypes.string,
-  isManager: PropTypes.bool
+  isManager: PropTypes.bool,
+  type: PropTypes.string
 };
 
 const BudgetList = ({
@@ -37,7 +38,8 @@ const BudgetList = ({
   list = [],
   isManager = false,
   onClickMenu = () => null,
-  onClickItem = () => null
+  onClickItem = () => null,
+  type=""
 }) => {
   const {t} = useTranslation();
 
@@ -59,6 +61,9 @@ const BudgetList = ({
         header: 'Target',
         accessor: 'target',
         cell: row => {
+          if(row?.value === 0 || !row?.value){
+            return null;
+          }
           if (
             [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
               row?.original?.type
@@ -135,7 +140,10 @@ const BudgetList = ({
     ];
   }, [isManager]);
 
-  const actions = !isManager ? [t('edit')] : [t('edit')];
+  let actions = [[t('edit')]];
+  if(type ){
+    actions.push(t('delete'))
+  }
 
   return (
     <Collapse title={title} initialOpen unMount={false}>

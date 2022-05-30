@@ -177,6 +177,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           list={userList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type="user"
         />
       )}
 
