@@ -42,12 +42,12 @@ const BudgetList = ({
   type = ''
 }) => {
   const {t} = useTranslation();
-  const destructuredList = list?.map(item=>{
-    if(item?.target === 0 || !item.target){
-      return {...item, actions: [t('edit')]}
+  const destructuredList = list?.map(item => {
+    if (item?.target === 0 || !item.target) {
+      return {...item, actions: [t('edit')]};
     }
-    return {...item, actions: [t('edit'), t('delete')]}
-  })
+    return {...item, actions: [t('edit'), t('delete')]};
+  });
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -97,7 +97,6 @@ const BudgetList = ({
           );
         }
       },
-
       {
         header: 'Time frame',
         accessor: 'time_frame',
@@ -149,10 +148,9 @@ const BudgetList = ({
           }
           return <CustomStatus {...statusProps} />;
         }
-      },
+      }
     ];
   }, [isManager]);
-
 
   return (
     <Collapse title={title} initialOpen unMount={false}>

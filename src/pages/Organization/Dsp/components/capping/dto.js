@@ -19,7 +19,8 @@ export const formToApi = ({formData, type}) => {
     ].includes(type)
   ) {
     return {
-      target: convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
+      target:
+        formData?.target === 0 ? 0 : convertGuiToApi({value: formData?.target}), //parseFloat(formData?.target) || 0,
       status
     };
   }
