@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -12,27 +12,26 @@ import {
   Container,
   Badge
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
+import { List } from 'components/list';
+import { CustomStatus } from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {ModalLayout} from 'components/forms';
+import { ModalLayout } from 'components/forms';
 import {
   useDeleteKeywordList,
   useGetKeywordList,
@@ -42,17 +41,12 @@ import KeywordListCreate from './KeywordListCreate';
 import KeywordListEdit from './KeywordListEdit';
 import KeywordListForm from './components/keyword-list.form';
 import KeywordBadge from './components/KeywordBadge';
-import {ApiError} from 'components/common';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
 const KeywordList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentKeywordList, setCurrentKeywordList] = React.useState(null);
@@ -62,7 +56,7 @@ const KeywordList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Domains.
-  const {data, isLoading, isPreviousData} = useGetKeywordLists({
+  const { data, isLoading, isPreviousData } = useGetKeywordLists({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -74,7 +68,7 @@ const KeywordList = () => {
 
   const keywordLists = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
@@ -86,7 +80,7 @@ const KeywordList = () => {
     isLoading: isLoadingDelete
   } = useDeleteKeywordList();
 
-  const {data: keywordList} = useGetKeywordList({
+  const { data: keywordList } = useGetKeywordList({
     keywordListId: currentKeywordList?.uuid,
     enabled: !!currentKeywordList?.uuid
   });
@@ -170,7 +164,7 @@ const KeywordList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteKeywordList({keywordListId: currentKeywordList?.uuid});
+      await deleteKeywordList({ keywordListId: currentKeywordList?.uuid });
       ShowToast.success('Deleted keyword list successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -192,7 +186,7 @@ const KeywordList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>{t('keywordList')}</div>
                   <div className="widget-content-right">
@@ -207,7 +201,7 @@ const KeywordList = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (

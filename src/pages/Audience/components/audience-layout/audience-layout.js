@@ -1,25 +1,16 @@
-import {ErrorBoundary} from 'components/common';
+import { ErrorBoundary } from 'components/common';
 //---> Internal Modules
 import AppContent from 'components/layouts/Admin/components/AppContent';
 //---> Build-in Modules
 import React from 'react';
 //---> External Modules
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-import {Outlet} from 'react-router-dom';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { Outlet } from 'react-router-dom';
 
 const AudienceLayout = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
 
   return (
     <ErrorBoundary>
-{/*      <ExtendSidebar
+      {/*      <ExtendSidebar
         heading={<NavLink to="/audiences">{t('audiences')}</NavLink>}
       >
         <div className="mb-2">

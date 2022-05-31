@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -12,43 +12,36 @@ import {
   Container,
   Badge
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {countries} from 'countries-list';
+import { countries } from 'countries-list';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
+import { List } from 'components/list';
+import { CustomStatus } from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {useDeleteUser, useGetUsers} from 'queries/users';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { useDeleteUser, useGetUsers } from 'queries/users';
 import UserCreate from './user-create';
 import UserEdit from './user-edit';
-import {UserForm} from './components';
-import {getUserRole} from './constants';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {useDispatch} from 'react-redux';
+import { UserForm } from './components';
+import { getUserRole } from './constants';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
 import SearchInput from './components/SearchInput';
-import {useSearchTermSelector} from 'store/reducers/user';
+import { useSearchTermSelector } from 'store/reducers/user';
 import { ApiError } from 'components/common';
 
 const UserList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentUser, setCurrentUser] = React.useState(null);
@@ -59,7 +52,7 @@ const UserList = () => {
   const searchTerm = useSearchTermSelector();
 
   //---> Query get list of Users.
-  const {data, isLoading, isPreviousData} = useGetUsers({
+  const { data, isLoading, isPreviousData } = useGetUsers({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -72,14 +65,14 @@ const UserList = () => {
 
   const users = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
   }, [data]);
 
   //---> Mutation delete user
-  const {mutateAsync: deleteUser, isLoading: isLoadingDelete} = useDeleteUser();
+  const { mutateAsync: deleteUser, isLoading: isLoadingDelete } = useDeleteUser();
 
   //---> Get list data
   //---> Get user role options
@@ -88,7 +81,7 @@ const UserList = () => {
   const countryOptions = React.useMemo(() => {
     const countriesArr = Object.values(countries);
     return countriesArr?.map(item => {
-      return {...item, value: item.languages?.[0], label: item.name};
+      return { ...item, value: item.languages?.[0], label: item.name };
     });
   }, []);
 
@@ -183,7 +176,7 @@ const UserList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteUser({userId: currentUser?.uuid});
+      await deleteUser({ userId: currentUser?.uuid });
       ShowToast.success('Deleted user successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -205,7 +198,7 @@ const UserList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div className="d-flex align-items-center">
                     <div className="mr-2">{t('userList')}</div>
@@ -223,7 +216,7 @@ const UserList = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (

@@ -2,24 +2,18 @@
 import React from 'react';
 
 //---> External Modules
-import {useParams} from 'react-router';
-import {useDispatch} from 'react-redux';
+import { useParams } from 'react-router';
 
 //---> Internal Modules
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {useGetReportPage} from 'queries/report-page';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { useGetReportPage } from 'queries/report-page';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import './_main.scss';
 
-const ReportLayout = ({children}) => {
-  const reduxDispatch = useDispatch();
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
-  const {pageId} = useParams();
+const ReportLayout = ({ children }) => {
+  const { pageId } = useParams();
 
-  const {data: pageDetails} = useGetReportPage(pageId);
+  const { data: pageDetails } = useGetReportPage(pageId);
 
   return (
     <>

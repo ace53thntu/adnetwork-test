@@ -2,34 +2,33 @@
 import React from 'react';
 
 //---> External Modules
-import {Card, CardHeader, Button, CardBody} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { Card, CardHeader, Button, CardBody } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 //---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import {List} from 'components/list';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { List } from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import {ApiError, LoadingIndicator} from 'components/common';
-import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
+import { ApiError, LoadingIndicator } from 'components/common';
+import { useDeletePublisher, useGetPublishers } from 'queries/publisher';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import PublisherLayout from './publisher-layout';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import { getRole } from 'utils/helpers/auth.helpers';
+import { USER_ROLE } from 'pages/user-management/constants';
 import SearchInput from './components/SearchInput';
-import {useSearchTermSelector} from 'store/reducers/publisher';
-import {useNavigate} from 'react-router-dom';
-import {RoutePaths} from 'constants/route-paths';
+import { useSearchTermSelector } from 'store/reducers/publisher';
+import { useNavigate } from 'react-router-dom';
+import { RoutePaths } from 'constants/route-paths';
 
 const ActionIndex = {
   EDIT: 0,
@@ -38,15 +37,14 @@ const ActionIndex = {
 
 const PublisherList = () => {
   const navigate = useNavigate();
-  const reduxDispatch = useDispatch();
   const role = getRole();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const searchTerm = useSearchTermSelector();
 
-  const {data, isLoading, isPreviousData} = useGetPublishers({
+  const { data, isLoading, isPreviousData } = useGetPublishers({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -59,7 +57,7 @@ const PublisherList = () => {
 
   const publishers = React.useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
 
   const paginationInfo = React.useMemo(() => {
@@ -144,7 +142,7 @@ const PublisherList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deletePublisher({pubId: currentPublisher?.uuid});
+      await deletePublisher({ pubId: currentPublisher?.uuid });
       ShowToast.success('Deleted publisher successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -153,14 +151,10 @@ const PublisherList = () => {
     }
   };
 
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
-
   return (
     <PublisherLayout>
       <Card className="main-card mb-3">
-        <CardHeader style={{display: 'flex', justifyContent: 'space-between'}}>
+        <CardHeader style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div className="d-flex align-items-center">
             <div className="mr-2">{t('publisherList')}</div>
             <SearchInput />
@@ -179,7 +173,7 @@ const PublisherList = () => {
             </div>
           )}
         </CardHeader>
-        <CardBody style={{minHeight: '400px'}}>
+        <CardBody style={{ minHeight: '400px' }}>
           {isLoading && <LoadingIndicator />}
           <List
             data={publishers || []}
