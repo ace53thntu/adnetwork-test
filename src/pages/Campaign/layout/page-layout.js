@@ -40,7 +40,7 @@ function CampaignPageLayout(props) {
 
   return (
     <ErrorBoundary>
-      <ExtendSidebar
+      {/*<ExtendSidebar
         heading={
           <NavLink to={`/${RoutePaths.CAMPAIGN}`}>
             {t('campaignManagement')}
@@ -61,7 +61,7 @@ function CampaignPageLayout(props) {
             <TreeSidebar />
           </ErrorBoundary>
         </div>
-      </ExtendSidebar>
+      </ExtendSidebar>*/}
 
       <AppContent>
         <Outlet />

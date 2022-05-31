@@ -1,31 +1,32 @@
 import { ApiError } from 'components/common';
-import {RoutePaths} from 'constants/route-paths';
-import {formToApi} from 'entities/Campaign';
+import { RoutePaths } from 'constants/route-paths';
+import { formToApi } from 'entities/Campaign';
 import PropTypes from 'prop-types';
-import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
-import {GET_CAMPAIGN} from 'queries/campaign/constants';
+import { useCreateCampaign, useEditCampaign } from 'queries/campaign';
+import { GET_CAMPAIGN } from 'queries/campaign/constants';
 //---> Build-in Modules
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 //---> External Modules
-import {FormProvider, useForm, useWatch} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {useQueryClient} from 'react-query';
-import {useDispatch} from 'react-redux';
-import {useParams} from 'react-router';
-import {useNavigate} from 'react-router-dom';
-import {Link} from 'react-router-dom';
-import {Button, Container, Form} from 'reactstrap';
-import {updateCampaignRedux} from 'store/reducers/campaign';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Button, Container, Form } from 'reactstrap';
+import { updateCampaignRedux } from 'store/reducers/campaign';
 //---> Internal Modules
-import {ShowToast} from 'utils/helpers/showToast.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
 
-import {useRefreshAdvertiserTree} from '../hooks/useRefreshAdvertiserTree';
+import { useRefreshAdvertiserTree } from '../hooks/useRefreshAdvertiserTree';
 import BudgetGroup from './form-fields/BudgetGroup';
 import DomainGroup from './form-fields/DomainGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import InformationGroup from './form-fields/InformationGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
-import {validationCampaign} from './validation';
+import StatisticMetrics from '../components/StatisticMetrics';
+import { validationCampaign } from './validation';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -43,23 +44,23 @@ const CampaignForm = ({
   currentCampaign = null
 }) => {
   const client = useQueryClient();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {refresh} = useRefreshAdvertiserTree();
+  const { refresh } = useRefreshAdvertiserTree();
 
-  const {mutateAsync: createCampaign} = useCreateCampaign();
-  const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
+  const { mutateAsync: createCampaign } = useCreateCampaign();
+  const { mutateAsync: updateCampaign } = useEditCampaign(currentCampaign?.uuid);
 
-  const {campaignId} = useParams();
+  const { campaignId } = useParams();
 
   const methods = useForm({
     defaultValues: currentCampaign,
     resolver: validationCampaign(t, isEdit)
   });
 
-  const {handleSubmit, control} = methods;
-  const startDate = useWatch({name: 'start_time', control});
+  const { handleSubmit, control } = methods;
+  const startDate = useWatch({ name: 'start_time', control });
 
   const onSubmit = useCallback(
     async formData => {
@@ -67,7 +68,7 @@ const CampaignForm = ({
 
       if (isEdit) {
         try {
-          const {data} = await updateCampaign({
+          const { data } = await updateCampaign({
             campId: campaignId,
             data: requestBody
           });
@@ -79,11 +80,11 @@ const CampaignForm = ({
           //   `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
           // );
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error || 'Fail to update Campaign'}/>);
+          ShowToast.error(<ApiError apiError={error || 'Fail to update Campaign'} />);
         }
       } else {
         try {
-          const {data} = await createCampaign(requestBody);
+          const { data } = await createCampaign(requestBody);
 
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
@@ -92,7 +93,7 @@ const CampaignForm = ({
 
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error || 'Fail to create Campaign'}/>);
+          ShowToast.error(<ApiError apiError={error || 'Fail to create Campaign'} />);
         }
       }
     },
@@ -114,6 +115,7 @@ const CampaignForm = ({
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
             {/* Information */}
+            <StatisticMetrics campaignId={campaignId} />
             <InformationGroup
               isView={isView}
               isCreate={isCreate}

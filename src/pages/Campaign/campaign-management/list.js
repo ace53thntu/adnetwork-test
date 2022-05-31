@@ -114,7 +114,7 @@ const CampaignList = () => {
 
   function onClickItem(item) {
     setCurrentCampaign(item);
-    navigate(`/${RoutePaths.CAMPAIGN}/${item?.uuid}`);
+    navigate(`/${RoutePaths.CAMPAIGN}/${item?.uuid}?advertiser_id=${item?.advertiser_uuid}`);
   }
 
   function onClickDelete(actionIndex, item) {

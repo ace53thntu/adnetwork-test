@@ -24,7 +24,7 @@
     "@uiw/react-prismjs": "^1.1.1",
     "@zumper/react-ladda": "^7.2.3",
     "animate-sass": "^0.8.2",
-    "antd": "^3.26.18",
+    "antd": "4.20.6",
     "apexcharts": "^3.19.3",
     "axios": "0.19.2",
     "chart.js": "^3.6.0",
