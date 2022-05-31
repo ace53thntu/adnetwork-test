@@ -40,7 +40,12 @@ export const schemaValidateCreateBudget = t => {
     yup.object().shape({
       global: yup
         .string()
-        .required(t('required'))
+        .when('daily', (dailyValue, schema) => {
+          if (!dailyValue) {
+            return schema.required(t('required'));
+          }
+          return schema.notRequired();
+        })
         .test(
           'is-number',
           'The budget global must be a integer number and greater than 0.',
@@ -61,7 +66,6 @@ export const schemaValidateCreateBudget = t => {
         .typeError('Invalid number'),
       daily: yup
         .string()
-        .required(t('required'))
         .test(
           'is-number',
           'The budget daily must be a integer number and greater than 0.',
@@ -79,6 +83,20 @@ export const schemaValidateCreateBudget = t => {
           }
         )
         .test({
+          name: 'not-allow-empty',
+          exclusive: false,
+          params: {},
+          // eslint-disable-next-line no-template-curly-in-string
+          message: "The budget daily and global don't allow empty together",
+          test: function (value) {
+            if (!value && !this.parent?.global) {
+              return false;
+            }
+
+            return true;
+          }
+        })
+        .test({
           name: 'global',
           exclusive: false,
           params: {},
@@ -86,6 +104,10 @@ export const schemaValidateCreateBudget = t => {
           message: 'The budget daily must be less than the global',
           test: function (value) {
             if (!value) {
+              return true;
+            }
+
+            if (!this.parent?.global && value) {
               return true;
             }
 
