@@ -23,8 +23,6 @@ const SEARCH_CAMPAIGNS = `${PREFIX}/SEARCH_CAMPAIGNS`;
 const EXPAND_CAMPAIGN = `${PREFIX}/EXPAND_CAMPAIGN`;
 const SET_CAMPAIGN = `${PREFIX}/SET_CAMPAIGN`;
 const SET_STRATEGY = `${PREFIX}/SET_STRATEGY`;
-const SET_SELECTED_TREE_NODE = `${PREFIX}/SET_SELECTED_TREE_NODE`;
-const SET_CAMPAIGN_TREE_DATA = `${PREFIX}/SET_CAMPAIGN_TREE_DATA`;
 
 const SELECT_STRATEGY_ID = `${PREFIX}/SELECT_STRATEGY_ID`;
 const SET_STRATEGY_INVENTORY_LIST = `${PREFIX}/SET_STRATEGY_INVENTORY_LIST`;
@@ -171,8 +169,6 @@ const handleActions = {
   [EXPAND_CAMPAIGN]: handleExpandCampaign,
   [SET_CAMPAIGN]: handleSetCampaign,
   [SET_STRATEGY]: handleSetStrategy,
-  [SET_SELECTED_TREE_NODE]: handleSetSelectedTreeNodeCampaign,
-  [SET_CAMPAIGN_TREE_DATA]: handleSetCampaignTreeData,
 };
 
 function handleInitializeInventory(state, action) {
@@ -580,22 +576,6 @@ function handleSearchCampaigns(state, action) {
   }
 }
 
-function handleSetSelectedTreeNodeCampaign(state, action) {
-  const {uuid} = action.payload;
-  return {
-    ...state,
-    selectedTreeNodeCampaign: uuid,
-  };
-}
-
-function handleSetCampaignTreeData(state, action) {
-  const {treeData} = action.payload;
-  return {
-    ...state,
-    campaignTreeData: treeData,
-  };
-}
-
 // Selector
 const makeSelectStrategyInventory = () =>
   createSelector(
@@ -660,16 +640,4 @@ export const campaignReducer = (
   action
 ) => {
   return createReducer(initialState, action, handleActions);
-};
-
-export const setSelectedTreeNodeRedux = uuid => {
-  return createAction(SET_SELECTED_TREE_NODE, {
-    uuid
-  });
-};
-
-export const setCampaignTreeDataRedux = treeData => {
-  return createAction(SET_CAMPAIGN_TREE_DATA, {
-    treeData
-  });
 };

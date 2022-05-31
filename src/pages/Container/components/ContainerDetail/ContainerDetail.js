@@ -11,6 +11,8 @@ import {useDispatchSelectContainer} from 'pages/Container/hooks/useDispatchSelec
 import {ContainerBodyLayout} from '../Layouts';
 import ContainerForm from './ContainerForm';
 import ContainerSources from './ContainerSources';
+import TreeSelectContainer from "../TreeSelectContainer";
+import {Button} from "antd";
 
 function ContainerDetail() {
   const {t} = useTranslation();
@@ -26,7 +28,7 @@ function ContainerDetail() {
   return (
     <ContainerBodyLayout
       heading={container?.name ?? t('containerDetail')}
-      subHeading={t('containerDescription')}
+      // subHeading={t('containerDescription')}
     >
       {isFetching === 'loading' ? <BlockOverlay /> : null}
       {isError ? (
@@ -34,24 +36,29 @@ function ContainerDetail() {
           <Col>{error?.message ?? 'Something went wrong.'}</Col>
         </Row>
       ) : (
-        <Row>
-          <Col sm="8">
-            <Card>
-              <CardHeader>{t('containerInfo')}</CardHeader>
-              <CardBody>
-                {isFetching ? (
-                  'Loading...'
-                ) : (
-                  <ContainerForm container={container} isEdit />
-                )}
-              </CardBody>
-            </Card>
-          </Col>
+        <>
+          <Row>
+            <TreeSelectContainer />
+          </Row>
+          <Row>
+            <Col sm="8">
+              <Card>
+                <CardHeader>{t('containerInfo')}</CardHeader>
+                <CardBody>
+                  {isFetching ? (
+                    'Loading...'
+                  ) : (
+                    <ContainerForm container={container} isEdit />
+                  )}
+                </CardBody>
+              </Card>
+            </Col>
 
-          <Col sm="4">
-            <ContainerSources container={container} isFetching={isFetching} />
-          </Col>
-        </Row>
+            <Col sm="4">
+              <ContainerSources container={container} isFetching={isFetching} />
+            </Col>
+          </Row>
+        </>
       )}
     </ContainerBodyLayout>
   );

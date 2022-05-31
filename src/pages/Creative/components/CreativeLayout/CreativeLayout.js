@@ -21,7 +21,7 @@ function CreativeLayout(props) {
 
   return (
     <ErrorBoundary>
-      <ExtendSidebar
+      {/*<ExtendSidebar
         heading={<NavLink to="/creative">{t('creativeManagement')}</NavLink>}
       >
         <div className="mb-2">
@@ -37,7 +37,7 @@ function CreativeLayout(props) {
             <AdvertisersTree />
           </ErrorBoundary>
         </div>
-      </ExtendSidebar>
+      </ExtendSidebar>*/}
 
       <AppContent>
         <Outlet />

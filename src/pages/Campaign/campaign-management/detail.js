@@ -14,6 +14,7 @@ import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
 import {CampaignContentLayout} from '../layout';
 import {CampaignContainerStyled} from './styled';
 import CampaignViewTabs from './ViewTabs';
+import {Button} from "antd";
 
 const CampaignDetail = () => {
   const {t} = useTranslation();
@@ -32,22 +33,16 @@ const CampaignDetail = () => {
     navigate(`/campaign/create`);
   }, [navigate]);
 
-  const actionPageTitle = React.useMemo(
-    () => ({
-      actions: t('createNewCampaign'),
-
-      onClick: goToCreate
-    }),
-    [goToCreate, t]
-  );
-
   return (
     <CampaignContentLayout
       heading={t('campaignDetail')}
       subHeading={t('campaignPageDescription')}
-      actionPageTitle={actionPageTitle}
+      // actionPageTitle={actionPageTitle}
     >
       <CampaignContainerStyled fluid>
+        <div className="justify-content-end d-flex mb-3">
+          <Button type="primary" onClick={goToCreate}>{t('createNewCampaign')}</Button>
+        </div>
         {isFetching && <LoadingIndicator />}
         {isFetched && (
           <Row>

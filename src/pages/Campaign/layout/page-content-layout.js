@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, Container, Row} from 'reactstrap';
 import TreeSelectCampaign from "../components/TreeSelectCampaign";
-import {useCampaignSelector} from "../../../store/reducers/campaign";
 
 const propTypes = {
   heading: PropTypes.string,
@@ -12,7 +11,6 @@ const propTypes = {
 };
 
 function CampaignContentLayout(props) {
-  const { selectedTreeNodeCampaign } = useCampaignSelector();
   const {
     children,
     heading = '',
@@ -20,23 +18,16 @@ function CampaignContentLayout(props) {
     actionPageTitle = null
   } = props;
 
-  //
-  const { name: advertiserName } = selectedTreeNodeCampaign || {};
-  const campaignTitle = advertiserName || heading;
-
   return (
     <>
       <PageTitleAlt
         icon="pe-7s-network icon-gradient bg-tempting-azure"
-        heading={campaignTitle}
+        heading={heading}
         subheading={subHeading}
         {...actionPageTitle}
       />
       <Container fluid>
-        <div style={{paddingLeft: "15px" }} className="mb-3">
-          <TreeSelectCampaign />
-        </div>
-
+        <TreeSelectCampaign />
         <Row>
           <Col sm={12}>{children}</Col>
         </Row>

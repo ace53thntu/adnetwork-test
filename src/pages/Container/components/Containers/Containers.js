@@ -25,6 +25,10 @@ import {ContainerBodyLayout} from '../Layouts';
 import {getRole, getUser} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {DEFAULT_PAGINATION} from 'constants/misc';
+import TreeSelectContainer from "../TreeSelectContainer";
+import {Button} from "antd";
+import {toggleCreateContainerModalRedux} from "../../../../store/reducers/container";
+import {useDispatch} from "react-redux";
 
 const STATUS_OPTIONS = [
   {
@@ -38,6 +42,7 @@ const STATUS_OPTIONS = [
 ];
 
 const Containers = props => {
+  const reduxDispatch = useDispatch();
   const {t} = useTranslation();
   const navigate = useNavigate();
   const role = getRole();
@@ -136,9 +141,12 @@ const Containers = props => {
     <>
       <ContainerBodyLayout
         heading={t('containerManager')}
-        subHeading={t('containerDescription')}
+        // subHeading={t('containerDescription')}
       >
         <Container fluid>
+          <Row>
+            <TreeSelectContainer />
+          </Row>
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
