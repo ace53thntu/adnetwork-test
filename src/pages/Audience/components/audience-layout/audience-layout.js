@@ -1,17 +1,13 @@
 import {ErrorBoundary} from 'components/common';
 //---> Internal Modules
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 //---> Build-in Modules
 import React from 'react';
 //---> External Modules
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
-import {NavLink, Outlet} from 'react-router-dom';
-import {Input} from 'reactstrap';
+import {Outlet} from 'react-router-dom';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-
-import {AudienceSidebar} from '../audience-sidebar';
 
 const AudienceLayout = () => {
   const {t} = useTranslation();
@@ -23,7 +19,7 @@ const AudienceLayout = () => {
 
   return (
     <ErrorBoundary>
-      <ExtendSidebar
+{/*      <ExtendSidebar
         heading={<NavLink to="/audiences">{t('audiences')}</NavLink>}
       >
         <div className="mb-2">
@@ -33,7 +29,7 @@ const AudienceLayout = () => {
         <div className="border mb-2">
           <AudienceSidebar />
         </div>
-      </ExtendSidebar>
+      </ExtendSidebar>*/}
 
       <AppContent>
         <Outlet />

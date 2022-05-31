@@ -1,10 +1,11 @@
-import { Breadcrumb } from 'antd';
-import {useBreadCrumb} from "../../hooks/useBreadCrumb";
+import {Breadcrumb, Spin} from 'antd';
+import {useBreadCrumb} from "./hooks/useBreadCrumb";
 import {Link} from 'react-router-dom';
-import {setSelectedTreeNodeRedux} from "../../../../store/reducers/campaign";
 import {useDispatch} from "react-redux";
+import {setSelectedTreeNodeRedux, useCommonSelector} from "../../store/reducers/common";
 
-const BreadCrumbCampaign = ({ defaultTitle }) => {
+const AiActivBreadCrumb = ({defaultTitle}) => {
+  const { selectedTreeNode } = useCommonSelector();
   const breadCrumb = useBreadCrumb();
   const dispatch = useDispatch();
 
@@ -13,10 +14,10 @@ const BreadCrumbCampaign = ({ defaultTitle }) => {
     dispatch(setSelectedTreeNodeRedux(uuid));
   }
 
-  return breadCrumb && breadCrumb.length >0 ? (
+  return breadCrumb && breadCrumb.length > 0 ? (
     <Breadcrumb>
       {breadCrumb.map(
-          item => <Breadcrumb.Item onClick={() => handleBreadCrumbItemClick(item?.uuid)}>
+          item => <Breadcrumb.Item key={item?.uuid} onClick={() => handleBreadCrumbItemClick(item?.uuid)}>
             <Link to={item.url}>
               {item.name}
             </Link>
@@ -27,4 +28,4 @@ const BreadCrumbCampaign = ({ defaultTitle }) => {
   ) : defaultTitle;
 };
 
-export default BreadCrumbCampaign;
+export default AiActivBreadCrumb;

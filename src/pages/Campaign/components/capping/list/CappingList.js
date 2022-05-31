@@ -123,11 +123,19 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     }
   }
 
-  async function onSubmitDelete(params) {
+  async function onSubmitDelete() {
     setIsSubmitting(true);
 
     try {
-      await deleteCapping({cappingId: activeCapping?.uuid});
+      if (
+        activeCapping?.type !== CappingTypes.BUDGET.value &&
+        activeCapping?.type !== CappingTypes.IMPRESSION.value
+      ) {
+        await deleteCapping({cappingId: activeCapping?.uuid});
+      } else {
+        await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
+      }
+
       setIsSubmitting(false);
 
       ShowToast.success('Deleted capping successfully');
@@ -177,6 +185,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           list={userList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type="user"
         />
       )}
 

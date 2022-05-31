@@ -4,7 +4,7 @@ import React from 'react';
 // External Modules
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Card, CardBody, Col, Container, CustomInput, Row} from 'reactstrap';
+import {Card, CardBody, Col, Container, Row} from 'reactstrap';
 
 import {CampaignList} from '../campaign-management';
 import {StrategyList} from '../strategy';
