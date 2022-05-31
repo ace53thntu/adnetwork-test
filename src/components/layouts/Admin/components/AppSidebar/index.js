@@ -1,5 +1,4 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
 import cx from 'classnames';
 import React, { Component, Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -16,11 +15,6 @@ class AppSidebar extends Component {
     setEnableMobileMenu(!enableMobileMenu);
   };
 
-  componentDidMount() {
-    const { setToggleSidebar } = this.props;
-    setToggleSidebar(true);
-  }
-
   toggleSideBar = () => {
     const { enableClosedSidebar, setToggleSidebar } = this.props;
     setToggleSidebar(!enableClosedSidebar);
@@ -35,7 +29,6 @@ class AppSidebar extends Component {
       backgroundImageOpacity,
       enableClosedSidebar
     } = this.props;
-
     return (
       <Fragment>
         <div
