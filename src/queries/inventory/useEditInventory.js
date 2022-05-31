@@ -3,7 +3,7 @@ import {DEFAULT_PAGINATION} from 'constants/misc';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_INVENTORIES, GET_INVENTORY} from './constants';
+import {GET_INVENTORIES} from './constants';
 
 /**
  * Update a Inventory
@@ -32,7 +32,6 @@ export function useEditInventory() {
             sort: 'created_at DESC'
           }
         ]);
-        client.invalidateQueries([GET_INVENTORY, data?.data?.uuid]);
       }
     }
   );

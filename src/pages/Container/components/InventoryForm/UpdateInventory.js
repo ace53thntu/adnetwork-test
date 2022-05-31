@@ -15,7 +15,9 @@ import InventoryFormContent from './InventoryFormContent';
 import {validationInventory} from './validation';
 import {useCreateTracker, useEditTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
-import { ApiError } from 'components/common';
+import {ApiError} from 'components/common';
+import {useQueryClient} from 'react-query';
+import {GET_INVENTORY} from 'queries/inventory/constants';
 
 export default function UpdateInventory({
   toggle = () => {},
@@ -41,6 +43,7 @@ export default function UpdateInventory({
 
 function FormUpdate({toggle, inventory, pageId}) {
   const {t} = useTranslation();
+  const client = useQueryClient();
   const inventoryTypes = getInventoryTypes();
   const inventoryFormats = getInventoryFormats();
   const defaultValues = useDefaultInventory({
@@ -69,7 +72,7 @@ function FormUpdate({toggle, inventory, pageId}) {
       const requestBody = mappingInventoryFormToApi({pageId, formData});
       setIsLoading(true);
       try {
-        await editInventory({
+        const {data: inventoryRes} = await editInventory({
           inventoryId: defaultValues?.uuid,
           data: requestBody
         });
@@ -91,6 +94,8 @@ function FormUpdate({toggle, inventory, pageId}) {
             await createTracker(trackerForm);
           }
         }
+        await client.invalidateQueries([GET_INVENTORY, inventoryRes?.uuid]);
+
         ShowToast.success('Update Inventory successfully!', {
           closeOnClick: true
         });
@@ -99,10 +104,13 @@ function FormUpdate({toggle, inventory, pageId}) {
         toggle();
       } catch (err) {
         setIsLoading(false);
-        ShowToast.error(<ApiError apiError={err || 'Fail to update inventory'}/>);
+        ShowToast.error(
+          <ApiError apiError={err || 'Fail to update inventory'} />
+        );
       }
     },
     [
+      client,
       createTracker,
       defaultValues?.uuid,
       editInventory,
