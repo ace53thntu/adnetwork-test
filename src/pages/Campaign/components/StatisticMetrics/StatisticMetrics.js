@@ -63,7 +63,7 @@ const StatisticMetrics = ({ campaignId }) => {
                             />
                         </Row>
                         <br />
-                        <Row justify='space-between'>
+                        <Row justify='space-between' gutter={16}>
                             <Col>
                                 <Card className="cardStatistic">
                                     <Statistic title="Adrequest" value={adrequest} prefix={<LikeOutlined />} />
@@ -104,4 +104,4 @@ const StatisticMetrics = ({ campaignId }) => {
 
 StatisticMetrics.propTypes = propTypes;
 
-export default StatisticMetrics;
+export default React.memo(StatisticMetrics);

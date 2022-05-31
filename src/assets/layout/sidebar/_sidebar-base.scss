@@ -43,6 +43,14 @@
   &.sidebar-shadow {
     box-shadow: 7px 0 60px rgba(0, 0, 0, 0.05);
   }
+
+  .app-sidebar__toggle {
+    width: -webkit-fill-available;
+    display: flex;
+		justify-content: center;
+		align-items: center;
+    height: 40px;
+  }
 }
 
 .app-sidebar__heading {

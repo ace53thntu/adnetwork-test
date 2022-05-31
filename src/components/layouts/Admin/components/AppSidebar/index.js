@@ -1,21 +1,30 @@
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 import cx from 'classnames';
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import CSSTransition from 'react-transition-group/CSSTransition';
-import {setEnableMobileMenu} from 'store/reducers/ThemeOptions';
-
+import { setEnableMobileMenu, setEnableClosedSidebar } from 'store/reducers/ThemeOptions';
 import HeaderLogo from '../AppLogo';
 import Nav from '../AppNav/VerticalNavWrapper';
 import AppUser from '../AppUser';
 
 class AppSidebar extends Component {
-  state = {};
-
   toggleMobileSidebar = () => {
-    let {enableMobileMenu, setEnableMobileMenu} = this.props;
+    let { enableMobileMenu, setEnableMobileMenu } = this.props;
     setEnableMobileMenu(!enableMobileMenu);
   };
+
+  componentDidMount() {
+    const { setToggleSidebar } = this.props;
+    setToggleSidebar(true);
+  }
+
+  toggleSideBar = () => {
+    const { enableClosedSidebar, setToggleSidebar } = this.props;
+    setToggleSidebar(!enableClosedSidebar);
+  }
 
   render() {
     let {
@@ -41,14 +50,18 @@ class AppSidebar extends Component {
             })}
           >
             <HeaderLogo />
-
             <PerfectScrollbar>
+              <div className='app-sidebar__toggle'>
+                {React.createElement(enableClosedSidebar ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                  className: 'trigger',
+                  onClick: this.toggleSideBar,
+                })}
+              </div>
               <AppUser />
               <div className="app-sidebar__inner">
                 <Nav role={'admin'} />
               </div>
             </PerfectScrollbar>
-
             <div
               className={cx('app-sidebar-bg', backgroundImageOpacity)}
               style={{
@@ -75,7 +88,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setEnableMobileMenu: enable => dispatch(setEnableMobileMenu(enable))
+  setEnableMobileMenu: enable => dispatch(setEnableMobileMenu(enable)),
+  setToggleSidebar: status => dispatch(setEnableClosedSidebar(status))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppSidebar);
