@@ -60,5 +60,5 @@ export const useBreadCrumb = () => {
       }
     }
     return paths;
-  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, selectTreeData]);
+  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, conceptId, selectTreeData]);
 };
