@@ -18,12 +18,12 @@ window.ADN_META_DATA = {
   SDK_IOS_NAME: 'AicactusAdsNetwork',
   SDK_ANDROID_NAME: 'AicactusAdsNetwork',
   SDK_ANDROID_NAME_SPACE: 'io.aicactus.adsnetwork',
-  SDK_ANDROID_DEPENDENCY: 'io.aicactus:adsnetwork',
+  SDK_ANDROID_DEPENDENCY: 'io.aicactus:adsnetwork:1.X.X'
 
   //---> Production
   // SDK_IOS_CONFIG: 'Aiactiv AdNetwork SDK Config',
   // SDK_IOS_NAME: 'AiactivAdNetwork',
   // SDK_ANDROID_NAME: 'AiactivAdNetwork',
   // SDK_ANDROID_NAME_SPACE: 'io.aiactiv.adnetwork',
-  // SDK_ANDROID_DEPENDENCY: 'io.aiactiv:adnetwork',
+  // SDK_ANDROID_DEPENDENCY: 'io.aiactiv:adnetwork:0.1.0',
 };

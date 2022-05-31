@@ -2,7 +2,12 @@ import React from 'react';
 
 import {Link} from 'react-router-dom';
 import {CopyBlock, atomOneLight} from 'react-code-blocks';
-import {SDK_ANDROID_NAME_SPACE,  SDK_ANDROID_NAME} from 'constants/container';
+import {
+  SDK_ANDROID_NAME_SPACE,
+  SDK_ANDROID_NAME,
+  COMPANY_NAME,
+  SDK_ANDROID_DEPENDENCY
+} from 'constants/container';
 
 function IosInitSnippet({containerId, isTv = false}) {
   return (
@@ -24,11 +29,11 @@ function IosInitSnippet({containerId, isTv = false}) {
         wrapLines
         codeBlock
       />
-      <div className='mt-2 mb-2'>Import Aicactus AdsNetwork SDK dependency</div>
+      <div className="mt-2 mb-2">{`Import ${COMPANY_NAME} AdNetwork SDK dependency`}</div>
       <CopyBlock
         theme={atomOneLight}
         text={`dependencies {
-    implementation 'io.aicactus:adsnetwork:1.X.X'
+    implementation '${SDK_ANDROID_DEPENDENCY}'
 }`}
         language="kotlin"
         showLineNumbers={false}
@@ -40,7 +45,8 @@ function IosInitSnippet({containerId, isTv = false}) {
       <h6 className="font-weight-bold mt-3">Init</h6>
       <strong>From AndroidManifest.xml</strong>
       <div className="mb-2">
-      Add this code to app manifest, wrapped in <code>{`<application>`}</code> tag and replace YOUR_CONTAINER_ID
+        Add this code to app manifest, wrapped in <code>{`<application>`}</code>{' '}
+        tag and replace YOUR_CONTAINER_ID
       </div>
       <CopyBlock
         theme={atomOneLight}
