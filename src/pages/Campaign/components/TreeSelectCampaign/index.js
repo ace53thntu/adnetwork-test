@@ -1,36 +1,48 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { TreeSelect } from 'antd';
-import { getAllCampaignTreeData } from "../../utils";
-import { RoutePaths } from "../../../../constants/route-paths";
-import {
-  setAdvertiserRedux,
-  setCampaignRedux, setCampaignTreeDataRedux,
-  setSelectedTreeNodeRedux,
-  setStrategyRedux, useCampaignSelector
-} from "../../../../store/reducers/campaign";
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import "./index.scss";
+import * as React from 'react';
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router";
+import AiActivTreeSelect from "../../../../components/AiActivTreeSelect";
+import {RoutePaths} from "../../../../constants/route-paths";
+import {setAdvertiserRedux, setCampaignRedux, setStrategyRedux} from "../../../../store/reducers/campaign";
+import {setSelectedTreeNodeRedux, useCommonSelector} from "../../../../store/reducers/common";
+import {getAllCampaignTreeData} from "../../utils";
+import {useParams} from "react-router-dom";
+import {useQueryString} from "../../../../hooks";
 
-const TreeSelectCampaign = React.memo(() => {
-  const { selectedTreeNodeCampaign, campaignTreeData } = useCampaignSelector();
-  const [treeData, setTreeData] = useState([]);
-  const navigate = useNavigate();
+function TreeSelectCampaign() {
+  const { selectedTreeNode } = useCommonSelector();
+  const [treeData, setTreeData] = useState();
+  const { campaignId, strategyId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const query = useQueryString();
 
-  useLayoutEffect(() => {
+  let advertiserIdQuery = query.get('advertiser_id');
+
+  useEffect(() => {
     getCampaignTree();
   }, [])
 
   const getCampaignTree = async () => {
-    const allCampaignTreeData = await getAllCampaignTreeData();
-    dispatch(setCampaignTreeDataRedux(allCampaignTreeData));
+    const treeData = await getAllCampaignTreeData();
+
+    if(strategyId){
+      dispatch(setSelectedTreeNodeRedux(strategyId))
+    } else if(campaignId) {
+      dispatch(setSelectedTreeNodeRedux(campaignId))
+    } else if(advertiserIdQuery) {
+      dispatch(setSelectedTreeNodeRedux(advertiserIdQuery))
+    } else {
+      dispatch(setSelectedTreeNodeRedux(''))
+    }
+
+    setTreeData(treeData);
   }
 
-  const onTreeNodeSelect = (value, node) => {
+  const handleSelectedItem = React.useCallback((value, node) => {
     const { isAdvertiser, isCampaign, isStrategy, uuid, advertiser_uuid, campaign_uuid } = node || {};
 
-    //set selected tree node
     dispatch(setSelectedTreeNodeRedux(value));
 
     if (isAdvertiser) {
@@ -47,71 +59,25 @@ const TreeSelectCampaign = React.memo(() => {
         `/${RoutePaths.CAMPAIGN}/${campaign_uuid}/${RoutePaths.STRATEGY}/${uuid}?advertiser_id=${advertiser_uuid}`
       );
     }
-  };
+  }, []);
 
-  const loopNode = (searchValue, data) => {
-    return data.map((item) => {
-      const index = item.title?.toLowerCase().indexOf(searchValue.toLowerCase());
-      const beforeStr = item.title?.substr(0, index);
-      const afterStr = item.title?.substr(index + searchValue.length);
-      const matchedItemValue = item.title?.substr(index, searchValue.length);
-      const title =
-        index > -1 ? (
-          <span>
-            {beforeStr}
-            <span style={{ color: "#545cd8", fontWeight: "bold" }}>{matchedItemValue}</span>
-            {afterStr}
-          </span>
-        ) : (
-          <span>{item.title}</span>
-        );
-      if (item.children) {
-        return { ...item, title, tempTitle: item.title, children: loopNode(searchValue, item.children) };
-      }
-      return {
-        ...item,
-        title,
-        tempTitle: item.title
-      };
-    });
+  const handleClearCampaign = (value) => {
+   if(!value){
+     dispatch(setSelectedTreeNodeRedux(''))
+     navigate(`/${RoutePaths.CAMPAIGN}`);
+   }
   }
-
-  const onChangeTreeSelect = (e) => {
-    const filteredData = loopNode(e, campaignTreeData);
-    setTreeData(filteredData);
-  }
-
-  useEffect(() => {
-    if (campaignTreeData) {
-      setTreeData(campaignTreeData);
-    }
-  }, [campaignTreeData])
-
 
   return (
-    <TreeSelect
-      treeLine
-      showSearch
-      className="mr-3"
-      style={{
-        width: '350px',
-      }}
-      value={campaignTreeData ? selectedTreeNodeCampaign : null}
-      dropdownStyle={{
-        maxHeight: 400,
-        overflow: 'auto',
-      }}
-      treeData={treeData}
-      placeholder="Please select..."
-      onSelect={onTreeNodeSelect}
-      filterTreeNode={(inputValue, treeNode) => {
-        const { tempTitle } = treeNode;
-        return tempTitle && tempTitle.toLowerCase().includes(inputValue.toLowerCase())
-      }}
-      onSearch={onChangeTreeSelect}
-      onChange={() => setTreeData(campaignTreeData)}
-    />
+    <div style={{paddingLeft: "15px" }} className="mb-3">
+      <AiActivTreeSelect
+        allowClear
+        selectedItem={selectedTreeNode}
+        treeData={treeData}
+        onSelectedItem={handleSelectedItem}
+        onChange={handleClearCampaign}
+      />
+    </div>
   );
-});
-
+}
 export default TreeSelectCampaign;

@@ -2,6 +2,7 @@ import {PageTitleAlt} from 'components/layouts/Admin/components';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, Container, Row} from 'reactstrap';
+import TreeSelectCreative from "../TreeSelectCreative";
 
 function CreativeBodyLayout(props) {
   const {children, heading} = props;
@@ -13,6 +14,7 @@ function CreativeBodyLayout(props) {
         icon="pe-7s-glasses icon-gradient bg-love-kiss"
       />
       <Container fluid>
+        <TreeSelectCreative />
         <Row>
           <Col sm={12}>{children}</Col>
         </Row>

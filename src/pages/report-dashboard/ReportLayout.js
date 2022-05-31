@@ -8,9 +8,7 @@ import {useDispatch} from 'react-redux';
 //---> Internal Modules
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 import {useGetReportPage} from 'queries/report-page';
-import ReportSidebar from './components/ReportSidebar';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import './_main.scss';
 
@@ -25,11 +23,11 @@ const ReportLayout = ({children}) => {
 
   return (
     <>
-      <ExtendSidebar heading="Report Page" isLink path={'/dashboard'}>
+      {/*<ExtendSidebar heading="Report Page" isLink path={'/dashboard'}>
         <div className="mb-2">
           <ReportSidebar pageId={pageId} />
         </div>
-      </ExtendSidebar>
+      </ExtendSidebar>*/}
 
       <AppContent>
         <PageTitleAlt

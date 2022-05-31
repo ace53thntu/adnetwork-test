@@ -1,12 +1,9 @@
-import {useDispatchSelectAdvertiser} from 'pages/Creative/hooks/useDispatchSelectAdvertiser';
 import * as React from 'react';
 
 import {CreativeBodyLayout} from '../CreativeLayout';
 import ConceptList from './ConceptList';
 
 function Concepts(props) {
-  useDispatchSelectAdvertiser();
-
   return (
     <CreativeBodyLayout heading={`Concepts Management`}>
       <ConceptList />

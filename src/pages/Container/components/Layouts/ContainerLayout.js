@@ -47,7 +47,7 @@ function ContainerLayout(props) {
 
   return (
     <ErrorBoundary>
-      <ExtendSidebar heading={<NavLink to="/container">Containers</NavLink>}>
+     {/* <ExtendSidebar heading={<NavLink to="/container">Containers</NavLink>}>
         <div className="mb-2">
           <Input
             placeholder="Search..."
@@ -67,7 +67,6 @@ function ContainerLayout(props) {
             {t('createNew')}
           </Button>
 
-          {/* create container dialog will be here */}
           <ContainerCreateModal />
         </div>
         <div className="border mb-2">
@@ -75,7 +74,9 @@ function ContainerLayout(props) {
             <ContainersTree />
           </ErrorBoundary>
         </div>
-      </ExtendSidebar>
+      </ExtendSidebar>*/}
+
+      <ContainerCreateModal />
 
       <AppContent>
         <Outlet />
