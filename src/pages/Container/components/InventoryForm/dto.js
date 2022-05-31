@@ -84,7 +84,10 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     if (metadata?.max_bitrate) {
       formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || null;
     }
-    console.log("metadata?.min_duration", metadata?.min_duration || parseInt(metadata?.min_duration, 10) === 0);
+    console.log(
+      'metadata?.min_duration',
+      metadata?.min_duration || parseInt(metadata?.min_duration, 10) === 0
+    );
     if (metadata?.min_duration || parseInt(metadata?.min_duration, 10) === 0) {
       formatMetadata.min_duration =
         parseInt(metadata?.min_duration, 10) === 0
@@ -284,12 +287,19 @@ export const mappingInventoryApiToForm = ({
   // metadata?.skip === true || metadata?.skip === 1 ? 'active' : 'inactive';
   destructedMetadata.linearity =
     LinearityOptions.find(item => item.value === metadata.linearity) || null;
-  destructedMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || '';
-  destructedMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || '';
-  destructedMetadata.min_duration = parseInt(metadata?.min_duration, 10) || '';
+  destructedMetadata.min_bitrate =
+    metadata?.min_bitrate === 0 ? 0 : parseInt(metadata?.min_bitrate, 10) || '';
+  destructedMetadata.max_bitrate =
+    metadata?.max_bitrate === 0 ? 0 : parseInt(metadata?.max_bitrate, 10) || '';
+  destructedMetadata.min_duration =
+    metadata?.min_duration === 0
+      ? 0
+      : parseInt(metadata?.min_duration, 10) || '';
   destructedMetadata.max_duration = parseInt(metadata?.max_duration, 10) || '';
-  destructedMetadata.skip_min = parseInt(metadata?.skip_min, 10) || '';
-  destructedMetadata.skip_after = parseInt(metadata?.skip_after, 10) || '';
+  destructedMetadata.skip_min =
+    metadata?.skip_min === 0 ? 0 : parseInt(metadata?.skip_min, 10) || '';
+  destructedMetadata.skip_after =
+    metadata?.skip_after === 0 ? 0 : parseInt(metadata?.skip_after, 10) || '';
   destructedMetadata.start_delay =
     StartDelayOptions.find(item => item.value === metadata?.start_delay) ||
     null;
