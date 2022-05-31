@@ -31,6 +31,7 @@ import {useDefaultUser} from '../hooks';
 import AdvertiserSelect from './form-fields/advertiser-select';
 import DspSelect from './form-fields/dsp-select';
 import PublisherSelect from './form-fields/publisher-select';
+import { ApiError } from 'components/common';
 
 const UserForm = ({
   modal = false,
@@ -84,7 +85,7 @@ const UserForm = ({
         ShowToast.success('Created user successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to create user');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     } else {
       // EDIT
@@ -93,7 +94,7 @@ const UserForm = ({
         ShowToast.success('Updated user successfully');
         toggle();
       } catch (err) {
-        ShowToast.error(err?.msg || 'Fail to update user');
+        ShowToast.error(<ApiError apiError={err} />);
       }
     }
   };

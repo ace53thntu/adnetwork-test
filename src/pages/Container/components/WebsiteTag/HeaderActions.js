@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux';
 import {useNavigate, useParams} from 'react-router';
 import {Button} from 'reactstrap';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DialogConfirm} from 'components/common';
+import {ApiError, DialogConfirm} from 'components/common';
 
 function HeaderActions(props) {
   const {source, cid: containerId, pageId} = useParams();
@@ -34,7 +34,7 @@ function HeaderActions(props) {
       navigate(`/container/${containerId}`);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 

@@ -35,7 +35,7 @@ import {IS_RESPONSE_ALL} from 'constants/misc';
 import {schemaValidate} from './validation';
 import {useTranslation} from 'react-i18next';
 import {BidDealTabs} from './bid-deal-tabs';
-import {Collapse} from 'components/common';
+import {ApiError, Collapse} from 'components/common';
 import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
@@ -154,7 +154,7 @@ const InventoryDetails = ({
       ShowToast.success('Bid inventory successfully');
       toggle();
     } catch (error) {
-      ShowToast.error(error?.msg || 'Fail to bid inventory');
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   }
 

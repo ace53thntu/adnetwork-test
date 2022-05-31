@@ -1,7 +1,11 @@
-import {Collapse} from 'components/common';
+import {ApiError, Collapse, DialogConfirm} from 'components/common';
 import {SelectPaginate} from 'components/forms';
 import PropTypes from 'prop-types';
-import {useCreateTracker, useEditTracker} from 'queries/tracker';
+import {
+  useCreateTracker,
+  useDeleteTracker,
+  useEditTracker
+} from 'queries/tracker';
 import * as React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -47,11 +51,18 @@ const formDefaultValues = {
 };
 
 function TrackerFormBody(props) {
-  const {handleAddTracker, referenceId, referenceType, tracker} = props;
+  const {
+    handleAddTracker,
+    referenceId,
+    referenceType,
+    tracker,
+    toggleCollapse
+  } = props;
   const {t} = useTranslation();
   const {loadTrackerTemplates} = useGetTrackerTemplatesPagination();
   const {mutateAsync: createTracker} = useCreateTracker();
   const {mutateAsync: updateTracker} = useEditTracker();
+  const {mutateAsync: deleteTracker} = useDeleteTracker();
 
   const isEdit = !!tracker;
 
@@ -72,6 +83,7 @@ function TrackerFormBody(props) {
   } = methods;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isOpenAlert, setIsOpenAlert] = React.useState(false);
 
   const watchTemplate = watch('template');
 
@@ -88,7 +100,7 @@ function TrackerFormBody(props) {
         handleCancel();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     } else {
       try {
@@ -98,74 +110,114 @@ function TrackerFormBody(props) {
         handleCancel();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     }
   };
 
+  const handleRemove = async () => {
+    setIsOpenAlert(!isOpenAlert);
+  };
+
+  const requestToRemoveTracker = async () => {
+    try {
+      await deleteTracker({trackerId: tracker.uuid});
+      setIsLoading(false);
+      ShowToast.success('Remove tracker successfully!');
+      handleRemove();
+    } catch (error) {
+      setIsLoading(false);
+      ShowToast.error(error?.msg);
+    }
+  };
+
   const handleCancel = () => {
-    handleAddTracker();
+    if (!isEdit) {
+      handleAddTracker(false);
+    } else {
+      toggleCollapse();
+    }
   };
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} name="tracker-form">
-        <Row>
-          <Col>
-            <SelectPaginate
-              required
-              name="template"
-              label="Template"
-              placeholder="Select tracker template..."
-              loadOptions={loadTrackerTemplates}
-              additional={{
-                page: 1
-              }}
-              defaultValue={null}
-              disabled={isLoading}
-            />
-          </Col>
-        </Row>
-
-        {watchTemplate && isJsonObject(watchTemplate?.variables) ? (
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} name="tracker-form">
           <Row>
             <Col>
-              <VariablesForm
-                variables={
-                  getFormDefaultValues?.variables ??
-                  watchTemplate?.variables ??
-                  {}
-                }
+              <SelectPaginate
+                required
+                name="template"
+                label="Template"
+                placeholder="Select tracker template..."
+                loadOptions={loadTrackerTemplates}
+                additional={{
+                  page: 1
+                }}
+                defaultValue={null}
+                disabled={isLoading || isEdit}
               />
             </Col>
           </Row>
-        ) : null}
 
-        <Row>
-          <Col>
-            <div className="d-flex justify-content-end">
-              <Button
-                color="secondary"
-                onClick={handleCancel}
-                disabled={isLoading}
-                type="button"
-                className="ml-2"
-              >
-                {t('cancel')}
-              </Button>
+          {watchTemplate && isJsonObject(watchTemplate?.variables) ? (
+            <Row>
+              <Col>
+                <VariablesForm
+                  variables={
+                    getFormDefaultValues?.variables ??
+                    watchTemplate?.variables ??
+                    {}
+                  }
+                />
+              </Col>
+            </Row>
+          ) : null}
 
-              <Button
-                type="submit"
-                color="primary"
-                className="ml-2"
-                disabled={isLoading || !isDirty}
-              >
-                {t('save')}
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </form>
-    </FormProvider>
+          <Row>
+            <Col>
+              <div className="d-flex justify-content-end">
+                {isEdit ? (
+                  <Button
+                    color="danger"
+                    onClick={handleRemove}
+                    disabled={isLoading}
+                    type="button"
+                  >
+                    Remove
+                  </Button>
+                ) : null}
+                <Button
+                  color="secondary"
+                  onClick={handleCancel}
+                  disabled={isLoading}
+                  type="button"
+                  className="ml-2"
+                >
+                  {t('cancel')}
+                </Button>
+
+                <Button
+                  type="submit"
+                  color="primary"
+                  className="ml-2"
+                  disabled={isLoading || !isDirty}
+                >
+                  {t('save')}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </form>
+      </FormProvider>
+
+      <DialogConfirm
+        open={isOpenAlert}
+        title={`Are you sure to delete?`}
+        handleClose={() => setIsOpenAlert(false)}
+        handleAgree={requestToRemoveTracker}
+        isLoading={isLoading}
+      />
+    </>
   );
 }

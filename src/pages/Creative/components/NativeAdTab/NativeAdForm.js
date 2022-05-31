@@ -1,5 +1,5 @@
 import {NativeAdAPI} from 'api/native-ad.api';
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {ApiError, BlockOverlay, CollapseBox} from 'components/common';
 import {EntityTypes} from 'constants/report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
@@ -82,7 +82,7 @@ function NativeAdForm(props) {
 
   const handleError = error => {
     setIsLoading(false);
-    ShowToast.error(error?.msg);
+    ShowToast.error(<ApiError apiError={error}/>);
   };
 
   const createAssets = async (nativeAdId, data) => {

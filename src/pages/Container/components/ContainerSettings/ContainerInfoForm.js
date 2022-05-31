@@ -1,4 +1,4 @@
-import {BlockOverlay, ButtonLoading} from 'components/common';
+import {ApiError, BlockOverlay, ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {SDK_CDN, SDK_NAME} from 'constants/container';
@@ -94,7 +94,7 @@ function ContainerInfoForm(props) {
       );
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message || 'Fail to update container');
+      ShowToast.error(<ApiError apiError={error || 'Fail to update container'}/>);
     }
   };
 

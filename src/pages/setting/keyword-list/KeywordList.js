@@ -42,6 +42,7 @@ import KeywordListCreate from './KeywordListCreate';
 import KeywordListEdit from './KeywordListEdit';
 import KeywordListForm from './components/keyword-list.form';
 import KeywordBadge from './components/KeywordBadge';
+import {ApiError} from 'components/common';
 
 const propTypes = {};
 
@@ -172,7 +173,7 @@ const KeywordList = () => {
       await deleteKeywordList({keywordListId: currentKeywordList?.uuid});
       ShowToast.success('Deleted keyword list successfully');
     } catch (err) {
-      ShowToast.error(err || 'Fail to delete keyword list');
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

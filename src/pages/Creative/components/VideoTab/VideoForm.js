@@ -1,4 +1,4 @@
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {ApiError, BlockOverlay, CollapseBox} from 'components/common';
 import {EntityTypes} from 'constants/report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
@@ -102,7 +102,7 @@ function VideoForm(props) {
 
   const handleError = err => {
     setIsLoading(false);
-    ShowToast.error(err?.msg);
+    ShowToast.error(<ApiError apiError={err} />);
   };
 
   const handleSuccess = (msg = 'Create Video successfully!') => {
@@ -172,13 +172,17 @@ function VideoForm(props) {
         </form>
       </FormProvider>
 
-      <hr />
-      <Row>
-        <Col>
-          <Trackers referenceId={rawData?.uuid} referenceType="video" />
-        </Col>
-      </Row>
-      <hr />
+      {!isCreate && (
+        <>
+          <hr />
+          <Row>
+            <Col>
+              <Trackers referenceId={rawData?.uuid} referenceType="video" />
+            </Col>
+          </Row>
+          <hr />
+        </>
+      )}
 
       {/* BEGIN: Report */}
       {rawData?.uuid && (

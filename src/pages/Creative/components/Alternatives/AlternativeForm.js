@@ -1,4 +1,4 @@
-import {BlockOverlay, StrapConfirmModal} from 'components/common';
+import {ApiError, BlockOverlay, StrapConfirmModal} from 'components/common';
 import {FormCheckbox, FormReactSelect, FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -72,7 +72,7 @@ function AlternativeForm(props) {
         ShowToast.success('Delete Alternative successfully!');
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     }
   }
@@ -127,7 +127,7 @@ function AlternativeForm(props) {
             client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
           } catch (error) {
             setIsLoading(false);
-            ShowToast.error(error?.msg);
+            ShowToast.error(<ApiError apiError={error}/>);
           }
         } else {
           // add new
@@ -138,7 +138,7 @@ function AlternativeForm(props) {
             client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
           } catch (error) {
             setIsLoading(false);
-            ShowToast.error(error?.msg);
+            ShowToast.error(<ApiError apiError={error}/>);
           }
         }
       }

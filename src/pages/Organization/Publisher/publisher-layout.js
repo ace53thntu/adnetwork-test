@@ -12,7 +12,7 @@ import {PageTitleAlt} from 'components/layouts/Admin/components';
 import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {setSearchTermRedux} from 'store/reducers/publisher';
 
-const PublisherLayout = ({children}) => {
+const PublisherLayout = ({children, pageTitle=''}) => {
   const reduxDispatch = useDispatch();
   const {t} = useTranslation();
 
@@ -30,7 +30,7 @@ const PublisherLayout = ({children}) => {
     <>
       <AppContent>
         <PageTitleAlt
-          heading={t('publisher')}
+          heading={pageTitle || t('publisher')}
           subheading={t('managementSegmentDescription')}
           icon="pe-7s-plane icon-gradient bg-tempting-azure"
         />

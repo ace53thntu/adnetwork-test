@@ -1,55 +1,34 @@
 import {Statuses} from 'constants/misc';
 import {checkValidJson} from 'pages/Creative/components/BannerForm/utils';
 import {
+  InputNames,
   TrackerTemplateTypeOptions,
   TrackerTemplateTypes
 } from 'pages/setting/tracker-template/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
-export const TRACKER_TEMPLATE_ENTITY = {
-  id: '',
-  uuid: '',
-  name: '',
-  status: Statuses.ACTIVE,
-  type: TrackerTemplateTypeOptions.find(
-    item => item.value === TrackerTemplateTypes.DEFAULT
-  ),
-  code: '',
-  click_url: '',
-  click_image: '',
-  click_script: '',
-  variables: '',
-  https: false,
-  skip: '',
-  first_quartile: '',
-  midpoint: '',
-  third_quartile: '',
-  complete: '',
-  click_url_append_params: '',
-  price: ''
+export const initializeTrackerTemplate = () => {
+  return Object.values(InputNames).reduce((acc, keyValue) => {
+    if (keyValue === 'status') {
+      acc = {...acc, [keyValue]: Statuses.ACTIVE};
+    } else if (keyValue === 'type') {
+      acc = {
+        ...acc,
+        [keyValue]: TrackerTemplateTypeOptions.find(
+          item => item.value === TrackerTemplateTypes.DEFAULT
+        )
+      };
+    } else {
+      acc = {...acc, [keyValue]: ''};
+    }
+
+    return acc;
+  }, {});
 };
 
 export const apiToForm = ({trackerTemplate = null}) => {
   if (trackerTemplate) {
-    const {
-      uuid: id,
-      name,
-      status = Statuses.ACTIVE,
-      type,
-      code,
-      click_url,
-      click_image,
-      click_script,
-      variables,
-      https,
-      skip,
-      first_quartile,
-      midpoint,
-      third_quartile,
-      complete,
-      click_url_append_params,
-      price
-    } = trackerTemplate;
+    const {uuid: id, type, variables, https, price} = trackerTemplate;
 
     const variablesConverted =
       variables &&
@@ -64,73 +43,34 @@ export const apiToForm = ({trackerTemplate = null}) => {
     const priceConverted = HandleCurrencyFields.convertApiToGui({value: price});
 
     return {
+      ...trackerTemplate,
       uuid: id,
       id,
-      name,
-      status,
       type: typeDestructured,
-      code,
-      click_url,
-      click_image,
-      click_script,
       variables: variablesConverted,
       https: https ? 'active' : 'inactive',
-      skip,
-      first_quartile,
-      midpoint,
-      third_quartile,
-      complete,
-      click_url_append_params,
       price: priceConverted
     };
   }
 
-  return TRACKER_TEMPLATE_ENTITY;
+  return initializeTrackerTemplate();
 };
 
 export const formToApi = ({formData = {}}) => {
   if (formData) {
-    const {
-      name,
-      status = Statuses.ACTIVE,
-      type,
-      code,
-      click_url,
-      click_image,
-      click_script,
-      variables,
-      https,
-      skip,
-      first_quartile,
-      midpoint,
-      third_quartile,
-      complete,
-      click_url_append_params,
-      price
-    } = formData;
+    const {type, variables, https, price} = formData;
 
     const priceConverted = HandleCurrencyFields.convertGuiToApi({value: price});
     let parseVariables = checkValidJson(variables) ? JSON.parse(variables) : {};
 
     return {
-      name,
-      status,
+      ...formData,
       type: type?.value || TrackerTemplateTypes.DEFAULT,
-      code,
-      click_url,
-      click_image,
-      click_script,
       variables: parseVariables,
       https: https === 'active' ? true : false,
-      skip,
-      first_quartile,
-      midpoint,
-      third_quartile,
-      complete,
-      click_url_append_params,
       price: priceConverted
     };
   }
 
-  return TRACKER_TEMPLATE_ENTITY;
+  return initializeTrackerTemplate();
 };

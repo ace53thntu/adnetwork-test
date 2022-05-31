@@ -1,5 +1,5 @@
 import {AlternativeAPI} from 'api/alternative.api';
-import {BlockOverlay, CollapseBox} from 'components/common';
+import {ApiError, BlockOverlay, CollapseBox} from 'components/common';
 import {
   FormCheckbox,
   FormReactSelect,
@@ -159,7 +159,7 @@ function BannerForm(props) {
             try {
               await Promise.all(promises);
             } catch (error) {
-              ShowToast.error(error?.msg);
+              ShowToast.error(<ApiError apiError={error}/>);
             }
           }
         }
@@ -170,7 +170,7 @@ function BannerForm(props) {
         handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     } else {
       const alternatives = values?.alternatives;
@@ -229,7 +229,7 @@ function BannerForm(props) {
         handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(error?.msg);
+        ShowToast.error(<ApiError apiError={error}/>);
       }
     }
   };
@@ -431,13 +431,17 @@ function BannerForm(props) {
         </form>
       </FormProvider>
 
-      <hr />
-      <Row>
-        <Col>
-          <Trackers referenceId={creative?.uuid} referenceType="creative" />
-        </Col>
-      </Row>
-      <hr />
+      {!isCreate && (
+        <>
+          <hr />
+          <Row>
+            <Col>
+              <Trackers referenceId={creative?.uuid} referenceType="creative" />
+            </Col>
+          </Row>
+          <hr />
+        </>
+      )}
 
       {/* BEGIN: Report */}
       {creative?.uuid && (

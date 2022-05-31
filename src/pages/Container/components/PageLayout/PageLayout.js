@@ -9,6 +9,7 @@ import CreatePage from '../ContainerWebsiteTag/CreatePage';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import DialogConfirm from 'components/common/DialogConfirm';
 import {useDeletePage} from 'queries/page';
+import { ApiError } from 'components/common';
 
 function PageLayout({
   title,
@@ -45,9 +46,7 @@ function PageLayout({
       navigate(`/container/${containerId}`);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error, {
-        closeOnClick: true
-      });
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   }, [containerId, deletePage, isIOS, navigate, pageId]);
 

@@ -57,10 +57,38 @@ const TrackerTemplateList = React.lazy(() =>
   )
 );
 
+const TrackerTemplateCreate = React.lazy(() =>
+  import(
+    './tracker-template/TrackerTemplateCreate' /* webpackChunkName: "tracker-template-create" */
+  )
+);
+
+const TrackerTemplateEdit = React.lazy(() =>
+  import(
+    './tracker-template/TrackerTemplateEdit' /* webpackChunkName: "tracker-template-edit" */
+  )
+);
+
 function TrackerTemplateListPage() {
   return (
     <ErrorBoundary>
       <TrackerTemplateList />
+    </ErrorBoundary>
+  );
+}
+
+function TrackerTemplateCreatePage() {
+  return (
+    <ErrorBoundary>
+      <TrackerTemplateCreate />
+    </ErrorBoundary>
+  );
+}
+
+function TrackerTemplateEditPage() {
+  return (
+    <ErrorBoundary>
+      <TrackerTemplateEdit />
     </ErrorBoundary>
   );
 }
@@ -95,6 +123,8 @@ export {
   KeywordListPage,
   PositionListPage,
   TrackerTemplateListPage,
+  TrackerTemplateCreatePage,
+  TrackerTemplateEditPage,
   TrackerListPage,
   LocationListPage
 };

@@ -1,4 +1,4 @@
-import {BlockOverlay, ButtonLoading} from 'components/common';
+import {ApiError, BlockOverlay, ButtonLoading} from 'components/common';
 import {FormReactSelect, FormTextInput, FormToggle} from 'components/forms';
 import {getContainerTags} from 'pages/Container/constants';
 
@@ -81,7 +81,7 @@ function PageInformationForm(props) {
         })
       );
     } catch (error) {
-      ShowToast.error(error?.message || 'Fail to update page');
+      ShowToast.error(<ApiError apiError={error}/>);
       setIsLoading(false);
     }
   };

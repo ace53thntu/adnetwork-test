@@ -2,33 +2,35 @@
 import React from 'react';
 
 //---> External Modules
-import PropTypes from 'prop-types';
+import {useParams} from 'react-router-dom';
 
 //---> Internal Modules
 import {useGetPublisher} from 'queries/publisher';
 import {PublisherForm} from './components';
 import {LoadingIndicator} from 'components/common';
+import PublisherLayout from './publisher-layout';
 
-const propTypes = {
-  publisherId: PropTypes.string.isRequired
-};
+const propTypes = {};
 
-const PublisherEdit = ({publisherId, ...rest}) => {
+const PublisherEdit = () => {
+  const {publisherId} = useParams();
   const {data: publisher, isFetched, status, isLoading} = useGetPublisher(
     publisherId,
     !!publisherId
   );
 
   return (
-    <div>
-      {isLoading && <LoadingIndicator />}
-      {isFetched && status === 'success' && (
-        <PublisherForm {...rest} publisher={publisher} />
-      )}
-    </div>
+    <PublisherLayout pageTitle='Publisher edit'>
+      <div>
+        {isLoading && <LoadingIndicator />}
+        {isFetched && status === 'success' && (
+          <PublisherForm isEdit publisher={publisher} />
+        )}
+      </div>
+    </PublisherLayout>
   );
 };
 
 PublisherEdit.propTypes = propTypes;
 
-export default React.memo(PublisherEdit);
+export default PublisherEdit;

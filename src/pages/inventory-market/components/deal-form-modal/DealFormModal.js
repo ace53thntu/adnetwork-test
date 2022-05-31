@@ -18,6 +18,7 @@ import {QueryStatuses} from 'constants/react-query';
 import {schemaValidate} from '../validation';
 import DealForm from '../deal.form';
 import {useEditDeal, useGetDeal} from 'queries/deal';
+import { ApiError } from 'components/common';
 
 const propTypes = {
   toggle: PropTypes.func,
@@ -84,7 +85,7 @@ const ModalContent = ({
       toggle();
     } catch (error) {
       if (error) {
-        ShowToast.error(error?.msg || 'Fail to deal inventory');
+        ShowToast.error(<ApiError apiError={error}/>);
       } else {
         ShowToast.info('There are no changes');
       }

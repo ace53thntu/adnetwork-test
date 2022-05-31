@@ -1,4 +1,4 @@
-import {DialogConfirm, SwiperList} from 'components/common';
+import {ApiError, DialogConfirm, SwiperList} from 'components/common';
 // import PropTypes from 'prop-types';
 import {useDeleteCreative, useGetCreatives} from 'queries/creative';
 import {GET_CREATIVES} from 'queries/creative/constants';
@@ -67,7 +67,7 @@ function Banners(props) {
       client.invalidateQueries([GET_CREATIVES, params]);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   }, [client, deleteCreativeRequest, deleteId, params]);
 

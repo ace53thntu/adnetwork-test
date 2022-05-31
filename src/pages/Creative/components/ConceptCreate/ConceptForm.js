@@ -1,3 +1,4 @@
+import { ApiError } from 'components/common';
 import {FormCheckbox, FormDatePicker, TextField} from 'components/forms';
 import PropTypes from 'prop-types';
 import {useCreateConcept, useUpdateConcept} from 'queries/concept';
@@ -83,7 +84,7 @@ function ConceptForm(props) {
       }
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.msg);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 

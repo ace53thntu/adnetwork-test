@@ -11,7 +11,7 @@ import {useNavigate, useParams} from 'react-router';
 import {Button, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import {validationPage} from './validations';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {useCreatePage, useGetPagesByContainer} from 'queries/page';
 import {useDispatch} from 'react-redux';
 import BlockUi from 'react-block-ui';
@@ -163,9 +163,7 @@ function PageCreateForm({pageTags = []}) {
 
         navigate(`/container/${cid}/${TAG_FROM_SOURCE[pageSource]}/${pageId}`);
       } catch (error) {
-        ShowToast.error(error?.msg, {
-          closeOnClick: true
-        });
+        ShowToast.error(<ApiError apiError={error}/>);
       } finally {
         // setIsLoading(false);
       }

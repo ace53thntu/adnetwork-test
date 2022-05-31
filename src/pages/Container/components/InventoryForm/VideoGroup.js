@@ -3,15 +3,15 @@ import React from 'react';
 
 ///---> External Modules
 import {useTranslation} from 'react-i18next';
-import {Col, FormGroup, Row} from 'reactstrap';
+import {Col, Row} from 'reactstrap';
 import {useFormContext} from 'react-hook-form';
 
 //---> Internal Modules
 import {Collapse} from 'components/common';
-import {FormReactSelect, FormToggle} from 'components/forms';
+import {FormRadioGroup, FormReactSelect} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {LinearityOptions} from 'constants/misc';
-import {StartDelayOptions} from 'pages/Campaign/constants';
+import {getSkippableOptions, StartDelayOptions} from 'pages/Campaign/constants';
 import Protocol from './Protocol';
 import VideoMime from './VideoMime';
 
@@ -21,11 +21,11 @@ const VideoGroup = ({currentInventory}) => {
   const skip = watch('metadata.skip');
 
   React.useEffect(() => {
-    if(skip !== 'active'){
-      setValue('metadata.skip_after', '')
-      setValue('metadata.skip_min', '')
+    if (skip !== 'true') {
+      setValue('metadata.skip_after', '');
+      setValue('metadata.skip_min', '');
     }
-  }, [setValue, skip])
+  }, [setValue, skip]);
 
   return (
     <Collapse initialOpen title={t('FORM.VIDEO_CONFIGURATION')} unMount={false}>
@@ -79,7 +79,7 @@ const VideoGroup = ({currentInventory}) => {
             disableGroupSeparators
             allowDecimals={false}
             disabled={formState.isSubmitting}
-            readOnly={skip !== 'active'}
+            readOnly={skip !== 'true'}
           />
         </Col>
         <Col md="6">
@@ -90,7 +90,7 @@ const VideoGroup = ({currentInventory}) => {
             disableGroupSeparators
             allowDecimals={false}
             disabled={formState.isSubmitting}
-            readOnly={skip !== 'active'}
+            readOnly={skip !== 'true'}
           />
         </Col>
 
@@ -120,33 +120,25 @@ const VideoGroup = ({currentInventory}) => {
         <Col sm={12}>
           <VideoMime />
         </Col>
-        <Col sm="3">
-          <FormGroup className="d-flex justify-content-end flex-column mb-0">
-            <FormToggle
-              name="metadata.loop"
-              defaultCheckedValue="active"
-              label={t('COMMON.LOOP')}
-              values={{
-                checked: 'active',
-                unChecked: 'inactive'
-              }}
-              disabled={formState.isSubmitting}
-            />
-          </FormGroup>
+        <Col sm="6">
+          <FormRadioGroup
+            inline
+            disabled={formState.isSubmitting}
+            label={t('COMMON.LOOP')}
+            items={getSkippableOptions('loop')}
+            defaultValue={null}
+            name="metadata.loop"
+          />
         </Col>
-        <Col sm="3">
-          <FormGroup className="d-flex justify-content-end flex-column mb-0">
-            <FormToggle
-              name="metadata.skip"
-              defaultCheckedValue="inactive"
-              label={t('FORM.SKIP')}
-              values={{
-                checked: 'active',
-                unChecked: 'inactive'
-              }}
-              disabled={formState.isSubmitting}
-            />
-          </FormGroup>
+        <Col sm="6">
+          <FormRadioGroup
+            inline
+            disabled={formState.isSubmitting}
+            label={t('FORM.SKIP')}
+            items={getSkippableOptions('skip')}
+            defaultValue={null}
+            name="metadata.skip"
+          />
         </Col>
       </Row>
     </Collapse>

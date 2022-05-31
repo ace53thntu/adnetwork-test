@@ -19,7 +19,7 @@ import {
 
 // Internal Modules
 import {schemaValidateCreateBudget} from '../validation';
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {BudgetTimeFrames, CappingTypes, Statuses} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -118,7 +118,7 @@ const BudgetCreateModal = ({
       ShowToast.success('Created Capping Successfully');
       toggleModal();
     } catch (err) {
-      ShowToast.error(err?.msg || 'Fail to Created Capping');
+      ShowToast.error(<ApiError apiError={err || 'Fail to Created Capping'}/>);
     }
   }
 

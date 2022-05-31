@@ -13,7 +13,9 @@ import {
 } from 'pages/Organization/Dsp';
 import {
   PublisherListPage,
-  PublisherReportPage
+  PublisherCreatePage,
+  PublisherEditPage,
+  PublisherViewPage
 } from 'pages/Organization/Publisher';
 import {USER_ROLE} from 'pages/user-management/constants';
 
@@ -55,8 +57,18 @@ export const organizationPages = {
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
         },
         {
-          path: `:publisherId/${RoutePaths.REPORT}`,
-          element: <PublisherReportPage />,
+          path: `create`,
+          element: <PublisherCreatePage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+        },
+        {
+          path: `:publisherId`,
+          element: <PublisherViewPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
+        },
+        {
+          path: `:publisherId/${RoutePaths.EDIT}`,
+          element: <PublisherEditPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.PUBLISHER]
         }
       ],

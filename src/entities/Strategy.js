@@ -143,8 +143,16 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
         ProtocolOptions?.find(
           item => item?.value === video_filter?.protocols
         ) || null,
-      only_skipable: video_filter?.only_skipable ? 'active' : 'inactive',
-      only_unskipable: video_filter?.only_unskipable ? 'active' : 'inactive'
+      only_skipable:
+        video_filter?.only_skipable !== true &&
+        video_filter?.only_skipable !== false
+          ? ''
+          : video_filter?.only_skipable?.toString(),
+      only_unskipable:
+        video_filter?.only_unskipable !== true &&
+        video_filter?.only_unskipable !== false
+          ? ''
+          : video_filter?.only_unskipable.toString()
     },
     context_filter: {
       browser: convertListToGui({
@@ -242,14 +250,11 @@ export const formToApi = ({
     formVideoFilter: video_filter,
     currentVideoFilter: originalStrategy?.video_filter
   });
-  console.log('🚀 ~ file: Strategy.js ~ line 241 ~ videoFilter', videoFilter);
   const contextFilter = getContextFilter({
     isEdit,
     contextFilterForm: context_filter,
     currentContextFilter: originalStrategy?.context_filter
   });
-
-  //---> CONTEXT FILTER
 
   let strategyReturn = {
     campaign_uuid: campaign?.value,
@@ -367,12 +372,9 @@ const getVideoFilter = ({
   formVideoFilter,
   currentVideoFilter
 }) => {
-  let videoFilter = {
-    only_skipable: formVideoFilter?.only_skipable === 'active' ? true : false,
-    only_unskipable:
-      formVideoFilter?.only_unskipable === 'active' ? true : false
-  };
+  let videoFilter = {};
   if (!isEdit) {
+    //---> Case: create
     if (formVideoFilter?.skip_delay) {
       videoFilter.skip_delay = formVideoFilter?.skip_delay
         ? parseInt(formVideoFilter?.skip_delay)
@@ -398,10 +400,25 @@ const getVideoFilter = ({
         ? formVideoFilter?.protocols?.value
         : null;
     }
+    if (
+      formVideoFilter?.only_skipable !== null &&
+      formVideoFilter?.only_skipable !== undefined &&
+      formVideoFilter?.only_skipable !== ''
+    ) {
+      videoFilter.only_skipable =
+        formVideoFilter?.only_skipable === 'true' ? true : false;
+    }
+    if (
+      formVideoFilter?.only_unskipable !== null &&
+      formVideoFilter?.only_unskipable !== undefined &&
+      formVideoFilter?.only_unskipable !== ''
+    ) {
+      videoFilter.only_unskipable =
+        formVideoFilter?.only_unskipable === 'true' ? true : false;
+    }
     return videoFilter;
   } else {
-    // Case: edit
-    // if (formVideoFilter?.skip_delay || formVideoFilter?.skip_delay === 0) {
+    //---> Case: edit
     videoFilter.skip_delay = getSkipDelay(formVideoFilter?.skip_delay);
     videoFilter.start_delay = formVideoFilter?.start_delay
       ? formVideoFilter?.start_delay?.value
@@ -415,7 +432,27 @@ const getVideoFilter = ({
     videoFilter.protocols = formVideoFilter?.protocols
       ? formVideoFilter?.protocols?.value
       : null;
-    console.log('videoFilter ====', videoFilter);
+    if (
+      formVideoFilter?.only_skipable !== null &&
+      formVideoFilter?.only_skipable !== undefined &&
+      formVideoFilter?.only_skipable !== ''
+    ) {
+      videoFilter.only_skipable =
+        formVideoFilter?.only_skipable === 'true' ? true : false;
+    } else {
+      videoFilter.only_skipable = null;
+    }
+    if (
+      formVideoFilter?.only_unskipable !== null &&
+      formVideoFilter?.only_unskipable !== undefined &&
+      formVideoFilter?.only_unskipable !== ''
+    ) {
+      videoFilter.only_unskipable =
+        formVideoFilter?.only_unskipable === 'true' ? true : false;
+    } else {
+      videoFilter.only_unskipable = null;
+    }
+
     return videoFilter;
   }
 };
@@ -520,7 +557,7 @@ const getContextFilter = ({
         contextFilterForm?.device_manufacturer
       );
     } else {
-      contextFilter.device_manufacture = [];
+      contextFilter.device_manufacturer = [];
     }
 
     if (

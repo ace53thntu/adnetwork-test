@@ -19,6 +19,7 @@ import {validationInventory} from './validation';
 import {useCreateTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
 import {VideoMineTypes} from 'constants/inventory';
+import { ApiError } from 'components/common';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {t} = useTranslation();
@@ -34,7 +35,8 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       allow_deal: 'inactive',
       type: null,
       metadata: {
-        loop: 'active',
+        loop: 'true',
+        skip: '',
         protocols: [
           {value: 2, label: 'VAST 2.0'},
           {value: 3, label: 'VAST 3.0'},
@@ -72,9 +74,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       toggle();
     } catch (err) {
       setIsLoading(false);
-      ShowToast.error(err?.msg || 'Fail to create Inventory', {
-        closeOnClick: true
-      });
+      ShowToast.error(<ApiError apiError={err || 'Fail to create Inventory'}/>);
     }
   };
 

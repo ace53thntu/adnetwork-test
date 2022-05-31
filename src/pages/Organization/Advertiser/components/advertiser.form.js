@@ -22,6 +22,7 @@ import Credential from 'components/credential';
 import {FormContent} from './form-content';
 import {useQueryClient} from 'react-query';
 import {GET_ADVERTISER} from 'queries/advertiser/constants';
+import { ApiError } from 'components/common';
 
 const AdvertiserForm = ({
   modal = false,
@@ -49,7 +50,7 @@ const AdvertiserForm = ({
     defaultValues,
     resolver: schemaValidate(t)
   });
-  const {handleSubmit, formState} = methods;
+  const {handleSubmit, formState, reset} = methods;
 
   /**
    * Submit form
@@ -69,7 +70,7 @@ const AdvertiserForm = ({
         navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.ADVERTISER}`);
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 61 ~ err', err);
-        ShowToast.error(err || 'Fail to create advertiser');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     } else {
       // EDIT
@@ -82,7 +83,7 @@ const AdvertiserForm = ({
         );
       } catch (err) {
         console.log('🚀 ~ file: advertiser.form.js ~ line 100 ~ err', err);
-        ShowToast.error(err || 'Fail to update advertiser');
+        ShowToast.error(<ApiError apiError={err}/>);
       }
     }
   };
@@ -112,7 +113,7 @@ const AdvertiserForm = ({
             </CardBody>
 
             <CardFooter className="d-flex justify-content-end">
-              <Button color="link" onClick={toggle} type="button">
+              <Button color="link" onClick={() => reset()} type="button">
                 {t('cancel')}
               </Button>
               {isEdit && (

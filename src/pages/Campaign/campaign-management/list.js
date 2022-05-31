@@ -1,4 +1,4 @@
-import {DialogConfirm, LoadingIndicator} from 'components/common';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
 import CustomPagination from 'components/common/CustomPagination';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
@@ -142,7 +142,7 @@ const CampaignList = () => {
       await deleteCampaign({cid: currentCampaign?.uuid});
       ShowToast.success('Deleted campaign successfully');
     } catch (err) {
-      ShowToast.error(err?.message || 'Fail to delete Campaign');
+      ShowToast.error(<ApiError apiError={err || 'Fail to delete Campaign'} />);
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);

@@ -23,6 +23,7 @@ import {v4 as uuidv4} from 'uuid';
 // import {useCreateReport} from 'core/queries/report';
 // import ReportItem from 'page/ReportDashboard/components/ReportItem/ReportItem';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import { ApiError } from 'components/common';
 
 const StrategyReport = () => {
   // const {mutateAsync: createReport} = useCreateReport();
@@ -54,7 +55,7 @@ const StrategyReport = () => {
       await createReport(data);
       ShowToast.success('Created report successfully');
     } catch (error) {
-      ShowToast.error(error.msg || 'Fail to create new report');
+      ShowToast.error(<ApiError apiError={error || 'Fail to create new report'}/>);
     }
     setTimeout(() => {
       setIsLoading(false);

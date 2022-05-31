@@ -39,6 +39,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import SearchInput from './components/SearchInput';
 import {useSearchTermSelector} from 'store/reducers/advertiser';
 import NoDataAvailable from 'components/list/no-data';
+import { ApiError } from 'components/common';
 
 /**
  * @function Advertiser List Component
@@ -166,10 +167,10 @@ const ListAdvertiser = () => {
     try {
       await deleteAdvertiser({advId: currentAdvertiser?.uuid});
       ShowToast.success('Delete advertiser successfully');
-    } catch (err) {
-      ShowToast.error(err || 'Fail to delete advertiser');
-    } finally {
       setShowDialog(false);
+
+    } catch (err) {
+      ShowToast.error(<ApiError apiError={err}/>);
     }
   };
 

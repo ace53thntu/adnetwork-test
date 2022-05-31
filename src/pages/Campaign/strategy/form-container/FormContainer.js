@@ -17,6 +17,8 @@ import {strategySchema} from '../validation';
 import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
 import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
+import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertiserTree';
+import ApiError from 'components/common/ApiError';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -43,6 +45,7 @@ const FormContainer = ({
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
   const navigate = useNavigate();
+  const {refresh} = useRefreshAdvertiserTree();
 
   const methods = useForm({
     defaultValues: {
@@ -171,19 +174,23 @@ const FormContainer = ({
             _isSummary: isSummary
           });
         } catch (error) {
-          ShowToast.error(error?.msg);
+          ShowToast.error(<ApiError apiError={error}/>);
         }
       } else {
         try {
           const {data} = await createStrategy(req);
 
           const strategyId = data?.uuid;
+          await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
+
           ShowToast.success('Created strategy successfully');
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
-          ShowToast.error(error?.debug);
+          ShowToast.error(
+            <ApiError apiError={error}/>
+          );
         }
       }
     },
@@ -199,6 +206,7 @@ const FormContainer = ({
       navigate,
       originalStrategy,
       redirectPageAfterSave,
+      refresh,
       reset,
       strategyId
     ]

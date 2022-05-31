@@ -1,4 +1,4 @@
-import {DialogConfirm, SwiperList} from 'components/common';
+import {ApiError, DialogConfirm, SwiperList} from 'components/common';
 // import PropTypes from 'prop-types';
 import {useDeleteVideo, useVideos} from 'queries/video';
 import {GET_VIDEOS} from 'queries/video/constants';
@@ -69,7 +69,7 @@ function Videos(props) {
       client.invalidateQueries([GET_VIDEOS, params]);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.message);
+      ShowToast.error(<ApiError apiError={error}/>);
     }
   };
 

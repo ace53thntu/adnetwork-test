@@ -1,4 +1,4 @@
-import {ButtonLoading} from 'components/common';
+import {ApiError, ButtonLoading} from 'components/common';
 import {FormTextInput, FormToggle} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {useRefreshContainerTree} from 'pages/Container/hooks/useRefeshContainerTree';
@@ -65,7 +65,7 @@ function ContainerCreateForm(props) {
       navigate(`/container/${data?.uuid}`);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(error?.msg || 'Fail to create Container');
+      ShowToast.error(<ApiError apiError={error || 'Fail to create Container'}/>);
     }
   };
 

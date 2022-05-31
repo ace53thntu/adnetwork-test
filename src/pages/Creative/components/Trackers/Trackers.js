@@ -10,8 +10,8 @@ function Trackers(props) {
 
   const [isOpenTrackerForm, setIsOpenTrackerForm] = React.useState(false);
 
-  const handleAddTracker = () => {
-    setIsOpenTrackerForm(!isOpenTrackerForm);
+  const handleAddTracker = isOpen => {
+    setIsOpenTrackerForm(isOpen);
   };
 
   return (
@@ -34,7 +34,7 @@ function Trackers(props) {
             color="primary"
             type="button"
             className="mt-2"
-            onClick={handleAddTracker}
+            onClick={() => handleAddTracker(true)}
           >
             Add tracker
           </Button>

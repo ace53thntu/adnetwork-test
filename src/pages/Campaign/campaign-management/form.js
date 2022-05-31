@@ -1,3 +1,4 @@
+import { ApiError } from 'components/common';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
 import PropTypes from 'prop-types';
@@ -78,7 +79,7 @@ const CampaignForm = ({
           //   `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
           // );
         } catch (error) {
-          ShowToast.error(error?.msg || 'Fail to update Campaign');
+          ShowToast.error(<ApiError apiError={error || 'Fail to update Campaign'}/>);
         }
       } else {
         try {
@@ -91,7 +92,7 @@ const CampaignForm = ({
 
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
-          ShowToast.error(error?.msg || 'Fail to create Campaign');
+          ShowToast.error(<ApiError apiError={error || 'Fail to create Campaign'}/>);
         }
       }
     },

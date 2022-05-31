@@ -12,7 +12,6 @@ const AdvertiserCreate = ({children}) => {
     <AdvertiserLayout pageTitle="Advertiser Create">
       <div>
         <AdvertiserForm IABsOptions={IABsOptions} isCreate />
-        )}
       </div>
     </AdvertiserLayout>
   );

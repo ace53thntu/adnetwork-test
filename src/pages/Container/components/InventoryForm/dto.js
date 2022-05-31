@@ -89,7 +89,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       formatMetadata.max_duration =
         parseInt(metadata?.max_duration, 10) || null;
     }
-    if(metadata?.skip === 'active'){
+    if (metadata?.skip === 'true') {
       if (metadata?.skip_min) {
         formatMetadata.skip_min = parseInt(metadata?.skip_min, 10) || null;
       }
@@ -119,8 +119,38 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
           : [];
     }
 
-    formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
-    formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
+    if (
+      metadata?.loop !== null &&
+      metadata?.loop !== undefined &&
+      metadata?.loop !== ''
+    ) {
+      if (metadata?.loop === 'true') {
+        formatMetadata.loop = 1;
+      }
+      if (metadata?.loop === 'false') {
+        formatMetadata.loop = 0;
+      }
+    } else {
+      formatMetadata.loop = null;
+    }
+
+    if (
+      metadata?.skip !== null &&
+      metadata?.skip !== undefined &&
+      metadata?.skip !== ''
+    ) {
+      if (metadata?.skip === 'true') {
+        formatMetadata.skip = 1;
+      }
+      if (metadata?.skip === 'false') {
+        formatMetadata.skip = 0;
+      }
+    } else {
+      formatMetadata.skip = null;
+    }
+
+    // formatMetadata.loop = metadata?.loop === 'active' ? 1 : 0;
+    // formatMetadata.skip = metadata?.skip === 'active' ? 1 : 0;
   }
 
   // Metadata banner format
@@ -241,10 +271,10 @@ export const mappingInventoryApiToForm = ({
         })
       : [];
   destructedMetadata.mimes = mimes;
-  destructedMetadata.loop =
-    metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
-  destructedMetadata.skip =
-    metadata?.skip === true || metadata?.skip === 1 ? 'active' : 'inactive';
+  destructedMetadata.loop = convertBooleanToRadioValue(metadata?.loop);
+  // metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
+  destructedMetadata.skip = convertBooleanToRadioValue(metadata?.skip);
+  // metadata?.skip === true || metadata?.skip === 1 ? 'active' : 'inactive';
   destructedMetadata.linearity =
     LinearityOptions.find(item => item.value === metadata.linearity) || null;
   destructedMetadata.min_bitrate = parseInt(metadata?.min_bitrate, 10) || '';
@@ -330,4 +360,14 @@ export const mappingTrackerFormToApi = ({tracker, inventoryId}) => {
     variables,
     status: Statuses.ACTIVE
   };
+};
+
+const convertBooleanToRadioValue = value => {
+  if (value === true || value === 1) {
+    return 'true';
+  }
+  if (value === false || value === 0) {
+    return 'false';
+  }
+  return '';
 };

@@ -16,7 +16,7 @@ import {capitalize} from 'utils/helpers/string.helpers';
 import {CustomStatus} from 'components/list/status';
 import NoDataAvailable from 'components/list/no-data';
 import BidFormModal from '../bid-form-modal';
-import {DialogConfirm} from 'components/common';
+import {ApiError, DialogConfirm} from 'components/common';
 import {useDeleteBid} from 'queries/bid';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {useQueryClient} from 'react-query';
@@ -87,7 +87,7 @@ const BidList = ({inventoryId}) => {
 
       ShowToast.success('Deleted bid successfully');
     } catch (error) {
-      ShowToast.error(error?.msg || 'Fail to delete bid');
+      ShowToast.error(<ApiError apiError={error}/>);
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);

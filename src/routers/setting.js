@@ -5,6 +5,8 @@ import {
   KeywordListPage,
   LocationListPage,
   PositionListPage,
+  TrackerTemplateCreatePage,
+  TrackerTemplateEditPage,
   TrackerTemplateListPage
 } from 'pages/setting';
 import {USER_ROLE} from 'pages/user-management/constants';
@@ -63,6 +65,16 @@ export const settingPages = {
         {
           path: '',
           element: <TrackerTemplateListPage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
+        },
+        {
+          path: '/create',
+          element: <TrackerTemplateCreatePage />,
+          canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
+        },
+        {
+          path: '/:trkTemplateId',
+          element: <TrackerTemplateEditPage />,
           canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER]
         }
       ],

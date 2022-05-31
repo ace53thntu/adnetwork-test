@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {formToApi, getExistedType, getListByType} from '../dto';
-import {DialogConfirm, LoadingIndicator} from 'components/common';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
 import {
   CappingTypes,
   DEFAULT_PAGINATION,
@@ -119,15 +119,23 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     } catch (err) {
       setIsSubmitting(false);
 
-      ShowToast.error(err?.msg || 'Fail to update capping');
+      ShowToast.error(<ApiError apiError={err || 'Fail to update capping'} />);
     }
   }
 
-  async function onSubmitDelete(params) {
+  async function onSubmitDelete() {
     setIsSubmitting(true);
 
     try {
-      await deleteCapping({cappingId: activeCapping?.uuid});
+      if (
+        activeCapping?.type !== CappingTypes.BUDGET.value &&
+        activeCapping?.type !== CappingTypes.IMPRESSION.value
+      ) {
+        await deleteCapping({cappingId: activeCapping?.uuid});
+      } else {
+        await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
+      }
+
       setIsSubmitting(false);
 
       ShowToast.success('Deleted capping successfully');
@@ -136,7 +144,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     } catch (err) {
       setIsSubmitting(false);
 
-      ShowToast.error(err?.msg || 'Fail to delete capping');
+      ShowToast.error(<ApiError apiError={err || 'Fail to delete capping'} />);
     }
   }
 
@@ -177,6 +185,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           list={userList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type="user"
         />
       )}
 
