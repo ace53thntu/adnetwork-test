@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, DatePicker, Statistic, Card, Spin } from 'antd';
-import { DesktopOutlined, EyeOutlined, LikeOutlined, PercentageOutlined, PieChartOutlined } from '@ant-design/icons';
+import { DesktopOutlined, EyeOutlined, LikeOutlined, PieChartOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import './style.scss'
 import { useGetTotalMetrics } from 'queries/metric/useGetTotalMetrics';
@@ -63,7 +63,7 @@ const StatisticMetrics = ({ campaignId }) => {
                             />
                         </Row>
                         <br />
-                        <Row justify='space-between' gutter={16}>
+                        <Row justify='space-between'>
                             <Col>
                                 <Card className="cardStatistic">
                                     <Statistic title="Adrequest" value={adrequest} prefix={<DesktopOutlined />} />
