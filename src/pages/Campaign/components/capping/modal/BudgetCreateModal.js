@@ -44,6 +44,7 @@ const BudgetCreateModal = ({
   existedTypes = [],
   cappings = []
 }) => {
+  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 47 ~ cappings", cappings)
   const {t} = useTranslation();
   const budgetGLobal = cappings?.find(
     item =>
@@ -52,9 +53,10 @@ const BudgetCreateModal = ({
   );
   const budgetDaily = cappings?.find(
     item =>
-      item.type === cappingType.value &&
+      item.type === cappingType.type &&
       item.time_frame === BudgetTimeFrames.DAILY
   );
+  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 59 ~ budgetDaily", budgetDaily)
 
   const defaultValues = {
     global: [CappingTypes.BUDGET.value].includes(cappingType.type)
@@ -68,10 +70,11 @@ const BudgetCreateModal = ({
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidateCreateBudget(t)
+    resolver: schemaValidateCreateBudget(t,cappingType.type)
   });
 
-  const {handleSubmit, formState, reset} = methods;
+  const {handleSubmit, formState, reset, errors} = methods;
+  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 75 ~ errors", errors)
 
   async function onSubmit(formData) {
     console.log(

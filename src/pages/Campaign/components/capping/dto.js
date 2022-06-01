@@ -186,6 +186,18 @@ export const disabledExistedType = ({existedTypes, currentType}) => {
     return false;
   }
 
+  if (currentType.type === CappingTypes.USER.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.USER.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
   if (currentType.type === CappingTypes.KEYWORD.value) {
     const typeFound = existedTypes.find(
       existedType => existedType.type === CappingTypes.KEYWORD.value

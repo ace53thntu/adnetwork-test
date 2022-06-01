@@ -20,7 +20,8 @@ export const SDK_IOS_CONFIG = window?.ADN_META_DATA?.SDK_IOS_CONFIG ?? 'Aicactus
 export const SDK_IOS_NAME = window?.ADN_META_DATA?.SDK_IOS_NAME ?? 'AicactusAdsNetwork';
 export const SDK_ANDROID_NAME = window?.ADN_META_DATA?.SDK_ANDROID_NAME ?? 'AicactusAdsNetwork';
 export const SDK_ANDROID_NAME_SPACE = window?.ADN_META_DATA?.SDK_ANDROID_NAME_SPACE ?? 'io.aicactus.adsnetwork';
-export const SDK_ANDROID_DEPENDENCY = window?.ADN_META_DATA?.SDK_ANDROID_DEPENDENCY ?? 'io.aicactus:adsnetwork';
+export const SDK_ANDROID_DEPENDENCY = window?.ADN_META_DATA?.SDK_ANDROID_DEPENDENCY ?? 'io.aicactus:adsnetwork:1.X.X';
+export const COMPANY_NAME = window?.ADN_META_DATA?.NAME ?? 'Aicactus';
 
 export const CONTAINER_TREE_TAGS = [
   {

@@ -101,4 +101,4 @@ const CurrencyInputField = props => {
 
 CurrencyInputField.propTypes = propTypes;
 
-export default React.memo(CurrencyInputField);
+export default CurrencyInputField;

@@ -19,6 +19,8 @@ import {useDispatch} from 'react-redux';
 import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertiserTree';
 import ApiError from 'components/common/ApiError';
+import {useQueryClient} from 'react-query';
+import {GET_STRATEGY} from 'queries/strategy/constants';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -39,6 +41,7 @@ const FormContainer = ({
   isConcept = false,
   originalStrategy
 }) => {
+  const client = useQueryClient();
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {strategyId} = useParams();
@@ -156,6 +159,9 @@ const FormContainer = ({
 
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
+          if (isSummary) {
+            await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
+          }
           const defaultValueUpdated = apiToForm({strategyData: data});
           reset(defaultValueUpdated);
           ShowToast.success('Updated strategy successfully');
@@ -174,7 +180,7 @@ const FormContainer = ({
             _isSummary: isSummary
           });
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error}/>);
+          ShowToast.error(<ApiError apiError={error} />);
         }
       } else {
         try {
@@ -188,13 +194,12 @@ const FormContainer = ({
             `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
           );
         } catch (error) {
-          ShowToast.error(
-            <ApiError apiError={error}/>
-          );
+          ShowToast.error(<ApiError apiError={error} />);
         }
       }
     },
     [
+      client,
       createStrategy,
       currentStrategy,
       dispatch,

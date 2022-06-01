@@ -134,6 +134,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
         await deleteCapping({cappingId: activeCapping?.uuid});
       } else {
         await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
+
       }
 
       setIsSubmitting(false);

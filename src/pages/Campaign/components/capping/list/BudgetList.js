@@ -42,11 +42,50 @@ const BudgetList = ({
   type = ''
 }) => {
   const {t} = useTranslation();
+  const existedAll = React.useMemo(() => {
+    if (list.length === 1) {
+      return false;
+    }
+    return (
+      list?.length === 2 &&
+      list?.every(
+        item =>
+          [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+            item.type
+          ) && item.target > 0
+      )
+    );
+  }, [list]);
+
   const destructuredList = list?.map(item => {
     if (item?.target === 0 || !item.target) {
-      return {...item, actions: [t('edit')]};
+      return {...item, id: item?.uuid, actions: [t('edit')]};
     }
-    return {...item, actions: [t('edit'), t('delete')]};
+
+    if (
+      [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+        item.type
+      )
+    ) {
+      if (existedAll) {
+        return {
+          ...item,
+          id: item?.uuid,
+          actions: [t('edit'), t('delete')]
+        };
+      }
+      return {
+        ...item,
+        id: item?.uuid,
+        actions: [t('edit')]
+      };
+    }
+
+    return {
+      ...item,
+      id: item?.uuid,
+      actions: [t('edit'), t('delete')]
+    };
   });
 
   //---> Define columns
