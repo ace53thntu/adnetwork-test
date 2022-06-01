@@ -3,11 +3,12 @@ import {useQueryString} from "../../../hooks";
 import {useParams} from "react-router-dom";
 import {useCommonSelector} from "../../../store/reducers/common";
 import {flattenMyTree} from "../utils";
+import {RoutePaths} from "../../../constants/route-paths";
 
 export const useBreadCrumb = () => {
   const { selectTreeData } = useCommonSelector();
   const query = useQueryString();
-  const { campaignId, strategyId, advertiserId, conceptId } = useParams();
+  const { campaignId, strategyId, advertiserId, conceptId, cid: containerId, source, pageId } = useParams();
   let advertiserIdQuery = query.get('advertiser_id');
 
   return useMemo(() => {
@@ -19,7 +20,7 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: advertiserId,
           name: adv?.name,
-          url: `/creative/${advertiserId}`
+          url: `/${RoutePaths.CREATIVE}/${advertiserId}`
         })
       }
 
@@ -28,7 +29,7 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: conceptId,
           name: adv?.name,
-          url: `/creative/${advertiserId}/${conceptId}`
+          url: `/${RoutePaths.CREATIVE}/${advertiserId}/${conceptId}`
         })
       }
 
@@ -37,7 +38,7 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: advertiserIdQuery,
           name: adv?.name,
-          url: `/campaign?mode=campaign&advertiser_id=${advertiserIdQuery}`
+          url: `/${RoutePaths.CAMPAIGN}?mode=campaign&advertiser_id=${advertiserIdQuery}`
         })
       }
 
@@ -46,7 +47,7 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: campaignId,
           name: campaign?.name,
-          url: `/campaign/${campaignId}?advertiser_id=${advertiserIdQuery}`
+          url: `/${RoutePaths.CAMPAIGN}/${campaignId}?advertiser_id=${advertiserIdQuery}`
         })
       }
 
@@ -55,10 +56,28 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: strategyId,
           name: strategy?.name,
-          url: `/campaign/${campaignId}/strategy/${strategyId}?advertiser_id=${advertiserIdQuery}`
+          url: `/${RoutePaths.CAMPAIGN}/${campaignId}/strategy/${strategyId}?advertiser_id=${advertiserIdQuery}`
+        })
+      }
+
+      if (containerId) {
+        const container = flattenTree.find(item => item.uuid === containerId);
+        paths.push({
+          uuid: containerId,
+          name: container?.name,
+          url: `/${RoutePaths.CONTAINER}/${containerId}`
+        })
+      }
+
+      if (pageId) {
+        const page = flattenTree.find(item => item.uuid === pageId);
+        paths.push({
+          uuid: pageId,
+          name: page?.name,
+          url: `/${RoutePaths.CONTAINER}/${containerId}/${source}/${pageId}`
         })
       }
     }
     return paths;
-  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, conceptId, selectTreeData]);
+  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, conceptId, containerId, source, pageId, selectTreeData]);
 };

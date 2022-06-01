@@ -21,6 +21,9 @@ import {
 } from './ConceptList.styles';
 import ConceptListItem from './ConceptListItem';
 import {conceptItemRepoToView} from './dto';
+import ConceptListItemAnt from "./ConceptListItemAnt";
+import {Row} from "antd";
+import "./index.scss";
 
 const LIMIT = 10;
 
@@ -64,61 +67,41 @@ function ConceptList(props) {
   }, [advertiserId, dispatch, expandedIds, res?.pages, selectedAdvertiserId]);
 
   return (
-    <Card className="main-card mb-3">
+    <div className="concept-list-wrapper">
       {status === 'loading' ? <BlockOverlay /> : null}
-      <CardBody>
-        <ConceptsContainer>
-          <AddConceptContainer>
-            <Link to={`create`}>
-              <div className="concept">
-                <div className="thumb concept-thumb">
-                  <AddConceptContainerBody>
-                    <div className="images-container d-flex align-items-center justify-content-center">
-                      {/* TODO remove ThemeProvider, custom MButton directly instead */}
-                      <ThemeProvider theme={btnTheme}>
-                        <Tooltip title="Create new concept">
-                          <MButton
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                          ></MButton>
-                        </Tooltip>
-                      </ThemeProvider>
-                    </div>
-                  </AddConceptContainerBody>
-                </div>
-              </div>
-            </Link>
-          </AddConceptContainer>
+      <Row gutter={[16, 16]}>
+        {res?.pages.map((group, i) => {
+          return (
+            <React.Fragment key={i}>
+              {group?.data?.data?.map((item, index) => (
+                /*                  <ConceptListItem
+                                    key={index}
+                                    data={conceptItemRepoToView(item)}
+                                  />*/
 
-          {res?.pages.map((group, i) => {
-            return (
-              <React.Fragment key={i}>
-                {group?.data?.data?.map((item, index) => (
-                  <ConceptListItem
-                    key={index}
-                    data={conceptItemRepoToView(item)}
-                  />
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </ConceptsContainer>
+                <ConceptListItemAnt
+                  key={index}
+                  data={conceptItemRepoToView(item)}
+                />
+              ))}
+            </React.Fragment>
+          );
+        })}
+      </Row>
 
-        {hasNextPage && (
-          <ConceptsLoadMore>
-            <Button
-              className="btn-wide mb-2 mr-2"
-              color="primary"
-              disabled={isFetchingNextPage}
-              onClick={() => fetchNextPage()}
-            >
-              Load more
-            </Button>
-          </ConceptsLoadMore>
-        )}
-      </CardBody>
-    </Card>
+      {hasNextPage && (
+        <ConceptsLoadMore>
+          <Button
+            className="btn-wide mb-2 mr-2"
+            color="primary"
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}
+          >
+            Load more
+          </Button>
+        </ConceptsLoadMore>
+      )}
+    </div>
   );
 }
 

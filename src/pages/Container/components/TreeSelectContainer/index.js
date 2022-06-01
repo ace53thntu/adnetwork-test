@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
-import {useLocation, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {setSelectedTreeNodeRedux, useCommonSelector} from "../../../../store/reducers/common";
 import {RoutePaths} from "../../../../constants/route-paths";
 import AiActivTreeSelect from "../../../../components/AiActivTreeSelect";

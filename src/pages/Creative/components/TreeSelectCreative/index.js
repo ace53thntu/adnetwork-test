@@ -30,8 +30,9 @@ function TreeSelectCreative() {
     } else if(advertiserId) {
       dispatch(setSelectedTreeNodeRedux(advertiserId))
     } else {
+      dispatch(setSelectedTreeNodeRedux(''))
       // navigate to first advertiser uuid
-      navigate(`/${RoutePaths.CREATIVE}/${treeData[0].uuid}`);
+      // navigate(`/${RoutePaths.CREATIVE}/${treeData[0].uuid}`);
     }
 
     setTreeData(treeData);
@@ -55,7 +56,7 @@ function TreeSelectCreative() {
   }, []);
 
   return (
-    <div className="mb-3">
+    <div style={{ marginLeft: "15px" }} className="mb-3">
       <AiActivTreeSelect selectedItem={selectedTreeNode} treeData={treeData} onSelectedItem={handleSelectedItem} />
     </div>
   );
