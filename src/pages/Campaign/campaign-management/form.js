@@ -27,6 +27,7 @@ import InformationGroup from './form-fields/InformationGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
 import StatisticMetrics from '../components/StatisticMetrics';
 import { validationCampaign } from './validation';
+import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -114,8 +115,9 @@ const CampaignForm = ({
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
+            {/* Campaign Statistic Metric */}
+            <StatisticMetrics id={campaignId} reportType={EnumTypeStatistics.Campaign} />
             {/* Information */}
-            <StatisticMetrics campaignId={campaignId} />
             <InformationGroup
               isView={isView}
               isCreate={isCreate}

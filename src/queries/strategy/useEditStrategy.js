@@ -2,7 +2,7 @@ import {StrategyAPIRequest} from 'api/strategy.api';
 import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
-import {GET_STRATEGIES, GET_STRATEGY} from './constants';
+import {GET_STRATEGIES} from './constants';
 
 /**
  * Edit a Strategy
@@ -24,7 +24,6 @@ export function useEditStrategy() {
       },
       onSettled: responseData => {
         client.invalidateQueries([GET_STRATEGIES]);
-        client.invalidateQueries([GET_STRATEGY, responseData?.data?.uuid]);
       }
     }
   );

@@ -35,6 +35,7 @@ const AddTypeButton = ({
   referenceUuid = '',
   cappings = []
 }) => {
+  console.log("🚀 ~ file: AddTypeButton.js ~ line 38 ~ existedTypes", existedTypes)
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
 

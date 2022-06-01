@@ -3,13 +3,15 @@ import { useQuery } from 'react-query';
 import { MetricAPIRequest } from 'api/metric.api';
 import { useCancelRequest } from 'hooks';
 import { METRICS } from './constants';
+import { EnumTypeStatistics } from 'pages/Campaign/components/StatisticMetrics/StatisticMetrics';
 
 /**
- * Hook for get Total Metrics Report from API by query
+ * Hook for get Statistic Metrics Report from API by query
  */
-export function useGetTotalMetrics({ data, campaignId, enabled = false }) {
+export function useGetStatisticMetrics({ data, id, type = EnumTypeStatistics.Campaign, enabled = false }) {
+
   const { cancelToken } = useCancelRequest();
-  return useQuery([METRICS, campaignId, data], async () => {
+  return useQuery([METRICS, id, data], async () => {
     const response = await MetricAPIRequest.getMetric({
       data,
       options: {
@@ -18,15 +20,14 @@ export function useGetTotalMetrics({ data, campaignId, enabled = false }) {
     });
     if (response?.data) {
       return parseData({
-        campaignId
-        , metricData: response.data
+        id, metricData: response.data
       });
     }
     return {};
   })
 }
 
-const parseData = ({ campaignId, metricData }) => {
+const parseData = ({ id, metricData }) => {
   const { report } = metricData || {};
   const listReport = Object.values(report);
   const statisticTotal = {
@@ -36,8 +37,8 @@ const parseData = ({ campaignId, metricData }) => {
     ctr: 0,
   }
   listReport.forEach(item => {
-    if (!!item && Object.keys(item).length && item[campaignId]) {
-      const campaignMetrics = item[campaignId];
+    if (!!item && Object.keys(item).length && item[id]) {
+      const campaignMetrics = item[id];
       statisticTotal.impression +=
         (campaignMetrics['external_impressions'] ?? 0) +
         (campaignMetrics['creative_impressions'] ?? 0) +
