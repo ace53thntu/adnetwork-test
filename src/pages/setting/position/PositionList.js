@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -11,27 +11,25 @@ import {
   CardBody,
   Container
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
+import { List } from 'components/list';
+import { CustomStatus } from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {ModalLayout} from 'components/forms';
+import { ModalLayout } from 'components/forms';
 import PositionForm from './components/position.form';
 import {
   useDeletePosition,
@@ -45,12 +43,7 @@ import { ApiError } from 'components/common';
 const propTypes = {};
 
 const PositionList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentPosition, setCurrentPosition] = React.useState(null);
@@ -60,7 +53,7 @@ const PositionList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Positions.
-  const {data, isLoading, isPreviousData} = useGetPositions({
+  const { data, isLoading, isPreviousData } = useGetPositions({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -72,7 +65,7 @@ const PositionList = () => {
 
   const positions = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
@@ -84,7 +77,7 @@ const PositionList = () => {
     isLoading: isLoadingDelete
   } = useDeletePosition();
 
-  const {data: position} = useGetPosition({
+  const { data: position } = useGetPosition({
     positionId: currentPosition?.uuid,
     enabled: !!currentPosition?.uuid
   });
@@ -155,7 +148,7 @@ const PositionList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deletePosition({positionId: currentPosition?.uuid});
+      await deletePosition({ positionId: currentPosition?.uuid });
       ShowToast.success('Deleted position successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -177,7 +170,7 @@ const PositionList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>{t('positionList')}</div>
                   <div className="widget-content-right">
@@ -192,7 +185,7 @@ const PositionList = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (

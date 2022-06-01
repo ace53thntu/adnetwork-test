@@ -1,23 +1,13 @@
-import {ErrorBoundary} from 'components/common';
+import { ErrorBoundary } from 'components/common';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
 // import PropTypes from 'prop-types';
 import * as React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-import {NavLink, Outlet} from 'react-router-dom';
-import {Input} from 'reactstrap';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router-dom';
 
-import {AdvertisersTree} from '../AdvertisersTree';
 
 function CreativeLayout(props) {
-  const reduxDispatch = useDispatch();
-  const {t} = useTranslation();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   return (
     <ErrorBoundary>

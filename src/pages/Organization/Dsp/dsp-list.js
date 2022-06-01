@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -11,32 +11,31 @@ import {
   CardBody,
   Container
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 //---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
+import { List } from 'components/list';
 import Status from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
-import {useDeleteDsp, useGetDsps} from 'queries/dsp';
+import { useDeleteDsp, useGetDsps } from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
-import {RoutePaths} from 'constants/route-paths';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { RoutePaths } from 'constants/route-paths';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
 import CustomPagination from 'components/common/CustomPagination';
-import {USER_ROLE} from 'pages/user-management/constants';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {useSearchTermSelector} from 'store/reducers/dsp';
+import { USER_ROLE } from 'pages/user-management/constants';
+import { getRole } from 'utils/helpers/auth.helpers';
+import { useSearchTermSelector } from 'store/reducers/dsp';
 import SearchInput from './components/SearchInput';
 import { ApiError } from 'components/common';
 
@@ -48,12 +47,7 @@ const DspList = () => {
   const role = getRole();
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentDsp, setCurrentDsp] = React.useState(null);
@@ -62,7 +56,7 @@ const DspList = () => {
   const searchTerm = useSearchTermSelector();
 
   //---> QUery get list of DSP.
-  const {data, isFetching, isPreviousData} = useGetDsps({
+  const { data, isFetching, isPreviousData } = useGetDsps({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -75,7 +69,7 @@ const DspList = () => {
 
   const dsps = React.useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
 
   const paginationInfo = React.useMemo(() => {
@@ -83,7 +77,7 @@ const DspList = () => {
   }, [data]);
 
   //---> Mutation delete a DSP
-  const {mutateAsync: deleteDsp, isLoading: isLoadingDelete} = useDeleteDsp();
+  const { mutateAsync: deleteDsp, isLoading: isLoadingDelete } = useDeleteDsp();
 
   //---> Define columns
   const columns = useMemo(() => {
@@ -160,10 +154,10 @@ const DspList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteDsp({dspId: currentDsp?.uuid});
+      await deleteDsp({ dspId: currentDsp?.uuid });
       ShowToast.success('Deleted DSP successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }
@@ -185,7 +179,7 @@ const DspList = () => {
                 {isFetching && <LoadingIndicator />}
 
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div className="d-flex align-items-center">
                     <div className="mr-2">{t('dspList')}</div>
@@ -205,7 +199,7 @@ const DspList = () => {
                     </div>
                   )}
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   <List
                     data={dsps || []}
                     columns={columns}

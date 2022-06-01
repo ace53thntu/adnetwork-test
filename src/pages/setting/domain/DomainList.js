@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
 //---> External Modules
 import {
@@ -11,21 +11,19 @@ import {
   CardBody,
   Container
 } from 'reactstrap';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
 
 //---> Internal Modules
-import {PageTitleAlt} from 'components/layouts/Admin/components';
+import { PageTitleAlt } from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {List} from 'components/list';
+import { List } from 'components/list';
 import Status from 'components/list/status';
 import LoadingIndicator from 'components/common/LoadingIndicator';
 import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
 import {
   getResponseData,
   getResponsePagination
@@ -33,20 +31,15 @@ import {
 import CustomPagination from 'components/common/CustomPagination';
 import DomainCreate from './DomainCreate';
 import DomainEdit from './DomainEdit';
-import {ModalLayout} from 'components/forms';
+import { ModalLayout } from 'components/forms';
 import DomainForm from './components/domain.form';
-import {useDeleteDomain, useGetDomain, useGetDomains} from 'queries/domain';
-import {ApiError} from 'components/common';
+import { useDeleteDomain, useGetDomain, useGetDomains } from 'queries/domain';
+import { ApiError } from 'components/common';
 
 const propTypes = {};
 
 const DomainList = () => {
-  const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
+  const { t } = useTranslation();
 
   //---> Define local states.
   const [currentDomain, setCurrentDomain] = React.useState(null);
@@ -56,7 +49,7 @@ const DomainList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   //---> Query get list of Domains.
-  const {data, isLoading, isPreviousData} = useGetDomains({
+  const { data, isLoading, isPreviousData } = useGetDomains({
     params: {
       limit: DEFAULT_PAGINATION.perPage,
       page: currentPage,
@@ -68,7 +61,7 @@ const DomainList = () => {
 
   const domains = useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
@@ -80,7 +73,7 @@ const DomainList = () => {
     isLoading: isLoadingDelete
   } = useDeleteDomain();
 
-  const {data: domain} = useGetDomain({
+  const { data: domain } = useGetDomain({
     domainId: currentDomain?.uuid,
     enabled: !!currentDomain?.uuid
   });
@@ -155,7 +148,7 @@ const DomainList = () => {
 
   const onSubmitDelete = async () => {
     try {
-      await deleteDomain({domainId: currentDomain?.uuid});
+      await deleteDomain({ domainId: currentDomain?.uuid });
       ShowToast.success('Deleted domain successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err} />);
@@ -177,7 +170,7 @@ const DomainList = () => {
             <Col md="12">
               <Card className="main-card mb-3">
                 <CardHeader
-                  style={{display: 'flex', justifyContent: 'space-between'}}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>{t('domainList')}</div>
                   <div className="widget-content-right">
@@ -192,7 +185,7 @@ const DomainList = () => {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardBody style={{minHeight: '400px'}}>
+                <CardBody style={{ minHeight: '400px' }}>
                   {isLoading ? (
                     <LoadingIndicator />
                   ) : (
