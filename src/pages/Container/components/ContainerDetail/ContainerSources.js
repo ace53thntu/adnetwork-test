@@ -3,7 +3,7 @@ import {Badge, Tag} from 'antd';
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -15,17 +15,20 @@ import {
   Row,
   UncontrolledButtonDropdown
 } from 'reactstrap';
+import { Card as AntCard } from 'antd';
 
 import {toggleCreatePageModalRedux} from 'store/reducers/container';
 import Count from '../ContainerSettings/Count';
 import {useGetAllPage} from 'queries/page';
 import {SOURCE_HEADINGS, SOURCES} from '../ContainerSourcePage/constants';
 import {useMemo} from "react";
+import {RoutePaths} from "../../../../constants/route-paths";
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
   const dispatch = useDispatch();
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const countWebsiteTagPages = container?.source?.['web'] ?? 0;
   const countIOSTagPages = container?.source?.['ios'] ?? 0;
@@ -37,10 +40,12 @@ function ContainerSources(props) {
     return container?.sources?.map(source => {
       const { pages = [] } = container || {};
       const sourcePages = pages.filter(page => page.source === source);
+      const firstSourcePageUrl = `/${RoutePaths.CONTAINER}/${sourcePages[0]?.container_uuid}/${source}/${sourcePages[0]?.uuid}`;
+
       let color;
       switch (source) {
         case SOURCES.web: {
-          color = "purple";
+          color = "#545cd8";
           break;
         }
 
@@ -74,7 +79,7 @@ function ContainerSources(props) {
           break;
         }
       }
-      return { source, count: sourcePages.length, color }
+      return { source, count: sourcePages.length, color, link: firstSourcePageUrl }
     });
   }, [container])
 
@@ -227,9 +232,16 @@ function ContainerSources(props) {
           {sourceTags && (
             <div className="source-container">
               {sourceTags.map((item, index) => (
-                <Badge key={`${item.source}d-${index}`} size="small" count={item.count} offset={[-8, 0]} className="badge-source">
-                  <Tag color={item.color} className="tag-source">{SOURCE_HEADINGS[item.source]}</Tag>
-                </Badge>
+                <AntCard
+                  key={`${item.source}d-${index}`}
+                  title={SOURCE_HEADINGS[item.source]}
+                  bodyStyle={{borderBottom: `2px solid
+                  ${item.color}`}}
+                  bordered={false}
+                  onClick={() => navigate(item.link)}
+                >
+                  <div style={{ color: item.color }}>{`${item.count} ${item.source === SOURCES.web ? 'pages(s)' : 'screen(s)'}`}</div>
+                </AntCard>
               ))}
             </div>
           )}

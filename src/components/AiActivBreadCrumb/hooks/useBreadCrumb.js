@@ -70,14 +70,6 @@ export const useBreadCrumb = () => {
         })
       }
 
-      if (source) {
-        paths.push({
-          uuid: source,
-          name: SOURCE_HEADINGS[source],
-          url: `/${RoutePaths.CONTAINER}/`
-        })
-      }
-
       if (pageId) {
         const page = flattenTree.find(item => item.uuid === pageId);
         paths.push({
