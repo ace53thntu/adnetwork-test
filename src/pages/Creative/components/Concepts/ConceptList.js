@@ -3,26 +3,15 @@ import {BlockOverlay} from 'components/common';
 import {useGetConceptsLoadMore} from 'queries/concept';
 import * as React from 'react';
 import {useDispatch} from 'react-redux';
-import {Link, useParams} from 'react-router-dom';
-import {Button, Card, CardBody} from 'reactstrap';
+import {useParams} from 'react-router-dom';
+import {Button} from 'reactstrap';
 import {loadConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
-import MButton from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import {ThemeProvider} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-
-import {
-  AddConceptContainer,
-  AddConceptContainerBody,
-  ConceptsContainer,
-  ConceptsLoadMore,
-  btnTheme
-} from './ConceptList.styles';
-import ConceptListItem from './ConceptListItem';
+import { ConceptsLoadMore } from './ConceptList.styles';
 import {conceptItemRepoToView} from './dto';
 import ConceptListItemAnt from "./ConceptListItemAnt";
 import {Row} from "antd";
+import {useMemo} from "react";
 import "./index.scss";
 
 const LIMIT = 10;
@@ -30,7 +19,6 @@ const LIMIT = 10;
 function ConceptList(props) {
   const {advertiserId} = useParams();
   const dispatch = useDispatch();
-
   const {expandedIds, selectedAdvertiserId} = useCreativeSelector();
 
   const {
@@ -66,27 +54,26 @@ function ConceptList(props) {
     }
   }, [advertiserId, dispatch, expandedIds, res?.pages, selectedAdvertiserId]);
 
+  const conceptItemsRender = useMemo(() => {
+    return res?.pages.map((group, index) => {
+      return <React.Fragment key={index}>
+        {group?.data?.data?.map((item) => {
+          return (
+            <ConceptListItemAnt
+              key={item.uuid}
+              data={conceptItemRepoToView(item)}
+            />
+          )
+        })}
+      </React.Fragment>
+    })
+  }, [res?.pages])
+
   return (
     <div className="concept-list-wrapper">
       {status === 'loading' ? <BlockOverlay /> : null}
       <Row gutter={[16, 16]}>
-        {res?.pages.map((group, i) => {
-          return (
-            <React.Fragment key={i}>
-              {group?.data?.data?.map((item, index) => (
-                /*                  <ConceptListItem
-                                    key={index}
-                                    data={conceptItemRepoToView(item)}
-                                  />*/
-
-                <ConceptListItemAnt
-                  key={index}
-                  data={conceptItemRepoToView(item)}
-                />
-              ))}
-            </React.Fragment>
-          );
-        })}
+        {conceptItemsRender}
       </Row>
 
       {hasNextPage && (
