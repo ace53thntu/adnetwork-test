@@ -5,12 +5,15 @@ import {Col, Container, Row} from 'reactstrap';
 import TreeSelectCreative from "../TreeSelectCreative";
 import {Button} from "antd";
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {RoutePaths} from "../../../../constants/route-paths";
 
 function CreativeBodyLayout(props) {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const {children, heading} = props;
+  const {pathname} = useLocation();
+  const isCreativeHomepage = pathname === `/${RoutePaths.CREATIVE}`;
 
   return (
     <>
@@ -21,7 +24,7 @@ function CreativeBodyLayout(props) {
       <Container fluid>
         <Row>
           <TreeSelectCreative />
-          <Button type="primary" onClick={() => navigate("create")}>{t('createNew')}</Button>
+          {!isCreativeHomepage && (<Button type="primary" onClick={() => navigate("create")}>{t('createNew')}</Button>)}
         </Row>
         <Row>
           <Col sm={12}>{children}</Col>

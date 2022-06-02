@@ -37,8 +37,6 @@ export function useGetConceptsLoadMore({params, enabled = true}) {
                 params: {
                   concept_uuid: item?.uuid,
                   status: 'active',
-                  sort_by: 'updated_at',
-                  sort: 'desc'
                 },
               })
             );
@@ -48,8 +46,6 @@ export function useGetConceptsLoadMore({params, enabled = true}) {
                 params: {
                   concept_uuid: item?.uuid,
                   status: 'active',
-                  sort_by: 'updated_at',
-                  sort: 'desc'
                 }
               })
             );
