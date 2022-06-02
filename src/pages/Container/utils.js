@@ -45,7 +45,7 @@ export const getAllContainerTreeData = async () => {
           title: CONTAINER_TREE_SOURCES[source],
           value: keyValue,
           isSource: true,
-          selectable: false,
+          // selectable: false,
           children:
             pages.filter(page => page.source === source)
             .map(page => ({ ...page, key: page.uuid, title: page.name, value: page.uuid, isPage: true }))

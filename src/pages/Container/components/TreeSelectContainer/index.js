@@ -41,12 +41,18 @@ function TreeSelectContainer() {
   }
 
   const handleSelectedItem = React.useCallback((value, node) => {
-    const { isContainer, container_uuid, isPage, uuid, source } = node || {};
+    const { isContainer, isSource, container_uuid, isPage, uuid, source } = node || {};
 
     dispatch(setSelectedTreeNodeRedux(value));
 
     if (isContainer) {
       navigate(`/${RoutePaths.CONTAINER}/${uuid}`);
+    }
+
+    if(isSource) {
+      const sourcePages = node?.children[0];
+      const firstSourcePageUrl = `/${RoutePaths.CONTAINER}/${sourcePages?.container_uuid}/${sourcePages?.source}/${sourcePages?.uuid}`;
+      navigate(firstSourcePageUrl);
     }
 
     if (isPage) {
