@@ -1,0 +1,112 @@
+//---> Build-in Modules
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Col, Row, DatePicker, Statistic, Card, Spin } from 'antd';
+import { DesktopOutlined, EyeOutlined, LikeOutlined, PieChartOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import './style.scss'
+import { useGetStatisticMetrics } from 'queries/metric/useGetStatisticMetrics';
+const { RangePicker } = DatePicker;
+
+export const EnumTypeStatistics = {
+    Campaign: "campaign",
+    Strategy: "strategy"
+}
+
+const propTypes = {
+    campaignId: PropTypes.string.isRequired,
+    reportType: PropTypes.oneOf([EnumTypeStatistics.Campaign, EnumTypeStatistics.Strategy])
+};
+
+const dateFormat = 'YYYY/MM/DD';
+const currentTime = moment();
+const detaultRangeTime = [moment().subtract(7, 'days').startOf('day'), currentTime];
+
+const StatisticMetrics = ({ id, reportType = EnumTypeStatistics.Campaign }) => {
+    const [rangeTime, setRangeTime] = useState(detaultRangeTime);
+    const { data, isFetching } = useGetStatisticMetrics({
+        data: {
+            start_time: rangeTime[0].format(),
+            end_time: rangeTime[1].format(),
+            report_by: reportType,
+            report_source: reportType,
+            report_by_uuid: id,
+            source_uuid: id,
+            report_type: "distribution",
+            time_unit: "day"
+        },
+        id,
+        enabled: !!id,
+    });
+    const { statisticTotal } = data ?? {};
+    const { impression = 0, click = 0, adrequest = 0, ctr = 0 } = statisticTotal ?? {};
+
+    const onChange = (dates) => {
+        if (dates) {
+            setRangeTime(dates);
+        }
+    };
+
+    return (
+        <>
+            {
+                (<Spin size='large' spinning={isFetching} tip="Loading..." >
+                    <Col className="statisticContainer" >
+                        <Row justify='end'>
+                            <RangePicker
+                                value={rangeTime}
+                                format={dateFormat}
+                                ranges={{
+                                    Today: [moment().startOf('day'), currentTime],
+                                    Yesterday: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                                    'Last 7 days': [moment().subtract(7, 'days').startOf('day'), currentTime],
+                                    'Last 30 days': [moment().subtract(30, 'days').startOf('day'), currentTime],
+                                    'This Month': [moment().startOf('month'), currentTime],
+                                    'Last Month': [moment().subtract(1, 'months').startOf('month'), moment().subtract(1, 'months').endOf('month')]
+                                }}
+                                onChange={onChange}
+                            />
+                        </Row>
+                        <br />
+                        <Row justify='space-between'>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="Adrequest" value={adrequest} prefix={<DesktopOutlined />} />
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="Impression" value={impression} prefix={<EyeOutlined />} />
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="Click" value={click} prefix={<LikeOutlined />} />
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="CTR" value={ctr} prefix={<PieChartOutlined />} suffix=" %" />
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="Frequency capping" value={'--'} prefix={<LikeOutlined />} />
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="cardStatistic">
+                                    <Statistic title="Viewable" value={'--'} prefix={<LikeOutlined />} />
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Spin>)
+            }
+        </>
+    )
+};
+
+StatisticMetrics.propTypes = propTypes;
+
+export default React.memo(StatisticMetrics);
