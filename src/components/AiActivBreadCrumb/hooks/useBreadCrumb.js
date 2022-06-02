@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import {useCommonSelector} from "../../../store/reducers/common";
 import {flattenMyTree} from "../utils";
 import {RoutePaths} from "../../../constants/route-paths";
+import {SOURCE_HEADINGS} from "../../../pages/Container/components/ContainerSourcePage/constants";
 
 export const useBreadCrumb = () => {
   const { selectTreeData } = useCommonSelector();
@@ -66,6 +67,14 @@ export const useBreadCrumb = () => {
           uuid: containerId,
           name: container?.name,
           url: `/${RoutePaths.CONTAINER}/${containerId}`
+        })
+      }
+
+      if (source) {
+        paths.push({
+          uuid: source,
+          name: SOURCE_HEADINGS[source],
+          url: `/${RoutePaths.CONTAINER}/`
         })
       }
 
