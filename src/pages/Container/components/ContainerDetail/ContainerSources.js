@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import {Badge, Tag} from 'antd';
 import PropTypes from 'prop-types';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
@@ -19,7 +19,8 @@ import {
 import {toggleCreatePageModalRedux} from 'store/reducers/container';
 import Count from '../ContainerSettings/Count';
 import {useGetAllPage} from 'queries/page';
-import {SOURCES} from '../ContainerSourcePage/constants';
+import {SOURCE_HEADINGS, SOURCES} from '../ContainerSourcePage/constants';
+import {useMemo} from "react";
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
@@ -31,6 +32,51 @@ function ContainerSources(props) {
   const countAndroidTagPages = container?.source?.['android'] ?? 0;
   const importCount = container?.import_count ?? 0;
   const transferCount = container?.transfer_count ?? 0;
+
+  const sourceTags = useMemo(() => {
+    return container?.sources?.map(source => {
+      const { pages = [] } = container || {};
+      const sourcePages = pages.filter(page => page.source === source);
+      let color;
+      switch (source) {
+        case SOURCES.web: {
+          color = "purple";
+          break;
+        }
+
+        case SOURCES.ios: {
+          color = "gold";
+          break;
+        }
+
+        case SOURCES.android: {
+          color = "green";
+          break;
+        }
+
+        case SOURCES.webtv: {
+          color = "magenta";
+          break;
+        }
+
+        case SOURCES.appletv: {
+          color = "cyan";
+          break;
+        }
+
+        case SOURCES.androidtv: {
+          color = "blue";
+          break;
+        }
+
+        default: {
+          color = "purple";
+          break;
+        }
+      }
+      return { source, count: sourcePages.length, color }
+    });
+  }, [container])
 
   const {data: {items: webPage = []} = {}} = useGetAllPage({
     containerId: container?.uuid,
@@ -177,6 +223,17 @@ function ContainerSources(props) {
               </Row>
             </>
           )}
+
+          {sourceTags && (
+            <div className="source-container">
+              {sourceTags.map((item, index) => (
+                <Badge key={`${item.source}d-${index}`} size="small" count={item.count} offset={[-8, 0]} className="badge-source">
+                  <Tag color={item.color} className="tag-source">{SOURCE_HEADINGS[item.source]}</Tag>
+                </Badge>
+              ))}
+            </div>
+          )}
+
         </CardBody>
       </Card>
     </>

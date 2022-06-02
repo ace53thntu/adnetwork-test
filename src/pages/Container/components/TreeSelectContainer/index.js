@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router";
-import {useLocation, useParams} from "react-router-dom";
-import {setSelectedTreeNodeRedux, useCommonSelector} from "../../../../store/reducers/common";
-import {RoutePaths} from "../../../../constants/route-paths";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { useParams } from "react-router-dom";
+import { setSelectedTreeNodeRedux, useCommonSelector } from "../../../../store/reducers/common";
+import { RoutePaths } from "../../../../constants/route-paths";
 import AiActivTreeSelect from "../../../../components/AiActivTreeSelect";
-import {Button} from "antd";
-import {useTranslation} from "react-i18next";
+import { Button } from "antd";
+import { useTranslation } from "react-i18next";
 import {
   setFlagAlready,
   toggleCreateContainerModalRedux
 } from "../../../../store/reducers/container";
-import {getAllContainerTreeData} from "../../utils";
+import { getAllContainerTreeData } from "../../utils";
 
 function TreeSelectContainer() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { selectedTreeNode } = useCommonSelector();
   const [treeData, setTreeData] = useState();
   const { cid, pageId } = useParams();
@@ -29,9 +29,9 @@ function TreeSelectContainer() {
   const getContainerTree = async () => {
     const treeData = await getAllContainerTreeData();
 
-    if(pageId){
+    if (pageId) {
       dispatch(setSelectedTreeNodeRedux(pageId))
-    } else if(cid) {
+    } else if (cid) {
       dispatch(setSelectedTreeNodeRedux(cid))
     } else {
       dispatch(setSelectedTreeNodeRedux(''))
@@ -60,14 +60,14 @@ function TreeSelectContainer() {
   };
 
   const handleClearContainer = (value) => {
-    if(!value){
+    if (!value) {
       dispatch(setSelectedTreeNodeRedux(''))
       navigate(`/${RoutePaths.CONTAINER}`);
     }
   }
 
   return (
-    <div style={{paddingLeft: "15px" }} className="mb-3">
+    <div style={{ paddingLeft: "15px" }} className="mb-3">
       <AiActivTreeSelect
         allowClear
         selectedItem={selectedTreeNode}

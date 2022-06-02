@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import {
   Row,
   Col,
@@ -10,8 +10,8 @@ import {
   DropdownToggle,
   Container
 } from 'reactstrap';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import './styles.scss';
 import Table, {
@@ -19,16 +19,14 @@ import Table, {
   TableStatusCell,
   TableUtils
 } from 'components/table';
-import {useGetContainers} from 'queries/container/useGetContainers';
+import { useGetContainers } from 'queries/container/useGetContainers';
 import '../../style.scss';
-import {ContainerBodyLayout} from '../Layouts';
-import {getRole, getUser} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
-import {DEFAULT_PAGINATION} from 'constants/misc';
+import { ContainerBodyLayout } from '../Layouts';
+import { getRole, getUser } from 'utils/helpers/auth.helpers';
+import { USER_ROLE } from 'pages/user-management/constants';
+import { DEFAULT_PAGINATION } from 'constants/misc';
 import TreeSelectContainer from "../TreeSelectContainer";
-import {Button} from "antd";
-import {toggleCreateContainerModalRedux} from "../../../../store/reducers/container";
-import {useDispatch} from "react-redux";
+import { RoutePaths } from "../../../../constants/route-paths";
 
 const STATUS_OPTIONS = [
   {
@@ -42,8 +40,7 @@ const STATUS_OPTIONS = [
 ];
 
 const Containers = props => {
-  const reduxDispatch = useDispatch();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const role = getRole();
   const user = getUser();
@@ -56,7 +53,7 @@ const Containers = props => {
     params.publisher_uuid = user?.reference_uuid;
   }
 
-  const {data: containers} = useGetContainers({
+  const { data: containers } = useGetContainers({
     params,
     enabled: true
   });
@@ -94,7 +91,7 @@ const Containers = props => {
         Cell: row => <TableStatusCell row={row} />,
         filterMethod: (filter, rows) =>
           TableUtils.filterBySelect(rows, filter.value, 'status'),
-        Filter: ({filter, onChange}) => (
+        Filter: ({ filter, onChange }) => (
           <TableFilterSelect
             onChange={onChange}
             filter={filter}
@@ -137,11 +134,15 @@ const Containers = props => {
     [onRowClick, t]
   );
 
+  const handleRowClick = (item) => {
+    navigate(`/${RoutePaths.CONTAINER}/${item?.uuid}`);
+  }
+
   return (
     <>
       <ContainerBodyLayout
         heading={t('containerManager')}
-        // subHeading={t('containerDescription')}
+      // subHeading={t('containerDescription')}
       >
         <Container fluid>
           <Row>
@@ -154,6 +155,17 @@ const Containers = props => {
                   <Table
                     data={containers?.data?.data || []}
                     columns={columns}
+                    getTrProps={(event, row) => {
+                      return {
+                        onClick: (event) => {
+                          if (event?.target.classList.contains("edit") || event?.target.classList.contains("delete")) {
+                            event.preventDefault();
+                          } else {
+                            handleRowClick(row.original);
+                          }
+                        }
+                      };
+                    }}
                   />
                 </CardBody>
               </Card>

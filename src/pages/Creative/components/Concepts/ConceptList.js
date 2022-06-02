@@ -3,31 +3,22 @@ import {BlockOverlay} from 'components/common';
 import {useGetConceptsLoadMore} from 'queries/concept';
 import * as React from 'react';
 import {useDispatch} from 'react-redux';
-import {Link, useParams} from 'react-router-dom';
-import {Button, Card, CardBody} from 'reactstrap';
+import {useParams} from 'react-router-dom';
+import {Button} from 'reactstrap';
 import {loadConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
-import MButton from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import {ThemeProvider} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-
-import {
-  AddConceptContainer,
-  AddConceptContainerBody,
-  ConceptsContainer,
-  ConceptsLoadMore,
-  btnTheme
-} from './ConceptList.styles';
-import ConceptListItem from './ConceptListItem';
+import { ConceptsLoadMore } from './ConceptList.styles';
 import {conceptItemRepoToView} from './dto';
+import ConceptListItemAnt from "./ConceptListItemAnt";
+import {Row} from "antd";
+import {useMemo} from "react";
+import "./index.scss";
 
 const LIMIT = 10;
 
 function ConceptList(props) {
   const {advertiserId} = useParams();
   const dispatch = useDispatch();
-
   const {expandedIds, selectedAdvertiserId} = useCreativeSelector();
 
   const {
@@ -63,62 +54,41 @@ function ConceptList(props) {
     }
   }, [advertiserId, dispatch, expandedIds, res?.pages, selectedAdvertiserId]);
 
+  const conceptItemsRender = useMemo(() => {
+    return res?.pages.map((group, index) => {
+      return <React.Fragment key={index}>
+        {group?.data?.data?.map((item) => {
+          return (
+            <ConceptListItemAnt
+              key={item.uuid}
+              data={conceptItemRepoToView(item)}
+            />
+          )
+        })}
+      </React.Fragment>
+    })
+  }, [res?.pages])
+
   return (
-    <Card className="main-card mb-3">
+    <div className="concept-list-wrapper">
       {status === 'loading' ? <BlockOverlay /> : null}
-      <CardBody>
-        <ConceptsContainer>
-          <AddConceptContainer>
-            <Link to={`create`}>
-              <div className="concept">
-                <div className="thumb concept-thumb">
-                  <AddConceptContainerBody>
-                    <div className="images-container d-flex align-items-center justify-content-center">
-                      {/* TODO remove ThemeProvider, custom MButton directly instead */}
-                      <ThemeProvider theme={btnTheme}>
-                        <Tooltip title="Create new concept">
-                          <MButton
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                          ></MButton>
-                        </Tooltip>
-                      </ThemeProvider>
-                    </div>
-                  </AddConceptContainerBody>
-                </div>
-              </div>
-            </Link>
-          </AddConceptContainer>
+      <Row gutter={[16, 16]}>
+        {conceptItemsRender}
+      </Row>
 
-          {res?.pages.map((group, i) => {
-            return (
-              <React.Fragment key={i}>
-                {group?.data?.data?.map((item, index) => (
-                  <ConceptListItem
-                    key={index}
-                    data={conceptItemRepoToView(item)}
-                  />
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </ConceptsContainer>
-
-        {hasNextPage && (
-          <ConceptsLoadMore>
-            <Button
-              className="btn-wide mb-2 mr-2"
-              color="primary"
-              disabled={isFetchingNextPage}
-              onClick={() => fetchNextPage()}
-            >
-              Load more
-            </Button>
-          </ConceptsLoadMore>
-        )}
-      </CardBody>
-    </Card>
+      {hasNextPage && (
+        <ConceptsLoadMore>
+          <Button
+            className="btn-wide mb-2 mr-2"
+            color="primary"
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}
+          >
+            Load more
+          </Button>
+        </ConceptsLoadMore>
+      )}
+    </div>
   );
 }
 
