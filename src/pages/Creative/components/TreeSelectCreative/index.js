@@ -30,9 +30,9 @@ function TreeSelectCreative() {
     } else if(advertiserId) {
       dispatch(setSelectedTreeNodeRedux(advertiserId))
     } else {
-      dispatch(setSelectedTreeNodeRedux(''))
+      // dispatch(setSelectedTreeNodeRedux(''))
       // navigate to first advertiser uuid
-      // navigate(`/${RoutePaths.CREATIVE}/${treeData[0].uuid}`);
+      navigate(`/${RoutePaths.CREATIVE}/${treeData[0].uuid}`);
     }
 
     setTreeData(treeData);
