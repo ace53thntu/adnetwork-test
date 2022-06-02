@@ -50,6 +50,8 @@ function ConceptListItemAnt(props) {
       />
     } else if (fileType === InventoryFormats.VIDEO) {
       return <video controls className="concept-image" src={`${FILE_DISPLAY_URL}/${fileUUID}`} /> ;
+    } else if (fileType === InventoryFormats.NATIVE_ADS) {
+      return <img alt={""} src={noImage} />;
     }
 
     return <img alt={""} src={noImage} />;
