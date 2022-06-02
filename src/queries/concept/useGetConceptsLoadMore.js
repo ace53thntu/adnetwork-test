@@ -7,6 +7,7 @@ import {getResponsePagination} from 'utils/helpers/misc.helpers';
 import {GET_CONCEPTS_LOAD_MORE} from './constants';
 import {CreativeAPI} from "../../api/creative.api";
 import {VideoAPI} from "../../api/video.api";
+import {NativeAdAPI} from "../../api/native-ad.api";
 
 export function useGetConceptsLoadMore({params, enabled = true}) {
   const {cancelToken} = useCancelRequest();
@@ -29,7 +30,7 @@ export function useGetConceptsLoadMore({params, enabled = true}) {
       if (data) {
         let promises = [];
         data.forEach(item => {
-          const { creatives, videos } = item || {};
+          const { creatives, videos, nativeAds } = item || {};
           // is creative
           if(creatives){
             promises.push(
@@ -49,6 +50,13 @@ export function useGetConceptsLoadMore({params, enabled = true}) {
                 }
               })
             );
+          } else if(nativeAds) {
+            promises.push(NativeAdAPI.getNativeAds({
+              params: {
+                concept_uuid: item?.uuid,
+                status: 'active',
+              },
+            }));
           }
         })
 
