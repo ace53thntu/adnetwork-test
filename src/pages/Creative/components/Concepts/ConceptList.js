@@ -28,10 +28,12 @@ function ConceptList(props) {
     isFetchingNextPage,
     status
   } = useGetConceptsLoadMore({
-    enabled: !!advertiserId,
+    enabled: true,
     params: {
-      advertiser_uuid: advertiserId,
-      limit: LIMIT
+      ...(advertiserId && { advertiser_uuid: advertiserId }),
+      limit: LIMIT,
+      sort_by: 'created_at',
+      sort: 'desc'
     }
   });
 

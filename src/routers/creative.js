@@ -15,7 +15,7 @@ export const creativePages = {
   children: [
     {
       path: '',
-      element: <CreativePage />,
+      element: <ConceptsLazy />,
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {

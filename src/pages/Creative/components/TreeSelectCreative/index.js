@@ -31,8 +31,6 @@ function TreeSelectCreative() {
       dispatch(setSelectedTreeNodeRedux(advertiserId))
     } else {
       dispatch(setSelectedTreeNodeRedux(''))
-      // navigate to first advertiser uuid
-      // navigate(`/${RoutePaths.CREATIVE}/${treeData[0].uuid}`);
     }
 
     setTreeData(treeData);
@@ -55,9 +53,22 @@ function TreeSelectCreative() {
     }
   }, []);
 
+  const handleClearCreative = (value) => {
+    if(!value){
+      dispatch(setSelectedTreeNodeRedux(''))
+      navigate(`/${RoutePaths.CREATIVE}`);
+    }
+  }
+
   return (
     <div style={{ marginLeft: "15px" }} className="mb-3">
-      <AiActivTreeSelect selectedItem={selectedTreeNode} treeData={treeData} onSelectedItem={handleSelectedItem} />
+      <AiActivTreeSelect
+        allowClear
+        selectedItem={selectedTreeNode}
+        treeData={treeData}
+        onSelectedItem={handleSelectedItem}
+        onChange={handleClearCreative}
+      />
     </div>
   );
 }
