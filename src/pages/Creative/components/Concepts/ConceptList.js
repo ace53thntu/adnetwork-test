@@ -8,7 +8,6 @@ import {Button} from 'reactstrap';
 import {loadConceptRedux, useCreativeSelector} from 'store/reducers/creative';
 
 import { ConceptsLoadMore } from './ConceptList.styles';
-import {conceptItemRepoToView} from './dto';
 import ConceptListItemAnt from "./ConceptListItemAnt";
 import {Row} from "antd";
 import {useMemo} from "react";
