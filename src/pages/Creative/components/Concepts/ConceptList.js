@@ -63,7 +63,7 @@ function ConceptList(props) {
           return (
             <ConceptListItemAnt
               key={item.uuid}
-              data={conceptItemRepoToView(item)}
+              data={item}
             />
           )
         })}
