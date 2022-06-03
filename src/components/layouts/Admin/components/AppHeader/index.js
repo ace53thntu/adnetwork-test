@@ -35,13 +35,15 @@ class Header extends React.Component {
             })}
           >
             <HeaderLogo />
-            <div className='sidebar-toggle'>
-              {React.createElement(IconSideBar, {
-                className: 'trigger',
-                onClick: this.toggleSideBar,
-                title: enableClosedSidebar ? 'Collapsed' : 'Expanded'
-              })}
-            </div>
+            {!enableMobileMenuSmall && (
+              <div className='sidebar-toggle'>
+                {React.createElement(IconSideBar, {
+                  className: 'trigger',
+                  onClick: this.toggleSideBar,
+                  title: enableClosedSidebar ? 'Collapsed' : 'Expanded'
+                })}
+              </div>
+            )}
             <div
               className={cx('app-header__content', {
                 'header-mobile-open': enableMobileMenuSmall
