@@ -4,12 +4,14 @@ import {useParams} from "react-router-dom";
 import {useCommonSelector} from "../../../store/reducers/common";
 import {flattenMyTree} from "../utils";
 import {RoutePaths} from "../../../constants/route-paths";
+import {useDispatchSelectContainer} from "../../../pages/Container/hooks/useDispatchSelectContainer";
 import {SOURCE_HEADINGS} from "../../../pages/Container/components/ContainerSourcePage/constants";
 
 export const useBreadCrumb = () => {
   const { selectTreeData } = useCommonSelector();
   const query = useQueryString();
   const { campaignId, strategyId, advertiserId, conceptId, cid: containerId, source, pageId } = useParams();
+  const { container } = useDispatchSelectContainer();
   let advertiserIdQuery = query.get('advertiser_id');
 
   return useMemo(() => {
@@ -70,6 +72,18 @@ export const useBreadCrumb = () => {
         })
       }
 
+      if(source && container) {
+        const sourcePages = container?.pages?.filter(page => page.source === source);
+        const { container_uuid, uuid } = sourcePages[0] || {};
+        const firstSourcePageUrl = `/${RoutePaths.CONTAINER}/${container_uuid}/${source}/${uuid}`;
+
+        paths.push({
+          uuid: uuid,
+          name: SOURCE_HEADINGS[source],
+          url: firstSourcePageUrl
+        })
+      }
+
       if (pageId) {
         const page = flattenTree.find(item => item.uuid === pageId);
         paths.push({
@@ -80,5 +94,5 @@ export const useBreadCrumb = () => {
       }
     }
     return paths;
-  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, conceptId, containerId, source, pageId, selectTreeData]);
+  }, [advertiserIdQuery, campaignId, strategyId, advertiserId, conceptId, containerId, source, pageId, selectTreeData, container]);
 };
