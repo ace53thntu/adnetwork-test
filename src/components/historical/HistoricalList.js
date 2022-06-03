@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
 import {Avatar, Chip} from '@material-ui/core';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
+<<<<<<< HEAD
 import {Badge} from 'reactstrap';
 import {useDestructureLogList} from './hook';
 import HistoricalDetail from './HistoricalDetail';
@@ -28,6 +29,9 @@ const getColorByEntityType = entityType => {
   }
 };
 
+=======
+import {Badge, Table} from 'reactstrap';
+>>>>>>> b25e5cd (Update GUI logs viewer)
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -75,6 +79,7 @@ export default function HistoricalList({logList = [], entityName, entityType}) {
               onChange={handleChange(logItem?.id)}
               TransitionProps={{unmountOnExit: true}}
             >
+<<<<<<< HEAD
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
@@ -110,6 +115,48 @@ export default function HistoricalList({logList = [], entityName, entityType}) {
           );
         })}
       </PerfectScrollbar>
+=======
+              <Typography className={classes.createdTime}>
+                {moment(logItem?.created_at).format('YYYY-MM-DD hh:mm:ss')}
+              </Typography>
+              <Badge color="success" size="sm">
+                {entityType}
+              </Badge>
+              <Typography className={classes.heading}>{entityName}</Typography>
+              <Chip
+                size="small"
+                label={logItem?.action}
+                className={classes.action}
+                avatar={
+                  <Avatar>
+                    <TouchAppIcon />
+                  </Avatar>
+                }
+              />
+            </AccordionSummary>
+            <AccordionDetails>
+              <Table>
+                <tr>
+                  <th>field name</th>
+                  <th>old value</th>
+                  <th>new value</th>
+                </tr>
+                <tr>
+                  <td>name</td>
+                  <td>tp test 1</td>
+                  <td>tp test 2</td>
+                </tr>
+                <tr>
+                  <td>status</td>
+                  <td>active</td>
+                  <td>inactive</td>
+                </tr>
+              </Table>
+            </AccordionDetails>
+          </Accordion>
+        );
+      })}
+>>>>>>> b25e5cd (Update GUI logs viewer)
     </div>
   );
 }
