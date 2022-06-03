@@ -6,6 +6,12 @@
   }
 }
 
+@media only screen and (max-width: 1250px) {
+  .sidebar-toggle {
+    display: none;
+  }
+}
+
 @include media-breakpoint-down(md) {
 
   .app-main {
