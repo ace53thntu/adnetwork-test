@@ -1,45 +1,42 @@
-// Build-in Modules
-import React, {useMemo} from 'react';
-
-// External Modules
-import {useDispatch} from 'react-redux';
-import {
-  Card,
-  CardHeader,
-  Button,
-  Row,
-  Col,
-  CardBody,
-  Container
-} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-
-// Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
-import AppContent from 'components/layouts/Admin/components/AppContent';
+import {ApiError} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import DialogConfirm from 'components/common/DialogConfirm';
+import LoadingIndicator from 'components/common/LoadingIndicator';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
+import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
+import NoDataAvailable from 'components/list/no-data';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import LoadingIndicator from 'components/common/LoadingIndicator';
-import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {useDeleteAdvertiser, useGetAdvertisers} from 'queries/advertiser';
+// Build-in Modules
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+// External Modules
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row
+} from 'reactstrap';
+import {useSearchTermSelector} from 'store/reducers/advertiser';
+import {getRole} from 'utils/helpers/auth.helpers';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import CustomPagination from 'components/common/CustomPagination';
-import {RoutePaths} from 'constants/route-paths';
-import {useNavigate} from 'react-router-dom';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+// Internal Modules
+import {capitalize} from 'utils/helpers/string.helpers';
+
 import SearchInput from './components/SearchInput';
-import {useSearchTermSelector} from 'store/reducers/advertiser';
-import NoDataAvailable from 'components/list/no-data';
-import { ApiError } from 'components/common';
 
 /**
  * @function Advertiser List Component
@@ -50,11 +47,6 @@ const ListAdvertiser = () => {
 
   const navigate = useNavigate();
   const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   //---> Define local states.
   const [currentAdvertiser, setCurrentAdvertiser] = React.useState(null);
@@ -168,9 +160,8 @@ const ListAdvertiser = () => {
       await deleteAdvertiser({advId: currentAdvertiser?.uuid});
       ShowToast.success('Delete advertiser successfully');
       setShowDialog(false);
-
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     }
   };
 

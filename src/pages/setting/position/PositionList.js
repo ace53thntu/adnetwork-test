@@ -1,56 +1,48 @@
-//---> Build-in Modules
-import React, {useMemo} from 'react';
-
-//---> External Modules
-import {
-  Card,
-  CardHeader,
-  Button,
-  Row,
-  Col,
-  CardBody,
-  Container
-} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import moment from 'moment';
-import {useDispatch} from 'react-redux';
-
+import {ApiError} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import DialogConfirm from 'components/common/DialogConfirm';
+import LoadingIndicator from 'components/common/LoadingIndicator';
+import {ModalLayout} from 'components/forms';
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
 import {CustomStatus} from 'components/list/status';
-import LoadingIndicator from 'components/common/LoadingIndicator';
-import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {
-  getResponseData,
-  getResponsePagination
-} from 'utils/helpers/misc.helpers';
-import CustomPagination from 'components/common/CustomPagination';
-import {ModalLayout} from 'components/forms';
-import PositionForm from './components/position.form';
+import moment from 'moment';
 import {
   useDeletePosition,
   useGetPosition,
   useGetPositions
 } from 'queries/position';
+//---> Build-in Modules
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+//---> External Modules
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row
+} from 'reactstrap';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {capitalize} from 'utils/helpers/string.helpers';
+
 import PositionCreate from './PositionCreate';
 import PositionEdit from './PositionEdit';
-import { ApiError } from 'components/common';
+import PositionForm from './components/position.form';
 
 const propTypes = {};
 
 const PositionList = () => {
   const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   //---> Define local states.
   const [currentPosition, setCurrentPosition] = React.useState(null);

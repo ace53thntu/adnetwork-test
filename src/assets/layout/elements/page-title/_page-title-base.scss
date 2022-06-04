@@ -1,10 +1,12 @@
 // Page title
 
 .app-page-title {
-  padding: $grid-gutter-width;
+  // padding: $grid-gutter-width;
+  padding: 10px 30px;
   // margin: (-$grid-gutter-width) (-$form-grid-gutter-width) ($grid-gutter-width)
   //   (-$grid-gutter-width);
-  margin-bottom: ($grid-gutter-width);
+  // margin-bottom: ($grid-gutter-width);
+  margin-bottom: 20px;
   position: relative;
 
   .page-title-wrapper {
@@ -51,18 +53,22 @@
   }
 
   .page-title-icon {
-    font-size: 2rem;
+    // font-size: 2rem;
+    font-size: 30px;
     display: flex;
     align-items: center;
     align-content: center;
     text-align: center;
-    padding: ($layout-spacer-x / 1.8);
-    margin: 0 ($grid-gutter-width) 0 0;
+    // padding: ($layout-spacer-x / 1.8);
+    // margin: 0 ($grid-gutter-width) 0 0;
     background: $white;
     box-shadow: $box-shadow-default;
     @include border-radius($border-radius);
-    width: 60px;
-    height: 60px;
+    // width: 60px;
+    // height: 60px;
+
+    width: 40px;
+    height: 40px;
 
     i {
       margin: auto;

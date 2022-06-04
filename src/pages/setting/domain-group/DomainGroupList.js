@@ -1,58 +1,50 @@
-//---> Build-in Modules
-import React, {useMemo} from 'react';
-
-//---> External Modules
-import {
-  Card,
-  CardHeader,
-  Button,
-  Row,
-  Col,
-  CardBody,
-  Container
-} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import moment from 'moment';
-import {useDispatch} from 'react-redux';
-
+import {ApiError} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import DialogConfirm from 'components/common/DialogConfirm';
+import LoadingIndicator from 'components/common/LoadingIndicator';
+import {ModalLayout} from 'components/forms';
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
 import Status from 'components/list/status';
-import LoadingIndicator from 'components/common/LoadingIndicator';
-import DialogConfirm from 'components/common/DialogConfirm';
-import {capitalize} from 'utils/helpers/string.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {
-  getResponseData,
-  getResponsePagination
-} from 'utils/helpers/misc.helpers';
-import CustomPagination from 'components/common/CustomPagination';
-import DomainCreate from './DomainGroupCreate';
-import DomainEdit from './DomainGroupEdit';
-import {ModalLayout} from 'components/forms';
-import DomainForm from './components/domain-group.form';
+import moment from 'moment';
 import {
   useDeleteDomainGroup,
   useGetDomainGroup,
   useGetDomainGroups
 } from 'queries/domain-group';
-import DomainGroupForm from './components/domain-group.form';
+//---> Build-in Modules
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+//---> External Modules
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row
+} from 'reactstrap';
+import {
+  getResponseData,
+  getResponsePagination
+} from 'utils/helpers/misc.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {capitalize} from 'utils/helpers/string.helpers';
+
+import DomainCreate from './DomainGroupCreate';
+import DomainEdit from './DomainGroupEdit';
 import DomainBadge from './components/DomainBadge';
-import { ApiError } from 'components/common';
+import DomainForm from './components/domain-group.form';
+import DomainGroupForm from './components/domain-group.form';
 
 const propTypes = {};
 
 const DomainGroupList = () => {
   const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   //---> Define local states.
   const [currentDomain, setCurrentDomain] = React.useState(null);
@@ -165,7 +157,7 @@ const DomainGroupList = () => {
       await deleteDomainGroup({domainGroupId: currentDomain?.uuid});
       ShowToast.success('Deleted domain group successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

@@ -1,44 +1,41 @@
-//---> Build-in Modules
-import React, {useMemo} from 'react';
-
-//---> External Modules
-import {
-  Card,
-  CardHeader,
-  Button,
-  Row,
-  Col,
-  CardBody,
-  Container
-} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-
-//---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
+import {ApiError} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import DialogConfirm from 'components/common/DialogConfirm';
+import LoadingIndicator from 'components/common/LoadingIndicator';
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
 import {List} from 'components/list';
 import Status from 'components/list/status';
-import LoadingIndicator from 'components/common/LoadingIndicator';
-import {useDeleteDsp, useGetDsps} from 'queries/dsp';
 import TagsList from 'components/list/tags/tags';
-import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {useDeleteDsp, useGetDsps} from 'queries/dsp';
+//---> Build-in Modules
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+//---> External Modules
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row
+} from 'reactstrap';
+import {useSearchTermSelector} from 'store/reducers/dsp';
+import {getRole} from 'utils/helpers/auth.helpers';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import CustomPagination from 'components/common/CustomPagination';
-import {USER_ROLE} from 'pages/user-management/constants';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {useSearchTermSelector} from 'store/reducers/dsp';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+//---> Internal Modules
+import {capitalize} from 'utils/helpers/string.helpers';
+
 import SearchInput from './components/SearchInput';
-import { ApiError } from 'components/common';
 
 /**
  * @function DSP List Component
@@ -49,11 +46,6 @@ const DspList = () => {
 
   const navigate = useNavigate();
   const {t} = useTranslation();
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   //---> Define local states.
   const [currentDsp, setCurrentDsp] = React.useState(null);
@@ -163,7 +155,7 @@ const DspList = () => {
       await deleteDsp({dspId: currentDsp?.uuid});
       ShowToast.success('Deleted DSP successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     } finally {
       setShowDialog(false);
     }

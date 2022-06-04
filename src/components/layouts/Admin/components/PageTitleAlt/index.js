@@ -3,6 +3,8 @@ import React, {useCallback} from 'react';
 import {Helmet} from 'react-helmet-async';
 import {Button} from 'reactstrap';
 
+import AiActivBreadCrumb from '../../../../AiActivBreadCrumb';
+
 const PageTitleAlt = props => {
   const {
     heading,
@@ -33,8 +35,8 @@ const PageTitleAlt = props => {
           <div className={cx('page-title-icon', {'d-none': !true})}>
             <i className={icon} />
           </div>
-          <div>
-            {heading}
+          <div style={{marginLeft: '15px'}}>
+            <AiActivBreadCrumb defaultTitle={heading} />
             <div className={cx('page-title-subheading', {'d-none': !true})}>
               {subheading}
             </div>

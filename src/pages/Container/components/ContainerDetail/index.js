@@ -1,3 +1,5 @@
+import './index.scss';
+
 import {ErrorBoundary} from 'components/common';
 import React from 'react';
 

@@ -5,12 +5,13 @@ import {useParams} from 'react-router';
 import {Col, Container, Row} from 'reactstrap';
 
 import {AndroidTag} from '../AndroidTag';
-import { AndroidTvTag } from '../AndroidTvTag';
+import {AndroidTvTag} from '../AndroidTvTag';
 import {IosTag} from '../IosTag';
 import IosTvTag from '../IosTvTag/IosTvTag';
 import {ContainerBodyLayout} from '../Layouts';
+import TreeSelectContainer from '../TreeSelectContainer';
+import {WebTvTag} from '../WebTvTag';
 import {WebsiteTag} from '../WebsiteTag';
-import { WebTvTag } from '../WebTvTag';
 import {SOURCES, SOURCE_HEADINGS, SOURCE_SUB_HEADINGS} from './constants';
 
 function ContainerSourcePage(props) {
@@ -37,14 +38,14 @@ function ContainerSourcePage(props) {
     if (source === SOURCES.ios) {
       return <IosTag />;
     }
-    if(source === SOURCES.webtv){
-      return <WebTvTag />
+    if (source === SOURCES.webtv) {
+      return <WebTvTag />;
     }
-    if(source === SOURCES.androidtv){
-      return <AndroidTvTag />
+    if (source === SOURCES.androidtv) {
+      return <AndroidTvTag />;
     }
-    if(source === SOURCES.appletv){
-      return <IosTvTag />
+    if (source === SOURCES.appletv) {
+      return <IosTvTag />;
     }
   };
 
@@ -53,6 +54,10 @@ function ContainerSourcePage(props) {
       heading={SOURCE_HEADINGS[source]}
       subHeading={SOURCE_SUB_HEADINGS[source]}
     >
+      <Row style={{paddingLeft: '15px'}}>
+        <TreeSelectContainer />
+      </Row>
+
       {isFetching ? 'Loading...' : _renderBySource()}
     </ContainerBodyLayout>
   );

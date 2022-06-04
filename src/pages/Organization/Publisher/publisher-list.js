@@ -1,35 +1,32 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import {Card, CardHeader, Button, CardBody} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import moment from 'moment';
-import {useDispatch} from 'react-redux';
-
-//---> Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
+import {ApiError, LoadingIndicator} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import DialogConfirm from 'components/common/DialogConfirm';
 import {List} from 'components/list';
 import Status from 'components/list/status';
 import TagsList from 'components/list/tags/tags';
-import {ApiError, LoadingIndicator} from 'components/common';
-import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
-import DialogConfirm from 'components/common/DialogConfirm';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import PublisherLayout from './publisher-layout';
+import {RoutePaths} from 'constants/route-paths';
+import moment from 'moment';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {useDeletePublisher, useGetPublishers} from 'queries/publisher';
+//---> Build-in Modules
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+//---> External Modules
+import {Button, Card, CardBody, CardHeader} from 'reactstrap';
+import {useSearchTermSelector} from 'store/reducers/publisher';
+import {getRole} from 'utils/helpers/auth.helpers';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import CustomPagination from 'components/common/CustomPagination';
-import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+//---> Internal Modules
+import {capitalize} from 'utils/helpers/string.helpers';
+
 import SearchInput from './components/SearchInput';
-import {useSearchTermSelector} from 'store/reducers/publisher';
-import {useNavigate} from 'react-router-dom';
-import {RoutePaths} from 'constants/route-paths';
+import PublisherLayout from './publisher-layout';
 
 const ActionIndex = {
   EDIT: 0,
@@ -38,7 +35,6 @@ const ActionIndex = {
 
 const PublisherList = () => {
   const navigate = useNavigate();
-  const reduxDispatch = useDispatch();
   const role = getRole();
   const {t} = useTranslation();
   const [currentPublisher, setCurrentPublisher] = React.useState(null);
@@ -152,10 +148,6 @@ const PublisherList = () => {
       setShowDialog(false);
     }
   };
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   return (
     <PublisherLayout>

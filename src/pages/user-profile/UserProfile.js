@@ -1,29 +1,21 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import {Row, Col, Container} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-
+import {LoadingIndicator} from 'components/common';
+import {PageTitleAlt} from 'components/layouts/Admin/components';
 //---> Internal Modules
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import ProfileForm from './ProfileForm';
-import {useGetMe} from 'queries/users';
 import {mappingProfileApiToForm} from 'entities/User';
-import {LoadingIndicator} from 'components/common';
+import {useGetMe} from 'queries/users';
+//---> Build-in Modules
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+//---> External Modules
+import {Col, Container, Row} from 'reactstrap';
+
+import ProfileForm from './ProfileForm';
 
 const propTypes = {};
 
 const UserProfile = () => {
-  const reduxDispatch = useDispatch();
   const {t} = useTranslation();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   const {data, isFetching, isFetched} = useGetMe({enable: true});
   const userData = React.useMemo(

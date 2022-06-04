@@ -1,36 +1,21 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import {useParams} from 'react-router';
-import {useDispatch} from 'react-redux';
-
-//---> Internal Modules
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import AppContent from 'components/layouts/Admin/components/AppContent';
-import ExtendSidebar from 'components/layouts/Admin/components/ExtendSidebar';
-import {useGetReportPage} from 'queries/report-page';
-import ReportSidebar from './components/ReportSidebar';
-import {PageTitleAlt} from 'components/layouts/Admin/components';
 import './_main.scss';
 
+import {PageTitleAlt} from 'components/layouts/Admin/components';
+//---> Internal Modules
+import AppContent from 'components/layouts/Admin/components/AppContent';
+import {useGetReportPage} from 'queries/report-page';
+//---> Build-in Modules
+import React from 'react';
+//---> External Modules
+import {useParams} from 'react-router';
+
 const ReportLayout = ({children}) => {
-  const reduxDispatch = useDispatch();
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(true));
-  }, [reduxDispatch]);
   const {pageId} = useParams();
 
   const {data: pageDetails} = useGetReportPage(pageId);
 
   return (
     <>
-      <ExtendSidebar heading="Report Page" isLink path={'/dashboard'}>
-        <div className="mb-2">
-          <ReportSidebar pageId={pageId} />
-        </div>
-      </ExtendSidebar>
-
       <AppContent>
         <PageTitleAlt
           heading={pageDetails?.name || 'Dashboard'}

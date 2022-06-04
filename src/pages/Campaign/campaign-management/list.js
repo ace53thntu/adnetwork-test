@@ -5,8 +5,10 @@ import {CustomStatus} from 'components/list/status';
 import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import {useQueryString} from 'hooks';
+import moment from 'moment';
 import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router';
 import {
   getResponseData,
@@ -14,9 +16,8 @@ import {
 } from 'utils/helpers/misc.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {capitalize} from 'utils/helpers/string.helpers';
+
 import {CampaignListStyled} from './styled';
-import moment from 'moment';
-import {useTranslation} from 'react-i18next';
 
 const DeleteTitle = 'Are you sure delete this Campaign';
 
@@ -114,7 +115,9 @@ const CampaignList = () => {
 
   function onClickItem(item) {
     setCurrentCampaign(item);
-    navigate(`/${RoutePaths.CAMPAIGN}/${item?.uuid}`);
+    navigate(
+      `/${RoutePaths.CAMPAIGN}/${item?.uuid}?advertiser_id=${item?.advertiser_uuid}`
+    );
   }
 
   function onClickDelete(actionIndex, item) {

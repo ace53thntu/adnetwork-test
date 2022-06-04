@@ -1,0 +1,33 @@
+.statisticContainer {
+  margin-bottom: 8px;
+  .cardStatistic {
+    width: 200px;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 16px;
+  }
+
+  .ant-statistic-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .anticon {
+      vertical-align: text-top;
+      margin-right: 5px;
+    }
+  }
+
+  .ant-card-bordered {
+    border-color: #89c781;
+    border-radius: 10px;
+    border-width: 3px;
+  }
+
+  .ant-card-body {
+    padding: 12px;
+  }
+
+  .ant-statistic {
+    text-align: center;
+  }
+}

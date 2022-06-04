@@ -1,4 +1,4 @@
-import { ApiError } from 'components/common';
+import {ApiError} from 'components/common';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
 import PropTypes from 'prop-types';
@@ -19,6 +19,8 @@ import {updateCampaignRedux} from 'store/reducers/campaign';
 //---> Internal Modules
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
+import StatisticMetrics from '../components/StatisticMetrics';
+import {EnumTypeStatistics} from '../components/StatisticMetrics/StatisticMetrics';
 import {useRefreshAdvertiserTree} from '../hooks/useRefreshAdvertiserTree';
 import BudgetGroup from './form-fields/BudgetGroup';
 import DomainGroup from './form-fields/DomainGroup';
@@ -79,7 +81,9 @@ const CampaignForm = ({
           //   `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
           // );
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error || 'Fail to update Campaign'}/>);
+          ShowToast.error(
+            <ApiError apiError={error || 'Fail to update Campaign'} />
+          );
         }
       } else {
         try {
@@ -92,7 +96,9 @@ const CampaignForm = ({
 
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error || 'Fail to create Campaign'}/>);
+          ShowToast.error(
+            <ApiError apiError={error || 'Fail to create Campaign'} />
+          );
         }
       }
     },
@@ -113,6 +119,12 @@ const CampaignForm = ({
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
+            {/* Campaign Statistic Metric */}
+            <StatisticMetrics
+              id={campaignId}
+              reportType={EnumTypeStatistics.Campaign}
+            />
+
             {/* Information */}
             <InformationGroup
               isView={isView}

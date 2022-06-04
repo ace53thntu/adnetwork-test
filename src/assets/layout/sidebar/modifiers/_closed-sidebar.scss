@@ -52,50 +52,50 @@
       }
     }
 
-    &:hover {
-      flex: 0 0 $app-sidebar-width !important;
-      width: $app-sidebar-width !important;
+    // &:hover {
+    //   flex: 0 0 $app-sidebar-width !important;
+    //   width: $app-sidebar-width !important;
 
-      .app-sidebar__inner {
-        .app-sidebar__heading {
-          text-indent: initial;
-          &::before {
-            display: none;
-          }
-        }
+    //   .app-sidebar__inner {
+    //     .app-sidebar__heading {
+    //       text-indent: initial;
+    //       &::before {
+    //         display: none;
+    //       }
+    //     }
 
-        .metismenu-link {
-          text-indent: initial;
-          padding: 0 $layout-spacer-x 0 45px;
-        }
+    //     .metismenu-link {
+    //       text-indent: initial;
+    //       padding: 0 $layout-spacer-x 0 45px;
+    //     }
 
-        .metismenu-icon {
-          text-indent: initial;
-          left: 5px;
-          margin-left: 0;
-        }
+    //     .metismenu-icon {
+    //       text-indent: initial;
+    //       left: 5px;
+    //       margin-left: 0;
+    //     }
 
-        .metismenu-state-icon {
-          visibility: visible;
-        }
+    //     .metismenu-state-icon {
+    //       visibility: visible;
+    //     }
 
-        .metismenu-container {
-          &.visible {
-            padding: 0.5em 0 0 2rem;
+    //     .metismenu-container {
+    //       &.visible {
+    //         padding: 0.5em 0 0 2rem;
 
-            & > .metismenu-item > .metismenu-link {
-              height: 2.3em;
-            }
-          }
+    //         & > .metismenu-item > .metismenu-link {
+    //           height: 2.3em;
+    //         }
+    //       }
 
-          .metismenu-container {
-            .metismenu-link {
-              padding-left: 1em;
-            }
-          }
-        }
-      }
-    }
+    //       .metismenu-container {
+    //         .metismenu-link {
+    //           padding-left: 1em;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     // &.has-extend-sidebar {
     //   &:hover {
     //     flex: 0 0 $app-sidebar-width + $app-sidebar-width-collapsed !important;
@@ -107,18 +107,21 @@
   &:not(.sidebar-mobile-open) {
     .app-sidebar {
       .scrollbar-container {
-        position: static;
-        height: auto;
-        overflow: initial !important;
+        // position: static;
+        // height: auto;
+        // overflow: initial !important;
+        position: absolute;
+        height: 100%;
+        overflow: hidden !important;
       }
 
-      &:hover {
-        .scrollbar-container {
-          position: absolute;
-          height: 100%;
-          overflow: hidden !important;
-        }
-      }
+      // &:hover {
+      //   .scrollbar-container {
+      //     position: absolute;
+      //     height: 100%;
+      //     overflow: hidden !important;
+      //   }
+      // }
     }
   }
 
@@ -195,6 +198,10 @@
             margin: 0;
           }
         }
+      }
+
+      .app-sidebar__toggle {
+        display: none;
       }
     }
 

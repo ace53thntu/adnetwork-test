@@ -1,9 +1,11 @@
-import * as React from 'react';
-
+import {Card as AntCard} from 'antd';
 import PropTypes from 'prop-types';
+import {useGetAllPage} from 'queries/page';
+import * as React from 'react';
+import {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -15,22 +17,75 @@ import {
   Row,
   UncontrolledButtonDropdown
 } from 'reactstrap';
-
 import {toggleCreatePageModalRedux} from 'store/reducers/container';
+
+import {RoutePaths} from '../../../../constants/route-paths';
 import Count from '../ContainerSettings/Count';
-import {useGetAllPage} from 'queries/page';
-import {SOURCES} from '../ContainerSourcePage/constants';
+import {SOURCES, SOURCE_HEADINGS} from '../ContainerSourcePage/constants';
 
 function ContainerSources(props) {
   const {isFetching, container} = props;
   const dispatch = useDispatch();
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const countWebsiteTagPages = container?.source?.['web'] ?? 0;
   const countIOSTagPages = container?.source?.['ios'] ?? 0;
   const countAndroidTagPages = container?.source?.['android'] ?? 0;
   const importCount = container?.import_count ?? 0;
   const transferCount = container?.transfer_count ?? 0;
+
+  const sourceTags = useMemo(() => {
+    return container?.sources?.map(source => {
+      const {pages = []} = container || {};
+      const sourcePages = pages.filter(page => page.source === source);
+      const firstSourcePageUrl = `/${RoutePaths.CONTAINER}/${sourcePages[0]?.container_uuid}/${source}/${sourcePages[0]?.uuid}`;
+
+      let color;
+      switch (source) {
+        case SOURCES.web: {
+          color = '#545cd8';
+          break;
+        }
+
+        case SOURCES.ios: {
+          color = 'gold';
+          break;
+        }
+
+        case SOURCES.android: {
+          color = 'green';
+          break;
+        }
+
+        case SOURCES.webtv: {
+          color = 'magenta';
+          break;
+        }
+
+        case SOURCES.appletv: {
+          color = 'cyan';
+          break;
+        }
+
+        case SOURCES.androidtv: {
+          color = 'blue';
+          break;
+        }
+
+        default: {
+          color = 'purple';
+          break;
+        }
+      }
+      return {
+        source,
+        count: sourcePages.length,
+        color,
+        link: firstSourcePageUrl
+      };
+    });
+  }, [container]);
 
   const {data: {items: webPage = []} = {}} = useGetAllPage({
     containerId: container?.uuid,
@@ -176,6 +231,27 @@ function ContainerSources(props) {
                 ) : null}
               </Row>
             </>
+          )}
+
+          {sourceTags && (
+            <div className="source-container">
+              {sourceTags.map((item, index) => (
+                <AntCard
+                  key={`${item.source}d-${index}`}
+                  title={SOURCE_HEADINGS[item.source]}
+                  bodyStyle={{
+                    borderBottom: `2px solid
+                  ${item.color}`
+                  }}
+                  bordered={false}
+                  onClick={() => navigate(item.link)}
+                >
+                  <div style={{color: item.color}}>{`${item.count} ${
+                    item.source === SOURCES.web ? 'pages(s)' : 'screen(s)'
+                  }`}</div>
+                </AntCard>
+              ))}
+            </div>
           )}
         </CardBody>
       </Card>

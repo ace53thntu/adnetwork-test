@@ -1,30 +1,33 @@
-import React, {useMemo} from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  UncontrolledButtonDropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Container
-} from 'reactstrap';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-
 import './styles.scss';
+import '../../style.scss';
+
 import Table, {
   TableFilterSelect,
   TableStatusCell,
   TableUtils
 } from 'components/table';
-import {useGetContainers} from 'queries/container/useGetContainers';
-import '../../style.scss';
-import {ContainerBodyLayout} from '../Layouts';
-import {getRole, getUser} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
 import {DEFAULT_PAGINATION} from 'constants/misc';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {useGetContainers} from 'queries/container/useGetContainers';
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Row,
+  UncontrolledButtonDropdown
+} from 'reactstrap';
+import {getRole, getUser} from 'utils/helpers/auth.helpers';
+
+import {RoutePaths} from '../../../../constants/route-paths';
+import {ContainerBodyLayout} from '../Layouts';
+import TreeSelectContainer from '../TreeSelectContainer';
 
 const STATUS_OPTIONS = [
   {
@@ -132,13 +135,18 @@ const Containers = props => {
     [onRowClick, t]
   );
 
+  const handleRowClick = item => {
+    navigate(`/${RoutePaths.CONTAINER}/${item?.uuid}`);
+  };
+
   return (
     <>
-      <ContainerBodyLayout
-        heading={t('containerManager')}
-        subHeading={t('containerDescription')}
-      >
+      <ContainerBodyLayout heading={t('containerManager')}>
         <Container fluid>
+          <Row>
+            <TreeSelectContainer />
+          </Row>
+
           <Row>
             <Col md="12">
               <Card className="main-card mb-3">
@@ -146,6 +154,20 @@ const Containers = props => {
                   <Table
                     data={containers?.data?.data || []}
                     columns={columns}
+                    getTrProps={(event, row) => {
+                      return {
+                        onClick: event => {
+                          if (
+                            event?.target.classList.contains('edit') ||
+                            event?.target.classList.contains('delete')
+                          ) {
+                            event.preventDefault();
+                          } else {
+                            handleRowClick(row.original);
+                          }
+                        }
+                      };
+                    }}
                   />
                 </CardBody>
               </Card>

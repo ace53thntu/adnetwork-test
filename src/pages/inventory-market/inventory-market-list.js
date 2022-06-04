@@ -1,37 +1,34 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import {Card, CardHeader, Row, Col, CardBody, Container} from 'reactstrap';
-import {useDispatch} from 'react-redux';
-import {useTranslation} from 'react-i18next';
-
+import {LoadingIndicator} from 'components/common';
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
-import {LoadingIndicator} from 'components/common';
-import {useGetContainersInfinity} from 'queries/container';
-import {AccordionList} from 'components/list';
-import {capitalize} from 'utils/helpers/string.helpers';
-import Status from 'components/list/status';
-import {ContainerPage} from './components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
-import {FilterBar, FilterBarForm} from './components/filter-bar';
+import {AccordionList} from 'components/list';
+import {Pagination} from 'components/list/pagination';
+import Status from 'components/list/status';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
 import {
   getInventoryFormats,
   getInventoryTypes
 } from 'pages/Container/constants';
+import {USER_ROLE} from 'pages/user-management/constants';
+import {useGetContainersInfinity} from 'queries/container';
+//---> Build-in Modules
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+//---> External Modules
+import {Card, CardBody, CardHeader, Col, Container, Row} from 'reactstrap';
 import {
   useFilterParamsSelector,
   useSearchTypeSelector
 } from 'store/reducers/inventory-market';
-import {InventoryListLayout} from './components/inventory-list-layout';
-import {isFalsy} from 'utils/validateObject';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {Pagination} from 'components/list/pagination';
-import {getResponseData} from 'utils/helpers/misc.helpers';
 import {getRole} from 'utils/helpers/auth.helpers';
-import {USER_ROLE} from 'pages/user-management/constants';
+import {getResponseData} from 'utils/helpers/misc.helpers';
+import {capitalize} from 'utils/helpers/string.helpers';
+import {isFalsy} from 'utils/validateObject';
+
+import {ContainerPage} from './components';
+import {FilterBar, FilterBarForm} from './components/filter-bar';
+import {InventoryListLayout} from './components/inventory-list-layout';
 
 const getStatus = ({row, statusProps}) => {
   switch (row.value) {
@@ -132,12 +129,6 @@ const InventoryMarket = () => {
       return true;
     });
   }, [role]);
-
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
 
   return (
     <AppContent>

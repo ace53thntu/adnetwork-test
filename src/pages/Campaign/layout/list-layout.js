@@ -1,12 +1,14 @@
+import {Button} from 'antd';
 import {useQueryString} from 'hooks';
 // Build-in Modules
 import React from 'react';
 // External Modules
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Card, CardBody, Col, Container, CustomInput, Row} from 'reactstrap';
+import {Card, CardBody, Col, Container, Row} from 'reactstrap';
 
 import {CampaignList} from '../campaign-management';
+import ViewModeCampaign from '../components/ViewModeCampaign';
 import {StrategyList} from '../strategy';
 // Internal Modules
 import {CampaignContentLayout} from '.';
@@ -35,17 +37,6 @@ const ListCampaignLayout = () => {
     }
   }, [typeView, navigate, advertiserQuery, campaignId]);
 
-  const actionPageTitle = React.useMemo(
-    () => ({
-      actions:
-        typeView === 'campaign'
-          ? t('createNewCampaign')
-          : t('createNewStrategy'),
-      onClick: goToCreate
-    }),
-    [goToCreate, t, typeView]
-  );
-
   React.useEffect(() => {
     if (mode) {
       setTypeView(mode);
@@ -61,28 +52,19 @@ const ListCampaignLayout = () => {
     <CampaignContentLayout
       heading={t('campaignManagement')}
       subHeading={t('campaignPageDescription')}
-      actionPageTitle={typeView === 'campaign' ? actionPageTitle : null}
     >
       <Container fluid>
-        <div className="justify-content-end d-flex mb-3">
-          <CustomInput
-            onChange={() => onChangeType('campaign')}
-            type="radio"
-            id={'campaign'}
-            label={t('viewByCampaign')}
-            className="mr-4"
-            name="view_mode"
-            checked={typeView === 'campaign'}
-          />
-          <CustomInput
-            onChange={() => onChangeType('strategy')}
-            type="radio"
-            id={'strategy'}
-            label={t('viewByStrategy')}
-            checked={typeView === 'strategy'}
-            name="view_mode"
-          />
+        <div className="justify-content-start d-flex mb-3">
+          <ViewModeCampaign value={typeView} onChange={onChangeType} />
+          <div className="justify-content-end d-flex flex-fill">
+            {typeView === 'campaign' && (
+              <Button type="primary" onClick={goToCreate}>
+                {t('createNewCampaign')}
+              </Button>
+            )}
+          </div>
         </div>
+
         <Row>
           <Col md="12">
             <Card className="main-card mb-3">

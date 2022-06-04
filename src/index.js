@@ -1,6 +1,7 @@
 import './bootstrap';
 
 import withClearCache from 'CacheBuster';
+import {ConfigProvider} from 'antd';
 import {RootProvider} from 'context';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -22,6 +23,12 @@ if (process.env.NODE_ENV !== 'development') {
 const ClearCacheComponent = withClearCache(App);
 
 const store = configureStore();
+
+ConfigProvider.config({
+  theme: {
+    primaryColor: '#545cd8'
+  }
+});
 
 ReactDOM.render(
   <Provider store={store}>

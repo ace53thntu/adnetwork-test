@@ -1,5 +1,4 @@
 import {RoutePaths} from 'constants/route-paths';
-import CreativePage from 'pages/Creative';
 import {
   ConceptCreateLazy,
   ConceptDetailLazy,
@@ -15,7 +14,7 @@ export const creativePages = {
   children: [
     {
       path: '',
-      element: <CreativePage />,
+      element: <ConceptsLazy />,
       canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
     },
     {

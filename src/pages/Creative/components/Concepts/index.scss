@@ -1,0 +1,19 @@
+.concept-list-wrapper {
+  padding: 15px 0;
+
+  .ant-card-body {
+    padding: 10px 24px;
+  }
+
+  .ant-card-actions {
+    li {
+      margin: 5px 0;
+    }
+  }
+
+  .concept-image {
+    width: 199px;
+    height: 199px;
+    object-fit: cover;
+  }
+}

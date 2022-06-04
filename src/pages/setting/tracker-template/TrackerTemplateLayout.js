@@ -1,27 +1,17 @@
-//---> Build-in Modules
-import React from 'react';
-
-//---> External Modules
-import PropTypes from 'prop-types';
-import {Col, Container, Row} from 'reactstrap';
-import {useDispatch} from 'react-redux';
-
 //---> Internal Modules
 import {PageTitleAlt} from 'components/layouts/Admin/components';
 import AppContent from 'components/layouts/Admin/components/AppContent';
-import {setEnableClosedSidebar} from 'store/reducers/ThemeOptions';
+//---> External Modules
+import PropTypes from 'prop-types';
+//---> Build-in Modules
+import React from 'react';
+import {Col, Container, Row} from 'reactstrap';
 
 const propTypes = {
-  pageTitle: PropTypes.string,
+  pageTitle: PropTypes.string
 };
 
 const TrackerTemplateLayout = ({children, pageTitle = ''}) => {
-  const reduxDispatch = useDispatch();
-
-  React.useEffect(() => {
-    reduxDispatch(setEnableClosedSidebar(false));
-  }, [reduxDispatch]);
-
   return (
     <AppContent>
       <PageTitleAlt

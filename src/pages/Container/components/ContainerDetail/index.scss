@@ -1,0 +1,25 @@
+.source-container {
+  margin-top: 10px;
+
+  .ant-card {
+    margin-bottom: 10px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+
+    .ant-card-head {
+      padding: 5px 10px;
+      min-height: 25px;
+
+      .ant-card-head-title {
+        font-size: 14px;
+        padding: 0;
+        color: darkgray;
+      }
+    }
+
+    .ant-card-body {
+      padding: 10px;
+      font-size: 20px;
+    }
+  }
+}
