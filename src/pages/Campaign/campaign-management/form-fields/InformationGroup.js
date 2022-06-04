@@ -1,17 +1,19 @@
 import {Collapse} from 'components/common';
-import {ActiveToggle, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import React from 'react';
 import ReactDatePicker from 'react-datepicker';
 import {Controller, useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Col, FormGroup, Label, Row} from 'reactstrap';
+import { getListCurrency } from 'utils/helpers/getListCurrency';
+import { getListTimeZone } from 'utils/helpers/getListTimezone';
 import AdvertiserSelect from './AdvertiserSelect';
+
 
 const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
   const {t} = useTranslation();
   const {control, errors} = useFormContext();
-
   return (
     <Collapse initialOpen title="Information" unMount={false}>
       <Row>
@@ -94,6 +96,24 @@ const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
               </div>
             ) : null}
           </FormGroup>
+        </Col>
+        <Col md="4">
+          <FormReactSelect
+            name="timezone"
+            placeholder='Timezone'
+            label="Timezone"
+            options={getListTimeZone()}
+            disabled
+          />
+        </Col>
+        <Col md="4">
+          <FormReactSelect
+            name="currency"
+            placeholder='Currency'
+            label="Currency"
+            options={getListCurrency()}
+            disabled
+          />
         </Col>
         <Col md="3">
           <Label className="mr-5">Status</Label>
