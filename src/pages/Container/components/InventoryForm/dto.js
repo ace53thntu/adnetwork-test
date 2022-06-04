@@ -29,7 +29,16 @@ export const getMetaExtra = metadata => {
     'pass_back',
     'banner_type',
     'banner_play_types',
-    'duration'
+    'duration',
+    'cpm',
+    'cpc',
+    'cpa',
+    'cpd',
+    'cpl',
+    'cpe',
+    'cpv',
+    'cpi',
+    'cpvm'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
@@ -168,6 +177,17 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     formatMetadata.banner_play_type = metadata?.banner_play_type?.value || null;
   }
 
+  // Metadata Price model
+  formatMetadata.cpm = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpm});
+  formatMetadata.cpc = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpc});
+  formatMetadata.cpa = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpa});
+  formatMetadata.cpd = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpd});
+  formatMetadata.cpl = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpl});
+  formatMetadata.cpe = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpe});
+  formatMetadata.cpv = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpv});
+  formatMetadata.cpi = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpi});
+  formatMetadata.cpvm = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpvm});
+
   // Metadata extra
   if (metadata?.extra) {
     try {
@@ -181,6 +201,8 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       );
     }
   }
+
+
 
   const tags = formTags?.map(item => item?.value);
 
@@ -311,6 +333,19 @@ export const mappingInventoryApiToForm = ({
   );
   destructedMetadata.banner_type = bannerTypeSelected;
   destructedMetadata.banner_play_type = bannerPlayTypeSelected;
+
+  // Price model
+  destructedMetadata.cpm = HandleCurrencyFields.convertApiToGui({value: metadata?.cpm});
+  destructedMetadata.cpc = HandleCurrencyFields.convertApiToGui({value: metadata?.cpc});
+  destructedMetadata.cpa = HandleCurrencyFields.convertApiToGui({value: metadata?.cpa});
+  destructedMetadata.cpd = HandleCurrencyFields.convertApiToGui({value: metadata?.cpd});
+  destructedMetadata.cpl = HandleCurrencyFields.convertApiToGui({value: metadata?.cpl});
+  destructedMetadata.cpe = HandleCurrencyFields.convertApiToGui({value: metadata?.cpe});
+  destructedMetadata.cpv = HandleCurrencyFields.convertApiToGui({value: metadata?.cpv});
+  destructedMetadata.cpi = HandleCurrencyFields.convertApiToGui({value: metadata?.cpi});
+  destructedMetadata.cpvm = HandleCurrencyFields.convertApiToGui({value: metadata?.cpvm});
+
+
   const extra = getMetaExtra(metadata);
 
   if (typeof extra === 'object' && Object.keys(extra)) {

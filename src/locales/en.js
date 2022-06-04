@@ -537,7 +537,16 @@ const en = {
     INVENTORY_INFORMATION: 'Inventory Information',
     MARKET: 'Market type',
     SELECT_MARKET: 'Select market type',
-    IS_AUTO_CREATE: 'Is auto create'
+    IS_AUTO_CREATE: 'Is auto create',
+    CPM: 'Cost per thousand',
+    CPC: 'Cost per click',
+    CPA: 'Cost per acquisition',
+    CPD: 'Cost per day',
+    CPL: 'Cost per lead',
+    CPE: 'Cost per engagement',
+    CPV: 'Cost per view',
+    CPI: 'Cost per install',
+    CPVM: 'Cost per viewed thousand',
   },
   //---> Common text
   COMMON: {
