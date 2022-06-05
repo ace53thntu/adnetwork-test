@@ -23,7 +23,8 @@ import {DescriptionTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
 import {Collapse} from 'components/common';
-import {CappingReferenceTypes} from 'constants/misc';
+import {CappingReferenceTypes, LogTypes} from 'constants/misc';
+import Historical from 'components/historical';
 // import Audience from './form-fields/Audience';
 
 const propTypes = {
@@ -38,6 +39,12 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
   const {strategyId} = useParams();
   const strategyEditPath = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${strategyId}/${RoutePaths.EDIT}?advertiser_id=${ownerId}`;
   const [currentTab, setCurrentTab] = useState('description');
+  const [openModal, setOpenModal] = useState(false);
+
+  const toggleModal = useCallback(() => {
+    setOpenModal(prevState => !prevState);
+  }, []);
+
   const goTo = useCallback(({nextTab}) => {
     setCurrentTab(nextTab);
   }, []);
@@ -57,37 +64,49 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
         {
           name: t('description'),
           content: (
-            <>
-              <DescriptionTab>
-                <FormContainer {...defaultProps}>
-                  <StrategyForm
-                    campaignId={campaignId}
-                    isView
-                    currentStrategy={currentStrategy}
-                  />
-                  {/* <Divider text="Audience"></Divider> */}
-                  {/* <Audience
+            <DescriptionTab>
+              <div className="d-flex justify-content-end mb-2">
+                <Button color="primary" type="button" onClick={toggleModal}>
+                  Logs
+                </Button>
+              </div>
+              <FormContainer {...defaultProps}>
+                <StrategyForm
+                  campaignId={campaignId}
+                  isView
+                  currentStrategy={currentStrategy}
+                />
+                {/* <Divider text="Audience"></Divider> */}
+                {/* <Audience
                 goTo={goTo}
                 listAudiences={[]}
                 dataStrategy={currentStrategy}
                 isView
               /> */}
-                  <Collapse unMount={false} initialOpen title={t('concepts')}>
-                    <Concept
-                      conceptList={currentStrategy?.concepts}
-                      isView
-                      strategyData={currentStrategy}
-                    />
-                  </Collapse>
-                  <div style={{textAlign: 'right'}}>
-                    <Link to={strategyEditPath}>
-                      <Button color="link">{t('goToEdit')}</Button>
-                    </Link>
-                  </div>
-                  <FormAction isView />
-                </FormContainer>
-              </DescriptionTab>
-            </>
+                <Collapse unMount={false} initialOpen title={t('concepts')}>
+                  <Concept
+                    conceptList={currentStrategy?.concepts}
+                    isView
+                    strategyData={currentStrategy}
+                  />
+                </Collapse>
+                <div style={{textAlign: 'right'}}>
+                  <Link to={strategyEditPath}>
+                    <Button color="link">{t('goToEdit')}</Button>
+                  </Link>
+                </div>
+                <FormAction isView />
+              </FormContainer>
+              {openModal && (
+                <Historical
+                  modal={openModal}
+                  toggle={toggleModal}
+                  entityName={currentStrategy?.name}
+                  entityUuid={currentStrategy?.uuid}
+                  entityType={LogTypes.STRATEGY}
+                />
+              )}
+            </DescriptionTab>
           )
         },
         {
@@ -117,7 +136,16 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
         title: name,
         getContent: () => content
       })),
-    [campaignId, currentStrategy, defaultProps, ownerId, strategyEditPath, t]
+    [
+      campaignId,
+      currentStrategy,
+      defaultProps,
+      openModal,
+      ownerId,
+      strategyEditPath,
+      t,
+      toggleModal
+    ]
   );
 
   const getTab = index => {

@@ -48,6 +48,7 @@ const CampaignDetail = () => {
         {isFetched && (
           <Row>
             <Col md="12">
+
               <CampaignViewTabs currentCampaign={campaignDestructure} />
             </Col>
           </Row>

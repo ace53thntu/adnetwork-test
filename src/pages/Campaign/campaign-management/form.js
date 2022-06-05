@@ -1,4 +1,6 @@
 import {ApiError} from 'components/common';
+import Historical from 'components/historical';
+import {LogTypes} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
 import PropTypes from 'prop-types';
@@ -62,7 +64,15 @@ const CampaignForm = ({
 
   const {handleSubmit, control} = methods;
   const startDate = useWatch({name: 'start_time', control});
+  const [openModal, setOpenModal] = React.useState(false);
+  console.log(
+    '🚀 ~ file: ViewTabs.js ~ line 37 ~ CampaignViewTabs ~ openModal',
+    openModal
+  );
 
+  const toggleModal = useCallback(() => {
+    setOpenModal(prevState => !prevState);
+  }, []);
   const onSubmit = useCallback(
     async formData => {
       const requestBody = formToApi(formData);
@@ -73,13 +83,10 @@ const CampaignForm = ({
             campId: campaignId,
             data: requestBody
           });
-          // reset();
           await client.invalidateQueries([GET_CAMPAIGN, data?.uuid]);
           ShowToast.success('Updated Campaign successfully!');
           dispatch(updateCampaignRedux(data));
-          // navigate(
-          //   `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=description&advertiser_id=${data?.advertiser_uuid}`
-          // );
+          navigate(`/${RoutePaths.CAMPAIGN}/${data?.uuid}`);
         } catch (error) {
           ShowToast.error(
             <ApiError apiError={error || 'Fail to update Campaign'} />
@@ -116,6 +123,14 @@ const CampaignForm = ({
 
   return (
     <div>
+      {isView && (
+        <div className="d-flex justify-content-end mb-2">
+          <Button color="primary" type="button" onClick={toggleModal}>
+            Logs
+          </Button>
+        </div>
+      )}
+
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
@@ -179,6 +194,15 @@ const CampaignForm = ({
           </div>
         </Form>
       </FormProvider>
+      {openModal && (
+        <Historical
+          modal={openModal}
+          toggle={toggleModal}
+          entityName={currentCampaign?.name}
+          entityUuid={currentCampaign?.uuid}
+          entityType={LogTypes.CAMPAIGN}
+        />
+      )}
     </div>
   );
 };

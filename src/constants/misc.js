@@ -1,6 +1,16 @@
 /**
  * @enum
  */
+export const LogTypes = {
+  CAMPAIGN: 'campaign',
+  STRATEGY: 'strategy',
+  INVENTORY: 'inventory',
+  CREATIVE: 'creative'
+};
+
+/**
+ * @enum
+ */
 export const Linearity = {
   LINEAR: 1,
   NONLINEAR: 2

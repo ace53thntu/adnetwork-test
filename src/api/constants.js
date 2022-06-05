@@ -124,5 +124,9 @@ export const endpoints = {
     geo_location: `${API_V1}/geo_location`,
     geo_country: `${API_V1}/geo_country`,
     geo_city: `${API_V1}/geo_city`
-  }
+  },
+  historical: {
+    log: `${API_V1}/log`,
+    diff: 'diff'
+  },
 };

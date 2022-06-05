@@ -12,7 +12,7 @@ import CampaignForm from './form';
 import {EntityTypes} from 'constants/report';
 import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
-import {CappingReferenceTypes} from 'constants/misc';
+import {CappingReferenceTypes, } from 'constants/misc';
 import CampaignStrategies from './strategies';
 
 const TabIndexes = {
@@ -42,11 +42,13 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
         {
           name: t('description'),
           content: (
-            <CampaignForm
-              goToTab={goToTab}
-              isView
-              currentCampaign={currentCampaign}
-            />
+            <>
+              <CampaignForm
+                goToTab={goToTab}
+                isView
+                currentCampaign={currentCampaign}
+              />
+            </>
           )
         },
         {

@@ -560,7 +560,8 @@ const en = {
     ANDROID_TV: 'Android TV',
     APPLE_TV: 'Apple TV',
     VIEW: 'View',
-    EDIT: 'Edit'
+    EDIT: 'Edit',
+    CLOSE: 'Close'
   },
   FORM: {
     SELECT_POSITION: 'Select position',
