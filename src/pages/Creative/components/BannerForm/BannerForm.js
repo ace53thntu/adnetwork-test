@@ -48,7 +48,7 @@ import {
   creativeModelToRepo,
   creativeRepoToModel
 } from './dto';
-import {useCalculateAdSize} from './hooks';
+import {useCalculateAdSize, useWatchCreativeType} from './hooks';
 import {bannerFormValidationResolver} from './utils';
 
 const defaultFormValues = {
@@ -130,6 +130,8 @@ function BannerForm(props) {
     setValue
   });
 
+  const isThirdPartyType = useWatchCreativeType({watch});
+
   const onSubmit = async values => {
     const bodyRequest = creativeModelToRepo(values, conceptId);
 
@@ -159,7 +161,7 @@ function BannerForm(props) {
             try {
               await Promise.all(promises);
             } catch (error) {
-              ShowToast.error(<ApiError apiError={error}/>);
+              ShowToast.error(<ApiError apiError={error} />);
             }
           }
         }
@@ -170,7 +172,7 @@ function BannerForm(props) {
         handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(<ApiError apiError={error}/>);
+        ShowToast.error(<ApiError apiError={error} />);
       }
     } else {
       const alternatives = values?.alternatives;
@@ -229,7 +231,7 @@ function BannerForm(props) {
         handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(<ApiError apiError={error}/>);
+        ShowToast.error(<ApiError apiError={error} />);
       }
     }
   };
@@ -399,27 +401,30 @@ function BannerForm(props) {
                   </Row>
                 </Col>
               </Row>
-              <Row>
-                <Col md="12">
-                  <FormReactSelect
-                    options={THIRD_PARTY_TAG_TYPES}
-                    placeholder=""
-                    name="third_party_tag_type"
-                    label="Third party tag type"
-                    defaultValue={defaultValues.third_party_tag_type}
-                  />
-                </Col>
-                <Col md="12">
-                  <FormTextInput
-                    type="textarea"
-                    placeholder=""
-                    name="third_party_tag"
-                    label="Third party tag"
-                    rows={4}
-                    defaultValue={defaultValues.third_party_tag}
-                  />
-                </Col>
-              </Row>
+
+              {isThirdPartyType && (
+                <Row>
+                  <Col md="12">
+                    <FormReactSelect
+                      options={THIRD_PARTY_TAG_TYPES}
+                      placeholder=""
+                      name="third_party_tag_type"
+                      label="Third party tag type"
+                      defaultValue={defaultValues.third_party_tag_type}
+                    />
+                  </Col>
+                  <Col md="12">
+                    <FormTextInput
+                      type="textarea"
+                      placeholder=""
+                      name="third_party_tag"
+                      label="Third party tag"
+                      rows={4}
+                      defaultValue={defaultValues.third_party_tag}
+                    />
+                  </Col>
+                </Row>
+              )}
             </CollapseBox>
 
             <Row>

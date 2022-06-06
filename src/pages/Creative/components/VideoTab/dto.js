@@ -4,6 +4,7 @@ import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
 import {makeValueForAdSizeFormat} from '../BannerForm/dto';
 import {checkValidJson} from '../BannerForm/utils';
 import {VideoServeTypes, VideoTypes} from './constants';
+import {VAST} from './hooks';
 
 export function videoRepoToFormValues(raw) {
   const {
@@ -22,17 +23,22 @@ export function videoRepoToFormValues(raw) {
     tags
   } = raw;
 
+  const linear = VideoTypes.find(item => item.value === linearity) || null;
+  const isLinear = linear?.value === VideoTypes[0].value;
+
+  const thirdParty = isLinear
+    ? VAST[0]
+    : THIRD_PARTY_TAG_TYPES.find(type => type.value === third_party_tag_type);
+
   const result = {
     name,
     click_url,
     width: width?.toString() ?? '1',
     height: height?.toString() ?? '1',
-    linearity: VideoTypes.find(item => item.value === linearity) || null,
+    linearity: linear,
     type: VideoServeTypes.find(item => item.value === type) || null,
     third_party_tag,
-    third_party_tag_type: THIRD_PARTY_TAG_TYPES.find(
-      type => type.value === third_party_tag_type
-    ),
+    third_party_tag_type: thirdParty,
     tags: tags?.length ? tags : [],
     ad_size_format:
       ad_size_format === 'dropdown'

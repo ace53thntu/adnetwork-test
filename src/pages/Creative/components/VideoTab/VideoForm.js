@@ -21,7 +21,7 @@ import {
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 
-import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
+import {PLATFORM_OPTIONS} from '../BannerForm/constants';
 import {useCalculateAdSize} from '../BannerForm/hooks';
 import Report from '../Report';
 import {Trackers} from '../Trackers';
@@ -30,6 +30,7 @@ import VideoInformationForm from './VideoInformationForm';
 import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
+import {VAST} from './hooks';
 
 const defaultValues = {
   // concept_id: 1,
@@ -46,7 +47,7 @@ const defaultValues = {
   video_metadata: '',
   tags: [],
   third_party_tag: '',
-  third_party_tag_type: THIRD_PARTY_TAG_TYPES[0]
+  third_party_tag_type: VAST[0]
   // files: []
 };
 
@@ -165,7 +166,11 @@ function VideoForm(props) {
           {isLoading && <BlockOverlay />}
 
           <CollapseBox open title="Information">
-            <VideoInformationForm defaultValues={getDefaultValues} />
+            <VideoInformationForm
+              defaultValues={getDefaultValues}
+              watch={watch}
+              setValue={setValue}
+            />
           </CollapseBox>
 
           <VideoFiles videoId={rawData?.uuid} />

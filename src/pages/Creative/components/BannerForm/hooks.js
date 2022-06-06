@@ -1,5 +1,6 @@
 import {usePrevious} from 'hooks/usePrevious';
 import React from 'react';
+import {CREATIVE_TYPES} from './constants';
 
 const getWithAndHeight = watchValue => {
   return watchValue.value.split('x');
@@ -52,4 +53,14 @@ export const useCalculateAdSize = ({watch, setValue}) => {
       }
     }
   }, [prevHeight, setFormField, watchAdSizeFormat, watchHeight]);
+};
+
+export const useWatchCreativeType = ({watch}) => {
+  const watchType = watch('type');
+
+  if (watchType.value === CREATIVE_TYPES[0].value) {
+    return true;
+  } else {
+    return false;
+  }
 };

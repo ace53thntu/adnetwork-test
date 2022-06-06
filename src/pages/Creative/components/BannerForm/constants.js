@@ -15,12 +15,12 @@ export const CREATIVE_TYPES = [
 
 export const THIRD_PARTY_TAG_TYPES = [
   {
-    label: 'Mustache',
-    value: 'mustache'
+    label: 'Static Asset URL',
+    value: 'static_asset_url'
   },
   {
-    label: 'Vast Url',
-    value: 'vast_url'
+    label: 'Iframe URL',
+    value: 'iframe_url'
   },
   {
     label: 'Html Tag',

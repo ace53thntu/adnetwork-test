@@ -6,13 +6,18 @@ import {Col, FormGroup, Row} from 'reactstrap';
 
 import {
   AD_SIZE_FORMAT_OPTIONS,
-  PLATFORM_OPTIONS,
-  THIRD_PARTY_TAG_TYPES
+  PLATFORM_OPTIONS
 } from '../BannerForm/constants';
 import {VideoServeTypes, VideoTypes} from './constants';
+import {useCheckLinearity} from './hooks';
 
 function VideoInformationForm(props) {
-  const {defaultValues} = props;
+  const {defaultValues, watch, setValue} = props;
+
+  const {thirdParties, defaultThirdPartyTagType} = useCheckLinearity(
+    watch,
+    setValue
+  );
 
   return (
     <Row>
@@ -112,11 +117,11 @@ function VideoInformationForm(props) {
       </Col>
       <Col md={12}>
         <FormReactSelect
-          options={THIRD_PARTY_TAG_TYPES}
+          options={thirdParties}
           placeholder=""
           name="third_party_tag_type"
           label="Third party tag type"
-          defaultValue={defaultValues.third_party_tag_type}
+          defaultValue={defaultThirdPartyTagType}
         />
       </Col>
       <Col md="12">
