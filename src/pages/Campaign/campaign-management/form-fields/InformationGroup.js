@@ -1,15 +1,14 @@
 import {Collapse} from 'components/common';
-import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
+import {ActiveToggle, FormTextInput} from 'components/forms';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import React from 'react';
 import ReactDatePicker from 'react-datepicker';
 import {Controller, useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Col, FormGroup, Label, Row} from 'reactstrap';
-import { getListCurrency } from 'utils/helpers/getListCurrency';
-import { getListTimeZone } from 'utils/helpers/getListTimezone';
+// import { getListCurrency } from 'utils/helpers/getListCurrency';
+// import { getListTimeZone } from 'utils/helpers/getListTimezone';
 import AdvertiserSelect from './AdvertiserSelect';
-
 
 const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
   const {t} = useTranslation();
@@ -97,7 +96,7 @@ const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
             ) : null}
           </FormGroup>
         </Col>
-        <Col md="4">
+        {/* <Col md="4">
           <FormReactSelect
             name="timezone"
             placeholder='Timezone'
@@ -114,7 +113,7 @@ const InformationGroup = ({isView, isCreate, currentCampaign, startDate}) => {
             options={getListCurrency()}
             disabled
           />
-        </Col>
+        </Col> */}
         <Col md="3">
           <Label className="mr-5">Status</Label>
           <Controller

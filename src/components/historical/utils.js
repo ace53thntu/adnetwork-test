@@ -1,15 +1,12 @@
 import {PriorityOptions, StrategySources} from 'pages/Campaign/constants';
 
 export const mappingStrategyFields = ({obj, fieldName}) => {
-console.log("🚀 ~ file: utils.js ~ line 4 ~ mappingStrategyFields ~ fieldName", fieldName)
-console.log("🚀 ~ file: utils.js ~ line 4 ~ mappingStrategyFields ~ obj", obj)
   if (!obj || typeof obj !== 'object' || !Object.keys(obj)) {
     return {
       old: '',
       new: ''
     };
   }
-
 
   if (fieldName === 'sources') {
     const oldVal = convertLogObjectToString(obj?.old, StrategySources);
@@ -41,16 +38,16 @@ const convertLogObjectToString = (logsData, listData = []) => {
           acc = `${acc}, ${valueFromList?.label}`;
         }
       }
-      if(acc.indexOf(',') === 0){
+      if (acc.indexOf(',') === 0) {
         acc = acc?.substring(1);
       }
       return acc;
     }, '');
   }
 
-  if(typeof logsData === 'string' || typeof logsData === 'number'){
+  if (typeof logsData === 'string' || typeof logsData === 'number') {
     const valueFromList = listData.find(item => item?.value === logsData);
-    return valueFromList?.label || ''
+    return valueFromList?.label || '';
   }
 
   return '';

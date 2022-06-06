@@ -4,18 +4,18 @@ import React from 'react';
 //---> External Modules
 import {Table} from 'reactstrap';
 import {Chip} from '@material-ui/core';
-import PropTypes from "prop-types"
+import PropTypes from 'prop-types';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
 import {useGetLogDifference} from 'queries/historical';
 import {useDestructureLogDifference, useParseLogValue} from './hook';
-import { mappingStrategyFields } from './utils';
+import {mappingStrategyFields} from './utils';
 
 const propTypes = {
   sourceId: PropTypes.number,
-  compareId: PropTypes.number,
-}
+  compareId: PropTypes.number
+};
 
 const HistoricalDetail = ({sourceId, compareId}) => {
   const {data, isFetching} = useGetLogDifference({
@@ -25,10 +25,6 @@ const HistoricalDetail = ({sourceId, compareId}) => {
     },
     enabled: !!sourceId && !!compareId
   });
-  console.log(
-    '🚀 ~ file: HistoricalDetail.js ~ line 13 ~ HistoricalDetail ~ data',
-    data
-  );
   const diffData = useDestructureLogDifference({diffData: data?.data});
   const totalDiff = React.useMemo(() => data?.diff, [data?.diff]);
 
@@ -71,10 +67,6 @@ const HistoricalDetail = ({sourceId, compareId}) => {
 
 const DetailItems = ({logDetails}) => {
   return logDetails?.map(([fieldName, logDiff], index) => {
-    console.log(
-      '🚀 ~ file: HistoricalDetail.js ~ line 47 ~ returnlogDetails?.map ~ logDiff',
-      logDiff
-    );
     const parsedLog = mappingStrategyFields({obj: logDiff, fieldName});
     return (
       <tr key={`pr-${index}`}>

@@ -135,7 +135,7 @@ const UserList = () => {
       },
       {
         header: 'Updated at',
-        accessor: 'update_at',
+        accessor: 'updated_at',
         cell: row => moment(row?.value).format('DD/MM/YYYY')
       }
     ];

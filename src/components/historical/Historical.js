@@ -29,7 +29,6 @@ const Historical = ({
   entityName,
   entityType
 }) => {
-  console.log("🚀 ~ file: Historical.js ~ line 32 ~ modal", modal)
   const {t} = useTranslation();
   const {data: logData, isFetching, isFetched, status} = useGetAllHistorical({
     params: {
@@ -51,14 +50,12 @@ const Historical = ({
       };
     });
   }, [logData]);
-  console.log(
-    '🚀 ~ file: Historical.js ~ line 9 ~ Historical ~ logList',
-    logList
-  );
 
   return (
     <Modal isOpen={modal} toggle={toggle} size="lg" style={{maxWidth: 1000}}>
-      <ModalHeader toggle={toggle}>{`Logs ${entityType} - ${entityName}`}</ModalHeader>
+      <ModalHeader
+        toggle={toggle}
+      >{`Logs ${entityType} - ${entityName}`}</ModalHeader>
       <ModalBody>
         {isFetching && <LoadingIndicator />}
         {isFetched && status === QueryStatuses.SUCCESS && (
