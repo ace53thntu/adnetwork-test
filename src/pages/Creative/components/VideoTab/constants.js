@@ -1,11 +1,11 @@
 export const VideoServeTypes = [
   {
-    value: 'normal',
-    label: 'Normal'
+    value: 'first_party',
+    label: 'First party'
   },
   {
-    value: 'wrapped_vast',
-    label: 'Wrapped Vast'
+    value: 'third_party',
+    label: 'Third party'
   }
 ];
 
