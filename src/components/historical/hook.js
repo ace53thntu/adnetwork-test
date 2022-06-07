@@ -46,7 +46,11 @@ const aggregateLogValue = logValue => {
 
   if (_.isArray(logValue)) {
     return logValue?.reduce((acc, item, index) => {
-      acc = `${acc} ${item?.name},`;
+      if(item?.location_name){
+        acc = `${acc} ${item?.location_name},`;
+      }else{
+        acc = `${acc} ${item?.name},`;
+      }
       if (index === logValue.length - 1) {
         acc = acc?.slice(0, -1);
       }

@@ -123,13 +123,13 @@ const CampaignForm = ({
 
   return (
     <div>
-      {/* {isView && (
+      {isView && (
         <div className="d-flex justify-content-end mb-2">
           <Button color="primary" type="button" onClick={toggleModal}>
             Logs
           </Button>
         </div>
-      )} */}
+      )}
 
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

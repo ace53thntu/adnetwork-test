@@ -5,12 +5,22 @@ import React from 'react';
 import {Table} from 'reactstrap';
 import {Chip} from '@material-ui/core';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
 import {useGetLogDifference} from 'queries/historical';
 import {useDestructureLogDifference, useParseLogValue} from './hook';
-import {mappingStrategyFields} from './utils';
+import {
+  getStrategyVideoFilterLogs,
+  getStrategyContextFilterLogs,
+  mappingStrategyFields
+} from './utils';
+
+const logFnByFieldName = {
+  video_filter: getStrategyVideoFilterLogs,
+  context_filter: getStrategyContextFilterLogs
+};
 
 const propTypes = {
   sourceId: PropTypes.number,
@@ -41,15 +51,15 @@ const HistoricalDetail = ({sourceId, compareId}) => {
       <thead>
         <tr>
           <th width="22%">
-            field name{' '}
+            Field Name{' '}
             <Chip
               label={`${totalDiff || '0'}`}
               size="small"
               style={{color: 'grey', fontSize: '12px'}}
             />
           </th>
-          <th>old value</th>
-          <th>new value</th>
+          <th>Old Value</th>
+          <th>New Value</th>
         </tr>
       </thead>
       <tbody>
@@ -67,21 +77,63 @@ const HistoricalDetail = ({sourceId, compareId}) => {
 
 const DetailItems = ({logDetails}) => {
   return logDetails?.map(([fieldName, logDiff], index) => {
+    if (['video_filter', 'context_filter'].includes(fieldName)) {
+      const videoFilterLogs = logFnByFieldName[fieldName](logDiff);
+      console.log(
+        '🚀 ~ file: HistoricalDetail.js ~ line 72 ~ returnlogDetails?.map ~ videoFilterLogs',
+        videoFilterLogs
+      );
+      return videoFilterLogs?.map((item, videoFilterIndex) => {
+        return (
+          <LogRow
+            key={`pr-${videoFilterIndex}`}
+            name={item?.name}
+            oldValue={item?.old}
+            newValue={item?.new}
+          />
+        );
+      });
+    }
+
+    if (fieldName === 'start_time' || fieldName === 'end_time') {
+      const formattedDateOld = moment(logDiff?.old).format('DD/MM/YYYY') || '';
+      const formattedDateNew = moment(logDiff?.new).format('DD/MM/YYYY') || '';
+      return (
+        <LogRow
+          key={`pr-${index}`}
+          name={fieldName}
+          oldValue={formattedDateOld}
+          newValue={formattedDateNew}
+        />
+      );
+    }
+
     const parsedLog = mappingStrategyFields({obj: logDiff, fieldName});
     return (
-      <tr key={`pr-${index}`}>
-        <td>
-          <code>{fieldName}</code>
-        </td>
-        <td style={{color: 'red'}}>
-          <LogCell logValue={parsedLog?.old} />
-        </td>
-        <td style={{color: 'blue'}}>
-          <LogCell logValue={parsedLog?.new} />
-        </td>
-      </tr>
+      <LogRow
+        key={`pr-${index}`}
+        name={fieldName}
+        oldValue={parsedLog?.old}
+        newValue={parsedLog?.new}
+      />
     );
   });
+};
+
+const LogRow = ({name, oldValue, newValue}) => {
+  return (
+    <tr>
+      <td>
+        <code>{name}</code>
+      </td>
+      <td style={{color: 'red'}}>
+        <LogCell logValue={oldValue} />
+      </td>
+      <td style={{color: 'blue'}}>
+        <LogCell logValue={newValue} />
+      </td>
+    </tr>
+  );
 };
 
 const LogCell = ({logValue}) => {
