@@ -65,11 +65,11 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
           name: t('description'),
           content: (
             <DescriptionTab>
-              {/* <div className="d-flex justify-content-end mb-2">
+              <div className="d-flex justify-content-end mb-2">
                 <Button color="primary" type="button" onClick={toggleModal}>
                   Logs
                 </Button>
-              </div> */}
+              </div>
               <FormContainer {...defaultProps}>
                 <StrategyForm
                   campaignId={campaignId}
