@@ -159,9 +159,8 @@ const FormContainer = ({
 
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
-          if (isSummary) {
-            await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
-          }
+
+          await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
           const defaultValueUpdated = apiToForm({strategyData: data});
           reset(defaultValueUpdated);
           ShowToast.success('Updated strategy successfully');
