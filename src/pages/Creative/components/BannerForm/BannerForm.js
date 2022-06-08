@@ -406,6 +406,7 @@ function BannerForm(props) {
                 <Row>
                   <Col md="12">
                     <FormReactSelect
+                      required
                       options={THIRD_PARTY_TAG_TYPES}
                       placeholder=""
                       name="third_party_tag_type"
@@ -415,6 +416,7 @@ function BannerForm(props) {
                   </Col>
                   <Col md="12">
                     <FormTextInput
+                      isRequired
                       type="textarea"
                       placeholder=""
                       name="third_party_tag"

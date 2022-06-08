@@ -53,7 +53,12 @@ export const bannerFormValidationResolver = () => {
 
           return true;
         }
-      )
+      ),
+
+      third_party_tag: Yup.string().when('type', {
+        is: type => type.value === 'third_party',
+        then: Yup.string().required('Required.')
+      })
     })
   );
 };
