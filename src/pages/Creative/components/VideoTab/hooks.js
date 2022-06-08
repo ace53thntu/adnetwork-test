@@ -1,5 +1,5 @@
 import {THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
-import {VideoTypes} from './constants';
+import {VideoServeTypes, VideoTypes} from './constants';
 
 export const VAST = [
   {
@@ -29,4 +29,14 @@ export const useCheckLinearity = (watch, setValue) => {
     thirdParties,
     defaultThirdPartyTagType
   };
+};
+
+export const useCheckVideoType = watch => {
+  const watchType = watch('type');
+
+  if (watchType.value === VideoServeTypes[0].value) {
+    return false;
+  } else {
+    return true;
+  }
 };
