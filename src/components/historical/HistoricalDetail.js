@@ -79,10 +79,6 @@ const DetailItems = ({logDetails}) => {
   return logDetails?.map(([fieldName, logDiff], index) => {
     if (['video_filter', 'context_filter'].includes(fieldName)) {
       const videoFilterLogs = logFnByFieldName[fieldName](logDiff);
-      console.log(
-        '🚀 ~ file: HistoricalDetail.js ~ line 72 ~ returnlogDetails?.map ~ videoFilterLogs',
-        videoFilterLogs
-      );
       return videoFilterLogs?.map((item, videoFilterIndex) => {
         return (
           <LogRow
@@ -96,8 +92,13 @@ const DetailItems = ({logDetails}) => {
     }
 
     if (fieldName === 'start_time' || fieldName === 'end_time') {
+      if (moment(logDiff?.old).isSame(logDiff?.new)) {
+        return null;
+      }
+
       const formattedDateOld = moment(logDiff?.old).format('DD/MM/YYYY') || '';
       const formattedDateNew = moment(logDiff?.new).format('DD/MM/YYYY') || '';
+
       return (
         <LogRow
           key={`pr-${index}`}
