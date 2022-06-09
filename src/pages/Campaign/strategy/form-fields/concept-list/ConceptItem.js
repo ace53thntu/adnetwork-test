@@ -14,7 +14,7 @@ const ConceptItem = ({
   conceptItem = {},
   conceptIdx = 0,
   defaultValue = '',
-  isView = false
+  isEdit = false
 }) => {
   const {register, setValue} = useFormContext();
 
@@ -28,7 +28,7 @@ const ConceptItem = ({
       <div className="widget-content p-0">
         <div className="widget-content-wrapper">
           <div className="widget-content-left flex2">
-            {!isView ? (
+            {isEdit ? (
               <CustomInput
                 type="checkbox"
                 label={conceptItem?.name}

@@ -1,8 +1,8 @@
 //---> Build-in Modules
 import React from 'react';
 
-const ConceptTab = props => {
+const FilterAndCappingTab = props => {
   return <>{props.children}</>;
 };
 
-export default ConceptTab;
+export default FilterAndCappingTab;

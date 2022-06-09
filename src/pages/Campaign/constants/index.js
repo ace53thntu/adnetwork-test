@@ -374,17 +374,21 @@ export const StrategyEditTabs = {
     value: 0,
     name: 'description'
   },
-  CONCEPT: {
+  FILTER_CAPPING: {
     value: 1,
-    name: 'concept'
+    name: 'capping'
   },
   // AUDIENCE: {
   //   value: 2,
   //   name: 'audience'
   // },
-  SUMMARY: {
+  /*  SUMMARY: {
     value: 2,
     name: 'summary'
+  },*/
+  REPORT: {
+    value: 2,
+    name: 'report'
   }
 };
 

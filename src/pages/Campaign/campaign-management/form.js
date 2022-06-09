@@ -1,8 +1,13 @@
-import { ApiError } from 'components/common';
+import {ApiError, DialogConfirm} from 'components/common';
 import Historical from 'components/historical';
-import { LogTypes } from 'constants/misc';
-import { RoutePaths } from 'constants/route-paths';
-import { formToApi } from 'entities/Campaign';
+import {
+  CappingTypes,
+  DEFAULT_PAGINATION,
+  IS_RESPONSE_ALL,
+  LogTypes
+} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
+import {formToApi} from 'entities/Campaign';
 import PropTypes from 'prop-types';
 import { useCreateCampaign, useEditCampaign } from 'queries/campaign';
 import { GET_CAMPAIGN } from 'queries/campaign/constants';
@@ -29,7 +34,16 @@ import DomainGroup from './form-fields/DomainGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import InformationGroup from './form-fields/InformationGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
-import { validationCampaign } from './validation';
+import {validationCampaign} from './validation';
+import BudgetList from '../components/capping/list/BudgetList';
+import {getResponseData} from '../../../utils/helpers/misc.helpers';
+import {getListByType} from '../components/capping/dto';
+import {
+  useDeleteCapping,
+  useEditCapping,
+  useGetCappings
+} from '../../../queries/capping';
+import CappingFormContainer from '../components/capping/form/CappingFormContainer';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -52,8 +66,10 @@ const CampaignForm = ({
   const dispatch = useDispatch();
   const { refresh } = useRefreshAdvertiserTree();
 
-  const { mutateAsync: createCampaign } = useCreateCampaign();
-  const { mutateAsync: updateCampaign } = useEditCampaign(currentCampaign?.uuid);
+  const {mutateAsync: editCapping} = useEditCapping();
+  const {mutateAsync: deleteCapping} = useDeleteCapping();
+  const {mutateAsync: createCampaign} = useCreateCampaign();
+  const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
 
   const { campaignId } = useParams();
 
@@ -65,6 +81,22 @@ const CampaignForm = ({
   const { handleSubmit, control } = methods;
   const startDate = useWatch({ name: 'start_time', control });
   const [openModal, setOpenModal] = React.useState(false);
+  const [openForm, setOpenForm] = React.useState(false);
+  const [activeCapping, setActiveCapping] = React.useState(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const referenceUuid = currentCampaign?.uuid;
+  const {data, isLoading} = useGetCappings({
+    params: {
+      per_page: DEFAULT_PAGINATION.perPage,
+      page: DEFAULT_PAGINATION.page,
+      sort: 'created_at DESC',
+      reference_uuid: referenceUuid
+    },
+    enabled: !!referenceUuid
+  });
+
   console.log(
     '🚀 ~ file: ViewTabs.js ~ line 37 ~ CampaignViewTabs ~ openModal',
     openModal
@@ -122,6 +154,83 @@ const CampaignForm = ({
     ]
   );
 
+  const cappings = React.useMemo(() => {
+    const cappingData = getResponseData(data, IS_RESPONSE_ALL);
+
+    return cappingData?.map(item => ({...item, id: item?.uuid}));
+  }, [data]);
+
+  const budgetList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.BUDGET.value});
+  }, [cappings]);
+
+  const impressionList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
+  }, [cappings]);
+
+  function toggleCappingModal() {
+    setOpenForm(prevState => !prevState);
+  }
+
+  function onClickMenu(index, item) {
+    setActiveCapping(item);
+    if (index === 0) {
+      setOpenForm(true);
+    } else if (index === 1) {
+      setOpenDialog(true);
+    }
+  }
+
+  function onClickItem(item) {
+    setActiveCapping(item);
+    setOpenForm(true);
+  }
+  function onCancelDelete() {
+    setOpenDialog(false);
+  }
+
+  async function onEditCapping(formData) {
+    const requestBody = formToApi({formData, type: activeCapping?.type});
+    setIsSubmitting(true);
+    try {
+      await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
+      setIsSubmitting(false);
+
+      ShowToast.success('Updated capping successfully');
+      toggleModal();
+      setActiveCapping(null);
+    } catch (err) {
+      setIsSubmitting(false);
+
+      ShowToast.error(<ApiError apiError={err || 'Fail to update capping'} />);
+    }
+  }
+
+  async function onSubmitDelete() {
+    setIsSubmitting(true);
+
+    try {
+      if (
+        activeCapping?.type !== CappingTypes.BUDGET.value &&
+        activeCapping?.type !== CappingTypes.IMPRESSION.value
+      ) {
+        await deleteCapping({cappingId: activeCapping?.uuid});
+      } else {
+        await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
+      }
+
+      setIsSubmitting(false);
+
+      ShowToast.success('Deleted capping successfully');
+      setOpenDialog(false);
+      setActiveCapping(null);
+    } catch (err) {
+      setIsSubmitting(false);
+
+      ShowToast.error(<ApiError apiError={err || 'Fail to delete capping'} />);
+    }
+  }
+
   return (
     <div>
       {isView && (
@@ -150,6 +259,25 @@ const CampaignForm = ({
               currentCampaign={currentCampaign}
               startDate={startDate}
             />
+
+            {/* Capping List */}
+
+            {budgetList?.length > 0 && (
+              <BudgetList
+                list={budgetList}
+                onClickMenu={onClickMenu}
+                onClickItem={onClickItem}
+              />
+            )}
+
+            {impressionList?.length > 0 && (
+              <BudgetList
+                title="Impression"
+                list={impressionList}
+                onClickMenu={onClickMenu}
+                onClickItem={onClickItem}
+              />
+            )}
 
             {isCreate && (
               <>
@@ -197,6 +325,28 @@ const CampaignForm = ({
           </div>
         </Form>
       </FormProvider>
+
+      {/* Capping Form */}
+      {openForm && (
+        <CappingFormContainer
+          cappingId={activeCapping?.uuid}
+          onSubmit={onEditCapping}
+          isSubmitting={isSubmitting}
+          openForm={openForm}
+          toggleModal={toggleCappingModal}
+        />
+      )}
+
+      {openDialog && (
+        <DialogConfirm
+          open={openDialog}
+          title="Are you sure delete this capping?"
+          handleClose={onCancelDelete}
+          handleAgree={onSubmitDelete}
+          isLoading={isSubmitting}
+        />
+      )}
+
       {openModal && (
         <Historical
           modal={openModal}

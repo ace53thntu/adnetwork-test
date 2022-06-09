@@ -3,20 +3,20 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
-import {Col, Row} from 'reactstrap';
-import {useFormContext} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Col, Row } from 'reactstrap';
+import { useFormContext } from 'react-hook-form';
 
 //---> Internal Modules
-import {Collapse} from 'components/common';
-import {FormRadioGroup, FormReactSelect} from 'components/forms';
+import { Collapse } from 'components/common';
+import { FormRadioGroup, FormReactSelect } from 'components/forms';
 import {
   getSkippableOptions,
   PlacementTypeOptions,
   StartDelayOptions
 } from 'pages/Campaign/constants';
-import {LinearityOptions, ProtocolOptions} from 'constants/misc';
-import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import { LinearityOptions, ProtocolOptions } from 'constants/misc';
+import { CurrencyInputField } from 'components/forms/CurrencyInputField';
 import ErrorMessage from 'components/forms/ErrorMessage';
 
 const propTypes = {
@@ -24,14 +24,14 @@ const propTypes = {
   currentStrategy: PropTypes.object
 };
 
-const VideoFilterGroup = ({isView = false, currentStrategy}) => {
-  const {t} = useTranslation();
-  const {errors} = useFormContext();
+const VideoFilterGroup = ({ isView = false, currentStrategy }) => {
+  const { t } = useTranslation();
+  const { errors } = useFormContext();
 
   return (
     <Collapse initialOpen title={t('FORM.VIDEO_FILTER')} unMount={false}>
       <Row>
-        <Col md="3">
+        <Col md="4">
           <CurrencyInputField
             name="video_filter.skip_delay"
             placeholder={t('FORM.SKIP_DELAY')}
@@ -41,7 +41,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             disabled={isView}
           />
         </Col>
-        <Col md="3">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.video_filter?.start_delay}
@@ -52,7 +52,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             isClearable
           />
         </Col>
-        <Col md="3">
+        <Col md="4">
           <FormReactSelect
             disabled={true}
             defaultValue={currentStrategy?.video_filter?.ptype}
@@ -63,7 +63,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             isClearable
           />
         </Col>
-        <Col md="3">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.video_filter?.linearity}
@@ -74,7 +74,7 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             isClearable
           />
         </Col>
-        <Col md="12">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.video_filter?.protocols}
@@ -85,7 +85,10 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             isClearable
           />
         </Col>
-        <Col md="6">
+      </Row>
+
+      <Row>
+        <Col md="4">
           <FormRadioGroup
             inline
             disabled={isView}
@@ -95,7 +98,8 @@ const VideoFilterGroup = ({isView = false, currentStrategy}) => {
             name="video_filter.only_skipable"
           />
         </Col>
-        <Col md="6">
+
+        <Col md="4">
           <FormRadioGroup
             inline
             disabled={isView}
