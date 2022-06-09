@@ -15,8 +15,7 @@ import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog,
-  useCreativeSelector
+  toggleCreativeDetailDialog
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -55,7 +54,6 @@ function VideoForm(props) {
   const {video: rawData, isCreate} = props;
   const {t} = useTranslation();
   const {conceptId} = useParams();
-  const {selectedAdvertiserId} = useCreativeSelector();
   const dispatch = useDispatch();
   const client = useQueryClient();
   const {isUploading} = useCommonSelector();
@@ -194,8 +192,9 @@ function VideoForm(props) {
         <Report
           entityId={rawData?.uuid}
           entity={EntityTypes.VIDEO}
-          ownerId={selectedAdvertiserId}
           ownerRole={USER_ROLE.ADVERTISER}
+          entityName={rawData?.name}
+          groupObjectId={rawData?.advertiser_uuid}
         />
       )}
 

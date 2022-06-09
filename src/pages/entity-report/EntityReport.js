@@ -30,7 +30,6 @@ const propTypes = {
   entityName: PropTypes.string,
   parentPath: PropTypes.string,
   entityId: PropTypes.string,
-  ownerId: PropTypes.string,
   ownerRole: PropTypes.string
 };
 
@@ -39,7 +38,6 @@ const EntityReport = ({
   entityName = '',
   parentPath = '',
   entityId = null,
-  ownerId,
   ownerRole
 }) => {
   const dispatch = useDispatch();
@@ -122,7 +120,6 @@ const EntityReport = ({
             entityType={entityType}
             distributionBy={distributionBy}
             metricType={metricType}
-            ownerId={ownerId}
             ownerRole={ownerRole}
           />
         </Col>

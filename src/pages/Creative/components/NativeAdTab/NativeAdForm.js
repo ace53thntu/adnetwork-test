@@ -17,8 +17,7 @@ import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog,
-  useCreativeSelector
+  toggleCreativeDetailDialog
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -49,7 +48,6 @@ function NativeAdForm(props) {
   const client = useQueryClient();
   const {t} = useTranslation();
   const {conceptId} = useParams();
-  const {selectedAdvertiserId} = useCreativeSelector();
   const {isUploading} = useCommonSelector();
 
   const {mutateAsync: createNativeAdRequest} = useCreateNativeAd();
@@ -82,7 +80,7 @@ function NativeAdForm(props) {
 
   const handleError = error => {
     setIsLoading(false);
-    ShowToast.error(<ApiError apiError={error}/>);
+    ShowToast.error(<ApiError apiError={error} />);
   };
 
   const createAssets = async (nativeAdId, data) => {
@@ -183,8 +181,9 @@ function NativeAdForm(props) {
         <Report
           entity={EntityTypes.NATIVE_AD}
           entityId={nativeAd?.uuid}
-          ownerId={selectedAdvertiserId}
           ownerRole={USER_ROLE.ADVERTISER}
+          entityName={nativeAd?.name}
+          groupObjectId={nativeAd?.advertiser_uuid}
         />
       )}
 
