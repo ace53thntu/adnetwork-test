@@ -1,36 +1,39 @@
-import {Button} from 'antd';
+import { Button } from 'antd';
 // Build-in Modules
-import {LoadingIndicator} from 'components/common';
-import {apiToForm} from 'entities/Campaign';
-import {useGetCampaign} from 'queries/campaign';
+import { LoadingIndicator } from 'components/common';
+import { apiToForm } from 'entities/Campaign';
+import { useGetCampaign } from 'queries/campaign';
 import React from 'react';
 // External Modules
-import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
-import {Col, Row} from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Col, Row } from 'reactstrap';
 
-import {useRedirectInCampaign} from '../hooks/useRedirectInCampaign';
+import { useRedirectInCampaign } from '../hooks/useRedirectInCampaign';
 // Internal Modules
-import {CampaignContentLayout} from '../layout';
+import { CampaignContentLayout } from '../layout';
 import CampaignViewTabs from './ViewTabs';
-import {CampaignContainerStyled} from './styled';
+import { CampaignContainerStyled } from './styled';
+import { useQueryString } from 'hooks';
 
 const CampaignDetail = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const {campaignId} = useParams();
+  const { campaignId } = useParams();
+  const query = useQueryString();
+  const advertiserId = query.get('advertiser_id');
 
-  const {data: campaign, isFetching, isFetched} = useGetCampaign({
+  const { data: campaign, isFetching, isFetched } = useGetCampaign({
     cid: campaignId,
     enabled: !!campaignId
   });
 
-  const campaignDestructure = apiToForm({campaign});
+  const campaignDestructure = apiToForm({ campaign });
   useRedirectInCampaign();
 
   const goToCreate = React.useCallback(() => {
-    navigate(`/campaign/create`);
-  }, [navigate]);
+    navigate(`/campaign/create${advertiserId ? `?advertiser_id=${advertiserId}` : ''}`);
+  }, [advertiserId, navigate]);
 
   return (
     <CampaignContentLayout

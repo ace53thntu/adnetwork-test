@@ -2,12 +2,12 @@
 import PropTypes from 'prop-types';
 //---> Build-in Modules
 import React from 'react';
-import {getRole} from 'utils/helpers/auth.helpers';
+import { getRole } from 'utils/helpers/auth.helpers';
 
 import DomainGroup from '../campaign-management/form-fields/DomainGroup';
 import KeywordGroup from '../campaign-management/form-fields/KeywordGroup';
 import StatisticMetrics from '../components/StatisticMetrics';
-import {EnumTypeStatistics} from '../components/StatisticMetrics/StatisticMetrics';
+import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ContextFilterGroup from './form-fields/ContextFilterGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
@@ -34,7 +34,7 @@ const StrategyForm = ({
   return (
     <>
       {/* Strategy Statistic Metric */}
-      {currentStrategy?.id && (
+      {currentStrategy?.id && isView && (
         <StatisticMetrics
           id={currentStrategy.id}
           reportType={EnumTypeStatistics.Strategy}

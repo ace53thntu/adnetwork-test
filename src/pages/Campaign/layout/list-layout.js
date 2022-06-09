@@ -1,26 +1,26 @@
-import {Button} from 'antd';
-import {useQueryString} from 'hooks';
+import { Button } from 'antd';
+import { useQueryString } from 'hooks';
 // Build-in Modules
 import React from 'react';
 // External Modules
-import {useTranslation} from 'react-i18next';
-import {useNavigate, useParams} from 'react-router-dom';
-import {Card, CardBody, Col, Container, Row} from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Card, CardBody, Col, Container, Row } from 'reactstrap';
 
-import {CampaignList} from '../campaign-management';
+import { CampaignList } from '../campaign-management';
 import ViewModeCampaign from '../components/ViewModeCampaign';
-import {StrategyList} from '../strategy';
+import { StrategyList } from '../strategy';
 // Internal Modules
-import {CampaignContentLayout} from '.';
+import { CampaignContentLayout } from '.';
 
 const ListCampaignLayout = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const query = useQueryString();
   const mode = query.get('mode') || 'campaign';
   const advertiserId = query.get('advertiser_id') || '';
 
-  const {campaignId} = useParams();
+  const { campaignId } = useParams();
   const [typeView, setTypeView] = React.useState(mode);
 
   const advertiserQuery = advertiserId ? `advertiser_id=${advertiserId}` : '';
@@ -45,7 +45,7 @@ const ListCampaignLayout = () => {
 
   const onChangeType = type => {
     setTypeView(type);
-    navigate(`/campaign?mode=${type}`);
+    navigate(`/campaign?mode=${type}${!!advertiserQuery ? `&${advertiserQuery}` : ''}`);
   };
 
   return (

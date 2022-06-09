@@ -1,11 +1,11 @@
 import './style.scss';
 
-import {Card, Col, DatePicker, Row, Spin, Statistic} from 'antd';
+import { Card, Col, DatePicker, Row, Spin, Statistic } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import {useGetStatisticMetrics} from 'queries/metric/useGetStatisticMetrics';
+import { useGetStatisticMetrics } from 'queries/metric/useGetStatisticMetrics';
 //---> Build-in Modules
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   DesktopOutlined,
@@ -13,7 +13,7 @@ import {
   LikeOutlined,
   PieChartOutlined
 } from '@ant-design/icons';
-const {RangePicker} = DatePicker;
+const { RangePicker } = DatePicker;
 
 export const EnumTypeStatistics = {
   Campaign: 'campaign',
@@ -21,7 +21,7 @@ export const EnumTypeStatistics = {
 };
 
 const propTypes = {
-  campaignId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   reportType: PropTypes.oneOf([
     EnumTypeStatistics.Campaign,
     EnumTypeStatistics.Strategy
@@ -35,9 +35,9 @@ const detaultRangeTime = [
   currentTime
 ];
 
-const StatisticMetrics = ({id, reportType = EnumTypeStatistics.Campaign}) => {
+const StatisticMetrics = ({ id, reportType = EnumTypeStatistics.Campaign }) => {
   const [rangeTime, setRangeTime] = useState(detaultRangeTime);
-  const {data, isFetching} = useGetStatisticMetrics({
+  const { data, isFetching } = useGetStatisticMetrics({
     data: {
       start_time: rangeTime[0].format(),
       end_time: rangeTime[1].format(),
@@ -51,8 +51,8 @@ const StatisticMetrics = ({id, reportType = EnumTypeStatistics.Campaign}) => {
     id,
     enabled: !!id
   });
-  const {statisticTotal} = data ?? {};
-  const {impression = 0, click = 0, adrequest = 0, ctr = 0} =
+  const { statisticTotal } = data ?? {};
+  const { impression = 0, click = 0, adrequest = 0, ctr = 0 } =
     statisticTotal ?? {};
 
   const onChange = dates => {
