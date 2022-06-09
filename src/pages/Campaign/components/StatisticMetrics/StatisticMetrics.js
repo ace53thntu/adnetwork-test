@@ -21,7 +21,7 @@ export const EnumTypeStatistics = {
 };
 
 const propTypes = {
-  campaignId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   reportType: PropTypes.oneOf([
     EnumTypeStatistics.Campaign,
     EnumTypeStatistics.Strategy

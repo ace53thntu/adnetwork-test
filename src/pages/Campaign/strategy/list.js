@@ -168,15 +168,18 @@ const StrategyList = ({
     if (actionIndex === 2) {
       setOpenDialog(true);
       setCurrentStrategy(item);
-    } else if (actionIndex === 1) {
+
+      // Edit strategry
+    } else if (actionIndex === 0) {
       navigate(
-        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}/${RoutePaths.EDIT}?advertiser_id=${item?.campaign?.advertiser_uuid}`
-      );
-    } else {
-      navigate(
-        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.campaign?.advertiser_uuid}`
+        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}/${RoutePaths.EDIT}?advertiser_id=${item?.advertiser_uuid}`
       );
     }
+    /*    else {
+      navigate(
+        `/${RoutePaths.CAMPAIGN}/${item?.campaign_uuid}/${RoutePaths.STRATEGY}/${item?.uuid}?advertiser_id=${item?.advertiser_uuid}`
+      );
+    }*/
   }
 
   function onCancelDelete() {
@@ -190,7 +193,7 @@ const StrategyList = ({
       await deleteStrategy({straId: currentStrategy?.uuid});
       ShowToast.success('Deleted strategy successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err || 'Fail to delete strategy'}/>);
+      ShowToast.error(<ApiError apiError={err || 'Fail to delete strategy'} />);
     } finally {
       setIsDeleting(false);
       setOpenDialog(false);
@@ -206,7 +209,7 @@ const StrategyList = ({
             data={strategies || []}
             columns={columns}
             showAction
-            actions={['View', 'Edit', 'Delete']}
+            actions={['Edit', 'Delete']}
             handleAction={onClickMenu}
             handleClickItem={onClickItem}
           />

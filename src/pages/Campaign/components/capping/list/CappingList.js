@@ -25,12 +25,20 @@ import BudgetList from './BudgetList';
 import DomainList from './DomainList';
 import KeywordList from './KeywordList';
 import ScheduleList from './ScheduleList';
+import GeneralFilter from '../../../strategy/form-fields/GeneralFilter';
+import VideoFilterGroup from '../../../strategy/form-fields/VideoFilterGroup';
+import ContextFilterGroup from '../../../strategy/form-fields/ContextFilterGroup';
 
 const propTypes = {
-  referenceUuid: PropTypes.string.isRequired
+  referenceUuid: PropTypes.string.isRequired,
+  currentStrategy: PropTypes.any
 };
 
-const CappingList = ({referenceUuid = '', referenceType = ''}) => {
+const CappingList = ({
+  referenceUuid = '',
+  referenceType = '',
+  currentStrategy
+}) => {
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -54,14 +62,6 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
     return cappingData?.map(item => ({...item, id: item?.uuid}));
   }, [data]);
-
-  const budgetList = React.useMemo(() => {
-    return getListByType({cappings, type: CappingTypes.BUDGET.value});
-  }, [cappings]);
-
-  const impressionList = React.useMemo(() => {
-    return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
-  }, [cappings]);
 
   const userList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.USER.value});
@@ -134,7 +134,6 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
         await deleteCapping({cappingId: activeCapping?.uuid});
       } else {
         await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
-
       }
 
       setIsSubmitting(false);
@@ -161,25 +160,19 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
       </div>
       {isLoading && <LoadingIndicator />}
 
+      {currentStrategy && (
+        <>
+          <GeneralFilter currentStrategy={currentStrategy} />
+
+          {/* Video filter */}
+          <VideoFilterGroup currentStrategy={currentStrategy} />
+
+          {/* Context filter */}
+          <ContextFilterGroup currentStrategy={currentStrategy} />
+        </>
+      )}
+
       {/* Capping List */}
-
-      {budgetList?.length > 0 && (
-        <BudgetList
-          list={budgetList}
-          onClickMenu={onClickMenu}
-          onClickItem={onClickItem}
-        />
-      )}
-
-      {impressionList?.length > 0 && (
-        <BudgetList
-          title="Impression"
-          list={impressionList}
-          onClickMenu={onClickMenu}
-          onClickItem={onClickItem}
-        />
-      )}
-
       {userList?.length > 0 && (
         <BudgetList
           title="User"

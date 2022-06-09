@@ -15,7 +15,6 @@ export function useGetCappings({
   keepPreviousData = false
 }) {
   const {cancelToken} = useCancelRequest();
-
   return useQuery(
     [GET_CAPPINGS, params],
     () =>

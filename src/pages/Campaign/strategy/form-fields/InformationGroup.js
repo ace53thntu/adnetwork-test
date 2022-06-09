@@ -138,28 +138,6 @@ const InformationGroup = ({
             />
           </Col>
           <Col md="6">
-            <PositionSelect
-              disabled={isView}
-              defaultValue={currentStrategy?.position_uuids}
-              name="position_uuids"
-              label={t('position')}
-              placeholder={t('position')}
-              multiple={true}
-            />
-          </Col>
-          <Col md="6">
-            <FormReactSelect
-              disabled={isView}
-              defaultValue={currentStrategy?.sources}
-              options={StrategySources}
-              name="sources"
-              label={t('source')}
-              placeholder={t('selectSource')}
-              multiple
-            />
-          </Col>
-
-          <Col md="6">
             <FormTextInput
               name="click_commission"
               label={t('clickCommission')}
@@ -167,28 +145,6 @@ const InformationGroup = ({
               disabled={
                 isView || ![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
               }
-            />
-          </Col>
-          <Col md="12">
-            <LocationSelect
-              name="location_uuids"
-              defaultValue={currentStrategy?.location_uuids || []}
-              label={t('location')}
-              placeholder={t('selectLocation')}
-              disabled={isView}
-              multiple
-            />
-          </Col>
-          {/* TODO: Set readonly because the logic not clear now */}
-          <Col md="3">
-            <FormTextInput
-              type="text"
-              placeholder={t('category')}
-              id="category"
-              name="category"
-              label={t('category')}
-              disabled={isView}
-              readOnly
             />
           </Col>
           <Col md="3">
@@ -201,22 +157,6 @@ const InformationGroup = ({
               placeholder="Priority"
             />
           </Col>
-          {strategyType?.value === StrategyTypes.NORMAL && (
-            <Col md="3">
-              <CurrencyInputField
-                required={false}
-                name="cpm_max"
-                placeholder="0.0"
-                label="Price max"
-                decimalSeparator="."
-                groupSeparator=","
-                disableGroupSeparators={false}
-                decimalsLimit={3}
-                prefix="$"
-                disabled={isView}
-              />
-            </Col>
-          )}
           <Col md="3">
             <Label className="mr-5">Status</Label>
             <Controller

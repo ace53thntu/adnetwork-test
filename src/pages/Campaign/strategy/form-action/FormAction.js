@@ -52,7 +52,7 @@ const FormAction = ({
           >
             {t('cancel')}
           </Button>
-          {!isCreate && (
+          {/*{!isCreate && (
             <Button
               onClick={goToView}
               className="mr-2"
@@ -61,7 +61,7 @@ const FormAction = ({
             >
               {t('goToView')}
             </Button>
-          )}
+          )}*/}
 
           <ButtonLoading
             type="submit"

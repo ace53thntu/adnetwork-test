@@ -110,7 +110,7 @@ const en = {
   strategyCreate: 'Add new strategy',
   strategyPageDescription: '',
   inventoryList: 'Inventory List',
-  capping: 'Capping',
+  capping: 'Filters & Cappings',
   concept: 'Concept',
   manageDomain: 'Manage Domain',
   domainList: 'Domain list',
@@ -546,7 +546,7 @@ const en = {
     CPE: 'Cost per engagement',
     CPV: 'Cost per view',
     CPI: 'Cost per install',
-    CPVM: 'Cost per viewed thousand',
+    CPVM: 'Cost per viewed thousand'
   },
   //---> Common text
   COMMON: {

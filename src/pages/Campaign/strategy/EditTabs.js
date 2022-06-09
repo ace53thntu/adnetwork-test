@@ -6,16 +6,27 @@ import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
 import {useQueryString} from 'hooks';
-import {StrategyEditTabs as EditTabs} from 'pages/Campaign/constants';
+import {
+  StrategyEditTabs as EditTabs,
+  StrategyViewTabs as ViewTabs
+} from 'pages/Campaign/constants';
 import StrategyForm from './form';
 import {Tabs} from '../components';
 import Concept from './form-fields/Concept';
-import {ConceptTab, DescriptionTab, SummaryTab} from './strategy-tabs';
+import {FilterAndCappingTab, DescriptionTab, SummaryTab} from './strategy-tabs';
 import {FormContainer} from './form-container';
 import {FormAction} from './form-action';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {Collapse} from 'components/common';
+import {Capping} from '../components/capping';
+import {CappingReferenceTypes} from '../../../constants/misc';
+import GeneralFilter from './form-fields/GeneralFilter';
+import VideoFilterGroup from './form-fields/VideoFilterGroup';
+import ContextFilterGroup from './form-fields/ContextFilterGroup';
+import {EntityReport} from '../../entity-report';
+import {EntityTypes} from '../../../constants/report';
+import {USER_ROLE} from '../../user-management/constants';
 // import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
@@ -27,10 +38,10 @@ const StrategyEditTabs = ({
 }) => {
   const navigate = useNavigate();
   const query = useQueryString();
+  const ownerId = query.get('advertiser_id');
   const nextTab = query.get('next_tab');
-
+  const isDescriptionTab = nextTab === 'description';
   const {t} = useTranslation();
-
   const [currentTab, setCurrentTab] = useState('description');
 
   const goTo = useCallback(({nextTab}) => {
@@ -65,7 +76,14 @@ const StrategyEditTabs = ({
                   campaignId={campaignId}
                   isEdit={!isCreate}
                   currentStrategy={currentStrategy}
+                  isDescriptionTab={isDescriptionTab}
                 />
+
+                {/* Concept */}
+                <Collapse initialOpen title="Concept" unMount={false}>
+                  <Concept strategyData={currentStrategy} />
+                </Collapse>
+
                 <FormAction
                   currentStrategy={currentStrategy}
                   isCreate={isCreate}
@@ -86,7 +104,7 @@ const StrategyEditTabs = ({
         //     </div>
         //   )
         // },
-        {
+        /*        {
           name: t(EditTabs.CONCEPT.name),
           content: (
             <ConceptTab>
@@ -96,33 +114,83 @@ const StrategyEditTabs = ({
               </FormContainer>
             </ConceptTab>
           )
+        },*/
+        {
+          name: t(ViewTabs.CAPPING.name),
+          content: (
+            <FilterAndCappingTab>
+              <FormContainer {...defaultProps} isCapping>
+                <Capping
+                  currentStrategy={currentStrategy}
+                  referenceUuid={currentStrategy?.uuid}
+                  referenceType={CappingReferenceTypes.STRATEGY}
+                />
+                <FormAction
+                  currentStrategy={currentStrategy}
+                  isCreate={isCreate}
+                />
+              </FormContainer>
+            </FilterAndCappingTab>
+          )
         },
         {
           name: t(EditTabs.SUMMARY.name),
           content: (
-            <div>
-              <SummaryTab>
-                <FormContainer {...defaultProps} isSummary>
-                  <StrategyForm
-                    campaignId={campaignId}
-                    isEdit={!isCreate}
-                    currentStrategy={currentStrategy}
-                  />
-                  <Collapse title={t('concepts')} initialOpen unMount={false}>
-                    <Concept goTo={goTo} strategyData={currentStrategy} />
-                  </Collapse>
-                  <FormAction isSummary currentStrategy={currentStrategy} />
-                </FormContainer>
-              </SummaryTab>
-            </div>
+            <SummaryTab>
+              <FormContainer {...defaultProps} isSummary>
+                <StrategyForm
+                  campaignId={campaignId}
+                  isEdit={!isCreate}
+                  currentStrategy={currentStrategy}
+                />
+
+                <GeneralFilter currentStrategy={currentStrategy} />
+
+                {/* Video filter */}
+                <VideoFilterGroup currentStrategy={currentStrategy} />
+
+                {/* Context filter */}
+                <ContextFilterGroup currentStrategy={currentStrategy} />
+
+                <Collapse title={t('concepts')} initialOpen unMount={false}>
+                  <Concept goTo={goTo} strategyData={currentStrategy} />
+                </Collapse>
+
+                <FormAction isSummary currentStrategy={currentStrategy} />
+              </FormContainer>
+            </SummaryTab>
           )
-        }
+        },
+        ...(!isCreate
+          ? [
+              {
+                name: t(ViewTabs.REPORT.name),
+                content: (
+                  <EntityReport
+                    entity={EntityTypes.STRATEGY}
+                    entityName={currentStrategy?.name}
+                    parentPath={`${currentStrategy?.advertiser_name}/${currentStrategy?.campaign_uuid?.label}`}
+                    entityId={currentStrategy?.uuid}
+                    ownerId={ownerId}
+                    ownerRole={USER_ROLE.ADVERTISER}
+                  />
+                )
+              }
+            ]
+          : [])
       ].map(({name, content}, index) => ({
         key: index,
         title: name,
         getContent: () => content
       })),
-    [t, defaultProps, campaignId, isCreate, currentStrategy, goTo]
+    [
+      defaultProps,
+      campaignId,
+      isCreate,
+      currentStrategy,
+      goTo,
+      isDescriptionTab
+    ]
   );
 
   const getTab = index => {
@@ -132,9 +200,9 @@ const StrategyEditTabs = ({
         // setCurrentTab(EditTabs.DESCRIPTION.name);
         navigate(`${url}${EditTabs.DESCRIPTION.name}`);
         break;
-      case EditTabs.CONCEPT.value:
+      case EditTabs.FILTER_CAPPING.value:
         // setCurrentTab(EditTabs.CONCEPT.name);
-        navigate(`${url}${EditTabs.CONCEPT.name}`);
+        navigate(`${url}${EditTabs.FILTER_CAPPING.name}`);
 
         break;
       // case EditTabs.AUDIENCE.value:
@@ -143,12 +211,12 @@ const StrategyEditTabs = ({
       case EditTabs.SUMMARY.value:
         // setCurrentTab(EditTabs.SUMMARY.name);
         navigate(`${url}${EditTabs.SUMMARY.name}`);
-
+      case EditTabs.REPORT.value:
+        setCurrentTab(EditTabs.REPORT.name);
         break;
       default:
         // setCurrentTab(EditTabs.DESCRIPTION.name);
         navigate(`${url}${EditTabs.DESCRIPTION.name}`);
-
         break;
     }
   };
@@ -157,12 +225,14 @@ const StrategyEditTabs = ({
     switch (currentTab) {
       case EditTabs.DESCRIPTION.name:
         return EditTabs.DESCRIPTION.value;
-      case EditTabs.CONCEPT.name:
-        return EditTabs.CONCEPT.value;
+      case EditTabs.FILTER_CAPPING.name:
+        return EditTabs.FILTER_CAPPING.value;
       // case EditTabs.AUDIENCE.name:
       // return EditTabs.AUDIENCE.value;
       case EditTabs.SUMMARY.name:
         return EditTabs.SUMMARY.value;
+      case EditTabs.REPORT.name:
+        return EditTabs.REPORT.name;
       default:
         return EditTabs.DESCRIPTION.value;
     }
