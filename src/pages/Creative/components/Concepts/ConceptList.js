@@ -1,25 +1,25 @@
 import './index.scss';
 
-import {Row} from 'antd';
-import {BlockOverlay} from 'components/common';
+import { Row } from 'antd';
+import { BlockOverlay } from 'components/common';
 // import PropTypes from 'prop-types';
-import {useGetConceptsLoadMore} from 'queries/concept';
+import { useGetConceptsLoadMore } from 'queries/concept';
 import * as React from 'react';
-import {useMemo} from 'react';
-import {useDispatch} from 'react-redux';
-import {useParams} from 'react-router-dom';
-import {Button} from 'reactstrap';
-import {loadConceptRedux, useCreativeSelector} from 'store/reducers/creative';
+import { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import { loadConceptRedux, useCreativeSelector } from 'store/reducers/creative';
 
-import {ConceptsLoadMore} from './ConceptList.styles';
+import { ConceptsLoadMore } from './ConceptList.styles';
 import ConceptListItemAnt from './ConceptListItemAnt';
 
 const LIMIT = 10;
 
 function ConceptList(props) {
-  const {advertiserId} = useParams();
+  const { advertiserId } = useParams();
   const dispatch = useDispatch();
-  const {expandedIds, selectedAdvertiserId} = useCreativeSelector();
+  const { expandedIds, selectedAdvertiserId } = useCreativeSelector();
 
   const {
     data: res,
@@ -30,10 +30,9 @@ function ConceptList(props) {
   } = useGetConceptsLoadMore({
     enabled: true,
     params: {
-      ...(advertiserId && {advertiser_uuid: advertiserId}),
+      ...(advertiserId && { advertiser_uuid: advertiserId }),
       limit: LIMIT,
-      sort_by: 'created_at',
-      sort: 'desc'
+      sort: 'created_at DESC'
     }
   });
 

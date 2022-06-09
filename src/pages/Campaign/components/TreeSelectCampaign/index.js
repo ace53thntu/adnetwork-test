@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router';
-import {useParams} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import AiActivTreeSelect from '../../../../components/AiActivTreeSelect';
-import {RoutePaths} from '../../../../constants/route-paths';
-import {useQueryString} from '../../../../hooks';
+import { RoutePaths } from '../../../../constants/route-paths';
+import { useQueryString } from '../../../../hooks';
 import {
   setAdvertiserRedux,
   setCampaignRedux,
@@ -14,14 +14,14 @@ import {
 } from '../../../../store/reducers/campaign';
 import {
   setSelectedTreeNodeRedux,
+  setSelectTreeDataRedux,
   useCommonSelector
 } from '../../../../store/reducers/common';
-import {getAllCampaignTreeData} from '../../utils';
+import { getAllCampaignTreeData } from '../../utils';
 
 function TreeSelectCampaign() {
-  const {selectedTreeNode} = useCommonSelector();
-  const [treeData, setTreeData] = useState();
-  const {campaignId, strategyId} = useParams();
+  const { selectedTreeNode, selectTreeData } = useCommonSelector();
+  const { campaignId, strategyId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const query = useQueryString();
@@ -46,7 +46,7 @@ function TreeSelectCampaign() {
       dispatch(setSelectedTreeNodeRedux(''));
     }
 
-    setTreeData(treeData);
+    dispatch(setSelectTreeDataRedux(treeData));
   };
 
   const handleSelectedItem = React.useCallback((value, node) => {
@@ -86,11 +86,11 @@ function TreeSelectCampaign() {
   };
 
   return (
-    <div style={{paddingLeft: '15px'}} className="mb-3">
+    <div style={{ paddingLeft: '15px' }} className="mb-3">
       <AiActivTreeSelect
         allowClear
         selectedItem={selectedTreeNode}
-        treeData={treeData}
+        treeData={selectTreeData}
         onSelectedItem={handleSelectedItem}
         onChange={handleClearCampaign}
       />

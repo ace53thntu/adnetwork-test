@@ -1,5 +1,8 @@
 .breadcrumb-item {
   font-size: 18px;
+  & > a {
+    cursor: pointer;
+  }
 }
 
 .ant-breadcrumb-separator {
