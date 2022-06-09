@@ -168,6 +168,7 @@ function VideoForm(props) {
               defaultValues={getDefaultValues}
               watch={watch}
               setValue={setValue}
+              isCreate={isCreate}
             />
           </CollapseBox>
 

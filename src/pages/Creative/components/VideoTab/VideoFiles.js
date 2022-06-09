@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
 import {Button, Col, Row} from 'reactstrap';
+import {useCheckVideoType} from './hooks';
 
 import VideoFileForm from './VideoFileForm';
 
 function VideoFiles(props) {
   const {videoId} = props;
-  const {control} = useFormContext();
+  const {control, watch} = useFormContext();
+  const isThirdParty = useCheckVideoType(watch);
 
   const {fields, append, remove} = useFieldArray({
     control,
     name: 'files'
   });
 
-  // const limited = fields?.length >= 1;
   const limited = false;
 
   return (
@@ -45,7 +46,7 @@ function VideoFiles(props) {
             );
           })}
 
-          {!limited && (
+          {!limited && !isThirdParty && (
             <div className="pb-5 ml-auto">
               <Button
                 color="primary"
