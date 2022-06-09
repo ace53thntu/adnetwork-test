@@ -12,7 +12,7 @@ import {VideoServeTypes, VideoTypes} from './constants';
 import {useCheckLinearity, useCheckVideoType} from './hooks';
 
 function VideoInformationForm(props) {
-  const {defaultValues, watch, setValue} = props;
+  const {defaultValues, watch, setValue, isCreate} = props;
 
   const {thirdParties, defaultThirdPartyTagType} = useCheckLinearity(
     watch,
@@ -48,6 +48,7 @@ function VideoInformationForm(props) {
           label="Type"
           defaultValue={defaultValues.type}
           options={VideoServeTypes}
+          disabled={!isCreate}
         />
       </Col>
       <Col md={3}>
@@ -57,6 +58,7 @@ function VideoInformationForm(props) {
           label="Linearity"
           defaultValue={defaultValues.linearity}
           options={VideoTypes}
+          disabled={!isCreate}
         />
       </Col>
       <Col md={3}>

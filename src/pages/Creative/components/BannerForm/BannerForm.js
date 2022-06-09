@@ -278,6 +278,7 @@ function BannerForm(props) {
                     name="type"
                     label="Creative type"
                     defaultValue={defaultValues.type}
+                    disabled={!isCreate}
                   />
                 </Col>
               </Row>
