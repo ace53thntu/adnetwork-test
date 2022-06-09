@@ -38,14 +38,14 @@ const Concept = ({ strategyData }) => {
     return !isEdit
       ? conceptList
       : pages?.reduce((acc, page = {}) => {
-        const items = getResponseData(page, IS_RESPONSE_ALL);
-        const itemsDestructured = items?.map(item => ({
-          ...item,
-          id: item?.uuid
-        }));
-        acc = [...acc, ...itemsDestructured];
-        return acc;
-      }, []);
+          const items = getResponseData(page, IS_RESPONSE_ALL);
+          const itemsDestructured = items?.map(item => ({
+            ...item,
+            id: item?.uuid
+          }));
+          acc = [...acc, ...itemsDestructured];
+          return acc;
+        }, []);
   }, [isEdit, conceptList, pages]);
 
   return (

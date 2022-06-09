@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ConceptItem from './ConceptItem';
 import { ListGroup } from 'reactstrap';
 import { Button } from 'antd';
-import "./styles.scss"
+import './styles.scss';
 import SearchInput from './components/SearchInput';
 
 const propTypes = {
@@ -13,21 +13,22 @@ const propTypes = {
   isView: PropTypes.bool,
   onEdit: PropTypes.func
 };
-;
 const ConceptList = ({
   concepts = [],
   isEdit = false,
   conceptsSelected = [],
   onEdit,
-  setSearchTerm,
+  setSearchTerm
 }) => {
   return (
     <div className="concept-wrapper">
       <div className="concept-search">
-        <div>
-          {isEdit && <SearchInput setSearchTerm={setSearchTerm} />}
-        </div>
-        <Button className="concept-button" type="primary" onClick={() => onEdit(!isEdit)}>
+        <div>{isEdit && <SearchInput setSearchTerm={setSearchTerm} />}</div>
+        <Button
+          className="concept-button"
+          type="primary"
+          onClick={() => onEdit(!isEdit)}
+        >
           {!isEdit ? 'Edit' : 'View'}
         </Button>
       </div>
@@ -47,7 +48,6 @@ const ConceptList = ({
             />
           );
         })}
-
       </ListGroup>
     </div>
   );
