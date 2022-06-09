@@ -1,9 +1,9 @@
 import moment from 'moment';
 
-import {AdvertiserAPIRequest} from '../../api/advertiser.api';
-import {CampaignAPIRequest} from '../../api/campaign.api';
-import {IS_RESPONSE_ALL} from '../../constants/misc';
-import {CAMPAIGN_KEYS} from './constants';
+import { AdvertiserAPIRequest } from '../../api/advertiser.api';
+import { CampaignAPIRequest } from '../../api/campaign.api';
+import { IS_RESPONSE_ALL } from '../../constants/misc';
+import { CAMPAIGN_KEYS } from './constants';
 
 const DEFAULT_PAGE = 1;
 const TOTAL_ITEMS = 1000;
@@ -48,11 +48,11 @@ export const getAllCampaignTreeData = async () => {
     }
   });
 
-  const {data: advertiserData} = response?.data || {};
+  const { data: advertiserData } = response?.data || {};
   if (advertiserData) {
     let promises = [];
     advertiserData.forEach(item => {
-      const {uuid: advertiserUUID} = item || {};
+      const { uuid: advertiserUUID } = item || {};
       promises.push(
         CampaignAPIRequest.getAllCampaign({
           params: {
@@ -60,7 +60,7 @@ export const getAllCampaignTreeData = async () => {
             page: DEFAULT_PAGE,
             per_page: TOTAL_ITEMS
           },
-          options: {isResponseAll: IS_RESPONSE_ALL}
+          options: { isResponseAll: IS_RESPONSE_ALL }
         })
       );
     });
@@ -68,7 +68,7 @@ export const getAllCampaignTreeData = async () => {
     const promiseAll = await Promise.all(promises);
     let allCampaigns = promiseAll.reduce((a, b) => a.concat(b?.data?.data), []);
     allCampaigns = allCampaigns.map(campaign => {
-      const {name: campaignName, uuid: campaignUUID} = campaign || {};
+      const { name: campaignName, uuid: campaignUUID } = campaign || {};
       return {
         ...campaign,
         title: campaignName,
@@ -76,20 +76,20 @@ export const getAllCampaignTreeData = async () => {
         isCampaign: true,
         children: campaign?.strategies
           ? campaign.strategies.map(s => {
-              const {name: strategyName, uuid: strategyUUID} = s || {};
-              return {
-                ...s,
-                title: strategyName,
-                value: strategyUUID,
-                isStrategy: true
-              };
-            })
+            const { name: strategyName, uuid: strategyUUID } = s || {};
+            return {
+              ...s,
+              title: strategyName,
+              value: strategyUUID,
+              isStrategy: true
+            };
+          })
           : []
       };
     });
 
     advertiserDataMap = advertiserData.map(adv => {
-      const {name: advName, uuid: advUUID} = adv || {};
+      const { name: advName, uuid: advUUID } = adv || {};
       const children = allCampaigns.filter(
         campaign => campaign.advertiser_uuid === advUUID
       );
@@ -104,3 +104,24 @@ export const getAllCampaignTreeData = async () => {
   }
   return advertiserDataMap;
 };
+
+function filterTree(array, uuid) {
+  const getNodes = (result, object) => {
+    if ((!Array.isArray(object.children) || object.children?.length === 0) && object.uuid !== uuid) {
+      result.push(object);
+      return result;
+    }
+    if (Array.isArray(object.children) && object.uuid !== uuid) {
+      const children = object.children.reduce(getNodes, []);
+      result.push({ ...object, children });
+    }
+    return result;
+  };
+  return array.reduce(getNodes, []);
+}
+
+export const updateTreeData = ({ treeData, advertiserId, campaignId = undefined, strategyId = undefined, uuid }) => {
+  let tmpTree = [...treeData];
+  tmpTree = filterTree(tmpTree, uuid);
+  return JSON.parse(JSON.stringify(tmpTree));
+}

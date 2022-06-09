@@ -1,30 +1,37 @@
-import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
+import { ApiError, DialogConfirm, LoadingIndicator } from 'components/common';
 import CustomPagination from 'components/common/CustomPagination';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {RoutePaths} from 'constants/route-paths';
-import {useQueryString} from 'hooks';
+import { List } from 'components/list';
+import { CustomStatus } from 'components/list/status';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
+import { RoutePaths } from 'constants/route-paths';
+import { useQueryString } from 'hooks';
 import moment from 'moment';
-import {useDeleteCampaign, useGetCampaigns} from 'queries/campaign';
+import { useDeleteCampaign, useGetCampaigns } from 'queries/campaign';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { setSelectTreeDataRedux, useCommonSelector } from 'store/reducers/common';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import {ShowToast} from 'utils/helpers/showToast.helpers';
-import {capitalize} from 'utils/helpers/string.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { updateTreeData } from '../utils';
 
-import {CampaignListStyled} from './styled';
+import { CampaignListStyled } from './styled';
 
 const DeleteTitle = 'Are you sure delete this Campaign';
 
 const propTypes = {};
 
 const CampaignList = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+
+  const dispatch = useDispatch();
+  const { selectTreeData } = useCommonSelector();
+
   const navigate = useNavigate();
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id') || '';
@@ -40,7 +47,7 @@ const CampaignList = () => {
     params.advertiser_uuid = advertiserId;
   }
 
-  const {data, isLoading, isPreviousData} = useGetCampaigns({
+  const { data, isLoading, isPreviousData } = useGetCampaigns({
     params,
     enabled: true,
     keepPreviousData: true
@@ -48,12 +55,12 @@ const CampaignList = () => {
 
   const campaigns = React.useMemo(() => {
     const dataDestructured = getResponseData(data, IS_RESPONSE_ALL);
-    return dataDestructured?.map(item => ({...item, id: item?.uuid}));
+    return dataDestructured?.map(item => ({ ...item, id: item?.uuid }));
   }, [data]);
   const paginationInfo = React.useMemo(() => {
     return getResponsePagination(data);
   }, [data]);
-  const {mutateAsync: deleteCampaign} = useDeleteCampaign();
+  const { mutateAsync: deleteCampaign } = useDeleteCampaign();
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [currentCampaign, setCurrentCampaign] = React.useState(null);
@@ -142,7 +149,13 @@ const CampaignList = () => {
     //---> Delete campaign
     setIsDeleting(true);
     try {
-      await deleteCampaign({cid: currentCampaign?.uuid});
+      const { data } = await deleteCampaign({ cid: currentCampaign?.uuid });
+      if (data?.uuid) {
+        dispatch(setSelectTreeDataRedux(updateTreeData({
+          treeData: selectTreeData,
+          uuid: data?.uuid
+        })));
+      }
       ShowToast.success('Deleted campaign successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err || 'Fail to delete Campaign'} />);
