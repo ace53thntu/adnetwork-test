@@ -114,6 +114,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
           name: t(ViewTabs.CAPPING.name),
           content: (
             <Capping
+              currentStrategy={currentStrategy}
               referenceUuid={currentStrategy?.uuid}
               referenceType={CappingReferenceTypes.STRATEGY}
             />

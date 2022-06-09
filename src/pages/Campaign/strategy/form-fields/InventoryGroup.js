@@ -12,14 +12,12 @@ import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
 import {useStrategyInventorySelector} from 'store/reducers/campaign';
 import {useTranslation} from 'react-i18next';
 
-const propTypes = {
-  isView: PropTypes.bool
-};
+const propTypes = {};
 
-const InventoryGroup = ({isView = false}) => {
+const InventoryGroup = () => {
   const {t} = useTranslation();
   const strategyInventories = useStrategyInventorySelector();
-
+  const hasStrategyInventories = strategyInventories?.length > 0;
   const [openModal, setOpenModal] = React.useState(false);
 
   function onToggleModal() {
@@ -27,7 +25,11 @@ const InventoryGroup = ({isView = false}) => {
   }
 
   return (
-    <Collapse initialOpen title={t('inventories')} unMount={false}>
+    <Collapse
+      initialOpen={hasStrategyInventories}
+      title={t('inventories')}
+      unMount={false}
+    >
       <Col sm={12}>
         {strategyInventories?.length === 0 && (
           <FormText>
@@ -36,17 +38,13 @@ const InventoryGroup = ({isView = false}) => {
           </FormText>
         )}
 
-        {!isView && (
-          <div>
-            <Button type="button" onClick={onToggleModal} color="primary">
-              Add Inventory
-            </Button>
-          </div>
-        )}
-        <StrategyInventory
-          strategyInventories={strategyInventories}
-          isView={isView}
-        />
+        <div>
+          <Button type="button" onClick={onToggleModal} color="primary">
+            Add Inventory
+          </Button>
+        </div>
+
+        <StrategyInventory strategyInventories={strategyInventories} />
       </Col>
       <InventoryModal openModal={openModal} onToggleModal={onToggleModal} />
     </Collapse>

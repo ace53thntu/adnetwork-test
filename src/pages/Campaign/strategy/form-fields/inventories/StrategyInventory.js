@@ -138,7 +138,6 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
         <ErrorMessage message={errors?.inventories_bid?.message} />
       )}
       <List
-        showAction={!isView}
         data={strategyInventories}
         columns={columns}
         actions={['Delete']}

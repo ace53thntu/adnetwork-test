@@ -214,7 +214,7 @@ const BudgetList = ({
   }, [isManager]);
 
   return (
-    <Collapse title={title} initialOpen unMount={false}>
+    <Collapse title={title} unMount={false}>
       {isArray(list) && list.length > 0 ? (
         <List
           data={destructuredList || []}

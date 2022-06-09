@@ -14,14 +14,12 @@ export function useGetCappings({
   enabled = false,
   keepPreviousData = false
 }) {
-  const {cancelToken} = useCancelRequest();
-
   return useQuery(
     [GET_CAPPINGS, params],
     () =>
       CappingAPIRequest.getAllCapping({
         params,
-        options: {cancelToken, isResponseAll: IS_RESPONSE_ALL}
+        options: {isResponseAll: IS_RESPONSE_ALL}
       }).then(res => res),
     {
       suspense: false,

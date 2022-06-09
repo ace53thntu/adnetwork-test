@@ -4,16 +4,19 @@ import PropTypes from 'prop-types';
 
 import ConceptItem from './ConceptItem';
 import {ListGroup} from 'reactstrap';
+import {Button} from 'antd';
 
 const propTypes = {
   concepts: PropTypes.array,
-  isView: PropTypes.bool
+  isView: PropTypes.bool,
+  onEdit: PropTypes.func
 };
 
 const ConceptList = ({
   concepts = [],
-  isView = false,
-  conceptsSelected = []
+  isEdit = false,
+  conceptsSelected = [],
+  onEdit
 }) => {
   return (
     <ListGroup className="mb-3">
@@ -23,7 +26,7 @@ const ConceptList = ({
             key={`pr-${conceptItem?.uuid}`}
             conceptItem={conceptItem}
             conceptIdx={conceptIdx}
-            isView={isView}
+            isEdit={isEdit}
             defaultValue={
               conceptsSelected?.find(
                 conceptSelected => conceptSelected?.uuid === conceptItem?.uuid
@@ -32,6 +35,9 @@ const ConceptList = ({
           />
         );
       })}
+      <Button type="primary" onClick={() => onEdit(!isEdit)}>
+        {!isEdit ? 'Edit' : 'View'}
+      </Button>
     </ListGroup>
   );
 };

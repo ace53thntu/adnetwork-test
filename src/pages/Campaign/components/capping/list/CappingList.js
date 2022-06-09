@@ -25,12 +25,25 @@ import BudgetList from './BudgetList';
 import DomainList from './DomainList';
 import KeywordList from './KeywordList';
 import ScheduleList from './ScheduleList';
+import GeneralFilter from '../../../strategy/form-fields/GeneralFilter';
+import VideoFilterGroup from '../../../strategy/form-fields/VideoFilterGroup';
+import ContextFilterGroup from '../../../strategy/form-fields/ContextFilterGroup';
+import {
+  hasContextFilterInput,
+  hasGeneralFilterInput,
+  hasVideoFilterInput
+} from '../../../utils';
 
 const propTypes = {
-  referenceUuid: PropTypes.string.isRequired
+  referenceUuid: PropTypes.string.isRequired,
+  currentStrategy: PropTypes.any
 };
 
-const CappingList = ({referenceUuid = '', referenceType = ''}) => {
+const CappingList = ({
+  referenceUuid = '',
+  referenceType = '',
+  currentStrategy
+}) => {
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -38,6 +51,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   const [activeCapping, setActiveCapping] = React.useState(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [cappingList, setCappingList] = React.useState([]);
 
   const {data, isLoading} = useGetCappings({
     params: {
@@ -50,18 +64,24 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
   });
 
   const cappings = React.useMemo(() => {
-    const cappingData = getResponseData(data, IS_RESPONSE_ALL);
+    let cappingData = getResponseData(data, IS_RESPONSE_ALL);
+    cappingData = cappingData?.map(item => ({...item, id: item?.uuid}));
 
-    return cappingData?.map(item => ({...item, id: item?.uuid}));
+    if (hasGeneralFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.GENERAL.value});
+    }
+
+    if (hasVideoFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.VIDEO.value});
+    }
+
+    if (hasContextFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.CONTEXT.value});
+    }
+
+    setCappingList(cappingData);
+    return cappingData;
   }, [data]);
-
-  const budgetList = React.useMemo(() => {
-    return getListByType({cappings, type: CappingTypes.BUDGET.value});
-  }, [cappings]);
-
-  const impressionList = React.useMemo(() => {
-    return getListByType({cappings, type: CappingTypes.IMPRESSION.value});
-  }, [cappings]);
 
   const userList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.USER.value});
@@ -99,7 +119,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     return getListByType({cappings, type: CappingTypes.SCHEDULE.value});
   }, [cappings]);
 
-  const existedTypes = getExistedType(cappings);
+  let existedTypes = getExistedType(cappingList);
 
   function toggleModal() {
     setOpenForm(prevState => !prevState);
@@ -172,29 +192,38 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           referenceType={referenceType}
           referenceUuid={referenceUuid}
           cappings={cappings}
+          onAddTypeCapping={setCappingList}
         />
       </div>
       {isLoading && <LoadingIndicator />}
 
+      {currentStrategy &&
+        cappingList.map(item => {
+          const {type} = item || {};
+          switch (type) {
+            case CappingTypes.GENERAL.value: {
+              return <GeneralFilter currentStrategy={currentStrategy} />;
+            }
+
+            case CappingTypes.VIDEO.value: {
+              {
+                /* Video filter */
+              }
+              return <VideoFilterGroup currentStrategy={currentStrategy} />;
+            }
+
+            case CappingTypes.CONTEXT.value: {
+              /* Context filter */
+              return <ContextFilterGroup currentStrategy={currentStrategy} />;
+            }
+
+            default: {
+              return;
+            }
+          }
+        })}
+
       {/* Capping List */}
-
-      {budgetList?.length > 0 && (
-        <BudgetList
-          list={budgetList}
-          onClickMenu={onClickMenu}
-          onClickItem={onClickItem}
-        />
-      )}
-
-      {impressionList?.length > 0 && (
-        <BudgetList
-          title="Impression"
-          list={impressionList}
-          onClickMenu={onClickMenu}
-          onClickItem={onClickItem}
-        />
-      )}
-
       {userList?.length > 0 && (
         <BudgetList
           title="User"

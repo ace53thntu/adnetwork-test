@@ -21,7 +21,8 @@ import ScheduleCreateModal from '../modal/ScheduleCreateModal';
 const propTypes = {
   existedTypes: PropTypes.array,
   referenceType: PropTypes.string,
-  referenceUuid: PropTypes.string
+  referenceUuid: PropTypes.string,
+  onAddTypeCapping: PropTypes.func
 };
 
 /**
@@ -33,7 +34,8 @@ const AddTypeButton = ({
   existedTypes = [],
   referenceType = 'campaign',
   referenceUuid = '',
-  cappings = []
+  cappings = [],
+  onAddTypeCapping
 }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
@@ -44,6 +46,16 @@ const AddTypeButton = ({
 
   function openCappingCreate(evt, item) {
     evt.preventDefault();
+    const {type} = item || {};
+    if (
+      type === CappingTypes.GENERAL.value ||
+      type == CappingTypes.VIDEO.value ||
+      type === CappingTypes.CONTEXT.value
+    ) {
+      onAddTypeCapping([...existedTypes, item]);
+      return;
+    }
+
     setOpenModal(true);
     setActiveType(item);
   }
@@ -52,7 +64,7 @@ const AddTypeButton = ({
     <>
       <UncontrolledButtonDropdown direction="down">
         <DropdownToggle caret color="primary">
-          Add capping
+          Add filter & capping
         </DropdownToggle>
         <DropdownMenu>
           {CappingTypeButtons?.map((item, idx) => {

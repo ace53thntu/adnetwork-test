@@ -36,7 +36,7 @@ function Collapse(props) {
               <Col sm={12}>
                 {React.Children.map(children, child => {
                   return React.cloneElement(child, {
-                    toggleCollapse: handleCollapse
+                    // toggleCollapse: handleCollapse
                   });
                 })}
               </Col>
@@ -47,7 +47,7 @@ function Collapse(props) {
             <Col sm={12}>
               {React.Children.map(children, child => {
                 return React.cloneElement(child, {
-                  toggleCollapse: handleCollapse
+                  // toggleCollapse: handleCollapse
                 });
               })}
             </Col>

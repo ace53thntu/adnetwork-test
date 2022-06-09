@@ -201,15 +201,10 @@ export const formToApi = ({
   formData,
   currentStrategy,
   originalStrategy,
-  isConcept = false,
   isSummary = false,
+  isCapping = false,
   isEdit = false
 }) => {
-  if (isConcept) {
-    return {
-      concept_uuids: formData?.concept_uuids?.filter(item => item) || []
-    };
-  }
   const {
     campaign_uuid: campaign,
     name,
@@ -233,10 +228,11 @@ export const formToApi = ({
     domain_groups_black,
     keywords_list_white,
     keywords_list_black,
-    pricing_model
+    pricing_model,
+    concept_uuids
   } = formData;
 
-  const positionIds = position_uuids?.map(item => item?.value);
+  const positionIds = position_uuids?.map(item => item?.value) || [];
   let startDate = moment(start_time).isSame(moment(), 'day')
     ? null
     : moment(start_time).toISOString();
@@ -277,7 +273,8 @@ export const formToApi = ({
     priority: priority?.value || '',
     video_filter: videoFilter,
     context_filter: contextFilter,
-    pricing_model: pricing_model?.value?.toUpperCase() || ''
+    pricing_model: pricing_model?.value?.toUpperCase() || '',
+    concept_uuids: concept_uuids?.filter(item => item) || []
   };
 
   if (
@@ -362,6 +359,25 @@ export const formToApi = ({
     strategyReturn.location_uuids = location_uuids?.map(item => item.value);
   } else {
     strategyReturn.location_uuids = [];
+  }
+
+  // filter & capping
+  if (isCapping) {
+    return {
+      campaign_uuid: currentStrategy?.campaign_uuid?.value,
+      cpm_max:
+        currentStrategy?.strategy_type?.value === StrategyTypes.NORMAL
+          ? convertGuiToApi({value: cpm_max})
+          : 0,
+      sources: strategyReturn.sources,
+      category,
+      video_filter: strategyReturn.video_filter,
+      context_filter: strategyReturn.context_filter,
+      position_uuids: positionIds,
+      location_uuids: location_uuids?.length
+        ? location_uuids?.map(item => item.value)
+        : []
+    };
   }
 
   return strategyReturn;
