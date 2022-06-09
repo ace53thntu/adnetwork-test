@@ -52,6 +52,7 @@ const defaultValues = {
 
 function VideoForm(props) {
   const {video: rawData, isCreate} = props;
+
   const {t} = useTranslation();
   const {conceptId} = useParams();
   const dispatch = useDispatch();

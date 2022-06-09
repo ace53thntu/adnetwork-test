@@ -27,7 +27,9 @@ export const useCheckLinearity = (watch, setValue) => {
     thirdParties = THIRD_PARTY_TAG_TYPES;
   }
 
-  setValue('third_party_tag_type', defaultThirdPartyTagType);
+  React.useEffect(() => {
+    setValue('third_party_tag_type', defaultThirdPartyTagType);
+  }, [defaultThirdPartyTagType, setValue]);
 
   return {
     thirdParties,
@@ -38,7 +40,7 @@ export const useCheckLinearity = (watch, setValue) => {
 export const useCheckVideoType = watch => {
   const watchType = watch('type');
 
-  if (watchType.value === VideoServeTypes[0].value) {
+  if (watchType?.value === VideoServeTypes[0].value) {
     return false;
   } else {
     return true;
@@ -54,7 +56,6 @@ export const useCheckLinearityForUploadFile = (watch, setValue, reset) => {
 
   React.useEffect(() => {
     if (prevCount && prevCount?.value !== watchLinearity?.value) {
-      console.log('diff');
       setValue('files', []);
     }
   }, [prevCount, watchLinearity, setValue]);
