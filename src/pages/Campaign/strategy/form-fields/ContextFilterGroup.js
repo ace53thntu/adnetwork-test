@@ -3,15 +3,15 @@ import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
-import {useTranslation} from 'react-i18next';
-import {Col, Row} from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { Col, Row } from 'reactstrap';
 
 //---> Internal Modules
-import {FormReactSelect} from 'components/forms';
-import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
-import {getListCarriers} from 'utils/helpers/getListCarriers';
-import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
-import {Collapse} from 'components/common';
+import { FormReactSelect } from 'components/forms';
+import { getBrowserLanguages } from 'utils/helpers/getBrowserLanguages';
+import { getListCarriers } from 'utils/helpers/getListCarriers';
+import { getListMobilePhoneBrands } from 'utils/helpers/getListMobilePhoneBrands';
+import { Collapse } from 'components/common';
 import {
   BandwidthOptions,
   BrowsersOptions,
@@ -25,13 +25,13 @@ const propTypes = {
   currentStrategy: PropTypes.any
 };
 
-const ContextFilterGroup = ({isView = false, currentStrategy}) => {
-  const {t} = useTranslation();
+const ContextFilterGroup = ({ isView = false, currentStrategy }) => {
+  const { t } = useTranslation();
 
   return (
     <Collapse initialOpen title={t('COMMON.CONTEXT_FILTER')} unMount={false}>
       <Row>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.browser}
@@ -42,7 +42,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.operating_system}
@@ -53,7 +53,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             disabled={isView}
             defaultValue={currentStrategy?.context_filter?.bandwidth}
@@ -64,7 +64,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             disabled={true}
             defaultValue={currentStrategy?.context_filter?.mobile_carrier}
@@ -75,7 +75,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             defaultValue={currentStrategy?.context_filter?.browser_language}
             options={getBrowserLanguages()}
@@ -86,7 +86,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             defaultValue={currentStrategy?.context_filter?.device_manufacturer}
             options={getListMobilePhoneBrands()}
@@ -97,7 +97,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             defaultValue={currentStrategy?.context_filter?.device_type}
             options={DeviceTypeOptions}
@@ -108,7 +108,7 @@ const ContextFilterGroup = ({isView = false, currentStrategy}) => {
             multiple
           />
         </Col>
-        <Col md="6">
+        <Col md="4">
           <FormReactSelect
             defaultValue={currentStrategy?.context_filter?.platform}
             options={PlatformOptions}

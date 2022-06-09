@@ -3,13 +3,8 @@ import * as Yup from 'yup';
 
 const VALID_NUMBER = /^\d*\.?\d*$/;
 
-export const strategySchema = (
-  isUpdate = false,
-  t,
-  isConcept = false,
-  videoFilter
-) => {
-  if (isConcept) {
+export const strategySchema = (isUpdate = false, t, isCapping = false) => {
+  if (isCapping) {
     return yupResolver(
       Yup.object().shape({
         concept_uuids: Yup.array().nullable().notRequired()
@@ -33,7 +28,7 @@ export const strategySchema = (
 
         return true;
       }
-    }),
+    })
   };
 
   const basicSchema = {
