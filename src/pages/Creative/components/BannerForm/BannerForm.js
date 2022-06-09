@@ -23,8 +23,7 @@ import {useCommonSelector} from 'store/reducers/common';
 import {
   dirtyForm,
   toggleCreateCreativeDialog,
-  toggleCreativeDetailDialog,
-  useCreativeSelector
+  toggleCreativeDetailDialog
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -78,7 +77,6 @@ const defaultFormValues = {
 
 function BannerForm(props) {
   const {isCreate, creative} = props;
-  const {selectedAdvertiserId} = useCreativeSelector();
   const {isUploading} = useCommonSelector();
 
   const client = useQueryClient();
@@ -455,8 +453,9 @@ function BannerForm(props) {
         <Report
           entity={EntityTypes.CREATIVE}
           entityId={creative?.uuid}
-          ownerId={selectedAdvertiserId}
           ownerRole={USER_ROLE.ADVERTISER}
+          entityName={creative?.name}
+          groupObjectId={creative?.advertiser_uuid}
         />
       )}
 
