@@ -8,7 +8,7 @@ function TrackerList(props) {
   const {referenceId, referenceType, handleAddTracker} = props;
 
   const {data, isFetching} = useGetTrackers({
-    enabled: true,
+    enabled: !!referenceId,
     params: {
       reference_type: referenceType,
       reference_uuid: referenceId
