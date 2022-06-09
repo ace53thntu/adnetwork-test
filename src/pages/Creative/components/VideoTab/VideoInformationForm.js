@@ -9,7 +9,7 @@ import {
   PLATFORM_OPTIONS
 } from '../BannerForm/constants';
 import {VideoServeTypes, VideoTypes} from './constants';
-import {useCheckLinearity} from './hooks';
+import {useCheckLinearity, useCheckVideoType} from './hooks';
 
 function VideoInformationForm(props) {
   const {defaultValues, watch, setValue} = props;
@@ -18,6 +18,8 @@ function VideoInformationForm(props) {
     watch,
     setValue
   );
+
+  const isThirdPartyType = useCheckVideoType(watch);
 
   return (
     <Row>
@@ -115,25 +117,32 @@ function VideoInformationForm(props) {
           />
         </FormGroup>
       </Col>
-      <Col md={12}>
-        <FormReactSelect
-          options={thirdParties}
-          placeholder=""
-          name="third_party_tag_type"
-          label="Third party tag type"
-          defaultValue={defaultThirdPartyTagType}
-        />
-      </Col>
-      <Col md="12">
-        <FormTextInput
-          type="textarea"
-          placeholder=""
-          name="third_party_tag"
-          label="Third party tag"
-          rows={4}
-          defaultValue={defaultValues.third_party_tag}
-        />
-      </Col>
+
+      {isThirdPartyType && (
+        <>
+          <Col md={12}>
+            <FormReactSelect
+              required
+              options={thirdParties}
+              placeholder=""
+              name="third_party_tag_type"
+              label="Third party tag type"
+              defaultValue={defaultThirdPartyTagType}
+            />
+          </Col>
+          <Col md="12">
+            <FormTextInput
+              isRequired
+              type="textarea"
+              placeholder=""
+              name="third_party_tag"
+              label="Third party tag"
+              rows={4}
+              defaultValue={defaultValues.third_party_tag}
+            />
+          </Col>
+        </>
+      )}
     </Row>
   );
 }

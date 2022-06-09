@@ -1,18 +1,19 @@
 import './index.scss';
 
-import {TreeSelect} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import { TreeSelect } from 'antd';
+import React, { useEffect, useState } from 'react';
+// import {useDispatch} from 'react-redux';
 
-import {setSelectTreeDataRedux} from '../../store/reducers/common';
+// import {setSelectTreeDataRedux} from '../../store/reducers/common';
 
 const AiActivTreeSelect = React.memo(
-  ({selectedItem, treeData, onSelectedItem, ...rest}) => {
-    const dispatch = useDispatch();
+  ({ selectedItem, treeData, onSelectedItem, ...rest }) => {
+    // const dispatch = useDispatch();
     const [treeDataFiltered, setTreeDataFiltered] = useState(treeData);
     useEffect(() => {
-      setTreeDataFiltered(treeData);
-      dispatch(setSelectTreeDataRedux(treeData));
+      if (treeData) {
+        setTreeDataFiltered(treeData);
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [treeData]);
 
@@ -28,7 +29,7 @@ const AiActivTreeSelect = React.memo(
           index > -1 ? (
             <span>
               {beforeStr}
-              <span style={{color: '#545cd8', fontWeight: 'bold'}}>
+              <span style={{ color: '#545cd8', fontWeight: 'bold' }}>
                 {matchedItemValue}
               </span>
               {afterStr}
@@ -74,7 +75,7 @@ const AiActivTreeSelect = React.memo(
         placeholder="Please select..."
         onSelect={onSelectedItem}
         filterTreeNode={(inputValue, treeNode) => {
-          const {tempTitle} = treeNode;
+          const { tempTitle } = treeNode;
           return (
             tempTitle &&
             tempTitle.toLowerCase().includes(inputValue.toLowerCase())

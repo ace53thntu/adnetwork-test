@@ -31,7 +31,6 @@ const ReportForm = ({
   entityId = null,
   entityType = '',
   metricType = '',
-  ownerId,
   ownerRole
 }) => {
   const dispatch = useDispatch();
@@ -143,7 +142,6 @@ const ReportForm = ({
           metricType={metricType}
           entityType={entityType}
           entityId={entityId}
-          ownerId={ownerId}
           ownerRole={ownerRole}
           unit={DEFAULT_TIME_UNIT}
         />

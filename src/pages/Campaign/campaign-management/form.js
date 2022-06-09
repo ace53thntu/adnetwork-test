@@ -1,35 +1,35 @@
-import {ApiError} from 'components/common';
+import { ApiError } from 'components/common';
 import Historical from 'components/historical';
-import {LogTypes} from 'constants/misc';
-import {RoutePaths} from 'constants/route-paths';
-import {formToApi} from 'entities/Campaign';
+import { LogTypes } from 'constants/misc';
+import { RoutePaths } from 'constants/route-paths';
+import { formToApi } from 'entities/Campaign';
 import PropTypes from 'prop-types';
-import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
-import {GET_CAMPAIGN} from 'queries/campaign/constants';
+import { useCreateCampaign, useEditCampaign } from 'queries/campaign';
+import { GET_CAMPAIGN } from 'queries/campaign/constants';
 //---> Build-in Modules
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 //---> External Modules
-import {FormProvider, useForm, useWatch} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {useQueryClient} from 'react-query';
-import {useDispatch} from 'react-redux';
-import {useParams} from 'react-router';
-import {useNavigate} from 'react-router-dom';
-import {Link} from 'react-router-dom';
-import {Button, Container, Form} from 'reactstrap';
-import {updateCampaignRedux} from 'store/reducers/campaign';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Button, Container, Form } from 'reactstrap';
+import { updateCampaignRedux } from 'store/reducers/campaign';
 //---> Internal Modules
-import {ShowToast} from 'utils/helpers/showToast.helpers';
+import { ShowToast } from 'utils/helpers/showToast.helpers';
 
 import StatisticMetrics from '../components/StatisticMetrics';
-import {EnumTypeStatistics} from '../components/StatisticMetrics/StatisticMetrics';
-import {useRefreshAdvertiserTree} from '../hooks/useRefreshAdvertiserTree';
+import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
+import { useRefreshAdvertiserTree } from '../hooks/useRefreshAdvertiserTree';
 import BudgetGroup from './form-fields/BudgetGroup';
 import DomainGroup from './form-fields/DomainGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 import InformationGroup from './form-fields/InformationGroup';
 import KeywordGroup from './form-fields/KeywordGroup';
-import {validationCampaign} from './validation';
+import { validationCampaign } from './validation';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -47,23 +47,23 @@ const CampaignForm = ({
   currentCampaign = null
 }) => {
   const client = useQueryClient();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {refresh} = useRefreshAdvertiserTree();
+  const { refresh } = useRefreshAdvertiserTree();
 
-  const {mutateAsync: createCampaign} = useCreateCampaign();
-  const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
+  const { mutateAsync: createCampaign } = useCreateCampaign();
+  const { mutateAsync: updateCampaign } = useEditCampaign(currentCampaign?.uuid);
 
-  const {campaignId} = useParams();
+  const { campaignId } = useParams();
 
   const methods = useForm({
     defaultValues: currentCampaign,
     resolver: validationCampaign(t, isEdit)
   });
 
-  const {handleSubmit, control} = methods;
-  const startDate = useWatch({name: 'start_time', control});
+  const { handleSubmit, control } = methods;
+  const startDate = useWatch({ name: 'start_time', control });
   const [openModal, setOpenModal] = React.useState(false);
   console.log(
     '🚀 ~ file: ViewTabs.js ~ line 37 ~ CampaignViewTabs ~ openModal',
@@ -79,7 +79,7 @@ const CampaignForm = ({
 
       if (isEdit) {
         try {
-          const {data} = await updateCampaign({
+          const { data } = await updateCampaign({
             campId: campaignId,
             data: requestBody
           });
@@ -94,7 +94,7 @@ const CampaignForm = ({
         }
       } else {
         try {
-          const {data} = await createCampaign(requestBody);
+          const { data } = await createCampaign(requestBody);
 
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
@@ -123,22 +123,24 @@ const CampaignForm = ({
 
   return (
     <div>
-      {/* {isView && (
+      {isView && (
         <div className="d-flex justify-content-end mb-2">
           <Button color="primary" type="button" onClick={toggleModal}>
             Logs
           </Button>
         </div>
-      )} */}
+      )}
 
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <Container fluid>
             {/* Campaign Statistic Metric */}
-            <StatisticMetrics
-              id={campaignId}
-              reportType={EnumTypeStatistics.Campaign}
-            />
+            {
+              isView && <StatisticMetrics
+                id={campaignId}
+                reportType={EnumTypeStatistics.Campaign}
+              />
+            }
 
             {/* Information */}
             <InformationGroup
