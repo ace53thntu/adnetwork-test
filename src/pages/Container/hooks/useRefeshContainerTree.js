@@ -1,14 +1,16 @@
-import {ContainerAPIRequest} from 'api/container.api';
-import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
-import {useDispatch} from 'react-redux';
-import {setContainersRedux} from 'store/reducers/container';
+import { ContainerAPIRequest } from 'api/container.api';
+import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
+import { useDispatch } from 'react-redux';
+import { setSelectTreeDataRedux } from 'store/reducers/common';
+import { setContainersRedux } from 'store/reducers/container';
 import {
   getResponseData,
   getResponsePagination,
   isValidResponse
 } from 'utils/helpers/misc.helpers';
 
-import {containersMapData} from '../components/Tree/dto';
+import { containersMapData } from '../components/Tree/dto';
+import { getAllContainerTreeData } from '../utils';
 
 export function useRefreshContainerTree() {
   const dispatch = useDispatch();
@@ -32,7 +34,14 @@ export function useRefreshContainerTree() {
     }
   }
 
+  async function refreshTree() {
+    const treeData = await getAllContainerTreeData();
+
+    dispatch(setSelectTreeDataRedux(treeData));
+  }
+
   return {
-    refresh
+    refresh,
+    refreshTree
   };
 }
