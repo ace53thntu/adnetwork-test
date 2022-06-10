@@ -28,7 +28,7 @@ const propTypes = {
   isView: PropTypes.bool,
   currentStrategy: PropTypes.any,
   isSummary: PropTypes.bool,
-  isConcept: PropTypes.bool
+  isCapping: PropTypes.bool
 };
 
 const FormContainer = ({
@@ -38,8 +38,8 @@ const FormContainer = ({
   currentStrategy = null,
   isSummary = false,
   children,
-  isConcept = false,
-  originalStrategy
+  originalStrategy,
+  isCapping = false
 }) => {
   const client = useQueryClient();
   const {t} = useTranslation();
@@ -54,12 +54,7 @@ const FormContainer = ({
     defaultValues: {
       ...currentStrategy
     },
-    resolver: strategySchema(
-      isEdit,
-      t,
-      isConcept,
-      currentStrategy?.video_filter
-    )
+    resolver: strategySchema(isEdit, t, isCapping)
   });
 
   const {
@@ -68,6 +63,7 @@ const FormContainer = ({
     formState: {isDirty},
     watch
   } = methods;
+
   const strategyType = watch('strategy_type');
   const refStrategyType = React.useRef(null);
 
@@ -89,10 +85,10 @@ const FormContainer = ({
       _strategyId,
       _campaignId,
       _advertiserId,
-      _isConcept = false,
+      _isCapping,
       _isSummary = false
     }) => {
-      if (_isConcept) {
+      if (_isCapping) {
         navigate(
           `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=summary&advertiser_id=${_advertiserId}`
         );
@@ -101,13 +97,13 @@ const FormContainer = ({
 
       if (_isSummary) {
         navigate(
-          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}?next_tab=description&advertiser_id=${_advertiserId}`
+          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=description&advertiser_id=${_advertiserId}`
         );
         return;
       }
 
       navigate(
-        `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/edit?next_tab=concept&advertiser_id=${_advertiserId}`
+        `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=capping&advertiser_id=${_advertiserId}`
       );
     },
     [navigate]
@@ -118,10 +114,10 @@ const FormContainer = ({
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
       const req = formToApi({
         formData,
-        isConcept,
         isSummary,
         currentStrategy,
         isEdit,
+        isCapping,
         originalStrategy
       });
       console.log('======== FORM DATA', req);
@@ -132,27 +128,8 @@ const FormContainer = ({
             _strategyId: currentStrategy?.uuid,
             _campaignId: currentStrategy?.campaign_uuid?.value,
             _advertiserId: currentStrategy?.advertiser_uuid,
-            _isConcept: isConcept,
-            _isSummary: isSummary
-          });
-          return;
-        }
-
-        //---> Check concepts is changed
-        const conceptUuids = formData.concept_uuids?.filter(cont => cont) || [];
-        if (
-          isConcept &&
-          !isConceptsChanged({
-            newConcepts: conceptUuids,
-            oldConcepts: currentStrategy.concept_uuids
-          })
-        ) {
-          redirectPageAfterSave({
-            _strategyId: currentStrategy?.uuid,
-            _campaignId: currentStrategy?.campaign_uuid?.value,
-            _advertiserId: currentStrategy?.advertiser_uuid,
-            _isConcept: isConcept,
-            _isSummary: isSummary
+            _isSummary: isSummary,
+            _isCapping: isCapping
           });
           return;
         }
@@ -175,7 +152,7 @@ const FormContainer = ({
             _strategyId: currentStrategy?.uuid,
             _campaignId: currentStrategy?.campaign_uuid?.value,
             _advertiserId: currentStrategy?.advertiser_uuid,
-            _isConcept: isConcept,
+            _isCapping: isCapping,
             _isSummary: isSummary
           });
         } catch (error) {
@@ -203,7 +180,7 @@ const FormContainer = ({
       currentStrategy,
       dispatch,
       editStrategy,
-      isConcept,
+      isCapping,
       isDirty,
       isEdit,
       isSummary,

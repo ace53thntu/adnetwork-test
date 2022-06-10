@@ -9,24 +9,25 @@ import KeywordGroup from '../campaign-management/form-fields/KeywordGroup';
 import StatisticMetrics from '../components/StatisticMetrics';
 import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
 import BudgetGroup from './form-fields/BudgetGroup';
-import ContextFilterGroup from './form-fields/ContextFilterGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 //---> Internal Modules
 import InformationGroup from './form-fields/InformationGroup';
 import InventoryGroup from './form-fields/InventoryGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
-import VideoFilterGroup from './form-fields/VideoFilterGroup';
+import BudgetAndImpression from '../components/BudgetAndImpression';
 
 const propTypes = {
   isEdit: PropTypes.bool,
   isView: PropTypes.bool,
-  currentStrategy: PropTypes.any
+  currentStrategy: PropTypes.any,
+  isDescriptionTab: PropTypes.bool
 };
 
 const StrategyForm = ({
   isEdit = false,
   isView = false,
-  currentStrategy = null
+  currentStrategy = null,
+  isDescriptionTab = false
 }) => {
   const role = getRole();
   const isCreate = React.useMemo(() => !isEdit && !isView, [isEdit, isView]);
@@ -34,9 +35,9 @@ const StrategyForm = ({
   return (
     <>
       {/* Strategy Statistic Metric */}
-      {currentStrategy?.id && isView && (
+      {currentStrategy?.id && isDescriptionTab && isView && (
         <StatisticMetrics
-          id={currentStrategy.id}
+          id={currentStrategy?.id}
           reportType={EnumTypeStatistics.Strategy}
         />
       )}
@@ -49,6 +50,8 @@ const StrategyForm = ({
         role={role}
       />
 
+      <BudgetAndImpression referenceUuid={currentStrategy?.uuid} />
+
       {isCreate && <BudgetGroup />}
       {isCreate && <ImpressionGroup />}
       {/* Domain */}
@@ -57,13 +60,6 @@ const StrategyForm = ({
       {/* Keyword */}
       {isCreate && <KeywordGroup />}
       {isCreate && <ScheduleGroup />}
-
-      {/* eslint-disable-next-line no-undef */}
-      {/* Video filter */}
-      <VideoFilterGroup isView={isView} currentStrategy={currentStrategy} />
-
-      {/* Context filter */}
-      <ContextFilterGroup isView={isView} currentStrategy={currentStrategy} />
 
       {/* Inventory Group */}
       <InventoryGroup isView={isView} />

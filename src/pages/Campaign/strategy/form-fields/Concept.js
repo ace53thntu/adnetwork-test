@@ -13,7 +13,6 @@ import {LoadingIndicator} from 'components/common';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const Concept = ({
-  goTo,
   strategyData,
   isSummary = false,
   isView = false,

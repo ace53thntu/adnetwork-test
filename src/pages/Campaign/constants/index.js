@@ -1,8 +1,8 @@
-export const getSkippableOptions = (key) => ([
-  {value: "", label: 'Off', id: `${key}-unset`},
+export const getSkippableOptions = key => [
+  {value: '', label: 'Off', id: `${key}-unset`},
   {value: true, label: 'True', id: `${key}-true`},
   {value: false, label: 'False', id: `${key}-false`}
-]);
+];
 
 /**
  * @enum
@@ -335,9 +335,9 @@ export const StrategyEditTabs = {
     value: 0,
     name: 'description'
   },
-  CONCEPT: {
+  FILTER_CAPPING: {
     value: 1,
-    name: 'concept'
+    name: 'capping'
   },
   // AUDIENCE: {
   //   value: 2,
@@ -346,6 +346,10 @@ export const StrategyEditTabs = {
   SUMMARY: {
     value: 2,
     name: 'summary'
+  },
+  REPORT: {
+    value: 3,
+    name: 'report'
   }
 };
 

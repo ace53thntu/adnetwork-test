@@ -142,8 +142,8 @@ export const CappingTypes = {
 
 export const CappingTypeButtons = [
   {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
-  {type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
-  {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},
+  /*{type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
+  {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},*/
   {type: 'USR', sub_type: '', label: 'User', api_key: 'user'},
   {type: 'DM', sub_type: '', label: 'Domain'},
   {type: 'KW', sub_type: '', label: 'Keyword'},
