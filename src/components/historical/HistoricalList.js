@@ -9,9 +9,10 @@ import moment from 'moment';
 import {Avatar, Chip} from '@material-ui/core';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import {Badge} from 'reactstrap';
-import {useDestructureLogList} from './hook';
+import {useDestructureCappingLogList, useDestructureLogList} from './hook';
 import HistoricalDetail from './HistoricalDetail';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import {sortLogs} from './utils';
 
 const getColorByEntityType = entityType => {
   switch (entityType) {
@@ -51,13 +52,33 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function HistoricalList({logList = [], entityName, entityType}) {
+export default function HistoricalList({
+  logList = [],
+  cappingLogs = [],
+  entityName,
+  entityType
+}) {
   const classes = useStyles();
   const destructuredList = useDestructureLogList({logList});
   console.log(
     '🚀 ~ file: HistoricalList.js ~ line 38 ~ HistoricalList ~ destructuredList',
     destructuredList
   );
+  console.log('🚀 ~ file: Historical.js ~ line 59 ~ cappingLogs', cappingLogs);
+  const destructuredCappingLogs = useDestructureCappingLogList(cappingLogs);
+  console.log(
+    '🚀 ~ file: Historical.js ~ line 60 ~ destructuredCappingLogs',
+    destructuredCappingLogs
+  );
+  const combinedLogs = sortLogs([
+    ...destructuredList,
+    ...destructuredCappingLogs
+  ]);
+  console.log(
+    '🚀 ~ file: Historical.js ~ line 73 ~ combinedLogs',
+    combinedLogs
+  );
+
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
@@ -67,7 +88,7 @@ export default function HistoricalList({logList = [], entityName, entityType}) {
   return (
     <div className={classes.root}>
       <PerfectScrollbar>
-        {destructuredList?.map(logItem => {
+        {combinedLogs?.map(logItem => {
           return (
             <Accordion
               key={`pr-${logItem?.id}`}
