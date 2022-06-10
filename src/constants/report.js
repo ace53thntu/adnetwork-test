@@ -788,6 +788,80 @@ export const REPORT_VIEW_TYPES = [
         code_name: 'visit_time'
       }
     ]
+  },
+  {
+    label: 'View',
+    options: [
+      {
+        label: 'Viewable',
+        value: 'viewable',
+        code: 'viewable',
+        acl: 'viewable',
+        is_price: false,
+        code_name: 'viewable'
+      },
+      {
+        label: 'Not Viewable',
+        value: 'not_viewable',
+        code: 'not_viewable',
+        acl: 'not_viewable',
+        is_price: false,
+        code_name: 'not_viewable'
+      },
+      {
+        label: 'View Undertermined',
+        value: 'view_undertermined',
+        code: 'view_undertermined',
+        acl: 'view_undertermined',
+        is_price: false,
+        code_name: 'view_undertermined'
+      }
+    ]
+  },
+  {
+    label: 'Unique',
+    options: [
+      {
+        label: 'Unique Viewable',
+        value: 'unique_viewable',
+        code: 'unique_viewable',
+        acl: 'unique_viewable',
+        is_price: false,
+        code_name: 'unique_viewable'
+      },
+      {
+        label: 'Unique Impression',
+        value: 'unique_impressions',
+        code: 'unique_impressions',
+        acl: 'unique_impressions',
+        is_price: false,
+        code_name: 'unique_impressions'
+      },
+      {
+        label: 'Unique Not Viewable',
+        value: 'unique_not_viewable',
+        code: 'unique_not_viewable',
+        acl: 'unique_not_viewable',
+        is_price: false,
+        code_name: 'unique_not_viewable'
+      },
+      {
+        label: 'Unique View Undertermined',
+        value: 'unique_view_undertermined',
+        code: 'unique_view_undertermined',
+        acl: 'unique_view_undertermined',
+        is_price: false,
+        code_name: 'unique_view_undertermined'
+      },
+      {
+        label: 'Unique Click',
+        value: 'unique_click',
+        code: 'unique_click',
+        acl: 'unique_click',
+        is_price: false,
+        code_name: 'unique_click'
+      }
+    ]
   }
   // {
   //   label: 'Visibility',
@@ -953,417 +1027,72 @@ export const PUBLISHER_REPORT_VIEW_TYPES = [
     code: 'fraud',
     is_price: false,
     code_name: 'fraud'
+  },
+  {
+    label: 'Viewable',
+    value: 'viewable',
+    code: 'viewable',
+    acl: 'viewable',
+    is_price: false,
+    code_name: 'viewable'
+  },
+  {
+    label: 'Not Viewable',
+    value: 'not_viewable',
+    code: 'not_viewable',
+    acl: 'not_viewable',
+    is_price: false,
+    code_name: 'not_viewable'
+  },
+  {
+    label: 'View Undertermined',
+    value: 'view_undertermined',
+    code: 'view_undertermined',
+    acl: 'view_undertermined',
+    is_price: false,
+    code_name: 'view_undertermined'
+  },
+  {
+    label: 'Unique Viewable',
+    value: 'unique_viewable',
+    code: 'unique_viewable',
+    acl: 'unique_viewable',
+    is_price: false,
+    code_name: 'unique_viewable'
+  },
+  {
+    label: 'Unique Impression',
+    value: 'unique_impressions',
+    code: 'unique_impressions',
+    acl: 'unique_impressions',
+    is_price: false,
+    code_name: 'unique_impressions'
+  },
+  {
+    label: 'Unique Not Viewable',
+    value: 'unique_not_viewable',
+    code: 'unique_not_viewable',
+    acl: 'unique_not_viewable',
+    is_price: false,
+    code_name: 'unique_not_viewable'
+  },
+  {
+    label: 'Unique View Undertermined',
+    value: 'unique_view_undertermined',
+    code: 'unique_view_undertermined',
+    acl: 'unique_view_undertermined',
+    is_price: false,
+    code_name: 'unique_view_undertermined'
+  },
+  {
+    label: 'Unique Click',
+    value: 'unique_click',
+    code: 'unique_click',
+    acl: 'unique_click',
+    is_price: false,
+    code_name: 'unique_click'
   }
 ];
-
-export const METRIC_SETS = {
-  // External
-  xic: {label: 'External Impressions', value: 3, code: 'xic', is_price: false},
-  xcc: {label: 'ExternalClicks', value: 4, code: 'xcc', is_price: false},
-  // Creative
-  cbc: {
-    label: 'Creative Bids',
-    value: 5,
-    code: 'cbc',
-    acl: 'bc',
-    is_price: false
-  },
-  cbsp: {
-    label: 'Creative Bid Price',
-    value: 6,
-    code: 'cbsp',
-    acl: 'bsp',
-    is_price: true
-  },
-  cic: {
-    label: 'Creative Impressions',
-    value: 7,
-    code: 'cic',
-    acl: 'ic',
-    is_price: false
-  },
-  ccc: {
-    label: 'Creative Clicks',
-    value: 8,
-    code: 'ccc',
-    acl: 'cc',
-    is_price: false
-  },
-  ccl: {
-    label: 'Creative Post Click Visits',
-    value: 9,
-    code: 'ccl',
-    acl: 'cl',
-    is_price: false
-  },
-  cpc: {
-    label: 'Creative Post Click Conv',
-    value: 10,
-    code: 'cpc',
-    acl: 'pc',
-    is_price: false
-  },
-  cpv: {
-    label: 'Creative Post View Conv',
-    value: 11,
-    code: 'cpv',
-    acl: 'pv',
-    is_price: false
-  },
-  ctp: {
-    label: 'Creative Tracking Cost',
-    value: 12,
-    code: 'ctp',
-    acl: 'tp',
-    is_price: true
-  },
-  cirp: {
-    label: 'Creative Cost',
-    value: 13,
-    code: 'cirp',
-    acl: 'irp',
-    is_price: true
-  },
-  cirp_org: {
-    label: 'Creative Media Cost',
-    value: 14,
-    code: 'cirp_org',
-    is_price: true
-  },
-  cirp_client: {
-    label: 'Creative Client Media Cost',
-    value: 15,
-    code: 'cirp_client',
-    acl: 'irp_client',
-    is_price: true
-  },
-  // Native
-  nbc: {
-    label: 'Native Bids',
-    value: 16,
-    code: 'nbc',
-    acl: 'bc',
-    is_price: false
-  },
-  nbsp: {
-    label: 'Native Bid Price',
-    value: 17,
-    code: 'nbsp',
-    acl: 'bsp',
-    is_price: true
-  },
-  nic: {
-    label: 'Native Impressions',
-    value: 18,
-    code: 'nic',
-    acl: 'ic',
-    is_price: false
-  },
-  ncc: {
-    label: 'Native Clicks',
-    value: 19,
-    code: 'ncc',
-    acl: 'cc',
-    is_price: false
-  },
-  ncl: {
-    label: 'Native Post Click Visits',
-    value: 20,
-    code: 'ncl',
-    acl: 'cl',
-    is_price: false
-  },
-  npc: {
-    label: 'Native Post Click Conv',
-    value: 21,
-    code: 'npc',
-    acl: 'pc',
-    is_price: false
-  },
-  npv: {
-    label: 'Native Post View Conv',
-    value: 22,
-    code: 'npv',
-    acl: 'pv',
-    is_price: false
-  },
-  ntp: {
-    label: 'Native Tracking Cost',
-    value: 23,
-    code: 'ntp',
-    acl: 'tp',
-    is_price: true
-  },
-  nirp: {
-    label: 'Native Cost',
-    value: 24,
-    code: 'nirp',
-    acl: 'irp',
-    is_price: true
-  },
-  nirp_org: {
-    label: 'Native Media Cost',
-    value: 25,
-    code: 'nirp_org',
-    acl: 'nirp_org',
-    is_price: true
-  },
-  nirp_client: {
-    label: 'Native Client Media Cost',
-    value: 26,
-    code: 'nirp_client',
-    acl: 'nirp_client',
-    is_price: true
-  },
-  // Video Ads
-  vbc: {
-    label: 'Video Bids',
-    value: 27,
-    code: 'vbc',
-    acl: 'vbc',
-    is_price: false
-  },
-  vbsp: {
-    label: 'Video Bid Price',
-    value: 28,
-    code: 'vbsp',
-    acl: 'vbsp',
-    is_price: true
-  },
-  vic: {
-    label: 'Video Impressions',
-    value: 29,
-    code: 'vic',
-    acl: 'vic',
-    is_price: false
-  },
-  vcc: {
-    label: 'Video Clicks',
-    value: 30,
-    code: 'vcc',
-    acl: 'vcc',
-    is_price: false
-  },
-  vcl: {
-    label: 'Video Post Click Visits',
-    value: 31,
-    code: 'vcl',
-    acl: 'vcl',
-    is_price: false
-  },
-  vpc: {
-    label: 'Video Post Click Conv',
-    value: 32,
-    code: 'vpc',
-    acl: 'vpc',
-    is_price: false
-  },
-  vpv: {
-    label: 'Video Post View Conv',
-    value: 33,
-    code: 'vpv',
-    acl: 'vpv',
-    is_price: false
-  },
-  vtp: {
-    label: 'Video Tracking Cost',
-    value: 34,
-    code: 'vtp',
-    acl: 'tp',
-    is_price: true
-  },
-  virp: {
-    label: 'Video Cost',
-    value: 35,
-    code: 'virp',
-    acl: 'irp',
-    is_price: true
-  },
-  virp_org: {
-    label: 'Video Media Cost',
-    value: 36,
-    code: 'virp_org',
-    acl: 'irp_org',
-    is_price: true
-  },
-  virp_client: {
-    label: 'Video Client Media Cost',
-    value: 37,
-    code: 'virp_client',
-    acl: 'qirp_client1',
-    is_price: true
-  },
-  q1: {
-    label: 'Video First Quartil',
-    value: 38,
-    code: 'q1',
-    acl: 'q1',
-    is_price: false
-  },
-  q2: {
-    label: 'Video Midpoint',
-    value: 39,
-    code: 'q2',
-    acl: 'q2',
-    is_price: false
-  },
-  q3: {
-    label: 'Video Third Quartil',
-    value: 40,
-    code: 'q3',
-    acl: 'q3',
-    is_price: false
-  },
-  q4: {
-    label: 'Video Completion',
-    value: 41,
-    code: 'q4',
-    acl: 'q4',
-    is_price: false
-  },
-  sk: {label: 'Video Skip', value: 42, code: 'sk', acl: 'sk', is_price: false},
-  t: {label: 'Video Time', value: 43, code: 't', acl: 't', is_price: false},
-  // Post
-  pce32: {
-    label: 'Post Click Lead',
-    value: 44,
-    code: 'pce32',
-    acl: 'pce32',
-    is_price: false
-  },
-  pve32: {
-    label: 'Post View Lead',
-    value: 45,
-    code: 'pve32',
-    acl: 'pve32',
-    is_price: false
-  },
-  pce128: {
-    label: 'Post Click Checkout',
-    value: 46,
-    code: 'pce128',
-    acl: 'pce128',
-    is_price: false
-  },
-  pve128: {
-    label: 'Post View Checkout',
-    value: 47,
-    code: 'pve128',
-    acl: 'pve128',
-    is_price: false
-  },
-  pce128s: {
-    label: 'Post Click Revenue',
-    value: 48,
-    code: 'pce128s',
-    acl: 'pce128s',
-    is_price: true
-  },
-  pve128s: {
-    label: 'Post View Revenue',
-    value: 49,
-    code: 'pve128s',
-    acl: 'pve128s',
-    is_price: true
-  },
-  // Event
-  e1: {label: 'Event Home', value: 50, code: 'e1', acl: 'e1', is_price: false},
-  e2: {label: 'Event View', value: 51, code: 'e2', acl: 'e2', is_price: false},
-  e4: {
-    label: 'Event Category',
-    value: 52,
-    code: 'e4',
-    acl: 'e4',
-    is_price: false
-  },
-  e8: {
-    label: 'Event Sub Category',
-    value: 53,
-    code: 'e8',
-    acl: 'e8',
-    is_price: false
-  },
-  e16: {
-    label: 'Event Product',
-    value: 54,
-    code: 'e16',
-    acl: 'e16',
-    is_price: false
-  },
-  e32: {
-    label: 'Event Lead',
-    value: 55,
-    code: 'e32',
-    acl: 'e32',
-    is_price: false
-  },
-  e64: {
-    label: 'Event Basket',
-    value: 56,
-    code: 'e64',
-    acl: 'e64',
-    is_price: false
-  },
-  e128: {
-    label: 'Event Checkout',
-    value: 57,
-    code: 'e128',
-    acl: 'e128',
-    is_price: false
-  },
-  e128s: {
-    label: 'Event Checkout Price',
-    value: 58,
-    code: 'e128s',
-    acl: 'e128s',
-    is_price: true
-  },
-  // Unique Visitor
-  uvh: {
-    label: 'Unique Visitor Hourly',
-    value: 59,
-    code: 'uvh',
-    acl: 'uvh',
-    is_price: false
-  },
-  uvd: {
-    label: 'Unique Visitor Daily',
-    value: 60,
-    code: 'uvd',
-    acl: 'uvd',
-    is_price: false
-  },
-  uvm: {
-    label: 'Unique Visitor Monthly',
-    value: 61,
-    code: 'uvm',
-    acl: 'uvm',
-    is_price: false
-  },
-  // Visit time
-  vt: {label: 'Visit Time', value: 62, code: 'vt', acl: 'vt', is_price: false},
-  labels: {
-    label: 'Labels',
-    value: 65,
-    code: 'labels',
-    acl: 'l',
-    is_price: false
-  },
-  labelsPc: {
-    label: 'Labels PC',
-    value: 66,
-    code: 'labelsPc',
-    acl: 'l',
-    is_price: false
-  },
-  labelsPv: {
-    label: 'Labels PV',
-    value: 67,
-    code: 'labelsPv',
-    acl: 'l',
-    is_price: false
-  }
-};
 
 export const METRIC_TYPES = {
   trend_strategy: 'trend-strategy',
@@ -1423,27 +1152,4 @@ export const EntityTypes = {
   CONTAINER: 'container',
   PAGE: 'page',
   INVENTORY: 'inventory'
-};
-
-export const PUBLISHER_METRIC_SET = {
-  bc: {label: 'Bids', value: 'bc', code: 'bc'},
-  bce: {label: 'Bid Errors', value: 'bce', code: 'bce'},
-  bsp: {label: 'Bid Price', value: 'bsp', code: 'bsp'},
-  ic: {label: 'Impressions', value: 'ic', code: 'ic'},
-  cc: {label: 'Clicks', value: 'cc', code: 'cc'},
-  ap: {label: 'Actual Price', value: 'ap', code: 'ap'},
-  tc: {label: 'Tracking Cost', value: 'tc', code: 'tc'},
-  cp: {label: 'Commission Price', value: 'cp', code: 'cp'},
-  pfr: {label: 'Publisher Final Revenue', value: 'pfr', code: 'pfr'},
-  trp: {label: 'Total Response Time', value: 'trp', code: 'trp'},
-  art: {label: 'Avg Response Time', value: 'art', code: 'art'},
-  cl: {label: 'Post Click Visits', value: 'cl', code: 'cl'},
-  pc: {label: 'Post Click Conv', value: 'pc', code: 'pc'},
-  pv: {label: 'Post View Conv', value: 'pv', code: 'pv'},
-  uvh: {label: 'Unique Visitor Hourly', value: 'uvh', code: 'uvh'},
-  uvd: {label: 'Unique Visitor Daily', value: 'uvd', code: 'uvd'},
-  uvm: {label: 'Unique Visitor Monthly', value: 'uvm', code: 'uvm'},
-  vt: {label: 'Visit Time', value: 'vt', code: 'vt'},
-  adloox: {label: 'Visibility', value: 'adloox', code: 'adloox'},
-  fraud: {label: 'Fraud', value: 'fraud', code: 'fraud'}
 };

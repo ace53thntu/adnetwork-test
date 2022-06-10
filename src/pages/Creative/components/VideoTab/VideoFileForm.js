@@ -3,18 +3,19 @@ import * as React from 'react';
 import {Button, Col, Row} from 'reactstrap';
 import {getUploaderConfig} from 'utils/helpers/storeUploaderConfig.helpers';
 
-import {
-  ASSET_TYPES,
-  getAssetAcceptFile,
-  getAssetLimitFileSize
-} from '../NativeAdTab/constants';
+import {ASSET_TYPES, getAssetLimitFileSize} from '../NativeAdTab/constants';
 import {UploadFile} from '..';
+import {useFormContext} from 'react-hook-form';
+import {useCheckLinearityForUploadFile} from './hooks';
 
 const uploaderConfig = getUploaderConfig();
 const fileTypePaths = uploaderConfig?.file_type_paths;
 
 function VideoFileForm(props) {
   const {fileIndex, fileName, toggleCollapse, removeFile, defaultValue} = props;
+  const {watch, setValue} = useFormContext();
+
+  const {accept} = useCheckLinearityForUploadFile(watch, setValue);
 
   function handleClose() {
     if (defaultValue) {
@@ -33,7 +34,7 @@ function VideoFileForm(props) {
               isInArray
               name={`${fileName}`}
               maxSize={getAssetLimitFileSize(ASSET_TYPES[1].id)}
-              accept={getAssetAcceptFile(ASSET_TYPES[1].id)}
+              accept={accept}
               defaultValue={defaultValue}
               removeFile={removeFile}
               fileIndex={fileIndex}

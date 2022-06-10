@@ -52,6 +52,7 @@ const defaultValues = {
 
 function VideoForm(props) {
   const {video: rawData, isCreate} = props;
+
   const {t} = useTranslation();
   const {conceptId} = useParams();
   const dispatch = useDispatch();
@@ -168,6 +169,7 @@ function VideoForm(props) {
               defaultValues={getDefaultValues}
               watch={watch}
               setValue={setValue}
+              isCreate={isCreate}
             />
           </CollapseBox>
 
