@@ -75,7 +75,7 @@ const CampaignForm = ({
   }, []);
   const onSubmit = useCallback(
     async formData => {
-      const requestBody = formToApi(formData);
+      const requestBody = formToApi(formData, isCreate);
 
       if (isEdit) {
         try {
@@ -110,13 +110,14 @@ const CampaignForm = ({
       }
     },
     [
+      isCreate,
+      isEdit,
+      updateCampaign,
       campaignId,
       client,
-      createCampaign,
       dispatch,
-      isEdit,
       navigate,
-      updateCampaign,
+      createCampaign,
       refresh
     ]
   );

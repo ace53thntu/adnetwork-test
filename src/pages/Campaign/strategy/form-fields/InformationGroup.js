@@ -13,6 +13,7 @@ import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
 import {Collapse} from 'components/common/Collapse';
 import {
+  PricingModelOptions,
   PriorityOptions,
   StrategySources,
   StrategyTypes,
@@ -180,7 +181,7 @@ const InformationGroup = ({
             />
           </Col>
           {/* TODO: Set readonly because the logic not clear now */}
-          <Col md="3">
+          <Col md="4">
             <FormTextInput
               type="text"
               placeholder={t('category')}
@@ -191,7 +192,7 @@ const InformationGroup = ({
               readOnly
             />
           </Col>
-          <Col md="3">
+          <Col md="4">
             <FormReactSelect
               disabled={isView}
               defaultValue={currentStrategy?.priority}
@@ -201,8 +202,17 @@ const InformationGroup = ({
               placeholder="Priority"
             />
           </Col>
+          <Col md="4">
+            <FormReactSelect
+              name="pricing_model"
+              placeholder="Pricing model"
+              label="Pricing model"
+              options={PricingModelOptions}
+              disabled={isView}
+            />
+          </Col>
           {strategyType?.value === StrategyTypes.NORMAL && (
-            <Col md="3">
+            <Col md="4">
               <CurrencyInputField
                 required={false}
                 name="cpm_max"
