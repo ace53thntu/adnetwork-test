@@ -324,6 +324,70 @@ export const REPORT_VIEW_TYPES = [
         acl: 'irp_client',
         is_price: true,
         code_name: 'creative_final_cost'
+      },
+      {
+        label: 'Creative Viewable',
+        value: 'creative_viewable',
+        code: 'creative_viewable',
+        acl: 'creative_viewable',
+        is_price: false,
+        code_name: 'creative_viewable'
+      },
+      {
+        label: 'Creative Not Viewable',
+        value: 'creative_not_viewable',
+        code: 'creative_not_viewable',
+        acl: 'creative_not_viewable',
+        is_price: false,
+        code_name: 'not_viewable'
+      },
+      {
+        label: 'Creative View Undertermined',
+        value: 'creative_view_undertermined',
+        code: 'creative_view_undertermined',
+        acl: 'creative_view_undertermined',
+        is_price: false,
+        code_name: 'creative_view_undertermined'
+      },
+      {
+        label: 'Creative Unique Viewable',
+        value: 'creative_unique_viewable',
+        code: 'creative_unique_viewable',
+        acl: 'creative_unique_viewable',
+        is_price: false,
+        code_name: 'creative_unique_viewable'
+      },
+      {
+        label: 'Creative Unique Impression',
+        value: 'creative_unique_impressions',
+        code: 'creative_unique_impressions',
+        acl: 'creative_unique_impressions',
+        is_price: false,
+        code_name: 'creative_unique_impressions'
+      },
+      {
+        label: 'Creative Unique Not Viewable',
+        value: 'creative_unique_not_viewable',
+        code: 'creative_unique_not_viewable',
+        acl: 'creative_unique_not_viewable',
+        is_price: false,
+        code_name: 'creative_unique_not_viewable'
+      },
+      {
+        label: 'Creative Unique View Undertermined',
+        value: 'creative_unique_view_undertermined',
+        code: 'creative_unique_view_undertermined',
+        acl: 'creative_unique_view_undertermined',
+        is_price: false,
+        code_name: 'creative_unique_view_undertermined'
+      },
+      {
+        label: 'Creative Unique Click',
+        value: 'creative_unique_click',
+        code: 'creative_unique_click',
+        acl: 'creative_unique_click',
+        is_price: false,
+        code_name: 'creative_unique_click'
       }
     ]
   },
@@ -409,6 +473,70 @@ export const REPORT_VIEW_TYPES = [
         acl: 'irp_client',
         is_price: true,
         code_name: 'native_final_cost'
+      },
+      {
+        label: 'Native Viewable',
+        value: 'native_viewable',
+        code: 'native_viewable',
+        acl: 'native_viewable',
+        is_price: false,
+        code_name: 'native_viewable'
+      },
+      {
+        label: 'Native Not Viewable',
+        value: 'native_not_viewable',
+        code: 'native_not_viewable',
+        acl: 'native_not_viewable',
+        is_price: false,
+        code_name: 'not_viewable'
+      },
+      {
+        label: 'Native View Undertermined',
+        value: 'native_view_undertermined',
+        code: 'native_view_undertermined',
+        acl: 'native_view_undertermined',
+        is_price: false,
+        code_name: 'native_view_undertermined'
+      },
+      {
+        label: 'Native Unique Viewable',
+        value: 'native_unique_viewable',
+        code: 'native_unique_viewable',
+        acl: 'native_unique_viewable',
+        is_price: false,
+        code_name: 'native_unique_viewable'
+      },
+      {
+        label: 'Native Unique Impression',
+        value: 'native_unique_impressions',
+        code: 'native_unique_impressions',
+        acl: 'native_unique_impressions',
+        is_price: false,
+        code_name: 'native_unique_impressions'
+      },
+      {
+        label: 'Native Unique Not Viewable',
+        value: 'native_unique_not_viewable',
+        code: 'native_unique_not_viewable',
+        acl: 'native_unique_not_viewable',
+        is_price: false,
+        code_name: 'native_unique_not_viewable'
+      },
+      {
+        label: 'Native Unique View Undertermined',
+        value: 'native_unique_view_undertermined',
+        code: 'native_unique_view_undertermined',
+        acl: 'native_unique_view_undertermined',
+        is_price: false,
+        code_name: 'native_unique_view_undertermined'
+      },
+      {
+        label: 'Native Unique Click',
+        value: 'native_unique_click',
+        code: 'native_unique_click',
+        acl: 'native_unique_click',
+        is_price: false,
+        code_name: 'native_unique_click'
       }
     ]
   },
@@ -614,6 +742,70 @@ export const REPORT_VIEW_TYPES = [
         acl: 't',
         is_price: false,
         code_name: 'video_time'
+      },
+      {
+        label: 'Video Viewable',
+        value: 'video_viewable',
+        code: 'video_viewable',
+        acl: 'video_viewable',
+        is_price: false,
+        code_name: 'video_viewable'
+      },
+      {
+        label: 'Video Not Viewable',
+        value: 'video_not_viewable',
+        code: 'video_not_viewable',
+        acl: 'video_not_viewable',
+        is_price: false,
+        code_name: 'not_viewable'
+      },
+      {
+        label: 'Video View Undertermined',
+        value: 'video_view_undertermined',
+        code: 'video_view_undertermined',
+        acl: 'video_view_undertermined',
+        is_price: false,
+        code_name: 'video_view_undertermined'
+      },
+      {
+        label: 'Video Unique Viewable',
+        value: 'video_unique_viewable',
+        code: 'video_unique_viewable',
+        acl: 'video_unique_viewable',
+        is_price: false,
+        code_name: 'video_unique_viewable'
+      },
+      {
+        label: 'Video Unique Impression',
+        value: 'video_unique_impressions',
+        code: 'video_unique_impressions',
+        acl: 'video_unique_impressions',
+        is_price: false,
+        code_name: 'video_unique_impressions'
+      },
+      {
+        label: 'Video Unique Not Viewable',
+        value: 'video_unique_not_viewable',
+        code: 'video_unique_not_viewable',
+        acl: 'video_unique_not_viewable',
+        is_price: false,
+        code_name: 'video_unique_not_viewable'
+      },
+      {
+        label: 'Video Unique View Undertermined',
+        value: 'video_unique_view_undertermined',
+        code: 'video_unique_view_undertermined',
+        acl: 'video_unique_view_undertermined',
+        is_price: false,
+        code_name: 'video_unique_view_undertermined'
+      },
+      {
+        label: 'Video Unique Click',
+        value: 'video_unique_click',
+        code: 'video_unique_click',
+        acl: 'video_unique_click',
+        is_price: false,
+        code_name: 'video_unique_click'
       }
     ]
   },
@@ -786,80 +978,6 @@ export const REPORT_VIEW_TYPES = [
         acl: 'vt',
         is_price: false,
         code_name: 'visit_time'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    options: [
-      {
-        label: 'Viewable',
-        value: 'viewable',
-        code: 'viewable',
-        acl: 'viewable',
-        is_price: false,
-        code_name: 'viewable'
-      },
-      {
-        label: 'Not Viewable',
-        value: 'not_viewable',
-        code: 'not_viewable',
-        acl: 'not_viewable',
-        is_price: false,
-        code_name: 'not_viewable'
-      },
-      {
-        label: 'View Undertermined',
-        value: 'view_undertermined',
-        code: 'view_undertermined',
-        acl: 'view_undertermined',
-        is_price: false,
-        code_name: 'view_undertermined'
-      }
-    ]
-  },
-  {
-    label: 'Unique',
-    options: [
-      {
-        label: 'Unique Viewable',
-        value: 'unique_viewable',
-        code: 'unique_viewable',
-        acl: 'unique_viewable',
-        is_price: false,
-        code_name: 'unique_viewable'
-      },
-      {
-        label: 'Unique Impression',
-        value: 'unique_impressions',
-        code: 'unique_impressions',
-        acl: 'unique_impressions',
-        is_price: false,
-        code_name: 'unique_impressions'
-      },
-      {
-        label: 'Unique Not Viewable',
-        value: 'unique_not_viewable',
-        code: 'unique_not_viewable',
-        acl: 'unique_not_viewable',
-        is_price: false,
-        code_name: 'unique_not_viewable'
-      },
-      {
-        label: 'Unique View Undertermined',
-        value: 'unique_view_undertermined',
-        code: 'unique_view_undertermined',
-        acl: 'unique_view_undertermined',
-        is_price: false,
-        code_name: 'unique_view_undertermined'
-      },
-      {
-        label: 'Unique Click',
-        value: 'unique_click',
-        code: 'unique_click',
-        acl: 'unique_click',
-        is_price: false,
-        code_name: 'unique_click'
       }
     ]
   }
