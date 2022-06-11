@@ -1,8 +1,47 @@
-export const getSkippableOptions = (key) => ([
-  {value: "", label: 'Off', id: `${key}-unset`},
+export const PricingModelOptions = [
+  {
+    value: 'cpm',
+    label: 'Cost per thousand'
+  },
+  {
+    value: 'cpc',
+    label: 'Cost per click'
+  },
+  {
+    value: 'cpa',
+    label: 'Cost per acquisition'
+  },
+  {
+    value: 'cpd',
+    label: 'Cost per day'
+  },
+  {
+    value: 'cpl',
+    label: 'Cost per lead'
+  },
+  {
+    value: 'cpe',
+    label: 'Cost per engagement'
+  },
+  {
+    value: 'cpv',
+    label: 'Cost per view'
+  },
+  {
+    value: 'cpi',
+    label: 'Cost per install'
+  },
+  {
+    value: 'cpvm',
+    label: 'Cost per viewed thousand'
+  }
+];
+
+export const getSkippableOptions = key => [
+  {value: '', label: 'Off', id: `${key}-unset`},
   {value: true, label: 'True', id: `${key}-true`},
   {value: false, label: 'False', id: `${key}-false`}
-]);
+];
 
 /**
  * @enum
@@ -416,7 +455,9 @@ export const CAMPAIGN_KEYS = {
   KEYWORD_LIST_WHITE_UUID: 'keywords_list_white_uuid',
   KEYWORD_LIST_BLACK_UUID: 'keywords_list_black_uuid',
   DOMAIN_GROUP_WHITE_UUID: 'domain_group_white_list_uuid',
-  DOMAIN_GROUP_BLACK_UUID: 'domain_group_black_list_uuid'
+  DOMAIN_GROUP_BLACK_UUID: 'domain_group_black_list_uuid',
+  TIMEZONE: 'time_zone',
+  CURRENCY: 'currency'
 };
 
 export const listEngine = [

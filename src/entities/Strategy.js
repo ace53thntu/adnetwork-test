@@ -8,6 +8,7 @@ import {
   OperatingSystemOptions,
   PlacementTypeOptions,
   PlatformOptions,
+  PricingModelOptions,
   Priority,
   PriorityOptions,
   StartDelayOptions,
@@ -60,7 +61,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     priority,
     cpm_max,
     video_filter,
-    context_filter
+    context_filter,
+    pricing_model
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -122,6 +124,10 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     category,
     priority: selectedPriority || {value: Priority.NORMAL, label: 'Normal'},
     cpm_max: convertApiToGui({value: cpm_max}),
+    pricing_model:
+      PricingModelOptions.find(
+        item => item.value === pricing_model?.toLowerCase()
+      ) || null,
     video_filter: {
       skip_delay:
         video_filter?.skip_delay || video_filter?.skip_delay === 0
@@ -226,7 +232,8 @@ export const formToApi = ({
     domain_groups_white,
     domain_groups_black,
     keywords_list_white,
-    keywords_list_black
+    keywords_list_black,
+    pricing_model
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value);
@@ -269,7 +276,8 @@ export const formToApi = ({
     category,
     priority: priority?.value || '',
     video_filter: videoFilter,
-    context_filter: contextFilter
+    context_filter: contextFilter,
+    pricing_model: pricing_model?.value?.toUpperCase() || ''
   };
 
   if (
