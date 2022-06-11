@@ -104,6 +104,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                   entityName={currentStrategy?.name}
                   entityUuid={currentStrategy?.uuid}
                   entityType={LogTypes.STRATEGY}
+                  hasCapping
                 />
               )}
             </DescriptionTab>

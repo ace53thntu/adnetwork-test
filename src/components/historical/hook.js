@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import {destructureCappingLogList} from './utils';
 
 export const useDestructureLogList = ({logList = []}) => {
   return React.useMemo(() => {
@@ -30,6 +31,12 @@ export const useDestructureLogDifference = ({diffData}) => {
   }, [diffData]);
 };
 
+export const useDestructureCappingLogList = (cappingLogs = []) => {
+  return React.useMemo(() => destructureCappingLogList(cappingLogs), [
+    cappingLogs
+  ]);
+};
+
 export const useParseLogValue = ({logObj}) => {
   return React.useMemo(() => {
     if (!logObj) {
@@ -46,9 +53,9 @@ const aggregateLogValue = logValue => {
 
   if (_.isArray(logValue)) {
     return logValue?.reduce((acc, item, index) => {
-      if(item?.location_name){
+      if (item?.location_name) {
         acc = `${acc} ${item?.location_name},`;
-      }else{
+      } else {
         acc = `${acc} ${item?.name},`;
       }
       if (index === logValue.length - 1) {

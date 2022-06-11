@@ -201,6 +201,7 @@ const CampaignForm = ({
           entityName={currentCampaign?.name}
           entityUuid={currentCampaign?.uuid}
           entityType={LogTypes.CAMPAIGN}
+          hasCapping
         />
       )}
     </div>
