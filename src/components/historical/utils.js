@@ -13,7 +13,8 @@ import {
   PlatformOptions,
   PriorityOptions,
   StartDelayOptions,
-  StrategySources
+  StrategySources,
+  WEEK_DAYS
 } from 'pages/Campaign/constants';
 import _ from 'lodash';
 import {getListCarriers} from 'utils/helpers/getListCarriers';
@@ -33,7 +34,7 @@ const contextListByField = {
   platform: PlatformOptions
 };
 
-const PriceFields = ['cpm_max'];
+const PriceFields = ['cpm_max', 'target'];
 
 export const mappingStrategyFields = ({obj, fieldName}) => {
   if (!obj || typeof obj !== 'object' || !Object.keys(obj)) {
@@ -43,7 +44,7 @@ export const mappingStrategyFields = ({obj, fieldName}) => {
     };
   }
 
-  if (PriceFields[fieldName]) {
+  if (PriceFields.includes(fieldName)) {
     const oldVal = handlePriceField(obj?.old);
     const newVal = handlePriceField(obj?.new);
     return {
@@ -69,6 +70,22 @@ export const mappingStrategyFields = ({obj, fieldName}) => {
     const newVal = findLogLabelFromList({
       value: obj?.new,
       list: PriorityOptions
+    });
+
+    return {
+      old: oldVal,
+      new: newVal
+    };
+  }
+
+  if (fieldName === 'week_days') {
+    const oldVal = findLogLabelFromList({
+      value: obj?.old,
+      list: WEEK_DAYS
+    });
+    const newVal = findLogLabelFromList({
+      value: obj?.new,
+      list: WEEK_DAYS
     });
 
     return {

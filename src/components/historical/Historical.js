@@ -15,9 +15,7 @@ import HistoricalList from './HistoricalList';
 import {LoadingIndicator} from 'components/common';
 import {QueryStatuses} from 'constants/react-query';
 import {getResponseData} from 'utils/helpers/misc.helpers';
-import {BudgetTimeFrames, CappingTypes, IS_RESPONSE_ALL} from 'constants/misc';
-import {sortLogs} from './utils';
-import {useDestructureCappingLogList} from './hook';
+import {IS_RESPONSE_ALL} from 'constants/misc';
 
 const propTypes = {
   modal: PropTypes.bool,
