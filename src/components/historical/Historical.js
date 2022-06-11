@@ -7,7 +7,10 @@ import {useTranslation} from 'react-i18next';
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 //---> Internal Modules
-import {useGetAllHistorical} from 'queries/historical';
+import {
+  useGetAllHistorical,
+  useGetLogCappingByReference
+} from 'queries/historical';
 import HistoricalList from './HistoricalList';
 import {LoadingIndicator} from 'components/common';
 import {QueryStatuses} from 'constants/react-query';
@@ -19,7 +22,8 @@ const propTypes = {
   toggle: PropTypes.func,
   entityUuid: PropTypes.string,
   entityName: PropTypes.string,
-  entityType: PropTypes.string
+  entityType: PropTypes.string,
+  hasCapping: PropTypes.bool
 };
 
 const Historical = ({
@@ -27,7 +31,8 @@ const Historical = ({
   toggle = () => null,
   entityUuid,
   entityName,
-  entityType
+  entityType,
+  hasCapping = false
 }) => {
   const {t} = useTranslation();
   const {data: logData, isFetching, isFetched, status} = useGetAllHistorical({
@@ -35,10 +40,21 @@ const Historical = ({
       uuid: entityUuid,
       entity_type: entityType,
       sort: 'created_at DESC',
-      per_page: 300
+      per_page: 1000
     },
     enabled: modal
   });
+
+  const {data: cappingLogs} = useGetLogCappingByReference({
+    referenceId: entityUuid,
+    params: {
+      entity_type: entityType,
+      sort: 'created_at DESC',
+      per_page: 1000
+    },
+    enabled: modal && !!entityUuid && hasCapping
+  });
+
   const logList = React.useMemo(() => {
     const logs = getResponseData(logData, IS_RESPONSE_ALL) || [];
     return logs?.map(item => {
@@ -61,6 +77,7 @@ const Historical = ({
         {isFetched && status === QueryStatuses.SUCCESS && (
           <HistoricalList
             logList={logList}
+            cappingLogs={cappingLogs}
             entityName={entityName}
             entityType={entityType}
           />

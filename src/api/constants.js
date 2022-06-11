@@ -127,6 +127,8 @@ export const endpoints = {
   },
   historical: {
     log: `${API_V1}/log`,
-    diff: 'diff'
-  },
+    logs: `${API_V1}/logs`,
+    diff: 'diff',
+    capping: 'capping'
+  }
 };

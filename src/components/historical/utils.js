@@ -1,4 +1,8 @@
-import {LinearityOptions, ProtocolOptions} from 'constants/misc';
+import {
+  BudgetTimeFrames,
+  LinearityOptions,
+  ProtocolOptions
+} from 'constants/misc';
 import {
   BandwidthOptions,
   BrowsersOptions,
@@ -9,13 +13,15 @@ import {
   PlatformOptions,
   PriorityOptions,
   StartDelayOptions,
-  StrategySources
+  StrategySources,
+  WEEK_DAYS
 } from 'pages/Campaign/constants';
 import _ from 'lodash';
 import {getListCarriers} from 'utils/helpers/getListCarriers';
 import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
 import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
+import {CappingTypes} from 'constants/misc';
 
 const contextListByField = {
   browser: BrowsersOptions,
@@ -28,7 +34,7 @@ const contextListByField = {
   platform: PlatformOptions
 };
 
-const PriceFields = ['cpm_max'];
+const PriceFields = ['cpm_max', 'target'];
 
 export const mappingStrategyFields = ({obj, fieldName}) => {
   if (!obj || typeof obj !== 'object' || !Object.keys(obj)) {
@@ -38,7 +44,7 @@ export const mappingStrategyFields = ({obj, fieldName}) => {
     };
   }
 
-  if (PriceFields[fieldName]) {
+  if (PriceFields.includes(fieldName)) {
     const oldVal = handlePriceField(obj?.old);
     const newVal = handlePriceField(obj?.new);
     return {
@@ -64,6 +70,22 @@ export const mappingStrategyFields = ({obj, fieldName}) => {
     const newVal = findLogLabelFromList({
       value: obj?.new,
       list: PriorityOptions
+    });
+
+    return {
+      old: oldVal,
+      new: newVal
+    };
+  }
+
+  if (fieldName === 'week_days') {
+    const oldVal = findLogLabelFromList({
+      value: obj?.old,
+      list: WEEK_DAYS
+    });
+    const newVal = findLogLabelFromList({
+      value: obj?.new,
+      list: WEEK_DAYS
     });
 
     return {
@@ -212,7 +234,11 @@ const handlePriceField = value => {
 };
 
 const convertLogObjectToString = (logsData, listData = []) => {
-  if (typeof logsData === 'object' && Object.keys(logsData).length) {
+  if (
+    logsData &&
+    typeof logsData === 'object' &&
+    Object.keys(logsData).length
+  ) {
     return Object.entries(logsData)?.reduce((acc, [objKey, val]) => {
       if (val) {
         const valueFromList = listData.find(item => item?.value === objKey);
@@ -252,4 +278,122 @@ const findLogLabelFromList = ({list, value}) => {
   const foundObj = list.find(item => item?.value === value);
 
   return foundObj?.label;
+};
+
+export const sortLogs = arr =>
+  arr.sort(function (a, b) {
+    return a.created_at < b.created_at
+      ? 1
+      : a.created_at > b.created_at
+      ? -1
+      : 0;
+  });
+
+const getCappingLogByType = ({cappingType, timeFrame, cappingLogs = []}) => {
+  const logFilter = [...cappingLogs]?.filter(item => {
+    if (
+      item?.data?.type === cappingType &&
+      item?.data?.time_frame === timeFrame
+    ) {
+      return true;
+    }
+
+    if (
+      ![
+        CappingTypes.BUDGET.value,
+        CappingTypes.BUDGET_MANAGER.value,
+        CappingTypes.IMPRESSION.value,
+        CappingTypes.USER.value
+      ].includes(item?.data?.type) &&
+      item?.data?.type === cappingType
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+
+  return logFilter?.map((item, index) => {
+    const idCompare = logFilter?.[index + 1]?.id || null;
+
+    return {
+      ...item,
+      action: item?.action === 'delete' ? 'finish' : item?.action,
+      id_source: item?.id,
+      id_compare: idCompare
+    };
+  });
+};
+
+export const destructureCappingLogList = cappingLogs => {
+  const budgetMngGlobal = getCappingLogByType({
+    cappingType: CappingTypes.BUDGET_MANAGER.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+
+  const budgetMngDaily = getCappingLogByType({
+    cappingType: CappingTypes.BUDGET_MANAGER.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+
+  const budgetGlobal = getCappingLogByType({
+    cappingType: CappingTypes.BUDGET.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+
+  const budgetDaily = getCappingLogByType({
+    cappingType: CappingTypes.BUDGET.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+  const impressionGlobal = getCappingLogByType({
+    cappingType: CappingTypes.IMPRESSION.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+
+  const impressionDaily = getCappingLogByType({
+    cappingType: CappingTypes.IMPRESSION.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+
+  const userGlobal = getCappingLogByType({
+    cappingType: CappingTypes.USER.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+  const userDaily = getCappingLogByType({
+    cappingType: CappingTypes.USER.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+  const domain = getCappingLogByType({
+    cappingType: CappingTypes.DOMAIN.value,
+    cappingLogs
+  });
+  const keyword = getCappingLogByType({
+    cappingType: CappingTypes.KEYWORD.value,
+    cappingLogs
+  });
+  const schedule = getCappingLogByType({
+    cappingType: CappingTypes.SCHEDULE.value,
+    cappingLogs
+  });
+  return [
+    ...budgetMngGlobal,
+    ...budgetMngDaily,
+    ...budgetGlobal,
+    ...budgetDaily,
+    ...impressionGlobal,
+    ...impressionDaily,
+    ...userGlobal,
+    ...userDaily,
+    ...domain,
+    ...keyword,
+    ...schedule
+  ];
 };

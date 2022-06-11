@@ -21,6 +21,14 @@ class HistoricalAPI extends XHRRequest {
       options
     );
   };
+
+  getHistoricalCapping = ({referenceId, params = null, options}) => {
+    return this.get(
+      `${endpoints.historical.logs}/${referenceId}/${endpoints.historical.capping}`,
+      params,
+      options
+    );
+  };
 }
 
 export const HistoricalAPIRequest = new HistoricalAPI(apiURL);
