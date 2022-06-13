@@ -21,7 +21,11 @@ import {convertApiToGui} from 'utils/handleCurrencyFields';
 const typeHasTimeFrame = [
   CappingTypes.BUDGET.value,
   CappingTypes.IMPRESSION.value,
-  CappingTypes.USER.value
+  CappingTypes.USER.value,
+  CappingTypes.USER_CLICK.value,
+  CappingTypes.USER_VIEWABLE.value,
+  CappingTypes.CLICK.value,
+  CappingTypes.VIEWABLE.value
 ];
 
 const propTypes = {
@@ -50,9 +54,15 @@ const BudgetList = ({
       list?.length === 2 &&
       list?.every(
         item =>
-          [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
-            item.type
-          ) && item.target > 0
+          [
+            CappingTypes.BUDGET.value,
+            CappingTypes.IMPRESSION.value,
+            CappingTypes.USER.value,
+            CappingTypes.USER_CLICK.value,
+            CappingTypes.USER_VIEWABLE.value,
+            CappingTypes.CLICK.value,
+            CappingTypes.VIEWABLE.value
+          ].includes(item.type) && item.target > 0
       )
     );
   }, [list]);
@@ -63,9 +73,15 @@ const BudgetList = ({
     }
 
     if (
-      [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
-        item.type
-      )
+      [
+        CappingTypes.BUDGET.value,
+        CappingTypes.IMPRESSION.value,
+        CappingTypes.USER.value,
+        CappingTypes.USER_CLICK.value,
+        CappingTypes.USER_VIEWABLE.value,
+        CappingTypes.CLICK.value,
+        CappingTypes.VIEWABLE.value
+      ].includes(item.type)
     ) {
       if (existedAll) {
         return {
@@ -110,9 +126,15 @@ const BudgetList = ({
             return null;
           }
           if (
-            [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
-              row?.original?.type
-            )
+            [
+              CappingTypes.IMPRESSION.value,
+              CappingTypes.USER.value,
+              CappingTypes.USER.value,
+              CappingTypes.USER_CLICK.value,
+              CappingTypes.USER_VIEWABLE.value,
+              CappingTypes.CLICK.value,
+              CappingTypes.VIEWABLE.value
+            ].includes(row?.original?.type)
           ) {
             return (
               <Badge color="info" pill>

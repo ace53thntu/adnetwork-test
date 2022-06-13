@@ -24,7 +24,13 @@ export const formToApi = ({formData, type}) => {
     };
   }
 
-  if ([CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(type)) {
+  if (
+    [
+      CappingTypes.IMPRESSION.value,
+      CappingTypes.USER.value,
+      CappingTypes.USER_CLICK.value
+    ].includes(type)
+  ) {
     return {
       target: formData?.target === 0 ? 0 : parseInt(formData?.target), //parseFloat(formData?.target) || 0,
       status
@@ -152,6 +158,8 @@ export const renderCappingTypeColor = type => {
       return 'info';
     case CappingTypes.SCHEDULE?.value:
       return 'light';
+    case CappingTypes.USER?.value:
+      return 'danger';
     default:
       return 'secondary';
   }
@@ -189,6 +197,54 @@ export const disabledExistedType = ({existedTypes, currentType}) => {
   if (currentType.type === CappingTypes.USER.value) {
     const typeFound = existedTypes.filter(
       existedType => existedType.type === CappingTypes.USER.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.USER_CLICK.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.USER_CLICK.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.USER_VIEWABLE.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.USER_VIEWABLE.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.CLICK.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.CLICK.value
+    );
+
+    //---> Business rule: Only always existed 2 capping type Impression
+    if (typeFound?.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (currentType.type === CappingTypes.VIEWABLE.value) {
+    const typeFound = existedTypes.filter(
+      existedType => existedType.type === CappingTypes.VIEWABLE.value
     );
 
     //---> Business rule: Only always existed 2 capping type Impression

@@ -67,6 +67,22 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     return getListByType({cappings, type: CappingTypes.USER.value});
   }, [cappings]);
 
+  const userClickList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.USER_CLICK.value});
+  }, [cappings]);
+
+  const userViewableList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.USER_VIEWABLE.value});
+  }, [cappings]);
+
+  const clickList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.CLICK.value});
+  }, [cappings]);
+
+  const viewableList = React.useMemo(() => {
+    return getListByType({cappings, type: CappingTypes.VIEWABLE.value});
+  }, [cappings]);
+
   const budgetManagerList = React.useMemo(() => {
     return getListByType({cappings, type: CappingTypes.BUDGET_MANAGER.value});
   }, [cappings]);
@@ -134,7 +150,6 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
         await deleteCapping({cappingId: activeCapping?.uuid});
       } else {
         await editCapping({cappingId: activeCapping?.uuid, data: {target: 0}});
-
       }
 
       setIsSubmitting(false);
@@ -186,7 +201,47 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
           list={userList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
-          type="user"
+          type={CappingTypes.USER.value}
+        />
+      )}
+
+      {userClickList?.length > 0 && (
+        <BudgetList
+          title="User click"
+          list={userClickList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          type={CappingTypes.USER_CLICK.value}
+        />
+      )}
+
+      {userViewableList?.length > 0 && (
+        <BudgetList
+          title="User viewable"
+          list={userViewableList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          type={CappingTypes.USER_VIEWABLE.value}
+        />
+      )}
+
+      {clickList?.length > 0 && (
+        <BudgetList
+          title="Click"
+          list={clickList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          type={CappingTypes.CLICK.value}
+        />
+      )}
+
+      {viewableList?.length > 0 && (
+        <BudgetList
+          title="Viewable"
+          list={viewableList}
+          onClickMenu={onClickMenu}
+          onClickItem={onClickItem}
+          type={CappingTypes.VIEWABLE.value}
         />
       )}
 
