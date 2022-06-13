@@ -164,7 +164,7 @@ const StrategyEditTabs = ({
         ...(!isCreate
           ? [
               {
-                name: t(ViewTabs.REPORT.name),
+                name: t(EditTabs.REPORT.name),
                 content: (
                   <EntityReport
                     entity={EntityTypes.STRATEGY}
@@ -232,7 +232,7 @@ const StrategyEditTabs = ({
       case EditTabs.SUMMARY.name:
         return EditTabs.SUMMARY.value;
       case EditTabs.REPORT.name:
-        return EditTabs.REPORT.name;
+        return EditTabs.REPORT.value;
       default:
         return EditTabs.DESCRIPTION.value;
     }
