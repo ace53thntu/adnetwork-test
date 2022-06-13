@@ -35,7 +35,6 @@ const AddTypeButton = ({
   referenceUuid = '',
   cappings = []
 }) => {
-  console.log("🚀 ~ file: AddTypeButton.js ~ line 38 ~ existedTypes", existedTypes)
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
 
@@ -60,7 +59,9 @@ const AddTypeButton = ({
             if (
               (referenceType === 'campaign' &&
                 item?.type === CappingTypes.SCHEDULE.value) ||
-              item?.type === CappingTypes.BUDGET_MANAGER.value
+              item?.type === CappingTypes.BUDGET_MANAGER.value ||
+              item?.type === CappingTypes.USER_CLICK.value ||
+              item?.type === CappingTypes.USER_VIEWABLE.value
             ) {
               return null;
             }
@@ -85,7 +86,11 @@ const AddTypeButton = ({
         [
           CappingTypes.BUDGET.value,
           CappingTypes.IMPRESSION.value,
-          CappingTypes.USER.value
+          CappingTypes.USER.value,
+          CappingTypes.USER_CLICK.value,
+          CappingTypes.USER_VIEWABLE.value,
+          CappingTypes.CLICK.value,
+          CappingTypes.VIEWABLE.value
         ].includes(activeType.type) && (
           <BudgetCreateModal
             openForm={openModal}

@@ -135,6 +135,14 @@ export const CappingTypes = {
   BUDGET: {value: 'BDG', label: 'Budget', api_key: 'budget'}, // capping by budget of client
   IMPRESSION: {value: 'IMP', label: 'Impression', api_key: 'impression'}, // capping by impression
   USER: {value: 'USR', label: 'User', api_key: 'user'}, // capping by user
+  USER_CLICK: {value: 'USR_CLICK', label: 'User Click', api_key: 'user_click'}, // capping by user click
+  USER_VIEWABLE: {
+    value: 'USR_VIEWABLE',
+    label: 'User Viewable',
+    api_key: 'user_viewable'
+  }, // capping by user viewable
+  CLICK: {value: 'CLICK', label: 'Click', api_key: 'click'}, // capping by user
+  VIEWABLE: {value: 'VIEWABLE', label: 'Viewable', api_key: 'viewable'}, // capping by viewable
   DOMAIN: {value: 'DM', label: 'Domain'}, // capping by domain
   SCHEDULE: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
   KEYWORD: {value: 'KW', label: 'Keyword'} // capping by keywords
@@ -145,6 +153,15 @@ export const CappingTypeButtons = [
   {type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
   {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},
   {type: 'USR', sub_type: '', label: 'User', api_key: 'user'},
+  {type: 'USR_CLICK', sub_type: '', label: 'User click', api_key: 'user_click'},
+  {type: 'VIEWABLE', sub_type: '', label: 'Viewable', api_key: 'viewable'},
+  {
+    type: 'USR_VIEWABLE',
+    sub_type: '',
+    label: 'User viewable',
+    api_key: 'user_viewable'
+  },
+  {type: 'CLICK', sub_type: '', label: 'Click', api_key: 'click'},
   {type: 'DM', sub_type: '', label: 'Domain'},
   {type: 'KW', sub_type: '', label: 'Keyword'},
   {type: 'SCHL', sub_type: '', label: 'Schedule'}

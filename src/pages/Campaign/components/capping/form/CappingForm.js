@@ -40,9 +40,14 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       };
     }
     if (
-      [CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
-        cappingType
-      )
+      [
+        CappingTypes.IMPRESSION.value,
+        CappingTypes.USER.value,
+        CappingTypes.USER_CLICK.value,
+        CappingTypes.USER_VIEWABLE.value,
+        CappingTypes.CLICK.value,
+        CappingTypes.VIEWABLE.value
+      ].includes(cappingType)
     ) {
       return {
         target: capping?.target,
@@ -132,9 +137,14 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               </Col>
             )}
 
-            {[CappingTypes.IMPRESSION.value, CappingTypes.USER.value].includes(
-              cappingType
-            ) && (
+            {[
+              CappingTypes.IMPRESSION.value,
+              CappingTypes.USER.value,
+              CappingTypes.USER_CLICK.value,
+              CappingTypes.USER_VIEWABLE.value,
+              CappingTypes.CLICK.value,
+              CappingTypes.VIEWABLE.value
+            ].includes(cappingType) && (
               <Col sm={6}>
                 <CurrencyInputField
                   required
