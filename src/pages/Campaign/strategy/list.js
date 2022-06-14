@@ -2,31 +2,31 @@
 import React from 'react';
 
 //---> External Modules
-import { useNavigate } from 'react-router';
+import {useNavigate} from 'react-router';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import { ApiError, DialogConfirm, LoadingIndicator } from 'components/common';
-import { List } from 'components/list';
-import { CustomStatus } from 'components/list/status';
-import { useDeleteStrategy, useGetStrategies } from 'queries/strategy';
-import { ShowToast } from 'utils/helpers/showToast.helpers';
-import { capitalize } from 'utils/helpers/string.helpers';
-import { StrategyListStyled } from './styled';
-import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
-import { RoutePaths } from 'constants/route-paths';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
+import {List} from 'components/list';
+import {CustomStatus} from 'components/list/status';
+import {useDeleteStrategy, useGetStrategies} from 'queries/strategy';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {capitalize} from 'utils/helpers/string.helpers';
+import {StrategyListStyled} from './styled';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
 import {
   getResponseData,
   getResponsePagination
 } from 'utils/helpers/misc.helpers';
-import { useQueryString } from 'hooks';
+import {useQueryString} from 'hooks';
 import NoDataAvailable from 'components/list/no-data';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import moment from 'moment';
 import CustomPagination from 'components/common/CustomPagination';
-import { updateTreeData } from '../utils';
-import { setSelectTreeDataRedux, useCommonSelector } from 'store/reducers/common';
-import { useDispatch } from 'react-redux';
+import {updateTreeData} from '../utils';
+import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
+import {useDispatch} from 'react-redux';
 
 const DeleteTitle = 'Are you sure delete this Strategy?';
 
@@ -41,11 +41,11 @@ const StrategyList = ({
   status = '',
   fromCampaignPage = false
 }) => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id');
 
-  const { selectTreeData } = useCommonSelector();
+  const {selectTreeData} = useCommonSelector();
   const dispatch = useDispatch();
 
   //---> Local states
@@ -55,7 +55,7 @@ const StrategyList = ({
   const [currentPage, setCurrentPage] = React.useState(DEFAULT_PAGINATION.page);
   //--->
   const navigate = useNavigate();
-  const { mutateAsync: deleteStrategy } = useDeleteStrategy();
+  const {mutateAsync: deleteStrategy} = useDeleteStrategy();
 
   const params = {
     per_page: DEFAULT_PAGINATION.perPage,
@@ -74,7 +74,7 @@ const StrategyList = ({
   if (advertiserId) {
     params.advertiser_id = advertiserId;
   }
-  const { data, isLoading, isPreviousData } = useGetStrategies({
+  const {data, isLoading, isPreviousData} = useGetStrategies({
     params,
     enabled: true,
     keepPreviousData: true
@@ -177,7 +177,7 @@ const StrategyList = ({
   }
 
   function onClickMenu(actionIndex, item) {
-    if (actionIndex === 2) {
+    if (actionIndex === 1) {
       setOpenDialog(true);
       setCurrentStrategy(item);
 
@@ -202,11 +202,15 @@ const StrategyList = ({
     //---> Delete campaign
     setIsDeleting(true);
     try {
-      await deleteStrategy({ straId: currentStrategy?.uuid });
-      dispatch(setSelectTreeDataRedux(updateTreeData({
-        treeData: selectTreeData,
-        uuid: currentStrategy?.uuid,
-      })));
+      await deleteStrategy({straId: currentStrategy?.uuid});
+      dispatch(
+        setSelectTreeDataRedux(
+          updateTreeData({
+            treeData: selectTreeData,
+            uuid: currentStrategy?.uuid
+          })
+        )
+      );
       ShowToast.success('Deleted strategy successfully');
     } catch (err) {
       ShowToast.error(<ApiError apiError={err || 'Fail to delete strategy'} />);
