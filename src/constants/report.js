@@ -339,7 +339,7 @@ export const REPORT_VIEW_TYPES = [
         code: 'creative_not_viewable',
         acl: 'creative_not_viewable',
         is_price: false,
-        code_name: 'not_viewable'
+        code_name: 'creative_not_viewable'
       },
       {
         label: 'Creative View Undertermined',
@@ -488,7 +488,7 @@ export const REPORT_VIEW_TYPES = [
         code: 'native_not_viewable',
         acl: 'native_not_viewable',
         is_price: false,
-        code_name: 'not_viewable'
+        code_name: 'native_not_viewable'
       },
       {
         label: 'Native View Undertermined',
@@ -757,7 +757,7 @@ export const REPORT_VIEW_TYPES = [
         code: 'video_not_viewable',
         acl: 'video_not_viewable',
         is_price: false,
-        code_name: 'not_viewable'
+        code_name: 'video_not_viewable'
       },
       {
         label: 'Video View Undertermined',
