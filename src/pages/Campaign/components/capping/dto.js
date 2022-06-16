@@ -162,61 +162,27 @@ export const getListByType = ({cappings, type}) => {
 };
 
 export const disabledExistedType = ({existedTypes, currentType}) => {
-  if (currentType.type === CappingTypes.BUDGET.value) {
-    const typeFound = existedTypes.filter(
-      existedType => existedType.type === CappingTypes.BUDGET.value
-    );
+  const type = currentType?.type;
+  const typeFound = existedTypes.filter(
+    existedType => existedType.type === type
+  );
 
-    //---> Business rule: Only always existed 2 capping type Budget
-    if (typeFound?.length === 2) {
-      return true;
+  switch (type) {
+    case CappingTypes.USER.value: {
+      return typeFound?.length === 2;
     }
-    return false;
-  }
 
-  if (currentType.type === CappingTypes.IMPRESSION.value) {
-    const typeFound = existedTypes.filter(
-      existedType => existedType.type === CappingTypes.IMPRESSION.value
-    );
-
-    //---> Business rule: Only always existed 2 capping type Impression
-    if (typeFound?.length === 2) {
-      return true;
+    case CappingTypes.GENERAL.value:
+    case CappingTypes.VIDEO.value:
+    case CappingTypes.CONTEXT.value:
+    case CappingTypes.KEYWORD.value:
+    case CappingTypes.DOMAIN.value:
+    case CappingTypes.SCHEDULE.value: {
+      return typeFound?.length > 0;
     }
-    return false;
-  }
 
-  if (currentType.type === CappingTypes.USER.value) {
-    const typeFound = existedTypes.filter(
-      existedType => existedType.type === CappingTypes.USER.value
-    );
-
-    //---> Business rule: Only always existed 2 capping type Impression
-    if (typeFound?.length === 2) {
-      return true;
+    default: {
+      return false;
     }
-    return false;
-  }
-
-  if (currentType.type === CappingTypes.KEYWORD.value) {
-    const typeFound = existedTypes.find(
-      existedType => existedType.type === CappingTypes.KEYWORD.value
-    );
-
-    if (typeFound) {
-      return true;
-    }
-    return false;
-  }
-
-  if (currentType.type === CappingTypes.DOMAIN.value) {
-    const typeFound = existedTypes.find(
-      existedType => existedType.type === CappingTypes.DOMAIN.value
-    );
-
-    if (typeFound) {
-      return true;
-    }
-    return false;
   }
 };

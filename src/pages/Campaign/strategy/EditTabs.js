@@ -27,6 +27,12 @@ import ContextFilterGroup from './form-fields/ContextFilterGroup';
 import {EntityReport} from '../../entity-report';
 import {EntityTypes} from '../../../constants/report';
 import {USER_ROLE} from '../../user-management/constants';
+import {
+  hasConcepts,
+  hasContextFilterInput,
+  hasGeneralFilterInput,
+  hasVideoFilterInput
+} from '../utils';
 // import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
@@ -81,7 +87,10 @@ const StrategyEditTabs = ({
 
                 {/* Concept */}
                 <Collapse initialOpen title="Concept" unMount={false}>
-                  <Concept strategyData={currentStrategy} />
+                  <Concept
+                    conceptList={currentStrategy?.concepts}
+                    strategyData={currentStrategy}
+                  />
                 </Collapse>
 
                 <FormAction
@@ -144,17 +153,23 @@ const StrategyEditTabs = ({
                   currentStrategy={currentStrategy}
                 />
 
-                <GeneralFilter currentStrategy={currentStrategy} />
+                {hasGeneralFilterInput(currentStrategy) && (
+                  <GeneralFilter currentStrategy={currentStrategy} />
+                )}
 
-                {/* Video filter */}
-                <VideoFilterGroup currentStrategy={currentStrategy} />
+                {hasVideoFilterInput(currentStrategy) && (
+                  <VideoFilterGroup currentStrategy={currentStrategy} />
+                )}
 
-                {/* Context filter */}
-                <ContextFilterGroup currentStrategy={currentStrategy} />
+                {hasContextFilterInput(currentStrategy) && (
+                  <ContextFilterGroup currentStrategy={currentStrategy} />
+                )}
 
-                <Collapse title={t('concepts')} initialOpen unMount={false}>
-                  <Concept goTo={goTo} strategyData={currentStrategy} />
-                </Collapse>
+                {hasConcepts(currentStrategy) && (
+                  <Collapse title={t('concepts')} initialOpen unMount={false}>
+                    <Concept goTo={goTo} strategyData={currentStrategy} />
+                  </Collapse>
+                )}
 
                 <FormAction isSummary currentStrategy={currentStrategy} />
               </FormContainer>

@@ -44,7 +44,7 @@ const BudgetCreateModal = ({
   existedTypes = [],
   cappings = []
 }) => {
-  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 47 ~ cappings", cappings)
+  console.log('🚀 ~ file: BudgetCreateModal.js ~ line 47 ~ cappings', cappings);
   const {t} = useTranslation();
   const budgetGLobal = cappings?.find(
     item =>
@@ -56,7 +56,10 @@ const BudgetCreateModal = ({
       item.type === cappingType.type &&
       item.time_frame === BudgetTimeFrames.DAILY
   );
-  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 59 ~ budgetDaily", budgetDaily)
+  console.log(
+    '🚀 ~ file: BudgetCreateModal.js ~ line 59 ~ budgetDaily',
+    budgetDaily
+  );
 
   const defaultValues = {
     global: [CappingTypes.BUDGET.value].includes(cappingType.type)
@@ -70,11 +73,11 @@ const BudgetCreateModal = ({
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidateCreateBudget(t,cappingType.type)
+    resolver: schemaValidateCreateBudget(t, cappingType.type)
   });
 
   const {handleSubmit, formState, reset, errors} = methods;
-  console.log("🚀 ~ file: BudgetCreateModal.js ~ line 75 ~ errors", errors)
+  console.log('🚀 ~ file: BudgetCreateModal.js ~ line 75 ~ errors', errors);
 
   async function onSubmit(formData) {
     console.log(
@@ -121,7 +124,7 @@ const BudgetCreateModal = ({
       ShowToast.success('Created Capping Successfully');
       toggleModal();
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err || 'Fail to Created Capping'}/>);
+      ShowToast.error(<ApiError apiError={err || 'Fail to Created Capping'} />);
     }
   }
 

@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React from 'react';
+import React, {useState} from 'react';
 
 //---> External Modules
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -12,14 +12,11 @@ import {Pagination} from 'components/list/pagination';
 import {LoadingIndicator} from 'components/common';
 import {getResponseData} from 'utils/helpers/misc.helpers';
 
-const Concept = ({
-  strategyData,
-  isSummary = false,
-  isView = false,
-  conceptList = []
-}) => {
+const Concept = ({strategyData}) => {
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id');
+  const conceptList = strategyData ? strategyData.concepts : [];
+  const [isEdit, setIsEdit] = useState(false);
   const {
     data: {pages = []} = {},
     isFetching,
@@ -35,7 +32,7 @@ const Concept = ({
   });
   const conceptsSelected = strategyData?.concepts || [];
   const concepts = React.useMemo(() => {
-    return isView
+    return !isEdit
       ? conceptList
       : pages?.reduce((acc, page = {}) => {
           const items = getResponseData(page, IS_RESPONSE_ALL);
@@ -46,17 +43,18 @@ const Concept = ({
           acc = [...acc, ...itemsDestructured];
           return acc;
         }, []);
-  }, [isView, conceptList, pages]);
+  }, [isEdit, conceptList, pages]);
 
   return (
     <>
       {isFetching && <LoadingIndicator />}
       <ConceptList
         concepts={concepts}
-        isView={isView}
+        isEdit={isEdit}
+        onEdit={setIsEdit}
         conceptsSelected={conceptsSelected}
       />
-      {hasNextPage && !isView && (
+      {hasNextPage && isEdit && (
         <Pagination
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}

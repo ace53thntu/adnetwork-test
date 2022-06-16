@@ -225,7 +225,7 @@ export const formToApi = ({
     concept_uuids
   } = formData;
 
-  const positionIds = position_uuids?.map(item => item?.value);
+  const positionIds = position_uuids?.map(item => item?.value) || [];
   let startDate = moment(start_time).isSame(moment(), 'day')
     ? null
     : moment(start_time).toISOString();

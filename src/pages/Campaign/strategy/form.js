@@ -2,12 +2,12 @@
 import PropTypes from 'prop-types';
 //---> Build-in Modules
 import React from 'react';
-import { getRole } from 'utils/helpers/auth.helpers';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 import DomainGroup from '../campaign-management/form-fields/DomainGroup';
 import KeywordGroup from '../campaign-management/form-fields/KeywordGroup';
 import StatisticMetrics from '../components/StatisticMetrics';
-import { EnumTypeStatistics } from '../components/StatisticMetrics/StatisticMetrics';
+import {EnumTypeStatistics} from '../components/StatisticMetrics/StatisticMetrics';
 import BudgetGroup from './form-fields/BudgetGroup';
 import ImpressionGroup from './form-fields/ImpressionGroup';
 //---> Internal Modules
@@ -62,7 +62,7 @@ const StrategyForm = ({
       {isCreate && <ScheduleGroup />}
 
       {/* Inventory Group */}
-      <InventoryGroup isView={isView} />
+      <InventoryGroup />
     </>
   );
 };

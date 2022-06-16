@@ -28,6 +28,11 @@ import ScheduleList from './ScheduleList';
 import GeneralFilter from '../../../strategy/form-fields/GeneralFilter';
 import VideoFilterGroup from '../../../strategy/form-fields/VideoFilterGroup';
 import ContextFilterGroup from '../../../strategy/form-fields/ContextFilterGroup';
+import {
+  hasContextFilterInput,
+  hasGeneralFilterInput,
+  hasVideoFilterInput
+} from '../../../utils';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired,
@@ -46,6 +51,7 @@ const CappingList = ({
   const [activeCapping, setActiveCapping] = React.useState(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [cappingList, setCappingList] = React.useState([]);
 
   const {data, isLoading} = useGetCappings({
     params: {
@@ -58,9 +64,23 @@ const CappingList = ({
   });
 
   const cappings = React.useMemo(() => {
-    const cappingData = getResponseData(data, IS_RESPONSE_ALL);
+    let cappingData = getResponseData(data, IS_RESPONSE_ALL);
+    cappingData = cappingData?.map(item => ({...item, id: item?.uuid}));
 
-    return cappingData?.map(item => ({...item, id: item?.uuid}));
+    if (hasGeneralFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.GENERAL.value});
+    }
+
+    if (hasVideoFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.VIDEO.value});
+    }
+
+    if (hasContextFilterInput(currentStrategy)) {
+      cappingData.push({type: CappingTypes.CONTEXT.value});
+    }
+
+    setCappingList(cappingData);
+    return cappingData;
   }, [data]);
 
   const userList = React.useMemo(() => {
@@ -83,7 +103,7 @@ const CappingList = ({
     return getListByType({cappings, type: CappingTypes.SCHEDULE.value});
   }, [cappings]);
 
-  const existedTypes = getExistedType(cappings);
+  let existedTypes = getExistedType(cappingList);
 
   function toggleModal() {
     setOpenForm(prevState => !prevState);
@@ -156,21 +176,36 @@ const CappingList = ({
           referenceType={referenceType}
           referenceUuid={referenceUuid}
           cappings={cappings}
+          onAddTypeCapping={setCappingList}
         />
       </div>
       {isLoading && <LoadingIndicator />}
 
-      {currentStrategy && (
-        <>
-          <GeneralFilter currentStrategy={currentStrategy} />
+      {currentStrategy &&
+        cappingList.map(item => {
+          const {type} = item || {};
+          switch (type) {
+            case CappingTypes.GENERAL.value: {
+              return <GeneralFilter currentStrategy={currentStrategy} />;
+            }
 
-          {/* Video filter */}
-          <VideoFilterGroup currentStrategy={currentStrategy} />
+            case CappingTypes.VIDEO.value: {
+              {
+                /* Video filter */
+              }
+              return <VideoFilterGroup currentStrategy={currentStrategy} />;
+            }
 
-          {/* Context filter */}
-          <ContextFilterGroup currentStrategy={currentStrategy} />
-        </>
-      )}
+            case CappingTypes.CONTEXT.value: {
+              /* Context filter */
+              return <ContextFilterGroup currentStrategy={currentStrategy} />;
+            }
+
+            default: {
+              return;
+            }
+          }
+        })}
 
       {/* Capping List */}
       {userList?.length > 0 && (

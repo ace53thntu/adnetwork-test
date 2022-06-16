@@ -137,10 +137,16 @@ export const CappingTypes = {
   USER: {value: 'USR', label: 'User', api_key: 'user'}, // capping by user
   DOMAIN: {value: 'DM', label: 'Domain'}, // capping by domain
   SCHEDULE: {value: 'SCHL', label: 'Schedule'}, //capping by schedule
-  KEYWORD: {value: 'KW', label: 'Keyword'} // capping by keywords
+  KEYWORD: {value: 'KW', label: 'Keyword'}, // capping by keywords
+  GENERAL: {value: 'GENERAL', label: 'General'}, // capping by General
+  VIDEO: {value: 'VIDEO', label: 'Video'}, // capping by Video
+  CONTEXT: {value: 'CONTEXT', label: 'Context'} // capping by Context
 };
 
 export const CappingTypeButtons = [
+  {type: 'GENERAL', sub_type: '', label: 'General'},
+  {type: 'VIDEO', sub_type: '', label: 'Video'},
+  {type: 'CONTEXT', sub_type: '', label: 'Context'},
   {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
   /*{type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
   {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},*/

@@ -23,7 +23,6 @@ function List(props) {
     data,
     columns,
     handleClickItem,
-    showAction,
     actions,
     handleAction,
     checkedValues,
@@ -141,58 +140,56 @@ function List(props) {
                 })}
               </Grid>
 
-              {showAction ? (
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-controls="setting-action-menu"
-                    aria-haspopup="true"
-                    onClick={event => handleOpenMenu(event, item)}
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-controls="setting-action-menu"
+                  aria-haspopup="true"
+                  onClick={event => handleOpenMenu(event, item)}
+                >
+                  <SettingsIcon />
+                </IconButton>
+                {item?.actions?.length ? (
+                  <Menu
+                    id="setting-action-menu"
+                    anchorEl={anchorEl}
+                    open={selectedId === item.id}
+                    onClose={handleCloseMenu}
+                    TransitionComponent={Fade}
+                    elevation={0}
+                    anchorOrigin={{
+                      vertical: 'center',
+                      horizontal: 'center'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}
+                    getContentAnchorEl={null}
+                    classes={{
+                      paper: classes.paperMenu
+                    }}
+                    keepMounted={false}
                   >
-                    <SettingsIcon />
-                  </IconButton>
-                  {item?.actions?.length ? (
-                    <Menu
-                      id="setting-action-menu"
-                      anchorEl={anchorEl}
-                      open={selectedId === item.id}
-                      onClose={handleCloseMenu}
-                      TransitionComponent={Fade}
-                      elevation={0}
-                      anchorOrigin={{
-                        vertical: 'center',
-                        horizontal: 'center'
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                      }}
-                      getContentAnchorEl={null}
-                      classes={{
-                        paper: classes.paperMenu
-                      }}
-                      keepMounted={false}
-                    >
-                      {item.actions.map((action, idx) => (
-                        <MenuItem
-                          key={idx}
-                          onClick={() => {
-                            handleAction(idx, item);
-                            handleCloseMenu();
-                          }}
-                        >
-                          {action}
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  ) : null}
-                </ListItemSecondaryAction>
-              ) : null}
+                    {item.actions.map((action, idx) => (
+                      <MenuItem
+                        key={idx}
+                        onClick={() => {
+                          handleAction(idx, item);
+                          handleCloseMenu();
+                        }}
+                      >
+                        {action}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                ) : null}
+              </ListItemSecondaryAction>
             </ListItem>
           );
         })}
       </MuiList>
-      {showAction && actions?.length ? (
+      {actions?.length ? (
         <Menu
           id="setting-action-menu"
           anchorEl={anchorEl}
@@ -268,11 +265,6 @@ List.propTypes = {
    */
   handleClickItem: PropTypes.func,
   /**
-   * If `true` then will show action (with setting icon)
-   * at the end of each item
-   */
-  showAction: PropTypes.bool,
-  /**
    * Function handle when click on an action
    */
   handleAction: PropTypes.func,
@@ -293,7 +285,6 @@ List.propTypes = {
 List.defaultProps = {
   handleClickItem: () => {},
   handleAction: () => {},
-  showAction: false,
   actions: [],
   checkedValues: [],
   checkable: false,
