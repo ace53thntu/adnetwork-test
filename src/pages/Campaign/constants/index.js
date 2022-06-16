@@ -41,7 +41,7 @@ export const getSkippableOptions = key => [
   {value: '', label: 'Off', id: `${key}-unset`},
   {value: true, label: 'True', id: `${key}-true`},
   {value: false, label: 'False', id: `${key}-false`}
-]);
+];
 
 /**
  * @enum
