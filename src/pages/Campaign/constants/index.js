@@ -382,12 +382,12 @@ export const StrategyEditTabs = {
   //   value: 2,
   //   name: 'audience'
   // },
-  SUMMARY: {
+  /*  SUMMARY: {
     value: 2,
     name: 'summary'
-  },
+  },*/
   REPORT: {
-    value: 3,
+    value: 2,
     name: 'report'
   }
 };

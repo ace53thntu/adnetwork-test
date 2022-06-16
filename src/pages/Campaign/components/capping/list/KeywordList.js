@@ -2,20 +2,20 @@
 import React from 'react';
 
 // External Modules
-import {useTranslation} from 'react-i18next';
-import {Badge} from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 // Internal Modules
-import {capitalize} from 'utils/helpers/string.helpers';
-import {renderCappingTypeColor} from '../dto';
-import {Collapse} from 'components/common';
-import {List} from 'components/list';
-import {CustomStatus} from 'components/list/status';
-import {CappingTypes} from 'constants/misc';
-import {isArray} from 'lodash';
+import { capitalize } from 'utils/helpers/string.helpers';
+import { renderCappingTypeColor } from '../dto';
+import { Collapse } from 'components/common';
+import { List } from 'components/list';
+import { CustomStatus } from 'components/list/status';
+import { CappingTypes } from 'constants/misc';
+import { isArray } from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
-import {Chip} from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 
 const propTypes = {
   list: PropTypes.array,
@@ -30,7 +30,7 @@ const KeywordList = ({
   onClickMenu = () => null,
   onClickItem = () => null
 }) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -106,7 +106,7 @@ const KeywordList = ({
   }, []);
 
   return (
-    <Collapse title={title} unMount={false}>
+    <Collapse initialOpen title={title} unMount={false}>
       {isArray(list) && list.length > 0 ? (
         <List
           data={list || []}
