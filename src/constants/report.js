@@ -628,7 +628,7 @@ export const REPORT_VIEW_TYPES = [
         value: 36,
         code: 'virp_start',
         acl: 'irp_client',
-        is_price: true,
+        is_price: false,
         code_name: 'video_start'
       },
       {

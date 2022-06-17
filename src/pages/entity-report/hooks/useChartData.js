@@ -75,7 +75,10 @@ const getDataPieChart = ({metrics, metricSet, info}) => {
       const metricList = Object.entries(metricData);
       const _metricSet = metricSet?.[0];
       const metricCode = _metricSet?.code || '';
-      const isPrice = _metricSet?.is_price;
+
+      // Check metricSet?.code !== 'video_start' condition because make sure old report work correctly
+      const isPrice =
+        metricCode === 'video_start' ? false : _metricSet?.is_price;
 
       const metricsBySet = metricList.map(([objectUuid, metricObj]) => {
         const metricValue = metricObj?.[metricCode] || 0;
@@ -256,7 +259,8 @@ const getDataDrawChart = ({
     let valueOfObject = 0;
     if (existedMetricByDate) {
       valueOfObject = existedMetricByDate?.[entityId]?.[metricSet?.code];
-      if (metricSet?.is_price) {
+      // Check metricSet?.code !== 'video_start' condition because make sure old report work correctly
+      if (metricSet?.is_price && metricSet?.code !== 'video_start') {
         valueOfObject = getPriceValue(valueOfObject);
       }
     }
