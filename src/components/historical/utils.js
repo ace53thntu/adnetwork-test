@@ -22,6 +22,7 @@ import {getBrowserLanguages} from 'utils/helpers/getBrowserLanguages';
 import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
 import {CappingTypes} from 'constants/misc';
+import {FieldNameMapping} from './constants';
 
 const contextListByField = {
   browser: BrowsersOptions,
@@ -396,4 +397,21 @@ export const destructureCappingLogList = cappingLogs => {
     ...keyword,
     ...schedule
   ];
+};
+
+export const getFieldChanged = dataLog => {
+  if (
+    dataLog &&
+    typeof dataLog === 'object' &&
+    Object.keys(dataLog).length > 0
+  ) {
+    const listKeys = Object.keys(dataLog);
+    return listKeys?.map(item => {
+      if (FieldNameMapping[item]) {
+        return FieldNameMapping[item];
+      }
+      return item;
+    });
+  }
+  return [];
 };
