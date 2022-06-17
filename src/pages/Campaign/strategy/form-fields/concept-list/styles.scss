@@ -1,0 +1,21 @@
+.concept-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .concept-search {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .concept-list-wrapper {
+        margin-top: 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .concept-item {
+            flex: 1 1 32%;
+        }
+    }
+}
