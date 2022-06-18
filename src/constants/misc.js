@@ -132,8 +132,13 @@ export const BudgetTimeFrames = {
 
 export const CappingTypes = {
   BUDGET_MANAGER: {value: 'BDG_MNG', label: 'Budget Manager'}, // capping by budget of manager ( admin )
-  BUDGET: {value: 'BDG', label: 'Budget', api_key: 'budget'}, // capping by budget of client
-  IMPRESSION: {value: 'IMP', label: 'Impression', api_key: 'impression'}, // capping by impression
+  BUDGET: {value: 'BDG', label: 'Budget', api_key: 'budget', type: 'BDG'}, // capping by budget of client
+  IMPRESSION: {
+    value: 'IMP',
+    label: 'Impression',
+    api_key: 'impression',
+    type: 'IMP'
+  }, // capping by impression
   USER: {value: 'USR', label: 'User', api_key: 'user'}, // capping by user
   USER_CLICK: {value: 'USR_CLICK', label: 'User Click', api_key: 'user_click'}, // capping by user click
   USER_VIEWABLE: {

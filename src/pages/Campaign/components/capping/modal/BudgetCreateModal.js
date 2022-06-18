@@ -31,8 +31,7 @@ const propTypes = {
   toggleModal: PropTypes.func,
   cappingType: PropTypes.object,
   referenceType: PropTypes.string,
-  referenceUuid: PropTypes.string,
-  existedTypes: PropTypes.array
+  referenceUuid: PropTypes.string
 };
 
 const BudgetCreateModal = ({
@@ -41,10 +40,8 @@ const BudgetCreateModal = ({
   cappingType = {},
   referenceType = '',
   referenceUuid = '',
-  existedTypes = [],
   cappings = []
 }) => {
-  console.log('🚀 ~ file: BudgetCreateModal.js ~ line 47 ~ cappings', cappings);
   const {t} = useTranslation();
   const budgetGLobal = cappings?.find(
     item =>
@@ -55,10 +52,6 @@ const BudgetCreateModal = ({
     item =>
       item.type === cappingType.type &&
       item.time_frame === BudgetTimeFrames.DAILY
-  );
-  console.log(
-    '🚀 ~ file: BudgetCreateModal.js ~ line 59 ~ budgetDaily',
-    budgetDaily
   );
 
   const defaultValues = {

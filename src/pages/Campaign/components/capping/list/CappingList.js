@@ -144,6 +144,10 @@ const CappingList = ({
 
   async function onEditCapping(formData) {
     const requestBody = formToApi({formData, type: activeCapping?.type});
+    console.log(
+      '🚀 ~ file: CappingList.js ~ line 147 ~ onEditCapping ~ requestBody',
+      requestBody
+    );
     setIsSubmitting(true);
     try {
       await editCapping({cappingId: activeCapping?.uuid, data: requestBody});

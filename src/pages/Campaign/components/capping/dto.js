@@ -28,7 +28,10 @@ export const formToApi = ({formData, type}) => {
     [
       CappingTypes.IMPRESSION.value,
       CappingTypes.USER.value,
-      CappingTypes.USER_CLICK.value
+      CappingTypes.USER_CLICK.value,
+      CappingTypes.USER_VIEWABLE.value,
+      CappingTypes.VIEWABLE.value,
+      CappingTypes.CLICK.value
     ].includes(type)
   ) {
     return {

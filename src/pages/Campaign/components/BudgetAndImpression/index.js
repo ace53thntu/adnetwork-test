@@ -2,6 +2,7 @@ import React from 'react';
 import BudgetList from '../capping/list/BudgetList';
 import {formToApi, getListByType} from '../capping/dto';
 import {
+  CappingReferenceTypes,
   CappingTypes,
   DEFAULT_PAGINATION,
   IS_RESPONSE_ALL
@@ -122,6 +123,9 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
           list={budgetList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type={CappingTypes.BUDGET}
+          referenceType={CappingReferenceTypes.STRATEGY}
+          referenceUuid={referenceUuid}
         />
       )}
 
@@ -131,6 +135,9 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
           list={impressionList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type={CappingTypes.IMPRESSION}
+          referenceUuid={referenceUuid}
+          referenceType={CappingReferenceTypes.STRATEGY}
         />
       )}
 
