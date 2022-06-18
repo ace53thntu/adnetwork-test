@@ -7,8 +7,8 @@ import {Avatar, Chip, Grid} from '@material-ui/core';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import {makeStyles} from '@material-ui/core/styles';
 import {useGetLogDifference} from 'queries/historical';
-import {useDestructureLogDifference} from './hook';
 import {getFieldChanged} from './utils';
+import './style.scss';
 
 const useStyles = makeStyles(theme => ({
   createdTime: {
@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
   fieldChanged: {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    textTransform: 'capitalize'
   }
 }));
 
@@ -41,18 +42,13 @@ const HistoricalItem = ({logItem, entityName, entityType}) => {
       id_source: logItem?.id_source,
       id_compare: logItem?.id_compare
     },
-    enabled: !!logItem
+    enabled: !!logItem?.id_source && !!logItem?.id_compare
   });
-  const listFieldChanged = getFieldChanged(data?.data);
-  console.log(
-    '🚀 ~ file: HistoricalItem.js ~ line 56 ~ HistoricalItem ~ listFieldChanged',
-    listFieldChanged
-  );
-  const diffData = useDestructureLogDifference({diffData: data?.data});
-  console.log(
-    '🚀 ~ file: HistoricalItem.js ~ line 55 ~ HistoricalItem ~ diffData',
-    diffData
-  );
+  const listFieldChanged = getFieldChanged({
+    dataLog: data?.data,
+    fieldName: logItem?.field_name
+  });
+
   return (
     <AccordionSummary
       expandIcon={<ExpandMoreIcon />}

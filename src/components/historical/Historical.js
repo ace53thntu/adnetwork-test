@@ -84,7 +84,7 @@ const Historical = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <Button type="button" color="link" onClick={toggle}>
+        <Button type="button" color="light" onClick={toggle}>
           {t('COMMON.CLOSE')}
         </Button>
       </ModalFooter>

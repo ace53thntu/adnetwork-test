@@ -35,6 +35,10 @@ const AddTypeButton = ({
   referenceUuid = '',
   cappings = []
 }) => {
+  console.log(
+    '🚀 ~ file: AddTypeButton.js ~ line 38 ~ referenceType',
+    referenceType
+  );
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
 
@@ -47,6 +51,7 @@ const AddTypeButton = ({
     setOpenModal(true);
     setActiveType(item);
   }
+  console.log('=== CappingTypeButtons', CappingTypeButtons);
 
   return (
     <>
@@ -58,13 +63,17 @@ const AddTypeButton = ({
           {CappingTypeButtons?.map((item, idx) => {
             if (
               (referenceType === 'campaign' &&
-                item?.type === CappingTypes.SCHEDULE.value) ||
-              item?.type === CappingTypes.BUDGET_MANAGER.value ||
-              item?.type === CappingTypes.USER_CLICK.value ||
-              item?.type === CappingTypes.USER_VIEWABLE.value
+                (item?.type === CappingTypes.SCHEDULE.value ||
+                  item?.type === CappingTypes.USER_CLICK.value ||
+                  item?.type === CappingTypes.USER_VIEWABLE.value)) ||
+              item?.type === CappingTypes.BUDGET_MANAGER.value
             ) {
               return null;
             }
+            console.log(
+              '🚀 ~ file: AddTypeButton.js ~ line 87 ~ {CappingTypeButtons?.map ~ item',
+              item
+            );
 
             return (
               <DropdownItem

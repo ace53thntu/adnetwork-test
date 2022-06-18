@@ -1,5 +1,6 @@
 import {
   BudgetTimeFrames,
+  CappingTypeButtons,
   LinearityOptions,
   ProtocolOptions
 } from 'constants/misc';
@@ -36,6 +37,16 @@ const contextListByField = {
 };
 
 const PriceFields = ['cpm_max', 'target'];
+const CappingHaveTimeFrame = [
+  CappingTypes.BUDGET.value,
+  CappingTypes.BUDGET_MANAGER.value,
+  CappingTypes.IMPRESSION.value,
+  CappingTypes.USER.value,
+  CappingTypes.USER_VIEWABLE.value,
+  CappingTypes.USER_CLICK.value,
+  CappingTypes.VIEWABLE.value,
+  CappingTypes.CLICK.value
+];
 
 export const mappingStrategyFields = ({obj, fieldName}) => {
   if (!obj || typeof obj !== 'object' || !Object.keys(obj)) {
@@ -300,12 +311,7 @@ const getCappingLogByType = ({cappingType, timeFrame, cappingLogs = []}) => {
     }
 
     if (
-      ![
-        CappingTypes.BUDGET.value,
-        CappingTypes.BUDGET_MANAGER.value,
-        CappingTypes.IMPRESSION.value,
-        CappingTypes.USER.value
-      ].includes(item?.data?.type) &&
+      !CappingHaveTimeFrame.includes(item?.data?.type) &&
       item?.data?.type === cappingType
     ) {
       return true;
@@ -316,13 +322,25 @@ const getCappingLogByType = ({cappingType, timeFrame, cappingLogs = []}) => {
 
   return logFilter?.map((item, index) => {
     const idCompare = logFilter?.[index + 1]?.id || null;
-
-    return {
+    const newItem = {
       ...item,
       action: item?.action === 'delete' ? 'finish' : item?.action,
       id_source: item?.id,
       id_compare: idCompare
     };
+    if (CappingHaveTimeFrame.includes(item?.data?.type)) {
+      const typeLabel = CappingTypeButtons?.find(
+        typeItem => typeItem?.type === item?.data?.type
+      )?.label;
+      const timeFrame =
+        item?.data?.time_frame === BudgetTimeFrames.DAILY ? 'daily' : 'global';
+      return {
+        ...newItem,
+        field_name: `${typeLabel} ${timeFrame}`
+      };
+    }
+
+    return newItem;
   });
 };
 
@@ -372,6 +390,46 @@ export const destructureCappingLogList = cappingLogs => {
     timeFrame: BudgetTimeFrames.DAILY,
     cappingLogs
   });
+  const userViewableGlobal = getCappingLogByType({
+    cappingType: CappingTypes.USER_VIEWABLE.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+  const userViewableDaily = getCappingLogByType({
+    cappingType: CappingTypes.USER_VIEWABLE.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+  const userClickGlobal = getCappingLogByType({
+    cappingType: CappingTypes.USER_CLICK.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+  const userClickDaily = getCappingLogByType({
+    cappingType: CappingTypes.USER_CLICK.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+  const viewableGlobal = getCappingLogByType({
+    cappingType: CappingTypes.VIEWABLE.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+  const viewableDaily = getCappingLogByType({
+    cappingType: CappingTypes.VIEWABLE.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
+  const clickGlobal = getCappingLogByType({
+    cappingType: CappingTypes.CLICK.value,
+    timeFrame: BudgetTimeFrames.GLOBAL,
+    cappingLogs
+  });
+  const clickDaily = getCappingLogByType({
+    cappingType: CappingTypes.CLICK.value,
+    timeFrame: BudgetTimeFrames.DAILY,
+    cappingLogs
+  });
   const domain = getCappingLogByType({
     cappingType: CappingTypes.DOMAIN.value,
     cappingLogs
@@ -393,13 +451,21 @@ export const destructureCappingLogList = cappingLogs => {
     ...impressionDaily,
     ...userGlobal,
     ...userDaily,
+    ...userViewableGlobal,
+    ...userViewableDaily,
+    ...userClickGlobal,
+    ...userClickDaily,
+    ...clickGlobal,
+    ...clickDaily,
+    ...viewableGlobal,
+    ...viewableDaily,
     ...domain,
     ...keyword,
     ...schedule
   ];
 };
 
-export const getFieldChanged = dataLog => {
+export const getFieldChanged = ({dataLog, fieldName = ''}) => {
   if (
     dataLog &&
     typeof dataLog === 'object' &&
@@ -407,10 +473,13 @@ export const getFieldChanged = dataLog => {
   ) {
     const listKeys = Object.keys(dataLog);
     return listKeys?.map(item => {
+      if (item === 'target' && fieldName) {
+        return fieldName;
+      }
       if (FieldNameMapping[item]) {
         return FieldNameMapping[item];
       }
-      return item;
+      return item?.replace(/_/g, ' ') || '';
     });
   }
   return [];
