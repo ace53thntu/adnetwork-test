@@ -22,12 +22,16 @@ const noImage =
 
 function ConceptListItemAnt(props) {
   const {data} = props;
-  const {name, advertiser_uuid, uuid: conceptId, fileUUID, fileType} = data;
+  const {name, advertiser_uuid, uuid: conceptId, preview_file} = data;
+
   const {advertiserId} = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {mutateAsync: deleteConceptRequest} = useDeleteConcept();
+
+  const fileUUID = preview_file?.uuid;
+  const fileType = preview_file?.type?.toLowerCase();
 
   const handleEdit = () => {
     navigate(`/${RoutePaths.CREATIVE}/${advertiser_uuid}/${conceptId}`);
