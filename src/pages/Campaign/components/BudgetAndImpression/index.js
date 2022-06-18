@@ -22,7 +22,7 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
-  const {data, isLoading} = useGetCappings({
+  const {data} = useGetCappings({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: DEFAULT_PAGINATION.page,

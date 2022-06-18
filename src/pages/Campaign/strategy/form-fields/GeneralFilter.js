@@ -1,29 +1,29 @@
 //---> Build-in Modules
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 
 //---> External Modules
-import { useTranslation } from 'react-i18next';
-import { Col, Row } from 'reactstrap';
-import { useFormContext, useWatch } from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Col, Row} from 'reactstrap';
+import {useFormContext, useWatch} from 'react-hook-form';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import { FormReactSelect, FormTextInput } from 'components/forms';
-import { Collapse } from 'components/common/Collapse';
-import { StrategySources, StrategyTypes } from 'pages/Campaign/constants';
+import {FormReactSelect, FormTextInput} from 'components/forms';
+import {Collapse} from 'components/common/Collapse';
+import {StrategySources, StrategyTypes} from 'pages/Campaign/constants';
 import PositionSelect from 'components/forms/PositionSelect';
 import LocationSelect from './LocationSelect';
-import { CurrencyInputField } from 'components/forms/CurrencyInputField';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
   isView: PropTypes.bool
 };
 
-const GeneralFilter = ({ currentStrategy = {}, isView = false }) => {
-  const { t } = useTranslation();
-  const { errors, control } = useFormContext();
-  const strategyType = useWatch({ name: 'strategy_type', control });
+const GeneralFilter = ({currentStrategy = {}, isView = false}) => {
+  const {t} = useTranslation();
+  const {control} = useFormContext();
+  const strategyType = useWatch({name: 'strategy_type', control});
 
   return (
     <>

@@ -37,10 +37,6 @@ const AddTypeButton = ({
   cappings = [],
   onAddTypeCapping
 }) => {
-  console.log(
-    '🚀 ~ file: AddTypeButton.js ~ line 38 ~ referenceType',
-    referenceType
-  );
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
 
@@ -53,7 +49,7 @@ const AddTypeButton = ({
     const {type} = item || {};
     if (
       type === CappingTypes.GENERAL.value ||
-      type == CappingTypes.VIDEO.value ||
+      type === CappingTypes.VIDEO.value ||
       type === CappingTypes.CONTEXT.value
     ) {
       onAddTypeCapping([...existedTypes, item]);
@@ -82,10 +78,6 @@ const AddTypeButton = ({
             ) {
               return null;
             }
-            console.log(
-              '🚀 ~ file: AddTypeButton.js ~ line 87 ~ {CappingTypeButtons?.map ~ item',
-              item
-            );
 
             return (
               <DropdownItem

@@ -1,5 +1,4 @@
 import {CappingAPIRequest} from 'api/capping.api';
-import {useCancelRequest} from 'hooks';
 import {useMutation, useQueryClient} from 'react-query';
 
 import {GET_CAPPINGS} from './constants';

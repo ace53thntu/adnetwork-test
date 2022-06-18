@@ -1,28 +1,23 @@
 //---> Build-in Modules
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 
 //---> External Modules
-import { useTranslation } from 'react-i18next';
-import { Col, FormGroup, Label, Row } from 'reactstrap';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Col, FormGroup, Label, Row} from 'reactstrap';
+import {Controller, useFormContext, useWatch} from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
 
 //---> Internal Modules
-import { ActiveToggle, FormReactSelect, FormTextInput } from 'components/forms';
+import {ActiveToggle, FormReactSelect, FormTextInput} from 'components/forms';
 import CampaignSelect from './CampaignSelect';
-import { Collapse } from 'components/common/Collapse';
+import {Collapse} from 'components/common/Collapse';
 import {
   PricingModelOptions,
   PriorityOptions,
-  StrategySources,
-  StrategyTypes,
   STRATEGY_TYPES
 } from 'pages/Campaign/constants';
-import PositionSelect from 'components/forms/PositionSelect';
-import { USER_ROLE } from 'pages/user-management/constants';
-import LocationSelect from './LocationSelect';
-import { CurrencyInputField } from 'components/forms/CurrencyInputField';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
   currentStrategy: PropTypes.object,
@@ -37,9 +32,9 @@ const InformationGroup = ({
   isView = false,
   role = ''
 }) => {
-  const { t } = useTranslation();
-  const { errors, control } = useFormContext();
-  const startDate = useWatch({ name: 'start_time', control });
+  const {t} = useTranslation();
+  const {errors, control} = useFormContext();
+  const startDate = useWatch({name: 'start_time', control});
 
   return (
     <>
@@ -67,7 +62,7 @@ const InformationGroup = ({
               <Controller
                 control={control}
                 name="start_time"
-                render={({ onChange, onBlur, value, name }) => (
+                render={({onChange, onBlur, value, name}) => (
                   <DatePicker
                     selected={value}
                     onChange={date => onChange(date)}
@@ -94,7 +89,7 @@ const InformationGroup = ({
               <Controller
                 control={control}
                 name="end_time"
-                render={({ onChange, onBlur, value, name }) => (
+                render={({onChange, onBlur, value, name}) => (
                   <DatePicker
                     selected={value}
                     onChange={date => onChange(date)}
@@ -174,7 +169,7 @@ const InformationGroup = ({
             <Controller
               control={control}
               name="status"
-              render={({ onChange, onBlur, value, name }) => (
+              render={({onChange, onBlur, value, name}) => (
                 <ActiveToggle
                   value={value}
                   onChange={onChange}

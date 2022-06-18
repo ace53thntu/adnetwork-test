@@ -2,20 +2,19 @@
 import React from 'react';
 
 //---> External Modules
-import PropTypes from 'prop-types';
-import { Col, Button, FormText } from 'reactstrap';
+import {Button, FormText} from 'reactstrap';
+import {useTranslation} from 'react-i18next';
 
 //---> Internal Modules
-import { Collapse } from 'components/common';
-import { InventoryModal, StrategyInventory } from './inventories';
-import { RequiredLabelPrefix } from 'components/common/RequireLabelPrefix';
-import { useStrategyInventorySelector } from 'store/reducers/campaign';
-import { useTranslation } from 'react-i18next';
+import {Collapse} from 'components/common';
+import {InventoryModal, StrategyInventory} from './inventories';
+import {RequiredLabelPrefix} from 'components/common/RequireLabelPrefix';
+import {useStrategyInventorySelector} from 'store/reducers/campaign';
 
 const propTypes = {};
 
 const InventoryGroup = () => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const strategyInventories = useStrategyInventorySelector();
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -33,7 +32,7 @@ const InventoryGroup = () => {
           </FormText>
         )}
         <StrategyInventory strategyInventories={strategyInventories} />
-        <div style={{ float: 'right' }}>
+        <div style={{float: 'right'}}>
           <Button type="button" onClick={onToggleModal} color="primary">
             Add Inventory
           </Button>

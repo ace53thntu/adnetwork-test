@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { useParams } from 'react-router-dom';
+import {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router';
+import {useParams} from 'react-router-dom';
 
 import AiActivTreeSelect from '../../../../components/AiActivTreeSelect';
-import { RoutePaths } from '../../../../constants/route-paths';
-import { useQueryString } from '../../../../hooks';
+import {RoutePaths} from '../../../../constants/route-paths';
+import {useQueryString} from '../../../../hooks';
 import {
   setAdvertiserRedux,
   setCampaignRedux,
@@ -17,11 +17,11 @@ import {
   setSelectTreeDataRedux,
   useCommonSelector
 } from '../../../../store/reducers/common';
-import { getAllCampaignTreeData } from '../../utils';
+import {getAllCampaignTreeData} from '../../utils';
 
 function TreeSelectCampaign() {
-  const { selectedTreeNode, selectTreeData } = useCommonSelector();
-  const { campaignId, strategyId } = useParams();
+  const {selectedTreeNode, selectTreeData} = useCommonSelector();
+  const {campaignId, strategyId} = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const query = useQueryString();
@@ -86,7 +86,7 @@ function TreeSelectCampaign() {
   };
 
   return (
-    <div style={{ paddingLeft: '15px' }} className="mb-3">
+    <div style={{paddingLeft: '15px'}} className="mb-3">
       <AiActivTreeSelect
         allowClear
         selectedItem={selectedTreeNode}

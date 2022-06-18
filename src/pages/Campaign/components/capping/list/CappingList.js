@@ -5,10 +5,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Internal Modules
-import { getResponseData } from 'utils/helpers/misc.helpers';
-import { ShowToast } from 'utils/helpers/showToast.helpers';
-import { formToApi, getExistedType, getListByType } from '../dto';
-import { ApiError, DialogConfirm, LoadingIndicator } from 'components/common';
+import {getResponseData} from 'utils/helpers/misc.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {formToApi, getExistedType, getListByType} from '../dto';
+import {ApiError, DialogConfirm, LoadingIndicator} from 'components/common';
 import {
   CappingTypes,
   DEFAULT_PAGINATION,
@@ -44,8 +44,8 @@ const CappingList = ({
   referenceType = '',
   currentStrategy
 }) => {
-  const { mutateAsync: editCapping } = useEditCapping();
-  const { mutateAsync: deleteCapping } = useDeleteCapping();
+  const {mutateAsync: editCapping} = useEditCapping();
+  const {mutateAsync: deleteCapping} = useDeleteCapping();
 
   const [openForm, setOpenForm] = React.useState(false);
   const [activeCapping, setActiveCapping] = React.useState(null);
@@ -53,7 +53,7 @@ const CappingList = ({
   const [openDialog, setOpenDialog] = React.useState(false);
   const [cappingList, setCappingList] = React.useState([]);
 
-  const { data, isLoading } = useGetCappings({
+  const {data, isLoading} = useGetCappings({
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       page: DEFAULT_PAGINATION.page,
@@ -65,58 +65,58 @@ const CappingList = ({
 
   const cappings = React.useMemo(() => {
     let cappingData = getResponseData(data, IS_RESPONSE_ALL);
-    cappingData = cappingData?.map(item => ({ ...item, id: item?.uuid }));
+    cappingData = cappingData?.map(item => ({...item, id: item?.uuid}));
 
     if (hasGeneralFilterInput(currentStrategy)) {
-      cappingData.push({ type: CappingTypes.GENERAL.value });
+      cappingData.push({type: CappingTypes.GENERAL.value});
     }
 
     if (hasVideoFilterInput(currentStrategy)) {
-      cappingData.push({ type: CappingTypes.VIDEO.value });
+      cappingData.push({type: CappingTypes.VIDEO.value});
     }
 
     if (hasContextFilterInput(currentStrategy)) {
-      cappingData.push({ type: CappingTypes.CONTEXT.value });
+      cappingData.push({type: CappingTypes.CONTEXT.value});
     }
 
     setCappingList(cappingData);
     return cappingData;
-  }, [data]);
+  }, [currentStrategy, data]);
 
   const userList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.USER.value });
+    return getListByType({cappings, type: CappingTypes.USER.value});
   }, [cappings]);
 
   const userClickList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.USER_CLICK.value });
+    return getListByType({cappings, type: CappingTypes.USER_CLICK.value});
   }, [cappings]);
 
   const userViewableList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.USER_VIEWABLE.value });
+    return getListByType({cappings, type: CappingTypes.USER_VIEWABLE.value});
   }, [cappings]);
 
   const clickList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.CLICK.value });
+    return getListByType({cappings, type: CappingTypes.CLICK.value});
   }, [cappings]);
 
   const viewableList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.VIEWABLE.value });
+    return getListByType({cappings, type: CappingTypes.VIEWABLE.value});
   }, [cappings]);
 
   const budgetManagerList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.BUDGET_MANAGER.value });
+    return getListByType({cappings, type: CappingTypes.BUDGET_MANAGER.value});
   }, [cappings]);
 
   const domainList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.DOMAIN.value });
+    return getListByType({cappings, type: CappingTypes.DOMAIN.value});
   }, [cappings]);
 
   const keywordList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.KEYWORD.value });
+    return getListByType({cappings, type: CappingTypes.KEYWORD.value});
   }, [cappings]);
 
   const scheduleList = React.useMemo(() => {
-    return getListByType({ cappings, type: CappingTypes.SCHEDULE.value });
+    return getListByType({cappings, type: CappingTypes.SCHEDULE.value});
   }, [cappings]);
 
   let existedTypes = getExistedType(cappingList);
@@ -143,10 +143,10 @@ const CappingList = ({
   }
 
   async function onEditCapping(formData) {
-    const requestBody = formToApi({ formData, type: activeCapping?.type });
+    const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {
-      await editCapping({ cappingId: activeCapping?.uuid, data: requestBody });
+      await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
       setIsSubmitting(false);
 
       ShowToast.success('Updated capping successfully');
@@ -167,11 +167,11 @@ const CappingList = ({
         activeCapping?.type !== CappingTypes.BUDGET.value &&
         activeCapping?.type !== CappingTypes.IMPRESSION.value
       ) {
-        await deleteCapping({ cappingId: activeCapping?.uuid });
+        await deleteCapping({cappingId: activeCapping?.uuid});
       } else {
         await editCapping({
           cappingId: activeCapping?.uuid,
-          data: { target: 0 }
+          data: {target: 0}
         });
       }
 
@@ -202,7 +202,7 @@ const CappingList = ({
 
       {currentStrategy &&
         cappingList.map(item => {
-          const { type } = item || {};
+          const {type} = item || {};
           switch (type) {
             case CappingTypes.GENERAL.value: {
               return <GeneralFilter currentStrategy={currentStrategy} />;
@@ -218,9 +218,8 @@ const CappingList = ({
               return <ContextFilterGroup currentStrategy={currentStrategy} />;
             }
 
-            default: {
-              return;
-            }
+            default:
+              return null;
           }
         })}
 

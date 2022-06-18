@@ -14,7 +14,7 @@ import {RoutePaths} from 'constants/route-paths';
 import {useCreateStrategy, useEditStrategy} from 'queries/strategy';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {strategySchema} from '../validation';
-import {apiToForm, formToApi, isConceptsChanged} from 'entities/Strategy';
+import {apiToForm, formToApi} from 'entities/Strategy';
 import {useDispatch} from 'react-redux';
 import {initStrategyInventoryListRedux} from 'store/reducers/campaign';
 import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertiserTree';

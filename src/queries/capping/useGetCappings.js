@@ -1,6 +1,5 @@
 import {CappingAPIRequest} from 'api/capping.api';
 import {IS_RESPONSE_ALL} from 'constants/misc';
-import {useCancelRequest} from 'hooks';
 import {useQuery} from 'react-query';
 
 import {GET_CAPPINGS} from './constants';

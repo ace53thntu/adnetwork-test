@@ -1,26 +1,29 @@
 //---> Build-in Modules
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 //---> External Modules
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { useGetConceptsLoadMore } from 'queries/concept';
-import { ConceptList } from './concept-list';
-import { useQueryString } from 'hooks';
-import { DEFAULT_PAGINATION, IS_RESPONSE_ALL } from 'constants/misc';
-import { Pagination } from 'components/list/pagination';
-import { LoadingIndicator } from 'components/common';
-import { getResponseData } from 'utils/helpers/misc.helpers';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {useGetConceptsLoadMore} from 'queries/concept';
+import {ConceptList} from './concept-list';
+import {useQueryString} from 'hooks';
+import {DEFAULT_PAGINATION, IS_RESPONSE_ALL} from 'constants/misc';
+import {Pagination} from 'components/list/pagination';
+import {LoadingIndicator} from 'components/common';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
-const Concept = ({ strategyData }) => {
+const Concept = ({strategyData}) => {
   const query = useQueryString();
   const advertiserId = query.get('advertiser_id');
-  const conceptList = strategyData ? strategyData.concepts : [];
+  const conceptList = React.useMemo(
+    () => (strategyData ? strategyData.concepts : []),
+    [strategyData]
+  );
   const [isEdit, setIsEdit] = useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
 
   const {
-    data: { pages = [] } = {},
+    data: {pages = []} = {},
     isFetching,
     hasNextPage,
     fetchNextPage,
