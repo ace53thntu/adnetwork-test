@@ -38,7 +38,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
   const {data, isLoading} = useGetCappings({
     params: {
-      per_page: DEFAULT_PAGINATION.perPage,
+      per_page: 100,
       page: DEFAULT_PAGINATION.page,
       sort: 'updated_at DESC',
       reference_uuid: referenceUuid
