@@ -16,10 +16,13 @@ import {getResponseData} from '../../../../utils/helpers/misc.helpers';
 import CappingFormContainer from '../capping/form/CappingFormContainer';
 import {ApiError, DialogConfirm} from '../../../../components/common';
 import {ShowToast} from '../../../../utils/helpers/showToast.helpers';
+import {useQueryClient} from 'react-query';
+import {GET_CAPPING} from 'queries/capping/constants';
 
 const propTypes = {};
 
 const BudgetAndImpression = ({referenceUuid = ''}) => {
+  const client = useQueryClient();
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -78,7 +81,11 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
     const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {
-      await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
+      const {data: updatedData} = await editCapping({
+        cappingId: activeCapping?.uuid,
+        data: requestBody
+      });
+      await client.invalidateQueries(GET_CAPPING, updatedData?.uuid);
       setIsSubmitting(false);
 
       ShowToast.success('Updated capping successfully');

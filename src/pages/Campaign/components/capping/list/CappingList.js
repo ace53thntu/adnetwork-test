@@ -33,6 +33,8 @@ import {
   hasGeneralFilterInput,
   hasVideoFilterInput
 } from '../../../utils';
+import {useQueryClient} from 'react-query';
+import {GET_CAPPING} from 'queries/capping/constants';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired,
@@ -44,6 +46,7 @@ const CappingList = ({
   referenceType = '',
   currentStrategy
 }) => {
+  const client = useQueryClient();
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
@@ -144,13 +147,13 @@ const CappingList = ({
 
   async function onEditCapping(formData) {
     const requestBody = formToApi({formData, type: activeCapping?.type});
-    console.log(
-      '🚀 ~ file: CappingList.js ~ line 147 ~ onEditCapping ~ requestBody',
-      requestBody
-    );
     setIsSubmitting(true);
     try {
-      await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
+      const {data} = await editCapping({
+        cappingId: activeCapping?.uuid,
+        data: requestBody
+      });
+      await client.invalidateQueries(GET_CAPPING, data?.uuid);
       setIsSubmitting(false);
 
       ShowToast.success('Updated capping successfully');
