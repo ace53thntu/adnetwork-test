@@ -1,6 +1,7 @@
 import {ApiError, DialogConfirm} from 'components/common';
 import Historical from 'components/historical';
 import {
+  CappingReferenceTypes,
   CappingTypes,
   DEFAULT_PAGINATION,
   IS_RESPONSE_ALL,
@@ -8,6 +9,8 @@ import {
 } from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
 import {formToApi} from 'entities/Campaign';
+import {formToApi as formCappingToApi} from '../components/capping/dto';
+
 import PropTypes from 'prop-types';
 import {useCreateCampaign, useEditCampaign} from 'queries/campaign';
 import {GET_CAMPAIGN} from 'queries/campaign/constants';
@@ -89,7 +92,7 @@ const CampaignForm = ({
   const referenceUuid = currentCampaign?.uuid;
   const {data} = useGetCappings({
     params: {
-      per_page: DEFAULT_PAGINATION.perPage,
+      per_page: 100,
       page: DEFAULT_PAGINATION.page,
       sort: 'created_at DESC',
       reference_uuid: referenceUuid
@@ -185,14 +188,18 @@ const CampaignForm = ({
   }
 
   async function onEditCapping(formData) {
-    const requestBody = formToApi({formData, type: activeCapping?.type});
+    const requestBody = formCappingToApi({formData, type: activeCapping?.type});
+    console.log(
+      '🚀 ~ file: form.js ~ line 192 ~ onEditCapping ~ requestBody',
+      requestBody
+    );
     setIsSubmitting(true);
     try {
       await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
       setIsSubmitting(false);
 
       ShowToast.success('Updated capping successfully');
-      toggleModal();
+      toggleCappingModal();
       setActiveCapping(null);
     } catch (err) {
       setIsSubmitting(false);
@@ -262,6 +269,8 @@ const CampaignForm = ({
                 list={budgetList}
                 onClickMenu={onClickMenu}
                 onClickItem={onClickItem}
+                referenceType={CappingReferenceTypes.CAMPAIGN}
+                referenceUuid={referenceUuid}
               />
             )}
 
@@ -271,6 +280,8 @@ const CampaignForm = ({
                 list={impressionList}
                 onClickMenu={onClickMenu}
                 onClickItem={onClickItem}
+                referenceType={CappingReferenceTypes.CAMPAIGN}
+                referenceUuid={referenceUuid}
               />
             )}
 

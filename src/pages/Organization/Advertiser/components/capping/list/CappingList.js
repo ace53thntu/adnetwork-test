@@ -40,7 +40,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
 
   const {data, isLoading} = useGetCappings({
     params: {
-      per_page: DEFAULT_PAGINATION.perPage,
+      per_page: 100,
       page: DEFAULT_PAGINATION.page,
       sort: 'created_at DESC',
       reference_uuid: referenceUuid
@@ -118,7 +118,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     } catch (err) {
       setIsSubmitting(false);
 
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     }
   }
 
@@ -142,7 +142,7 @@ const CappingList = ({referenceUuid = '', referenceType = ''}) => {
     } catch (err) {
       setIsSubmitting(false);
 
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     }
   }
 

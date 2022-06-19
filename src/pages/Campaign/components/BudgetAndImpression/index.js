@@ -2,6 +2,7 @@ import React from 'react';
 import BudgetList from '../capping/list/BudgetList';
 import {formToApi, getListByType} from '../capping/dto';
 import {
+  CappingReferenceTypes,
   CappingTypes,
   DEFAULT_PAGINATION,
   IS_RESPONSE_ALL
@@ -15,16 +16,19 @@ import {getResponseData} from '../../../../utils/helpers/misc.helpers';
 import CappingFormContainer from '../capping/form/CappingFormContainer';
 import {ApiError, DialogConfirm} from '../../../../components/common';
 import {ShowToast} from '../../../../utils/helpers/showToast.helpers';
+import {useQueryClient} from 'react-query';
+import {GET_CAPPING} from 'queries/capping/constants';
 
 const propTypes = {};
 
 const BudgetAndImpression = ({referenceUuid = ''}) => {
+  const client = useQueryClient();
   const {mutateAsync: editCapping} = useEditCapping();
   const {mutateAsync: deleteCapping} = useDeleteCapping();
 
   const {data} = useGetCappings({
     params: {
-      per_page: DEFAULT_PAGINATION.perPage,
+      per_page: 100,
       page: DEFAULT_PAGINATION.page,
       sort: 'created_at DESC',
       reference_uuid: referenceUuid
@@ -77,7 +81,11 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
     const requestBody = formToApi({formData, type: activeCapping?.type});
     setIsSubmitting(true);
     try {
-      await editCapping({cappingId: activeCapping?.uuid, data: requestBody});
+      const {data: updatedData} = await editCapping({
+        cappingId: activeCapping?.uuid,
+        data: requestBody
+      });
+      await client.invalidateQueries(GET_CAPPING, updatedData?.uuid);
       setIsSubmitting(false);
 
       ShowToast.success('Updated capping successfully');
@@ -122,6 +130,9 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
           list={budgetList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type={CappingTypes.BUDGET}
+          referenceType={CappingReferenceTypes.STRATEGY}
+          referenceUuid={referenceUuid}
         />
       )}
 
@@ -131,6 +142,9 @@ const BudgetAndImpression = ({referenceUuid = ''}) => {
           list={impressionList}
           onClickMenu={onClickMenu}
           onClickItem={onClickItem}
+          type={CappingTypes.IMPRESSION}
+          referenceUuid={referenceUuid}
+          referenceType={CappingReferenceTypes.STRATEGY}
         />
       )}
 

@@ -3,7 +3,7 @@ import React from 'react';
 
 // External Modules
 import {useTranslation} from 'react-i18next';
-import {Badge} from 'reactstrap';
+import {Badge, Button} from 'reactstrap';
 import PropTypes from 'prop-types';
 
 // Internal Modules
@@ -17,6 +17,7 @@ import {isArray} from 'lodash';
 import NoDataAvailable from 'components/list/no-data';
 import {formatValue} from 'react-currency-input-field';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
+import BudgetCreateModal from '../modal/BudgetCreateModal';
 
 const typeHasTimeFrame = [
   CappingTypes.BUDGET.value,
@@ -43,9 +44,12 @@ const BudgetList = ({
   isManager = false,
   onClickMenu = () => null,
   onClickItem = () => null,
-  type = ''
+  type = '',
+  referenceUuid = '',
+  referenceType = ''
 }) => {
   const {t} = useTranslation();
+  const [openForm, setOpenForm] = React.useState(false);
   const existedAll = React.useMemo(() => {
     if (list.length === 1) {
       return false;
@@ -213,23 +217,53 @@ const BudgetList = ({
     ];
   }, [isManager]);
 
+  function toggleModal() {
+    setOpenForm(prevState => !prevState);
+  }
+
   return (
-    <Collapse initialOpen title={title} unMount={false}>
-      {isArray(list) && list.length > 0 ? (
-        <List
-          data={destructuredList || []}
-          columns={columns}
-          showAction
-          handleAction={onClickMenu}
-          handleClickItem={onClickItem}
+    <>
+      <Collapse initialOpen title={title} unMount={false}>
+        {isArray(list) && list.length > 0 ? (
+          <>
+            <List
+              data={destructuredList || []}
+              columns={columns}
+              showAction
+              handleAction={onClickMenu}
+              handleClickItem={onClickItem}
+            />
+            {[
+              CappingTypes.BUDGET.value,
+              CappingTypes.IMPRESSION.value
+            ].includes(type?.value) &&
+              destructuredList?.length === 1 && (
+                <div className="d-flex justify-content-end mt-2">
+                  <Button type="button" color="primary" onClick={toggleModal}>
+                    {t('add')}
+                  </Button>
+                </div>
+              )}
+          </>
+        ) : (
+          <NoDataAvailable />
+        )}
+      </Collapse>
+      {/* Capping Form */}
+      {openForm && (
+        <BudgetCreateModal
+          openForm={openForm}
+          toggleModal={toggleModal}
+          cappingType={type}
+          referenceType={referenceType}
+          referenceUuid={referenceUuid}
+          cappings={destructuredList}
         />
-      ) : (
-        <NoDataAvailable />
       )}
-    </Collapse>
+    </>
   );
 };
 
 BudgetList.propTypes = propTypes;
 
-export default React.memo(BudgetList);
+export default BudgetList;
