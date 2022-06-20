@@ -139,6 +139,7 @@ const InformationGroup = ({
               label="Pricing model"
               options={PricingModelOptions}
               disabled={isView}
+              isClearable
             />
           </Col>
 
