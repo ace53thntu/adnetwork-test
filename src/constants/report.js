@@ -940,6 +940,51 @@ export const REPORT_VIEW_TYPES = [
     ]
   } /**===== END: EVENT GROUP =====*/,
   {
+    label: 'Report unique',
+    options: [
+      {
+        label: 'Report Unique Impression',
+        value: 'report_unique_impressions',
+        code: 'report_unique_impressions',
+        acl: 'unique',
+        is_price: false,
+        code_name: 'report_unique_impressions'
+      },
+      {
+        label: 'Report Unique Viewable',
+        value: 'report_unique_viewable',
+        code: 'report_unique_viewable',
+        acl: 'unique',
+        is_price: false,
+        code_name: 'report_unique_viewable'
+      },
+      {
+        label: 'Report Unique Not Viewable',
+        value: 'report_unique_not_viewable',
+        code: 'report_unique_not_viewable',
+        acl: 'unique',
+        is_price: false,
+        code_name: 'report_unique_not_viewable'
+      },
+      {
+        label: 'Report Unique View Undertermined',
+        value: 'report_unique_view_undertermined',
+        code: 'report_unique_view_undertermined',
+        acl: 'unique',
+        is_price: false,
+        code_name: 'report_unique_view_undertermined'
+      },
+      {
+        label: 'Report Unique Click',
+        value: 'report_unique_click',
+        code: 'report_unique_click',
+        acl: 'unique',
+        is_price: false,
+        code_name: 'report_unique_click'
+      }
+    ]
+  },
+  {
     label: 'Unique Visitor',
     options: [
       {
@@ -1209,6 +1254,46 @@ export const PUBLISHER_REPORT_VIEW_TYPES = [
     acl: 'unique_click',
     is_price: false,
     code_name: 'unique_click'
+  },
+  {
+    label: 'Report Unique Impression',
+    value: 'report_unique_impressions',
+    code: 'report_unique_impressions',
+    acl: 'unique',
+    is_price: false,
+    code_name: 'report_unique_impressions'
+  },
+  {
+    label: 'Report Unique Viewable',
+    value: 'report_unique_viewable',
+    code: 'report_unique_viewable',
+    acl: 'unique',
+    is_price: false,
+    code_name: 'report_unique_viewable'
+  },
+  {
+    label: 'Report Unique Not Viewable',
+    value: 'report_unique_not_viewable',
+    code: 'report_unique_not_viewable',
+    acl: 'unique',
+    is_price: false,
+    code_name: 'report_unique_not_viewable'
+  },
+  {
+    label: 'Report Unique View Undertermined',
+    value: 'report_unique_view_undertermined',
+    code: 'report_unique_view_undertermined',
+    acl: 'unique',
+    is_price: false,
+    code_name: 'report_unique_view_undertermined'
+  },
+  {
+    label: 'Report Unique Click',
+    value: 'report_unique_click',
+    code: 'report_unique_click',
+    acl: 'unique',
+    is_price: false,
+    code_name: 'report_unique_click'
   }
 ];
 
