@@ -59,7 +59,6 @@ const AddTypeButton = ({
     setOpenModal(true);
     setActiveType(item);
   }
-  console.log('=== CappingTypeButtons', CappingTypeButtons);
 
   return (
     <>

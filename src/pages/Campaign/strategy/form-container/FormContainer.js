@@ -21,6 +21,7 @@ import {useRefreshAdvertiserTree} from 'pages/Campaign/hooks/useRefreshAdvertise
 import ApiError from 'components/common/ApiError';
 import {useQueryClient} from 'react-query';
 import {GET_STRATEGY} from 'queries/strategy/constants';
+import {useQueryString} from 'hooks';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -41,6 +42,8 @@ const FormContainer = ({
   originalStrategy,
   isCapping = false
 }) => {
+  const query = useQueryString();
+  const currentTab = query.get('next_tab');
   const client = useQueryClient();
   const {t} = useTranslation();
   const dispatch = useDispatch();
@@ -90,7 +93,7 @@ const FormContainer = ({
     }) => {
       if (_isCapping) {
         navigate(
-          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=summary&advertiser_id=${_advertiserId}`
+          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=description&advertiser_id=${_advertiserId}`
         );
         return;
       }
@@ -118,7 +121,8 @@ const FormContainer = ({
         currentStrategy,
         isEdit,
         isCapping,
-        originalStrategy
+        originalStrategy,
+        currentTab
       });
       console.log('======== FORM DATA', req);
 
@@ -156,7 +160,12 @@ const FormContainer = ({
             _isSummary: isSummary
           });
         } catch (error) {
-          ShowToast.error(<ApiError apiError={error} />);
+          console.log('🚀 ~ file: FormContainer.js ~ line 163 ~ error', error);
+          if (error) {
+            ShowToast.error(<ApiError apiError={error} />);
+          } else {
+            ShowToast.error('Fail to update strategy');
+          }
         }
       } else {
         try {
@@ -178,6 +187,7 @@ const FormContainer = ({
       client,
       createStrategy,
       currentStrategy,
+      currentTab,
       dispatch,
       editStrategy,
       isCapping,

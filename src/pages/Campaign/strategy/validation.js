@@ -4,14 +4,6 @@ import * as Yup from 'yup';
 const VALID_NUMBER = /^\d*\.?\d*$/;
 
 export const strategySchema = (isUpdate = false, t, isCapping = false) => {
-  if (isCapping) {
-    return yupResolver(
-      Yup.object().shape({
-        concept_uuids: Yup.array().nullable().notRequired()
-      })
-    );
-  }
-
   const skippableValidate = {
     only_skipable: Yup.string(),
     only_unskipable: Yup.string().test({
@@ -30,6 +22,16 @@ export const strategySchema = (isUpdate = false, t, isCapping = false) => {
       }
     })
   };
+  if (isCapping) {
+    return yupResolver(
+      Yup.object().shape({
+        concept_uuids: Yup.array().nullable().notRequired(),
+        video_filter: Yup.object().shape({
+          ...skippableValidate
+        })
+      })
+    );
+  }
 
   const basicSchema = {
     campaign_uuid: Yup.object().nullable().required(t('required')),
@@ -57,12 +59,8 @@ export const strategySchema = (isUpdate = false, t, isCapping = false) => {
         }
         return Yup.array().nullable().notRequired();
       }),
-
     sources: Yup.array().notRequired(),
-    position_uuids: Yup.array().nullable().notRequired(),
-    video_filter: Yup.object().shape({
-      ...skippableValidate
-    })
+    position_uuids: Yup.array().nullable().notRequired()
   };
 
   if (isUpdate) {

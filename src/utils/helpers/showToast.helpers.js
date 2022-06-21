@@ -9,7 +9,11 @@ class ShowToast {
   }
 
   static error(message) {
-    toast.error(message ?? 'Something went wrong.', {
+    console.log(
+      '🚀 ~ file: showToast.helpers.js ~ line 12 ~ ShowToast ~ error ~ message',
+      message
+    );
+    toast.error(message || 'Something went wrong.', {
       closeOnClick: true,
       autoClose: 5000
     });

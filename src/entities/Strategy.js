@@ -203,8 +203,14 @@ export const formToApi = ({
   originalStrategy,
   isSummary = false,
   isCapping = false,
-  isEdit = false
+  isEdit = false,
+  currentTab = ''
 }) => {
+  console.log(
+    '🚀 ~ file: Strategy.js ~ line 209 ~ originalStrategy',
+    originalStrategy
+  );
+  console.log('🚀 ~ file: Strategy.js ~ line 209 ~ currentTab', currentTab);
   const {
     campaign_uuid: campaign,
     name,
@@ -263,25 +269,53 @@ export const formToApi = ({
     campaign_uuid: campaign?.value,
     name: name?.trim(),
     status,
-    position_uuids: positionIds,
     start_time: startDate,
     end_time: endDate,
     strategy_type: strategy_type ? strategy_type?.value : null,
     click_commission: parseFloat(click_commission) || null,
-    sources: sources?.length > 0 ? Array.from(sources, item => item.value) : [],
     category,
     priority: priority?.value || '',
-    video_filter: videoFilter,
-    context_filter: contextFilter,
+    // video_filter: videoFilter,
+    // context_filter: contextFilter,
     pricing_model: pricing_model?.value?.toUpperCase() || '',
     concept_uuids: concept_uuids?.filter(item => item) || []
   };
 
-  if (
-    !strategyReturn?.context_filter ||
-    Object.keys(strategyReturn?.context_filter).length === 0
-  ) {
-    delete strategyReturn?.context_filter;
+  if (currentTab !== 'description') {
+    strategyReturn.video_filter = videoFilter;
+    strategyReturn.context_filter = contextFilter;
+    strategyReturn.position_uuids = positionIds;
+    strategyReturn.category = category;
+    strategyReturn.sources =
+      sources?.length > 0 ? Array.from(sources, item => item.value) : [];
+    if (location_uuids?.length) {
+      strategyReturn.location_uuids = location_uuids?.map(item => item.value);
+    } else {
+      strategyReturn.location_uuids = [];
+    }
+    if (strategy_type?.value === StrategyTypes.NORMAL) {
+      strategyReturn.cpm_max = convertGuiToApi({value: cpm_max}) || 0;
+    }
+    if (
+      !strategyReturn?.context_filter ||
+      Object.keys(strategyReturn?.context_filter).length === 0
+    ) {
+      delete strategyReturn?.context_filter;
+    }
+  } else {
+    strategyReturn.video_filter = originalStrategy?.video_filter;
+    strategyReturn.context_filter = originalStrategy?.context_filter;
+    strategyReturn.position_uuids =
+      originalStrategy?.positions?.map(item => item?.uuid) || [];
+    strategyReturn.category = originalStrategy?.category;
+    strategyReturn.sources = originalStrategy?.sources;
+    strategyReturn.location_uuids =
+      originalStrategy?.location?.map(item => item?.uuid) || [];
+    strategyReturn.cpm_max = originalStrategy?.cpm_max;
+    console.log(
+      '🚀 ~ file: Strategy.js ~ line 313 ~ strategyReturn',
+      strategyReturn
+    );
   }
 
   if (!currentStrategy?.id) {
@@ -346,19 +380,9 @@ export const formToApi = ({
   strategyReturn.inventories_bid = inventoriesBid;
   // }
 
-  if (strategy_type?.value === StrategyTypes.NORMAL) {
-    strategyReturn.cpm_max = convertGuiToApi({value: cpm_max}) || 0;
-  }
-
   if (isSummary) {
     strategyReturn.concept_uuids =
       formData?.concept_uuids?.filter(item => item) || [];
-  }
-
-  if (location_uuids?.length) {
-    strategyReturn.location_uuids = location_uuids?.map(item => item.value);
-  } else {
-    strategyReturn.location_uuids = [];
   }
 
   // filter & capping
