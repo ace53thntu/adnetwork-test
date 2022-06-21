@@ -1,3 +1,4 @@
+import {STATUS_OPTIONS} from 'constants/misc';
 import __isNumber from 'lodash/isNumber';
 
 import {
@@ -32,7 +33,8 @@ export function creativeModelToRepo(raw, conceptId) {
     ad_size_format,
     alternative_play,
     platform,
-    creative_metadata
+    creative_metadata,
+    status
   } = raw;
 
   return {
@@ -50,7 +52,7 @@ export function creativeModelToRepo(raw, conceptId) {
     third_party_tag_type: third_party_tag_type?.value,
     file_type: file_type?.value,
     https,
-    status: 'active',
+    status: status.value,
     ad_size_format: ad_size_format ? 'dropdown' : 'custom',
     alternative_play: alternative_play?.value,
     platform: platform?.value,
@@ -79,11 +81,13 @@ export function creativeRepoToModel(raw) {
     ad_size_format,
     alternative_play,
     platform,
-    creative_metadata
+    creative_metadata,
+    status
   } = raw;
 
   return {
     name,
+    status: STATUS_OPTIONS.find(st => st.value === status),
     third_party_tag,
     third_party_tag_type: THIRD_PARTY_TAG_TYPES.find(
       type => type.value === third_party_tag_type
