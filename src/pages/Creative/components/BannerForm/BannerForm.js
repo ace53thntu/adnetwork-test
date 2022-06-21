@@ -49,6 +49,7 @@ import {
 } from './dto';
 import {useCalculateAdSize, useWatchCreativeType} from './hooks';
 import {bannerFormValidationResolver} from './utils';
+import {STATUS_OPTIONS} from 'constants/misc';
 
 const defaultFormValues = {
   third_party_tag: '',
@@ -70,7 +71,9 @@ const defaultFormValues = {
   creative_metadata: '',
   ad_size_format: null,
 
-  file_type: CREATIVE_FILE_TYPES[0]
+  file_type: CREATIVE_FILE_TYPES[0],
+
+  status: STATUS_OPTIONS[0]
 
   // alternatives: []
 };
@@ -273,18 +276,27 @@ function BannerForm(props) {
                 </Col>
                 <Col md="4">
                   <FormReactSelect
-                    options={CREATIVE_TYPES}
+                    options={STATUS_OPTIONS}
                     placeholder=""
-                    name="type"
-                    label="Creative type"
-                    defaultValue={defaultValues.type}
-                    disabled={!isCreate}
+                    name="status"
+                    label="Status"
+                    defaultValue={defaultValues.status}
                   />
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Row>
+                    <Col md="4">
+                      <FormReactSelect
+                        options={CREATIVE_TYPES}
+                        placeholder=""
+                        name="type"
+                        label="Creative type"
+                        defaultValue={defaultValues.type}
+                        disabled={!isCreate}
+                      />
+                    </Col>
                     <Col md="4">
                       <FormTextInput
                         isRequired

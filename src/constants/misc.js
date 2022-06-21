@@ -26,6 +26,17 @@ export const InputStatus = {
   INACTIVE: 'inactive'
 };
 
+export const STATUS_OPTIONS = [
+  {
+    value: 'active',
+    label: 'Active'
+  },
+  {
+    value: 'inactive',
+    label: 'In active'
+  }
+];
+
 export const LANG_OPTIONS = [
   {
     id: 'en',

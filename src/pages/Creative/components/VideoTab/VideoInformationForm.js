@@ -1,5 +1,6 @@
 import {FormReactSelect, FormTagsInput, FormTextInput} from 'components/forms';
 import FormCodeMirror from 'components/forms/FormCodeMirror';
+import {STATUS_OPTIONS} from 'constants/misc';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, FormGroup, Row} from 'reactstrap';
@@ -49,6 +50,15 @@ function VideoInformationForm(props) {
           defaultValue={defaultValues.type}
           options={VideoServeTypes}
           disabled={!isCreate}
+        />
+      </Col>
+      <Col md="3">
+        <FormReactSelect
+          options={STATUS_OPTIONS}
+          placeholder=""
+          name="status"
+          label="Status"
+          defaultValue={defaultValues.status}
         />
       </Col>
       <Col md={3}>

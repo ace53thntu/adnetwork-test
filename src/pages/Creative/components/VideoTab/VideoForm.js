@@ -30,6 +30,7 @@ import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
 import {VAST} from './hooks';
+import {STATUS_OPTIONS} from 'constants/misc';
 
 const defaultValues = {
   // concept_id: 1,
@@ -46,7 +47,8 @@ const defaultValues = {
   video_metadata: '',
   tags: [],
   third_party_tag: '',
-  third_party_tag_type: VAST[0]
+  third_party_tag_type: VAST[0],
+  status: STATUS_OPTIONS[0]
   // files: []
 };
 
@@ -134,14 +136,12 @@ function VideoForm(props) {
     } else {
       // update
       const diff = difference(values, getDefaultValues);
-
       let fileIds = [];
       if (values?.files?.length) {
         const filtered = values.files.filter(item => item.file);
         fileIds = filtered.map(file => file.file.uuid);
       }
       const requestBody = videoFormValuesToRepo(diff, conceptId, fileIds, true);
-
       try {
         await updateVideoRequest({videoId: rawData.uuid, data: requestBody});
         setIsLoading(false);

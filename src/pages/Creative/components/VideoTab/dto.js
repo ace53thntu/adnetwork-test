@@ -1,3 +1,4 @@
+import {STATUS_OPTIONS} from 'constants/misc';
 import _ from 'lodash';
 
 import {PLATFORM_OPTIONS, THIRD_PARTY_TAG_TYPES} from '../BannerForm/constants';
@@ -20,7 +21,8 @@ export function videoRepoToFormValues(raw) {
     third_party_tag,
     platform,
     ad_size_format,
-    tags
+    tags,
+    status
   } = raw;
 
   const linear = VideoTypes.find(item => item.value === linearity) || null;
@@ -33,6 +35,7 @@ export function videoRepoToFormValues(raw) {
   const result = {
     name,
     click_url,
+    status: STATUS_OPTIONS.find(st => st.value === status),
     width: width?.toString() ?? '1',
     height: height?.toString() ?? '1',
     linearity: linear,
@@ -79,7 +82,8 @@ export function videoFormValuesToRepo(
     third_party_tag,
     platform,
     ad_size_format,
-    tags
+    tags,
+    status
   } = raw;
 
   let obj = {
@@ -87,13 +91,19 @@ export function videoFormValuesToRepo(
     click_url,
     dtype: 'video',
     concept_uuid: conceptId,
-    status: 'active',
     files_uuid: [],
     tags,
     third_party_tag,
     third_party_tag_type: third_party_tag_type?.value,
     platform: platform?.value
   };
+
+  if (status?.value) {
+    obj = {
+      ...obj,
+      status: status?.value
+    };
+  }
 
   if (ad_size_format !== undefined) {
     obj = {
@@ -131,7 +141,7 @@ export function videoFormValuesToRepo(
   }
 
   if (isUpdate) {
-    const updateObj = _.omit(obj, ['dtype', 'concept_uuid', 'status']);
+    const updateObj = _.omit(obj, ['dtype', 'concept_uuid']);
     const omitObj = {};
     Object.keys(updateObj).forEach(key => {
       if (updateObj[key] === undefined) {
