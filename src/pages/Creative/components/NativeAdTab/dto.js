@@ -38,7 +38,7 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
     // active = true,
     click_url = '',
     // dco_product = '',
-    extra_trackers = ''
+    extra_trackers = '',
     // product_query_string = '',
     status
   } = raw;
@@ -47,7 +47,7 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
     name,
     click_url,
     // dco_product,
-    extra_trackers,
+    extra_trackers
     // product_query_string,
     // status: 'active'
     // catalog_id: null
@@ -59,7 +59,7 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
   }
 
   if (status?.value) {
-    results.status = status.value
+    results.status = status.value;
   }
 
   return results;
