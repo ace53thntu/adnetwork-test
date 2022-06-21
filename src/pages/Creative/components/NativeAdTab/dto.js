@@ -1,3 +1,4 @@
+import {STATUS_OPTIONS} from 'constants/misc';
 import {ASSET_TYPES, ASSET_TYPES_IS_FILE} from './constants';
 
 export function nativeAdRawToFormValues(raw) {
@@ -8,7 +9,8 @@ export function nativeAdRawToFormValues(raw) {
     extra_trackers = '',
     // active = false,
     // dco_product = '',
-    assets = []
+    assets = [],
+    status
   } = raw;
 
   return {
@@ -18,6 +20,7 @@ export function nativeAdRawToFormValues(raw) {
     extra_trackers,
     // active,
     // dco_product,
+    status: STATUS_OPTIONS.find(st => st.value === status),
     assets:
       assets?.map(({custom_id, file, type, value, uuid}) => ({
         custom_id,
@@ -36,7 +39,8 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
     click_url = '',
     // dco_product = '',
     extra_trackers = ''
-    // product_query_string = ''
+    // product_query_string = '',
+    status
   } = raw;
 
   const results = {
@@ -45,13 +49,17 @@ export function nativeAdFormValuesToRepo(raw, conceptId) {
     // dco_product,
     extra_trackers,
     // product_query_string,
-    status: 'active'
+    // status: 'active'
     // catalog_id: null
   };
 
   if (conceptId) {
     results.dtype = 'nativead';
     results.concept_uuid = conceptId;
+  }
+
+  if (status?.value) {
+    results.status = status.value
   }
 
   return results;

@@ -31,6 +31,7 @@ import {
   nativeAdRawToFormValues
 } from './dto';
 import {createNativeAdResolver} from './validations';
+import {STATUS_OPTIONS} from 'constants/misc';
 
 const defaultValues = {
   name: '',
@@ -39,7 +40,9 @@ const defaultValues = {
   // product_query_string: '',
   extra_trackers: '',
   //
-  assets: []
+  assets: [],
+
+  status: STATUS_OPTIONS[0]
 };
 
 function NativeAdForm(props) {
