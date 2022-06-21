@@ -83,35 +83,6 @@ const FormContainer = ({
     }
   }, [dispatch, isEdit, isView, strategyType?.value]);
 
-  const redirectPageAfterSave = useCallback(
-    ({
-      _strategyId,
-      _campaignId,
-      _advertiserId,
-      _isCapping,
-      _isSummary = false
-    }) => {
-      if (_isCapping) {
-        navigate(
-          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=description&advertiser_id=${_advertiserId}`
-        );
-        return;
-      }
-
-      if (_isSummary) {
-        navigate(
-          `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=description&advertiser_id=${_advertiserId}`
-        );
-        return;
-      }
-
-      navigate(
-        `/${RoutePaths.CAMPAIGN}/${_campaignId}/${RoutePaths.STRATEGY}/${_strategyId}/${RoutePaths.EDIT}?next_tab=capping&advertiser_id=${_advertiserId}`
-      );
-    },
-    [navigate]
-  );
-
   const onSubmit = useCallback(
     async formData => {
       console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
@@ -128,13 +99,6 @@ const FormContainer = ({
 
       if (isEdit) {
         if (!isDirty) {
-          redirectPageAfterSave({
-            _strategyId: currentStrategy?.uuid,
-            _campaignId: currentStrategy?.campaign_uuid?.value,
-            _advertiserId: currentStrategy?.advertiser_uuid,
-            _isSummary: isSummary,
-            _isCapping: isCapping
-          });
           return;
         }
 
@@ -151,14 +115,6 @@ const FormContainer = ({
               inventoryTempList: data?.inventories || []
             })
           );
-
-          redirectPageAfterSave({
-            _strategyId: currentStrategy?.uuid,
-            _campaignId: currentStrategy?.campaign_uuid?.value,
-            _advertiserId: currentStrategy?.advertiser_uuid,
-            _isCapping: isCapping,
-            _isSummary: isSummary
-          });
         } catch (error) {
           console.log('🚀 ~ file: FormContainer.js ~ line 163 ~ error', error);
           if (error) {
@@ -196,7 +152,6 @@ const FormContainer = ({
       isSummary,
       navigate,
       originalStrategy,
-      redirectPageAfterSave,
       refresh,
       reset,
       strategyId

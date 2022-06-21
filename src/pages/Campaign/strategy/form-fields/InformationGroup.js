@@ -149,7 +149,7 @@ const InformationGroup = ({
               label={t('campaign')}
               placeholder={t('selectCampaign')}
               defaultValue={currentStrategy?.campaign_uuid || null}
-              disabled={isEdit || isView}
+              disabled
             />
           </Col>
 
