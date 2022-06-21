@@ -203,6 +203,7 @@ const CappingList = ({
           referenceUuid={referenceUuid}
           cappings={cappings}
           onAddTypeCapping={setCappingList}
+          currentStrategy={currentStrategy}
         />
       </div>
       {isLoading && <LoadingIndicator />}

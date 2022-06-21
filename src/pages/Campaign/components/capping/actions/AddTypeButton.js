@@ -22,7 +22,8 @@ const propTypes = {
   existedTypes: PropTypes.array,
   referenceType: PropTypes.string,
   referenceUuid: PropTypes.string,
-  onAddTypeCapping: PropTypes.func
+  onAddTypeCapping: PropTypes.func,
+  currentStrategy: PropTypes.any
 };
 
 /**
@@ -35,7 +36,8 @@ const AddTypeButton = ({
   referenceType = 'campaign',
   referenceUuid = '',
   cappings = [],
-  onAddTypeCapping
+  onAddTypeCapping,
+  currentStrategy
 }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [activeType, setActiveType] = React.useState({});
@@ -69,11 +71,16 @@ const AddTypeButton = ({
         <DropdownMenu>
           {CappingTypeButtons?.map((item, idx) => {
             if (
+              item?.type === CappingTypes.BUDGET_MANAGER.value ||
               (referenceType === 'campaign' &&
                 (item?.type === CappingTypes.SCHEDULE.value ||
                   item?.type === CappingTypes.USER_CLICK.value ||
                   item?.type === CappingTypes.USER_VIEWABLE.value)) ||
-              item?.type === CappingTypes.BUDGET_MANAGER.value
+              (referenceType === 'campaign' &&
+                (item?.type === CappingTypes.GENERAL.value ||
+                  item?.type === CappingTypes.VIDEO.value ||
+                  item?.type === CappingTypes.CONTEXT.value) &&
+                !currentStrategy?.id)
             ) {
               return null;
             }
