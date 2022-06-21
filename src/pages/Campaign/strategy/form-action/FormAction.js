@@ -26,7 +26,7 @@ const FormAction = ({
   const {t} = useTranslation();
   const {gotoCampaignManagement} = useCampaignManager();
   const {
-    formState: {isSubmitting}
+    formState: {isSubmitting, isDirty}
   } = useFormContext();
 
   return (
@@ -48,9 +48,9 @@ const FormAction = ({
             type="submit"
             className="btn-primary"
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
           >
-            {isSummary ? t('finish') : t('saveAndNext')}
+            {isSummary ? t('finish') : t('save')}
           </ButtonLoading>
         </div>
       )}

@@ -275,8 +275,6 @@ export const formToApi = ({
     click_commission: parseFloat(click_commission) || null,
     category,
     priority: priority?.value || '',
-    // video_filter: videoFilter,
-    // context_filter: contextFilter,
     pricing_model: pricing_model?.value?.toUpperCase() || '',
     concept_uuids: concept_uuids?.filter(item => item) || []
   };
@@ -393,10 +391,11 @@ export const formToApi = ({
         currentStrategy?.strategy_type?.value === StrategyTypes.NORMAL
           ? convertGuiToApi({value: cpm_max})
           : 0,
-      sources: strategyReturn.sources,
+      sources:
+        sources?.length > 0 ? Array.from(sources, item => item.value) : [],
       category,
-      video_filter: strategyReturn.video_filter,
-      context_filter: strategyReturn.context_filter,
+      video_filter: videoFilter,
+      context_filter: contextFilter,
       position_uuids: positionIds,
       location_uuids: location_uuids?.length
         ? location_uuids?.map(item => item.value)
