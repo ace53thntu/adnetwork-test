@@ -1,4 +1,5 @@
-import {FormTextInput} from 'components/forms';
+import {FormReactSelect, FormTextInput} from 'components/forms';
+import {STATUS_OPTIONS} from 'constants/misc';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {Col, Row} from 'reactstrap';
@@ -16,6 +17,15 @@ function NativeAdInformationForm(props) {
             name="name"
             label="Name"
             defaultValue={defaultValues.name}
+          />
+        </Col>
+        <Col md="4">
+          <FormReactSelect
+            options={STATUS_OPTIONS}
+            placeholder=""
+            name="status"
+            label="Status"
+            defaultValue={defaultValues.status}
           />
         </Col>
         <Col md="4">
