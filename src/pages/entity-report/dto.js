@@ -9,6 +9,7 @@ import {
 } from 'constants/report';
 import {PublisherReportBys, ReportBys, ReportTypeOptions} from './constants.js';
 import {getReportSources} from 'utils/metrics.js';
+import {getListTimeZone} from 'utils/helpers/getListTimezone.js';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -64,15 +65,16 @@ export function mappingFormToApi({
       report_by: reportBy,
       report_by_uuid: reportByUuid,
       start_time: formatStartDate,
-      end_time: formatEndDate
+      end_time: formatEndDate,
+      time_zone: parseInt(api?.time_zone?.value) || 7
     }
   };
 
   return data;
 }
 
-export function mappingApiToForm({report}) {
-  const {api = {}, properties = {}} = report;
+export function mappingApiToForm({report, defaultTimezone}) {
+  const {api = {}, properties = {}} = report || {};
   let {report_source, report_type} = report;
 
   const isPublisher = isPublisherGroup(report_source);
@@ -84,7 +86,8 @@ export function mappingApiToForm({report}) {
     start_time,
     end_time,
     report_by_name,
-    report_by_uuid
+    report_by_uuid,
+    time_zone
   } = api;
 
   // Handle report source
@@ -123,7 +126,12 @@ export function mappingApiToForm({report}) {
       report_by,
       start_time,
       end_time,
-      report_by_uuid: reportByUuid
+      report_by_uuid: reportByUuid,
+      time_zone: time_zone
+        ? getListTimeZone().find(item => parseInt(item.value, 10) === time_zone)
+        : getListTimeZone().find(
+            item => parseInt(item.value, 10) === defaultTimezone
+          )
     },
     report_type,
     report_source
@@ -134,7 +142,8 @@ export const initDefaultValue = ({
   initColors = [],
   metricType,
   entityType,
-  sourceUuid
+  sourceUuid,
+  defaultTimezone
 }) => {
   return {
     properties: {
@@ -146,7 +155,11 @@ export const initDefaultValue = ({
       time_range: DEFAULT_TIME_RANGE,
       report_by: {label: capitalize(entityType), value: entityType},
       start_time: null,
-      end_time: null
+      end_time: null,
+      time_zone:
+        getListTimeZone().find(
+          item => parseInt(item.value) === defaultTimezone
+        ) || null
     },
     report_source: {label: capitalize(entityType), value: entityType},
     report_type: {

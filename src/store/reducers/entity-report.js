@@ -22,9 +22,12 @@ const SET_METRICSET_SELECTED = `${ACTION_PREFIX}/SET_METRICSET_SELECTED`;
 const SET_ENTITY_NAME = `${ACTION_PREFIX}/SET_ENTITY_NAME`;
 const SET_PARENT_PATH = `${ACTION_PREFIX}/SET_PARENT_PATH`;
 const SET_TIME_UNIT_SELECTED = `${ACTION_PREFIX}/SET_TIME_UNIT_SELECTED`;
+const SET_DEFAULT_TIMEZONE = `${ACTION_PREFIX}/SET_DEFAULT_TIMEZONE`;
 const RESET = `${ACTION_PREFIX}/RESET`;
 
 //---> Create actions
+export const setDefaultTimeZoneRedux = timezone =>
+  createAction(SET_DEFAULT_TIMEZONE, {timezone});
 export const setTimeUnitSelectRedux = timeUnit =>
   createAction(SET_TIME_UNIT_SELECTED, {timeUnit});
 export const setParentPathRedux = parentPath =>
@@ -68,11 +71,13 @@ const entityReportInitialState = {
   metricsetsSelected: [],
   colorsSelected: [],
   entityName: '',
-  parentPath: ''
+  parentPath: '',
+  defaultTimezone: ''
 };
 
 //---> Action mapping
 const handleActions = {
+  [SET_DEFAULT_TIMEZONE]: handleSetDefaultTimezone,
   [SET_ENTITY_NAME]: handleSetEntityName,
   [SET_PARENT_PATH]: handleSetParentPath,
   [SET_COLORS_SELECTED]: handleSetColorsSelected,
@@ -91,6 +96,10 @@ const handleActions = {
 
 function handleReset(state, action) {
   state = entityReportInitialState;
+}
+
+function handleSetDefaultTimezone(state, action) {
+  state.defaultTimezone = action.payload.timezone;
 }
 
 function handleSetParentPath(state, action) {
@@ -218,7 +227,18 @@ const makeSelectTimeUnit = () =>
     a => a.time_unit
   );
 
+const makeSelectDefaultTimezone = () =>
+  createSelector(
+    state => state.entityReportReducer,
+    a => a.defaultTimezone
+  );
+
 //---> Hook to select state
+export function useDefaultTimezoneSelector() {
+  const selectDefaultTimezone = React.useMemo(makeSelectDefaultTimezone, []);
+  return useSelector(state => selectDefaultTimezone(state));
+}
+
 export function useTimeUnitSelector() {
   const selectTimeUnit = React.useMemo(makeSelectTimeUnit, []);
   return useSelector(state => selectTimeUnit(state));

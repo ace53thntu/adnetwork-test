@@ -27,5 +27,8 @@ const ListTimezoneOffsets = [
 ];
 
 export const getListTimeZone = () => {
-  return ListTimezoneOffsets.map(item => ({value: item, label: `UTC${item}`}));
+  return ListTimezoneOffsets.map(item => ({
+    value: item === '±0' ? '0' : item,
+    label: `UTC${item}`
+  }));
 };

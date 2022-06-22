@@ -1,3 +1,5 @@
+export const DEFAULT_TIMEZONE = 7;
+
 /**
  * @enum
  */

@@ -15,6 +15,7 @@ import {QueryStatuses} from 'constants/react-query';
 //---> Styles
 import './styles/styles.scss';
 import {
+  useDefaultTimezoneSelector,
   useEntityNameSelector,
   useMetricsBodySelector,
   useParentPathSelector
@@ -48,12 +49,14 @@ export default function ModalReportForm({
   const {mutateAsync: createReport} = useCreateReport({entityId, entityType});
   const {mutateAsync: updateReport} = useEditReport();
   const metricBody = useMetricsBodySelector();
+  const defaultTimezone = useDefaultTimezoneSelector();
 
   const initializeDefaultValue = initDefaultValue({
     initColors,
     metricType,
     entityType,
-    sourceUuid: entityId
+    sourceUuid: entityId,
+    defaultTimezone
   });
 
   const executeReportCreating = useCallback(

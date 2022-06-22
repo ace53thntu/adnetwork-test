@@ -33,6 +33,9 @@ import DropdownChartType from './form/ChartConfig/DropdownChartType';
 import ReportName from './report-item/ReportName';
 import TimeUnit from './form/TimeUnit';
 import TimePeriod from './form/TimePeriod';
+import {FormReactSelect} from 'components/forms';
+import {getListTimeZone} from 'utils/helpers/getListTimezone';
+import {useDefaultTimezoneSelector} from 'store/reducers/entity-report';
 
 export default function ReportFormContent({
   initializeDefaultValue,
@@ -49,7 +52,8 @@ export default function ReportFormContent({
   noEdit
 }) {
   const {t} = useTranslation();
-  const currentReport = useDefaultValues({report});
+  const defaultTimezone = useDefaultTimezoneSelector();
+  const currentReport = useDefaultValues({report, defaultTimezone});
 
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
 
@@ -58,7 +62,6 @@ export default function ReportFormContent({
   const parentPath = report?.properties?.parentPath || '';
   const name = report?.name || '';
 
-  // const chartTypeSelectedRedux = useChartTypeSelectedSelector();
   const reportByUuid = getReportById({report, entityId});
 
   const methods = useForm({
@@ -165,6 +168,14 @@ export default function ReportFormContent({
                   </Col>
                 </Row>
                 <Row className="mb-3">
+                  <Col md="2">
+                    <FormReactSelect
+                      name="api.time_zone"
+                      placeholder="Time zone"
+                      label="Time zone"
+                      options={getListTimeZone()}
+                    />
+                  </Col>
                   <Col md="1">
                     <Label className="font-weight-bold">
                       {t('properties')}
