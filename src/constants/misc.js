@@ -33,7 +33,7 @@ export const STATUS_OPTIONS = [
   },
   {
     value: 'inactive',
-    label: 'In active'
+    label: 'Inactive'
   }
 ];
 
