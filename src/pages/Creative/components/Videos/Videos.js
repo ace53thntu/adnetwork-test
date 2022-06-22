@@ -26,7 +26,6 @@ function Videos(props) {
   const params = React.useMemo(() => {
     return {
       concept_uuid: conceptId,
-      status: 'active',
       sort_by: 'updated_at',
       sort: 'desc'
     };
@@ -69,7 +68,7 @@ function Videos(props) {
       client.invalidateQueries([GET_VIDEOS, params]);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(<ApiError apiError={error}/>);
+      ShowToast.error(<ApiError apiError={error} />);
     }
   };
 
