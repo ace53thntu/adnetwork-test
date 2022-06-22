@@ -75,8 +75,6 @@ export const formToApi = (formData, isCreate = false) => {
     time_zone,
     currency
   } = formData;
-  console.log('🚀 ~ file: Campaign.js ~ line 78 ~ currency', currency);
-  console.log('🚀 ~ file: Campaign.js ~ line 78 ~ time_zone', time_zone);
 
   let formatStartDate = moment(start_time).isSame(moment(), 'day')
     ? null
@@ -94,7 +92,6 @@ export const formToApi = (formData, isCreate = false) => {
     [CAMPAIGN_KEYS.STATUS]: status,
     [CAMPAIGN_KEYS.START_TIME]: formatStartDate,
     [CAMPAIGN_KEYS.END_TIME]: formaEndDate,
-
     [CAMPAIGN_KEYS.TIMEZONE]: time_zone?.value || '',
     [CAMPAIGN_KEYS.CURRENCY]: currency?.value || ''
   };

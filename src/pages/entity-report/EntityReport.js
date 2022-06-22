@@ -17,11 +17,13 @@ import {IS_RESPONSE_ALL, Statuses} from 'constants/misc';
 import {useDispatch} from 'react-redux';
 import {
   resetReportRedux,
+  setDefaultTimeZoneRedux,
   setEntityNameRedux,
   setParentPathRedux,
   setReportGroupRedux
 } from 'store/reducers/entity-report';
 import {ReportGroupTypes} from './constants.js/index.js';
+import {getTimeZoneOffset} from 'utils/metrics';
 
 const NUMBER_OF_PAGE = 10;
 
@@ -30,7 +32,8 @@ const propTypes = {
   entityName: PropTypes.string,
   parentPath: PropTypes.string,
   entityId: PropTypes.string,
-  ownerRole: PropTypes.string
+  ownerRole: PropTypes.string,
+  defaultTimeZone: PropTypes.any
 };
 
 const EntityReport = ({
@@ -38,7 +41,8 @@ const EntityReport = ({
   entityName = '',
   parentPath = '',
   entityId = null,
-  ownerRole
+  ownerRole,
+  defaultTimeZone
 }) => {
   const dispatch = useDispatch();
   const entityType = entity;
@@ -91,6 +95,14 @@ const EntityReport = ({
     dispatch(setEntityNameRedux(entityName));
     dispatch(setParentPathRedux(parentPath));
   }, [dispatch, entityName, parentPath]);
+
+  React.useEffect(() => {
+    if (defaultTimeZone !== undefined && defaultTimeZone !== null) {
+      dispatch(setDefaultTimeZoneRedux(defaultTimeZone));
+    } else {
+      dispatch(setDefaultTimeZoneRedux(parseInt(getTimeZoneOffset())));
+    }
+  }, [defaultTimeZone, dispatch]);
 
   React.useEffect(() => {
     // ReSet entity name

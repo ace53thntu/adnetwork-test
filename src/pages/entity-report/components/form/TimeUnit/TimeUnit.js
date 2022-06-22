@@ -31,10 +31,6 @@ export default function TimeUnit({
   const error = errors?.api?.time_unit || undefined;
   const timeRangeSelected = watch('api.time_range');
   const timeUnitSelect = watch(unitName);
-  console.log(
-    '🚀 ~ file: TimeUnit.js ~ line 34 ~ timeUnitSelect',
-    timeUnitSelect
-  );
 
   //---> Get units by time range
   const units = React.useMemo(

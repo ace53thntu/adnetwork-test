@@ -12,7 +12,7 @@ import CampaignForm from './form';
 import {EntityTypes} from 'constants/report';
 import {EntityReport} from 'pages/entity-report';
 import {USER_ROLE} from 'pages/user-management/constants';
-import {CappingReferenceTypes, } from 'constants/misc';
+import {CappingReferenceTypes} from 'constants/misc';
 import CampaignStrategies from './strategies';
 
 const TabIndexes = {
@@ -27,6 +27,10 @@ const propTypes = {
 };
 
 const CampaignViewTabs = ({currentCampaign = null}) => {
+  console.log(
+    '🚀 ~ file: ViewTabs.js ~ line 30 ~ CampaignViewTabs ~ currentCampaign',
+    currentCampaign
+  );
   const {t} = useTranslation();
   const ownerId = currentCampaign?.advertiser_uuid?.value;
   const entityId = currentCampaign?.uuid;
@@ -79,6 +83,7 @@ const CampaignViewTabs = ({currentCampaign = null}) => {
               entityId={entityId}
               ownerId={ownerId}
               ownerRole={USER_ROLE.ADVERTISER}
+              defaultTimeZone={parseInt(currentCampaign?.time_zone?.value)}
             />
           )
         }
