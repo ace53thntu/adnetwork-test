@@ -174,6 +174,7 @@ export default function ReportFormContent({
                       placeholder="Time zone"
                       label="Time zone"
                       options={getListTimeZone()}
+                      disabled={noEdit}
                     />
                   </Col>
                   <Col md="1">
