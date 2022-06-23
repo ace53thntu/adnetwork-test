@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
 import {CustomInput, ListGroupItem} from 'reactstrap';
+import ConceptThumbnail from './ConceptThumbnail';
 
 const propTypes = {
   conceptItem: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
@@ -28,6 +29,11 @@ const ConceptItem = ({
       <div className="widget-content p-0">
         <div className="widget-content-wrapper">
           <div className="widget-content-left flex2">
+            <div>
+              <div className="badge badge-pill badge-success">
+                {conceptItem?.status}
+              </div>
+            </div>
             {isEdit ? (
               <CustomInput
                 type="checkbox"
@@ -52,9 +58,7 @@ const ConceptItem = ({
             )}
           </div>
           <div className="widget-content-right ml-3">
-            <div className="badge badge-pill badge-success">
-              {conceptItem?.status}
-            </div>
+            <ConceptThumbnail conceptItem={conceptItem} />
           </div>
         </div>
       </div>
