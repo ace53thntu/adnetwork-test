@@ -1,5 +1,6 @@
 //---> Build-in Modules
 import {FormReactSelect} from 'components/forms';
+import {DEFAULT_TIMEZONE} from 'constants/misc.js';
 import {
   DEFAULT_TIME_RANGE,
   DEFAULT_TIME_UNIT,
@@ -21,6 +22,7 @@ import {
   setMetricSetSelectedRedux,
   useReportGroupTypeSelector
 } from 'store/reducers/entity-report';
+import {TimezoneMapping} from 'utils/helpers/getListTimezone.js';
 import {ReportGroupTypes} from './constants.js/index.js';
 import ModalReportForm from './ReportCreateModal';
 import {getReportById} from './utils/getReportById';
@@ -73,7 +75,8 @@ const ReportForm = ({
       time_unit: DEFAULT_TIME_UNIT,
       time_range: DEFAULT_TIME_RANGE,
       report_source: entityType,
-      report_by: entityType
+      report_by: entityType,
+      time_zone: TimezoneMapping[DEFAULT_TIMEZONE]
     };
     try {
       const {data} = await getReportMetric(requestBody);

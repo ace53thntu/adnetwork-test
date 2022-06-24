@@ -1,8 +1,16 @@
 import {METRIC_TIMERANGES} from 'constants/report';
 import React, {memo} from 'react';
 import {Badge} from 'reactstrap';
+import {getListTimeZone} from 'utils/helpers/getListTimezone';
 
-const MetricInfo = ({timeRange, unit, reportSource, reportBy, reportType}) => {
+const MetricInfo = ({
+  timeRange,
+  unit,
+  reportSource,
+  reportBy,
+  reportType,
+  timeZone
+}) => {
   const timeRanges = METRIC_TIMERANGES.reduce((acc, item) => {
     const {value} = item;
     acc = {...acc, [value]: item};
@@ -48,6 +56,15 @@ const MetricInfo = ({timeRange, unit, reportSource, reportBy, reportType}) => {
         </span>
         <Badge color="light" style={{backgroundColor: '#e0f2ff'}}>
           {reportBy}
+        </Badge>
+      </div>
+      <div className="mr-3">
+        <span className="mr-1" style={{fontSize: 12}}>
+          Time zone:
+        </span>
+        <Badge color="light" style={{backgroundColor: '#e0f2ff'}}>
+          {getListTimeZone().find(item => parseInt(item.value) === timeZone)
+            ?.label || 'UTC+7'}
         </Badge>
       </div>
     </div>

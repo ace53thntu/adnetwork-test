@@ -66,7 +66,7 @@ export function mappingFormToApi({
       report_by_uuid: reportByUuid,
       start_time: formatStartDate,
       end_time: formatEndDate,
-      time_zone: parseInt(api?.time_zone?.value) || 7
+      time_zone: parseInt(api?.time_zone?.value)
     }
   };
 
@@ -118,6 +118,16 @@ export function mappingApiToForm({report, defaultTimezone}) {
 
   // Handle color
 
+  let timeZone = getListTimeZone().find(
+    item => parseInt(item.value, 10) === defaultTimezone
+  );
+
+  if (getListTimeZone().find(item => parseInt(item.value, 10) === time_zone)) {
+    timeZone = getListTimeZone().find(
+      item => parseInt(item.value, 10) === time_zone
+    );
+  }
+
   return {
     properties,
     api: {
@@ -127,11 +137,7 @@ export function mappingApiToForm({report, defaultTimezone}) {
       start_time,
       end_time,
       report_by_uuid: reportByUuid,
-      time_zone: time_zone
-        ? getListTimeZone().find(item => parseInt(item.value, 10) === time_zone)
-        : getListTimeZone().find(
-            item => parseInt(item.value, 10) === defaultTimezone
-          )
+      time_zone: timeZone
     },
     report_type,
     report_source

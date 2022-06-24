@@ -11,7 +11,7 @@ const ListTimezoneOffsets = [
   '-3',
   '-2',
   '-1',
-  '±0',
+  '0',
   '+1',
   '+2',
   '+3',
@@ -26,9 +26,37 @@ const ListTimezoneOffsets = [
   '+12'
 ];
 
+export const TimezoneMapping = {
+  '-12': 0,
+  '-11': 1,
+  '-10': 2,
+  '-9': 3,
+  '-8': 4,
+  '-7': 5,
+  '-6': 6,
+  '-5': 7,
+  '-4': 8,
+  '-3': 9,
+  '-2': 10,
+  '-1': 11,
+  '0': 12,
+  '1': 13,
+  '2': 14,
+  '3': 15,
+  '4': 16,
+  '5': 17,
+  '6': 18,
+  '7': 19,
+  '8': 20,
+  '9': 21,
+  '10': 22,
+  '11': 23,
+  '12': 24
+};
+
 export const getListTimeZone = () => {
   return ListTimezoneOffsets.map(item => ({
-    value: item === '±0' ? '0' : item,
-    label: `UTC${item}`
+    value: item,
+    label: item === '0' ? 'UTC' : `UTC${item}`
   }));
 };

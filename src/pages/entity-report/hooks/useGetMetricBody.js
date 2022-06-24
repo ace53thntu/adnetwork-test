@@ -1,6 +1,8 @@
+import {DEFAULT_TIMEZONE} from 'constants/misc';
 import {ReportTypes, REPORT_INPUT_NAME, TimeUnits} from 'constants/report';
 import moment from 'moment';
 import {useFormContext} from 'react-hook-form';
+import {TimezoneMapping} from 'utils/helpers/getListTimezone';
 import {isValidTimePeriod} from '../utils';
 import {useIsChartCompareInForm} from './useIsChartCompare';
 
@@ -11,6 +13,7 @@ const timeRangeName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIME_RANGE}`
 const timeUnitName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.UNIT}`;
 const startTimeName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.START_TIME}`;
 const endTimeName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.END_TIME}`;
+const timeZoneName = `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIMEZONE}`;
 
 export const useGetMetricBody = ({sourceUuid = ''}) => {
   const {watch} = useFormContext();
@@ -24,7 +27,8 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     timeRangeName,
     timeUnitName,
     endTimeName,
-    startTimeName
+    startTimeName,
+    timeZoneName
   ]);
   const reportSource = watchFields?.report_source?.value || '';
   const reportType = watchFields?.report_type?.value || '';
@@ -34,6 +38,14 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   let startTime = watchFields?.[startTimeName] || null;
   let endTime = watchFields?.[endTimeName] || null;
   let reportByUuid = watchFields?.[reportByUuidName]?.value || '';
+  let timeZone = parseInt(watchFields?.[timeZoneName]?.value) || null;
+  console.log(
+    '🚀 ~ file: useGetMetricBody.js ~ line 40 ~ useGetMetricBody ~ timeZone',
+    timeZone
+  );
+  if (timeZone === null || timeZone === undefined || timeZone === '') {
+    timeZone = TimezoneMapping[DEFAULT_TIMEZONE];
+  }
 
   if (reportSource === reportBy) {
     reportByUuid = sourceUuid;
@@ -45,11 +57,12 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     report_type: reportType,
     report_by: reportBy,
     report_by_uuid: reportByUuid,
-    time_unit: timeUnit
+    time_unit: timeUnit,
+    time_zone: timeZone
   };
 
   const firstPointEnable =
-    reportSource && reportType && reportBy && timeRange && timeUnit
+    reportSource && reportType && reportBy && timeRange && timeUnit && timeZone
       ? true
       : false;
   console.log('===== Global', firstPointEnable, isCompareChart, timeUnit);
@@ -93,7 +106,7 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
       time_range: timeRange
     };
   }
-  console.log('enableCallMetric ===', enableCallMetric);
+  console.log('enableCallMetric === 2', enableCallMetric);
   return {
     metricBody,
     enableCallMetric

@@ -89,6 +89,9 @@ export default function ReportFormContent({
   const reportByUuidSelected = watch(
     `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.REPORT_BY_UUID}`
   );
+  const timeZoneSelected = watch(
+    `${REPORT_INPUT_NAME.API}.${REPORT_INPUT_NAME.TIMEZONE}`
+  );
 
   const isChartCompare = useIsChartCompare({
     reportByUuid: reportByUuidSelected?.value,
@@ -218,6 +221,7 @@ export default function ReportFormContent({
               reportSource={reportSource}
               defaultColors={defaultValues?.properties?.color}
               sourceUuid={entityId}
+              timeZone={timeZoneSelected?.value}
             />
           </ModalBody>
           <ModalFooter>

@@ -190,7 +190,8 @@ export const REPORT_INPUT_NAME = {
   END_TIME: 'end_time',
   REPORT_BY: 'report_by',
   REPORT_BY_UUID: 'report_by_uuid',
-  MODE: 'mode'
+  MODE: 'mode',
+  TIMEZONE: 'time_zone'
 };
 
 export const DEFAULT_TIME_RANGE = 'l1mt';
