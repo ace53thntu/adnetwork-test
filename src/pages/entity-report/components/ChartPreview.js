@@ -44,15 +44,6 @@ const ChartPreview = ({
   const {metricBody: metricRequestBody, enableCallMetric} = useGetMetricBody({
     sourceUuid
   });
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 47 ~ metricRequestBody',
-    metricRequestBody
-  );
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 47 ~ enableCallMetric',
-    enableCallMetric,
-    !!reportId
-  );
 
   const {data: metrics, status, isFetching} = useGetMetrics({
     data: metricRequestBody,
@@ -123,7 +114,6 @@ const ChartPreviewContent = ({
     colors: parseColorsNoCompare,
     timeZone
   });
-  console.log('🚀 ~ file: ChartPreview.js ~ line 118 ~ chartData', chartData);
 
   // const colors = React.useMemo(
   //   () =>

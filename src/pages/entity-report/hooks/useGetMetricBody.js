@@ -39,12 +39,11 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   let endTime = watchFields?.[endTimeName] || null;
   let reportByUuid = watchFields?.[reportByUuidName]?.value || '';
   let timeZone = parseInt(watchFields?.[timeZoneName]?.value) || null;
-  console.log(
-    '🚀 ~ file: useGetMetricBody.js ~ line 40 ~ useGetMetricBody ~ timeZone',
-    timeZone
-  );
+  let timeZoneValue = '';
   if (timeZone === null || timeZone === undefined || timeZone === '') {
-    timeZone = TimezoneMapping[DEFAULT_TIMEZONE];
+    timeZoneValue = TimezoneMapping[DEFAULT_TIMEZONE];
+  } else {
+    timeZoneValue = TimezoneMapping[timeZone];
   }
 
   if (reportSource === reportBy) {
@@ -58,7 +57,7 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     report_by: reportBy,
     report_by_uuid: reportByUuid,
     time_unit: timeUnit,
-    time_zone: timeZone
+    time_zone: timeZoneValue
   };
 
   const firstPointEnable =
