@@ -9,11 +9,16 @@ export const getMetricRequestBody = ({report}) => {
 
   const {time_range, time_unit, report_by, start_time, end_time, time_zone} =
     api || {};
-  const timeZoneValue =
-    TimezoneMapping[`${time_zone}` || `${DEFAULT_TIMEZONE}`];
+
   let report_by_uuid = api?.report_by_uuid || null;
   if (report_source === report_by) {
     report_by_uuid = source_uuid;
+  }
+  let timeZoneValue = '';
+  if (time_zone === null || time_zone === undefined || time_zone === '') {
+    timeZoneValue = TimezoneMapping[DEFAULT_TIMEZONE];
+  } else {
+    timeZoneValue = TimezoneMapping[time_zone];
   }
 
   const requestBody = {
