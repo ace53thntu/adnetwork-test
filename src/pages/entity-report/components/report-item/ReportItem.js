@@ -36,6 +36,7 @@ import {useMappingMetricSet} from 'pages/entity-report/hooks/useMappingMetricSet
 import ReportName from './ReportName';
 import {exportFile} from 'pages/entity-report/utils/exportExcelFile';
 import styled from 'styled-components';
+import {DEFAULT_TIMEZONE} from 'constants/misc';
 
 const IconStyled = styled(Button)`
   padding: 5px;
@@ -66,11 +67,12 @@ export default function ReportItem({
   const dispatch = useDispatch();
   const {
     uuid: reportId,
-    api: {time_unit: unit, time_range: timeRange, report_by} = {},
+    api: {time_unit: unit, time_range: timeRange, report_by, time_zone} = {},
     report_source,
     report_type,
     name
-  } = reportItem;
+  } = reportItem || {};
+
   const properties = reportItem?.properties;
   const metricRequestBody = getMetricRequestBody({report: reportItem});
   const reportGroup = PublisherReportBys.map(item => item.value).includes(
@@ -89,6 +91,11 @@ export default function ReportItem({
 
   const {mutateAsync: deleteReport} = useDeleteReport();
   const metricSet = useMappingMetricSet({metricSet: metricSetRes, reportGroup});
+  let timeZone = DEFAULT_TIMEZONE;
+  if (time_zone !== null && time_zone !== undefined) {
+    timeZone = time_zone;
+  }
+
   const metricData = useChartData({
     type: chartType,
     metrics,
@@ -98,7 +105,8 @@ export default function ReportItem({
     entityId: reportByUuid,
     chartType,
     chartMode,
-    colors
+    colors,
+    timeZone
   });
 
   const [openModal, setOpenModal] = React.useState(false);
@@ -137,7 +145,7 @@ export default function ReportItem({
       ShowToast.success('Deleted report successfully');
       setShowDialogConfirm(false);
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err}/>);
+      ShowToast.error(<ApiError apiError={err} />);
     }
     setIsLoadingDelete(false);
   };
@@ -230,6 +238,7 @@ export default function ReportItem({
               reportSource={report_source}
               reportBy={report_by}
               reportType={report_type}
+              timeZone={time_zone}
             />
           </div>
         ) : (

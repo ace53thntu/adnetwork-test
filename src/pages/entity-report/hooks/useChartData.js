@@ -22,7 +22,8 @@ export const useChartData = ({
   entityId,
   chartType = '',
   chartMode = ChartModes.BY,
-  colors
+  colors,
+  timeZone
 }) => {
   return useMemo(() => {
     if (metricData && Object.keys(metricData).length > 0) {
@@ -32,7 +33,7 @@ export const useChartData = ({
         unit === TimeUnits.GLOBAL &&
         metricSet?.length === 1
       ) {
-        return getDataPieChart({metrics, metricSet, info});
+        return getDataPieChart({metrics, metricSet, info, timeZone});
       }
 
       if (unit !== TimeUnits.GLOBAL) {
@@ -45,7 +46,8 @@ export const useChartData = ({
           entityId,
           chartMode,
           type,
-          colors
+          colors,
+          timeZone
         });
       }
       return null;
@@ -58,6 +60,7 @@ export const useChartData = ({
     entityId,
     metricData,
     metricSet,
+    timeZone,
     type,
     unit
   ]);
@@ -128,10 +131,12 @@ const getDataLineChart = ({
   entityId,
   chartMode,
   type,
-  colors
+  colors,
+  timeZone
 }) => {
-  const startTime = getDateFromTimestamp(start_time); //moment.unix(start_time);
-  const endTime = getDateFromTimestamp(end_time); //moment.unix(end_time);
+  const startTime = getDateFromTimestamp(start_time, timeZone); //moment.unix(start_time);
+  const endTime = getDateFromTimestamp(end_time, timeZone); //moment.unix(end_time);
+
   const increaseNumber = 1;
   const unitStr = unit;
   //---> Get list of checkpoints
@@ -140,13 +145,19 @@ const getDataLineChart = ({
     endDate: endTime,
     formatStr: FORMAT_BY_UNIT[unitStr],
     unit: `${unitStr}s`,
-    increaseNumber
+    increaseNumber,
+    timeZone
   });
+  console.log(
+    '🚀 ~ file: useChartData.js ~ line 158 ~ listCheckPoints',
+    listCheckPoints
+  );
 
   const newMetrics = convertApiToRender({
     unit: unitStr,
     metrics,
-    listCheckPoints
+    listCheckPoints,
+    timeZone
   });
 
   if (validArray({list: metricSet})) {
@@ -191,7 +202,8 @@ const enumerateDaysBetweenDates = ({
   endDate,
   formatStr,
   unit,
-  increaseNumber = 1
+  increaseNumber = 1,
+  timeZone
 }) => {
   const now = startDate.clone();
   const dates = [];
@@ -202,16 +214,16 @@ const enumerateDaysBetweenDates = ({
 
     now.add(increaseNumber, unit);
   }
-  if (validArray({list: dates})) {
-    dates.length = dates?.length - 1;
-  }
+  // if (validArray({list: dates})) {
+  //   dates.length = dates?.length - 1;
+  // }
 
   return dates;
 };
 
-const getLocalDateTime = ({formatStr = 'YYYY-MM-DD', dateStr}) => {
-  const tmpDateUtc = moment.utc(moment.unix(dateStr));
-  const newDateStr = tmpDateUtc.local().format(formatStr);
+const getLocalDateTime = ({formatStr = 'YYYY-MM-DD', dateStr, timeZone}) => {
+  const tmpDateUtc = moment.utc(moment.unix(dateStr)).add(timeZone, 'h');
+  const newDateStr = tmpDateUtc.format(formatStr);
 
   return newDateStr;
 };
@@ -219,7 +231,8 @@ const getLocalDateTime = ({formatStr = 'YYYY-MM-DD', dateStr}) => {
 const convertApiToRender = ({
   unit = '',
   metrics = {},
-  listCheckPoints = []
+  listCheckPoints = [],
+  timeZone
 }) => {
   const result = {};
 
@@ -235,7 +248,8 @@ const convertApiToRender = ({
   for (const [key, value] of Object.entries(metrics)) {
     const newKey = getLocalDateTime({
       formatStr: FORMAT_BY_UNIT[unit],
-      dateStr: key
+      dateStr: key,
+      timeZone
     });
     result[newKey] = value;
   }
@@ -249,6 +263,7 @@ const getDataDrawChart = ({
   metricSet,
   chartMode
 }) => {
+  console.log('🚀 ~ file: useChartData.js ~ line 260 ~ metrics', metrics);
   const data = [...listCheckPoints].reduce((acc, calculatedDate, idx) => {
     const existedMetricByDate = mappingData({
       data: metrics,
@@ -316,11 +331,6 @@ const getPriceValue = value => {
   return value;
 };
 
-const getDateFromTimestamp = timestamp => {
-  if (!timestamp) {
-    return null;
-  }
-
-  const dateTmp = new Date(timestamp * 1000);
-  return moment(dateTmp);
+const getDateFromTimestamp = (timestamp, timeZone) => {
+  return moment.utc(moment.unix(timestamp)).add(timeZone, 'h');
 };
