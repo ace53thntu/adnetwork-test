@@ -38,15 +38,21 @@ const ChartPreview = ({
   entityId,
   reportSource,
   defaultColors,
-  sourceUuid
+  sourceUuid,
+  timeZone
 }) => {
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 43 ~ defaultColors',
-    defaultColors
-  );
   const {metricBody: metricRequestBody, enableCallMetric} = useGetMetricBody({
     sourceUuid
   });
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 47 ~ metricRequestBody',
+    metricRequestBody
+  );
+  console.log(
+    '🚀 ~ file: ChartPreview.js ~ line 47 ~ enableCallMetric',
+    enableCallMetric,
+    !!reportId
+  );
 
   const {data: metrics, status, isFetching} = useGetMetrics({
     data: metricRequestBody,
@@ -70,6 +76,7 @@ const ChartPreview = ({
       entityId={metricRequestBody?.report_by_uuid}
       reportSource={reportSource}
       defaultColors={defaultColors}
+      timeZone={timeZone}
     />
   );
 };
@@ -83,7 +90,8 @@ const ChartPreviewContent = ({
   metricSet,
   entityId,
   reportSource,
-  defaultColors
+  defaultColors,
+  timeZone
 }) => {
   const {watch, setValue} = useFormContext();
   const isChartCompare = useIsChartCompareInForm();
@@ -94,15 +102,9 @@ const ChartPreviewContent = ({
   const colorsSelected = watch(
     `${REPORT_INPUT_NAME.PROPERTIES}.${REPORT_INPUT_NAME.COLOR}`
   );
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 93 ~ colorsSelected',
-    colorsSelected
-  );
+
   const parseColorsNoCompare = parseColorsFn(colorsSelected);
-  console.log(
-    '🚀 ~ file: ChartPreview.js ~ line 98 ~ parseColorsNoCompare',
-    parseColorsNoCompare
-  );
+
   const reportGroup = PublisherReportBys.map(item => item.value).includes(
     reportSource
   )
@@ -118,7 +120,8 @@ const ChartPreviewContent = ({
     entityId,
     chartType: chartTypeSelected,
     chartMode,
-    colors: parseColorsNoCompare
+    colors: parseColorsNoCompare,
+    timeZone
   });
   console.log('🚀 ~ file: ChartPreview.js ~ line 118 ~ chartData', chartData);
 
