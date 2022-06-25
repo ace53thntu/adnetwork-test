@@ -4,6 +4,7 @@ import {
   CappingReferenceTypes,
   CappingTypes,
   DEFAULT_PAGINATION,
+  DEFAULT_TIMEZONE,
   IS_RESPONSE_ALL,
   LogTypes
 } from 'constants/misc';
@@ -47,6 +48,7 @@ import {
   useGetCappings
 } from '../../../queries/capping';
 import CappingFormContainer from '../components/capping/form/CappingFormContainer';
+import {TimezoneMapping} from 'utils/helpers/getListTimezone';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -80,6 +82,22 @@ const CampaignForm = ({
     defaultValues: currentCampaign,
     resolver: validationCampaign(t, isEdit)
   });
+  let timeZone = '';
+  if (
+    currentCampaign?.time_zone?.value === null ||
+    currentCampaign?.time_zone?.value === undefined ||
+    currentCampaign?.time_zone?.value === ''
+  ) {
+    timeZone = TimezoneMapping[`${DEFAULT_TIMEZONE}`];
+  } else {
+    timeZone =
+      TimezoneMapping[`${parseInt(currentCampaign?.time_zone?.value)}`];
+  }
+  console.log(
+    '🚀 ~ file: form.js ~ line 94 ~ timeZone',
+    timeZone,
+    currentCampaign?.time_zone?.value
+  );
 
   const {handleSubmit, control} = methods;
   const startDate = useWatch({name: 'start_time', control});
@@ -251,6 +269,7 @@ const CampaignForm = ({
               <StatisticMetrics
                 id={campaignId}
                 reportType={EnumTypeStatistics.Campaign}
+                timeZone={timeZone}
               />
             )}
 

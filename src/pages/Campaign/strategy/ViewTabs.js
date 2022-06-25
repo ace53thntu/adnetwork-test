@@ -75,6 +75,7 @@ const StrategyViewTabs = ({currentStrategy = {}, campaignId}) => {
                   campaignId={campaignId}
                   isView
                   currentStrategy={currentStrategy}
+                  isDescriptionTab
                 />
                 {/* <Divider text="Audience"></Divider> */}
                 {/* <Audience

@@ -56,6 +56,14 @@ export default function ReportFormContent({
   const currentReport = useDefaultValues({report, defaultTimezone});
 
   const defaultValues = isEdit ? currentReport : initializeDefaultValue;
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 59 ~ defaultValues',
+    currentReport
+  );
+  console.log(
+    '🚀 ~ file: ReportFormContent.js ~ line 59 ~ initializeDefaultValue',
+    initializeDefaultValue
+  );
 
   const reportSourceOptions = getReportSources();
 
