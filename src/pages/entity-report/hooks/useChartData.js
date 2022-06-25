@@ -148,10 +148,6 @@ const getDataLineChart = ({
     increaseNumber,
     timeZone
   });
-  console.log(
-    '🚀 ~ file: useChartData.js ~ line 158 ~ listCheckPoints',
-    listCheckPoints
-  );
 
   const newMetrics = convertApiToRender({
     unit: unitStr,

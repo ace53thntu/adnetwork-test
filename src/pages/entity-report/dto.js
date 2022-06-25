@@ -10,6 +10,7 @@ import {
 import {PublisherReportBys, ReportBys, ReportTypeOptions} from './constants.js';
 import {getReportSources} from 'utils/metrics.js';
 import {getListTimeZone} from 'utils/helpers/getListTimezone.js';
+import {DEFAULT_TIMEZONE} from 'constants/misc.js';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -121,10 +122,20 @@ export function mappingApiToForm({report, defaultTimezone}) {
   let timeZone = getListTimeZone().find(
     item => parseInt(item.value, 10) === defaultTimezone
   );
-
+  console.log(
+    '==== 11111',
+    getListTimeZone().find(item => parseInt(item.value, 10) === time_zone),
+    timeZone
+  );
   if (getListTimeZone().find(item => parseInt(item.value, 10) === time_zone)) {
     timeZone = getListTimeZone().find(
       item => parseInt(item.value, 10) === time_zone
+    );
+  }
+
+  if (timeZone === undefined || timeZone === null || timeZone === '') {
+    timeZone = getListTimeZone().find(
+      item => parseInt(item.value, 10) === DEFAULT_TIMEZONE
     );
   }
 
