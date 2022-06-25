@@ -72,7 +72,7 @@ function TreeSelectCampaign() {
     } else if (isStrategy) {
       dispatch(setStrategyRedux(advertiser_uuid, campaign_uuid, uuid));
       navigate(
-        `/${RoutePaths.CAMPAIGN}/${campaign_uuid}/${RoutePaths.STRATEGY}/${uuid}?advertiser_id=${advertiser_uuid}`
+        `/${RoutePaths.CAMPAIGN}/${campaign_uuid}/${RoutePaths.STRATEGY}/${uuid}/${RoutePaths.EDIT}?advertiser_id=${advertiser_uuid}`
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

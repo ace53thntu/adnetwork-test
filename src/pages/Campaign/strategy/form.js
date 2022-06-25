@@ -15,6 +15,9 @@ import InformationGroup from './form-fields/InformationGroup';
 import InventoryGroup from './form-fields/InventoryGroup';
 import ScheduleGroup from './form-fields/ScheduleGroup';
 import BudgetAndImpression from '../components/BudgetAndImpression';
+import {useGetCampaign} from 'queries/campaign';
+import {TimezoneMapping} from 'utils/helpers/getListTimezone';
+import {DEFAULT_TIMEZONE} from 'constants/misc';
 
 const propTypes = {
   isEdit: PropTypes.bool,
@@ -31,14 +34,29 @@ const StrategyForm = ({
 }) => {
   const role = getRole();
   const isCreate = React.useMemo(() => !isEdit && !isView, [isEdit, isView]);
+  const {data: campaign} = useGetCampaign({
+    cid: currentStrategy?.campaign_uuid?.value,
+    enabled: !!currentStrategy?.campaign_uuid?.value
+  });
+  let timeZone = '';
+  if (
+    campaign?.time_zone === null ||
+    campaign?.time_zone === undefined ||
+    campaign?.time_zone === ''
+  ) {
+    timeZone = TimezoneMapping[`${DEFAULT_TIMEZONE}`];
+  } else {
+    timeZone = TimezoneMapping[`${parseInt(campaign?.time_zone)}`];
+  }
 
   return (
     <>
       {/* Strategy Statistic Metric */}
-      {currentStrategy?.id && isDescriptionTab && (
+      {currentStrategy?.id && isDescriptionTab && campaign && (
         <StatisticMetrics
           id={currentStrategy?.id}
           reportType={EnumTypeStatistics.Strategy}
+          timeZone={timeZone}
         />
       )}
 
