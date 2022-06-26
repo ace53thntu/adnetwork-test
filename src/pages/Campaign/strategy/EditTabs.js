@@ -24,6 +24,9 @@ import {CappingReferenceTypes} from '../../../constants/misc';
 import {EntityReport} from '../../entity-report';
 import {EntityTypes} from '../../../constants/report';
 import {USER_ROLE} from '../../user-management/constants';
+import {Button} from 'reactstrap';
+import {LogTypes} from 'constants/misc';
+import Historical from 'components/historical';
 
 const StrategyEditTabs = ({
   currentStrategy = {},
@@ -36,10 +39,14 @@ const StrategyEditTabs = ({
   const query = useQueryString();
   const ownerId = query.get('advertiser_id');
   const nextTab = query.get('next_tab');
-  const isDescriptionTab = nextTab === 'description';
+  const isDescriptionTab = nextTab === 'description' || !nextTab;
   const {t} = useTranslation();
   const [currentTab, setCurrentTab] = useState('description');
+  const [openModal, setOpenModal] = React.useState(false);
 
+  const toggleModal = React.useCallback(() => {
+    setOpenModal(prevState => !prevState);
+  }, []);
   const goTo = useCallback(({nextTab}) => {
     setCurrentTab(nextTab);
   }, []);
@@ -67,6 +74,11 @@ const StrategyEditTabs = ({
           name: t(EditTabs.DESCRIPTION.name),
           content: (
             <DescriptionTab>
+              <div className="d-flex justify-content-end mb-2">
+                <Button color="primary" type="button" onClick={toggleModal}>
+                  Logs
+                </Button>
+              </div>
               <FormContainer {...defaultProps}>
                 <StrategyForm
                   campaignId={campaignId}
@@ -88,6 +100,16 @@ const StrategyEditTabs = ({
                   isCreate={isCreate}
                 />
               </FormContainer>
+              {openModal && (
+                <Historical
+                  modal={openModal}
+                  toggle={toggleModal}
+                  entityName={currentStrategy?.name}
+                  entityUuid={currentStrategy?.uuid}
+                  entityType={LogTypes.STRATEGY}
+                  hasCapping
+                />
+              )}
             </DescriptionTab>
           )
         },
@@ -138,7 +160,9 @@ const StrategyEditTabs = ({
       isCreate,
       currentStrategy,
       isDescriptionTab,
-      ownerId
+      ownerId,
+      openModal,
+      toggleModal
     ]
   );
 

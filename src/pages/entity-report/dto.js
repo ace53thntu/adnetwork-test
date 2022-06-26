@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {
   ChartTypes,
@@ -11,6 +10,7 @@ import {PublisherReportBys, ReportBys, ReportTypeOptions} from './constants.js';
 import {getReportSources} from 'utils/metrics.js';
 import {getListTimeZone} from 'utils/helpers/getListTimezone.js';
 import {DEFAULT_TIMEZONE} from 'constants/misc.js';
+import {convertDateToIosStandard} from 'utils/helpers/dateTime.helpers.js';
 
 const isPublisherGroup = reportSource => {
   return [
@@ -42,8 +42,10 @@ export function mappingFormToApi({
   } = api;
 
   const reportSource = report_source?.value;
-  let formatStartDate = start_time ? moment(start_time).toISOString() : null;
-  const formatEndDate = moment(end_time).toISOString();
+  let formatStartDate = start_time
+    ? convertDateToIosStandard(start_time)
+    : null;
+  const formatEndDate = convertDateToIosStandard(end_time);
   const reportBy = report_by?.value || '';
   const reportByName = report_by?.label || '';
   const reportByUuid = report_by_uuid?.value || '';
@@ -122,11 +124,7 @@ export function mappingApiToForm({report, defaultTimezone}) {
   let timeZone = getListTimeZone().find(
     item => parseInt(item.value, 10) === defaultTimezone
   );
-  console.log(
-    '==== 11111',
-    getListTimeZone().find(item => parseInt(item.value, 10) === time_zone),
-    timeZone
-  );
+
   if (getListTimeZone().find(item => parseInt(item.value, 10) === time_zone)) {
     timeZone = getListTimeZone().find(
       item => parseInt(item.value, 10) === time_zone

@@ -1,7 +1,7 @@
 import {DEFAULT_TIMEZONE} from 'constants/misc';
 import {ReportTypes, REPORT_INPUT_NAME, TimeUnits} from 'constants/report';
-import moment from 'moment';
 import {useFormContext} from 'react-hook-form';
+import {convertLocalDateToTimezone} from 'utils/helpers/dateTime.helpers';
 import {TimezoneMapping} from 'utils/helpers/getListTimezone';
 import {isValidTimePeriod} from '../utils';
 import {useIsChartCompareInForm} from './useIsChartCompare';
@@ -38,13 +38,11 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   let startTime = watchFields?.[startTimeName] || null;
   let endTime = watchFields?.[endTimeName] || null;
   let reportByUuid = watchFields?.[reportByUuidName]?.value || '';
-  let timeZone = parseInt(watchFields?.[timeZoneName]?.value) || null;
-  let timeZoneValue = '';
+  let timeZone = parseInt(watchFields?.[timeZoneName]?.value);
   if (timeZone === null || timeZone === undefined || timeZone === '') {
-    timeZoneValue = TimezoneMapping[DEFAULT_TIMEZONE];
-  } else {
-    timeZoneValue = TimezoneMapping[timeZone];
+    timeZone = DEFAULT_TIMEZONE;
   }
+  const timeZoneValue = TimezoneMapping[timeZone];
 
   if (reportSource === reportBy) {
     reportByUuid = sourceUuid;
@@ -87,8 +85,16 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     const isValidTime = isValidTimePeriod({startTime, endTime});
 
     if (isValidTime) {
-      startTime = moment(startTime).toISOString();
-      endTime = moment(endTime).toISOString();
+      startTime = convertLocalDateToTimezone({
+        localDate: startTime,
+        timeZoneOffset: timeZone,
+        isEndDate: false
+      });
+      endTime = convertLocalDateToTimezone({
+        localDate: endTime,
+        timeZoneOffset: timeZone,
+        isEndDate: true
+      });
       metricBody = {
         ...metricBody,
         start_time: startTime,
