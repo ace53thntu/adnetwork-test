@@ -13,6 +13,7 @@ import {
   LikeOutlined,
   PieChartOutlined
 } from '@ant-design/icons';
+import {convertLocalDateToTimezone} from 'utils/helpers/dateTime.helpers';
 const {RangePicker} = DatePicker;
 
 export const EnumTypeStatistics = {
@@ -26,12 +27,12 @@ const propTypes = {
     EnumTypeStatistics.Campaign,
     EnumTypeStatistics.Strategy
   ]),
-  timeZone: PropTypes.string
+  timeZone: PropTypes.number
 };
 
 const dateFormat = 'YYYY/MM/DD';
 const currentTime = moment();
-const detaultRangeTime = [
+const defaultRangeTime = [
   moment().subtract(7, 'days').startOf('day'),
   currentTime
 ];
@@ -39,13 +40,25 @@ const detaultRangeTime = [
 const StatisticMetrics = ({
   id,
   reportType = EnumTypeStatistics.Campaign,
-  timeZone
+  timeZone,
+  originalTimezone
 }) => {
-  const [rangeTime, setRangeTime] = useState(detaultRangeTime);
+  const [rangeTime, setRangeTime] = useState(defaultRangeTime);
+  const startDate = convertLocalDateToTimezone({
+    localDate: rangeTime?.[0]?.format(),
+    originalTimezone,
+    isEndDate: false
+  });
+  const endDate = convertLocalDateToTimezone({
+    localDate: rangeTime?.[1]?.format(),
+    originalTimezone,
+    isEndDate: true
+  });
+
   const {data, isFetching} = useGetStatisticMetrics({
     data: {
-      start_time: rangeTime[0].format(),
-      end_time: rangeTime[1].format(),
+      start_time: startDate,
+      end_time: endDate,
       report_by: reportType,
       report_source: reportType,
       report_by_uuid: id,

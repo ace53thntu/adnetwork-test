@@ -57,6 +57,7 @@ const StrategyForm = ({
           id={currentStrategy?.id}
           reportType={EnumTypeStatistics.Strategy}
           timeZone={timeZone}
+          originalTimezone={parseInt(campaign?.time_zone) || DEFAULT_TIMEZONE}
         />
       )}
 

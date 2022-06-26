@@ -35,7 +35,7 @@ const propTypes = {
   onClickMenu: PropTypes.func,
   title: PropTypes.string,
   isManager: PropTypes.bool,
-  type: PropTypes.string
+  type: PropTypes.object
 };
 
 const BudgetList = ({

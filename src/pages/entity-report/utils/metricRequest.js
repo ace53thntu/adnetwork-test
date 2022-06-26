@@ -1,4 +1,5 @@
 import {DEFAULT_TIMEZONE} from 'constants/misc';
+import {convertLocalDateToTimezone} from 'utils/helpers/dateTime.helpers';
 import {TimezoneMapping} from 'utils/helpers/getListTimezone';
 
 export const getMetricRequestBody = ({report}) => {
@@ -7,19 +8,18 @@ export const getMetricRequestBody = ({report}) => {
   }
   const {source_uuid, report_source, report_type, api} = report;
 
-  const {time_range, time_unit, report_by, start_time, end_time, time_zone} =
-    api || {};
-
+  const {time_range, time_unit, report_by, start_time, end_time} = api || {};
+  let time_zone = api?.time_zone;
   let report_by_uuid = api?.report_by_uuid || null;
   if (report_source === report_by) {
     report_by_uuid = source_uuid;
   }
-  let timeZoneValue = '';
+
   if (time_zone === null || time_zone === undefined || time_zone === '') {
-    timeZoneValue = TimezoneMapping[DEFAULT_TIMEZONE];
-  } else {
-    timeZoneValue = TimezoneMapping[time_zone];
+    time_zone = DEFAULT_TIMEZONE;
   }
+
+  const timeZoneValue = TimezoneMapping[time_zone];
 
   const requestBody = {
     source_uuid,
@@ -33,7 +33,10 @@ export const getMetricRequestBody = ({report}) => {
   };
 
   if (report_type === 'distribution') {
-    requestBody.start_time = start_time;
+    requestBody.start_time = convertLocalDateToTimezone({
+      localDate: start_time,
+      timeZoneOffset: time_zone
+    });
     requestBody.end_time = end_time;
   }
 
