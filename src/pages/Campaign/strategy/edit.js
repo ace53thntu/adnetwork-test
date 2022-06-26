@@ -39,11 +39,10 @@ const StrategyEdit = () => {
   const strategy = apiToForm({strategyData});
 
   React.useEffect(() => {
-    if(isFetching){
+    if (isFetching) {
       dispatch(initializedStrategyRedux(false));
-
     }
-  }, [dispatch, isFetching])
+  }, [dispatch, isFetching]);
 
   useRedirectInCampaign();
 

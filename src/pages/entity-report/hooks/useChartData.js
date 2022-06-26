@@ -259,7 +259,6 @@ const getDataDrawChart = ({
   metricSet,
   chartMode
 }) => {
-  console.log('🚀 ~ file: useChartData.js ~ line 260 ~ metrics', metrics);
   const data = [...listCheckPoints].reduce((acc, calculatedDate, idx) => {
     const existedMetricByDate = mappingData({
       data: metrics,

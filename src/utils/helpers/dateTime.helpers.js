@@ -146,3 +146,33 @@ export const enumerateDaysBetweenDates = ({
 
   return dates;
 };
+
+export const convertLocalDateToTimezone = ({
+  localDate,
+  timeZoneOffset = 7,
+  isEndDate = false
+}) => {
+  if (!localDate || !moment(localDate).isValid()) {
+    return null;
+  }
+
+  // if (!isEndDate) {
+  //   return moment(localDate)
+  //     .startOfDay()
+  //     .utcOffset(timeZoneOffset, true)
+  //     .toISOString(true);
+  // }
+  // return moment(localDate)
+  //   .endOfDay()
+  //   .utcOffset(timeZoneOffset, true)
+  //   .toISOString(true);
+  return moment(localDate).utcOffset(timeZoneOffset, true).toISOString(true);
+};
+
+export const convertDateToIosStandard = dateStr => {
+  if (!dateStr || !moment(dateStr).isValid()) {
+    return null;
+  }
+
+  return moment(dateStr)?.toISOString();
+};

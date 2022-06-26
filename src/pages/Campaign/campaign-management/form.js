@@ -93,11 +93,6 @@ const CampaignForm = ({
     timeZone =
       TimezoneMapping[`${parseInt(currentCampaign?.time_zone?.value)}`];
   }
-  console.log(
-    '🚀 ~ file: form.js ~ line 94 ~ timeZone',
-    timeZone,
-    currentCampaign?.time_zone?.value
-  );
 
   const {handleSubmit, control} = methods;
   const startDate = useWatch({name: 'start_time', control});
@@ -270,6 +265,10 @@ const CampaignForm = ({
                 id={campaignId}
                 reportType={EnumTypeStatistics.Campaign}
                 timeZone={timeZone}
+                originalTimezone={
+                  parseInt(currentCampaign?.time_zone?.value) ||
+                  DEFAULT_TIMEZONE
+                }
               />
             )}
 
