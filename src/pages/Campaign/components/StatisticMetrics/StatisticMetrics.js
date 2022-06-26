@@ -46,12 +46,12 @@ const StatisticMetrics = ({
   const [rangeTime, setRangeTime] = useState(defaultRangeTime);
   const startDate = convertLocalDateToTimezone({
     localDate: rangeTime?.[0]?.format(),
-    originalTimezone,
+    timeZoneOffset: originalTimezone,
     isEndDate: false
   });
   const endDate = convertLocalDateToTimezone({
     localDate: rangeTime?.[1]?.format(),
-    originalTimezone,
+    timeZoneOffset: originalTimezone,
     isEndDate: true
   });
 
