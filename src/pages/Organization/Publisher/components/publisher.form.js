@@ -161,24 +161,25 @@ const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
                 </>
               )}
               {isEdit && (
-                <>
-                  <Link
-                    to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}`}
-                  >
-                    {t('COMMON.VIEW')}
-                  </Link>
-                  <Button color="link" onClick={() => reset()} type="button">
-                    {t('cancel')}
-                  </Button>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    disabled={!formState.isDirty}
-                  >
-                    {t('save')}
-                  </Button>
-                </>
+                <Link
+                  to={`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}/${publisherId}`}
+                >
+                  {t('COMMON.VIEW')}
+                </Link>
               )}
+              {!isView && (
+                <Button color="link" onClick={() => reset()} type="button">
+                  {t('cancel')}
+                </Button>
+              )}
+              <Button
+                color="primary"
+                type="submit"
+                disabled={!formState.isDirty}
+                className="ml-2"
+              >
+                {t('save')}
+              </Button>
             </CardFooter>
           </BlockUi>
         </Form>
