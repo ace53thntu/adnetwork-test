@@ -39,11 +39,11 @@ const ConceptThumbnail = ({conceptItem = {}}) => {
       return <img alt={''} src={noImage} />;
     }
 
-    return <img alt={''} src={noImage} />;
+    return <img className="concept-image" alt={''} src={noImage} />;
   };
 
   return (
-    !!previewFile && (
+    !!conceptItem && (
       <div className="concept-image-wrapper">{renderConceptThumbnail()}</div>
     )
   );
