@@ -227,7 +227,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'External Impressions',
-        value: 3,
+        value: 'external_impressions',
         code: 'xic',
         acl: 'xic',
         is_price: false,
@@ -235,7 +235,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'ExternalClicks',
-        value: 4,
+        value: 'external_clicks',
         code: 'xcc',
         acl: 'xcc',
         is_price: false,
@@ -248,7 +248,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Creative Bids',
-        value: 5,
+        value: 'creative_bids',
         code: 'cbc',
         acl: 'bc',
         is_price: false,
@@ -256,7 +256,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Bid Price',
-        value: 6,
+        value: 'creative_bid_price',
         code: 'cbsp',
         acl: 'bsp',
         is_price: true,
@@ -264,7 +264,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Impressions',
-        value: 7,
+        value: 'creative_impressions',
         code: 'cic',
         acl: 'ic',
         is_price: false,
@@ -272,7 +272,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Clicks',
-        value: 8,
+        value: 'creative_clicks',
         code: 'ccc',
         acl: 'cc',
         is_price: false,
@@ -280,7 +280,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Post Click Visits',
-        value: 9,
+        value: 'creative_post_click_visits',
         code: 'ccl',
         acl: 'cl',
         is_price: false,
@@ -288,7 +288,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Post Click Conv',
-        value: 10,
+        value: 'creative_post_click_conv',
         code: 'cpc',
         acl: 'pc',
         is_price: false,
@@ -296,7 +296,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Post View Conv',
-        value: 11,
+        value: 'creative_post_view_conv',
         code: 'cpv',
         acl: 'pv',
         is_price: false,
@@ -304,7 +304,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Tracking Cost',
-        value: 12,
+        value: 'creative_tracking_cost',
         code: 'ctp',
         acl: 'tp',
         is_price: true,
@@ -312,7 +312,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Cost',
-        value: 13,
+        value: 'creative_cost',
         code: 'cirp',
         acl: 'irp',
         is_price: true,
@@ -320,7 +320,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Creative Final Cost',
-        value: 14,
+        value: 'creative_final_cost',
         code: 'cirp_final',
         acl: 'irp_client',
         is_price: true,
@@ -397,7 +397,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Native Bids',
-        value: 16,
+        value: 'native_bids',
         code: 'nbc',
         acl: 'bc',
         is_price: false,
@@ -405,7 +405,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Bid Price',
-        value: 17,
+        value: 'native_bid_price',
         code: 'nbsp',
         acl: 'bsp',
         is_price: true,
@@ -413,7 +413,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Impressions',
-        value: 18,
+        value: 'native_impressions',
         code: 'nic',
         acl: 'ic',
         is_price: false,
@@ -421,7 +421,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Clicks',
-        value: 19,
+        value: 'native_clicks',
         code: 'ncc',
         acl: 'cc',
         is_price: false,
@@ -429,7 +429,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Post Click Visits',
-        value: 20,
+        value: 'native_post_click_visits',
         code: 'ncl',
         acl: 'cl',
         is_price: false,
@@ -437,7 +437,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Post Click Conv',
-        value: 21,
+        value: 'native_post_click_conv',
         code: 'npc',
         acl: 'pc',
         is_price: false,
@@ -445,7 +445,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Post View Conv',
-        value: 22,
+        value: 'native_post_view_conv',
         code: 'npv',
         acl: 'pv',
         is_price: false,
@@ -453,7 +453,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Tracking Cost',
-        value: 23,
+        value: 'native_tracking_cost',
         code: 'ntp',
         acl: 'tp',
         is_price: true,
@@ -461,7 +461,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Cost',
-        value: 24,
+        value: 'native_cost',
         code: 'nirp',
         acl: 'irp',
         is_price: true,
@@ -469,7 +469,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Native Final Cost',
-        value: 25,
+        value: 'native_final_cost',
         code: 'nirp_final',
         acl: 'irp_client',
         is_price: true,
@@ -546,7 +546,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Video Bids',
-        value: 27,
+        value: 'video_bids',
         code: 'vbc',
         acl: 'vbc',
         is_price: false,
@@ -554,7 +554,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Bid Price',
-        value: 28,
+        value: 'video_bid_price',
         code: 'vbsp',
         acl: 'vbsp',
         is_price: true,
@@ -562,7 +562,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Impressions',
-        value: 29,
+        value: 'video_impressions',
         code: 'vic',
         acl: 'vic',
         is_price: false,
@@ -570,7 +570,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Clicks',
-        value: 30,
+        value: 'video_clicks',
         code: 'vcc',
         acl: 'vcc',
         is_price: false,
@@ -578,7 +578,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Post Click Visits',
-        value: 31,
+        value: 'video_post_click_visits',
         code: 'vcl',
         acl: 'vcl',
         is_price: false,
@@ -586,7 +586,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Post Click Conv',
-        value: 32,
+        value: 'video_post_click_conv',
         code: 'vpc',
         acl: 'vpc',
         is_price: false,
@@ -594,7 +594,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Post View Conv',
-        value: 33,
+        value: 'video_post_view_conv',
         code: 'vpv',
         acl: 'vpv',
         is_price: false,
@@ -602,7 +602,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Tracking Cost',
-        value: 34,
+        value: 'video_tracking_cost',
         code: 'vtp',
         acl: 'tp',
         is_price: true,
@@ -610,7 +610,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Cost',
-        value: 35,
+        value: 'video_cost',
         code: 'virp',
         acl: 'irp',
         is_price: true,
@@ -618,7 +618,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Final Cost',
-        value: 36,
+        value: 'video_final_cost',
         code: 'virp_org',
         acl: 'irp_client',
         is_price: true,
@@ -626,7 +626,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Start',
-        value: 36,
+        value: 'video_start',
         code: 'virp_start',
         acl: 'irp_client',
         is_price: false,
@@ -634,7 +634,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video First Quartil',
-        value: 38,
+        value: 'video_first_quartil',
         code: 'q1',
         acl: 'q1',
         is_price: false,
@@ -642,7 +642,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Midpoint',
-        value: 39,
+        value: 'video_midpoint',
         code: 'q2',
         acl: 'q2',
         is_price: false,
@@ -650,7 +650,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Third Quartil',
-        value: 40,
+        value: 'video_third_quartil',
         code: 'q3',
         acl: 'q3',
         is_price: false,
@@ -658,7 +658,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Completion',
-        value: 41,
+        value: 'video_completion',
         code: 'q4',
         acl: 'q4',
         is_price: false,
@@ -666,7 +666,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Skip',
-        value: 42,
+        value: 'video_skip',
         code: 'sk',
         acl: 'sk',
         is_price: false,
@@ -674,7 +674,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Mute',
-        value: 42,
+        value: 'video_mute',
         code: 'vmt',
         acl: 'vmt',
         is_price: false,
@@ -682,7 +682,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Unmute',
-        value: 42,
+        value: 'video_unmute',
         code: 'vumt',
         acl: 'vumt',
         is_price: false,
@@ -690,7 +690,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Rewind',
-        value: 42,
+        value: 'video_rewind',
         code: 'vrw',
         acl: 'vrw',
         is_price: false,
@@ -698,7 +698,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Pause',
-        value: 42,
+        value: 'video_pause',
         code: 'vps',
         acl: 'vps',
         is_price: false,
@@ -706,7 +706,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Resume',
-        value: 42,
+        value: 'video_resume',
         code: 'vrs',
         acl: 'vrs',
         is_price: false,
@@ -714,7 +714,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Full screen',
-        value: 42,
+        value: 'video_fullscreen',
         code: 'vfs',
         acl: 'vfs',
         is_price: false,
@@ -722,7 +722,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Exit Full screen',
-        value: 42,
+        value: 'video_exit_fullscreen',
         code: 'vefs',
         acl: 'vefs',
         is_price: false,
@@ -730,7 +730,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Close Linear',
-        value: 42,
+        value: 'video_close_linear',
         code: 'vcln',
         acl: 'vcln',
         is_price: false,
@@ -738,7 +738,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Video Time',
-        value: 43,
+        value: 'video_time',
         code: 't',
         acl: 't',
         is_price: false,
@@ -815,7 +815,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Post Click Lead',
-        value: 44,
+        value: 'post_click_lead',
         code: 'pce32',
         acl: 'pce32',
         is_price: false,
@@ -823,7 +823,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Post View Lead',
-        value: 45,
+        value: 'post_view_lead',
         code: 'pve32',
         acl: 'pve32',
         is_price: false,
@@ -831,7 +831,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Post Click Checkout',
-        value: 46,
+        value: 'post_click_checkout',
         code: 'pce128',
         acl: 'pce128',
         is_price: false,
@@ -839,7 +839,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Post View Checkout',
-        value: 47,
+        value: 'post_view_checkout',
         code: 'pve128',
         acl: 'pve128',
         is_price: false,
@@ -847,7 +847,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Post Click Revenue',
-        value: 48,
+        value: 'post_click_revenue',
         code: 'pce128s',
         acl: 'pce128s',
         is_price: true,
@@ -855,7 +855,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Post View Revenue',
-        value: 49,
+        value: 'post_view_revenue',
         code: 'pve128s',
         acl: 'pve128s',
         is_price: true,
@@ -868,7 +868,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Event Home',
-        value: 50,
+        value: 'event_home',
         code: 'e1',
         acl: 'e1',
         is_price: false,
@@ -876,7 +876,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event View',
-        value: 51,
+        value: 'event_view',
         code: 'e2',
         acl: 'e2',
         is_price: false,
@@ -884,7 +884,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Category',
-        value: 52,
+        value: 'event_category',
         code: 'e4',
         acl: 'e4',
         is_price: false,
@@ -892,7 +892,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Sub Category',
-        value: 53,
+        value: 'event_sub_category',
         code: 'e8',
         acl: 'e8',
         is_price: false,
@@ -900,7 +900,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Product',
-        value: 54,
+        value: 'event_product',
         code: 'e16',
         acl: 'e16',
         is_price: false,
@@ -908,7 +908,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Lead',
-        value: 55,
+        value: 'event_lead',
         code: 'e32',
         acl: 'e32',
         is_price: false,
@@ -916,7 +916,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Basket',
-        value: 56,
+        value: 'event_basket',
         code: 'e64',
         acl: 'e64',
         is_price: false,
@@ -924,7 +924,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Checkout',
-        value: 57,
+        value: 'event_checkout',
         code: 'e128',
         acl: 'e128',
         is_price: false,
@@ -932,7 +932,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Event Checkout Price',
-        value: 58,
+        value: 'event_checkout_price',
         code: 'e128s',
         acl: 'e128s',
         is_price: true,
@@ -990,7 +990,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Unique Visitor Hourly',
-        value: 59,
+        value: 'unique_visitor_hourly',
         code: 'uvh',
         acl: 'uvh',
         is_price: false,
@@ -998,7 +998,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Unique Visitor Daily',
-        value: 60,
+        value: 'unique_visitor_daily',
         code: 'uvd',
         acl: 'uvd',
         is_price: false,
@@ -1006,7 +1006,7 @@ export const REPORT_VIEW_TYPES = [
       },
       {
         label: 'Unique Visitor Monthly',
-        value: 61,
+        value: 'unique_visitor_monthly',
         code: 'uvm',
         acl: 'uvm',
         is_price: false,
@@ -1019,7 +1019,7 @@ export const REPORT_VIEW_TYPES = [
     options: [
       {
         label: 'Visit Time',
-        value: 62,
+        value: 'visit_time',
         code: 'vt',
         acl: 'vt',
         is_price: false,
