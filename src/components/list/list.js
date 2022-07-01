@@ -34,6 +34,7 @@ function List(props) {
     isShowInventoryHighlight,
     onChangeCheckBox
   } = props;
+  console.log('🚀 ~ file: list.js ~ line 37 ~ List ~ actions', actions);
 
   const classes = useListStyles();
 
