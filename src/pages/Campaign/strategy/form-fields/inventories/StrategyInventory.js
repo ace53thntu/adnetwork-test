@@ -22,17 +22,30 @@ const propTypes = {
 };
 
 const StrategyInventory = ({strategyInventories = [], isView = false}) => {
+  console.log(
+    '🚀 ~ file: StrategyInventory.js ~ line 25 ~ StrategyInventory ~ strategyInventories',
+    strategyInventories
+  );
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);
 
   const {errors, setValue, control, watch} = useFormContext();
   const strategyType = watch('strategy_type');
+  const activePriceModel = watch('pricing_model');
 
   React.useEffect(() => {
     const inventoriesConverted = strategyInventories?.map(item => ({
       uuid: item?.uuid,
-      price: item?.deal_floor_price
+      cpm: item?.cpm,
+      cpc: item?.cpc,
+      cpa: item?.cpa,
+      cpd: item?.cpd,
+      cpl: item?.cpl,
+      cpe: item?.cpe,
+      cpv: item?.cpv,
+      cpi: item?.cpi,
+      cpvm: item?.cpvm
     }));
 
     setValue('inventories_bid', inventoriesConverted, {
@@ -114,9 +127,35 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
             </Badge>
           );
         }
+      },
+      {
+        header: activePriceModel?.label,
+        accessor: activePriceModel?.value,
+        cell: row => {
+          const noStore = row?.original?.noStore;
+          let priceModelValue = '';
+          if (noStore) {
+            priceModelValue = row?.value?.toString();
+          } else {
+            priceModelValue = HandleCurrencyFields.convertApiToGui({
+              value: row?.value
+            })?.toString();
+          }
+
+          return (
+            <Badge color="info">
+              {formatValue({
+                value: priceModelValue,
+                groupSeparator: ',',
+                decimalSeparator: '.',
+                prefix: '$'
+              })}
+            </Badge>
+          );
+        }
       }
     ];
-  }, [strategyType?.value]);
+  }, [activePriceModel?.label, activePriceModel?.value, strategyType?.value]);
 
   function onClickAction(actionIndex, currentItem) {
     setOpenDialog(true);
@@ -147,6 +186,11 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
       />
 
       {strategyInventories?.map((inventoryItem, inventoryIndex) => {
+        console.log(
+          '🚀 ~ file: StrategyInventory.js ~ line 205 ~ {strategyInventories?.map ~ inventoryItem',
+          inventoryItem
+        );
+
         return (
           <div key={`pr-${inventoryItem?.uuid}`}>
             <Controller
@@ -156,7 +200,47 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
             />
             <Controller
               render={({field}) => <input {...field} type="hidden" />}
-              name={`inventories_bid[${inventoryIndex}].price`}
+              name={`inventories_bid[${inventoryIndex}].cpm`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpc`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpa`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpd`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpl`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpe`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpv`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpi`}
+              control={control}
+            />
+            <Controller
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`inventories_bid[${inventoryIndex}].cpvm`}
               control={control}
             />
           </div>

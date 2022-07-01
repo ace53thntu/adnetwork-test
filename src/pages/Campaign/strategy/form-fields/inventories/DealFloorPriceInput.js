@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CurrencyInput from 'react-currency-input-field';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
-import {StrategyTypes} from 'pages/Campaign/constants';
 
 const propTypes = {
   defaultValue: PropTypes.number,
@@ -39,7 +38,7 @@ const DealFloorPriceInput = ({
       disableGroupSeparators={false}
       decimalsLimit={3}
       prefix="$"
-      disabled={strategyType === StrategyTypes.NORMAL}
+      // disabled={strategyType === StrategyTypes.NORMAL}
     />
   );
 };

@@ -63,10 +63,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     tags: formTags,
     first_party
   } = formData;
-  console.log(
-    '🚀 ~ file: dto.js ~ line 56 ~ mappingInventoryFormToApi ~ metadata',
-    metadata
-  );
+  let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = formData;
 
   const formatData = format?.value || '';
 
@@ -93,10 +90,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     if (metadata?.max_bitrate) {
       formatMetadata.max_bitrate = parseInt(metadata?.max_bitrate, 10) || null;
     }
-    console.log(
-      'metadata?.min_duration',
-      metadata?.min_duration || parseInt(metadata?.min_duration, 10) === 0
-    );
+
     if (metadata?.min_duration || parseInt(metadata?.min_duration, 10) === 0) {
       formatMetadata.min_duration =
         parseInt(metadata?.min_duration, 10) === 0
@@ -177,16 +171,16 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     formatMetadata.banner_play_type = metadata?.banner_play_type?.value || null;
   }
 
-  // Metadata Price model
-  formatMetadata.cpm = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpm});
-  formatMetadata.cpc = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpc});
-  formatMetadata.cpa = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpa});
-  formatMetadata.cpd = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpd});
-  formatMetadata.cpl = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpl});
-  formatMetadata.cpe = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpe});
-  formatMetadata.cpv = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpv});
-  formatMetadata.cpi = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpi});
-  formatMetadata.cpvm = HandleCurrencyFields.convertGuiToApi({value: metadata?.cpvm});
+  // Price model
+  cpm = HandleCurrencyFields.convertGuiToApi({value: cpm});
+  cpc = HandleCurrencyFields.convertGuiToApi({value: cpc});
+  cpa = HandleCurrencyFields.convertGuiToApi({value: cpa});
+  cpd = HandleCurrencyFields.convertGuiToApi({value: cpd});
+  cpl = HandleCurrencyFields.convertGuiToApi({value: cpl});
+  cpe = HandleCurrencyFields.convertGuiToApi({value: cpe});
+  cpv = HandleCurrencyFields.convertGuiToApi({value: cpv});
+  cpi = HandleCurrencyFields.convertGuiToApi({value: cpi});
+  cpvm = HandleCurrencyFields.convertGuiToApi({value: cpvm});
 
   // Metadata extra
   if (metadata?.extra) {
@@ -201,8 +195,6 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
       );
     }
   }
-
-
 
   const tags = formTags?.map(item => item?.value);
 
@@ -225,7 +217,16 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     market_type: market_type?.value || null,
     market_dsps: marketDsps,
     tags,
-    first_party: first_party === 'active' ? true : false
+    first_party: first_party === 'active' ? true : false,
+    cpm,
+    cpc,
+    cpa,
+    cpd,
+    cpl,
+    cpe,
+    cpv,
+    cpi,
+    cpvm
   };
 };
 
@@ -256,6 +257,7 @@ export const mappingInventoryApiToForm = ({
     is_auto_create = false,
     first_party
   } = inventory;
+  let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = inventory;
   const destructureType = inventoryTypes.find(item => item.value === type);
   const destructurePosition =
     {value: position_uuid, label: position_name} || null;
@@ -304,9 +306,7 @@ export const mappingInventoryApiToForm = ({
       : [];
   destructedMetadata.mimes = mimes;
   destructedMetadata.loop = convertBooleanToRadioValue(metadata?.loop);
-  // metadata?.loop === true || metadata?.loop === 1 ? 'active' : 'inactive';
   destructedMetadata.skip = convertBooleanToRadioValue(metadata?.skip);
-  // metadata?.skip === true || metadata?.skip === 1 ? 'active' : 'inactive';
   destructedMetadata.linearity =
     LinearityOptions.find(item => item.value === metadata.linearity) || null;
   destructedMetadata.min_bitrate =
@@ -335,16 +335,33 @@ export const mappingInventoryApiToForm = ({
   destructedMetadata.banner_play_type = bannerPlayTypeSelected;
 
   // Price model
-  destructedMetadata.cpm = HandleCurrencyFields.convertApiToGui({value: metadata?.cpm});
-  destructedMetadata.cpc = HandleCurrencyFields.convertApiToGui({value: metadata?.cpc});
-  destructedMetadata.cpa = HandleCurrencyFields.convertApiToGui({value: metadata?.cpa});
-  destructedMetadata.cpd = HandleCurrencyFields.convertApiToGui({value: metadata?.cpd});
-  destructedMetadata.cpl = HandleCurrencyFields.convertApiToGui({value: metadata?.cpl});
-  destructedMetadata.cpe = HandleCurrencyFields.convertApiToGui({value: metadata?.cpe});
-  destructedMetadata.cpv = HandleCurrencyFields.convertApiToGui({value: metadata?.cpv});
-  destructedMetadata.cpi = HandleCurrencyFields.convertApiToGui({value: metadata?.cpi});
-  destructedMetadata.cpvm = HandleCurrencyFields.convertApiToGui({value: metadata?.cpvm});
-
+  cpm = HandleCurrencyFields.convertApiToGui({
+    value: cpm
+  });
+  cpc = HandleCurrencyFields.convertApiToGui({
+    value: cpc
+  });
+  cpa = HandleCurrencyFields.convertApiToGui({
+    value: cpa
+  });
+  cpd = HandleCurrencyFields.convertApiToGui({
+    value: cpd
+  });
+  cpl = HandleCurrencyFields.convertApiToGui({
+    value: cpl
+  });
+  cpe = HandleCurrencyFields.convertApiToGui({
+    value: cpe
+  });
+  cpv = HandleCurrencyFields.convertApiToGui({
+    value: cpv
+  });
+  cpi = HandleCurrencyFields.convertApiToGui({
+    value: cpi
+  });
+  cpvm = HandleCurrencyFields.convertApiToGui({
+    value: cpvm
+  });
 
   const extra = getMetaExtra(metadata);
 
@@ -400,7 +417,16 @@ export const mappingInventoryApiToForm = ({
       variables
     },
     is_auto_create: is_auto_create ? 'active' : 'inactive',
-    first_party: first_party ? 'active' : 'inactive'
+    first_party: first_party ? 'active' : 'inactive',
+    cpm,
+    cpc,
+    cpa,
+    cpd,
+    cpl,
+    cpe,
+    cpv,
+    cpi,
+    cpvm
   };
 };
 
