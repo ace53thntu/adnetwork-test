@@ -54,12 +54,26 @@ const StrategyEdit = () => {
       !isInitializedInventory
     ) {
       const inventories =
-        strategy?.inventories && strategy?.inventories.length > 0
-          ? strategy?.inventories?.map((item, idx) => ({
-              ...item,
-              deal_floor_price: strategy?.inventories_bid[idx]?.price,
-              noStore: false
-            }))
+        strategy?.inventories_bid && strategy?.inventories_bid.length > 0
+          ? strategy?.inventories_bid?.map((item, idx) => {
+              const {
+                name,
+                container_name,
+                position_name,
+                position_uuid,
+                floor_price
+              } = strategy.inventories[idx] || {};
+              return {
+                ...item,
+                id: item?.uuid,
+                name,
+                container_name,
+                position_name,
+                position_uuid,
+                floor_price,
+                noStore: false
+              };
+            })
           : [];
       dispatch(
         initStrategyInventoryListRedux({

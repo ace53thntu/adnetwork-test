@@ -54,6 +54,19 @@ export const validationInventory = t => {
         }
         return Yup.string().nullable().notRequired();
       }),
+      cpm: Yup.string()
+        .required('This field is required.')
+        .test({
+          name: 'cpm_floor_price',
+          exclusive: false,
+          params: {},
+          // eslint-disable-next-line no-template-curly-in-string
+          message: 'The CPM must be greater than the floor price',
+          test: function (value) {
+            // You can access the budget global field with `this.parent`.
+            return parseFloat(value) > parseFloat(this.parent?.floor_price);
+          }
+        }),
       metadata: Yup.object({
         width: Yup.string()
           .required('This field is required.')

@@ -20,6 +20,7 @@ import {getListCarriers} from 'utils/helpers/getListCarriers';
 import {getListMobilePhoneBrands} from 'utils/helpers/getListMobilePhoneBrands';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {getTimeZoneOffset} from 'utils/metrics';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const formatListData = (listData = []) => {
   return listData?.length > 0 ? Array.from(listData, item => item.value) : [];
@@ -206,11 +207,11 @@ export const formToApi = ({
   isEdit = false,
   currentTab = ''
 }) => {
+  console.log('🚀 ~ file: Strategy.js ~ line 209 ~ formData', formData);
   console.log(
     '🚀 ~ file: Strategy.js ~ line 209 ~ originalStrategy',
     originalStrategy
   );
-  console.log('🚀 ~ file: Strategy.js ~ line 209 ~ currentTab', currentTab);
   const {
     campaign_uuid: campaign,
     name,
@@ -375,7 +376,31 @@ export const formToApi = ({
 
   // if (strategy_type?.value === 'premium') {
   const inventoriesBid = formData?.inventories_bid || [];
-  strategyReturn.inventories_bid = inventoriesBid;
+  strategyReturn.inventories_bid = inventoriesBid?.map(item => {
+    let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = item;
+    // Price model
+    cpm = HandleCurrencyFields.convertGuiToApi({value: cpm});
+    cpc = HandleCurrencyFields.convertGuiToApi({value: cpc});
+    cpa = HandleCurrencyFields.convertGuiToApi({value: cpa});
+    cpd = HandleCurrencyFields.convertGuiToApi({value: cpd});
+    cpl = HandleCurrencyFields.convertGuiToApi({value: cpl});
+    cpe = HandleCurrencyFields.convertGuiToApi({value: cpe});
+    cpv = HandleCurrencyFields.convertGuiToApi({value: cpv});
+    cpi = HandleCurrencyFields.convertGuiToApi({value: cpi});
+    cpvm = HandleCurrencyFields.convertGuiToApi({value: cpvm});
+    return {
+      ...item,
+      cpm,
+      cpc,
+      cpa,
+      cpd,
+      cpl,
+      cpe,
+      cpv,
+      cpi,
+      cpvm
+    };
+  });
   // }
 
   if (isSummary) {

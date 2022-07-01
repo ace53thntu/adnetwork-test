@@ -12,7 +12,6 @@ import React from 'react';
 import {Badge} from 'reactstrap';
 import PropTypes from 'prop-types';
 import {useFormContext} from 'react-hook-form';
-import {formatValue} from 'react-currency-input-field';
 
 //---> Internal Modules
 import {LoadingIndicator} from 'components/common';
@@ -39,7 +38,7 @@ import useDeepCompareEffect from 'hooks/useDeepCompareEffect';
 import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {StrategyTypes} from 'pages/Campaign/constants';
-import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
+import InventoryPriceModal from '../InventoryPriceModal';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -49,6 +48,11 @@ const InventoryContentModal = ({containerId}) => {
   const role = getRole();
   const {watch} = useFormContext();
   const strategyTypeSelected = watch('strategy_type');
+  const pricingModel = watch('pricing_model');
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 53 ~ InventoryContentModal ~ pricingModel',
+    pricingModel
+  );
   const strategyType = strategyTypeSelected?.value;
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
@@ -91,6 +95,10 @@ const InventoryContentModal = ({containerId}) => {
     inventories,
     strategyInventories
   });
+  console.log(
+    '🚀 ~ file: InventoryContentModal.js ~ line 97 ~ InventoryContentModal ~ inventoriesMapping',
+    inventoriesMapping
+  );
 
   const initChecked = React.useCallback(list => {
     setInventoryIdsChecked(list);
@@ -110,6 +118,24 @@ const InventoryContentModal = ({containerId}) => {
       tmpArr = tmpArr.map(item => {
         if (item?.uuid === _inventoryId) {
           return {...item, deal_floor_price: value, noStore: true};
+        }
+        return item;
+      });
+      dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
+    },
+    [dispatch, strategyInventoriesTemp]
+  );
+
+  const onChangePriceModelField = React.useCallback(
+    (value, _inventoryId) => {
+      console.log(
+        '🚀 ~ file: InventoryContentModal.js ~ line 128 ~ InventoryContentModal ~ value',
+        value
+      );
+      let tmpArr = [...strategyInventoriesTemp];
+      tmpArr = tmpArr.map(item => {
+        if (item?.uuid === _inventoryId) {
+          return {...item, ...value, noStore: true};
         }
         return item;
       });
@@ -160,19 +186,13 @@ const InventoryContentModal = ({containerId}) => {
         {
           header: 'Floor price',
           accessor: 'floor_price',
-          cell: row =>
-            row?.value ? (
-              <Badge color="warning" pill>
-                {formatValue({
-                  value: HandleCurrencyFields.convertApiToGui({
-                    value: row?.value
-                  })?.toString(),
-                  groupSeparator: ',',
-                  decimalSeparator: '.',
-                  prefix: '$'
-                })}
-              </Badge>
-            ) : null
+          cell: row => (
+            <InventoryPriceModal
+              inventory={row?.original}
+              onChangePriceModelField={onChangePriceModelField}
+              pricingModel={pricingModel?.value?.toUpperCase()}
+            />
+          )
         },
         {
           header: 'Deal Floor Price',
@@ -194,13 +214,20 @@ const InventoryContentModal = ({containerId}) => {
         {
           header: 'Floor Price',
           accessor: 'floor_price',
+          // cell: row => (
+          //   <DealFloorPriceInput
+          //     defaultValue={row?.value || 0}
+          //     onChangeInputGlobal={value =>
+          //       onChangeDealFloorPrice(value, row?.original?.uuid)
+          //     }
+          //     strategyType={strategyType}
+          //   />
+          // )
           cell: row => (
-            <DealFloorPriceInput
-              defaultValue={row?.value || 0}
-              onChangeInputGlobal={value =>
-                onChangeDealFloorPrice(value, row?.original?.uuid)
-              }
-              strategyType={strategyType}
+            <InventoryPriceModal
+              inventory={row?.original}
+              onChangePriceModelField={onChangePriceModelField}
+              pricingModel={pricingModel?.value?.toUpperCase()}
             />
           )
         }
@@ -219,9 +246,17 @@ const InventoryContentModal = ({containerId}) => {
       }
       return true;
     });
-  }, [onChangeDealFloorPrice, role, strategyType]);
+  }, [
+    onChangeDealFloorPrice,
+    onChangePriceModelField,
+    pricingModel?.value,
+    role,
+    strategyType
+  ]);
 
-  const onClickItem = item => {};
+  const onClickItem = item => {
+    // setActivatedInventory(item);
+  };
 
   const onClickView = currentItem => {};
 
@@ -270,6 +305,7 @@ const InventoryContentModal = ({containerId}) => {
             checkable
             checkedValues={inventoryIdsChecked}
             onChangeCheckBox={onChangeCheckBox}
+            actions={[]}
           />
           {hasNextPage && (
             <Pagination

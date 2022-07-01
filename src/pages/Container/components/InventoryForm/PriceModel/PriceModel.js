@@ -1,20 +1,23 @@
-import { Collapse } from "components/common"
-import { CurrencyInputField } from "components/forms/CurrencyInputField"
-import React from "react"
-import { useFormContext } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { Col, Row } from "reactstrap"
+import {Collapse} from 'components/common';
+import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import React from 'react';
+import {useFormContext} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Col, Row} from 'reactstrap';
 
 const PriceModel = () => {
   const {t} = useTranslation();
-  const {formState: {isSubmitting}, errors} =useFormContext()
+  const {
+    formState: {isSubmitting},
+    errors
+  } = useFormContext();
 
   return (
     <Collapse initialOpen title="Price model">
       <Row>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpm"
+            name="cpm"
             placeholder="0.0"
             label={t('INVENTORY.CPM')}
             disabled={isSubmitting}
@@ -23,12 +26,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpm}
+            invalid={errors?.cpm}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpc"
+            name="cpc"
             placeholder="0.0"
             label={t('INVENTORY.CPC')}
             disabled={isSubmitting}
@@ -37,12 +40,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpc}
+            invalid={errors?.cpc}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpa"
+            name="cpa"
             placeholder="0.0"
             label={t('INVENTORY.CPA')}
             disabled={isSubmitting}
@@ -51,12 +54,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpa}
+            invalid={errors?.cpa}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpd"
+            name="cpd"
             placeholder="0.0"
             label={t('INVENTORY.CPD')}
             disabled={isSubmitting}
@@ -65,12 +68,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpd}
+            invalid={errors?.cpd}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpl"
+            name="cpl"
             placeholder="0.0"
             label={t('INVENTORY.CPL')}
             disabled={isSubmitting}
@@ -79,12 +82,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpl}
+            invalid={errors?.cpl}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpe"
+            name="cpe"
             placeholder="0.0"
             label={t('INVENTORY.CPE')}
             disabled={isSubmitting}
@@ -93,12 +96,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpe}
+            invalid={errors?.cpe}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpv"
+            name="cpv"
             placeholder="0.0"
             label={t('INVENTORY.CPV')}
             disabled={isSubmitting}
@@ -107,12 +110,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpv}
+            invalid={errors?.cpv}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpi"
+            name="cpi"
             placeholder="0.0"
             label={t('INVENTORY.CPI')}
             disabled={isSubmitting}
@@ -121,12 +124,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpi}
+            invalid={errors?.cpi}
           />
         </Col>
-        <Col sm='4'>
+        <Col sm="4">
           <CurrencyInputField
-            name="metadata.cpvm"
+            name="cpvm"
             placeholder="0.0"
             label={t('INVENTORY.CPVM')}
             disabled={isSubmitting}
@@ -135,12 +138,12 @@ const PriceModel = () => {
             disableGroupSeparators={false}
             decimalsLimit={3}
             prefix="$"
-            invalid={errors?.metadata?.cpvm}
+            invalid={errors?.cpvm}
           />
         </Col>
       </Row>
     </Collapse>
-  )
-}
+  );
+};
 
 export default PriceModel;
