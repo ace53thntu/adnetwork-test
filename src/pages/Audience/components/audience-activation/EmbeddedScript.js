@@ -6,6 +6,7 @@ import BlockUi from 'react-block-ui';
 import {Alert} from '@material-ui/lab';
 import {Collapse} from '@material-ui/core';
 import {useGetActivation} from 'queries/activation';
+import {getRole} from 'utils/helpers/auth.helpers';
 
 const EmbeddedScript = ({
   code = 'No script',
@@ -14,10 +15,14 @@ const EmbeddedScript = ({
   roleRefId = 0
 }) => {
   console.log('🚀 ~ file: EmbeddedScript.js ~ line 16 ~ roleRefId', roleRefId);
+  const role = getRole();
   const [open, setOpen] = React.useState(true);
 
   const {data, isLoading, isFetched} = useGetActivation({
-    roleRefId,
+    params: {
+      role_ref_uuid: roleRefId,
+      role
+    },
     enabled: !!roleRefId
   });
   const url = data?.url || '';

@@ -7,14 +7,14 @@ import {ACTIVATION_URL} from './constants';
 /**
  * Hook for get Audience from API by query
  */
-export function useGetActivation({roleRefId, enabled = false}) {
+export function useGetActivation({params, enabled = false}) {
   const {cancelToken} = useCancelRequest();
 
   return useQuery(
-    [ACTIVATION_URL, roleRefId],
+    [ACTIVATION_URL, params],
     () =>
       ActivationRequestAPI.getActivation({
-        params: {role_ref_uuid: roleRefId},
+        params,
         options: {
           cancelToken
         }
