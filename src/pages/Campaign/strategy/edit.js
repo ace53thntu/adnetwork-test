@@ -25,6 +25,7 @@ import {
 } from 'store/reducers/campaign';
 import {useDispatch} from 'react-redux';
 import {QueryStatuses} from 'constants/react-query';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const StrategyEdit = () => {
   const dispatch = useDispatch();
@@ -63,6 +64,35 @@ const StrategyEdit = () => {
                 position_uuid,
                 floor_price
               } = strategy.inventories[idx] || {};
+              let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = item || {};
+              // Price model
+              cpm = HandleCurrencyFields.convertApiToGui({
+                value: cpm
+              });
+              cpc = HandleCurrencyFields.convertApiToGui({
+                value: cpc
+              });
+              cpa = HandleCurrencyFields.convertApiToGui({
+                value: cpa
+              });
+              cpd = HandleCurrencyFields.convertApiToGui({
+                value: cpd
+              });
+              cpl = HandleCurrencyFields.convertApiToGui({
+                value: cpl
+              });
+              cpe = HandleCurrencyFields.convertApiToGui({
+                value: cpe
+              });
+              cpv = HandleCurrencyFields.convertApiToGui({
+                value: cpv
+              });
+              cpi = HandleCurrencyFields.convertApiToGui({
+                value: cpi
+              });
+              cpvm = HandleCurrencyFields.convertApiToGui({
+                value: cpvm
+              });
               return {
                 ...item,
                 id: item?.uuid,
@@ -71,7 +101,16 @@ const StrategyEdit = () => {
                 position_name,
                 position_uuid,
                 floor_price,
-                noStore: false
+                noStore: false,
+                cpm,
+                cpc,
+                cpa,
+                cpd,
+                cpl,
+                cpe,
+                cpv,
+                cpi,
+                cpvm
               };
             })
           : [];

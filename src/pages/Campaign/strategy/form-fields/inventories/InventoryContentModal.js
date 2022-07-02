@@ -25,7 +25,6 @@ import {
   getInventoryMarketTypeColor,
   getInventoryTypeColor
 } from 'pages/inventory-market/helpers';
-import DealFloorPriceInput from './DealFloorPriceInput';
 import {
   setStrategyInventoryTempListRedux,
   useStrategyInventorySelector,
@@ -49,10 +48,6 @@ const InventoryContentModal = ({containerId}) => {
   const {watch} = useFormContext();
   const strategyTypeSelected = watch('strategy_type');
   const pricingModel = watch('pricing_model');
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 53 ~ InventoryContentModal ~ pricingModel',
-    pricingModel
-  );
   const strategyType = strategyTypeSelected?.value;
   // Local states
   const [inventoryIdsChecked, setInventoryIdsChecked] = React.useState([]);
@@ -95,10 +90,6 @@ const InventoryContentModal = ({containerId}) => {
     inventories,
     strategyInventories
   });
-  console.log(
-    '🚀 ~ file: InventoryContentModal.js ~ line 97 ~ InventoryContentModal ~ inventoriesMapping',
-    inventoriesMapping
-  );
 
   const initChecked = React.useCallback(list => {
     setInventoryIdsChecked(list);
@@ -111,20 +102,6 @@ const InventoryContentModal = ({containerId}) => {
         : [];
     initChecked(idsTemp);
   }, [initChecked, strategyInventoriesTemp]);
-
-  const onChangeDealFloorPrice = React.useCallback(
-    (value, _inventoryId) => {
-      let tmpArr = [...strategyInventoriesTemp];
-      tmpArr = tmpArr.map(item => {
-        if (item?.uuid === _inventoryId) {
-          return {...item, deal_floor_price: value, noStore: true};
-        }
-        return item;
-      });
-      dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
-    },
-    [dispatch, strategyInventoriesTemp]
-  );
 
   const onChangePriceModelField = React.useCallback(
     (value, _inventoryId) => {
@@ -193,19 +170,6 @@ const InventoryContentModal = ({containerId}) => {
               pricingModel={pricingModel?.value?.toUpperCase()}
             />
           )
-        },
-        {
-          header: 'Deal Floor Price',
-          accessor: 'deal_floor_price',
-          cell: row => (
-            <DealFloorPriceInput
-              defaultValue={row?.value || 0}
-              onChangeInputGlobal={value =>
-                onChangeDealFloorPrice(value, row?.original?.uuid)
-              }
-              strategyType={strategyType}
-            />
-          )
         }
       ];
     } else {
@@ -214,15 +178,6 @@ const InventoryContentModal = ({containerId}) => {
         {
           header: 'Floor Price',
           accessor: 'floor_price',
-          // cell: row => (
-          //   <DealFloorPriceInput
-          //     defaultValue={row?.value || 0}
-          //     onChangeInputGlobal={value =>
-          //       onChangeDealFloorPrice(value, row?.original?.uuid)
-          //     }
-          //     strategyType={strategyType}
-          //   />
-          // )
           cell: row => (
             <InventoryPriceModal
               inventory={row?.original}
@@ -246,13 +201,7 @@ const InventoryContentModal = ({containerId}) => {
       }
       return true;
     });
-  }, [
-    onChangeDealFloorPrice,
-    onChangePriceModelField,
-    pricingModel?.value,
-    role,
-    strategyType
-  ]);
+  }, [onChangePriceModelField, pricingModel?.value, role, strategyType]);
 
   const onClickItem = item => {
     // setActivatedInventory(item);
