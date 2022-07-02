@@ -58,7 +58,12 @@ const useAdvertiserPagination = () => {
   const loadAdvertiser = React.useCallback(
     async (search, prevOptions, {page}) => {
       const res = await AdvertiserAPIRequest.getAllAdvertiser({
-        params: {page, limit: DEFAULT_PAGINATION.perPage, name: search},
+        params: {
+          page,
+          per_page: DEFAULT_PAGINATION.perPage,
+          name: search,
+          status: 'active'
+        },
         options: {isResponseAll: IS_RESPONSE_ALL}
       });
       const data = getResponseData(res, IS_RESPONSE_ALL);

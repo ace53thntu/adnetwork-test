@@ -34,7 +34,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
   if (type !== 'user') {
     params = {...params, reference_uuid: referenceId};
   }
-  const {data: {items = []} = {}, isFetching, isFetched} = useGetCredentials({
+  const {data: items, isFetching, isFetched} = useGetCredentials({
     params,
     enabled: enableApi
   });
@@ -44,6 +44,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
     isFetching: isFetchingCredential
   } = useReGenerateCredential();
   const [secretKey, setSecretKey] = React.useState('');
+
   const [isGenerating, setIsGenerating] = React.useState(false);
   const credentialId = React.useMemo(() => {
     return items?.[0]?.uuid;
@@ -67,7 +68,9 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
       setSecretKey(newScretKey);
       ShowToast.success('Re-generated new credential successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err ?? 'Fail to re-generate credential'}/>);
+      ShowToast.error(
+        <ApiError apiError={err ?? 'Fail to re-generate credential'} />
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -82,7 +85,9 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
       setSecretKey(newScretKey);
       ShowToast.success('Generated new credential successfully');
     } catch (err) {
-      ShowToast.error(<ApiError apiError={err ?? 'Fail to re-generate credential'}/>);
+      ShowToast.error(
+        <ApiError apiError={err ?? 'Fail to re-generate credential'} />
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -142,7 +147,7 @@ const Credential = ({isUser = false, type = 'user', referenceId}) => {
           </ButtonLoading>
         )}
       </div>
-      { isFetched && !isGenerating && <SecretKey secretKey={secretKey} />}
+      {isFetched && !isGenerating && <SecretKey secretKey={secretKey} />}
       <DialogConfirm />
     </>
   );
