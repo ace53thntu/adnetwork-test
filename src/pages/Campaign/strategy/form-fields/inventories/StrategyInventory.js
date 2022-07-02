@@ -13,7 +13,6 @@ import {useDispatch} from 'react-redux';
 import {DialogConfirm} from 'components/common';
 import ErrorMessage from 'components/forms/ErrorMessage';
 import {formatValue} from 'react-currency-input-field';
-import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {getUserRole, USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
@@ -76,9 +75,7 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
           if (noStore) {
             priceModelValue = row?.value?.toString();
           } else {
-            priceModelValue = HandleCurrencyFields.convertApiToGui({
-              value: row?.value
-            })?.toString();
+            priceModelValue = row?.value?.toString();
           }
 
           return (
