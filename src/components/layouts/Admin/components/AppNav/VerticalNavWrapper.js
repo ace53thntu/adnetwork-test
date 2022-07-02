@@ -39,7 +39,7 @@ const Nav = ({role: roleProp}) => {
         </>
       )}
 
-      {[ADMIN, MANAGER].includes(role) && (
+      {[ADMIN, MANAGER, ADVERTISER].includes(role) && (
         <>
           <MetisMenu
             content={AudiencesNav(t)}
