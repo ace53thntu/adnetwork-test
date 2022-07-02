@@ -63,7 +63,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     cpm_max,
     video_filter,
     context_filter,
-    pricing_model
+    pricing_model = 'CPM'
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -128,7 +128,7 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     pricing_model:
       PricingModelOptions.find(
         item => item.value === pricing_model?.toLowerCase()
-      ) || null,
+      ) || PricingModelOptions.find(item => item.value === 'CPM'),
     video_filter: {
       skip_delay:
         video_filter?.skip_delay || video_filter?.skip_delay === 0

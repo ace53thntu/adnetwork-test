@@ -36,6 +36,10 @@ import './_main.scss';
 import {ApiError} from 'components/common';
 
 const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
+  console.log(
+    '🚀 ~ file: publisher.form.js ~ line 39 ~ PublisherForm ~ publisher',
+    publisher
+  );
   const navigate = useNavigate();
   const client = useQueryClient();
   const role = getRole();
