@@ -15,6 +15,7 @@ import {Collapse} from 'components/common/Collapse';
 import {
   PricingModelOptions,
   PriorityOptions,
+  StrategyTypes,
   STRATEGY_TYPES
 } from 'pages/Campaign/constants';
 import {USER_ROLE} from 'pages/user-management/constants';
@@ -33,8 +34,24 @@ const InformationGroup = ({
   role = ''
 }) => {
   const {t} = useTranslation();
-  const {errors, control} = useFormContext();
+  const {errors, control, setValue} = useFormContext();
   const startDate = useWatch({name: 'start_time', control});
+  const strategyType = useWatch({name: 'strategy_type', control});
+
+  // Handle pricing model by strategy type
+  React.useEffect(() => {
+    if (strategyType?.value === StrategyTypes.PREMIUM) {
+      setValue(
+        'pricing_model',
+        PricingModelOptions.find(item => item.value === 'cpd')
+      );
+    } else {
+      setValue(
+        'pricing_model',
+        PricingModelOptions.find(item => item.value === 'cpm')
+      );
+    }
+  }, [setValue, strategyType?.value]);
 
   return (
     <>
@@ -132,16 +149,6 @@ const InformationGroup = ({
               placeholder="Priority"
             />
           </Col>
-          <Col md="4">
-            <FormReactSelect
-              name="pricing_model"
-              placeholder="Pricing model"
-              label="Pricing model"
-              options={PricingModelOptions}
-              disabled={isView}
-              isClearable
-            />
-          </Col>
 
           <Col md="4">
             <CampaignSelect
@@ -162,6 +169,16 @@ const InformationGroup = ({
               label={t('type')}
               placeholder={t('selectType')}
               required
+            />
+          </Col>
+
+          <Col md="4">
+            <FormReactSelect
+              name="pricing_model"
+              placeholder="Pricing model"
+              label="Pricing model"
+              options={PricingModelOptions}
+              disabled={isView || strategyType?.value === StrategyTypes.PREMIUM}
             />
           </Col>
 

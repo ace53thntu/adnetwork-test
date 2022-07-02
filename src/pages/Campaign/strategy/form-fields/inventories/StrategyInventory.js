@@ -14,7 +14,7 @@ import {DialogConfirm} from 'components/common';
 import ErrorMessage from 'components/forms/ErrorMessage';
 import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
-import {StrategyTypes} from 'pages/Campaign/constants';
+import {getUserRole, USER_ROLE} from 'pages/user-management/constants';
 
 const propTypes = {
   strategyInventories: PropTypes.array,
@@ -22,16 +22,12 @@ const propTypes = {
 };
 
 const StrategyInventory = ({strategyInventories = [], isView = false}) => {
-  console.log(
-    '🚀 ~ file: StrategyInventory.js ~ line 25 ~ StrategyInventory ~ strategyInventories',
-    strategyInventories
-  );
+  const role = getUserRole();
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [activeInventory, setActiveInventory] = React.useState(null);
 
   const {errors, setValue, control, watch} = useFormContext();
-  const strategyType = watch('strategy_type');
   const activePriceModel = watch('pricing_model');
 
   React.useEffect(() => {
@@ -69,65 +65,8 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
         accessor: 'position_name'
       }
     ];
-    if (strategyType?.value === StrategyTypes.PREMIUM) {
-      return [
-        ...baseCols,
-        {
-          header: 'Deal Floor Price',
-          accessor: 'deal_floor_price',
-          cell: row => {
-            const noStore = row?.original?.noStore;
-            let dealFloorPrice = '';
-            if (noStore) {
-              dealFloorPrice = row?.value?.toString();
-            } else {
-              dealFloorPrice = HandleCurrencyFields.convertApiToGui({
-                value: row?.value
-              })?.toString();
-            }
-
-            return (
-              <Badge color="info">
-                {formatValue({
-                  value: dealFloorPrice,
-                  groupSeparator: ',',
-                  decimalSeparator: '.',
-                  prefix: '$'
-                })}
-              </Badge>
-            );
-          }
-        }
-      ];
-    }
     return [
       ...baseCols,
-      {
-        header: 'Floor Price',
-        accessor: 'floor_price',
-        cell: row => {
-          const noStore = row?.original?.noStore;
-          let dealFloorPrice = '';
-          if (noStore) {
-            dealFloorPrice = row?.value?.toString();
-          } else {
-            dealFloorPrice = HandleCurrencyFields.convertApiToGui({
-              value: row?.value
-            })?.toString();
-          }
-
-          return (
-            <Badge color="info">
-              {formatValue({
-                value: dealFloorPrice,
-                groupSeparator: ',',
-                decimalSeparator: '.',
-                prefix: '$'
-              })}
-            </Badge>
-          );
-        }
-      },
       {
         header: activePriceModel?.label,
         accessor: activePriceModel?.value,
@@ -155,7 +94,7 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
         }
       }
     ];
-  }, [activePriceModel?.label, activePriceModel?.value, strategyType?.value]);
+  }, [activePriceModel?.label, activePriceModel?.value]);
 
   function onClickAction(actionIndex, currentItem) {
     setOpenDialog(true);
@@ -171,6 +110,10 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
     setOpenDialog(false);
   }
 
+  const actions = [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
+    ? ['Edit', 'Delete']
+    : ['Delete'];
+
   return (
     <>
       {errors?.inventories_bid && (
@@ -179,18 +122,13 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
       <List
         data={strategyInventories}
         columns={columns}
-        actions={['Delete']}
+        actions={actions}
         handleAction={(actionIndex, currentItem) =>
           onClickAction(actionIndex, currentItem)
         }
       />
 
       {strategyInventories?.map((inventoryItem, inventoryIndex) => {
-        console.log(
-          '🚀 ~ file: StrategyInventory.js ~ line 205 ~ {strategyInventories?.map ~ inventoryItem',
-          inventoryItem
-        );
-
         return (
           <div key={`pr-${inventoryItem?.uuid}`}>
             <Controller
