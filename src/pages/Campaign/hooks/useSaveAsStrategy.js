@@ -15,6 +15,8 @@ import {ApiError} from 'components/common';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
+import {useDispatch} from 'react-redux';
+import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
 
 export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const query = useQueryString();
@@ -23,6 +25,8 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const navigate = useNavigate();
   const {refresh} = useRefreshAdvertiserTree();
+  const dispatch = useDispatch();
+  const {selectTreeData} = useCommonSelector();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -49,7 +53,10 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
       ShowToast.success('Create strategy successfully');
       setIsSubmitting(false);
 
+      dispatch(setSelectTreeDataRedux(reValidateTree(selectTreeData, data)));
+
       await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
+
       navigate(
         `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${data?.uuid}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
       );
@@ -63,10 +70,12 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
     createStrategy,
     currentStrategy,
     currentTab,
+    dispatch,
     getValues,
     navigate,
     originalStrategy,
-    refresh
+    refresh,
+    selectTreeData
   ]);
 
   return {
@@ -274,4 +283,30 @@ const formToApi = ({
   }
 
   return strategyReturn;
+};
+
+const reValidateTree = (tree, item) => {
+  const updatedTree = [...tree].map(advItem => {
+    if (advItem?.uuid !== item?.advertiser_uuid) {
+      return advItem;
+    }
+
+    const advChildren = [...advItem.children].map(cpItem => {
+      if (cpItem?.uuid !== item?.campaign_uuid) {
+        return cpItem;
+      }
+
+      return {
+        ...cpItem,
+        children: [...cpItem.children, item]
+      };
+    });
+
+    return {
+      ...advItem,
+      children: advChildren
+    };
+  });
+
+  return updatedTree;
 };
