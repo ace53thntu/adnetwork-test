@@ -21,6 +21,7 @@ import {getAllCampaignTreeData} from '../../utils';
 
 function TreeSelectCampaign() {
   const {selectedTreeNode, selectTreeData} = useCommonSelector();
+
   const {campaignId, strategyId} = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();

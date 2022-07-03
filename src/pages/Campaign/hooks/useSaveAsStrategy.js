@@ -16,7 +16,11 @@ import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
 import {useDispatch} from 'react-redux';
-import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
+import {
+  setSelectedTreeNodeRedux,
+  setSelectTreeDataRedux,
+  useCommonSelector
+} from 'store/reducers/common';
 
 export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const query = useQueryString();
@@ -54,7 +58,7 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
       setIsSubmitting(false);
 
       dispatch(setSelectTreeDataRedux(reValidateTree(selectTreeData, data)));
-
+      dispatch(setSelectedTreeNodeRedux(data.uuid));
       await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
 
       navigate(
@@ -298,7 +302,14 @@ const reValidateTree = (tree, item) => {
 
       return {
         ...cpItem,
-        children: [...cpItem.children, item]
+        children: [
+          ...cpItem.children,
+          {
+            ...item,
+            title: item.name,
+            value: item.uuid
+          }
+        ]
       };
     });
 
