@@ -63,7 +63,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
     cpm_max,
     video_filter,
     context_filter,
-    pricing_model = 'CPM'
+    pricing_model = 'CPM',
+    audiences
   } = strategyData;
 
   const startDate = start_time ? new Date(start_time) : new Date();
@@ -194,7 +195,8 @@ export const apiToForm = ({strategyData = null, campaignDetail = null}) => {
         baseList: PlatformOptions,
         selectedList: context_filter?.platform || []
       })
-    }
+    },
+    audience_uuids: audiences?.map(item => item?.uuid) || []
   };
 };
 
@@ -231,7 +233,8 @@ export const formToApi = ({
     keywords_list_white,
     keywords_list_black,
     pricing_model,
-    concept_uuids
+    concept_uuids,
+    audience_uuids
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value) || [];
@@ -405,6 +408,10 @@ export const formToApi = ({
 
   // filter & capping
   if (isCapping) {
+    let audiences = [];
+    if (audience_uuids?.length) {
+      audiences = audience_uuids?.filter(item => item) || [];
+    }
     return {
       campaign_uuid: currentStrategy?.campaign_uuid?.value,
       cpm_max:
@@ -419,7 +426,8 @@ export const formToApi = ({
       position_uuids: positionIds,
       location_uuids: location_uuids?.length
         ? location_uuids?.map(item => item.value)
-        : []
+        : [],
+      audience_uuids: audiences
     };
   }
 

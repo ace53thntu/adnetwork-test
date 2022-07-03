@@ -1,9 +1,9 @@
 //---> Build-in Modules
-import React, {useCallback} from 'react';
+import React from 'react';
 
 //---> External Modules
-import {useForm, FormProvider} from 'react-hook-form';
-import {Form, Badge} from 'reactstrap';
+import {useFormContext, Controller} from 'react-hook-form';
+import {Badge} from 'reactstrap';
 import moment from 'moment';
 
 //---> Internal Modules
@@ -11,55 +11,30 @@ import {Pagination} from 'components/list/pagination';
 import {useGetAudiencesInfinity} from 'queries/audience';
 import {NoAudienceStyled} from 'pages/Audience/components/audience-list/styled';
 import {List} from 'components/list';
-import {LoadingIndicator} from 'components/common';
-import {capitalize} from 'utils/helpers/string.helpers';
 import {AUDIENCES_INFINITY} from 'queries/audience/constants';
 import {useDestructureAudiences} from 'pages/Audience/hooks';
-import Status from 'components/list/status';
+import {DEFAULT_PAGINATION} from 'constants/misc';
 
-const getStatus = ({row, statusProps}) => {
-  switch (row?.value) {
-    case 'active':
-      statusProps.color = 'success';
-      break;
-    case 'pending':
-      statusProps.color = 'warning';
-      break;
-    case 'completed':
-      statusProps.color = 'info';
-      break;
-    default:
-      statusProps.color = 'secondary';
-      break;
-  }
-
-  return statusProps;
-};
-
-const Audience = ({
-  goTo,
-  footer = true,
-  listAudiences = [],
-  currentStrategy = {},
-  setDataStrategy,
-  setListErrors,
-  viewOnly
-}) => {
+const Audience = ({defaultAudiences = []}) => {
+  const {control, setValue} = useFormContext();
   const [checkedAudiences, setCheckedAudiences] = React.useState([]);
+  console.log(
+    '🚀 ~ file: Audience.js ~ line 50 ~ checkedAudiences',
+    checkedAudiences
+  );
   const {
     data: {pages = []} = {},
-    isFetching,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage
   } = useGetAudiencesInfinity({
     enabled: true,
+    page: 1,
+    per_page: DEFAULT_PAGINATION,
     key: AUDIENCES_INFINITY
   });
 
   const audiences = useDestructureAudiences({pages});
-  const methods = useForm({});
-  const {handleSubmit} = methods;
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -70,7 +45,7 @@ const Audience = ({
       },
       {
         header: 'Name',
-        accessor: 'name'
+        accessor: 'audience_name'
       },
       {
         header: 'Audience Type',
@@ -88,16 +63,6 @@ const Audience = ({
         accessor: 'vendor_code',
         cell: row => {
           return row?.value ? <Badge>{row.value}</Badge> : null;
-        }
-      },
-      {
-        accessor: 'status',
-        cell: row => {
-          let statusProps = {
-            label: row.value ? capitalize(row.value) : 'Unknown'
-          };
-          statusProps = getStatus({row, statusProps});
-          return <Status {...statusProps} noHeader />;
         }
       },
       {
@@ -130,37 +95,51 @@ const Audience = ({
     } else {
       tmpArr.push(item?.id);
     }
+
     setCheckedAudiences(tmpArr);
   }
 
-  const onSubmit = useCallback(async () => {
-    goTo({nextTab: 'concept'});
-  }, [goTo]);
+  React.useEffect(() => {
+    setCheckedAudiences(defaultAudiences);
+  }, [defaultAudiences]);
+
+  React.useEffect(() => {
+    setValue('audience_uuids', checkedAudiences, {
+      shouldValidate: true,
+      shouldDirty: true
+    });
+  }, [setValue, checkedAudiences]);
 
   return (
-    <FormProvider {...methods}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        {isFetching && <LoadingIndicator />}
-        {audiences?.length > 0 ? (
-          <List
-            data={audiences}
-            columns={columns}
-            checkable
-            handleClickItem={onClickItem}
-            checkedValues={checkedAudiences}
+    <>
+      {audiences?.length > 0 ? (
+        <List
+          data={audiences}
+          columns={columns}
+          checkable
+          handleClickItem={onClickItem}
+          checkedValues={checkedAudiences}
+        />
+      ) : (
+        <NoAudienceStyled>No data available</NoAudienceStyled>
+      )}
+      {hasNextPage && (
+        <Pagination
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
+      )}
+      {checkedAudiences &&
+        checkedAudiences?.map((item, index) => (
+          <Controller
+            key={`pr-${item}`}
+            render={({field}) => <input {...field} type="hidden" />}
+            name={`audience_uuids[${index}]`}
+            control={control}
           />
-        ) : (
-          <NoAudienceStyled>No data available</NoAudienceStyled>
-        )}
-        {hasNextPage && (
-          <Pagination
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
-        )}
-      </Form>
-    </FormProvider>
+        ))}
+    </>
   );
 };
 
