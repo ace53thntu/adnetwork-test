@@ -1,6 +1,5 @@
 import './bootstrap';
 
-import withClearCache from 'CacheBuster';
 import {ConfigProvider} from 'antd';
 import {RootProvider} from 'context';
 import React from 'react';
@@ -20,8 +19,6 @@ if (process.env.NODE_ENV !== 'development') {
   console.error = noop;
 }
 
-const ClearCacheComponent = withClearCache(App);
-
 const store = configureStore();
 
 ConfigProvider.config({
@@ -33,7 +30,7 @@ ConfigProvider.config({
 ReactDOM.render(
   <Provider store={store}>
     <RootProvider>
-      <ClearCacheComponent />
+      <App />
     </RootProvider>
   </Provider>,
   document.getElementById('root')

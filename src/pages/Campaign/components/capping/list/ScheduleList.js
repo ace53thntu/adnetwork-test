@@ -2,18 +2,18 @@
 import React from 'react';
 
 // External Modules
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import PropTypes from 'prop-types';
 
 // Internal Modules
-import { capitalize } from 'utils/helpers/string.helpers';
-import { Collapse } from 'components/common';
-import { List } from 'components/list';
-import { CustomStatus } from 'components/list/status';
-import { isArray } from 'lodash';
+import {capitalize} from 'utils/helpers/string.helpers';
+import {Collapse} from 'components/common';
+import {List} from 'components/list';
+import {CustomStatus} from 'components/list/status';
+import isArray from 'lodash/isArray';
 import NoDataAvailable from 'components/list/no-data';
-import { WEEK_DAYS } from 'pages/Campaign/constants';
-import { Chip } from '@material-ui/core';
+import {WEEK_DAYS} from 'pages/Campaign/constants';
+import Chip from '@material-ui/core/Chip';
 
 const propTypes = {
   list: PropTypes.array,
@@ -28,7 +28,7 @@ const ScheduleList = ({
   onClickMenu = () => null,
   onClickItem = () => null
 }) => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   //---> Define columns
   const columns = React.useMemo(() => {

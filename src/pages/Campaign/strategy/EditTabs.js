@@ -79,7 +79,7 @@ const StrategyEditTabs = ({
                   Logs
                 </Button>
               </div>
-              <FormContainer {...defaultProps}>
+              <FormContainer {...defaultProps} id="description">
                 <StrategyForm
                   campaignId={campaignId}
                   isEdit={!isCreate}
@@ -98,6 +98,7 @@ const StrategyEditTabs = ({
                 <FormAction
                   currentStrategy={currentStrategy}
                   isCreate={isCreate}
+                  originalStrategy={defaultProps.originalStrategy}
                 />
               </FormContainer>
               {openModal && (
@@ -117,7 +118,7 @@ const StrategyEditTabs = ({
           name: t(ViewTabs.CAPPING.name),
           content: (
             <FilterAndCappingTab>
-              <FormContainer {...defaultProps} isCapping>
+              <FormContainer {...defaultProps} isCapping id="capping">
                 <Capping
                   currentStrategy={currentStrategy}
                   referenceUuid={currentStrategy?.uuid}
@@ -126,6 +127,7 @@ const StrategyEditTabs = ({
                 <FormAction
                   currentStrategy={currentStrategy}
                   isCreate={isCreate}
+                  originalStrategy={defaultProps.originalStrategy}
                 />
               </FormContainer>
             </FilterAndCappingTab>
@@ -143,6 +145,7 @@ const StrategyEditTabs = ({
                     entityId={currentStrategy?.uuid}
                     ownerId={ownerId}
                     ownerRole={USER_ROLE.ADVERTISER}
+                    id="entity-report"
                   />
                 )
               }
@@ -155,19 +158,20 @@ const StrategyEditTabs = ({
       })),
     [
       t,
+      toggleModal,
       defaultProps,
       campaignId,
       isCreate,
       currentStrategy,
       isDescriptionTab,
-      ownerId,
       openModal,
-      toggleModal
+      ownerId
     ]
   );
 
   const getTab = index => {
     const url = `/${RoutePaths.CAMPAIGN}/${campaignId}/${RoutePaths.STRATEGY}/${currentStrategy?.uuid}/${RoutePaths.EDIT}?advertiser_id=${currentStrategy?.advertiser_uuid}&next_tab=`;
+
     switch (index) {
       case EditTabs.DESCRIPTION.value:
         // setCurrentTab(EditTabs.DESCRIPTION.name);

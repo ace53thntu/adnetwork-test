@@ -40,7 +40,8 @@ const FormContainer = ({
   isSummary = false,
   children,
   originalStrategy,
-  isCapping = false
+  isCapping = false,
+  id
 }) => {
   const query = useQueryString();
   const currentTab = query.get('next_tab');
@@ -85,7 +86,6 @@ const FormContainer = ({
 
   const onSubmit = useCallback(
     async formData => {
-      console.log('🚀 ~ file: FormContainer.js ~ line 55 ~ formData', formData);
       const req = formToApi({
         formData,
         isSummary,
@@ -95,7 +95,6 @@ const FormContainer = ({
         originalStrategy,
         currentTab
       });
-      console.log('======== FORM DATA', req);
 
       if (isEdit) {
         if (!isDirty) {
@@ -116,7 +115,6 @@ const FormContainer = ({
             })
           );
         } catch (error) {
-          console.log('🚀 ~ file: FormContainer.js ~ line 163 ~ error', error);
           if (error) {
             ShowToast.error(<ApiError apiError={error} />);
           } else {
@@ -161,7 +159,7 @@ const FormContainer = ({
   return (
     <div>
       <FormProvider {...methods}>
-        <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off" id={id}>
           {children}
         </Form>
       </FormProvider>

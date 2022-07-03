@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "4.0.0",
+    "@codemirror/autocomplete": "^6.0.2",
     "@codemirror/lang-html": "^0.19.4",
     "@codemirror/lang-javascript": "^0.19.6",
     "@codemirror/lang-json": "^0.19.1",
@@ -42,6 +43,7 @@
     "immer": "6.0.9",
     "iso-639-1": "^2.1.13",
     "loaders.css": "^0.1.2",
+    "localforage": "^1.10.0",
     "lodash": "4.17.15",
     "match-sorter": "^6.3.1",
     "mcc-mnc-list": "^1.1.8",
@@ -115,9 +117,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "ci": "git-cz",
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "update-build": "node update-build",
-    "prebuild": "yarn update-build"
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -136,6 +136,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "buildDate": 1652285074289
+  }
 }
