@@ -319,12 +319,12 @@ export const REPORT_VIEW_TYPES = [
         code_name: 'creative_cost'
       },
       {
-        label: 'Creative Final Cost',
-        value: 'creative_final_cost',
+        label: 'Creative Advertiser Cost',
+        value: 'creative_advertiser_cost',
         code: 'cirp_final',
         acl: 'irp_client',
         is_price: true,
-        code_name: 'creative_final_cost'
+        code_name: 'creative_advertiser_cost'
       },
       {
         label: 'Creative Viewable',
@@ -468,12 +468,12 @@ export const REPORT_VIEW_TYPES = [
         code_name: 'native_cost'
       },
       {
-        label: 'Native Final Cost',
-        value: 'native_final_cost',
+        label: 'Native Advertiser Cost',
+        value: 'native_advertiser_cost',
         code: 'nirp_final',
         acl: 'irp_client',
         is_price: true,
-        code_name: 'native_final_cost'
+        code_name: 'native_advertiser_cost'
       },
       {
         label: 'Native Viewable',
@@ -617,12 +617,12 @@ export const REPORT_VIEW_TYPES = [
         code_name: 'video_cost'
       },
       {
-        label: 'Video Final Cost',
-        value: 'video_final_cost',
+        label: 'Video Advertiser Cost',
+        value: 'video_advertiser_cost',
         code: 'virp_org',
         acl: 'irp_client',
         is_price: true,
-        code_name: 'video_final_cost'
+        code_name: 'video_advertiser_cost'
       },
       {
         label: 'Video Start',
