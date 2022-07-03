@@ -108,7 +108,7 @@ const AudienceActivation = () => {
       {roleRefVal && (
         <div>
           <Label>Embedded script</Label>
-          <EmbeddedScript roleRefId={roleRefVal?.value} />
+          <EmbeddedScript roleRefId={roleRefVal?.value} roleRef={roleRef} />
         </div>
       )}
     </>
