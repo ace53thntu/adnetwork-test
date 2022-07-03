@@ -7,15 +7,21 @@ import {Alert} from '@material-ui/lab';
 import {Collapse} from '@material-ui/core';
 import {useGetActivation} from 'queries/activation';
 import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const EmbeddedScript = ({
   code = 'No script',
   language = 'text',
   showLineNumbers = false,
-  roleRefId = 0
+  roleRefId = '',
+  roleRef
 }) => {
+  console.log('🚀 ~ file: EmbeddedScript.js ~ line 19 ~ roleRef', roleRef);
   console.log('🚀 ~ file: EmbeddedScript.js ~ line 16 ~ roleRefId', roleRefId);
-  const role = getRole();
+  let role = getRole();
+  if (role === USER_ROLE.ADMIN || USER_ROLE.MANAGER) {
+    role = roleRef;
+  }
   const [open, setOpen] = React.useState(true);
 
   const {data, isLoading, isFetched} = useGetActivation({
