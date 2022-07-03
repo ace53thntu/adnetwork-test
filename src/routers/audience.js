@@ -12,12 +12,24 @@ export const audiencePages = {
     {
       path: '',
       element: <AudienceListPageLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: [
+        USER_ROLE.ADMIN,
+        USER_ROLE.MANAGER,
+        USER_ROLE.ADVERTISER,
+        USER_ROLE.PUBLISHER,
+        USER_ROLE.DSP
+      ]
     },
     {
       path: ':id',
       element: <AudienceDetailPageLazy />,
-      canAccess: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.ADVERTISER]
+      canAccess: [
+        USER_ROLE.ADMIN,
+        USER_ROLE.MANAGER,
+        USER_ROLE.ADVERTISER,
+        USER_ROLE.PUBLISHER,
+        USER_ROLE.DSP
+      ]
     }
   ]
 };
