@@ -2,8 +2,18 @@
 import React from 'react';
 
 //---> External Modules
+<<<<<<< HEAD
 import {useFormContext, Controller} from 'react-hook-form';
 import {Badge} from 'reactstrap';
+=======
+import {
+  useForm,
+  FormProvider,
+  useFormContext,
+  Controller
+} from 'react-hook-form';
+import {Form, Badge} from 'reactstrap';
+>>>>>>> 4a2da24 (Add Audience GUI to strategy)
 import moment from 'moment';
 
 //---> Internal Modules
@@ -18,10 +28,6 @@ import {DEFAULT_PAGINATION} from 'constants/misc';
 const Audience = ({defaultAudiences = []}) => {
   const {control, setValue} = useFormContext();
   const [checkedAudiences, setCheckedAudiences] = React.useState([]);
-  console.log(
-    '🚀 ~ file: Audience.js ~ line 50 ~ checkedAudiences',
-    checkedAudiences
-  );
   const {
     data: {pages = []} = {},
     hasNextPage,
@@ -98,10 +104,6 @@ const Audience = ({defaultAudiences = []}) => {
 
     setCheckedAudiences(tmpArr);
   }
-
-  React.useEffect(() => {
-    setCheckedAudiences(defaultAudiences);
-  }, [defaultAudiences]);
 
   React.useEffect(() => {
     setValue('audience_uuids', checkedAudiences, {
