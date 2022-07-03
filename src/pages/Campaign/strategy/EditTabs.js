@@ -27,6 +27,7 @@ import {USER_ROLE} from '../../user-management/constants';
 import {Button} from 'reactstrap';
 import {LogTypes} from 'constants/misc';
 import Historical from 'components/historical';
+import Audience from './form-fields/Audience';
 
 const StrategyEditTabs = ({
   currentStrategy = {},
@@ -124,6 +125,7 @@ const StrategyEditTabs = ({
                   referenceUuid={currentStrategy?.uuid}
                   referenceType={CappingReferenceTypes.STRATEGY}
                 />
+                <Audience defaultAudiences={currentStrategy?.audience_uuids} />
                 <FormAction
                   currentStrategy={currentStrategy}
                   isCreate={isCreate}
