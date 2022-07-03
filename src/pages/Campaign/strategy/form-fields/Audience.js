@@ -2,18 +2,9 @@
 import React from 'react';
 
 //---> External Modules
-<<<<<<< HEAD
+
 import {useFormContext, Controller} from 'react-hook-form';
 import {Badge} from 'reactstrap';
-=======
-import {
-  useForm,
-  FormProvider,
-  useFormContext,
-  Controller
-} from 'react-hook-form';
-import {Form, Badge} from 'reactstrap';
->>>>>>> 4a2da24 (Add Audience GUI to strategy)
 import moment from 'moment';
 
 //---> Internal Modules
@@ -104,6 +95,10 @@ const Audience = ({defaultAudiences = []}) => {
 
     setCheckedAudiences(tmpArr);
   }
+
+  React.useEffect(() => {
+    setCheckedAudiences(defaultAudiences);
+  }, [defaultAudiences]);
 
   React.useEffect(() => {
     setValue('audience_uuids', checkedAudiences, {
