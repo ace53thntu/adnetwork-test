@@ -207,11 +207,6 @@ export const formToApi = ({
   isEdit = false,
   currentTab = ''
 }) => {
-  console.log('🚀 ~ file: Strategy.js ~ line 209 ~ formData', formData);
-  console.log(
-    '🚀 ~ file: Strategy.js ~ line 209 ~ originalStrategy',
-    originalStrategy
-  );
   const {
     campaign_uuid: campaign,
     name,
@@ -439,7 +434,7 @@ export const isConceptsChanged = ({newConcepts, oldConcepts}) => {
   return true;
 };
 
-const getVideoFilter = ({
+export const getVideoFilter = ({
   isEdit = false,
   formVideoFilter,
   currentVideoFilter
@@ -529,7 +524,7 @@ const getVideoFilter = ({
   }
 };
 
-const getContextFilter = ({
+export const getContextFilter = ({
   isEdit,
   contextFilterForm,
   currentContextFilter
