@@ -86,6 +86,7 @@ const FormContainer = ({
 
   const onSubmit = useCallback(
     async formData => {
+      console.log('🚀 ~ file: FormContainer.js ~ line 89 ~ formData', formData);
       const req = formToApi({
         formData,
         isSummary,
@@ -95,6 +96,7 @@ const FormContainer = ({
         originalStrategy,
         currentTab
       });
+      console.log('🚀 ~ file: FormContainer.js ~ line 99 ~ req', req);
 
       if (isEdit) {
         if (!isDirty) {

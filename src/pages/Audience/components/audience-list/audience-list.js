@@ -2,7 +2,6 @@ import {LoadingIndicator} from 'components/common';
 //---> Internal Modules
 import {List} from 'components/list';
 import {Pagination} from 'components/list/pagination';
-import Status from 'components/list/status';
 import {RoutePaths} from 'constants/route-paths';
 //---> External Modules
 import moment from 'moment';
@@ -21,32 +20,12 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import {capitalize} from 'utils/helpers/string.helpers';
 
 import {AudienceActivation} from '../audience-activation';
 import ActionBar from './action-bar';
 import {BodyContentStyled, NoAudienceStyled} from './styled';
 
-const getStatus = ({row, statusProps}) => {
-  switch (row.value) {
-    case 'active':
-      statusProps.color = 'success';
-      break;
-    case 'pending':
-      statusProps.color = 'warning';
-      break;
-    case 'completed':
-      statusProps.color = 'info';
-      break;
-    default:
-      statusProps.color = 'secondary';
-      break;
-  }
-
-  return statusProps;
-};
-
-const ActionIndexs = {
+const ActionIndexes = {
   VIEW: 0,
   DELETE: 1
 };
@@ -78,7 +57,7 @@ const AudienceList = () => {
       },
       {
         header: 'Name',
-        accessor: 'name'
+        accessor: 'audience_name'
       },
       {
         header: 'Audience Type',
@@ -96,16 +75,6 @@ const AudienceList = () => {
         accessor: 'vendor_code',
         cell: row => {
           return row?.value ? <Badge>{row.value}</Badge> : null;
-        }
-      },
-      {
-        accessor: 'status',
-        cell: row => {
-          let statusProps = {
-            label: row.value ? capitalize(row.value) : 'Unknown'
-          };
-          statusProps = getStatus({row, statusProps});
-          return <Status {...statusProps} noHeader />;
         }
       },
       {
@@ -134,7 +103,7 @@ const AudienceList = () => {
   }
 
   function onClickAction(actionIndex, item) {
-    if (actionIndex === ActionIndexs.VIEW) {
+    if (actionIndex === ActionIndexes.VIEW) {
       navigate(`/${RoutePaths.AUDIENCE}/${item?.uuid}`);
     }
   }
