@@ -1,20 +1,20 @@
-import { useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import {useMemo} from 'react';
+import {useLocation, useParams} from 'react-router-dom';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
-import { RoutePaths } from '../../../constants/route-paths';
-import { useQueryString } from '../../../hooks';
-import { SOURCE_HEADINGS } from '../../../pages/Container/components/ContainerSourcePage/constants';
-import { useDispatchSelectContainer } from '../../../pages/Container/hooks/useDispatchSelectContainer';
-import { useCommonSelector } from '../../../store/reducers/common';
-import { flattenMyTree } from '../utils';
+import {RoutePaths} from '../../../constants/route-paths';
+import {useQueryString} from '../../../hooks';
+import {SOURCE_HEADINGS} from '../../../pages/Container/components/ContainerSourcePage/constants';
+import {useDispatchSelectContainer} from '../../../pages/Container/hooks/useDispatchSelectContainer';
+import {useCommonSelector} from '../../../store/reducers/common';
+import {flattenMyTree} from '../utils';
 
 export const useBreadCrumb = () => {
-  const { t } = useTranslation();
-  const { selectTreeData } = useCommonSelector();
+  const {t} = useTranslation();
+  const {selectTreeData} = useCommonSelector();
   const query = useQueryString();
-  const { pathname, search } = useLocation();
+  const {pathname, search} = useLocation();
   const {
     campaignId,
     strategyId,
@@ -24,12 +24,13 @@ export const useBreadCrumb = () => {
     source,
     pageId
   } = useParams();
-  const { container } = useDispatchSelectContainer();
+  const {container} = useDispatchSelectContainer();
   let advertiserIdQuery = query.get('advertiser_id');
 
   return useMemo(() => {
     let paths = [];
     const flattenTree = selectTreeData ? flattenMyTree(selectTreeData) : [];
+
     if (flattenTree && flattenTree.length > 0) {
       if (advertiserId) {
         const adv = flattenTree.find(item => item.uuid === advertiserId);
@@ -95,7 +96,7 @@ export const useBreadCrumb = () => {
         const sourcePages = container?.pages?.filter(
           page => page.source === source
         );
-        const { container_uuid, uuid } = sourcePages[0] || {};
+        const {container_uuid, uuid} = sourcePages[0] || {};
         const firstSourcePageUrl = `/${RoutePaths.CONTAINER}/${container_uuid}/${source}/${uuid}`;
 
         paths.push({
@@ -114,14 +115,18 @@ export const useBreadCrumb = () => {
         });
       }
     }
-    if ((pathname === '/campaign/create' && paths.length === 0)) {
-      paths = [{
-        name: t('campaignManagement'),
-        url: `/${RoutePaths.CAMPAIGN}`
-      }, ...paths, {
-        name: t('createCampaign'),
-        url: ''
-      }];
+    if (pathname === '/campaign/create' && paths.length === 0) {
+      paths = [
+        {
+          name: t('campaignManagement'),
+          url: `/${RoutePaths.CAMPAIGN}`
+        },
+        ...paths,
+        {
+          name: t('createCampaign'),
+          url: ''
+        }
+      ];
     }
     return paths;
   }, [
