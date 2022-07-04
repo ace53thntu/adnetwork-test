@@ -15,6 +15,7 @@ import {List} from 'components/list';
 import {AUDIENCES_INFINITY} from 'queries/audience/constants';
 import {useDestructureAudiences} from 'pages/Audience/hooks';
 import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Collapse} from 'components/common';
 
 const Audience = ({defaultAudiences = []}) => {
   const {control, setValue} = useFormContext();
@@ -32,6 +33,10 @@ const Audience = ({defaultAudiences = []}) => {
   });
 
   const audiences = useDestructureAudiences({pages});
+  console.log(
+    '🚀 ~ file: Audience.js ~ line 35 ~ Audience ~ audiences',
+    audiences
+  );
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -108,35 +113,37 @@ const Audience = ({defaultAudiences = []}) => {
   }, [setValue, checkedAudiences]);
 
   return (
-    <>
-      {audiences?.length > 0 ? (
-        <List
-          data={audiences}
-          columns={columns}
-          checkable
-          handleClickItem={onClickItem}
-          checkedValues={checkedAudiences}
-        />
-      ) : (
-        <NoAudienceStyled>No data available</NoAudienceStyled>
-      )}
-      {hasNextPage && (
-        <Pagination
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      )}
-      {checkedAudiences &&
-        checkedAudiences?.map((item, index) => (
-          <Controller
-            key={`pr-${item}`}
-            render={({field}) => <input {...field} type="hidden" />}
-            name={`audience_uuids[${index}]`}
-            control={control}
+    <Collapse initialOpen title="Audience" unMount={false}>
+      <div>
+        {audiences?.length > 0 ? (
+          <List
+            data={audiences}
+            columns={columns}
+            checkable
+            handleClickItem={onClickItem}
+            checkedValues={checkedAudiences}
           />
-        ))}
-    </>
+        ) : (
+          <NoAudienceStyled>No audience</NoAudienceStyled>
+        )}
+        {hasNextPage && (
+          <Pagination
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        )}
+        {checkedAudiences &&
+          checkedAudiences?.map((item, index) => (
+            <Controller
+              key={`pr-${item}`}
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`audience_uuids[${index}]`}
+              control={control}
+            />
+          ))}
+      </div>
+    </Collapse>
   );
 };
 
