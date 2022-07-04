@@ -22,6 +22,7 @@ import ApiError from 'components/common/ApiError';
 import {useQueryClient} from 'react-query';
 import {GET_STRATEGY} from 'queries/strategy/constants';
 import {useQueryString} from 'hooks';
+import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -105,15 +106,76 @@ const FormContainer = ({
 
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
+          console.log('🚀 ~ file: FormContainer.js ~ line 109 ~ data', data);
 
           await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
           const defaultValueUpdated = apiToForm({strategyData: data});
           reset(defaultValueUpdated);
           ShowToast.success('Updated strategy successfully');
+          const inventories = data?.inventories?.map((item, idx) => {
+            const {
+              name,
+              container_name,
+              position_name,
+              position_uuid,
+              floor_price
+            } = item || {};
+
+            let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} =
+              data?.inventories_bid?.[item?.uuid] || {};
+            // Price model
+            cpm = HandleCurrencyFields.convertApiToGui({
+              value: cpm
+            });
+            cpc = HandleCurrencyFields.convertApiToGui({
+              value: cpc
+            });
+            cpa = HandleCurrencyFields.convertApiToGui({
+              value: cpa
+            });
+            cpd = HandleCurrencyFields.convertApiToGui({
+              value: cpd
+            });
+            cpl = HandleCurrencyFields.convertApiToGui({
+              value: cpl
+            });
+            cpe = HandleCurrencyFields.convertApiToGui({
+              value: cpe
+            });
+            cpv = HandleCurrencyFields.convertApiToGui({
+              value: cpv
+            });
+            cpi = HandleCurrencyFields.convertApiToGui({
+              value: cpi
+            });
+            cpvm = HandleCurrencyFields.convertApiToGui({
+              value: cpvm
+            });
+            return {
+              ...item,
+              id: item?.uuid,
+              name,
+              container_name,
+              position_name,
+              position_uuid,
+              floor_price,
+              noStore: false,
+              cpm,
+              cpc,
+              cpa,
+              cpd,
+              cpl,
+              cpe,
+              cpv,
+              cpi,
+              cpvm
+            };
+          });
+
           dispatch(
             initStrategyInventoryListRedux({
-              inventoryList: data?.inventories || [],
-              inventoryTempList: data?.inventories || []
+              inventoryList: inventories || [],
+              inventoryTempList: inventories || []
             })
           );
         } catch (error) {

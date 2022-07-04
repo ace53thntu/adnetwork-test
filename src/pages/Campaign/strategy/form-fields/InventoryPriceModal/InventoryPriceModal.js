@@ -28,15 +28,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const isValidPriceModel = (priceModelData, floorPrice) => {
+  if (
+    HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpm}) <=
+      floorPrice ||
+    HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpm}) < 0
+  ) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpc}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpa}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpd}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpl}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpe}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpv}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpi}) < 0) {
+    return false;
+  }
+
+  if (HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpvm}) < 0) {
+    return false;
+  }
+
+  return true;
+};
+
 export default function InventoryPriceModal({
   inventory,
   onChangePriceModelField,
   pricingModel
 }) {
-  console.log(
-    '🚀 ~ file: InventoryPriceModal.js ~ line 36 ~ pricingModel',
-    pricingModel
-  );
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -63,10 +103,6 @@ export default function InventoryPriceModal({
   });
 
   function handleChangeInput(value, name) {
-    console.log(
-      '🚀 ~ file: InventoryPriceModal.js ~ line 66 ~ handleChangeInput ~ value',
-      value
-    );
     setCurrencyInput(prevState => ({
       ...prevState,
       [name]: value
@@ -114,6 +150,7 @@ export default function InventoryPriceModal({
             currencyInput={currencyInput}
             handleChangeInput={handleChangeInput}
             activePricingModel={pricingModel}
+            floorPrice={inventory?.floor_price}
           />
           <div className={classes.footerWrap}>
             <Button
@@ -124,6 +161,7 @@ export default function InventoryPriceModal({
                 onChangePriceModelField(currencyInput, inventory?.uuid);
                 handleClose();
               }}
+              disabled={!isValidPriceModel()}
             >
               Save
             </Button>
