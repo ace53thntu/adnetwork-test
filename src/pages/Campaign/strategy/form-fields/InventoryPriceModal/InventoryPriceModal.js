@@ -6,6 +6,8 @@ import {Badge, Button} from 'reactstrap';
 import {formatValue} from 'react-currency-input-field';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import PriceModelForm from './PriceModelForm';
+import {getRole} from 'utils/helpers/auth.helpers';
+import {USER_ROLE} from 'pages/user-management/constants';
 
 const useStyles = makeStyles(theme => ({
   wrap: {
@@ -75,14 +77,20 @@ const isValidPriceModel = (priceModelData, floorPrice) => {
 export default function InventoryPriceModal({
   inventory,
   onChangePriceModelField,
-  pricingModel
+  pricingModel,
+  currentPrice
 }) {
+  const role = getRole();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = inventory;
 
   const handleClick = event => {
+    event.preventDefault();
+    if (![USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
+      return;
+    }
     setAnchorEl(event.currentTarget);
   };
 
@@ -120,9 +128,7 @@ export default function InventoryPriceModal({
         onClick={handleClick}
       >
         {formatValue({
-          value: HandleCurrencyFields.convertApiToGui({
-            value: inventory?.floor_price
-          })?.toString(),
+          value: currentPrice?.toString() || '',
           groupSeparator: ',',
           decimalSeparator: '.',
           prefix: '$'
@@ -161,7 +167,9 @@ export default function InventoryPriceModal({
                 onChangePriceModelField(currencyInput, inventory?.uuid);
                 handleClose();
               }}
-              disabled={!isValidPriceModel()}
+              disabled={
+                !isValidPriceModel(currencyInput, inventory?.floor_price)
+              }
             >
               Save
             </Button>

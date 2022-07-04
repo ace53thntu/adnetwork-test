@@ -50,7 +50,8 @@ const AddTypeButton = ({
     if (
       type === CappingTypes.GENERAL.value ||
       type === CappingTypes.VIDEO.value ||
-      type === CappingTypes.CONTEXT.value
+      type === CappingTypes.CONTEXT.value ||
+      type === CappingTypes.AUDIENCE.value
     ) {
       onAddTypeCapping([...existedTypes, item]);
       return;
@@ -72,7 +73,10 @@ const AddTypeButton = ({
               (referenceType === 'campaign' &&
                 (item?.type === CappingTypes.SCHEDULE.value ||
                   item?.type === CappingTypes.USER_CLICK.value ||
-                  item?.type === CappingTypes.USER_VIEWABLE.value)) ||
+                  item?.type === CappingTypes.USER_VIEWABLE.value ||
+                  item?.type === CappingTypes.AUDIENCE.value ||
+                  item?.type === CappingTypes.GENERAL.value ||
+                  item?.type === CappingTypes.CONTEXT.value)) ||
               item?.type === CappingTypes.BUDGET_MANAGER.value
             ) {
               return null;
