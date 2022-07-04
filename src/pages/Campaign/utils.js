@@ -4,6 +4,16 @@ import {AdvertiserAPIRequest} from '../../api/advertiser.api';
 import {CampaignAPIRequest} from '../../api/campaign.api';
 import {IS_RESPONSE_ALL} from '../../constants/misc';
 import {CAMPAIGN_KEYS} from './constants';
+import {utils, writeFile} from 'xlsx';
+import {useGenerateReportUrl} from 'queries/report';
+import React from 'react';
+import {DEFAULT_TIME_UNIT, EntityTypes, ReportTypes} from 'constants/report';
+import {TimezoneMappingHai} from 'utils/helpers/getListTimezone';
+import {convertLocalDateToTimezone} from 'utils/helpers/dateTime.helpers';
+import __uniq from 'lodash/uniq';
+import {capitalize} from 'utils/helpers/string.helpers';
+import {ShowToast} from 'utils/helpers/showToast.helpers';
+// import __sortBy from 'lodash/sortBy'
 
 const DEFAULT_PAGE = 1;
 const TOTAL_ITEMS = 1000;
@@ -204,3 +214,118 @@ export const hasConcepts = strategy => {
   }
   return false;
 };
+
+export function useExportReportStrategy() {
+  const {mutateAsync: getReportMetric} = useGenerateReportUrl();
+
+  const exportReport = React.useCallback(
+    async ({entityId, campaignId, startTime}) => {
+      try {
+        const campaign = await CampaignAPIRequest.getCampaign({id: campaignId});
+
+        if (campaign?.data?.time_zone?.length) {
+          const requestBody = {
+            // strategy ID
+            source_uuid: entityId,
+            report_source: EntityTypes.STRATEGY,
+            report_type: ReportTypes.DISTRIBUTION,
+            report_by: EntityTypes.STRATEGY,
+            // strategy ID
+            report_by_uuid: entityId,
+            time_unit: DEFAULT_TIME_UNIT,
+            // from campaign
+            time_zone: TimezoneMappingHai[campaign.data.time_zone],
+            // strategy start date
+            start_time: convertLocalDateToTimezone({
+              localDate: startTime,
+              timeZoneOffset: campaign.data.time_zone
+            }),
+            // now
+            end_time: convertLocalDateToTimezone({
+              localDate: new Date(),
+              timeZoneOffset: campaign.data.time_zone
+            })
+          };
+          try {
+            const {data} = await getReportMetric(requestBody);
+            const isValid = data?.report && !!Object.keys(data.report).length;
+
+            if (isValid) {
+              convertReportResponseToSheetData(data?.report, entityId);
+            } else {
+              ShowToast.error(`Strategy don't have report data`);
+            }
+          } catch (error) {
+            //
+            ShowToast.error(`Strategy don't have report data`);
+          }
+        }
+      } catch (error) {
+        //
+        ShowToast.error(`Strategy don't have report data`);
+      }
+    },
+    [getReportMetric]
+  );
+
+  return {exportReport};
+}
+
+function convertReportResponseToSheetData(report, entityId) {
+  const sheetData = [];
+  let headers = [];
+  let tempColumns = [];
+
+  Object.keys(report).forEach(key => {
+    if (report[key]?.[entityId]) {
+      const getColumnKeys = Object.keys(report[key][entityId]);
+      tempColumns = [...tempColumns, ...getColumnKeys];
+    }
+  });
+
+  const uniqAndSortColumns = __uniq(tempColumns).sort((a, b) =>
+    a > b ? 1 : a === b ? 0 : -1
+  );
+  const capitalAndReplaceUnderscoreColumns = [...uniqAndSortColumns].map(
+    column => {
+      return capitalize(column.replace(/_/g, ' '));
+    }
+  );
+
+  headers = ['Date', ...capitalAndReplaceUnderscoreColumns];
+  sheetData.push(headers);
+
+  Object.keys(report).forEach(key => {
+    if (report[key]?.[entityId]) {
+      //
+      let data = [];
+      uniqAndSortColumns.forEach(col => {
+        if (report[key][entityId]?.[col]) {
+          data.push(report[key][entityId][col]);
+        } else {
+          data.push(0);
+        }
+      });
+
+      sheetData.push([
+        moment(parseInt(key, 10) * 1000).format('DD/MM/YYYY'),
+        ...data
+      ]);
+    } else {
+      let data = [];
+      uniqAndSortColumns.forEach(col => {
+        data.push(0);
+      });
+      sheetData.push([
+        moment(parseInt(key, 10) * 1000).format('DD/MM/YYYY'),
+        ...data
+      ]);
+    }
+  });
+  console.log('---sheetData: ', sheetData);
+
+  const ws = utils.aoa_to_sheet(sheetData);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, 'report strategy');
+  writeFile(wb, `report_strategy_${moment().format('DDMMYYYY')}.xlsx`);
+}
