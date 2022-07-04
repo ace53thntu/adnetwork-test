@@ -86,8 +86,7 @@ const StrategyEditTabs = ({
                     exportReport({
                       entityId: currentStrategy?.uuid,
                       campaignId,
-                      startTime: originalStrategy.start_time,
-                      originalStrategy: defaultProps.originalStrategy
+                      startTime: originalStrategy?.start_time
                     })
                   }
                 >
@@ -186,7 +185,7 @@ const StrategyEditTabs = ({
       openModal,
       ownerId,
       exportReport,
-      originalStrategy.start_time
+      originalStrategy?.start_time
     ]
   );
 

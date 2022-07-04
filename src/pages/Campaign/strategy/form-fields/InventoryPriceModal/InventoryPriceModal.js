@@ -63,6 +63,10 @@ export default function InventoryPriceModal({
   });
 
   function handleChangeInput(value, name) {
+    console.log(
+      '🚀 ~ file: InventoryPriceModal.js ~ line 66 ~ handleChangeInput ~ value',
+      value
+    );
     setCurrencyInput(prevState => ({
       ...prevState,
       [name]: value
