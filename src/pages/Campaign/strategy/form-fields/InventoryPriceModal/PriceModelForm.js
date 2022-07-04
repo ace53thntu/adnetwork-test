@@ -4,6 +4,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import {CurrencyInputFieldNoRHF} from 'components/forms/CurrencyInputFieldNoRHF';
 import './_main.scss';
+import {convertGuiToApi} from 'utils/handleCurrencyFields';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,11 +20,12 @@ const propTypes = {
 export default function PriceModelForm({
   currencyInput,
   handleChangeInput,
-  activePricingModel = ''
+  activePricingModel = '',
+  floorPrice
 }) {
   console.log(
-    '🚀 ~ file: PriceModelForm.js ~ line 23 ~ activePricingModel',
-    activePricingModel
+    '🚀 ~ file: PriceModelForm.js ~ line 24 ~ floorPrice',
+    floorPrice
   );
   const classes = useStyles();
 
@@ -43,6 +46,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpm');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpm}) <= floorPrice ? (
+              <ErrorMessage message="CPM must greater than floor price" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -59,6 +65,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpc');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpc}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -75,6 +84,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpa');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpa}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -91,6 +103,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpd');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpd}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -107,6 +122,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpl');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpl}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -123,6 +141,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpe');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpe}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -139,6 +160,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpv');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpv}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -155,6 +179,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpi');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpi}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={4}>
@@ -171,6 +198,9 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpvm');
               }}
             />
+            {convertGuiToApi({value: currencyInput?.cpvm}) < 0 ? (
+              <ErrorMessage message="This field must greater than 0" />
+            ) : null}
           </div>
         </Grid>
       </Grid>

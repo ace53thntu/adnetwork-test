@@ -57,13 +57,16 @@ const StrategyEdit = () => {
       const inventories =
         strategy?.inventories_bid && strategy?.inventories_bid.length > 0
           ? strategy?.inventories_bid?.map((item, idx) => {
+              const foundInventory = strategy.inventories?.find(
+                invItem => invItem?.uuid === item?.uuid
+              );
               const {
                 name,
                 container_name,
                 position_name,
                 position_uuid,
                 floor_price
-              } = strategy.inventories[idx] || {};
+              } = foundInventory || {};
               let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = item || {};
               // Price model
               cpm = HandleCurrencyFields.convertApiToGui({
