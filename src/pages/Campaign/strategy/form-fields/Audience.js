@@ -2,6 +2,7 @@
 import React from 'react';
 
 //---> External Modules
+
 import {useFormContext, Controller} from 'react-hook-form';
 import {Badge} from 'reactstrap';
 import moment from 'moment';
@@ -14,14 +15,11 @@ import {List} from 'components/list';
 import {AUDIENCES_INFINITY} from 'queries/audience/constants';
 import {useDestructureAudiences} from 'pages/Audience/hooks';
 import {DEFAULT_PAGINATION} from 'constants/misc';
+import {Collapse} from 'components/common';
 
 const Audience = ({defaultAudiences = []}) => {
   const {control, setValue} = useFormContext();
   const [checkedAudiences, setCheckedAudiences] = React.useState([]);
-  console.log(
-    '🚀 ~ file: Audience.js ~ line 50 ~ checkedAudiences',
-    checkedAudiences
-  );
   const {
     data: {pages = []} = {},
     hasNextPage,
@@ -111,35 +109,37 @@ const Audience = ({defaultAudiences = []}) => {
   }, [setValue, checkedAudiences]);
 
   return (
-    <>
-      {audiences?.length > 0 ? (
-        <List
-          data={audiences}
-          columns={columns}
-          checkable
-          handleClickItem={onClickItem}
-          checkedValues={checkedAudiences}
-        />
-      ) : (
-        <NoAudienceStyled>No data available</NoAudienceStyled>
-      )}
-      {hasNextPage && (
-        <Pagination
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      )}
-      {checkedAudiences &&
-        checkedAudiences?.map((item, index) => (
-          <Controller
-            key={`pr-${item}`}
-            render={({field}) => <input {...field} type="hidden" />}
-            name={`audience_uuids[${index}]`}
-            control={control}
+    <Collapse initialOpen title="Audience" unMount={false}>
+      <div>
+        {audiences?.length > 0 ? (
+          <List
+            data={audiences}
+            columns={columns}
+            checkable
+            handleClickItem={onClickItem}
+            checkedValues={checkedAudiences}
           />
-        ))}
-    </>
+        ) : (
+          <NoAudienceStyled>No audience</NoAudienceStyled>
+        )}
+        {hasNextPage && (
+          <Pagination
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        )}
+        {checkedAudiences &&
+          checkedAudiences?.map((item, index) => (
+            <Controller
+              key={`pr-${item}`}
+              render={({field}) => <input {...field} type="hidden" />}
+              name={`audience_uuids[${index}]`}
+              control={control}
+            />
+          ))}
+      </div>
+    </Collapse>
   );
 };
 
