@@ -86,7 +86,8 @@ const StrategyEditTabs = ({
                     exportReport({
                       entityId: currentStrategy?.uuid,
                       campaignId,
-                      startTime: originalStrategy.start_time
+                      startTime: originalStrategy.start_time,
+                      originalStrategy: defaultProps.originalStrategy
                     })
                   }
                 >

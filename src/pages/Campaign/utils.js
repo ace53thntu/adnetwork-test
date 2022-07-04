@@ -13,6 +13,7 @@ import {convertLocalDateToTimezone} from 'utils/helpers/dateTime.helpers';
 import __uniq from 'lodash/uniq';
 import {capitalize} from 'utils/helpers/string.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {getUser} from 'utils/helpers/auth.helpers';
 // import __sortBy from 'lodash/sortBy'
 
 const DEFAULT_PAGE = 1;
@@ -219,10 +220,9 @@ export function useExportReportStrategy() {
   const {mutateAsync: getReportMetric} = useGenerateReportUrl();
 
   const exportReport = React.useCallback(
-    async ({entityId, campaignId, startTime}) => {
+    async ({entityId, campaignId, startTime, originalStrategy}) => {
       try {
         const campaign = await CampaignAPIRequest.getCampaign({id: campaignId});
-
         if (campaign?.data?.time_zone?.length) {
           const requestBody = {
             // strategy ID
@@ -251,7 +251,12 @@ export function useExportReportStrategy() {
             const isValid = data?.report && !!Object.keys(data.report).length;
 
             if (isValid) {
-              convertReportResponseToSheetData(data?.report, entityId);
+              convertReportResponseToSheetData(data?.report, entityId, {
+                campaignName: originalStrategy.campaign_name,
+                advertiserName: originalStrategy.advertiser_name,
+                strategyName: originalStrategy.name,
+                startTime
+              });
             } else {
               ShowToast.error(`Strategy don't have report data`);
             }
@@ -271,8 +276,12 @@ export function useExportReportStrategy() {
   return {exportReport};
 }
 
-function convertReportResponseToSheetData(report, entityId) {
-  const sheetData = [];
+function convertReportResponseToSheetData(
+  report,
+  entityId,
+  {advertiserName = '', campaignName = '', strategyName = '', startTime}
+) {
+  let sheetData = [];
   let headers = [];
   let tempColumns = [];
 
@@ -297,7 +306,6 @@ function convertReportResponseToSheetData(report, entityId) {
 
   Object.keys(report).forEach(key => {
     if (report[key]?.[entityId]) {
-      //
       let data = [];
       uniqAndSortColumns.forEach(col => {
         if (report[key][entityId]?.[col]) {
@@ -307,25 +315,71 @@ function convertReportResponseToSheetData(report, entityId) {
         }
       });
 
-      sheetData.push([
-        moment(parseInt(key, 10) * 1000).format('DD/MM/YYYY'),
-        ...data
-      ]);
+      sheetData.push([formatDateColumn(key), ...data]);
     } else {
       let data = [];
       uniqAndSortColumns.forEach(col => {
         data.push(0);
       });
-      sheetData.push([
-        moment(parseInt(key, 10) * 1000).format('DD/MM/YYYY'),
-        ...data
-      ]);
+      sheetData.push([formatDateColumn(key), ...data]);
     }
   });
-  console.log('---sheetData: ', sheetData);
 
+  // total row
+  let totalRow = ['Total'];
+  sheetData.forEach((row, rowIndex) => {
+    if (rowIndex > 0) {
+      row.forEach((col, colIndex) => {
+        if (colIndex > 0) {
+          if (totalRow[colIndex] !== undefined) {
+            totalRow[colIndex] += col;
+          } else {
+            totalRow.push(col);
+          }
+        }
+      });
+    }
+  });
+  sheetData.push(totalRow);
+
+  const advertiserNameRow = ['Advertiser name', advertiserName];
+  const campaignNameRow = ['Campaign name', campaignName];
+  const strategyNameRow = ['Strategy name', strategyName];
+  const exportDateTimeRow = ['Export Date/Time', formatDateTime(new Date())];
+  const dateRangeRow = [
+    'Date range',
+    `${formatDate(startTime)}-${formatDate(new Date())}`
+  ];
+  const user = getUser();
+  const userRow = ['User', user.email];
+
+  sheetData = [
+    ['', ''],
+    advertiserNameRow,
+    campaignNameRow,
+    strategyNameRow,
+    exportDateTimeRow,
+    dateRangeRow,
+    userRow,
+    ['', ''],
+    ...sheetData
+  ];
+
+  // write file
   const ws = utils.aoa_to_sheet(sheetData);
   const wb = utils.book_new();
   utils.book_append_sheet(wb, ws, 'report strategy');
-  writeFile(wb, `report_strategy_${moment().format('DDMMYYYY')}.xlsx`);
+  writeFile(wb, `report_strategy_${new Date().getTime()}.xlsx`);
+}
+
+function formatDateColumn(date) {
+  return formatDate(parseInt(date, 10) * 1000);
+}
+
+function formatDate(date) {
+  return moment(date).format('DD/MM/YYYY');
+}
+
+function formatDateTime(dateTime) {
+  return moment(dateTime).format('DD/MM/YYYY HH:mm');
 }
