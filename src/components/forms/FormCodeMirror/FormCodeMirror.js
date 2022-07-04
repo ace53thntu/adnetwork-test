@@ -6,13 +6,10 @@ import React from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 
-import {html} from '@codemirror/lang-html';
-import {javascript} from '@codemirror/lang-javascript';
-import {json} from '@codemirror/lang-json';
-import {oneDark} from '@codemirror/theme-one-dark';
 import CodeMirror from '@uiw/react-codemirror';
 
 import ErrorMessage from '../ErrorMessage';
+import {langs} from './langs';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -24,9 +21,8 @@ const propTypes = {
 
 const HEIGHT = '150px';
 export const CodeMirrorExtensions = {
-  JAVASCRIPT: javascript(),
-  HTML: html(),
-  JSON: json()
+  HTML: langs.html,
+  JSON: langs.json
 };
 
 const FormCodeMirror = ({
@@ -57,12 +53,12 @@ const FormCodeMirror = ({
               name={rhfName}
               value={value}
               height={HEIGHT}
-              extensions={[CodeMirrorExtensions[extension]]}
+              extensions={[CodeMirrorExtensions[extension]()]}
               onChange={(value, viewUpdate) => {
                 onChange(value);
               }}
               placeholder={placeholder}
-              theme={oneDark}
+              theme={'dark'}
               defaultValue={defaultValue}
             />
           );
