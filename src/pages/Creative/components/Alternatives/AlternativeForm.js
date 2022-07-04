@@ -24,7 +24,8 @@ import {
   ALTERNATIVE_FILE_TYPES,
   ALTERNATIVE_PLAY_TYPES,
   LIMIT_FILE_SIZE,
-  formAlternativeName
+  formAlternativeName,
+  ALTERNATIVE_INTERACTIVE_PLAY_TYPES
 } from './constants';
 
 function AlternativeForm(props) {
@@ -37,7 +38,13 @@ function AlternativeForm(props) {
 
   const client = useQueryClient();
   const {t} = useTranslation();
-  const {watch, trigger: formTrigger, reset, getValues} = useFormContext();
+  const {
+    watch,
+    trigger: formTrigger,
+    reset,
+    getValues,
+    setValue
+  } = useFormContext();
   const {selectedCreativeId} = useCreativeSelector();
   const {mutateAsync: updateAlternativeRequest} = useUpdateAlternative();
   const {mutateAsync: deleteAlternativeRequest} = useDeleteAlternative();
@@ -53,6 +60,19 @@ function AlternativeForm(props) {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const watchFileType = watch(`${prefixName}.file_type`);
+
+  React.useEffect(() => {
+    if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
+      setValue(
+        `${prefixName}.play_type`,
+        ALTERNATIVE_INTERACTIVE_PLAY_TYPES[0]
+      );
+    } else {
+      setValue(`${prefixName}.play_type`, ALTERNATIVE_PLAY_TYPES[0]);
+    }
+  }, [prefixName, setValue, watchFileType]);
 
   function handleClose() {
     setIsOpen(false);
@@ -72,7 +92,7 @@ function AlternativeForm(props) {
         ShowToast.success('Delete Alternative successfully!');
       } catch (error) {
         setIsLoading(false);
-        ShowToast.error(<ApiError apiError={error}/>);
+        ShowToast.error(<ApiError apiError={error} />);
       }
     }
   }
@@ -127,7 +147,7 @@ function AlternativeForm(props) {
             client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
           } catch (error) {
             setIsLoading(false);
-            ShowToast.error(<ApiError apiError={error}/>);
+            ShowToast.error(<ApiError apiError={error} />);
           }
         } else {
           // add new
@@ -138,7 +158,7 @@ function AlternativeForm(props) {
             client.invalidateQueries([GET_CREATIVE, selectedCreativeId]);
           } catch (error) {
             setIsLoading(false);
-            ShowToast.error(<ApiError apiError={error}/>);
+            ShowToast.error(<ApiError apiError={error} />);
           }
         }
       }
@@ -150,6 +170,30 @@ function AlternativeForm(props) {
       handleRemoveAlternative(itemIndex);
     } else {
       setIsOpen(true);
+    }
+  };
+
+  const getAlternativePlayType = () => {
+    if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
+      return (
+        <FormReactSelect
+          options={ALTERNATIVE_INTERACTIVE_PLAY_TYPES}
+          placeholder=""
+          name={`${prefixName}.play_type`}
+          label="Play type"
+          defaultValue={defaultValues.play_type}
+        />
+      );
+    } else {
+      return (
+        <FormReactSelect
+          options={ALTERNATIVE_PLAY_TYPES}
+          placeholder=""
+          name={`${prefixName}.play_type`}
+          label="Play type"
+          defaultValue={defaultValues.play_type}
+        />
+      );
     }
   };
 
@@ -227,15 +271,7 @@ function AlternativeForm(props) {
                 defaultValue={defaultValues.file_type}
               />
             </Col>
-            <Col md={6}>
-              <FormReactSelect
-                options={ALTERNATIVE_PLAY_TYPES}
-                placeholder=""
-                name={`${prefixName}.play_type`}
-                label="Play type"
-                defaultValue={defaultValues.play_type}
-              />
-            </Col>
+            <Col md={6}>{getAlternativePlayType()}</Col>
           </Row>
 
           {/* <Row>
