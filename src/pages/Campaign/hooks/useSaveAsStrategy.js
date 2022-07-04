@@ -272,15 +272,26 @@ const formToApi = ({
     };
   }
 
-  // if (strategy_type?.value === 'premium') {
-  const inventoriesBid = formData?.inventories_bid || [];
-  strategyReturn.inventories_bid = inventoriesBid;
-  // }
+  const inventoriesBid = formData?.inventories_bid ?? [];
 
-  if (isSummary) {
-    strategyReturn.concept_uuids =
-      formData?.concept_uuids?.filter(item => item) || [];
-  }
+  strategyReturn.inventories_bid = inventoriesBid.map(
+    ({id, ts, uuid, ...rest}) => {
+      let other = {};
+
+      Object.keys(rest).forEach(key => {
+        if (typeof rest[key] === 'number') {
+          other[key] = parseInt(parseFloat(rest[key]) * 1000, 10);
+        } else {
+          other[key] = 0;
+        }
+      });
+
+      return {
+        ...other,
+        uuid
+      };
+    }
+  );
 
   return strategyReturn;
 };
