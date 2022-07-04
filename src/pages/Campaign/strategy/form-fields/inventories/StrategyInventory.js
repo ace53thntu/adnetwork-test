@@ -73,10 +73,18 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
           const noStore = row?.original?.noStore;
           let priceModelValue = '';
           if (noStore) {
-            priceModelValue = row?.value?.toString();
+            priceModelValue = row?.original?.[
+              activePriceModel?.value
+            ].toString();
           } else {
-            priceModelValue = row?.value?.toString();
+            priceModelValue = row?.original?.[
+              activePriceModel?.value
+            ].toString();
           }
+          console.log(
+            '----- 111',
+            row?.original?.[activePriceModel?.value].toString()
+          );
 
           return (
             <Badge color="info">
