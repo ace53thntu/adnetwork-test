@@ -33,10 +33,6 @@ const Audience = ({defaultAudiences = []}) => {
   });
 
   const audiences = useDestructureAudiences({pages});
-  console.log(
-    '🚀 ~ file: Audience.js ~ line 35 ~ Audience ~ audiences',
-    audiences
-  );
 
   //---> Define columns
   const columns = React.useMemo(() => {
