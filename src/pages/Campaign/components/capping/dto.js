@@ -190,6 +190,7 @@ export const disabledExistedType = ({existedTypes, currentType}) => {
     case CappingTypes.GENERAL.value:
     case CappingTypes.VIDEO.value:
     case CappingTypes.CONTEXT.value:
+    case CappingTypes.AUDIENCE.value:
     case CappingTypes.KEYWORD.value:
     case CappingTypes.DOMAIN.value:
     case CappingTypes.SCHEDULE.value: {

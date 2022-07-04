@@ -52,7 +52,8 @@ const AddTypeButton = ({
     if (
       type === CappingTypes.GENERAL.value ||
       type === CappingTypes.VIDEO.value ||
-      type === CappingTypes.CONTEXT.value
+      type === CappingTypes.CONTEXT.value ||
+      type === CappingTypes.AUDIENCE.value
     ) {
       onAddTypeCapping([...existedTypes, item]);
       return;

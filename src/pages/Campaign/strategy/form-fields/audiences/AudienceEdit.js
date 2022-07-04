@@ -2,7 +2,7 @@
 import React from 'react';
 
 //---> External Modules
-
+import PropTypes from 'prop-types';
 import {useFormContext, Controller} from 'react-hook-form';
 import {Badge} from 'reactstrap';
 import moment from 'moment';
@@ -15,9 +15,12 @@ import {List} from 'components/list';
 import {AUDIENCES_INFINITY} from 'queries/audience/constants';
 import {useDestructureAudiences} from 'pages/Audience/hooks';
 import {DEFAULT_PAGINATION} from 'constants/misc';
-import {Collapse} from 'components/common';
 
-const Audience = ({defaultAudiences = []}) => {
+const propTypes = {
+  defaultAudiences: PropTypes.array
+};
+
+const AudienceEdit = ({defaultAudiences = []}) => {
   const {control, setValue} = useFormContext();
   const [checkedAudiences, setCheckedAudiences] = React.useState([]);
   const {
@@ -109,38 +112,38 @@ const Audience = ({defaultAudiences = []}) => {
   }, [setValue, checkedAudiences]);
 
   return (
-    <Collapse initialOpen title="Audience" unMount={false}>
-      <div>
-        {audiences?.length > 0 ? (
-          <List
-            data={audiences}
-            columns={columns}
-            checkable
-            handleClickItem={onClickItem}
-            checkedValues={checkedAudiences}
+    <div>
+      {audiences?.length > 0 ? (
+        <List
+          data={audiences}
+          columns={columns}
+          checkable
+          handleClickItem={onClickItem}
+          checkedValues={checkedAudiences}
+        />
+      ) : (
+        <NoAudienceStyled>No audience</NoAudienceStyled>
+      )}
+      {hasNextPage && (
+        <Pagination
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
+      )}
+      {checkedAudiences &&
+        checkedAudiences?.map((item, index) => (
+          <Controller
+            key={`pr-${item}`}
+            render={({field}) => <input {...field} type="hidden" />}
+            name={`audience_uuids[${index}]`}
+            control={control}
           />
-        ) : (
-          <NoAudienceStyled>No audience</NoAudienceStyled>
-        )}
-        {hasNextPage && (
-          <Pagination
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
-        )}
-        {checkedAudiences &&
-          checkedAudiences?.map((item, index) => (
-            <Controller
-              key={`pr-${item}`}
-              render={({field}) => <input {...field} type="hidden" />}
-              name={`audience_uuids[${index}]`}
-              control={control}
-            />
-          ))}
-      </div>
-    </Collapse>
+        ))}
+    </div>
   );
 };
 
-export default Audience;
+AudienceEdit.propTypes = propTypes;
+
+export default AudienceEdit;
