@@ -28,6 +28,7 @@ import {Button} from 'reactstrap';
 import {LogTypes} from 'constants/misc';
 import Historical from 'components/historical';
 import Audience from './form-fields/Audience';
+import {useExportReportStrategy} from '../utils';
 
 const StrategyEditTabs = ({
   currentStrategy = {},
@@ -68,6 +69,8 @@ const StrategyEditTabs = ({
     [currentStrategy, goTo, isCreate, originalStrategy]
   );
 
+  const {exportReport} = useExportReportStrategy();
+
   const tabDetail = useMemo(
     () =>
       [
@@ -76,6 +79,19 @@ const StrategyEditTabs = ({
           content: (
             <DescriptionTab>
               <div className="d-flex justify-content-end mb-2">
+                <Button
+                  color="primary mr-2"
+                  type="button"
+                  onClick={() =>
+                    exportReport({
+                      entityId: currentStrategy?.uuid,
+                      campaignId,
+                      startTime: originalStrategy.start_time
+                    })
+                  }
+                >
+                  Export
+                </Button>
                 <Button color="primary" type="button" onClick={toggleModal}>
                   Logs
                 </Button>
@@ -167,7 +183,9 @@ const StrategyEditTabs = ({
       currentStrategy,
       isDescriptionTab,
       openModal,
-      ownerId
+      ownerId,
+      exportReport,
+      originalStrategy.start_time
     ]
   );
 
