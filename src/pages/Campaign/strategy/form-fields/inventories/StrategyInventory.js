@@ -3,17 +3,20 @@ import React from 'react';
 
 // External Modules
 import PropTypes from 'prop-types';
-import {Badge} from 'reactstrap';
 import {Controller, useFormContext} from 'react-hook-form';
+import {useDispatch} from 'react-redux';
 
 // Internal Modules
-import {removeInventoryStrategyRedux} from 'store/reducers/campaign';
+import {
+  removeInventoryStrategyRedux,
+  setStrategyInventoryListRedux,
+  setStrategyInventoryTempListRedux
+} from 'store/reducers/campaign';
 import {List} from 'components/list';
-import {useDispatch} from 'react-redux';
 import {DialogConfirm} from 'components/common';
 import ErrorMessage from 'components/forms/ErrorMessage';
-import {formatValue} from 'react-currency-input-field';
 import {getUserRole, USER_ROLE} from 'pages/user-management/constants';
+import InventoryPriceModal from '../InventoryPriceModal';
 
 const propTypes = {
   strategyInventories: PropTypes.array,
@@ -49,6 +52,21 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
     });
   }, [setValue, strategyInventories]);
 
+  const onChangePriceModelField = React.useCallback(
+    (value, _inventoryId) => {
+      let tmpArr = [...strategyInventories];
+      tmpArr = tmpArr.map(item => {
+        if (item?.uuid === _inventoryId) {
+          return {...item, ...value, noStore: true};
+        }
+        return item;
+      });
+      dispatch(setStrategyInventoryTempListRedux({inventoryList: tmpArr}));
+      dispatch(setStrategyInventoryListRedux({inventoryList: tmpArr}));
+    },
+    [dispatch, strategyInventories]
+  );
+
   const columns = React.useMemo(() => {
     const baseCols = [
       {
@@ -81,25 +99,23 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
               activePriceModel?.value
             ].toString();
           }
-          console.log(
-            '----- 111',
-            row?.original?.[activePriceModel?.value].toString()
-          );
 
           return (
-            <Badge color="info">
-              {formatValue({
-                value: priceModelValue,
-                groupSeparator: ',',
-                decimalSeparator: '.',
-                prefix: '$'
-              })}
-            </Badge>
+            <InventoryPriceModal
+              inventory={row?.original}
+              onChangePriceModelField={onChangePriceModelField}
+              pricingModel={activePriceModel?.value?.toUpperCase()}
+              currentPrice={priceModelValue}
+            />
           );
         }
       }
     ];
-  }, [activePriceModel?.label, activePriceModel?.value]);
+  }, [
+    activePriceModel?.label,
+    activePriceModel?.value,
+    onChangePriceModelField
+  ]);
 
   function onClickAction(actionIndex, currentItem) {
     setOpenDialog(true);
@@ -116,7 +132,7 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
   }
 
   const actions = [USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)
-    ? ['Edit', 'Delete']
+    ? ['Delete']
     : ['Delete'];
 
   return (

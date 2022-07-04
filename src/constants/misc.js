@@ -166,16 +166,16 @@ export const CappingTypes = {
   KEYWORD: {value: 'KW', label: 'Keyword'}, // capping by keywords
   GENERAL: {value: 'GENERAL', label: 'General'}, // capping by General
   VIDEO: {value: 'VIDEO', label: 'Video'}, // capping by Video
-  CONTEXT: {value: 'CONTEXT', label: 'Context'} // capping by Context
+  CONTEXT: {value: 'CONTEXT', label: 'Context'},
+  AUDIENCE: {value: 'AUDIENCE', label: 'Audience'}
 };
 
 export const CappingTypeButtons = [
   {type: 'GENERAL', sub_type: '', label: 'General'},
   {type: 'VIDEO', sub_type: '', label: 'Video'},
   {type: 'CONTEXT', sub_type: '', label: 'Context'},
+  {type: 'AUDIENCE', sub_type: '', label: 'Audience'},
   {type: 'BDG_MNG', sub_type: '', label: 'Budget manager'},
-  /*{type: 'BDG', sub_type: '', label: 'Budget', api_key: 'budget'},
-  {type: 'IMP', sub_type: '', label: 'Impression', api_key: 'impression'},*/
   {type: 'USR', sub_type: '', label: 'User', api_key: 'user'},
   {type: 'USR_CLICK', sub_type: '', label: 'User click', api_key: 'user_click'},
   {type: 'VIEWABLE', sub_type: '', label: 'Viewable', api_key: 'viewable'},

@@ -35,16 +35,19 @@ import {
 } from '../../../utils';
 import {useQueryClient} from 'react-query';
 import {GET_CAPPING} from 'queries/capping/constants';
+import Audience from 'pages/Campaign/strategy/form-fields/audiences/Audience';
 
 const propTypes = {
   referenceUuid: PropTypes.string.isRequired,
-  currentStrategy: PropTypes.any
+  currentStrategy: PropTypes.any,
+  originalStrategy: PropTypes.any
 };
 
 const CappingList = ({
   referenceUuid = '',
   referenceType = '',
-  currentStrategy
+  currentStrategy,
+  originalStrategy
 }) => {
   const client = useQueryClient();
   const {mutateAsync: editCapping} = useEditCapping();
@@ -80,6 +83,10 @@ const CappingList = ({
 
     if (hasContextFilterInput(currentStrategy)) {
       cappingData.push({type: CappingTypes.CONTEXT.value});
+    }
+
+    if (currentStrategy?.audience_uuids?.length > 0) {
+      cappingData.push({type: CappingTypes.AUDIENCE.value});
     }
 
     setCappingList(cappingData);
@@ -223,6 +230,16 @@ const CappingList = ({
             case CappingTypes.CONTEXT.value: {
               /* Context filter */
               return <ContextFilterGroup currentStrategy={currentStrategy} />;
+            }
+
+            case CappingTypes.AUDIENCE.value: {
+              /* Audience */
+              return (
+                <Audience
+                  defaultAudiences={currentStrategy?.audience_uuids}
+                  audienceInStrategy={originalStrategy?.audiences}
+                />
+              );
             }
 
             default:

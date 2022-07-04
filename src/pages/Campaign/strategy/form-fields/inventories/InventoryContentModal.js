@@ -38,6 +38,7 @@ import {USER_ROLE} from 'pages/user-management/constants';
 import {getRole} from 'utils/helpers/auth.helpers';
 import {StrategyTypes} from 'pages/Campaign/constants';
 import InventoryPriceModal from '../InventoryPriceModal';
+import {convertApiToGui} from 'utils/handleCurrencyFields';
 
 const propTypes = {
   containerId: PropTypes.string
@@ -168,6 +169,9 @@ const InventoryContentModal = ({containerId}) => {
               inventory={row?.original}
               onChangePriceModelField={onChangePriceModelField}
               pricingModel={pricingModel?.value?.toUpperCase()}
+              currentPrice={convertApiToGui({
+                value: row?.original?.floor_price
+              })}
             />
           )
         }
@@ -183,6 +187,9 @@ const InventoryContentModal = ({containerId}) => {
               inventory={row?.original}
               onChangePriceModelField={onChangePriceModelField}
               pricingModel={pricingModel?.value?.toUpperCase()}
+              currentPrice={convertApiToGui({
+                value: row?.original?.floor_price
+              })}
             />
           )
         }
