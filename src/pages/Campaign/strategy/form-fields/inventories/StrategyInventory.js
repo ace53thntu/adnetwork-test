@@ -93,11 +93,11 @@ const StrategyInventory = ({strategyInventories = [], isView = false}) => {
           if (noStore) {
             priceModelValue = row?.original?.[
               activePriceModel?.value
-            ].toString();
+            ]?.toString();
           } else {
             priceModelValue = row?.original?.[
               activePriceModel?.value
-            ].toString();
+            ]?.toString();
           }
 
           return (
