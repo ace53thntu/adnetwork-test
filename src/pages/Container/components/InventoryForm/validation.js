@@ -64,7 +64,7 @@ export const validationInventory = t => {
           message: 'The CPM must be greater than the floor price',
           test: function (value) {
             // You can access the budget global field with `this.parent`.
-            return parseFloat(value) > parseFloat(this.parent?.floor_price);
+            return parseFloat(value) >= parseFloat(this.parent?.floor_price);
           }
         }),
       metadata: Yup.object({
