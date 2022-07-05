@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const isValidPriceModel = (priceModelData, floorPrice) => {
   if (
-    HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpm}) <=
+    HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpm}) <
       floorPrice ||
     HandleCurrencyFields.convertGuiToApi({value: priceModelData?.cpm}) < 0
   ) {

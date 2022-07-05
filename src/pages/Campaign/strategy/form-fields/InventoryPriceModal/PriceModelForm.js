@@ -23,10 +23,6 @@ export default function PriceModelForm({
   activePricingModel = '',
   floorPrice
 }) {
-  console.log(
-    '🚀 ~ file: PriceModelForm.js ~ line 24 ~ floorPrice',
-    floorPrice
-  );
   const classes = useStyles();
 
   return (
@@ -46,7 +42,7 @@ export default function PriceModelForm({
                 handleChangeInput(value, 'cpm');
               }}
             />
-            {convertGuiToApi({value: currencyInput?.cpm}) <= floorPrice ? (
+            {convertGuiToApi({value: currencyInput?.cpm}) < floorPrice ? (
               <ErrorMessage message="CPM must greater than floor price" />
             ) : null}
           </div>
