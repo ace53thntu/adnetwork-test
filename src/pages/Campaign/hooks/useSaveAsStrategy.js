@@ -14,9 +14,11 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ApiError} from 'components/common';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
-import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
-import {useDispatch} from 'react-redux';
-import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
+// import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
+// import {useDispatch} from 'react-redux';
+// import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
+// import {useQueryClient} from 'react-query';
+// import {GET_STRATEGY} from 'queries/strategy/constants';
 
 export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const query = useQueryString();
@@ -24,9 +26,9 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const {getValues} = useFormContext();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const navigate = useNavigate();
-  const {refresh} = useRefreshAdvertiserTree();
-  const dispatch = useDispatch();
-  const {selectTreeData} = useCommonSelector();
+  // const {refresh} = useRefreshAdvertiserTree();
+  // const dispatch = useDispatch();
+  // const {selectTreeData} = useCommonSelector();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -53,13 +55,16 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
       ShowToast.success('Create strategy successfully');
       setIsSubmitting(false);
 
-      dispatch(setSelectTreeDataRedux(reValidateTree(selectTreeData, data)));
+      // dispatch(setSelectTreeDataRedux(reValidateTree(selectTreeData, data)));
 
-      await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
+      // await client.invalidateQueries([GET_STRATEGY, data.uuid]);
+
+      // await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
 
       navigate(
         `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${data?.uuid}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
       );
+      window.location.reload();
     } catch (error) {
       setIsSubmitting(false);
       ShowToast.error(
@@ -70,12 +75,9 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
     createStrategy,
     currentStrategy,
     currentTab,
-    dispatch,
     getValues,
     navigate,
-    originalStrategy,
-    refresh,
-    selectTreeData
+    originalStrategy
   ]);
 
   return {
@@ -296,7 +298,7 @@ const formToApi = ({
   return strategyReturn;
 };
 
-const reValidateTree = (tree, item) => {
+export const reValidateTree = (tree, item) => {
   const updatedTree = [...tree].map(advItem => {
     if (advItem?.uuid !== item?.advertiser_uuid) {
       return advItem;

@@ -43,12 +43,12 @@ const InformationGroup = ({
     if (strategyType?.value === StrategyTypes.PREMIUM) {
       setValue(
         'pricing_model',
-        PricingModelOptions.find(item => item.value === 'cpd')
+        [...PricingModelOptions].find(item => item.value === 'cpd')
       );
     } else {
       setValue(
         'pricing_model',
-        PricingModelOptions.find(item => item.value === 'cpm')
+        [...PricingModelOptions].find(item => item.value === 'cpm')
       );
     }
   }, [setValue, strategyType?.value]);

@@ -87,7 +87,6 @@ const FormContainer = ({
 
   const onSubmit = useCallback(
     async formData => {
-      console.log('🚀 ~ file: FormContainer.js ~ line 89 ~ formData', formData);
       const req = formToApi({
         formData,
         isSummary,
@@ -97,7 +96,6 @@ const FormContainer = ({
         originalStrategy,
         currentTab
       });
-      console.log('🚀 ~ file: FormContainer.js ~ line 99 ~ req', req);
 
       if (isEdit) {
         if (!isDirty) {
@@ -106,7 +104,6 @@ const FormContainer = ({
 
         try {
           const {data} = await editStrategy({straId: strategyId, data: req});
-          console.log('🚀 ~ file: FormContainer.js ~ line 109 ~ data', data);
 
           await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
           const defaultValueUpdated = apiToForm({strategyData: data});

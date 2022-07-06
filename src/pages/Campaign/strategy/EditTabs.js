@@ -95,6 +95,7 @@ const StrategyEditTabs = ({
                   Logs
                 </Button>
               </div>
+
               <FormContainer {...defaultProps} id="description">
                 <StrategyForm
                   campaignId={campaignId}
@@ -117,6 +118,7 @@ const StrategyEditTabs = ({
                   originalStrategy={defaultProps.originalStrategy}
                 />
               </FormContainer>
+
               {openModal && (
                 <Historical
                   modal={openModal}

@@ -33,6 +33,7 @@ const LOAD_CAMPAIGN = `${PREFIX}/LOAD_CAMPAIGN`;
 const UPDATE_CAMPAIGN = `${PREFIX}/UPDATE_CAMPAIGN`;
 const INITIALIZED_INVENTORY_STRATEGY = `${PREFIX}/INITIALIZED_INVENTORY_STRATEGY`;
 const SET_ALREADY_FLAG = `${PREFIX}/SET_ALREADY_FLAG`;
+const SET_SAVING_AS = `${PREFIX}/SET_SAVING_AS`;
 
 // dispatch actions
 export const initializedStrategyRedux = isInitializedInventory =>
@@ -86,7 +87,7 @@ export const setAdvertisersRedux = (
     campaignId,
     campaigns,
     strategyId,
-  strategies
+    strategies
   });
 };
 export const selectAdvertiserRedux = (advertiserId, advertiser) => {
@@ -117,6 +118,10 @@ export const setCampaignRedux = (advertiserId, campaignId, campaigns = []) => {
 
 export const selectedStrategyIdRedux = strategyId => {
   return createAction(SELECT_STRATEGY_ID, {strategyId});
+};
+
+export const setSavingAs = isSavingAs => {
+  return createAction(SET_SAVING_AS, {isSavingAs});
 };
 
 export const setStrategyRedux = (
@@ -155,7 +160,8 @@ const campaignInitialState = {
   advertiserPage: 1,
   advertiserTotalPage: 1,
   activatedStrategyId: '',
-  isInitializedInventory: false
+  isInitializedInventory: false,
+  isSavingAs: false
 };
 
 const handleActions = {
@@ -177,8 +183,13 @@ const handleActions = {
   [SEARCH_CAMPAIGNS]: handleSearchCampaigns,
   [EXPAND_CAMPAIGN]: handleExpandCampaign,
   [SET_CAMPAIGN]: handleSetCampaign,
-  [SET_STRATEGY]: handleSetStrategy
+  [SET_STRATEGY]: handleSetStrategy,
+  [SET_SAVING_AS]: handleSavingAs
 };
+
+function handleSavingAs(state, action) {
+  state.isSavingAs = action.payload.isSavingAs;
+}
 
 function handleSetFlagAlready(state, action) {
   state.alreadySetAdvertiser = action.payload.flag;
@@ -276,7 +287,16 @@ function handleReset(state) {
 }
 
 function handleSetAdvertisers(state, action) {
-  const {page, data, total, advId, campaigns = [], campaignId, strategies =[], strategyId} = action.payload;
+  const {
+    page,
+    data,
+    total,
+    advId,
+    campaigns = [],
+    campaignId,
+    strategies = [],
+    strategyId
+  } = action.payload;
 
   if (page > state.advertiserPage) {
     state.advertisers = [...state.advertisers, ...data];
@@ -293,26 +313,26 @@ function handleSetAdvertisers(state, action) {
               expanded: true,
               children: campaigns.map(camp => {
                 if (camp.id === campaignId) {
-                  if(strategies?.length){
+                  if (strategies?.length) {
                     return {
                       ...camp,
                       expanded: true,
                       children: strategies.map(str => {
-                        if(str.id === strategyId){
+                        if (str.id === strategyId) {
                           return {
                             ...str,
                             selected: true
-                          }
+                          };
                         }
                         return str;
                       }),
                       numChildren: strategies?.length
-                    }
+                    };
                   }
 
                   return {
                     ...camp,
-                    selected: true,
+                    selected: true
                   };
                 }
                 return camp;
