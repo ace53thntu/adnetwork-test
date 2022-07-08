@@ -39,7 +39,8 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   let endTime = watchFields?.[endTimeName] || null;
   let reportByUuid = watchFields?.[reportByUuidName]?.value || '';
   let timeZone = parseInt(watchFields?.[timeZoneName]?.value);
-  if (timeZone === null || timeZone === undefined || timeZone === '') {
+  console.log("🚀 ~ file: useGetMetricBody.js ~ line 42 ~ useGetMetricBody ~ timeZone", timeZone)
+  if (!isValidTimeZone(timeZone)) {
     timeZone = DEFAULT_TIMEZONE;
   }
   const timeZoneValue = TimezoneMapping[timeZone];
@@ -59,7 +60,7 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
   };
 
   const firstPointEnable =
-    reportSource && reportType && reportBy && timeRange && timeUnit && timeZone
+    reportSource && reportType && reportBy && timeRange && timeUnit && isValidTimeZone(timeZone)
       ? true
       : false;
   console.log('===== Global', firstPointEnable, isCompareChart, timeUnit);
@@ -117,3 +118,12 @@ export const useGetMetricBody = ({sourceUuid = ''}) => {
     enableCallMetric
   };
 };
+
+
+const isValidTimeZone = (timeZone) => {
+  if (timeZone === null || timeZone === undefined || timeZone === '') {
+    return false
+  }
+
+  return true;
+}
