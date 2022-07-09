@@ -7,7 +7,7 @@ import moment from 'moment';
 import {getContextFilter, getVideoFilter} from 'entities/Strategy';
 import {StrategyTypes} from '../constants';
 import {convertGuiToApi} from 'utils/handleCurrencyFields';
-import {getTimeZoneOffset} from 'utils/metrics';
+// import {getTimeZoneOffset} from 'utils/metrics';
 import {getListByType} from '../components/capping/dto';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -23,7 +23,7 @@ import {RoutePaths} from 'constants/route-paths';
 export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const query = useQueryString();
   const currentTab = query.get('next_tab');
-  const {getValues} = useFormContext();
+  const {getValues, trigger} = useFormContext();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const navigate = useNavigate();
   // const {refresh} = useRefreshAdvertiserTree();
@@ -33,6 +33,12 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const onHandleSaveAs = React.useCallback(async () => {
+    const result = await trigger();
+
+    if (!result) {
+      return;
+    }
+
     const formValues = getValues();
     let mergedData = __merge(currentStrategy, formValues);
 
@@ -77,7 +83,8 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
     currentTab,
     getValues,
     navigate,
-    originalStrategy
+    originalStrategy,
+    trigger
   ]);
 
   return {
@@ -105,7 +112,6 @@ const formToApi = ({
     strategy_type,
     click_commission,
     sources,
-    schedule,
     location_uuids,
     category,
     priority,
@@ -127,12 +133,8 @@ const formToApi = ({
   const endDate = moment(end_time).endOf('day').toISOString();
 
   // Set start time is null if start time < now
-  if (
-    moment(start_time).isBefore(moment(), 'day') ||
-    (currentStrategy?.start_time &&
-      moment(currentStrategy?.start_time).isSame(start_time, 'day'))
-  ) {
-    startDate = null;
+  if (moment(start_time).isBefore(moment(), 'day')) {
+    startDate = moment(new Date()).toISOString();
   }
 
   //---> VIDEO FILTER
@@ -194,15 +196,37 @@ const formToApi = ({
     strategyReturn.cpm_max = originalStrategy?.cpm_max;
   }
 
+  console.log('---originalStrategy: ', originalStrategy);
+
   if (originalStrategy?.cappings?.length) {
+    // get budget capping
     const cappingBudgets = getListByType({
       cappings: originalStrategy.cappings,
       type: CappingTypes.BUDGET.value
     });
+
+    // get impression capping
     const cappingImpressions = getListByType({
       cappings: originalStrategy.cappings,
       type: CappingTypes.IMPRESSION.value
     });
+
+    // get schedule capping
+    const cappingSchedules = getListByType({
+      cappings: originalStrategy.cappings,
+      type: CappingTypes.SCHEDULE.value
+    });
+
+    const cappingUserClick = originalStrategy.cappings.filter(cap =>
+      [
+        CappingTypes.IMPRESSION.value,
+        CappingTypes.USER.value,
+        CappingTypes.USER_CLICK.value,
+        CappingTypes.USER_VIEWABLE.value,
+        CappingTypes.VIEWABLE.value,
+        CappingTypes.CLICK.value
+      ].includes(cap.type)
+    );
 
     const budgetDaily = cappingBudgets?.find(
       bg => bg.time_frame === BudgetTimeFrames.DAILY
@@ -226,6 +250,30 @@ const formToApi = ({
       daily: parseInt(impDaily?.target) || null,
       global: parseInt(impGlobal?.target) || null
     };
+
+    if (cappingSchedules?.length) {
+      const {
+        week_days,
+        start_hour,
+        start_minute,
+        end_hour,
+        end_minute,
+        time_zone
+      } = cappingSchedules[0];
+
+      strategyReturn.schedule = {
+        week_days,
+        start_hour,
+        start_minute,
+        end_hour,
+        end_minute,
+        time_zone
+      };
+    }
+
+    if (cappingUserClick.length) {
+      console.log('---cappingUserClick: ', cappingUserClick);
+    }
   }
 
   if (domain_groups_white && domain_groups_white?.length > 0) {
@@ -254,24 +302,6 @@ const formToApi = ({
       keywords_list_black,
       domain => domain?.value
     );
-  }
-
-  if (schedule?.week_days?.length > 0) {
-    const scheduleStartHour = moment(schedule?.start_time).hours();
-    const scheduleStartMinute = moment(schedule?.start_time).minutes();
-    const scheduleEndHour = moment(schedule?.end_time).hours();
-    const scheduleEndMinute = moment(schedule?.end_time).minutes();
-    strategyReturn.schedule = {
-      week_days:
-        schedule?.week_days?.length > 0
-          ? Array.from(schedule?.week_days, item => item?.value)
-          : [],
-      start_hour: parseInt(scheduleStartHour, 10),
-      start_minute: parseInt(scheduleStartMinute, 10),
-      end_hour: parseInt(scheduleEndHour, 10),
-      end_minute: parseInt(scheduleEndMinute, 10),
-      time_zone: `${getTimeZoneOffset()}`
-    };
   }
 
   const inventoriesBid = formData?.inventories_bid ?? [];

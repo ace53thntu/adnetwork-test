@@ -261,6 +261,7 @@ export function useExportReportStrategy() {
               ShowToast.error(`Strategy don't have report data`);
             }
           } catch (error) {
+            console.log('🚀 ~ file: utils.js ~ line 265 ~ error', error);
             //
             ShowToast.error(`Strategy don't have report data`);
           }
