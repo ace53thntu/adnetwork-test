@@ -69,14 +69,9 @@ const BudgetCreateModal = ({
     resolver: schemaValidateCreateBudget(t, cappingType.type)
   });
 
-  const {handleSubmit, formState, reset, errors} = methods;
-  console.log('🚀 ~ file: BudgetCreateModal.js ~ line 75 ~ errors', errors);
+  const {handleSubmit, formState, reset} = methods;
 
   async function onSubmit(formData) {
-    console.log(
-      '🚀 ~ file: BudgetCreateModal.js ~ line 79 ~ onSubmit ~ formData',
-      formData
-    );
     let bodyRequest = {
       reference_type: referenceType,
       reference_uuid: referenceUuid,

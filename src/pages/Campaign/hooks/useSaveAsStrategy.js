@@ -14,6 +14,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {ApiError} from 'components/common';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
+import {useCreateCapping} from 'queries/capping';
 // import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
 // import {useDispatch} from 'react-redux';
 // import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
@@ -25,6 +26,7 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const currentTab = query.get('next_tab');
   const {getValues, trigger} = useFormContext();
   const {mutateAsync: createStrategy} = useCreateStrategy();
+  const {mutateAsync: createCapping} = useCreateCapping();
   const navigate = useNavigate();
   // const {refresh} = useRefreshAdvertiserTree();
   // const dispatch = useDispatch();
@@ -49,15 +51,29 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
       };
     }
 
-    const bodyRequest = formToApi({
+    const {bodyRequest, cappings} = formToApi({
       formData: mergedData,
       currentStrategy,
       originalStrategy,
       currentTab
     });
+
     setIsSubmitting(true);
     try {
       const {data} = await createStrategy(bodyRequest);
+
+      if (cappings.length) {
+        let promises = [];
+        promises = [...cappings].map(cap =>
+          createCapping({
+            ...cap,
+            reference_uuid: data.uuid
+          })
+        );
+
+        await Promise.all(promises);
+      }
+
       ShowToast.success('Create strategy successfully');
       setIsSubmitting(false);
 
@@ -78,6 +94,7 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
       );
     }
   }, [
+    createCapping,
     createStrategy,
     currentStrategy,
     currentTab,
@@ -118,24 +135,18 @@ const formToApi = ({
     cpm_max,
     video_filter,
     context_filter,
-    domain_groups_white,
-    domain_groups_black,
-    keywords_list_white,
-    keywords_list_black,
     pricing_model,
     concept_uuids
   } = formData;
 
   const positionIds = position_uuids?.map(item => item?.value) || [];
-  let startDate = moment(start_time).isSame(moment(), 'day')
+  const startDate = dateTimeIsSameOrBeforeToday(start_time)
     ? null
     : moment(start_time).toISOString();
-  const endDate = moment(end_time).endOf('day').toISOString();
-
-  // Set start time is null if start time < now
-  if (moment(start_time).isBefore(moment(), 'day')) {
-    startDate = moment(new Date()).toISOString();
-  }
+  // nếu end date trước hoặc bằng hiện tại \ start date thì cộng thêm 7 ngày.
+  const endDate = dateIsSameOrBeforeADate(end_time, startDate || moment())
+    ? moment().add(7, 'day').endOf('day').toISOString()
+    : moment(end_time).endOf('day').toISOString();
 
   //---> VIDEO FILTER
   const videoFilter = getVideoFilter({
@@ -196,7 +207,7 @@ const formToApi = ({
     strategyReturn.cpm_max = originalStrategy?.cpm_max;
   }
 
-  console.log('---originalStrategy: ', originalStrategy);
+  let returnCappings = [];
 
   if (originalStrategy?.cappings?.length) {
     // get budget capping
@@ -216,17 +227,6 @@ const formToApi = ({
       cappings: originalStrategy.cappings,
       type: CappingTypes.SCHEDULE.value
     });
-
-    const cappingUserClick = originalStrategy.cappings.filter(cap =>
-      [
-        CappingTypes.IMPRESSION.value,
-        CappingTypes.USER.value,
-        CappingTypes.USER_CLICK.value,
-        CappingTypes.USER_VIEWABLE.value,
-        CappingTypes.VIEWABLE.value,
-        CappingTypes.CLICK.value
-      ].includes(cap.type)
-    );
 
     const budgetDaily = cappingBudgets?.find(
       bg => bg.time_frame === BudgetTimeFrames.DAILY
@@ -271,37 +271,52 @@ const formToApi = ({
       };
     }
 
+    const cappingUserClick = originalStrategy.cappings.filter(cap =>
+      [
+        CappingTypes.USER.value,
+        CappingTypes.USER_CLICK.value,
+        CappingTypes.USER_VIEWABLE.value,
+        CappingTypes.VIEWABLE.value,
+        CappingTypes.CLICK.value,
+        CappingTypes.DOMAIN.value,
+        CappingTypes.KEYWORD.value
+      ].includes(cap.type)
+    );
     if (cappingUserClick.length) {
-      console.log('---cappingUserClick: ', cappingUserClick);
+      cappingUserClick.forEach(cap => {
+        let obj = {};
+        if (cap.type === CappingTypes.USER.value) {
+          obj[CappingTypes.USER.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.USER_CLICK.value) {
+          obj[CappingTypes.USER_CLICK.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.USER_VIEWABLE.value) {
+          obj[CappingTypes.USER_VIEWABLE.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.VIEWABLE.value) {
+          obj[CappingTypes.VIEWABLE.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.CLICK.value) {
+          obj[CappingTypes.CLICK.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.DOMAIN.value) {
+          obj.domain_group_white_list_uuid = cap.domain_group_white_list_uuid;
+          obj.domain_group_black_list_uuid = cap.domain_group_black_list_uuid;
+        }
+        if (cap.type === CappingTypes.KEYWORD.value) {
+          obj.keywords_list_white_uuid = cap.keywords_list_white_uuid;
+          obj.keywords_list_black_uuid = cap.keywords_list_black_uuid;
+        }
+
+        returnCappings.push({
+          reference_type: 'strategy', //only for strategy
+          type: cap.type,
+          status: 'active',
+          ...obj
+        });
+      });
     }
-  }
-
-  if (domain_groups_white && domain_groups_white?.length > 0) {
-    strategyReturn.domain_groups_white = Array.from(
-      domain_groups_white,
-      domain => domain?.value
-    );
-  }
-
-  if (domain_groups_black && domain_groups_black?.length > 0) {
-    strategyReturn.domain_groups_black = Array.from(
-      domain_groups_black,
-      domain => domain?.value
-    );
-  }
-
-  if (keywords_list_white && keywords_list_white?.length > 0) {
-    strategyReturn.keywords_list_white = Array.from(
-      keywords_list_white,
-      domain => domain?.value
-    );
-  }
-
-  if (keywords_list_black && keywords_list_black?.length > 0) {
-    strategyReturn.keywords_list_black = Array.from(
-      keywords_list_black,
-      domain => domain?.value
-    );
   }
 
   const inventoriesBid = formData?.inventories_bid ?? [];
@@ -325,7 +340,10 @@ const formToApi = ({
     }
   );
 
-  return strategyReturn;
+  return {
+    bodyRequest: strategyReturn,
+    cappings: returnCappings
+  };
 };
 
 export const reValidateTree = (tree, item) => {
@@ -353,3 +371,31 @@ export const reValidateTree = (tree, item) => {
 
   return updatedTree;
 };
+
+function getDailyAndGlobal(capping) {
+  if (capping?.time_frame > 0) {
+    return {
+      daily: capping.target,
+      global: null
+    };
+  }
+
+  return {
+    daily: null,
+    global: capping.target
+  };
+}
+
+function dateTimeIsSameOrBeforeToday(date) {
+  return (
+    moment(date).isSame(moment(), 'day') ||
+    moment(date).isBefore(moment(), 'day')
+  );
+}
+
+function dateIsSameOrBeforeADate(currentDate, compareDate) {
+  return (
+    moment(currentDate).isSame(moment(compareDate), 'day') ||
+    moment(currentDate).isBefore(moment(compareDate), 'day')
+  );
+}
