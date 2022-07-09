@@ -224,6 +224,7 @@ export function useExportReportStrategy() {
       try {
         const campaign = await CampaignAPIRequest.getCampaign({id: campaignId});
         if (campaign?.data?.time_zone?.length) {
+          const exportDate = new Date();
           const requestBody = {
             // strategy ID
             source_uuid: entityId,
@@ -242,7 +243,7 @@ export function useExportReportStrategy() {
             }),
             // now
             end_time: convertLocalDateToTimezone({
-              localDate: new Date(),
+              localDate: exportDate,
               timeZoneOffset: campaign.data.time_zone
             })
           };
@@ -255,13 +256,13 @@ export function useExportReportStrategy() {
                 campaignName: originalStrategy.campaign_name,
                 advertiserName: originalStrategy.advertiser_name,
                 strategyName: originalStrategy.name,
-                startTime
+                startTime,
+                exportDate
               });
             } else {
               ShowToast.error(`Strategy don't have report data`);
             }
           } catch (error) {
-            console.log('🚀 ~ file: utils.js ~ line 265 ~ error', error);
             //
             ShowToast.error(`Strategy don't have report data`);
           }
@@ -277,23 +278,46 @@ export function useExportReportStrategy() {
   return {exportReport};
 }
 
+const EXPORT_FIELDS = [
+  'creative_bids',
+  'creative_impressions',
+  'creative_clicks',
+  'creative_viewable',
+  'video_bids',
+  'video_impressions',
+  'video_viewable',
+  'video_clicks',
+  'video_start',
+  'video_first_quartil',
+  'video_midpoint',
+  'video_third_quartil',
+  'video_completion',
+  'video_skip'
+];
+
 function convertReportResponseToSheetData(
   report,
   entityId,
-  {advertiserName = '', campaignName = '', strategyName = '', startTime}
+  {
+    advertiserName = '',
+    campaignName = '',
+    strategyName = '',
+    startTime,
+    exportDate
+  }
 ) {
   let sheetData = [];
   let headers = [];
-  let tempColumns = [];
+  // let tempColumns = [];
 
-  Object.keys(report).forEach(key => {
-    if (report[key]?.[entityId]) {
-      const getColumnKeys = Object.keys(report[key][entityId]);
-      tempColumns = [...tempColumns, ...getColumnKeys];
-    }
-  });
+  // Object.keys(report).forEach(key => {
+  //   if (report[key]?.[entityId]) {
+  //     const getColumnKeys = Object.keys(report[key][entityId]);
+  //     tempColumns = [...tempColumns, ...getColumnKeys];
+  //   }
+  // });
 
-  const uniqAndSortColumns = __uniq(tempColumns).sort((a, b) =>
+  const uniqAndSortColumns = __uniq(EXPORT_FIELDS).sort((a, b) =>
     a > b ? 1 : a === b ? 0 : -1
   );
   const capitalAndReplaceUnderscoreColumns = [...uniqAndSortColumns].map(
@@ -305,24 +329,28 @@ function convertReportResponseToSheetData(
   headers = ['Date', ...capitalAndReplaceUnderscoreColumns];
   sheetData.push(headers);
 
-  Object.keys(report).forEach(key => {
-    if (report[key]?.[entityId]) {
+  const timeRangeRows = generateTimeRange(startTime, exportDate).sort(
+    (a, b) => a - b
+  );
+
+  timeRangeRows.forEach(timeCol => {
+    if (report?.[timeCol]?.[entityId]) {
       let data = [];
       uniqAndSortColumns.forEach(col => {
-        if (report[key][entityId]?.[col]) {
-          data.push(report[key][entityId][col]);
+        if (report[timeCol][entityId]?.[col]) {
+          data.push(report[timeCol][entityId][col]);
         } else {
           data.push(0);
         }
       });
 
-      sheetData.push([formatDateColumn(key), ...data]);
+      sheetData.push([formatDateColumn(timeCol), ...data]);
     } else {
       let data = [];
       uniqAndSortColumns.forEach(col => {
         data.push(0);
       });
-      sheetData.push([formatDateColumn(key), ...data]);
+      sheetData.push([formatDateColumn(timeCol), ...data]);
     }
   });
 
@@ -346,10 +374,10 @@ function convertReportResponseToSheetData(
   const advertiserNameRow = ['Advertiser name', advertiserName];
   const campaignNameRow = ['Campaign name', campaignName];
   const strategyNameRow = ['Strategy name', strategyName];
-  const exportDateTimeRow = ['Export Date/Time', formatDateTime(new Date())];
+  const exportDateTimeRow = ['Export Date/Time', formatDateTime(exportDate)];
   const dateRangeRow = [
     'Date range',
-    `${formatDate(startTime)}-${formatDate(new Date())}`
+    `${formatDate(startTime)}-${formatDate(exportDate)}`
   ];
   const user = getUser();
   const userRow = ['User', user.email];
@@ -367,10 +395,7 @@ function convertReportResponseToSheetData(
   ];
 
   // write file
-  const ws = utils.aoa_to_sheet(sheetData);
-  const wb = utils.book_new();
-  utils.book_append_sheet(wb, ws, 'report strategy');
-  writeFile(wb, `report_strategy_${new Date().getTime()}.xlsx`);
+  writeFileToExport(sheetData);
 }
 
 function formatDateColumn(date) {
@@ -383,4 +408,29 @@ function formatDate(date) {
 
 function formatDateTime(dateTime) {
   return moment(dateTime).format('DD/MM/YYYY HH:mm');
+}
+
+function writeFileToExport(sheetData) {
+  const ws = utils.aoa_to_sheet(sheetData);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, 'report strategy');
+  writeFile(wb, `report_strategy_${new Date().getTime()}.xlsx`);
+}
+
+function generateTimeRange(startDate, exportDate) {
+  let end = moment(exportDate).local();
+  let _end = moment(exportDate).local().endOf('day');
+  let start = moment(startDate).local().startOf('day');
+  const diff = _end.diff(start);
+  const durationAsDays = moment.duration(diff).asDays();
+  const count = Math.round(durationAsDays);
+
+  const res = [
+    end.startOf('day').unix(),
+    ...Array(count - 1)
+      .fill()
+      .map(() => end.subtract(1, 'd').startOf('day').unix())
+  ];
+
+  return res;
 }
