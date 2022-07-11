@@ -137,7 +137,7 @@ function BannerForm(props) {
     if (watchFileType?.value === CREATIVE_BANNER_TYPES[1].value) {
       setValue('creative_play_type', CREATIVE_INTERACTIVE_PLAY_TYPES[0]);
     } else {
-      setValue('creative_play_type', CREATIVE_PLAY_TYPES[0]);
+      setValue('creative_play_type', null);
     }
   }, [setValue, watchFileType]);
 
@@ -273,17 +273,8 @@ function BannerForm(props) {
           defaultValue={defaultValues.creative_play_type}
         />
       );
-    } else {
-      return (
-        <FormReactSelect
-          options={CREATIVE_PLAY_TYPES}
-          placeholder=""
-          name="creative_play_type"
-          label="Play type"
-          defaultValue={defaultValues.creative_play_type}
-        />
-      );
     }
+    return null;
   };
 
   return (
