@@ -50,6 +50,11 @@ import {
 import {useCalculateAdSize, useWatchCreativeType} from './hooks';
 import {bannerFormValidationResolver} from './utils';
 import {STATUS_OPTIONS} from 'constants/misc';
+import {
+  CREATIVE_BANNER_TYPES,
+  CREATIVE_INTERACTIVE_PLAY_TYPES,
+  CREATIVE_PLAY_TYPES
+} from 'pages/Creative/constants';
 
 const defaultFormValues = {
   third_party_tag: '',
@@ -73,7 +78,10 @@ const defaultFormValues = {
 
   file_type: CREATIVE_FILE_TYPES[0],
 
-  status: STATUS_OPTIONS[0]
+  status: STATUS_OPTIONS[0],
+
+  creative_type: CREATIVE_BANNER_TYPES[0],
+  play_type: ''
 
   // alternatives: []
 };
@@ -118,11 +126,20 @@ function BannerForm(props) {
     watch,
     setValue
   } = methods;
+  const watchFileType = watch('creative_type');
 
   React.useEffect(() => {
     dispatch(dirtyForm(isDirty));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDirty]);
+
+  React.useEffect(() => {
+    if (watchFileType?.value === CREATIVE_BANNER_TYPES[1].value) {
+      setValue('creative_play_type', CREATIVE_INTERACTIVE_PLAY_TYPES[0]);
+    } else {
+      setValue('creative_play_type', CREATIVE_PLAY_TYPES[0]);
+    }
+  }, [setValue, watchFileType]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -242,6 +259,30 @@ function BannerForm(props) {
       dispatch(toggleCreateCreativeDialog());
     } else {
       dispatch(toggleCreativeDetailDialog(null));
+    }
+  };
+
+  const generateCreativePlayType = () => {
+    if (watchFileType?.value === CREATIVE_BANNER_TYPES[1].value) {
+      return (
+        <FormReactSelect
+          options={CREATIVE_INTERACTIVE_PLAY_TYPES}
+          placeholder=""
+          name="creative_play_type"
+          label="Play type"
+          defaultValue={defaultValues.creative_play_type}
+        />
+      );
+    } else {
+      return (
+        <FormReactSelect
+          options={CREATIVE_PLAY_TYPES}
+          placeholder=""
+          name="creative_play_type"
+          label="Play type"
+          defaultValue={defaultValues.creative_play_type}
+        />
+      );
     }
   };
 
@@ -409,6 +450,18 @@ function BannerForm(props) {
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                    <Col md="4">
+                      <FormReactSelect
+                        options={CREATIVE_BANNER_TYPES}
+                        placeholder=""
+                        name="creative_type"
+                        label="File type"
+                        defaultValue={defaultValues.creative_type}
+                      />
+                    </Col>
+                    <Col md={4}>{generateCreativePlayType()}</Col>
                   </Row>
                 </Col>
               </Row>

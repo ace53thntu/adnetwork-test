@@ -42,8 +42,8 @@ function AlternativeForm(props) {
     watch,
     trigger: formTrigger,
     reset,
-    getValues,
-    setValue
+    getValues
+    // setValue
   } = useFormContext();
   const {selectedCreativeId} = useCreativeSelector();
   const {mutateAsync: updateAlternativeRequest} = useUpdateAlternative();
@@ -61,18 +61,18 @@ function AlternativeForm(props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const watchFileType = watch(`${prefixName}.file_type`);
+  // const watchFileType = watch(`${prefixName}.file_type`);
 
-  React.useEffect(() => {
-    if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
-      setValue(
-        `${prefixName}.play_type`,
-        ALTERNATIVE_INTERACTIVE_PLAY_TYPES[0]
-      );
-    } else {
-      setValue(`${prefixName}.play_type`, ALTERNATIVE_PLAY_TYPES[0]);
-    }
-  }, [prefixName, setValue, watchFileType]);
+  // React.useEffect(() => {
+  //   if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
+  //     setValue(
+  //       `${prefixName}.play_type`,
+  //       ALTERNATIVE_INTERACTIVE_PLAY_TYPES[0]
+  //     );
+  //   } else {
+  //     setValue(`${prefixName}.play_type`, ALTERNATIVE_PLAY_TYPES[0]);
+  //   }
+  // }, [prefixName, setValue, watchFileType]);
 
   function handleClose() {
     setIsOpen(false);
@@ -173,29 +173,29 @@ function AlternativeForm(props) {
     }
   };
 
-  const getAlternativePlayType = () => {
-    if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
-      return (
-        <FormReactSelect
-          options={ALTERNATIVE_INTERACTIVE_PLAY_TYPES}
-          placeholder=""
-          name={`${prefixName}.play_type`}
-          label="Play type"
-          defaultValue={defaultValues.play_type}
-        />
-      );
-    } else {
-      return (
-        <FormReactSelect
-          options={ALTERNATIVE_PLAY_TYPES}
-          placeholder=""
-          name={`${prefixName}.play_type`}
-          label="Play type"
-          defaultValue={defaultValues.play_type}
-        />
-      );
-    }
-  };
+  // const getAlternativePlayType = () => {
+  //   if (watchFileType?.value === ALTERNATIVE_FILE_TYPES[1].value) {
+  //     return (
+  //       <FormReactSelect
+  //         options={ALTERNATIVE_INTERACTIVE_PLAY_TYPES}
+  //         placeholder=""
+  //         name={`${prefixName}.play_type`}
+  //         label="Play type"
+  //         defaultValue={defaultValues.play_type}
+  //       />
+  //     );
+  //   } else {
+  //     return (
+  //       <FormReactSelect
+  //         options={ALTERNATIVE_PLAY_TYPES}
+  //         placeholder=""
+  //         name={`${prefixName}.play_type`}
+  //         label="Play type"
+  //         defaultValue={defaultValues.play_type}
+  //       />
+  //     );
+  //   }
+  // };
 
   return (
     <>
@@ -261,7 +261,7 @@ function AlternativeForm(props) {
             </Col>
           </Row>
 
-          <Row>
+          {/* <Row>
             <Col md={6}>
               <FormReactSelect
                 options={ALTERNATIVE_FILE_TYPES}
@@ -272,7 +272,7 @@ function AlternativeForm(props) {
               />
             </Col>
             <Col md={6}>{getAlternativePlayType()}</Col>
-          </Row>
+          </Row> */}
 
           {/* <Row>
             <Col>

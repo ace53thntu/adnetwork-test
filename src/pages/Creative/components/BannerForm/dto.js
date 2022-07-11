@@ -1,5 +1,10 @@
 import {STATUS_OPTIONS} from 'constants/misc';
 import __isNumber from 'lodash/isNumber';
+import {
+  CREATIVE_BANNER_TYPES,
+  CREATIVE_INTERACTIVE_PLAY_TYPES,
+  CREATIVE_PLAY_TYPES
+} from 'pages/Creative/constants';
 
 import {
   ALTERNATIVE_FILE_TYPES,
@@ -34,7 +39,9 @@ export function creativeModelToRepo(raw, conceptId) {
     alternative_play,
     platform,
     creative_metadata,
-    status
+    status,
+    creative_type = CREATIVE_BANNER_TYPES[0],
+    creative_play_type
   } = raw;
 
   return {
@@ -58,8 +65,30 @@ export function creativeModelToRepo(raw, conceptId) {
     platform: platform?.value,
     creative_metadata: checkValidJson(creative_metadata)
       ? JSON.parse(creative_metadata)
-      : {}
+      : {},
+    creative_type: creative_type.value,
+    play_type: creative_play_type?.value
   };
+}
+
+function getCreativeBannerPlayType(
+  creativeType = CREATIVE_BANNER_TYPES[0].value,
+  pType
+) {
+  if (creativeType === CREATIVE_BANNER_TYPES[0].value) {
+    return (
+      CREATIVE_PLAY_TYPES.find(playType => playType.value === pType) ??
+      CREATIVE_PLAY_TYPES[0].value
+    );
+  }
+  if (creativeType === CREATIVE_BANNER_TYPES[1].value) {
+    return (
+      CREATIVE_INTERACTIVE_PLAY_TYPES.find(
+        playType => playType.value === pType
+      ) ?? CREATIVE_INTERACTIVE_PLAY_TYPES[0].value
+    );
+  }
+  return null;
 }
 
 export function creativeRepoToModel(raw) {
@@ -82,9 +111,10 @@ export function creativeRepoToModel(raw) {
     alternative_play,
     platform,
     creative_metadata,
-    status
+    status,
+    creative_type,
+    play_type
   } = raw;
-
   return {
     name,
     status: STATUS_OPTIONS.find(st => st.value === status),
@@ -120,7 +150,11 @@ export function creativeRepoToModel(raw) {
     ),
     creative_metadata: checkValidJson(JSON.stringify(creative_metadata))
       ? JSON.stringify(creative_metadata)
-      : ''
+      : '',
+    creative_type: creative_type
+      ? CREATIVE_BANNER_TYPES.find(type => type.value === creative_type)
+      : CREATIVE_BANNER_TYPES[0],
+    creative_play_type: getCreativeBannerPlayType(creative_type, play_type)
   };
 }
 
@@ -210,7 +244,6 @@ export function alternativeRepoToModel(raw) {
     play_type
     // file_uuid
   } = raw;
-
   return {
     name,
     sound,
