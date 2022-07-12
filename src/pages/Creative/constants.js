@@ -1,7 +1,7 @@
 export const CREATIVE_BANNER_TYPES = [
   {
     label: 'Standard',
-    value: 'static_banner'
+    value: 'standard'
   },
   {
     label: 'Interactive',
@@ -12,21 +12,21 @@ export const CREATIVE_BANNER_TYPES = [
 export const CREATIVE_PLAY_TYPES = [
   {
     label: 'Standard',
-    value: 'static_banner'
+    value: 'standard'
   }
 ];
 
 export const CREATIVE_INTERACTIVE_PLAY_TYPES = [
   {
     label: 'Mobile First View',
-    value: 'mobile_first_view'
+    value: 'interactive_banner_mfv'
   },
   {
     label: 'Mobile Spin',
-    value: 'spin'
+    value: 'interactive_banner_spin'
   },
   {
     label: 'Mobile Cards',
-    value: 'cards'
+    value: 'interactive_banner_cards'
   }
 ];

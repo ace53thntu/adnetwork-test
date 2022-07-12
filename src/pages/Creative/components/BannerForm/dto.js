@@ -75,6 +75,12 @@ function getCreativeBannerPlayType(
   creativeType = CREATIVE_BANNER_TYPES[0].value,
   pType
 ) {
+  if (creativeType === CREATIVE_BANNER_TYPES[0].value) {
+    return (
+      CREATIVE_PLAY_TYPES.find(playType => playType.value === pType) ??
+      CREATIVE_PLAY_TYPES[0].value
+    );
+  }
   if (creativeType === CREATIVE_BANNER_TYPES[1].value) {
     return (
       CREATIVE_INTERACTIVE_PLAY_TYPES.find(
