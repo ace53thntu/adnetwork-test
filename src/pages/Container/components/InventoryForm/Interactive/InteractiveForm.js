@@ -40,7 +40,7 @@ const InteractiveForm = () => {
       {fields?.map((fieldItem, index) => {
         return (
           <InteractiveItem
-            key={`pr-${index}`}
+            key={`pr-${fieldItem?.play_type?.value}`}
             index={index}
             fieldItem={fieldItem}
             onClickRemove={handleRemoveInteractive}

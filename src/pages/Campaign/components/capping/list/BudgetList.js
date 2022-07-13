@@ -72,20 +72,30 @@ const BudgetList = ({
   }, [list]);
 
   const destructuredList = list?.map(item => {
-    if (item?.target === 0 || !item.target) {
-      return {...item, id: item?.uuid, actions: [t('edit')]};
-    }
-
     if (
       [
-        CappingTypes.BUDGET.value,
-        CappingTypes.IMPRESSION.value,
         CappingTypes.USER.value,
         CappingTypes.USER_CLICK.value,
         CappingTypes.USER_VIEWABLE.value,
         CappingTypes.CLICK.value,
         CappingTypes.VIEWABLE.value
       ].includes(item.type)
+    ) {
+      return {
+        ...item,
+        id: item?.uuid,
+        actions: [t('edit'), t('delete')]
+      };
+    }
+
+    if (item?.target === 0 || !item.target) {
+      return {...item, id: item?.uuid, actions: [t('edit')]};
+    }
+
+    if (
+      [CappingTypes.BUDGET.value, CappingTypes.IMPRESSION.value].includes(
+        item.type
+      )
     ) {
       if (existedAll) {
         return {
@@ -180,6 +190,14 @@ const BudgetList = ({
                   {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
                 </Badge>
               )}
+              {(typeHasTimeFrame.includes(row.original?.type) && row?.value) !==
+                BudgetTimeFrames.GLOBAL &&
+                (typeHasTimeFrame.includes(row.original?.type) &&
+                  row?.value) !== BudgetTimeFrames.DAILY && (
+                  <Badge color="warning" pill>
+                    {row?.value}
+                  </Badge>
+                )}
               {isManager && (
                 <Badge color="primary" pill>
                   global

@@ -20,7 +20,12 @@ import {
 // Internal Modules
 import {schemaValidateCreateBudget} from '../validation';
 import {ApiError, ButtonLoading} from 'components/common';
-import {BudgetTimeFrames, CappingTypes, Statuses} from 'constants/misc';
+import {
+  BudgetTimeFrames,
+  CappingReferenceTypes,
+  CappingTypes,
+  Statuses
+} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
@@ -67,7 +72,7 @@ const BudgetCreateModal = ({
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidateCreateBudget(t, cappingType.type)
+    resolver: schemaValidateCreateBudget(t, cappingType.type, referenceType)
   });
 
   const {handleSubmit, formState, reset} = methods;
@@ -108,8 +113,25 @@ const BudgetCreateModal = ({
     }
     bodyRequest[cappingType.api_key] = budget;
 
+    let bodyRequestCustom = {
+      reference_type: referenceType,
+      reference_uuid: referenceUuid,
+      type: cappingType?.type,
+      status: Statuses.ACTIVE
+    };
+    const secondsPerMinute = 60;
+
     try {
       await createCapping(bodyRequest);
+      if (formData?.time_frame && formData?.target) {
+        bodyRequestCustom = {
+          ...bodyRequestCustom,
+          target: parseInt(formData?.target),
+          time_frame: parseInt(formData?.time_frame) * secondsPerMinute,
+          custom: true
+        };
+        await createCapping(bodyRequestCustom);
+      }
       ShowToast.success('Created Capping Successfully');
       toggleModal();
     } catch (err) {
@@ -138,14 +160,6 @@ const BudgetCreateModal = ({
               ].includes(cappingType.type) && (
                 <Row>
                   <Col md="6">
-                    {/* <FormTextInput
-                      type="number"
-                      placeholder={t('global')}
-                      name="global"
-                      label={t('global')}
-                      isRequired
-                      readOnly={!!budgetGLobal}
-                    /> */}
                     <CurrencyInputField
                       required
                       name="global"
@@ -160,14 +174,6 @@ const BudgetCreateModal = ({
                     />
                   </Col>
                   <Col md="6">
-                    {/* <FormTextInput
-                      type="number"
-                      placeholder={t('daily')}
-                      name="daily"
-                      label={t('daily')}
-                      isRequired
-                      readOnly={!!budgetDaily}
-                    /> */}
                     <CurrencyInputField
                       required
                       name="daily"
@@ -214,19 +220,30 @@ const BudgetCreateModal = ({
                       readOnly={!!budgetDaily}
                     />
                   </Col>
-                  <Col md="8">
-                    <div className="mb-2">Custom time frame</div>
-                    <div className="d-flex align-items-center">
-                      <FormTextInput label="" placeholder="reach" />
-                      <div className="mr-2 ml-2" style={{height: 38}}>
-                        by
-                      </div>
-                      <FormTextInput label="" placeholder="time frame" />
-                      <div className="ml-2" style={{height: 38}}>
-                        minute(s)
-                      </div>
-                    </div>
-                  </Col>
+                  {cappingType.type === CappingTypes.USER.value &&
+                    referenceType === CappingReferenceTypes.STRATEGY && (
+                      <Col md="8">
+                        <div className="mb-2">Custom time frame</div>
+                        <div className="d-flex ">
+                          <FormTextInput
+                            label=""
+                            placeholder="reach"
+                            name="target"
+                          />
+                          <div className="mr-2 ml-2" style={{height: 38}}>
+                            by
+                          </div>
+                          <FormTextInput
+                            label=""
+                            placeholder="time frame"
+                            name="time_frame"
+                          />
+                          <div className="ml-2" style={{height: 38}}>
+                            minute(s)
+                          </div>
+                        </div>
+                      </Col>
+                    )}
                 </Row>
               )}
             </Form>
