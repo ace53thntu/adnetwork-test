@@ -2,9 +2,16 @@ import {BannerTypeOptions, VideoMineOptions} from 'constants/inventory';
 import {LinearityOptions, ProtocolOptions, Statuses} from 'constants/misc';
 import {StartDelayOptions} from 'pages/Campaign/constants';
 import {InventoryFormats} from 'pages/Container/constants';
+import {checkValidJson} from 'pages/Creative/components/BannerForm/utils';
 import {TrackerReferenceTypes} from 'pages/setting/tracker/constant';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
 import {capitalize} from 'utils/helpers/string.helpers';
+import {
+  getInteractiveFileTypeOptions,
+  getInteractivePlayTypeOptions,
+  getInteractiveStandardPlayTypeOptions,
+  InteractiveFileType
+} from './constant';
 
 export const getMetaExtra = metadata => {
   let tmpMetadata = {...metadata} || {};
@@ -61,8 +68,13 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     price_engine,
     market_dsps,
     tags: formTags,
-    first_party
+    first_party,
+    custom_play_type_data
   } = formData;
+  console.log(
+    '🚀 ~ file: dto.js ~ line 67 ~ mappingInventoryFormToApi ~ custom_play_type_data',
+    custom_play_type_data
+  );
   let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = formData;
 
   const formatData = format?.value || '';
@@ -202,6 +214,17 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     ? Array.from(market_dsps, dsp => dsp?.value)
     : [];
 
+  // Custom play type data
+  const customPlayType = custom_play_type_data?.reduce((acc, item) => {
+    acc[item?.play_type?.value] = {
+      file_type: item?.file_type?.value,
+      play_type: item?.play_type?.value,
+      price: HandleCurrencyFields.convertGuiToApi({value: item?.price}),
+      meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
+    };
+    return acc;
+  }, {});
+
   return {
     page_uuid: pageId,
     name,
@@ -226,7 +249,8 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     cpe,
     cpv,
     cpi,
-    cpvm
+    cpvm,
+    custom_play_type_data: customPlayType
   };
 };
 
@@ -255,7 +279,8 @@ export const mappingInventoryApiToForm = ({
     tags,
     tracker = [],
     is_auto_create = false,
-    first_party
+    first_party,
+    custom_play_type_data
   } = inventory;
   let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = inventory;
   const destructureType = inventoryTypes.find(item => item.value === type);
@@ -389,6 +414,46 @@ export const mappingInventoryApiToForm = ({
     variables = JSON.stringify(trackerObj?.variables);
   }
 
+  let customPlayType = [];
+  if (custom_play_type_data && Object.keys(custom_play_type_data).length) {
+    customPlayType = Object.entries(custom_play_type_data)?.map(
+      ([key, value]) => {
+        const isStandard = key === InteractiveFileType.STANDARD;
+        if (!isStandard) {
+          return {
+            file_type: value?.file_type
+              ? getInteractiveFileTypeOptions()?.find(
+                  item => item?.value === value?.file_type
+                )
+              : null,
+            play_type: value?.play_type
+              ? getInteractivePlayTypeOptions()?.find(
+                  item => item?.value === value?.play_type
+                )
+              : null,
+            price: HandleCurrencyFields.convertApiToGui({value: value?.price}),
+            meta: value?.meta ? JSON.stringify(value?.meta, null, 2) : ''
+          };
+        }
+
+        return {
+          file_type: value?.file_type
+            ? getInteractiveFileTypeOptions()?.find(
+                item => item?.value === value?.file_type
+              )
+            : null,
+          play_type: value?.play_type
+            ? getInteractiveStandardPlayTypeOptions()?.find(
+                item => item?.value === value?.play_type
+              )
+            : null,
+          price: HandleCurrencyFields.convertApiToGui({value: floor_price}),
+          meta: value?.meta ? JSON.stringify(value?.meta, null, 2) : ''
+        };
+      }
+    );
+  }
+
   return {
     uuid,
     name,
@@ -426,7 +491,8 @@ export const mappingInventoryApiToForm = ({
     cpe,
     cpv,
     cpi,
-    cpvm
+    cpvm,
+    custom_play_type_data: customPlayType
   };
 };
 

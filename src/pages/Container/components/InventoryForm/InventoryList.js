@@ -154,7 +154,9 @@ function InventoryList() {
       });
       setOpenConfirm(false);
     } catch (error) {
-      ShowToast.error(<ApiError apiError={error || 'Fail to delete Inventory'}/>);
+      ShowToast.error(
+        <ApiError apiError={error || 'Fail to delete Inventory'} />
+      );
     } finally {
       setIsLoading(false);
     }
@@ -214,6 +216,7 @@ function InventoryList() {
           size="lg"
           className="modal-dialog shadow-none"
           isOpen={isOpenUpdate}
+          style={{maxWidth: 1024}}
         >
           <UpdateInventory
             toggle={() => {

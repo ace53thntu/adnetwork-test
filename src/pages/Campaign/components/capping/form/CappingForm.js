@@ -18,7 +18,7 @@ import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
-import {FormToggle} from 'components/forms';
+import {FormTextInput, FormToggle} from 'components/forms';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -156,6 +156,10 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
                 />
               </Col>
             )}
+
+            <Col md="12">
+              <FormTextInput label="Custom time frame" placeholder="Custom time frame"/>
+            </Col>
 
             {/* Type */}
             <Col md="6">

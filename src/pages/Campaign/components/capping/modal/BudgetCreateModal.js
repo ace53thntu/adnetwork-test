@@ -25,6 +25,7 @@ import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui, convertGuiToApi} from 'utils/handleCurrencyFields';
+import {FormTextInput} from 'components/forms';
 
 const propTypes = {
   openForm: PropTypes.bool,
@@ -212,6 +213,19 @@ const BudgetCreateModal = ({
                       allowDecimals={false}
                       readOnly={!!budgetDaily}
                     />
+                  </Col>
+                  <Col md="8">
+                    <div className="mb-2">Custom time frame</div>
+                    <div className="d-flex align-items-center">
+                      <FormTextInput label="" placeholder="reach" />
+                      <div className="mr-2 ml-2" style={{height: 38}}>
+                        by
+                      </div>
+                      <FormTextInput label="" placeholder="time frame" />
+                      <div className="ml-2" style={{height: 38}}>
+                        minute(s)
+                      </div>
+                    </div>
                   </Col>
                 </Row>
               )}

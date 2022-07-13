@@ -19,7 +19,7 @@ import {validationInventory} from './validation';
 import {useCreateTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
 import {VideoMineTypes} from 'constants/inventory';
-import { ApiError } from 'components/common';
+import {ApiError} from 'components/common';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {t} = useTranslation();
@@ -74,7 +74,9 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       toggle();
     } catch (err) {
       setIsLoading(false);
-      ShowToast.error(<ApiError apiError={err || 'Fail to create Inventory'}/>);
+      ShowToast.error(
+        <ApiError apiError={err || 'Fail to create Inventory'} />
+      );
     }
   };
 
@@ -94,6 +96,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
       size="lg"
       className="modal-dialog shadow-none"
       isOpen={isOpen}
+      style={{maxWidth: 1024}}
     >
       <FormProvider {...methods} key="create-event">
         <form

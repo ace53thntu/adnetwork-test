@@ -26,6 +26,7 @@ import {
 
 import DirectSnippet from '../Snippets/DirectUrlSnippet';
 import DspSelect from './DspSelect';
+import Interactive from './Interactive';
 import InventoryProperty from './InventoryProperty';
 import InventorySnippet from './InventorySnippet';
 import PriceModel from './PriceModel';
@@ -230,6 +231,8 @@ const InventoryFormContent = ({
 
         <PriceModel />
         {/* <TrackerForm /> */}
+
+        <Interactive />
 
         {inventory?.uuid && (
           <>

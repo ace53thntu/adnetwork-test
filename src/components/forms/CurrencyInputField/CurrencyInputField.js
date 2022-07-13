@@ -25,7 +25,8 @@ const propTypes = {
   groupSeparator: PropTypes.string,
   decimalSeparator: PropTypes.string,
   disabled: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  defaultValue: PropTypes.string
 };
 
 const CurrencyInputField = props => {
@@ -46,6 +47,7 @@ const CurrencyInputField = props => {
     decimalsLimit = 2,
     description = '',
     invalid = false,
+    defaultValue = '',
     ...rest
   } = props;
   const {control, errors} = useFormContext();
@@ -61,7 +63,7 @@ const CurrencyInputField = props => {
       <Controller
         name={inputName}
         control={control}
-        defaultValue=""
+        defaultValue={defaultValue}
         render={({value, onChange, onBlur, name}) => {
           return (
             <CurrencyInput

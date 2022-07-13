@@ -47,6 +47,7 @@ const FormCodeMirror = ({
       <Controller
         control={control}
         name={name}
+        defaultValue={defaultValue}
         render={({onChange, onBlur, value, name: rhfName, ref}) => {
           return (
             <CodeMirror
