@@ -72,10 +72,7 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     first_party,
     custom_play_type_data
   } = formData;
-  console.log(
-    '🚀 ~ file: dto.js ~ line 67 ~ mappingInventoryFormToApi ~ custom_play_type_data',
-    custom_play_type_data
-  );
+
   let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} = formData;
 
   const formatData = format?.value || '';
@@ -216,15 +213,16 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
     : [];
 
   // Custom play type data
-  const customPlayType = custom_play_type_data?.reduce((acc, item) => {
-    acc[item?.play_type?.value] = {
-      file_type: item?.file_type?.value,
-      play_type: item?.play_type?.value,
-      price: HandleCurrencyFields.convertGuiToApi({value: item?.price}),
-      meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
-    };
-    return acc;
-  }, {});
+  const customPlayType =
+    custom_play_type_data?.reduce((acc, item) => {
+      acc[item?.play_type?.value] = {
+        file_type: item?.file_type?.value,
+        play_type: item?.play_type?.value,
+        price: HandleCurrencyFields.convertGuiToApi({value: item?.price}),
+        meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
+      };
+      return acc;
+    }, {}) || {};
 
   return {
     page_uuid: pageId,

@@ -8,6 +8,7 @@ const InteractivePlayTypeSelect = ({playTypeOptions = []}) => {
       placeholder="Play type"
       name="interactive_add.play_type"
       options={playTypeOptions}
+      required
     />
   );
 };

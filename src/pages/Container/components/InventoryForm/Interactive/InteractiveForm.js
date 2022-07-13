@@ -10,7 +10,7 @@ import InteractiveItem from './InteractiveItem';
 
 const InteractiveForm = () => {
   const {t} = useTranslation();
-  const {control, watch} = useFormContext();
+  const {control, watch, setValue} = useFormContext();
   const {fields, append, remove} = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: 'custom_play_type_data' // unique name for your Field Array
@@ -22,6 +22,10 @@ const InteractiveForm = () => {
     'interactive_add.meta'
   ]);
 
+  const fileTypeSelected = watch('interactive_add.file_type');
+  const playTypeInAddSelected = watch('interactive_add.play_type');
+  const isDisableAddBtn = !fileTypeSelected || !playTypeInAddSelected;
+
   function handleAddNewInteractive() {
     append({
       file_type: watchFormAddFields['interactive_add.file_type'],
@@ -29,6 +33,10 @@ const InteractiveForm = () => {
       price: watchFormAddFields['interactive_add.price'],
       meta: watchFormAddFields['interactive_add.meta']
     });
+    setValue('interactive_add.file_type', null);
+    setValue('interactive_add.play_type', null);
+    setValue('interactive_add.price', '');
+    setValue('interactive_add.meta', '');
   }
 
   function handleRemoveInteractive(index) {
@@ -57,6 +65,7 @@ const InteractiveForm = () => {
               type="button"
               className="mr-2"
               onClick={handleAddNewInteractive}
+              disabled={isDisableAddBtn}
             >
               {t('add')}
             </Button>

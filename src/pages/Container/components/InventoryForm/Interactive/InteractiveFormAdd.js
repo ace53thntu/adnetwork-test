@@ -53,6 +53,7 @@ const InteractiveFormAdd = () => {
             label="File type"
             placeholder="File type"
             name="interactive_add.file_type"
+            required
           />
         </Col>
         <Col sm="4">
@@ -74,6 +75,7 @@ const InteractiveFormAdd = () => {
             prefix="$"
           />
         </Col>
+        {/* TODO: validate Interactive banner MFV meta must has cross_price */}
         <Col sm="12">
           <FormCodeMirror
             name="interactive_add.meta"
