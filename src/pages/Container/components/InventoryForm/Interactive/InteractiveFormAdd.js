@@ -21,6 +21,13 @@ const InteractiveFormAdd = () => {
   const playTypeOptions = isStandard
     ? getInteractiveStandardPlayTypeOptions()
     : getInteractivePlayTypeOptions();
+  const customPlayTypeDataValues = watch('custom_play_type_data');
+  const playTypeSelected = customPlayTypeDataValues?.map(
+    item => item?.play_type?.value
+  );
+  const playTypeOptionsFiltered = playTypeOptions?.filter(
+    item => !playTypeSelected.includes(item?.value)
+  );
 
   React.useEffect(() => {
     if (isStandard) {
@@ -49,7 +56,9 @@ const InteractiveFormAdd = () => {
           />
         </Col>
         <Col sm="4">
-          <InteractivePlayTypeSelect playTypeOptions={playTypeOptions} />
+          <InteractivePlayTypeSelect
+            playTypeOptions={playTypeOptionsFiltered}
+          />
         </Col>
         <Col sm="4">
           <CurrencyInputField

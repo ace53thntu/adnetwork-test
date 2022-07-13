@@ -15,7 +15,6 @@ import {getRole} from 'utils/helpers/auth.helpers';
 import {USER_ROLE} from 'pages/user-management/constants';
 import VideoGroup from './VideoGroup';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
-import { BannerPlayTypeOptions, BannerTypeOptions } from 'constants/inventory';
 import ErrorMessage from 'components/forms/ErrorMessage';
 
 const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
@@ -63,28 +62,6 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
       {formatTypeSelected?.value === 'video' && (
         <VideoGroup isCreate={isCreate} />
       )}
-      {formatTypeSelected?.value === 'banner' && (
-         <Row>
-         <Col sm={6}>
-           <FormReactSelect
-             name="metadata.banner_type"
-             label={t('FORM.BANNER_TYPE')}
-             placeholder={t('FORM.BANNER_TYPE')}
-             options={BannerTypeOptions}
-             disabled={formState.isSubmitting}
-           />
-         </Col>
-         <Col sm={6}>
-           <FormReactSelect
-             name="metadata.banner_play_type"
-             label={t('FORM.BANNER_PLAY_TYPE')}
-             placeholder={t('FORM.BANNER_PLAY_TYPE')}
-             options={BannerPlayTypeOptions}
-             disabled={formState.isSubmitting}
-           />
-         </Col>
-       </Row>
-      )}
 
       <Row>
         <Col sm={12}>
@@ -130,7 +107,9 @@ const InventoryProperty = ({currentInventory = null, isCreate = false}) => {
               extension="JSON"
               showError={false}
             />
-            {errors?.metadata?.extra && <ErrorMessage message={errors?.metadata?.extra?.message || ''}/>}
+            {errors?.metadata?.extra && (
+              <ErrorMessage message={errors?.metadata?.extra?.message || ''} />
+            )}
           </Col>
         </Row>
       )}

@@ -11,7 +11,7 @@ import {
 
 const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
   return (
-    <Collapse title={fieldItem?.play_type?.value} initialOpen unMount={false}>
+    <Collapse title={fieldItem?.play_type?.label} initialOpen unMount={false}>
       <Row>
         <Col sm="4">
           <FormReactSelect
@@ -20,6 +20,7 @@ const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
             placeholder="File type"
             name={`custom_play_type_data[${index}].file_type`}
             defaultValue={fieldItem?.file_type}
+            disabled
           />
         </Col>
         <Col sm="4">
@@ -29,6 +30,7 @@ const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
             name={`custom_play_type_data[${index}].play_type`}
             options={getInteractivePlayTypeOptions()}
             defaultValue={fieldItem?.play_type}
+            disabled
           />
         </Col>
         <Col sm="4">

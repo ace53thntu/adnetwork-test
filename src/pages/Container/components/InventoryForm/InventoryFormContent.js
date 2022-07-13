@@ -6,6 +6,7 @@ import PositionSelect from 'components/forms/PositionSelect';
 import {MarketTypes, PriceEngines} from 'constants/inventory';
 import {InputStatus} from 'constants/misc';
 import {RoutePaths} from 'constants/route-paths';
+import {InventoryFormats} from 'pages/Container/constants';
 //---> External Modules
 import PropTypes from 'prop-types';
 //---> Build-in Modules
@@ -40,7 +41,8 @@ const formName = {
   allow_deal: 'allow_deal',
   market_type: 'market_type',
   first_party: 'first_party',
-  is_auto_create: 'is_auto_create'
+  is_auto_create: 'is_auto_create',
+  format: 'format'
 };
 
 const propTypes = {
@@ -64,10 +66,11 @@ const InventoryFormContent = ({
   isCreate = false
 }) => {
   const {t} = useTranslation();
-  const {formState, errors} = useFormContext();
+  const {formState, errors, control} = useFormContext();
   const isSubmitting = formState?.isSubmitting;
   const watchMarkType = useWatch({name: formName.market_type});
   const watchEnableDeal = useWatch({name: formName.allow_deal});
+  const formatTypeSelected = useWatch({name: formName.format, control});
 
   return (
     <BlockUi tag="div" blocking={isLoading}>
@@ -232,7 +235,9 @@ const InventoryFormContent = ({
         <PriceModel />
         {/* <TrackerForm /> */}
 
-        <Interactive />
+        {formatTypeSelected?.value === InventoryFormats.BANNER && (
+          <Interactive />
+        )}
 
         {inventory?.uuid && (
           <>

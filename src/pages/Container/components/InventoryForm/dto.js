@@ -45,7 +45,8 @@ export const getMetaExtra = metadata => {
     'cpe',
     'cpv',
     'cpi',
-    'cpvm'
+    'cpvm',
+    'banner_play_type'
   ].forEach(element => {
     delete tmpMetadata[element];
   });
