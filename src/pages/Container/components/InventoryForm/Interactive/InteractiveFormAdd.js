@@ -12,9 +12,10 @@ import {
   InteractiveFileType
 } from '../constant';
 import InteractivePlayTypeSelect from './InteractivePlayTypeSelect';
+import ErrorMessage from 'components/forms/ErrorMessage';
 
 const InteractiveFormAdd = () => {
-  const {watch, setValue} = useFormContext();
+  const {watch, setValue, errors} = useFormContext();
   const fileTypeSelected = watch('interactive_add.file_type');
   const floorPrice = watch('floor_price');
   const isStandard = fileTypeSelected?.value === InteractiveFileType.STANDARD;
@@ -83,6 +84,11 @@ const InteractiveFormAdd = () => {
             extension="JSON"
             showError={false}
           />
+          {errors?.interactive_add?.meta && (
+            <ErrorMessage
+              message={errors?.interactive_add?.meta?.message || ''}
+            />
+          )}
         </Col>
       </Row>
     </Collapse>

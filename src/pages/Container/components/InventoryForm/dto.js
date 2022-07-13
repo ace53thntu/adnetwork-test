@@ -10,7 +10,8 @@ import {
   getInteractiveFileTypeOptions,
   getInteractivePlayTypeOptions,
   getInteractiveStandardPlayTypeOptions,
-  InteractiveFileType
+  InteractiveFileType,
+  InteractiveStandardPlayType
 } from './constant';
 
 export const getMetaExtra = metadata => {
@@ -215,12 +216,21 @@ export const mappingInventoryFormToApi = ({pageId, formData}) => {
   // Custom play type data
   const customPlayType =
     custom_play_type_data?.reduce((acc, item) => {
-      acc[item?.play_type?.value] = {
-        file_type: item?.file_type?.value,
-        play_type: item?.play_type?.value,
-        price: HandleCurrencyFields.convertGuiToApi({value: item?.price}),
-        meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
-      };
+      if (item?.play_type?.value === InteractiveStandardPlayType.STANDARD) {
+        acc[item?.play_type?.value] = {
+          file_type: item?.file_type?.value,
+          play_type: item?.play_type?.value,
+          meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
+        };
+      } else {
+        acc[item?.play_type?.value] = {
+          file_type: item?.file_type?.value,
+          play_type: item?.play_type?.value,
+          price: HandleCurrencyFields.convertGuiToApi({value: item?.price}),
+          meta: checkValidJson(item?.meta) ? JSON.parse(item?.meta) : {}
+        };
+      }
+
       return acc;
     }, {}) || {};
 
@@ -491,7 +501,10 @@ export const mappingInventoryApiToForm = ({
     cpv,
     cpi,
     cpvm,
-    custom_play_type_data: customPlayType
+    custom_play_type_data: customPlayType,
+    interactive_add: {
+      price: ''
+    }
   };
 };
 

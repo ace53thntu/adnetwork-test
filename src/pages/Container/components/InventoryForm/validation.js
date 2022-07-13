@@ -4,6 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {InputStatus} from 'constants/misc';
 import {validateFloatInput, validateNumberInput} from 'utils/yupValidations';
 import {checkValidJson} from 'pages/Creative/components/BannerForm/utils';
+import {InteractivePlayType} from './constant';
 
 export const validationInventory = t => {
   return yupResolver(
@@ -245,6 +246,113 @@ export const validationInventory = t => {
             return Yup.object().nullable();
           }),
         variables: Yup.string()
+      }),
+      custom_play_type_data: Yup.array().of(
+        Yup.object().shape({
+          file_type: Yup.object().nullable(),
+          play_type: Yup.object().nullable(),
+          price: Yup.string()
+            .test(
+              'is-number',
+              'The price must be a integer number and greater than 0.',
+              val => {
+                if (!val) {
+                  return true;
+                }
+
+                const reg = /^\d+$/;
+                const parsed = parseInt(val, 10);
+                const isNumber = reg.test(val);
+                if (isNumber && parsed > 0) {
+                  return true;
+                }
+                return false;
+              }
+            )
+            .typeError('Invalid number'),
+          meta: Yup.string()
+            .test('isValidJson', 'Invalid JSON object', val => {
+              if (val?.length) {
+                return checkValidJson(val);
+              }
+
+              return true;
+            })
+            .test(
+              'cross-price-required',
+              'Field cross_play is required',
+              function (val) {
+                if (
+                  this.parent?.play_type?.value ===
+                  InteractivePlayType.INTERACTIVE_BANNER_MFV
+                ) {
+                  try {
+                    const parsed = JSON.parse(val);
+                    return parsed?.cross_play;
+                  } catch (error) {
+                    return false;
+                  }
+                }
+                return true;
+              }
+            )
+        })
+      ),
+      interactive_add: Yup.object().shape({
+        file_type: Yup.object().nullable(),
+        play_type: Yup.object().nullable(),
+        price: Yup.string()
+          .test(
+            'is-number',
+            'The price must be a integer number and greater than 0.',
+            function (val) {
+              console.log(
+                '🚀 ~ file: validation.js ~ line 309 ~ interactive_add:Yup.object ~ val',
+                val
+              );
+              if (this.parent?.play_type?.value) {
+                if (!val) {
+                  return true;
+                }
+
+                const reg = /^\d+$/;
+                const parsed = parseInt(val, 10);
+                const isNumber = reg.test(val);
+                if (isNumber && parsed > 0) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            }
+          )
+          .typeError('Invalid number'),
+        meta: Yup.string()
+          .test('isValidJson', 'Invalid JSON object', val => {
+            if (val?.length) {
+              return checkValidJson(val);
+            }
+
+            return true;
+          })
+          .test(
+            'cross-play-required',
+            'Field cross_play is required',
+            function (val) {
+              if (
+                this.parent?.play_type?.value ===
+                InteractivePlayType.INTERACTIVE_BANNER_MFV
+              ) {
+                try {
+                  const parsed = JSON.parse(val);
+                  return parsed?.cross_play;
+                } catch (error) {
+                  return false;
+                }
+              }
+              return true;
+            }
+          )
       })
     })
   );

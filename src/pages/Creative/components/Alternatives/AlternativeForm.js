@@ -1,5 +1,5 @@
 import {ApiError, BlockOverlay, StrapConfirmModal} from 'components/common';
-import {FormCheckbox, FormReactSelect, FormTextInput} from 'components/forms';
+import {FormCheckbox, FormTextInput} from 'components/forms';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -19,14 +19,7 @@ import {ShowToast} from 'utils/helpers/showToast.helpers';
 
 import {alternativeFormValuesToRepo} from '../BannerForm/dto';
 import {UploadFile} from '../UploadFile';
-import {
-  ACCEPT_FILES,
-  ALTERNATIVE_FILE_TYPES,
-  ALTERNATIVE_PLAY_TYPES,
-  LIMIT_FILE_SIZE,
-  formAlternativeName,
-  ALTERNATIVE_INTERACTIVE_PLAY_TYPES
-} from './constants';
+import {ACCEPT_FILES, LIMIT_FILE_SIZE, formAlternativeName} from './constants';
 
 function AlternativeForm(props) {
   const {

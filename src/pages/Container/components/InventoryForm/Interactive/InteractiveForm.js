@@ -10,7 +10,11 @@ import InteractiveItem from './InteractiveItem';
 
 const InteractiveForm = () => {
   const {t} = useTranslation();
-  const {control, watch, setValue} = useFormContext();
+  const {control, watch, setValue, trigger, errors} = useFormContext();
+  console.log(
+    '🚀 ~ file: InteractiveForm.js ~ line 14 ~ InteractiveForm ~ errors',
+    errors
+  );
   const {fields, append, remove} = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: 'custom_play_type_data' // unique name for your Field Array
@@ -24,9 +28,18 @@ const InteractiveForm = () => {
 
   const fileTypeSelected = watch('interactive_add.file_type');
   const playTypeInAddSelected = watch('interactive_add.play_type');
-  const isDisableAddBtn = !fileTypeSelected || !playTypeInAddSelected;
+  const isDisableAddBtn =
+    !fileTypeSelected || !playTypeInAddSelected || errors?.interactive_add;
 
-  function handleAddNewInteractive() {
+  async function handleAddNewInteractive() {
+    const result = await trigger('interactive_add.meta');
+    console.log(
+      '🚀 ~ file: InteractiveForm.js ~ line 31 ~ handleAddNewInteractive ~ result',
+      result
+    );
+    if (!result) {
+      return;
+    }
     append({
       file_type: watchFormAddFields['interactive_add.file_type'],
       play_type: watchFormAddFields['interactive_add.play_type'],

@@ -6,7 +6,8 @@ import React from 'react';
 import {Button, Col, Row} from 'reactstrap';
 import {
   getInteractiveFileTypeOptions,
-  getInteractivePlayTypeOptions
+  getInteractivePlayTypeOptions,
+  InteractiveStandardPlayType
 } from '../constant';
 
 const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
@@ -62,6 +63,10 @@ const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
               disableGroupSeparators={false}
               decimalsLimit={3}
               prefix="$"
+              disabled={
+                fieldItem?.play_type?.value ===
+                InteractiveStandardPlayType.STANDARD
+              }
             />
           </Col>
           <Col sm="12">
@@ -69,7 +74,7 @@ const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
               name={`custom_play_type_data[${index}].meta`}
               label="Meta"
               extension="JSON"
-              showError={false}
+              showError={true}
               defaultValue={fieldItem?.meta}
             />
           </Col>
