@@ -18,7 +18,7 @@ import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
-import {FormToggle} from 'components/forms';
+import {FormTextInput, FormToggle} from 'components/forms';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -26,6 +26,10 @@ const propTypes = {
 };
 
 const CappingForm = ({capping = {}, onSubmit = () => null}) => {
+  console.log(
+    '🚀 ~ file: CappingForm.js ~ line 29 ~ CappingForm ~ capping',
+    capping
+  );
   const {t} = useTranslation();
   const cappingType = capping?.type || '';
 
@@ -51,7 +55,8 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
     ) {
       return {
         target: capping?.target,
-        status: capping?.status
+        status: capping?.status,
+        time_frame: capping?.time_frame
       };
     }
     if (cappingType === CappingTypes.DOMAIN.value) {
@@ -144,16 +149,37 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
               CappingTypes.USER_VIEWABLE.value,
               CappingTypes.CLICK.value,
               CappingTypes.VIEWABLE.value
-            ].includes(cappingType) && (
-              <Col sm={6}>
-                <CurrencyInputField
-                  required
-                  name="target"
-                  placeholder="0.0"
-                  label={t('target')}
-                  allowDecimals={false}
-                  disableGroupSeparators
-                />
+            ].includes(cappingType) &&
+              !capping?.custom && (
+                <Col sm={6}>
+                  <CurrencyInputField
+                    required
+                    name="target"
+                    placeholder="0.0"
+                    label={t('target')}
+                    allowDecimals={false}
+                    disableGroupSeparators
+                  />
+                </Col>
+              )}
+
+            {cappingType === CappingTypes.USER.value && capping?.custom && (
+              <Col md="8">
+                <div className="mb-2">Custom time frame</div>
+                <div className="d-flex ">
+                  <FormTextInput label="" placeholder="reach" name="target" />
+                  <div className="mr-2 ml-2" style={{height: 38}}>
+                    by
+                  </div>
+                  <FormTextInput
+                    label=""
+                    placeholder="time frame"
+                    name="time_frame"
+                  />
+                  <div className="ml-2" style={{height: 38}}>
+                    minute(s)
+                  </div>
+                </div>
               </Col>
             )}
 

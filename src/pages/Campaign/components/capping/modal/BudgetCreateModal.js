@@ -20,12 +20,7 @@ import {
 // Internal Modules
 import {schemaValidateCreateBudget} from '../validation';
 import {ApiError, ButtonLoading} from 'components/common';
-import {
-  BudgetTimeFrames,
-  CappingReferenceTypes,
-  CappingTypes,
-  Statuses
-} from 'constants/misc';
+import {BudgetTimeFrames, CappingTypes, Statuses} from 'constants/misc';
 import {useCreateCapping} from 'queries/capping';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
@@ -220,30 +215,29 @@ const BudgetCreateModal = ({
                       readOnly={!!budgetDaily}
                     />
                   </Col>
-                  {cappingType.type === CappingTypes.USER.value &&
-                    referenceType === CappingReferenceTypes.STRATEGY && (
-                      <Col md="8">
-                        <div className="mb-2">Custom time frame</div>
-                        <div className="d-flex ">
-                          <FormTextInput
-                            label=""
-                            placeholder="reach"
-                            name="target"
-                          />
-                          <div className="mr-2 ml-2" style={{height: 38}}>
-                            by
-                          </div>
-                          <FormTextInput
-                            label=""
-                            placeholder="time frame"
-                            name="time_frame"
-                          />
-                          <div className="ml-2" style={{height: 38}}>
-                            minute(s)
-                          </div>
+                  {cappingType.type === CappingTypes.USER.value && (
+                    <Col md="8">
+                      <div className="mb-2">Custom time frame</div>
+                      <div className="d-flex ">
+                        <FormTextInput
+                          label=""
+                          placeholder="reach"
+                          name="target"
+                        />
+                        <div className="mr-2 ml-2" style={{height: 38}}>
+                          by
                         </div>
-                      </Col>
-                    )}
+                        <FormTextInput
+                          label=""
+                          placeholder="time frame"
+                          name="time_frame"
+                        />
+                        <div className="ml-2" style={{height: 38}}>
+                          minute(s)
+                        </div>
+                      </div>
+                    </Col>
+                  )}
                 </Row>
               )}
             </Form>

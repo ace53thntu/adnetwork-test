@@ -34,6 +34,18 @@ export const formToApi = ({formData, type}) => {
       CappingTypes.CLICK.value
     ].includes(type)
   ) {
+    if (
+      formData?.time_frame &&
+      parseInt(formData?.time_frame) !== BudgetTimeFrames.DAILY &&
+      parseInt(formData?.time_frame) !== BudgetTimeFrames.GLOBAL
+    ) {
+      return {
+        target: formData?.target === 0 ? 0 : parseInt(formData?.target), //parseFloat(formData?.target) || 0,
+        status,
+        time_frame:
+          formData?.time_frame === 0 ? 0 : parseInt(formData?.time_frame)
+      };
+    }
     return {
       target: formData?.target === 0 ? 0 : parseInt(formData?.target), //parseFloat(formData?.target) || 0,
       status
@@ -184,7 +196,7 @@ export const disabledExistedType = ({existedTypes, currentType}) => {
     case CappingTypes.USER.value:
     case CappingTypes.USER_CLICK.value:
     case CappingTypes.USER_VIEWABLE.value: {
-      return typeFound?.length === 2;
+      return typeFound?.length >= 2;
     }
 
     case CappingTypes.GENERAL.value:

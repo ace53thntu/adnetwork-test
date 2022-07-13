@@ -1,5 +1,5 @@
 import {yupResolver} from '@hookform/resolvers/yup';
-import {CappingReferenceTypes, CappingTypes} from 'constants/misc';
+import {CappingTypes} from 'constants/misc';
 import * as yup from 'yup';
 
 export const schemaValidate = (t, cappingType, referenceType) => {
@@ -35,7 +35,7 @@ export const schemaValidate = (t, cappingType, referenceType) => {
   );
 };
 
-export const schemaValidateCreateBudget = (t, cappingType, referenceType) => {
+export const schemaValidateCreateBudget = (t, cappingType) => {
   let baseSchema = {
     global: yup
       .string()
@@ -116,10 +116,7 @@ export const schemaValidateCreateBudget = (t, cappingType, referenceType) => {
       })
       .typeError('Invalid number')
   };
-  if (
-    cappingType === CappingTypes.USER.value &&
-    referenceType === CappingReferenceTypes.STRATEGY
-  ) {
+  if (cappingType === CappingTypes.USER.value) {
     return yupResolver(
       yup.object().shape({
         ...baseSchema,
