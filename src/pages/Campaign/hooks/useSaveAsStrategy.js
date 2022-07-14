@@ -2,12 +2,12 @@ import {useQueryString} from 'hooks';
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
 import __merge from 'lodash/merge';
+import __isArray from 'lodash/isArray';
 import {useCreateStrategy} from 'queries/strategy';
 import moment from 'moment';
 import {getContextFilter, getVideoFilter} from 'entities/Strategy';
 import {StrategyTypes} from '../constants';
 import {convertGuiToApi} from 'utils/handleCurrencyFields';
-// import {getTimeZoneOffset} from 'utils/metrics';
 import {getListByType} from '../components/capping/dto';
 import {BudgetTimeFrames, CappingTypes} from 'constants/misc';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
@@ -15,11 +15,6 @@ import {ApiError} from 'components/common';
 import {useNavigate} from 'react-router-dom';
 import {RoutePaths} from 'constants/route-paths';
 import {useCreateCapping} from 'queries/capping';
-// import {useRefreshAdvertiserTree} from './useRefreshAdvertiserTree';
-// import {useDispatch} from 'react-redux';
-// import {setSelectTreeDataRedux, useCommonSelector} from 'store/reducers/common';
-// import {useQueryClient} from 'react-query';
-// import {GET_STRATEGY} from 'queries/strategy/constants';
 
 export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const query = useQueryString();
@@ -28,9 +23,6 @@ export function useSaveAsStrategy(currentStrategy, originalStrategy) {
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: createCapping} = useCreateCapping();
   const navigate = useNavigate();
-  // const {refresh} = useRefreshAdvertiserTree();
-  // const dispatch = useDispatch();
-  // const {selectTreeData} = useCommonSelector();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -136,8 +128,13 @@ const formToApi = ({
     video_filter,
     context_filter,
     pricing_model,
-    concept_uuids
+    concept_uuids,
+    audience_uuids
   } = formData;
+  console.log(
+    '🚀 ~ file: useSaveAsStrategy.js ~ line 144 ~ audience_uuids',
+    audience_uuids
+  );
 
   const positionIds = position_uuids?.map(item => item?.value) || [];
   const startDate = dateTimeIsSameOrBeforeToday(start_time)
@@ -171,7 +168,8 @@ const formToApi = ({
     category,
     priority: priority?.value || '',
     pricing_model: pricing_model?.value?.toUpperCase() || '',
-    concept_uuids: concept_uuids?.filter(item => item) || []
+    concept_uuids: concept_uuids?.filter(item => item) || [],
+    audience_uuids: []
   };
 
   if (currentTab !== 'description') {
@@ -347,6 +345,10 @@ const formToApi = ({
       };
     }
   );
+
+  if (audience_uuids?.length && __isArray(audience_uuids)) {
+    strategyReturn.audience_uuids = audience_uuids;
+  }
 
   return {
     bodyRequest: strategyReturn,
