@@ -56,7 +56,7 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
       return {
         target: capping?.target,
         status: capping?.status,
-        time_frame: capping?.time_frame
+        time_frame: capping?.time_frame / 60 || ''
       };
     }
     if (cappingType === CappingTypes.DOMAIN.value) {

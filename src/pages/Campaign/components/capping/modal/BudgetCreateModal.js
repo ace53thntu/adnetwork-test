@@ -55,7 +55,9 @@ const BudgetCreateModal = ({
       item.time_frame === BudgetTimeFrames.DAILY
   );
 
-  const defaultValues = {
+  const customTimeFrame = cappings?.find(item => item.custom);
+
+  let defaultValues = {
     global: [CappingTypes.BUDGET.value].includes(cappingType.type)
       ? convertApiToGui({value: budgetGLobal?.target})
       : budgetGLobal?.target,
@@ -63,6 +65,14 @@ const BudgetCreateModal = ({
       ? convertApiToGui({value: budgetDaily?.target})
       : budgetDaily?.target
   };
+
+  if (customTimeFrame) {
+    defaultValues = {
+      ...defaultValues,
+      time_frame: customTimeFrame?.time_frame / 60 || '',
+      target: customTimeFrame?.target
+    };
+  }
 
   const {mutateAsync: createCapping} = useCreateCapping();
   const methods = useForm({
@@ -117,8 +127,11 @@ const BudgetCreateModal = ({
     const secondsPerMinute = 60;
 
     try {
-      await createCapping(bodyRequest);
-      if (formData?.time_frame && formData?.target) {
+      console.log('==== 111', budget?.daily || budget?.global);
+      if (budget?.daily || budget?.global) {
+        await createCapping(bodyRequest);
+      }
+      if (formData?.time_frame && formData?.target && !customTimeFrame) {
         bodyRequestCustom = {
           ...bodyRequestCustom,
           target: parseInt(formData?.target),
@@ -223,6 +236,7 @@ const BudgetCreateModal = ({
                           label=""
                           placeholder="reach"
                           name="target"
+                          disabled={!!defaultValues?.target}
                         />
                         <div className="mr-2 ml-2" style={{height: 38}}>
                           by
@@ -231,6 +245,7 @@ const BudgetCreateModal = ({
                           label=""
                           placeholder="time frame"
                           name="time_frame"
+                          disabled={!!defaultValues?.time_frame}
                         />
                         <div className="ml-2" style={{height: 38}}>
                           minute(s)
@@ -252,6 +267,7 @@ const BudgetCreateModal = ({
             className="mr-2 btn-primary"
             form="budgetForm"
             loading={formState.isSubmitting}
+            disabled={!formState?.isDirty}
           >
             {t('save')}
           </ButtonLoading>

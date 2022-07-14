@@ -43,7 +43,7 @@ export const formToApi = ({formData, type}) => {
         target: formData?.target === 0 ? 0 : parseInt(formData?.target), //parseFloat(formData?.target) || 0,
         status,
         time_frame:
-          formData?.time_frame === 0 ? 0 : parseInt(formData?.time_frame)
+          formData?.time_frame === 0 ? 0 : parseInt(formData?.time_frame) * 60
       };
     }
     return {
@@ -193,10 +193,12 @@ export const disabledExistedType = ({existedTypes, currentType}) => {
   switch (type) {
     case CappingTypes.CLICK.value:
     case CappingTypes.VIEWABLE.value:
-    case CappingTypes.USER.value:
     case CappingTypes.USER_CLICK.value:
     case CappingTypes.USER_VIEWABLE.value: {
-      return typeFound?.length >= 2;
+      return typeFound?.length === 2;
+    }
+    case CappingTypes.USER.value: {
+      return typeFound?.length === 3;
     }
 
     case CappingTypes.GENERAL.value:

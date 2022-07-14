@@ -195,7 +195,7 @@ const BudgetList = ({
                 (typeHasTimeFrame.includes(row.original?.type) &&
                   row?.value) !== BudgetTimeFrames.DAILY && (
                   <Badge color="warning" pill>
-                    {row?.value}
+                    {row?.value / 60}
                   </Badge>
                 )}
               {isManager && (
