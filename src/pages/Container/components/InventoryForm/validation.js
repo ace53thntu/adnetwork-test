@@ -260,10 +260,8 @@ export const validationInventory = t => {
                   return true;
                 }
 
-                const reg = /^\d+$/;
-                const parsed = parseInt(val, 10);
-                const isNumber = reg.test(val);
-                if (isNumber && parsed > 0) {
+                const parsed = parseFloat(val);
+                if (parsed > 0) {
                   return true;
                 }
                 return false;
@@ -306,19 +304,13 @@ export const validationInventory = t => {
             'is-number',
             'The price must be a integer number and greater than 0.',
             function (val) {
-              console.log(
-                '🚀 ~ file: validation.js ~ line 309 ~ interactive_add:Yup.object ~ val',
-                val
-              );
               if (this.parent?.play_type?.value) {
                 if (!val) {
                   return true;
                 }
 
-                const reg = /^\d+$/;
-                const parsed = parseInt(val, 10);
-                const isNumber = reg.test(val);
-                if (isNumber && parsed > 0) {
+                const parsed = parseFloat(val);
+                if (parsed > 0) {
                   return true;
                 }
                 return false;
