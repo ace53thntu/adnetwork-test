@@ -60,7 +60,7 @@ export default DomainSelect;
 const useDomainPagination = () => {
   const loadDomain = React.useCallback(async (search, prevOptions, {page}) => {
     const res = await DomainAPIRequest.getAllDomain({
-      params: {page, limit: DEFAULT_PAGINATION.perPage, name: search},
+      params: {page, limit: DEFAULT_PAGINATION.perPage, domain: search},
       options: {isResponseAll: IS_RESPONSE_ALL}
     });
 
