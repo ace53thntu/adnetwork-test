@@ -282,11 +282,19 @@ const formToApi = ({
         CappingTypes.KEYWORD.value
       ].includes(cap.type)
     );
+
     if (cappingUserClick.length) {
       cappingUserClick.forEach(cap => {
         let obj = {};
-        if (cap.type === CappingTypes.USER.value) {
+        if (cap.type === CappingTypes.USER.value && !cap.custom) {
           obj[CappingTypes.USER.api_key] = getDailyAndGlobal(cap);
+        }
+        if (cap.type === CappingTypes.USER.value && cap.custom) {
+          obj = {
+            custom: true,
+            time_frame: cap.time_frame,
+            target: cap.target
+          };
         }
         if (cap.type === CappingTypes.USER_CLICK.value) {
           obj[CappingTypes.USER_CLICK.api_key] = getDailyAndGlobal(cap);
