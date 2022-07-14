@@ -86,7 +86,12 @@ const FormContainer = ({
   }, [dispatch, isEdit, isView, strategyType?.value]);
 
   const onSubmit = useCallback(
-    async formData => {
+    async (formData, e) => {
+      if (e.target.id === 'cappingForm') {
+        // prevent call submit form when submit cappingForm which nested in
+        return;
+      }
+      debugger;
       const req = formToApi({
         formData,
         isSummary,
@@ -96,6 +101,7 @@ const FormContainer = ({
         originalStrategy,
         currentTab
       });
+      debugger;
 
       if (isEdit) {
         if (!isDirty) {
