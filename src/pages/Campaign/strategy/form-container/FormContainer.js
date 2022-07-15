@@ -91,7 +91,6 @@ const FormContainer = ({
         // prevent call submit form when submit cappingForm which nested in
         return;
       }
-      debugger;
       const req = formToApi({
         formData,
         isSummary,
@@ -101,7 +100,6 @@ const FormContainer = ({
         originalStrategy,
         currentTab
       });
-      debugger;
 
       if (isEdit) {
         if (!isDirty) {
