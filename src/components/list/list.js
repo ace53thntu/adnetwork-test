@@ -76,7 +76,7 @@ function List(props) {
                     }
                     tabIndex={-1}
                     disableRipple
-                    disabled={disabled}
+                    disabled={disabled || item?.status === 'inactive'}
                     inputProps={{
                       'aria-labelledby': `checkbox-list-label-${item?.id}`
                     }}
