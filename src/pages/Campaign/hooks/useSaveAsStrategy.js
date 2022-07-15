@@ -131,10 +131,6 @@ const formToApi = ({
     concept_uuids,
     audience_uuids
   } = formData;
-  console.log(
-    '🚀 ~ file: useSaveAsStrategy.js ~ line 144 ~ audience_uuids',
-    audience_uuids
-  );
 
   const positionIds = position_uuids?.map(item => item?.value) || [];
   const startDate = dateTimeIsSameOrBeforeToday(start_time)
@@ -333,7 +329,10 @@ const formToApi = ({
 
       Object.keys(rest).forEach(key => {
         if (typeof rest[key] === 'number') {
-          other[key] = parseInt(parseFloat(rest[key]) * 1000, 10);
+          other[key] =
+            currentTab === 'capping'
+              ? parseInt(parseFloat(rest[key]), 10)
+              : parseInt(parseFloat(rest[key]) * 1000, 10);
         } else {
           other[key] = 0;
         }
