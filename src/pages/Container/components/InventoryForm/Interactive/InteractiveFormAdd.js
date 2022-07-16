@@ -10,8 +10,7 @@ import {
   getInteractivePlayTypeOptions,
   getInteractiveStandardPlayTypeOptions,
   InteractiveFileType,
-  InteractivePlayType,
-  InteractiveStandardPlayType
+  InteractivePlayType
 } from '../constant';
 import InteractivePlayTypeSelect from './InteractivePlayTypeSelect';
 import ErrorMessage from 'components/forms/ErrorMessage';
@@ -36,21 +35,27 @@ const InteractiveFormAdd = () => {
   React.useEffect(() => {
     if (isStandard) {
       setValue('interactive_add.price', floorPrice);
-      if (
-        !playTypeListSelected?.includes(InteractiveStandardPlayType.STANDARD)
-      ) {
-        setValue(
-          'interactive_add.play_type',
-          getInteractiveStandardPlayTypeOptions()?.find(
-            item => item.value === 'standard'
-          )
-        );
-      }
+      setValue(
+        'interactive_add.play_type',
+        getInteractiveStandardPlayTypeOptions()?.find(
+          item => item.value === 'standard'
+        )
+      );
+      // if (
+      //   !playTypeListSelected?.includes(InteractiveStandardPlayType.STANDARD)
+      // ) {
+      //   setValue(
+      //     'interactive_add.play_type',
+      //     getInteractiveStandardPlayTypeOptions()?.find(
+      //       item => item.value === 'standard'
+      //     )
+      //   );
+      // }
     } else {
       setValue('interactive_add.price', '');
       setValue('interactive_add.play_type', null);
     }
-  }, [floorPrice, isStandard, playTypeListSelected, setValue]);
+  }, [floorPrice, isStandard, setValue]);
 
   React.useEffect(() => {
     if (
