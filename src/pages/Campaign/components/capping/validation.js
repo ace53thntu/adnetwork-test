@@ -96,7 +96,12 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
           ) {
             return false;
           }
-          if (!value && !this.parent?.global) {
+
+          if (
+            !value &&
+            !this.parent?.global &&
+            cappingType !== CappingTypes.USER.value
+          ) {
             return false;
           }
 
