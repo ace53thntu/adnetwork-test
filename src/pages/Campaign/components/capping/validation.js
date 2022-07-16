@@ -19,6 +19,67 @@ export const schemaValidate = (t, cappingType, referenceType) => {
       })
     );
   }
+
+  if (cappingType === CappingTypes.USER.value) {
+    return yupResolver(
+      yup.object().shape({
+        target: yup
+          .string()
+          .test(
+            'is-number',
+            'The target must be a integer number and greater than 0.',
+            val => {
+              if (!val) {
+                return true;
+              }
+
+              const reg = /^\d+$/;
+              const parsed = parseInt(val, 10);
+              const isNumber = reg.test(val);
+              if (isNumber && parsed > 0) {
+                return true;
+              }
+              return false;
+            }
+          )
+          .test('not-null-together', t('required'), function (val) {
+            if (this.parent?.time_frame && !val) {
+              return false;
+            }
+
+            return true;
+          })
+          .typeError('Invalid number'),
+        time_frame: yup
+          .string()
+          .test(
+            'is-number',
+            'The time frame must be a integer number between 1 and 1440.',
+            val => {
+              if (!val) {
+                return true;
+              }
+
+              const reg = /^\d+$/;
+              const parsed = parseInt(val, 10);
+              const isNumber = reg.test(val);
+              if (isNumber && parsed > 0 && parsed < 24 * 60) {
+                return true;
+              }
+              return false;
+            }
+          )
+          .test('not-null-together', t('required'), function (val) {
+            if (this.parent?.target && !val) {
+              return false;
+            }
+
+            return true;
+          })
+          .typeError('Invalid number')
+      })
+    );
+  }
   return yupResolver(
     yup.object().shape({
       // status: yup.string().required(t('required'))
@@ -152,6 +213,13 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
               return false;
             }
           )
+          .test('not-null-together', t('required'), function (val) {
+            if (this.parent?.time_frame && !val) {
+              return false;
+            }
+
+            return true;
+          })
           .typeError('Invalid number'),
         time_frame: yup
           .string()
@@ -172,6 +240,13 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
               return false;
             }
           )
+          .test('not-null-together', t('required'), function (val) {
+            if (this.parent?.target && !val) {
+              return false;
+            }
+
+            return true;
+          })
           .typeError('Invalid number')
       })
     );
