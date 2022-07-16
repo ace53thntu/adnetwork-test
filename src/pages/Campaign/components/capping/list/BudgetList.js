@@ -190,14 +190,11 @@ const BudgetList = ({
                   {row?.value === BudgetTimeFrames.GLOBAL && 'Global'}
                 </Badge>
               )}
-              {(typeHasTimeFrame.includes(row.original?.type) && row?.value) !==
-                BudgetTimeFrames.GLOBAL &&
-                (typeHasTimeFrame.includes(row.original?.type) &&
-                  row?.value) !== BudgetTimeFrames.DAILY && (
-                  <Badge color="warning" pill>
-                    {row?.value / 60}
-                  </Badge>
-                )}
+              {row?.original?.custom && (
+                <Badge color="warning" pill>
+                  {row?.value / 60}
+                </Badge>
+              )}
               {isManager && (
                 <Badge color="primary" pill>
                   global
