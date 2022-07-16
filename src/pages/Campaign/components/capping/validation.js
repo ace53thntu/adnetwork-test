@@ -15,15 +15,6 @@ export const schemaValidate = (t, cappingType, referenceType) => {
         target: yup
           .string()
           .required(t('required'))
-          // .test('is-float', 'Invalid number. Only allow integer > 0', value => {
-          //   const reg = /^\d+$/;
-          //   const parsed = parseInt(value, 10);
-          //   const isNumber = reg.test(value);
-          //   if (isNumber && parsed > 0) {
-          //     return true;
-          //   }
-          //   return false;
-          // })
           .typeError('Invalid number. Only allow integer > 0')
       })
     );
@@ -39,12 +30,21 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
   let baseSchema = {
     global: yup
       .string()
-      .when('daily', (dailyValue, schema) => {
-        if (!dailyValue) {
-          return schema.required(t('required'));
+      .when(
+        ['daily', 'target', 'time_frame'],
+        (dailyValue, targetCustom, timeFrameCustom, schema) => {
+          if (
+            (targetCustom || timeFrameCustom) &&
+            cappingType === CappingTypes.USER.value
+          ) {
+            return schema.notRequired(t('required'));
+          }
+          if (!dailyValue) {
+            return schema.required(t('required'));
+          }
+          return schema.notRequired();
         }
-        return schema.notRequired();
-      })
+      )
       .test(
         'is-number',
         'The budget global must be a integer number and greater than 0.',
@@ -85,9 +85,17 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
         name: 'not-allow-empty',
         exclusive: false,
         params: {},
-        // eslint-disable-next-line no-template-curly-in-string
         message: "The budget daily and global don't allow empty together",
         test: function (value) {
+          if (
+            cappingType === CappingTypes.USER.value &&
+            !value &&
+            !this.parent?.global &&
+            !this.parent?.target &&
+            !this.parent?.time_frame
+          ) {
+            return false;
+          }
           if (!value && !this.parent?.global) {
             return false;
           }
@@ -99,7 +107,6 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
         name: 'global',
         exclusive: false,
         params: {},
-        // eslint-disable-next-line no-template-curly-in-string
         message: 'The budget daily must be less than the global',
         test: function (value) {
           if (!value) {
@@ -116,6 +123,7 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
       })
       .typeError('Invalid number')
   };
+
   if (cappingType === CappingTypes.USER.value) {
     return yupResolver(
       yup.object().shape({

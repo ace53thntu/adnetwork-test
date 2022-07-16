@@ -156,16 +156,6 @@ export const convertLocalDateToTimezone = ({
     return null;
   }
 
-  // if (!isEndDate) {
-  //   return moment(localDate)
-  //     .startOfDay()
-  //     .utcOffset(timeZoneOffset, true)
-  //     .toISOString(true);
-  // }
-  // return moment(localDate)
-  //   .endOfDay()
-  //   .utcOffset(timeZoneOffset, true)
-  //   .toISOString(true);
   return moment(localDate).utcOffset(timeZoneOffset, true).toISOString(true);
 };
 
