@@ -328,11 +328,12 @@ const formToApi = ({
       let other = {};
 
       Object.keys(rest).forEach(key => {
-        if (typeof rest[key] === 'number') {
-          other[key] =
-            currentTab === 'capping'
-              ? parseInt(parseFloat(rest[key]), 10)
-              : parseInt(parseFloat(rest[key]) * 1000, 10);
+        const numbered = Number(rest[key]);
+        const isCappingTab = currentTab === 'capping';
+        if (!isNaN(numbered)) {
+          other[key] = isCappingTab
+            ? parseInt(parseFloat(numbered), 10)
+            : parseInt(parseFloat(numbered) * 1000, 10);
         } else {
           other[key] = 0;
         }
