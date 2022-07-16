@@ -277,8 +277,8 @@ export const validationInventory = t => {
               return true;
             })
             .test(
-              'cross-price-required',
-              'Field cross_play is required',
+              'cross-time-required',
+              'Field cross_time is required',
               function (val) {
                 if (
                   this.parent?.play_type?.value ===
@@ -286,7 +286,7 @@ export const validationInventory = t => {
                 ) {
                   try {
                     const parsed = JSON.parse(val);
-                    return parsed?.cross_play;
+                    return parsed?.cross_time;
                   } catch (error) {
                     return false;
                   }
@@ -328,8 +328,8 @@ export const validationInventory = t => {
             return true;
           })
           .test(
-            'cross-play-required',
-            'Field cross_play is required',
+            'cross-time-required',
+            'Field cross_time is required',
             function (val) {
               if (
                 this.parent?.play_type?.value ===
@@ -337,7 +337,7 @@ export const validationInventory = t => {
               ) {
                 try {
                   const parsed = JSON.parse(val);
-                  return parsed?.cross_play;
+                  return parsed?.cross_time;
                 } catch (error) {
                   return false;
                 }

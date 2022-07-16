@@ -1,8 +1,10 @@
 import {Collapse, DialogConfirm} from 'components/common';
 import {FormReactSelect} from 'components/forms';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
+import ErrorMessage from 'components/forms/ErrorMessage';
 import FormCodeMirror from 'components/forms/FormCodeMirror';
 import React from 'react';
+import {useFormContext} from 'react-hook-form';
 import {Button, Col, Row} from 'reactstrap';
 import {
   getInteractiveFileTypeOptions,
@@ -11,6 +13,8 @@ import {
 } from '../constant';
 
 const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
+  const {errors} = useFormContext();
+  const errorAtIndex = errors?.custom_play_type_data?.[index];
   const [openDialog, setOpenDialog] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
 
@@ -74,9 +78,12 @@ const InteractiveItem = ({index, fieldItem, onClickRemove = () => null}) => {
               name={`custom_play_type_data[${index}].meta`}
               label="Meta"
               extension="JSON"
-              showError={true}
+              showError={false}
               defaultValue={fieldItem?.meta}
             />
+            {errorAtIndex?.meta && (
+              <ErrorMessage message={errorAtIndex?.meta?.message || ''} />
+            )}
           </Col>
           <Col sm="12" className="d-flex justify-content-end mt-2">
             <Button color="danger" type="button" onClick={onClickRemoteButton}>

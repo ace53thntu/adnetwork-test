@@ -440,7 +440,9 @@ export const mappingInventoryApiToForm = ({
                   item => item?.value === value?.play_type
                 )
               : null,
-            price: HandleCurrencyFields.convertApiToGui({value: value?.price}),
+            price: HandleCurrencyFields.convertApiToGui({
+              value: value?.price
+            })?.toString(),
             meta: value?.meta ? JSON.stringify(value?.meta, null, 2) : ''
           };
         }
@@ -456,7 +458,9 @@ export const mappingInventoryApiToForm = ({
                 item => item?.value === value?.play_type
               )
             : null,
-          price: HandleCurrencyFields.convertApiToGui({value: floor_price}),
+          price: HandleCurrencyFields.convertApiToGui({
+            value: floor_price
+          })?.toString(),
           meta: value?.meta ? JSON.stringify(value?.meta, null, 2) : ''
         };
       }

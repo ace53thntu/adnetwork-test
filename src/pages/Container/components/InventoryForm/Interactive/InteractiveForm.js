@@ -11,10 +11,6 @@ import InteractiveItem from './InteractiveItem';
 const InteractiveForm = () => {
   const {t} = useTranslation();
   const {control, watch, setValue, trigger, errors} = useFormContext();
-  console.log(
-    '🚀 ~ file: InteractiveForm.js ~ line 14 ~ InteractiveForm ~ errors',
-    errors
-  );
   const {fields, append, remove} = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: 'custom_play_type_data' // unique name for your Field Array
@@ -33,10 +29,6 @@ const InteractiveForm = () => {
 
   async function handleAddNewInteractive() {
     const result = await trigger('interactive_add.meta');
-    console.log(
-      '🚀 ~ file: InteractiveForm.js ~ line 31 ~ handleAddNewInteractive ~ result',
-      result
-    );
     if (!result) {
       return;
     }
