@@ -2,7 +2,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {CappingTypes} from 'constants/misc';
 import * as yup from 'yup';
 
-export const schemaValidate = (t, cappingType, referenceType) => {
+export const schemaValidate = (t, cappingType, daily) => {
   if (
     [
       CappingTypes.BUDGET.value,
@@ -49,12 +49,34 @@ export const schemaValidate = (t, cappingType, referenceType) => {
 
             return true;
           })
+          .test(
+            'less-than-daily-target',
+            t('FORM.CONFLICT_CAPPING_VALUE'),
+            function (val) {
+              // Custom daily time_frame < 1 day
+              // Custom daily target < daily target (if exist)
+              // custom target*86400/time_frame > target daily(if exist)
+              if (daily) {
+                if (parseInt(val) > parseInt(daily)) {
+                  return false;
+                }
+                if (
+                  (parseInt(val) * 86400) / parseInt(this.parent?.time_frame) <
+                  parseInt(daily)
+                ) {
+                  return false;
+                }
+              }
+
+              return true;
+            }
+          )
           .typeError('Invalid number'),
         time_frame: yup
           .string()
           .test(
             'is-number',
-            'The time frame must be a integer number between 1 and 1440.',
+            'The time frame must be a integer number and greater than 0.',
             val => {
               if (!val) {
                 return true;
@@ -63,12 +85,25 @@ export const schemaValidate = (t, cappingType, referenceType) => {
               const reg = /^\d+$/;
               const parsed = parseInt(val, 10);
               const isNumber = reg.test(val);
-              if (isNumber && parsed > 0 && parsed < 24 * 60) {
+              if (isNumber && parsed > 0) {
                 return true;
               }
               return false;
             }
           )
+          .test('less-than-24h', t('FORM.CONFLICT_CAPPING_VALUE'), val => {
+            if (!val) {
+              return true;
+            }
+
+            const reg = /^\d+$/;
+            const parsed = parseInt(val, 10);
+            const isNumber = reg.test(val);
+            if (isNumber && parsed < 24 * 60) {
+              return true;
+            }
+            return false;
+          })
           .test('not-null-together', t('required'), function (val) {
             if (this.parent?.target && !val) {
               return false;
@@ -220,12 +255,34 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
 
             return true;
           })
+          .test(
+            'less-than-daily-target',
+            t('FORM.CONFLICT_CAPPING_VALUE'),
+            function (val) {
+              // Custom daily time_frame < 1 day
+              // Custom daily target < daily target (if exist)
+              // custom target*86400/time_frame > target daily(if exist)
+              if (this.parent?.daily) {
+                if (parseInt(val) > parseInt(this.parent?.daily)) {
+                  return false;
+                }
+                if (
+                  (parseInt(val) * 86400) / parseInt(this.parent?.time_frame) <
+                  parseInt(this.parent?.daily)
+                ) {
+                  return false;
+                }
+              }
+
+              return true;
+            }
+          )
           .typeError('Invalid number'),
         time_frame: yup
           .string()
           .test(
             'is-number',
-            'The time frame must be a integer number between 1 and 1440.',
+            'The time frame must be a integer number and greater than 0.',
             val => {
               if (!val) {
                 return true;
@@ -234,12 +291,25 @@ export const schemaValidateCreateBudget = (t, cappingType) => {
               const reg = /^\d+$/;
               const parsed = parseInt(val, 10);
               const isNumber = reg.test(val);
-              if (isNumber && parsed > 0 && parsed < 24 * 60) {
+              if (isNumber && parsed > 0) {
                 return true;
               }
               return false;
             }
           )
+          .test('less-than-24h', t('FORM.CONFLICT_CAPPING_VALUE'), val => {
+            if (!val) {
+              return true;
+            }
+
+            const reg = /^\d+$/;
+            const parsed = parseInt(val, 10);
+            const isNumber = reg.test(val);
+            if (isNumber && parsed < 24 * 60) {
+              return true;
+            }
+            return false;
+          })
           .test('not-null-together', t('required'), function (val) {
             if (this.parent?.target && !val) {
               return false;

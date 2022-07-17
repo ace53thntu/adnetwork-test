@@ -589,7 +589,9 @@ const en = {
     BANNER_PLAY_TYPE: 'Banner play type',
     BANNER_TYPE: 'Banner type',
     DEVICE_TYPE: 'Device type',
-    PLATFORM: 'Platform'
+    PLATFORM: 'Platform',
+    CONFLICT_CAPPING_VALUE:
+      'Conflict target custom and daily capping, reduce or remove capping daily to solve it'
   },
   LOCATION: {
     MANAGE_LOCATION: 'Manage Location',

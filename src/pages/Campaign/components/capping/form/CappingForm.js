@@ -13,12 +13,15 @@ import {schemaValidate} from '../validation';
 import KeywordListSelect from 'components/forms/KeywordListSelect';
 import {CAMPAIGN_KEYS} from 'pages/Campaign/constants';
 import DomainGroupSelect from 'components/forms/DomainGroupSelect';
-import {CappingTypes} from 'constants/misc';
+import {BudgetTimeFrames, CappingTypes, IS_RESPONSE_ALL} from 'constants/misc';
 import {ScheduleFormFields} from '../../../strategy/form-fields/ScheduleGroup';
 import {WEEK_DAYS} from 'pages/Campaign/constants';
 import {CurrencyInputField} from 'components/forms/CurrencyInputField';
 import {convertApiToGui} from 'utils/handleCurrencyFields';
 import {FormTextInput, FormToggle} from 'components/forms';
+import {useGetCappings} from 'queries/capping';
+import {useParams} from 'react-router-dom';
+import {getResponseData} from 'utils/helpers/misc.helpers';
 
 const propTypes = {
   capping: PropTypes.object.isRequired,
@@ -26,10 +29,21 @@ const propTypes = {
 };
 
 const CappingForm = ({capping = {}, onSubmit = () => null}) => {
-  console.log(
-    '🚀 ~ file: CappingForm.js ~ line 29 ~ CappingForm ~ capping',
-    capping
+  const {strategyId} = useParams();
+  const {data: cappingUserDaily} = useGetCappings({
+    params: {
+      reference_uuid: strategyId,
+      type: CappingTypes.USER.value,
+      time_frame: BudgetTimeFrames.DAILY
+    },
+    enabled: capping?.type === CappingTypes.USER.value && !!strategyId
+  });
+
+  const daily = React.useMemo(
+    () => getResponseData(cappingUserDaily, IS_RESPONSE_ALL)?.[0]?.target || 0,
+    [cappingUserDaily]
   );
+
   const {t} = useTranslation();
   const cappingType = capping?.type || '';
 
@@ -112,9 +126,13 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
 
   const methods = useForm({
     defaultValues,
-    resolver: schemaValidate(t, cappingType)
+    resolver: schemaValidate(t, cappingType, daily)
   });
   const {handleSubmit} = methods;
+
+  const renderDailyTarget = () => {
+    return <strong>{`Daily target: ${daily}`}</strong>;
+  };
 
   return (
     <div>
@@ -165,7 +183,9 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
 
             {cappingType === CappingTypes.USER.value && capping?.custom && (
               <Col md="8">
-                <div className="mb-2">Custom time frame</div>
+                <div className="mb-2">
+                  Custom time frame ({renderDailyTarget()})
+                </div>
                 <div className="d-flex ">
                   <FormTextInput label="" placeholder="reach" name="target" />
                   <div className="mr-2 ml-2" style={{height: 38}}>
@@ -182,10 +202,6 @@ const CappingForm = ({capping = {}, onSubmit = () => null}) => {
                 </div>
               </Col>
             )}
-
-            {/* <Col md="12">
-              <FormTextInput label="Custom time frame" placeholder="Custom time frame"/>
-            </Col> */}
 
             {/* Type */}
             <Col md="6">
