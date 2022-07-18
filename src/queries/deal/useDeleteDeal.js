@@ -10,9 +10,9 @@ export function useDeleteDeal() {
   const client = useQueryClient();
 
   return useMutation(
-    ({cappingId}) =>
+    ({dealId}) =>
       DealAPIRequest.deleteDeal({
-        id: cappingId
+        id: dealId
       }),
     {
       onError: (err, variables, rollback) => {
