@@ -7,10 +7,6 @@ import {
 } from 'pages/Creative/constants';
 
 import {
-  ALTERNATIVE_FILE_TYPES,
-  ALTERNATIVE_PLAY_TYPES
-} from '../Alternatives/constants';
-import {
   AD_SIZE_FORMAT_OPTIONS,
   ALTERNATIVE_PLAY_OPTIONS,
   CREATIVE_FILE_TYPES,
@@ -192,13 +188,13 @@ export function alternativeFormValuesToRepo(raw, creativeId) {
     name,
     sound,
     file,
-    description,
+    description
     // only_catalog_products,
     // product_query_string,
     // products,
     // extra_config,
-    file_type,
-    play_type
+    // file_type,
+    // play_type
   } = raw;
 
   return {
@@ -209,9 +205,9 @@ export function alternativeFormValuesToRepo(raw, creativeId) {
     creative_uuid: creativeId,
     file_uuid: file?.uuid,
     priority: parseInt(priority),
-    type: getTypeOfAlt(file),
-    file_type: file_type.value,
-    play_type: play_type.value
+    type: getTypeOfAlt(file)
+    // file_type: file_type.value,
+    // play_type: play_type.value
     // catalog_id: parseInt(catalog_id),
     // only_catalog_products,
     // min_products: parseInt(min_products),
@@ -239,9 +235,9 @@ export function alternativeRepoToModel(raw) {
     // product_query_string = '',
     // product_width = '0',
     // products = '',
-    file,
-    file_type,
-    play_type
+    file
+    // file_type,
+    // play_type
     // file_uuid
   } = raw;
   return {
@@ -258,11 +254,11 @@ export function alternativeRepoToModel(raw) {
     // product_query_string,
     // product_width: product_width.toString(),
     // products,
-    file,
-    file_type:
-      ALTERNATIVE_FILE_TYPES.find(type => type.value === file_type) ?? null,
-    play_type:
-      ALTERNATIVE_PLAY_TYPES.find(playType => playType.value === play_type) ??
-      null
+    file
+    // file_type:
+    //   ALTERNATIVE_FILE_TYPES.find(type => type.value === file_type) ?? null,
+    // play_type:
+    //   ALTERNATIVE_PLAY_TYPES.find(playType => playType.value === play_type) ??
+    //   null
   };
 }
