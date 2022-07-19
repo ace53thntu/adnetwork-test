@@ -76,11 +76,11 @@ export const PLATFORM_OPTIONS = [
 ];
 
 export const ALTERNATIVE_PLAY_OPTIONS = [
-  {
-    id: 'single',
-    label: 'Single',
-    value: 'single'
-  },
+  // {
+  //   id: 'single',
+  //   label: 'Single',
+  //   value: 'single'
+  // },
   {
     id: 'evenly',
     label: 'Evenly',

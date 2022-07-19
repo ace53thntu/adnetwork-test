@@ -57,7 +57,8 @@ export function creativeModelToRepo(raw, conceptId) {
     https,
     status: status.value,
     ad_size_format: ad_size_format ? 'dropdown' : 'custom',
-    alternative_play: alternative_play?.value,
+    alternative_play:
+      alternative_play?.value ?? ALTERNATIVE_PLAY_OPTIONS[0].value,
     platform: platform?.value,
     creative_metadata: checkValidJson(creative_metadata)
       ? JSON.parse(creative_metadata)
@@ -111,6 +112,9 @@ export function creativeRepoToModel(raw) {
     creative_type,
     play_type
   } = raw;
+
+  const playType = getCreativeBannerPlayType(creative_type, play_type);
+
   return {
     name,
     status: STATUS_OPTIONS.find(st => st.value === status),
@@ -150,7 +154,7 @@ export function creativeRepoToModel(raw) {
     creative_type: creative_type
       ? CREATIVE_BANNER_TYPES.find(type => type.value === creative_type)
       : CREATIVE_BANNER_TYPES[0],
-    creative_play_type: getCreativeBannerPlayType(creative_type, play_type)
+    creative_play_type: playType
   };
 }
 

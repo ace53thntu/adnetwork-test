@@ -81,6 +81,7 @@ const defaultFormValues = {
   status: STATUS_OPTIONS[0],
 
   creative_type: CREATIVE_BANNER_TYPES[0],
+  creative_play_type: CREATIVE_PLAY_TYPES[0],
   play_type: ''
 
   // alternatives: []
@@ -135,11 +136,19 @@ function BannerForm(props) {
 
   React.useEffect(() => {
     if (watchFileType?.value === CREATIVE_BANNER_TYPES[1].value) {
-      setValue('creative_play_type', CREATIVE_INTERACTIVE_PLAY_TYPES[0]);
+      if (isCreate) {
+        setValue('creative_play_type', CREATIVE_INTERACTIVE_PLAY_TYPES[0]);
+      } else {
+        setValue('creative_play_type', defaultValues.creative_play_type);
+      }
     } else {
-      setValue('creative_play_type', CREATIVE_PLAY_TYPES[0]);
+      if (isCreate) {
+        setValue('creative_play_type', CREATIVE_PLAY_TYPES[0]);
+      } else {
+        setValue('creative_play_type', defaultValues.creative_play_type);
+      }
     }
-  }, [setValue, watchFileType]);
+  }, [defaultValues.creative_play_type, isCreate, setValue, watchFileType]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
