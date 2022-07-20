@@ -18,7 +18,7 @@ export const rawDataToFormDefaultValues = (raw, pageTags = [], source) => {
         ?.filter(tag => tagIds.includes(tag.value))
         .map(item => ({
           label: item.label,
-          value: item.tag
+          value: item.value
         }));
     }
     return result;
@@ -40,6 +40,7 @@ export const pageInformationFormValuesToRepo = (
   source
 ) => {
   const {name, url, tags, status, context} = formValues;
+
   let updatedData = {
     name: name.trim(),
     tags: Array.from(tags, tag => tag?.value),
