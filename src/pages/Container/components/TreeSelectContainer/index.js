@@ -1,13 +1,13 @@
-import { Button } from 'antd';
+import {Button} from 'antd';
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { useParams } from 'react-router-dom';
+import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router';
+import {useParams} from 'react-router-dom';
 
 import AiActivTreeSelect from '../../../../components/AiActivTreeSelect';
-import { RoutePaths } from '../../../../constants/route-paths';
+import {RoutePaths} from '../../../../constants/route-paths';
 import {
   setSelectedTreeNodeRedux,
   setSelectTreeDataRedux,
@@ -15,22 +15,22 @@ import {
 } from '../../../../store/reducers/common';
 import {
   setFlagAlready,
-  toggleCreateContainerModalRedux,
+  toggleCreateContainerModalRedux
 } from '../../../../store/reducers/container';
-import { getAllContainerTreeData } from '../../utils';
+import {getAllContainerTreeData} from '../../utils';
 
 function TreeSelectContainer() {
-  const { t } = useTranslation();
-  const { selectedTreeNode, selectTreeData } = useCommonSelector();
+  const {t} = useTranslation();
+  const {selectedTreeNode, selectTreeData} = useCommonSelector();
 
-  const { cid, pageId } = useParams();
+  const {cid, pageId} = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     getContainerTree();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cid]);
+  }, [cid, pageId]);
 
   const getContainerTree = async () => {
     const treeData = await getAllContainerTreeData();
@@ -47,7 +47,7 @@ function TreeSelectContainer() {
   };
 
   const handleSelectedItem = React.useCallback((value, node) => {
-    const { isContainer, isSource, container_uuid, isPage, uuid, source } =
+    const {isContainer, isSource, container_uuid, isPage, uuid, source} =
       node || {};
 
     dispatch(setSelectedTreeNodeRedux(value));
@@ -81,7 +81,7 @@ function TreeSelectContainer() {
   };
 
   return (
-    <div style={{ paddingLeft: '15px' }} className="mb-3">
+    <div style={{paddingLeft: '15px'}} className="mb-3">
       <AiActivTreeSelect
         allowClear
         selectedItem={selectedTreeNode}
