@@ -36,7 +36,21 @@ export const containerFormResolver = (containers, role) => {
           return isValidURL(value);
         }
         return true;
+      }),
+    defaults: Yup.object().shape({
+      deal_floor_price: Yup.string().test({
+        name: 'floor_price',
+        exclusive: false,
+        params: {},
+        message: 'The deal floor price must be greater than the floor price',
+        test: function (value) {
+          if (value !== undefined || value !== undefined) {
+            return parseFloat(value) > parseFloat(this.parent?.floor_price);
+          }
+          return true;
+        }
       })
+    })
   };
   if ([USER_ROLE.ADMIN, USER_ROLE.MANAGER].includes(role)) {
     return yupResolver(
