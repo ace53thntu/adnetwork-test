@@ -31,7 +31,6 @@ const ContainerDefault = ({isLoading = false, toggleCollapse}) => {
               options={getInventoryFormats()}
               label={t('format')}
               defaultValue={null}
-              required
             />
           </Col>
           <Col sm="6">
@@ -46,7 +45,6 @@ const ContainerDefault = ({isLoading = false, toggleCollapse}) => {
               decimalsLimit={2}
               maxLength="4"
               prefix="$"
-              required
             />
           </Col>
           <Col sm="6">
