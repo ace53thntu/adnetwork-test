@@ -29,7 +29,7 @@ import VideoInformationForm from './VideoInformationForm';
 import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
-import {VAST} from './hooks';
+import {useCheckVideoType, VAST} from './hooks';
 import {DEFAULT_TIMEZONE, STATUS_OPTIONS} from 'constants/misc';
 import {getDefaultMetric1, getDefaultReport} from 'utils/metrics';
 import {AdvertiserAPIRequest} from 'api/advertiser.api';
@@ -86,6 +86,7 @@ function VideoForm(props) {
     setValue
   } = methods;
 
+  const isThirdPartyType = useCheckVideoType(watch);
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -117,7 +118,6 @@ function VideoForm(props) {
 
   const onSubmit = async values => {
     setIsLoading(true);
-
     if (isCreate) {
       let requestData = {};
       if (values?.files?.length) {
@@ -196,7 +196,7 @@ function VideoForm(props) {
             />
           </CollapseBox>
 
-          <VideoFiles videoId={rawData?.uuid} />
+          {!isThirdPartyType && <VideoFiles videoId={rawData?.uuid} />}
         </form>
       </FormProvider>
 
