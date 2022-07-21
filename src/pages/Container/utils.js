@@ -24,8 +24,8 @@ export const getAllContainerTreeData = async () => {
   const params = {
     page: DEFAULT_PAGE,
     per_page: TOTAL_ITEMS,
-    sort: 'created_at DESC',
-    status: 'active'
+    sort: 'created_at DESC'
+    // status: 'active'
   };
   const response = await ContainerAPIRequest.getAllContainer({
     params,
