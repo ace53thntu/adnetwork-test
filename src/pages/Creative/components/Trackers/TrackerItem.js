@@ -5,15 +5,14 @@ import TrackerForm from './TrackerForm';
 
 function TrackerItem(props) {
   const {tracker, referenceId, referenceType, handleAddTracker} = props;
-
-  return (
+  return tracker?.tracker_template ? (
     <TrackerForm
       handleAddTracker={handleAddTracker}
       referenceId={referenceId}
       referenceType={referenceType}
       tracker={tracker}
     />
-  );
+  ) : null;
 }
 
 TrackerItem.propTypes = {
