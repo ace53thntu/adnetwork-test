@@ -1,5 +1,5 @@
 //---> Build-in Modules
-import React, {useCallback} from 'react';
+import React from 'react';
 
 //---> External Modules
 import PropTypes from 'prop-types';
@@ -23,6 +23,13 @@ import {useQueryClient} from 'react-query';
 import {GET_STRATEGY} from 'queries/strategy/constants';
 import {useQueryString} from 'hooks';
 import * as HandleCurrencyFields from 'utils/handleCurrencyFields';
+import {useCreateReport} from 'queries/report';
+import {
+  getDefaultMetric1,
+  getDefaultMetric2,
+  getDefaultReport
+} from 'utils/metrics';
+import {REPORT_VIEW_TYPES} from 'constants/report';
 
 const propTypes = {
   goTo: PropTypes.func,
@@ -52,6 +59,8 @@ const FormContainer = ({
   const {strategyId} = useParams();
   const {mutateAsync: createStrategy} = useCreateStrategy();
   const {mutateAsync: editStrategy} = useEditStrategy();
+  const {mutateAsync: createReport} = useCreateReport({});
+
   const navigate = useNavigate();
   const {refresh} = useRefreshAdvertiserTree();
 
@@ -85,137 +94,167 @@ const FormContainer = ({
     }
   }, [dispatch, isEdit, isView, strategyType?.value]);
 
-  const onSubmit = useCallback(
-    async formData => {
-      const req = formToApi({
-        formData,
-        isSummary,
-        currentStrategy,
-        isEdit,
-        isCapping,
-        originalStrategy,
-        currentTab
-      });
+  const onSubmit = async formData => {
+    const req = formToApi({
+      formData,
+      isSummary,
+      currentStrategy,
+      isEdit,
+      isCapping,
+      originalStrategy,
+      currentTab
+    });
 
-      if (isEdit) {
-        if (!isDirty) {
-          return;
-        }
+    if (isEdit) {
+      if (!isDirty) {
+        return;
+      }
 
-        try {
-          const {data} = await editStrategy({straId: strategyId, data: req});
+      try {
+        const {data} = await editStrategy({straId: strategyId, data: req});
 
-          await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
-          const defaultValueUpdated = apiToForm({strategyData: data});
-          reset(defaultValueUpdated);
-          ShowToast.success('Updated strategy successfully');
-          const inventories = data?.inventories?.map((item, idx) => {
-            const {
-              name,
-              container_name,
-              position_name,
-              position_uuid,
-              floor_price
-            } = item || {};
+        await client.invalidateQueries([GET_STRATEGY, data?.uuid]);
+        const defaultValueUpdated = apiToForm({strategyData: data});
+        reset(defaultValueUpdated);
+        ShowToast.success('Updated strategy successfully');
+        const inventories = data?.inventories?.map((item, idx) => {
+          const {
+            name,
+            container_name,
+            position_name,
+            position_uuid,
+            floor_price
+          } = item || {};
 
-            let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} =
-              data?.inventories_bid?.[item?.uuid] || {};
-            // Price model
-            cpm = HandleCurrencyFields.convertApiToGui({
-              value: cpm
-            });
-            cpc = HandleCurrencyFields.convertApiToGui({
-              value: cpc
-            });
-            cpa = HandleCurrencyFields.convertApiToGui({
-              value: cpa
-            });
-            cpd = HandleCurrencyFields.convertApiToGui({
-              value: cpd
-            });
-            cpl = HandleCurrencyFields.convertApiToGui({
-              value: cpl
-            });
-            cpe = HandleCurrencyFields.convertApiToGui({
-              value: cpe
-            });
-            cpv = HandleCurrencyFields.convertApiToGui({
-              value: cpv
-            });
-            cpi = HandleCurrencyFields.convertApiToGui({
-              value: cpi
-            });
-            cpvm = HandleCurrencyFields.convertApiToGui({
-              value: cpvm
-            });
-            return {
-              ...item,
-              id: item?.uuid,
-              name,
-              container_name,
-              position_name,
-              position_uuid,
-              floor_price,
-              noStore: false,
-              cpm,
-              cpc,
-              cpa,
-              cpd,
-              cpl,
-              cpe,
-              cpv,
-              cpi,
-              cpvm
-            };
+          let {cpm, cpc, cpa, cpd, cpl, cpe, cpv, cpi, cpvm} =
+            data?.inventories_bid?.[item?.uuid] || {};
+          // Price model
+          cpm = HandleCurrencyFields.convertApiToGui({
+            value: cpm
           });
+          cpc = HandleCurrencyFields.convertApiToGui({
+            value: cpc
+          });
+          cpa = HandleCurrencyFields.convertApiToGui({
+            value: cpa
+          });
+          cpd = HandleCurrencyFields.convertApiToGui({
+            value: cpd
+          });
+          cpl = HandleCurrencyFields.convertApiToGui({
+            value: cpl
+          });
+          cpe = HandleCurrencyFields.convertApiToGui({
+            value: cpe
+          });
+          cpv = HandleCurrencyFields.convertApiToGui({
+            value: cpv
+          });
+          cpi = HandleCurrencyFields.convertApiToGui({
+            value: cpi
+          });
+          cpvm = HandleCurrencyFields.convertApiToGui({
+            value: cpvm
+          });
+          return {
+            ...item,
+            id: item?.uuid,
+            name,
+            container_name,
+            position_name,
+            position_uuid,
+            floor_price,
+            noStore: false,
+            cpm,
+            cpc,
+            cpa,
+            cpd,
+            cpl,
+            cpe,
+            cpv,
+            cpi,
+            cpvm
+          };
+        });
 
-          dispatch(
-            initStrategyInventoryListRedux({
-              inventoryList: inventories || [],
-              inventoryTempList: inventories || []
-            })
-          );
-        } catch (error) {
-          if (error) {
-            ShowToast.error(<ApiError apiError={error} />);
-          } else {
-            ShowToast.error('Fail to update strategy');
-          }
-        }
-      } else {
-        try {
-          const {data} = await createStrategy(req);
-
-          const strategyId = data?.uuid;
-          await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
-
-          ShowToast.success('Created strategy successfully');
-          navigate(
-            `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
-          );
-        } catch (error) {
+        dispatch(
+          initStrategyInventoryListRedux({
+            inventoryList: inventories || [],
+            inventoryTempList: inventories || []
+          })
+        );
+      } catch (error) {
+        if (error) {
           ShowToast.error(<ApiError apiError={error} />);
+        } else {
+          ShowToast.error('Fail to update strategy');
         }
       }
-    },
-    [
-      client,
-      createStrategy,
-      currentStrategy,
-      currentTab,
-      dispatch,
-      editStrategy,
-      isCapping,
-      isDirty,
-      isEdit,
-      isSummary,
-      navigate,
-      originalStrategy,
-      refresh,
-      reset,
-      strategyId
-    ]
-  );
+    } else {
+      try {
+        const {data} = await createStrategy(req);
+        const parentPath = `${data?.advertiser_name}/${data?.campaign_name}`;
+        const timeZone = parseInt(data?.campaign_time_zone);
+        const strategyId = data?.uuid;
+        const reportCreative1SubmitData = getDefaultReport({
+          parentPath: parentPath,
+          sourceUuid: data?.uuid,
+          reportSource: 'strategy',
+          timeZone,
+          campaignName: data?.name,
+          metricSets: getDefaultMetric1({
+            metricTextType: 'creative',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+        const reportCreative2SubmitData = getDefaultReport({
+          parentPath: parentPath,
+          sourceUuid: data?.uuid,
+          reportSource: 'strategy',
+          timeZone,
+          campaignName: data?.name,
+          metricSets: getDefaultMetric2({
+            metricTextType: 'creative',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+        const reportVideo1SubmitData = getDefaultReport({
+          parentPath: parentPath,
+          sourceUuid: data?.uuid,
+          reportSource: 'strategy',
+          timeZone,
+          campaignName: data?.name,
+          metricSets: getDefaultMetric1({
+            metricTextType: 'video',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+        const reportVideo2SubmitData = getDefaultReport({
+          parentPath: parentPath,
+          sourceUuid: data?.uuid,
+          reportSource: 'strategy',
+          timeZone,
+          campaignName: data?.name,
+          metricSets: getDefaultMetric2({
+            metricTextType: 'video',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+        createReport(reportCreative1SubmitData);
+        createReport(reportCreative2SubmitData);
+        createReport(reportVideo1SubmitData);
+        createReport(reportVideo2SubmitData);
+        await refresh(data?.advertiser_uuid, data?.campaign_uuid, data?.uuid);
+
+        ShowToast.success('Created strategy successfully');
+        navigate(
+          `/${RoutePaths.CAMPAIGN}/${data?.campaign_uuid}/${RoutePaths.STRATEGY}/${strategyId}/edit?next_tab=concept&advertiser_id=${data?.advertiser_uuid}`
+        );
+      } catch (error) {
+        ShowToast.error(<ApiError apiError={error} />);
+      }
+    }
+  };
 
   return (
     <div>
