@@ -1,15 +1,8 @@
-import {LoadingIndicator} from 'components/common';
-//---> Internal Modules
-import {List} from 'components/list';
-import {Pagination} from 'components/list/pagination';
-import {RoutePaths} from 'constants/route-paths';
-//---> External Modules
-import moment from 'moment';
-import {useDestructureAudiences} from 'pages/Audience/hooks';
-import {useGetAudiencesInfinity} from 'queries/audience';
-import {AUDIENCES_INFINITY} from 'queries/audience/constants';
 //---> Build-in Modules
 import React from 'react';
+
+//---> External Modules
+import moment from 'moment';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router';
 import {
@@ -21,9 +14,18 @@ import {
   ModalHeader
 } from 'reactstrap';
 
+//---> Internal Modules
+import {List} from 'components/list';
+import {DEFAULT_PAGINATION} from 'constants/misc';
+import {RoutePaths} from 'constants/route-paths';
+import {LoadingIndicator} from 'components/common';
+import CustomPagination from 'components/common/CustomPagination';
+import {getResponsePagination} from 'utils/helpers/misc.helpers';
 import {AudienceActivation} from '../audience-activation';
 import ActionBar from './action-bar';
 import {BodyContentStyled, NoAudienceStyled} from './styled';
+import {useDestructureAudiences} from 'pages/Audience/hooks';
+import {useGetAudiences} from 'queries/audience';
 
 const ActionIndexes = {
   VIEW: 0,
@@ -35,18 +37,23 @@ const AudienceList = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = React.useState(false);
 
-  const {
-    data: {pages = []} = {},
-    isFetching,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage
-  } = useGetAudiencesInfinity({
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const params = {
+    per_page: DEFAULT_PAGINATION.perPage,
+    page: currentPage,
+    sort: 'created_at DESC'
+  };
+
+  const {data, isLoading, isPreviousData} = useGetAudiences({
+    params,
     enabled: true,
-    key: AUDIENCES_INFINITY
+    keepPreviousData: true
   });
 
-  const audiences = useDestructureAudiences({pages});
+  const paginationInfo = React.useMemo(() => {
+    return getResponsePagination(data);
+  }, [data]);
+  const audiences = useDestructureAudiences({data});
 
   //---> Define columns
   const columns = React.useMemo(() => {
@@ -98,6 +105,11 @@ const AudienceList = () => {
     ];
   }, []);
 
+  function onPageChange(evt, page) {
+    evt.preventDefault();
+    setCurrentPage(page);
+  }
+
   function onClickItem(item) {
     navigate(`/${RoutePaths.AUDIENCE}/${item?.uuid}`);
   }
@@ -116,7 +128,7 @@ const AudienceList = () => {
     <>
       <ActionBar onClickActivation={onToggleModal} />
       <BodyContentStyled>
-        {isFetching && <LoadingIndicator />}
+        {isLoading && <LoadingIndicator />}
         {audiences?.length > 0 ? (
           <List
             showAction
@@ -131,13 +143,12 @@ const AudienceList = () => {
         ) : (
           <NoAudienceStyled>No data available</NoAudienceStyled>
         )}
-        {hasNextPage && (
-          <Pagination
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
-        )}
+        <CustomPagination
+          currentPage={currentPage}
+          totalCount={paginationInfo?.totalItems}
+          onPageChange={(evt, page) => onPageChange(evt, page)}
+          disabled={isPreviousData}
+        />
       </BodyContentStyled>
 
       {/* Activation Modal */}

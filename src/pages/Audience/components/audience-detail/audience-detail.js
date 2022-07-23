@@ -11,6 +11,7 @@ import DetailItem from './detail-item';
 import {useGetAudience} from 'queries/audience';
 import {LoadingIndicator} from 'components/common';
 import {RoutePaths} from 'constants/route-paths';
+import DeliveryHistories from './delivery-histories';
 
 //---> Define prop types
 const propTypes = {};
@@ -66,6 +67,7 @@ const AudienceDetail = props => {
               );
             })}
         </Row>
+        <DeliveryHistories audienceUuid={audienceId} />
       </CardBody>
     </CardStyled>
   );

@@ -29,6 +29,10 @@ class AudienceAPI extends XHRRequest {
   deleteAudience = ({id, params}) => {
     return this.delete(`${endpoints.audience.audience}/${id}`, params);
   };
+
+  getTransferHistories = ({params = {}, options}) => {
+    return this.get(`${endpoints.audience.transferHistory}`, params, options);
+  };
 }
 
 export const AudienceAPIRequest = new AudienceAPI(apiURL);

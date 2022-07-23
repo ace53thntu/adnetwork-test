@@ -70,7 +70,8 @@ export const endpoints = {
     domainGroup: `${API_V1}/domain_group`
   },
   audience: {
-    audience: `${API_V1}/audience`
+    audience: `${API_V1}/audience`,
+    transferHistory: `${API_V1}/transfer_history`
   },
   deal: {
     deal: `${API_V1}/deal`
