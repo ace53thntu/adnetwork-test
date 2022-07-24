@@ -98,7 +98,10 @@ export const getDefaultReport = ({
     report_source: reportSource,
     status: Statuses.ACTIVE,
     properties: {
-      color: '#5ea151',
+      color:
+        metricSets?.length === 4
+          ? '#5ea151,#219ebc,#dda15e,#bc6c25'
+          : '#fb8500',
       chart_type: 'line',
       mode: 'by',
       metric_set: metricSets,

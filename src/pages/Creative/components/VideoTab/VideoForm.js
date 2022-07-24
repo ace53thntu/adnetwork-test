@@ -1,5 +1,5 @@
 import {ApiError, BlockOverlay, CollapseBox} from 'components/common';
-import {EntityTypes} from 'constants/report';
+import {EntityTypes, REPORT_VIEW_TYPES} from 'constants/report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateVideo, useUpdateVideo} from 'queries/video';
@@ -30,7 +30,10 @@ import {VideoServeTypes, VideoTypes} from './constants';
 import {videoFormValuesToRepo, videoRepoToFormValues} from './dto';
 import {createVideoFormResolver} from './validations';
 import {VAST} from './hooks';
-import {STATUS_OPTIONS} from 'constants/misc';
+import {DEFAULT_TIMEZONE, STATUS_OPTIONS} from 'constants/misc';
+import {getDefaultMetric1, getDefaultReport} from 'utils/metrics';
+import {AdvertiserAPIRequest} from 'api/advertiser.api';
+import {useCreateReport} from 'queries/report';
 
 const defaultValues = {
   // concept_id: 1,
@@ -63,6 +66,7 @@ function VideoForm(props) {
 
   const {mutateAsync: createVideoRequest} = useCreateVideo();
   const {mutateAsync: updateVideoRequest} = useUpdateVideo();
+  const {mutateAsync: createReport} = useCreateReport({});
 
   const getDefaultValues = React.useMemo(() => {
     if (rawData) {
@@ -125,11 +129,30 @@ function VideoForm(props) {
       }
 
       try {
-        await createVideoRequest(requestData);
+        const {data} = await createVideoRequest(requestData);
         setIsLoading(false);
         handleSuccess();
         handleCloseDialog();
         client.invalidateQueries([GET_VIDEOS]);
+        const {data: advertiserData} = await AdvertiserAPIRequest.getAdvertiser(
+          {
+            id: data?.advertiser_uuid
+          }
+        );
+        // Create default report
+        const reportCreative1SubmitData = getDefaultReport({
+          parentPath: advertiserData?.name,
+          sourceUuid: data?.uuid,
+          reportSource: EntityTypes.VIDEO,
+          timeZone: DEFAULT_TIMEZONE,
+          campaignName: data?.name,
+          metricSets: getDefaultMetric1({
+            metricTextType: 'creative',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+
+        createReport(reportCreative1SubmitData);
       } catch (error) {
         handleError(error);
       }
