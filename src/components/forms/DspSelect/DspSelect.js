@@ -36,7 +36,7 @@ const DspSelect = ({
   const {
     formState: {isSubmitting}
   } = useFormContext();
-  const {loadDsp} = useDspPagination(inventoryId);
+  const {loadDsp} = useDspPagination();
 
   return (
     <SelectPaginate
