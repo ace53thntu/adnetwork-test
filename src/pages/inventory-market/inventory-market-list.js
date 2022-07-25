@@ -63,7 +63,8 @@ const InventoryMarket = () => {
     params: {
       per_page: DEFAULT_PAGINATION.perPage,
       sort: 'created_at DESC',
-      has_inventory: true
+      has_inventory: true,
+      status: 'active'
     },
     enabled: true
   });
@@ -139,6 +140,7 @@ const InventoryMarket = () => {
       />
       <Container fluid>
         <Row>
+          TEST1
           <Col>
             <FilterBar>
               <FilterBarForm
@@ -148,6 +150,7 @@ const InventoryMarket = () => {
             </FilterBar>
           </Col>
         </Row>
+        TEST2
         <Row>
           <Col md="12">
             {searchType || (filterParams && !isFalsy(filterParams)) ? (
