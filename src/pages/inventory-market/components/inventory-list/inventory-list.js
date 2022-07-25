@@ -156,7 +156,8 @@ const InventoryList = ({page, filterParams = null, fromPage = false}) => {
   const filterMode = useFilterModeSelector();
 
   let params = {
-    limit: DEFAULT_PAGINATION.perPage
+    limit: DEFAULT_PAGINATION.perPage,
+    status: 'active'
   };
 
   if (page) {
@@ -250,6 +251,7 @@ const InventoryList = ({page, filterParams = null, fromPage = false}) => {
 
   return (
     <React.Fragment>
+      TEST1
       {isFetching && <LoadingIndicator />}
       {inventories?.length > 0 ? (
         <>
