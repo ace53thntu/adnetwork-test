@@ -5,12 +5,22 @@ import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {AUDIENCES_INFINITY, GET_AUDIENCES} from './constants';
 
-export function useGetAudiences() {
+export function useGetAudiences({
+  params,
+  enabled = false,
+  keepPreviousData = false
+}) {
   return useQuery(
-    GET_AUDIENCES,
-    () => AudienceAPIRequest.getAllAudience({}).then(res => res?.data ?? []),
+    [GET_AUDIENCES, params],
+    () =>
+      AudienceAPIRequest.getAllAudience({
+        params,
+        options: {isResponseAll: IS_RESPONSE_ALL}
+      }).then(res => res),
     {
-      suspense: false
+      suspense: false,
+      enabled,
+      keepPreviousData
     }
   );
 }

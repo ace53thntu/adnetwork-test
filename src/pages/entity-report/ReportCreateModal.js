@@ -100,7 +100,6 @@ export default function ModalReportForm({
         entityName: entityNameRedux,
         parentPath: parentPathRedux,
         metricBody
-        // colorsRedux
       });
 
       if (!isEdit) {

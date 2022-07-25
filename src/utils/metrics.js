@@ -1,7 +1,13 @@
-import {DISTRIBUTIONS, METRIC_UNITS, REPORT_SOURCES} from 'constants/report';
+import {
+  DISTRIBUTIONS,
+  METRIC_UNITS,
+  ReportTypes,
+  REPORT_SOURCES
+} from 'constants/report';
 import {capitalize} from './helpers/string.helpers';
 import timezones from 'timezones-list';
 import moment from 'moment-timezone';
+import {Statuses} from 'constants/misc';
 
 export const getMetricUnits = () => {
   return METRIC_UNITS.map(item => ({value: item, label: capitalize(item)}));
@@ -41,4 +47,74 @@ export const getTimeZoneOffset = () => {
     ?.replace(/\b0+/g, '')
     ?.replace(/\b:+/g, '');
   return valueConverted || '+7';
+};
+
+export const getDefaultMetric1 = ({metricTextType, metricTypeOptions = []}) => {
+  const creativeMetricSets = metricTypeOptions.filter(
+    item => item?.label?.toLowerCase() === metricTextType
+  );
+  const creativeReportMetricSets = creativeMetricSets?.map(item => {
+    const {options} = item;
+    return options?.filter(optItem =>
+      [
+        `${metricTextType}_bids`,
+        `${metricTextType}_impressions`,
+        `${metricTextType}_clicks`,
+        `${metricTextType}_viewable`
+      ].includes(optItem.value)
+    );
+  });
+  return creativeReportMetricSets?.[0];
+};
+
+export const getDefaultMetric2 = ({metricTextType, metricTypeOptions = []}) => {
+  const creativeMetricSets = metricTypeOptions.filter(
+    item => item?.label?.toLowerCase() === metricTextType
+  );
+  const creativeReportMetricSets = creativeMetricSets?.map(item => {
+    const {options} = item;
+    return options?.filter(optItem =>
+      [`${metricTextType}_cost`].includes(optItem.value)
+    );
+  });
+  return creativeReportMetricSets?.[0];
+};
+
+export const getDefaultReport = ({
+  sourceUuid,
+  reportType = ReportTypes.TRENDING,
+  reportSource,
+  parentPath,
+  metricSets = [],
+  timeZone,
+  timeUnit = 'day',
+  timeRange = 'l1mt',
+  campaignName
+}) => {
+  return {
+    name: `${campaignName} / Group by ${reportSource}`,
+    source_uuid: sourceUuid,
+    report_type: reportType,
+    report_source: reportSource,
+    status: Statuses.ACTIVE,
+    properties: {
+      color:
+        metricSets?.length === 4
+          ? '#5ea151,#219ebc,#dda15e,#bc6c25'
+          : '#fb8500',
+      chart_type: 'line',
+      mode: 'by',
+      metric_set: metricSets,
+      parentPath: parentPath
+    },
+    api: {
+      time_unit: timeUnit,
+      time_range: timeRange,
+      report_by: reportSource,
+      report_by_uuid: '',
+      start_time: null,
+      end_time: null,
+      time_zone: timeZone
+    }
+  };
 };

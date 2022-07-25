@@ -18,6 +18,7 @@ import {
   rawDataToFormDefaultValues
 } from './dto';
 import {validationPage} from './validations';
+import {SOURCES} from '../ContainerSourcePage/constants';
 
 function PageInformationForm(props) {
   const {t} = useTranslation();
@@ -81,7 +82,7 @@ function PageInformationForm(props) {
         })
       );
     } catch (error) {
-      ShowToast.error(<ApiError apiError={error}/>);
+      ShowToast.error(<ApiError apiError={error} />);
       setIsLoading(false);
     }
   };
@@ -116,7 +117,7 @@ function PageInformationForm(props) {
               disabled={isSubmitting}
             />
 
-            {source === 'website' && (
+            {source === SOURCES.web && (
               <FormTextInput
                 isRequired
                 name="url"

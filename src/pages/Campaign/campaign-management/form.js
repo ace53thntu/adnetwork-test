@@ -49,6 +49,13 @@ import {
 } from '../../../queries/capping';
 import CappingFormContainer from '../components/capping/form/CappingFormContainer';
 import {TimezoneMapping} from 'utils/helpers/getListTimezone';
+import {useCreateReport} from 'queries/report';
+import {REPORT_VIEW_TYPES} from 'constants/report';
+import {
+  getDefaultMetric1,
+  getDefaultMetric2,
+  getDefaultReport
+} from 'utils/metrics';
 
 const propTypes = {
   goToTab: PropTypes.func,
@@ -75,6 +82,7 @@ const CampaignForm = ({
   const {mutateAsync: deleteCapping} = useDeleteCapping();
   const {mutateAsync: createCampaign} = useCreateCampaign();
   const {mutateAsync: updateCampaign} = useEditCampaign(currentCampaign?.uuid);
+  const {mutateAsync: createReport} = useCreateReport({});
 
   const {campaignId} = useParams();
 
@@ -116,6 +124,7 @@ const CampaignForm = ({
   const toggleModal = useCallback(() => {
     setOpenModal(prevState => !prevState);
   }, []);
+
   const onSubmit = useCallback(
     async formData => {
       const requestBody = formToApi(formData, isCreate);
@@ -139,6 +148,55 @@ const CampaignForm = ({
         try {
           const {data} = await createCampaign(requestBody);
 
+          const reportCreative1SubmitData = getDefaultReport({
+            parentPath: data?.advertiser_name,
+            sourceUuid: data?.uuid,
+            reportSource: 'campaign',
+            timeZone,
+            campaignName: data?.name,
+            metricSets: getDefaultMetric1({
+              metricTextType: 'creative',
+              metricTypeOptions: REPORT_VIEW_TYPES
+            })
+          });
+          const reportCreative2SubmitData = getDefaultReport({
+            parentPath: data?.advertiser_name,
+            sourceUuid: data?.uuid,
+            reportSource: 'campaign',
+            timeZone,
+            campaignName: data?.name,
+            metricSets: getDefaultMetric2({
+              metricTextType: 'creative',
+              metricTypeOptions: REPORT_VIEW_TYPES
+            })
+          });
+          const reportVideo1SubmitData = getDefaultReport({
+            parentPath: data?.advertiser_name,
+            sourceUuid: data?.uuid,
+            reportSource: 'campaign',
+            timeZone,
+            campaignName: data?.name,
+            metricSets: getDefaultMetric1({
+              metricTextType: 'video',
+              metricTypeOptions: REPORT_VIEW_TYPES
+            })
+          });
+          const reportVideo2SubmitData = getDefaultReport({
+            parentPath: data?.advertiser_name,
+            sourceUuid: data?.uuid,
+            reportSource: 'campaign',
+            timeZone,
+            campaignName: data?.name,
+            metricSets: getDefaultMetric2({
+              metricTextType: 'video',
+              metricTypeOptions: REPORT_VIEW_TYPES
+            })
+          });
+          createReport(reportCreative1SubmitData);
+          createReport(reportCreative2SubmitData);
+          createReport(reportVideo1SubmitData);
+          createReport(reportVideo2SubmitData);
+
           navigate(
             `/${RoutePaths.CAMPAIGN}/${data?.uuid}?next_tab=strategies&advertiser_id=${data?.advertiser_uuid}`
           );
@@ -146,6 +204,7 @@ const CampaignForm = ({
 
           ShowToast.success('Created Campaign successfully!');
         } catch (error) {
+          console.log('🚀 ~ file: form.js ~ line 178 ~ error', error);
           ShowToast.error(
             <ApiError apiError={error || 'Fail to create Campaign'} />
           );
@@ -161,6 +220,8 @@ const CampaignForm = ({
       dispatch,
       navigate,
       createCampaign,
+      timeZone,
+      createReport,
       refresh
     ]
   );

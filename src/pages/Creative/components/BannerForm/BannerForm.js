@@ -7,7 +7,7 @@ import {
   FormTextInput
 } from 'components/forms';
 import FormCodeMirror from 'components/forms/FormCodeMirror';
-import {EntityTypes} from 'constants/report';
+import {EntityTypes, REPORT_VIEW_TYPES} from 'constants/report';
 import {USER_ROLE} from 'pages/user-management/constants';
 import PropTypes from 'prop-types';
 import {useCreateCreative, useUpdateCreative} from 'queries/creative';
@@ -27,6 +27,7 @@ import {
 } from 'store/reducers/creative';
 import {difference} from 'utils/helpers/difference.helpers';
 import {ShowToast} from 'utils/helpers/showToast.helpers';
+import {AdvertiserAPIRequest} from 'api/advertiser.api';
 
 import Box from '@material-ui/core/Box';
 
@@ -49,12 +50,14 @@ import {
 } from './dto';
 import {useCalculateAdSize, useWatchCreativeType} from './hooks';
 import {bannerFormValidationResolver} from './utils';
-import {STATUS_OPTIONS} from 'constants/misc';
+import {DEFAULT_TIMEZONE, STATUS_OPTIONS} from 'constants/misc';
 import {
   CREATIVE_BANNER_TYPES,
   CREATIVE_INTERACTIVE_PLAY_TYPES,
   CREATIVE_PLAY_TYPES
 } from 'pages/Creative/constants';
+import {useCreateReport} from 'queries/report';
+import {getDefaultMetric1, getDefaultReport} from 'utils/metrics';
 
 const defaultFormValues = {
   third_party_tag: '',
@@ -97,6 +100,7 @@ function BannerForm(props) {
   const {conceptId} = useParams();
   const {mutateAsync: createCreativeRequest} = useCreateCreative();
   const {mutateAsync: updateCreativeRequest} = useUpdateCreative();
+  const {mutateAsync: createReport} = useCreateReport({});
 
   const params = React.useMemo(() => {
     return {
@@ -207,11 +211,32 @@ function BannerForm(props) {
 
         setIsLoading(false);
         ShowToast.success('Create Banner successfully!');
-        client.invalidateQueries([GET_CREATIVES]);
+        await client.invalidateQueries([GET_CREATIVES]);
+        const {data: advertiserData} = await AdvertiserAPIRequest.getAdvertiser(
+          {
+            id: res?.data?.advertiser_uuid
+          }
+        );
+        // Create default report
+        const reportCreative1SubmitData = getDefaultReport({
+          parentPath: advertiserData?.name,
+          sourceUuid: res?.data?.uuid,
+          reportSource: EntityTypes.CREATIVE,
+          timeZone: DEFAULT_TIMEZONE,
+          campaignName: res?.data?.name,
+          metricSets: getDefaultMetric1({
+            metricTextType: 'creative',
+            metricTypeOptions: REPORT_VIEW_TYPES
+          })
+        });
+
+        createReport(reportCreative1SubmitData);
+
         handleCloseDialog();
       } catch (error) {
         setIsLoading(false);
         ShowToast.error(<ApiError apiError={error} />);
+      } finally {
       }
     } else {
       const alternatives = values?.alternatives;

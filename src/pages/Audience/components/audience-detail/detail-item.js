@@ -12,7 +12,7 @@ const DetailItem = ({label, value}) => {
   return (
     <Col md={4} className="mb-3">
       <div className="text-capitalize font-weight-bold">
-        {label?.replace('_', ' ')}
+        {label?.replace(/_/g, ' ')}
       </div>
       <div className="mt-2">{value}</div>
     </Col>
