@@ -43,9 +43,13 @@ export const validationDescriptionTab = (containers, role) => {
         exclusive: false,
         params: {},
         message: 'The deal floor price must be greater than the floor price',
-        test: function (value) {
-          if (value !== undefined || value !== undefined) {
-            return parseFloat(value) > parseFloat(this.parent?.floor_price);
+        test: function (dealPrice) {
+          const floorPrice = this.parent?.floor_price;
+          if (
+            (!isNaN(floorPrice) && !isNaN(dealPrice)) ||
+            (isNaN(floorPrice) && !isNaN(floorPrice))
+          ) {
+            return parseFloat(dealPrice) > parseFloat(this.parent?.floor_price);
           }
           return true;
         }
