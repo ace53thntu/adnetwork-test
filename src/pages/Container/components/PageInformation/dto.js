@@ -1,3 +1,5 @@
+import {SOURCES} from '../ContainerSourcePage/constants';
+
 export const rawDataToFormDefaultValues = (raw, pageTags = [], source) => {
   if (raw) {
     const {name = '', status = '', url = '', tags = [], context = ''} = raw;
@@ -8,7 +10,7 @@ export const rawDataToFormDefaultValues = (raw, pageTags = [], source) => {
       tags: [],
       context
     };
-    if (source === 'web') {
+    if (source === SOURCES.web) {
       result.url = url;
     }
 
@@ -43,13 +45,13 @@ export const pageInformationFormValuesToRepo = (
 
   let updatedData = {
     name: name.trim(),
-    tags: Array.from(tags, tag => tag?.value),
+    tags: tags && tags.length > 0 ? Array.from(tags, tag => tag?.value) : [],
     status: status,
     container_uuid: containerId,
     source: rawData.source,
     context
   };
-  if (source === 'web') {
+  if (source === SOURCES.web) {
     updatedData.url = url.trim();
   }
   return updatedData;

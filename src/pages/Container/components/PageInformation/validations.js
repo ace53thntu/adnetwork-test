@@ -2,9 +2,10 @@ import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidURL} from 'utils/helpers/validations.helpers';
+import {SOURCES} from '../ContainerSourcePage/constants';
 
 export const validationPage = (pages = [], isMobile = false, source) => {
-  if (isMobile || source === 'webtv') {
+  if (isMobile || source === SOURCES.webtv) {
     return yupResolver(
       Yup.object().shape({
         name: Yup.string()
