@@ -35,8 +35,8 @@ export const mappingFormToApi = ({
     const filterParams = {
       format: format?.value || '',
       type: type?.value || '',
-      floor_price: floor_price ? parseFloat(floor_price) : '',
-      deal_price: deal_price ? parseFloat(deal_price) : '',
+      floor_price: floor_price ? parseFloat(floor_price) * 1000 : '',
+      deal_price: deal_price ? parseFloat(deal_price) * 1000 : '',
       fill_rate: fill_rate ? parseFloat(fill_rate) : '',
       click_rate: click_rate ? parseFloat(click_rate) : '',
       market_type: market_type || ''

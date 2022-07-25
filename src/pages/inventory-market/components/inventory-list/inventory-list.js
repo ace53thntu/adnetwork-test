@@ -92,18 +92,20 @@ const useColumns = (role, fromPage) => {
         accessor: 'deal_floor_price',
         cell: row => {
           if (row?.original?.allow_deal) {
-            <Badge color="info" pill>
-              {row?.value
-                ? formatValue({
-                    value: HandleCurrencyFields.convertApiToGui({
-                      value: row?.value
-                    })?.toString(),
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    prefix: '$'
-                  })
-                : ''}
-            </Badge>;
+            return (
+              <Badge color="info" pill>
+                {row?.value
+                  ? formatValue({
+                      value: HandleCurrencyFields.convertApiToGui({
+                        value: row?.value
+                      })?.toString(),
+                      groupSeparator: ',',
+                      decimalSeparator: '.',
+                      prefix: '$'
+                    })
+                  : ''}
+              </Badge>
+            );
           }
 
           return 'N/A';
