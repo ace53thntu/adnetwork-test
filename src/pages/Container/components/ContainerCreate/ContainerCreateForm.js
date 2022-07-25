@@ -19,6 +19,14 @@ import PublisherSelect from '../ContainerDetail/PublisherSelect';
 import {mappingFormToApi} from '../ContainerDetail/dto';
 import {ContainerDefault} from '../ContainerFormFields';
 import {containerFormResolver} from '../ContainerSettings/validations';
+import {useCreateReport} from 'queries/report';
+import {DEFAULT_TIMEZONE} from 'constants/misc';
+import {
+  getDefaultPublisherMetric1,
+  getDefaultPublisherMetric2,
+  getDefaultReport
+} from 'utils/metrics';
+import {EntityTypes, PUBLISHER_REPORT_VIEW_TYPES} from 'constants/report';
 
 const AM_ROLES = [USER_ROLE.ADMIN, USER_ROLE.MANAGER];
 
@@ -31,6 +39,7 @@ function ContainerCreateForm(props) {
   const {refresh} = useRefreshContainerTree();
 
   const {mutateAsync: createContainerRequest} = useCreateContainer();
+  const {mutateAsync: createReport} = useCreateReport({});
 
   const methods = useForm({
     defaultValues: {
@@ -63,9 +72,36 @@ function ContainerCreateForm(props) {
       await refresh();
 
       navigate(`/container/${data?.uuid}`);
+
+      // Create default report
+      const timeZone = DEFAULT_TIMEZONE;
+      const report1SubmitData = getDefaultReport({
+        parentPath: data?.publisher_name,
+        sourceUuid: data?.uuid,
+        reportSource: EntityTypes.CONTAINER,
+        timeZone,
+        campaignName: data?.name,
+        metricSets: getDefaultPublisherMetric1({
+          metricTypeOptions: PUBLISHER_REPORT_VIEW_TYPES
+        })
+      });
+      const report2SubmitData = getDefaultReport({
+        parentPath: data?.publisher_name,
+        sourceUuid: data?.uuid,
+        reportSource: EntityTypes.CONTAINER,
+        timeZone,
+        campaignName: data?.name,
+        metricSets: getDefaultPublisherMetric2({
+          metricTypeOptions: PUBLISHER_REPORT_VIEW_TYPES
+        })
+      });
+      createReport(report1SubmitData);
+      createReport(report2SubmitData);
     } catch (error) {
       setIsLoading(false);
-      ShowToast.error(<ApiError apiError={error || 'Fail to create Container'}/>);
+      ShowToast.error(
+        <ApiError apiError={error || 'Fail to create Container'} />
+      );
     }
   };
 

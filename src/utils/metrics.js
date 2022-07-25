@@ -49,7 +49,11 @@ export const getTimeZoneOffset = () => {
   return valueConverted || '+7';
 };
 
-export const getDefaultMetric1 = ({metricTextType, metricTypeOptions = []}) => {
+export const getDefaultMetric1 = ({
+  metricTextType = '',
+  metricTypeOptions = []
+}) => {
+  let prefixMetric = metricTextType ? `${metricTextType}_` : '';
   const creativeMetricSets = metricTypeOptions.filter(
     item => item?.label?.toLowerCase() === metricTextType
   );
@@ -57,10 +61,10 @@ export const getDefaultMetric1 = ({metricTextType, metricTypeOptions = []}) => {
     const {options} = item;
     return options?.filter(optItem =>
       [
-        `${metricTextType}_bids`,
-        `${metricTextType}_impressions`,
-        `${metricTextType}_clicks`,
-        `${metricTextType}_viewable`
+        `${prefixMetric}bids`,
+        `${prefixMetric}impressions`,
+        `${prefixMetric}clicks`,
+        `${prefixMetric}viewable`
       ].includes(optItem.value)
     );
   });
@@ -78,6 +82,21 @@ export const getDefaultMetric2 = ({metricTextType, metricTypeOptions = []}) => {
     );
   });
   return creativeReportMetricSets?.[0];
+};
+
+export const getDefaultPublisherMetric1 = ({
+  metricTextType = '',
+  metricTypeOptions = []
+}) => {
+  return metricTypeOptions?.filter(optItem =>
+    [`bids`, `impressions`, `clicks`, `viewable`].includes(optItem.code_name)
+  );
+};
+
+export const getDefaultPublisherMetric2 = ({metricTypeOptions = []}) => {
+  return metricTypeOptions?.filter(optItem =>
+    [`publisher_final_revenue`].includes(optItem.code_name)
+  );
 };
 
 export const getDefaultReport = ({

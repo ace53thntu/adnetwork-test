@@ -1109,6 +1109,13 @@ export const PUBLISHER_REPORT_VIEW_TYPES = [
     code_name: 'commission_price'
   },
   {
+    label: 'Publisher Price',
+    value: 'publisher_price',
+    code: 'publisher_price',
+    is_price: true,
+    code_name: 'publisher_price'
+  },
+  {
     label: 'Publisher Final Revenue',
     value: 'pfr',
     code: 'pfr',

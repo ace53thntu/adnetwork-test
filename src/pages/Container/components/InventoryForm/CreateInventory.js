@@ -20,6 +20,15 @@ import {useCreateTracker} from 'queries/tracker';
 import {useTranslation} from 'react-i18next';
 import {VideoMineTypes} from 'constants/inventory';
 import {ApiError} from 'components/common';
+import {
+  getDefaultPublisherMetric1,
+  getDefaultPublisherMetric2,
+  getDefaultReport
+} from 'utils/metrics';
+import {EntityTypes, PUBLISHER_REPORT_VIEW_TYPES} from 'constants/report';
+import {DEFAULT_TIMEZONE} from 'constants/misc';
+import {useCreateReport} from 'queries/report';
+import {ContainerAPIRequest} from 'api/container.api';
 
 function CreateInventory({isOpen = false, toggle = () => {}}) {
   const {t} = useTranslation();
@@ -28,6 +37,7 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
   const inventoryFormats = getInventoryFormats();
   const {mutateAsync: createInventory} = useCreateInventory();
   const {mutateAsync: createTracker} = useCreateTracker();
+  const {mutateAsync: createReport} = useCreateReport({});
 
   const methods = useForm({
     defaultValues: {
@@ -72,6 +82,34 @@ function CreateInventory({isOpen = false, toggle = () => {}}) {
 
       setIsLoading(false);
       toggle();
+      const {data: containerData} = await ContainerAPIRequest.getContainer({
+        id: data?.container_uuid
+      });
+      // Create default report
+      const parentPath = `${containerData?.publisher_name}/${containerData?.name}`;
+      const timeZone = DEFAULT_TIMEZONE;
+      const report1SubmitData = getDefaultReport({
+        parentPath,
+        sourceUuid: data?.uuid,
+        reportSource: EntityTypes.INVENTORY,
+        timeZone,
+        campaignName: data?.name,
+        metricSets: getDefaultPublisherMetric1({
+          metricTypeOptions: PUBLISHER_REPORT_VIEW_TYPES
+        })
+      });
+      const report2SubmitData = getDefaultReport({
+        parentPath,
+        sourceUuid: data?.uuid,
+        reportSource: EntityTypes.INVENTORY,
+        timeZone,
+        campaignName: data?.name,
+        metricSets: getDefaultPublisherMetric2({
+          metricTypeOptions: PUBLISHER_REPORT_VIEW_TYPES
+        })
+      });
+      createReport(report1SubmitData);
+      createReport(report2SubmitData);
     } catch (err) {
       setIsLoading(false);
       ShowToast.error(
