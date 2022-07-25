@@ -251,7 +251,6 @@ const InventoryList = ({page, filterParams = null, fromPage = false}) => {
 
   return (
     <React.Fragment>
-      TEST1
       {isFetching && <LoadingIndicator />}
       {inventories?.length > 0 ? (
         <>

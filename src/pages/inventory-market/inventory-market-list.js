@@ -140,7 +140,6 @@ const InventoryMarket = () => {
       />
       <Container fluid>
         <Row>
-          TEST1
           <Col>
             <FilterBar>
               <FilterBarForm
@@ -150,7 +149,6 @@ const InventoryMarket = () => {
             </FilterBar>
           </Col>
         </Row>
-        TEST2
         <Row>
           <Col md="12">
             {searchType || (filterParams && !isFalsy(filterParams)) ? (
