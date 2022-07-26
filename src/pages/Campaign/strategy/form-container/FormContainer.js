@@ -94,7 +94,11 @@ const FormContainer = ({
     }
   }, [dispatch, isEdit, isView, strategyType?.value]);
 
-  const onSubmit = async formData => {
+  const onSubmit = async (formData, e) => {
+    if (e.target.id === 'cappingForm') {
+      // prevent call submit form when submit cappingForm which nested in
+      return;
+    }
     const req = formToApi({
       formData,
       isSummary,
