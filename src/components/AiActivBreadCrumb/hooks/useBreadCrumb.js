@@ -102,7 +102,8 @@ export const useBreadCrumb = () => {
         paths.push({
           uuid: uuid,
           name: SOURCE_HEADINGS[source],
-          url: firstSourcePageUrl
+          url: firstSourcePageUrl,
+          class: 'no-link'
         });
       }
 

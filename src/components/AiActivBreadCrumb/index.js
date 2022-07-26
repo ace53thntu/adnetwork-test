@@ -20,7 +20,7 @@ const AiActivBreadCrumb = ({defaultTitle}) => {
     <Breadcrumb>
       {breadCrumb.map(item => (
         <Breadcrumb.Item
-          className="breadcrumb-item"
+          className={`breadcrumb-item ${item?.class ?? ''}`}
           key={item?.uuid}
           onClick={() => handleBreadCrumbItemClick(item?.uuid)}
         >

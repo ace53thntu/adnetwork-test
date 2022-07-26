@@ -3,6 +3,9 @@
   & > a {
     cursor: pointer;
   }
+  &.no-link > a {
+    pointer-events: none;
+  }
 }
 
 .ant-breadcrumb-separator {
