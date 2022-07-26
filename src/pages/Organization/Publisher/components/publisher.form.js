@@ -94,6 +94,11 @@ const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
     }
   };
 
+  const onCancel = () => {
+    reset();
+    navigate(`/${RoutePaths.ORGANIZATION}/${RoutePaths.PUBLISHER}`);
+  };
+
   return (
     <Card className={`main-card ${isView ? 'no-shadow' : ''}`}>
       <FormProvider {...methods}>
@@ -172,7 +177,7 @@ const PublisherForm = ({isEdit = false, isView = false, publisher = null}) => {
                 </Link>
               )}
               {!isView && (
-                <Button color="link" onClick={() => reset()} type="button">
+                <Button color="link" onClick={onCancel} type="button">
                   {t('cancel')}
                 </Button>
               )}
