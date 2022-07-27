@@ -24,10 +24,10 @@ const AudienceDetail = props => {
   });
 
   const {
-    name: audience_name,
+    audience_name,
     role,
     audience_type,
-    send_code,
+    sender_code,
     vendor_code,
     start_date,
     last_transfer_date
@@ -35,7 +35,7 @@ const AudienceDetail = props => {
   const destructureAudience = {
     role: role ? <Badge color="success">{role}</Badge> : '',
     audience_type,
-    send_code,
+    sender_code,
     vendor_code: vendor_code ? <Badge>{vendor_code}</Badge> : '',
     start_date: start_date ? moment(start_date).format('DD/MM/YYYY') : '',
     last_transfer_date: last_transfer_date

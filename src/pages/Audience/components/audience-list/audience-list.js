@@ -59,10 +59,6 @@ const AudienceList = () => {
   const columns = React.useMemo(() => {
     return [
       {
-        header: 'Role',
-        accessor: 'role'
-      },
-      {
         header: 'Name',
         accessor: 'audience_name'
       },
@@ -71,18 +67,8 @@ const AudienceList = () => {
         accessor: 'audience_type'
       },
       {
-        header: 'Send Code',
-        accessor: 'send_code',
-        cell: row => {
-          return row?.value ? <code>{row.value}</code> : null;
-        }
-      },
-      {
-        header: 'Vendor Code',
-        accessor: 'vendor_code',
-        cell: row => {
-          return row?.value ? <Badge>{row.value}</Badge> : null;
-        }
+        header: 'Owner',
+        accessor: 'owner'
       },
       {
         header: 'Start Date',
@@ -100,6 +86,17 @@ const AudienceList = () => {
           return row.value ? (
             <code>{moment(row.value).format('DD/MM/YYYY')}</code>
           ) : null;
+        }
+      },
+      {
+        header: 'Created by',
+        accessor: 'created_by'
+      },
+      {
+        header: 'Send Code',
+        accessor: 'send_code',
+        cell: row => {
+          return row?.value ? <code>{row.value}</code> : null;
         }
       }
     ];
